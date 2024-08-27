@@ -1,0 +1,100 @@
+@model IEnumerable<Exampler_ERP.Models.HR_Employee>
+@{
+    var GenderList = (List<SelectListItem>)ViewBag.GenderList;
+    var MaritalStatusList = (List<SelectListItem>)ViewBag.MaritalStatusList;
+    var ReligionList = (List<SelectListItem>)ViewBag.ReligionList;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Employees</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Employee List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Picture</th>
+                <th>Employee ID</th>
+                <th>Employee Code</th>
+                <th>Active</th>
+                <th>Full Name</th>
+                <th>Gender</th>
+                <th>Marital Status</th>
+                <th>Religion</th>
+                <th>Phone</th>
+                <th>Mobile</th>
+                <th>Whatsapp</th>
+                <th>Branch</th>
+                <th>Department</th>
+                <th>Designation</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in Model)
+            {
+                <tr>
+                    <td>
+                        @if (employee.Picture != null)
+                        {
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(employee.Picture)" style="width: 50px; height: 50px; border-radius:50%" alt="Profile Picture" />
+                        }
+                        else
+                        {
+                            <img src="~/img/icons/noimage.jpg" style="width: 50px; height: 50px; border-radius:50%" alt="No Image Available" />
+                        }
+                    </td>
+                    <td>@employee.EmployeeID</td>
+                    <td>@employee.EmployeeCode</td>
+                    <td>@(employee.ActiveID == 1 ? "Yes" : "No")</td>
+                    <td>@($"{employee.FirstName} {employee.FatherName} {employee.FamilyName}")</td>
+                    <td>
+                        @(employee.Sex == 0 || employee.Sex == null
+                            ? ""
+                            : GenderList.FirstOrDefault(g => g.Value == employee.Sex.ToString())?.Text)
+                    </td>
+                    <td>
+                        @(employee.MaritalStatus == 0 || employee.MaritalStatus == null
+                            ? ""
+                            : MaritalStatusList.FirstOrDefault(m => m.Value == employee.MaritalStatus.ToString())?.Text)
+                    </td>
+                    <td>
+                        @(employee.Religion == 0 || employee.Religion == null
+                            ? ""
+                            : ReligionList.FirstOrDefault(r => r.Value == employee.Religion.ToString())?.Text)
+                    </td>
+                    <td>@employee.Phone1</td> <!-- Assuming Phone1 is the primary phone -->
+                    <td>@employee.Mobile</td>
+                    <td>@employee.Whatsapp</td>
+                    <td>@employee.Branch?.BranchName</td>
+                    <td>@employee.Department?.DepartmentName</td>
+                    <td>@employee.Designation?.DesignationName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

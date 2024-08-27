@@ -1,0 +1,40 @@
+@model Exampler_ERP.Models.Settings_DeductionType
+
+<div class="modal fade" id="editDeductionTypeModal" tabindex="-1" role="dialog" aria-labelledby="editDeductionTypeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editDeductionTypeModalLabel">Edit DeductionType</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editDeductionTypeForm">
+                    <div class="row">
+                        <div class="col-2 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-12 col-md-12 col-lg-12">
+                                    <label for="DeductionTypeName">DeductionType Name</label>
+                                    <input type="text" class="form-control" id="DeductionTypeName" name="DeductionTypeName" value="@Model.DeductionTypeName" />
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label asp-for="ActiveYNID">Active</label>
+                                    <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text", Model.ActiveYNID))" class="form-control">
+                                    </select>
+                                    <span asp-validation-for="ActiveYNID" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="DeductionTypeID" name="DeductionTypeID" value="@Model.DeductionTypeID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+@model Exampler_ERP.Models.Settings_Department
+
+<div class="modal fade" id="editDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="editDepartmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editDepartmentModalLabel">Edit Department</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editDepartmentForm">
+                    <div class="row">
+                        <div class="col-2 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="BranchID" class="control-label">Select Branch</label>
+                                    <select asp-for="BranchID" asp-items="@(new SelectList(ViewBag.BranchList, "Value", "Text", Model.BranchID))" class="form-control">
+                                    </select>
+                                    <span asp-validation-for="BranchID" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="ActiveYNID">Active</label>
+                                    <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control">
+                                        <option>Please select</option>
+                                    </select>
+                                    <span asp-validation-for="ActiveYNID" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label for="DepartmentName">Department Name</label>
+                                    <input type="text" class="form-control" id="DepartmentName" name="DepartmentName" value="@Model.DepartmentName" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="DepartmentID" name="DepartmentID" value="@Model.DepartmentID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

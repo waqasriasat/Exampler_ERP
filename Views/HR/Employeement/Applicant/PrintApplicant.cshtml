@@ -1,0 +1,92 @@
+@model IEnumerable<Exampler_ERP.Models.HR_Applicant>
+@{
+    var GenderList = (List<SelectListItem>)ViewBag.GenderList;
+    var MaritalStatusList = (List<SelectListItem>)ViewBag.MaritalStatusList;
+    var ReligionList = (List<SelectListItem>)ViewBag.ReligionList;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Applicants</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Applicant List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Picture</th>
+                <th>Applicant ID</th>
+                <th>Full Name</th>
+                <th>Gender</th>
+                <th>Marital Status</th>
+                <th>Religion</th>
+                <th>Phone</th>
+                <th>Mobile</th>
+                <th>Whatsapp</th>
+                <th>Branch</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Applicant in Model)
+            {
+                <tr>
+                    <td>
+                        @if (Applicant.Picture != null)
+                        {
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Applicant.Picture)" style="width: 50px; height: 50px; border-radius:50%" alt="Profile Picture" />
+                        }
+                        else
+                        {
+                            <img src="~/img/icons/noimage.jpg" style="width: 50px; height: 50px; border-radius:50%" alt="No Image Available" />
+                        }
+                    </td>
+                    <td>@Applicant.ApplicantID</td>
+                    <td>@($"{Applicant.FirstName} {Applicant.FatherName} {Applicant.FamilyName}")</td>
+                    <td>
+                        @(Applicant.Sex == 0 || Applicant.Sex == null
+                            ? ""
+                            : GenderList.FirstOrDefault(g => g.Value == Applicant.Sex.ToString())?.Text)
+                    </td>
+                    <td>
+                        @(Applicant.MaritalStatus == 0 || Applicant.MaritalStatus == null
+                            ? ""
+                            : MaritalStatusList.FirstOrDefault(m => m.Value == Applicant.MaritalStatus.ToString())?.Text)
+                    </td>
+                    <td>
+                        @(Applicant.Religion == 0 || Applicant.Religion == null
+                            ? ""
+                            : ReligionList.FirstOrDefault(r => r.Value == Applicant.Religion.ToString())?.Text)
+                    </td>
+                    <td>@Applicant.Phone1</td> <!-- Assuming Phone1 is the primary phone -->
+                    <td>@Applicant.Mobile</td>
+                    <td>@Applicant.Whatsapp</td>
+                    <td>@Applicant.Branch?.BranchName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

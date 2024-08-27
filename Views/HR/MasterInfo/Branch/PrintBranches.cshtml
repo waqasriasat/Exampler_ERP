@@ -1,0 +1,71 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_Branch>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Branches</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Branch List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Branch ID</th>
+                <th>Date</th>
+                <th>Branch Name</th>
+                <th>Active</th>
+                <th>PO Box</th>
+                <th>Country</th>
+                <th>City</th>
+                <th>Street</th>
+                <th>Phone</th>
+                <th>Fax</th>
+                <th>Mobile</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var branch in Model)
+            {
+                <tr>
+                    <td>@branch.BranchID</td>
+                    <td>@branch.Date</td>
+                    <td>@branch.BranchName</td>
+                    <td>@(branch.ActiveYNID == 1 ? "Yes" : "No")</td>
+                    <td>@branch.POBox</td>
+                    <td>@branch.Country</td>
+                    <td>@branch.City</td>
+                    <td>@branch.Street</td>
+                    <td>@branch.Phone</td>
+                    <td>@branch.Fax</td>
+                    <td>@branch.Mobile</td>
+                    <td>@branch.Address</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_Department>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Departmentes</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Department List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Department ID</th>
+                <th>Branch Name</th>
+                <th>Department Name</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Department in Model)
+            {
+                <tr>
+                    <td>@Department.DepartmentID</td>
+                    <td>@(Department.Branch?.BranchName ?? "N/A")</td>
+                    <td>@Department.DepartmentName</td>
+                    <td>@(Department.ActiveYNID == 1 ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+@model List<Exampler_ERP.Models.CR_ProcessTypeApprovalSetup>
+
+
+<script>
+    $(document).ready(function () {
+        console.log('Document is ready.');
+
+        // Function to update hidden fields based on checkboxes and ranks
+        function updateHiddenFields() {
+            $('#hiddenFieldsContainer').empty(); // Clear existing hidden fields
+
+            var processtypeid = $('#processTypeId').val(); // Get the ProcessTypeID value
+            var checkedRoles = $('.role-checkbox:checked');
+            checkedRoles.each(function (index) {
+                var roleId = $(this).val();
+                var rankInput = $('#rank_' + roleId);
+                var rank = rankInput.val();
+
+                $('#hiddenFieldsContainer').append(
+                    `<div class="row">
+                            <input type="hidden" name="ProcessTypeApprovalSetups[${index}].ProcessTypeID" value="${processtypeid}" id="hidden_ProcessTypeID_${roleId}" />
+                            <input type="hidden" name="ProcessTypeApprovalSetups[${index}].RoleID" value="${roleId}" id="hidden_RoleID_${roleId}" />
+                            <input type="hidden" name="ProcessTypeApprovalSetups[${index}].Rank" value="${rank}" id="hidden_Rank_${roleId}" />
+                        </div>`
+                );
+            });
+        }
+
+        // Event handler for role checkbox change
+        $(document).on('change', '.role-checkbox', function () {
+            // debugger;
+            var roleId = $(this).val();
+            var rankInput = $('#rank_' + roleId);
+
+            if ($(this).is(':checked')) {
+                var maxRank = 0;
+                $('.rank').each(function () {
+                    var val = parseInt($(this).val());
+                    if (val > maxRank) {
+                        maxRank = val;
+                    }
+                });
+                rankInput.val(maxRank + 1).removeAttr('readonly');
+                reorderRanks();
+            } else {
+                rankInput.val('').attr('readonly', true);
+                reorderRanks();
+            }
+
+            // Update hidden fields after checkbox change
+            updateHiddenFields();
+        });
+
+        function reorderRanks() {
+            // debugger;
+            var checkedRoles = [];
+            $('.role-checkbox:checked').each(function () {
+                checkedRoles.push($(this).val());
+            });
+
+            checkedRoles.sort(function (a, b) {
+                return $('#rank_' + a).val() - $('#rank_' + b).val();
+            });
+
+            for (var i = 0; i < checkedRoles.length; i++) {
+                $('#rank_' + checkedRoles[i]).val(i + 1);
+            }
+        }
+
+        // Initial call to update hidden fields on page load
+        updateHiddenFields();
+    });
+
+</script>
+
+<div class="modal fade" id="editProcessTypeApprovalSetupModal" tabindex="-1" role="dialog" aria-labelledby="editProcessTypeApprovalSetupModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProcessTypeApprovalSetupModalLabel">Edit ProcessTypeApprovalSetup</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editProcessTypeApprovalSetupForm">
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <div class="form-group">
+                                    <label for="processTypeName">ProcessType Name</label>
+                                <input type="text" class="form-control" id="processTypeName" value="@Model.FirstOrDefault()?.ProcessType?.ProcessTypeName" disabled />
+                                <input type="hidden" id="processTypeId" value="@Model.FirstOrDefault()?.ProcessTypeID" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row role-container">
+                            <div class="col-9">
+                                @foreach (var role in (IEnumerable<dynamic>)ViewBag.RoleList)
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input role-checkbox" type="checkbox" name="RoleIDs" value="@role.Value" id="role_@role.Value" @(Model.Any(m => m.RoleID == role.Value) ? "checked" : "") />
+                                        <label class="form-control form-check-label" for="role_@role.Value">@role.Text</label>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-3">
+                                @foreach (var role in (IEnumerable<dynamic>)ViewBag.RoleList)
+                                {
+                                    int? rank = Model.FirstOrDefault(m => m.RoleID == role.Value)?.Rank;
+                                    <input type="text" class="form-control rank" id="rank_@role.Value" value="@rank?.ToString()" readonly />
+                                }
+                            </div>
+                        </div>
+
+                        <div id="hiddenFieldsContainer">
+                            @for (var i = 0; i < Model.Count; i++)
+                            {
+                                <div class="row">
+                                    <input style="width:100px" type="text" name="ProcessTypeApprovalSetups[@i].ProcessTypeID" value="@Model[i].ProcessTypeID" id="hidden_ProcessTypeID_@Model[i].ProcessTypeID" />
+                                    <input style="width:100px" type="text" name="ProcessTypeApprovalSetups[@i].RoleID" value="@Model[i].RoleID" id="hidden_RoleID_@Model[i].RoleID" />
+                                    <input style="width:100px" type="text" name="ProcessTypeApprovalSetups[@i].Rank" value="@Model[i].Rank" id="hidden_Rank_@Model[i].RoleID" />
+                                </div>
+                            }
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

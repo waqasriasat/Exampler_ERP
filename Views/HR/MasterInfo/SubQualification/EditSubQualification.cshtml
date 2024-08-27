@@ -1,0 +1,46 @@
+@model Exampler_ERP.Models.Settings_SubQualification
+
+<div class="modal fade" id="editSubQualificationModal" tabindex="-1" role="dialog" aria-labelledby="editSubQualificationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editSubQualificationModalLabel">Edit SubQualification</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editSubQualificationForm">
+                    <div class="row">
+                        <div class="col-2 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="QualificationID" class="control-label">Select Qualification</label>
+                                    <select asp-for="QualificationID" asp-items="@(new SelectList(ViewBag.QualificationList, "Value", "Text", Model.QualificationID))" class="form-control">
+                                    </select>
+                                    <span asp-validation-for="QualificationID" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="ActiveYNID">Active</label>
+                                    <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control">
+                                        <option>Please select</option>
+                                    </select>
+                                    <span asp-validation-for="ActiveYNID" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label for="SubQualificationName">SubQualification Name</label>
+                                    <input type="text" class="form-control" id="SubQualificationName" name="SubQualificationName" value="@Model.SubQualificationName" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="SubQualificationID" name="SubQualificationID" value="@Model.SubQualificationID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+@model List<Exampler_ERP.Models.HR_BankAccount>
+
+<div class="modal fade" id="editBankAccountModal" tabindex="-1" role="dialog" aria-labelledby="editBankAccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editBankAccountModalLabel">Edit BankAccount</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editBankAccountForm">
+                    <div class="row">
+                        <div class="col-12 mb-2">
+                            <div class="form-group">
+                                <label for="EmployeeName">Employee Name</label>
+                                <input type="text" class="form-control" id="EmployeeName" value="@Model.FirstOrDefault()?.Employee?.FirstName @Model.FirstOrDefault()?.Employee?.FatherName @Model.FirstOrDefault()?.Employee?.FamilyName" disabled />
+                                <input type="hidden" name="EmployeeID" id="EmployeeID" value="@Model.FirstOrDefault()?.Employee?.EmployeeID" />
+                            </div>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <div class="form-group">
+                                <label for="AccountHolderName">Account Holder Name</label>
+                                <input type="text" class="form-control" id="AccountHolderName" name="AccountHolderName" value="@Model.FirstOrDefault()?.AccountHolderName" />
+                            </div>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <div class="form-group">
+                                <label for="AccountNumber">Account Number</label>
+                                <input type="text" class="form-control" id="AccountNumber" name="AccountNumber" value="@Model.FirstOrDefault()?.AccountNumber" />
+                            </div>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <div class="form-group">
+                                <label for="BankName">Bank Name</label>
+                                <input type="text" class="form-control" id="BankName" name="BankName" value="@Model.FirstOrDefault()?.BankName" />
+                            </div>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <div class="form-group">
+                                <label for="BranchName">Branch Name</label>
+                                <input type="text" class="form-control" id="BranchName" name="BranchName" value="@Model.FirstOrDefault()?.BranchName" />
+                            </div>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <div class="form-group">
+                                <label for="AccountType">Account Type</label>
+                                <input type="text" class="form-control" id="AccountType" name="AccountType" value="@Model.FirstOrDefault()?.AccountType" />
+                            </div>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <div class="form-group">
+                                <label for="BankContact">Bank Contact</label>
+                                <input type="text" class="form-control" id="BankContact" name="BankContact" value="@Model.FirstOrDefault()?.BankContact" />
+                            </div>
+                        </div>
+                        <div class="col-12 mb-2">
+                            <div class="form-group">
+                                <label for="BankAddress">Bank Address</label>
+                                <input type="text" class="form-control" id="BankAddress" name="BankAddress" value="@Model.FirstOrDefault()?.BankAddress" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

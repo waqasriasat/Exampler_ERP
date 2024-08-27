@@ -1,0 +1,46 @@
+@model Exampler_ERP.Models.Settings_Section
+
+<div class="modal fade" id="editSectionModal" tabindex="-1" role="dialog" aria-labelledby="editSectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editSectionModalLabel">Edit Section</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editSectionForm">
+                    <div class="row">
+                        <div class="col-2 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="DepartmentID" class="control-label">Select Department</label>
+                                    <select asp-for="DepartmentID" asp-items="@(new SelectList(ViewBag.DepartmentList, "Value", "Text", Model.DepartmentID))" class="form-control">
+                                    </select>
+                                    <span asp-validation-for="DepartmentID" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="ActiveYNID">Active</label>
+                                    <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control">
+                                        <option>Please select</option>
+                                    </select>
+                                    <span asp-validation-for="ActiveYNID" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label for="SectionName">Section Name</label>
+                                    <input type="text" class="form-control" id="SectionName" name="SectionName" value="@Model.SectionName" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="SectionID" name="SectionID" value="@Model.SectionID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

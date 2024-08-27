@@ -1,0 +1,170 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_Designation>
+
+@{
+    ViewData["Title"] = "Master Information - Designation";
+}
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            // Edit Designation modal popup
+            $('.editDesignationLink').click(function (e) {
+                e.preventDefault();
+                var DesignationId = $(this).data('id');
+                $.get('@Url.Action("Edit", "Designation")', { id: DesignationId }, function (data) {
+                    $('#editDesignationModalContainer').html(data);
+                    $('#editDesignationModal').modal('show');
+                });
+            });
+
+            $('#editDesignationModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editDesignationForm').serialize();
+                $.post('@Url.Action("Edit", "Designation")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        // Show validation errors
+                    }
+                });
+            });
+
+            // Add new Designation modal popup
+            $('.addDesignationLink').click(function () {
+                $.get('@Url.Action("Create", "Designation")', function (data) {
+                    $('#addDesignationModalContainer').html(data);
+                    $('#addDesignationModal').modal('show');
+                });
+            });
+
+            // Save new Designation form
+            $('#addDesignationModalContainer').on('click', '#saveNewDesignation', function () {
+                var formData = $('#addDesignationForm').serialize();
+                $.post('@Url.Action("Create", "Designation")', formData, function (response) {
+                    if (response.success) {
+                        $('#addDesignationModal').modal('hide');
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        // Handle validation errors or other cases
+                    }
+                });
+            });
+
+            // Delete Designation
+            $('.deleteDesignationLink').click(function (e) {
+                e.preventDefault();
+                var DesignationId = $(this).data('id');
+                $.post('@Url.Action("Delete", "Designation")', { id: DesignationId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        // Handle errors
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+    </script>
+    <script>
+        function printDesignations() {
+            var printWindow = window.open('@Url.Action("Print", "Designation")', '_blank');
+            printWindow.focus();
+        }
+    </script>
+}
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Master Information /</span> Designation
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Designation List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-10 col-lg-9">
+                            <div class="row">
+                                <div class="col-2">
+                                    <p class="text-nowrap">Designation ID</p>
+                                </div>
+                                <div class="col-8">
+                                    <p class="text-nowrap">Designation Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Active</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-8 col-md-10 col-lg-9">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Designation ID : </span>@Html.DisplayFor(modelItem => item.DesignationID)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-8">
+                                        <p class="text-nowrap"><span class="smallAdd">Designation Name : </span>@Html.DisplayFor(modelItem => item.DesignationName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Active : </span>
+                                            @if (item.ActiveYNID == 1)
+                                            {
+                                                <span>Yes</span>
+                                            }
+                                            else if (item.ActiveYNID == 0)
+                                            {
+                                                <span>No</span>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-2 col-lg-3">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editDesignationLink" data-id="@item.DesignationID">
+                                                <i class="fa fa-pencil" style="font-size: x-large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="deleteDesignationLink" data-id="@item.DesignationID">
+                                                <i class="fa fa-trash-o" style="font-size: x-large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="mt-4">
+                        <button type="button" class="btn btn-primary addDesignationLink">Add New</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Designation")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printDesignations()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editDesignationModalContainer"></div>
+<div id="addDesignationModalContainer"></div>

@@ -1,0 +1,193 @@
+@{
+    ViewData["Title"] = "Human Resources - Employeement";
+}
+
+@section PageScripts {
+    <script src="~/js/pages-account-settings-account.js"></script>
+    <link href="~/css/custom.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+}
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Human Resources /</span> Employeement
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-pills flex-column flex-md-row mb-3">
+            <li class="nav-item"><a class="nav-link" href="~/Main_Dashboard/Index"><i class="bx bx-user me-1"></i> Main</a></li>
+            <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-bell me-1"></i> Employeement</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/HR_Dashboard/Index"><i class="bx bx-link-alt me-1"></i> HR</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/Finance_Dashboard/Index"><i class="bx bx-bell me-1"></i> Finance</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/Report_Dashboard/Index"><i class="bx bx-link-alt me-1"></i> Report</a></li>
+        </ul>
+        <div class="card mb-4">
+            <h5 class="card-header">Details</h5>
+            <div class="row" style="padding: 30px 30px 0px 30px;">
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <a asp-controller="Applicant" asp-action="Index">
+                        <div class="shadow mb-4">
+                            <div class="small-box bg-white">
+                                <div class="inner Card1div">
+                                    <strong class="CardFontColor">Applicant</strong>
+                                    <h4 class="CardCountFontColor">
+                                        0
+                                    </h4>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
+                                </div>
+                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <a asp-controller="Employee" asp-action="Index">
+                        <div class="shadow mb-4">
+                            <div class="small-box bg-white">
+                                <div class="inner Card1div">
+                                    <strong class="CardFontColor">Employee</strong>
+                                    <h4 class="CardCountFontColor">
+                                        0
+                                    </h4>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-print Card1I" aria-hidden="true"></i>
+                                </div>
+                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <a asp-controller="Contract" asp-action="Index">
+                        <div class="shadow mb-4">
+                            <div class="small-box bg-white">
+                                <div class="inner Card1div">
+                                    <strong class="CardFontColor">Contract</strong>
+                                    <h4 class="CardCountFontColor">
+                                        0
+                                    </h4>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-book Card1I" aria-hidden="true"></i>
+                                </div>
+                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <a asp-controller="Salary" asp-action="Index">
+                        <div class="shadow mb-4">
+                            <div class="small-box bg-white">
+                                <div class="inner Card1div">
+                                    <strong class="CardFontColor">Salary</strong>
+                                    <h4 class="CardCountFontColor">
+                                        0
+                                    </h4>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
+                                </div>
+                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <a asp-controller="Joining" asp-action="Index"> 
+                        <div class="shadow mb-4">
+                            <div class="small-box bg-white">
+                                <div class="inner Card1div">
+                                    <strong class="CardFontColor">Joining</strong>
+                                    <h4 class="CardCountFontColor">
+                                        0
+                                    </h4>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-print Card1I" aria-hidden="true"></i>
+                                </div>
+                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+               <div class="col-lg-3 col-md-6 col-sm-12">
+                    <a asp-controller="BankAccount" asp-action="Index">
+                        <div class="shadow mb-4">
+                            <div class="small-box bg-white">
+                                <div class="inner Card1div">
+                                    <strong class="CardFontColor">Bank Account</strong>
+                                    <h4 class="CardCountFontColor">
+                                        0
+                                    </h4>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-book Card1I" aria-hidden="true"></i>
+                                </div>
+                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <a asp-controller="ContractRenewal" asp-action="Index">
+                        <div class="shadow mb-4">
+                            <div class="small-box bg-white">
+                                <div class="inner Card1div">
+                                    <strong class="CardFontColor">Contract Renewal</strong>
+                                    <h4 class="CardCountFontColor">
+                                        0
+                                    </h4>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
+                                </div>
+                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <a asp-controller="LeaveBalance" asp-action="Index">
+                        <div class="shadow mb-4">
+                            <div class="small-box bg-white">
+                                <div class="inner Card1div">
+                                    <strong class="CardFontColor">Leaves Balance</strong>
+                                    <h4 class="CardCountFontColor">
+                                        0
+                                    </h4>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-print Card1I" aria-hidden="true"></i>
+                                </div>
+                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <a asp-controller="CardPrint" asp-action="Index">
+                        <div class="shadow mb-4">
+                            <div class="small-box bg-white">
+                                <div class="inner Card1div">
+                                    <strong class="CardFontColor">Card Print</strong>
+                                    <h4 class="CardCountFontColor">
+                                        0
+                                    </h4>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-book Card1I" aria-hidden="true"></i>
+                                </div>
+                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

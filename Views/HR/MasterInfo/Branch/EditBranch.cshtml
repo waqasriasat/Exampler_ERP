@@ -1,0 +1,71 @@
+@model Exampler_ERP.Models.Settings_Branch
+
+<div class="modal fade" id="editBranchModal" tabindex="-1" role="dialog" aria-labelledby="editBranchModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editBranchModalLabel">Edit Branch</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editBranchForm">
+                    <div class="row">
+                        <div class="col-2 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-12 col-md-12 col-lg-12">
+                                    <label for="BranchName">Branch Name</label>
+                                    <input type="text" class="form-control" id="BranchName" name="BranchName" value="@Model.BranchName" />
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label asp-for="ActiveYNID">Active</label>
+                                    <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text", Model.ActiveYNID))" class="form-control">
+                                    </select>
+                                    <span asp-validation-for="ActiveYNID" class="text-danger"></span>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label for="POBox">PO Box</label>
+                                    <input type="text" class="form-control" id="POBox" name="POBox" value="@Model.POBox" />
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label for="Country">Country</label>
+                                    <input type="text" class="form-control" id="Country" name="Country" value="@Model.Country" />
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label for="City">City</label>
+                                    <input type="text" class="form-control" id="City" name="City" value="@Model.City" />
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label for="Street">Street</label>
+                                    <input type="text" class="form-control" id="Street" name="Street" value="@Model.Street" />
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label for="Phone">Phone</label>
+                                    <input type="text" class="form-control" id="Phone" name="Phone" value="@Model.Phone" />
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label for="Fax">Fax</label>
+                                    <input type="text" class="form-control" id="Fax" name="Fax" value="@Model.Fax" />
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label for="Mobile">Mobile</label>
+                                    <input type="text" class="form-control" id="Mobile" name="Mobile" value="@Model.Mobile" />
+                                </div>
+                                <div class="col-12 col-md-12 col-lg-12">
+                                    <label for="Address">Address</label>
+                                    <input type="text" class="form-control" id="Address" name="Address" style="height: 100px;" value="@Model.Address" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="BranchID" name="BranchID" value="@Model.BranchID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

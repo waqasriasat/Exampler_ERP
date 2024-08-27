@@ -1,0 +1,170 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_ProcessType>
+
+@{
+    ViewData["Title"] = "Master Information - ProcessType";
+}
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            // Edit ProcessType modal popup
+            $('.editProcessTypeLink').click(function (e) {
+                e.preventDefault();
+                var ProcessTypeId = $(this).data('id');
+                $.get('@Url.Action("Edit", "ProcessType")', { id: ProcessTypeId }, function (data) {
+                    $('#editProcessTypeModalContainer').html(data);
+                    $('#editProcessTypeModal').modal('show');
+                });
+            });
+
+            $('#editProcessTypeModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editProcessTypeForm').serialize();
+                $.post('@Url.Action("Edit", "ProcessType")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        // Show validation errors
+                    }
+                });
+            });
+
+            // Add new ProcessType modal popup
+            $('.addProcessTypeLink').click(function () {
+                $.get('@Url.Action("Create", "ProcessType")', function (data) {
+                    $('#addProcessTypeModalContainer').html(data);
+                    $('#addProcessTypeModal').modal('show');
+                });
+            });
+
+            // Save new ProcessType form
+            $('#addProcessTypeModalContainer').on('click', '#saveNewProcessType', function () {
+                var formData = $('#addProcessTypeForm').serialize();
+                $.post('@Url.Action("Create", "ProcessType")', formData, function (response) {
+                    if (response.success) {
+                        $('#addProcessTypeModal').modal('hide');
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        // Handle validation errors or other cases
+                    }
+                });
+            });
+
+            // Delete ProcessType
+            $('.deleteProcessTypeLink').click(function (e) {
+                e.preventDefault();
+                var ProcessTypeId = $(this).data('id');
+                $.post('@Url.Action("Delete", "ProcessType")', { id: ProcessTypeId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        // Handle errors
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+    </script>
+    <script>
+        function printProcessTypes() {
+            var printWindow = window.open('@Url.Action("Print", "ProcessType")', '_blank');
+            printWindow.focus();
+        }
+    </script>
+}
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Master Information /</span> ProcessType
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">ProcessType List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-10 col-lg-9">
+                            <div class="row">
+                                <div class="col-2">
+                                    <p class="text-nowrap">ProcessType ID</p>
+                                </div>
+                                <div class="col-8">
+                                    <p class="text-nowrap">ProcessType Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Active</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-8 col-md-10 col-lg-9">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">ProcessType ID : </span>@Html.DisplayFor(modelItem => item.ProcessTypeID)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-8">
+                                        <p class="text-nowrap"><span class="smallAdd">ProcessType Name : </span>@Html.DisplayFor(modelItem => item.ProcessTypeName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Active : </span>
+                                            @if (item.ActiveYNID == 1)
+                                            {
+                                                <span>Yes</span>
+                                            }
+                                            else if (item.ActiveYNID == 0)
+                                            {
+                                                <span>No</span>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-2 col-lg-3">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editProcessTypeLink" data-id="@item.ProcessTypeID">
+                                                <i class="fa fa-pencil" style="font-size: x-large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="deleteProcessTypeLink" data-id="@item.ProcessTypeID">
+                                                <i class="fa fa-trash-o" style="font-size: x-large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="mt-4">
+                        <button type="button" class="btn btn-primary addProcessTypeLink">Add New</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "ProcessType")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printProcessTypes()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editProcessTypeModalContainer"></div>
+<div id="addProcessTypeModalContainer"></div>

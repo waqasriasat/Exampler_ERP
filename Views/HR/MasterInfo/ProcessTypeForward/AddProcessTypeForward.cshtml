@@ -1,0 +1,42 @@
+@model Exampler_ERP.Models.Temp.ProcessTypeForwardViewModel
+
+<div class="modal fade" id="addNewProcessTypeForwardModal" tabindex="-1" role="dialog" aria-labelledby="addNewProcessTypeForwardModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addNewProcessTypeForwardModalLabel">Add New ProcessTypeForward</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label for="ProcessTypeID">ProcessType</label>
+                        <select asp-for="ProcessTypeID" asp-items="@(new SelectList(ViewBag.ProcessTypes, "ProcessTypeID", "ProcessTypeName"))" class="form-control"></select>
+                        <span asp-validation-for="ProcessTypeID" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Roles</label>
+                        @foreach (var role in ViewBag.Roles)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="SelectedRoleIds" value="@role.RoleID" />
+                                <label class="form-check-label">@role.RoleName</label>
+                            </div>
+                        }
+                        <span asp-validation-for="SelectedRoleIds" class="text-danger"></span>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveNewProcessTypeForward">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+@media print {
+  /* Hide elements that are not needed for printing */
+  .btn, .no-print {
+    display: none !important;
+  }
+
+  /* Style adjustments for printing */
+  body {
+    font-size: 10pt;
+  }
+
+  /* Page break handling */
+  .page-break {
+    page-break-before: always;
+  }
+}

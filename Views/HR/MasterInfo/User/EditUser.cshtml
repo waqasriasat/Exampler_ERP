@@ -1,0 +1,55 @@
+@model Exampler_ERP.Models.CR_User
+
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserForm">
+                    <div class="row">
+                        <div class="col-2 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="RoleID" class="control-label">Select Role</label>
+                                    <select asp-for="RoleID" asp-items="@(new SelectList(ViewBag.RoleList, "Value", "Text", Model.RoleID))" class="form-control">
+                                    </select>
+                                    <span asp-validation-for="RoleID" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="EmployeeID">Employee</label>
+                                    <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeeList, "Value", "Text"))" class="form-control" disabled>
+                                    </select>
+                                    <span asp-validation-for="EmployeeID" class="text-danger"></span>
+                                    <input type="hidden" name="EmployeeID" value="@Model.EmployeeID" />
+                                </div>
+                                <div class="col-12">
+                                    <label for="UserName">User Name</label>
+                                    <input type="text" class="form-control" id="UserName" name="UserName" value="@Model.UserName" disabled />
+                                    <input type="hidden" name="UserName" value="@Model.UserName" />
+                                </div>
+                                <div class="col-12">
+                                    <label for="Password">Password</label>
+                                    <input type="text" class="form-control" id="Password" name="Password" value="@Model.Password" />
+                                </div>
+                                <input type="hidden" id="ActiveYNID" name="ActiveYNID" value="@Model.ActiveYNID" />
+                                <input type="hidden" id="DeleteYNID" name="DeleteYNID" value="@Model.DeleteYNID" />
+                                <input type="hidden" id="FinalApprovalID" name="FinalApprovalID" value="@Model.FinalApprovalID" />
+                                <input type="hidden" id="ApprovalProcessID" name="ApprovalProcessID" value="@Model.ApprovalProcessID" />
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="UserID" name="UserID" value="@Model.UserID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+@model Exampler_ERP.Models.CR_User
+
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addUserForm">
+                    <div class="row">
+                        <div class="col-6">
+                            <label asp-for="RoleID" class="control-label">Select Role</label>
+                            <select asp-for="RoleID" asp-items="@(new SelectList(ViewBag.RoleList, "Value", "Text", Model.RoleID))" class="form-control">
+                            </select>
+                            <span asp-validation-for="RoleID" class="text-danger"></span>
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="EmployeeID">Employee</label>
+                            <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeeList, "Value", "Text"))" class="form-control">
+                            </select>
+                            <span asp-validation-for="EmployeeID" class="text-danger"></span>
+                        </div>
+                        <div class="col-12">
+                            <label for="UserName">User Name</label>
+                            <input type="text" class="form-control" id="UserName" name="UserName" value="@Model.UserName" />
+                        </div>
+                        <div class="col-12">
+                            <label for="Password">Password</label>
+                            <input type="text" class="form-control" id="Password" name="Password" value="@Model.Password" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveNewUser">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

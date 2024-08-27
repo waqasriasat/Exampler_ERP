@@ -1,0 +1,40 @@
+@model Exampler_ERP.Models.Settings_VacationType
+
+<div class="modal fade" id="editVacationTypeModal" tabindex="-1" role="dialog" aria-labelledby="editVacationTypeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editVacationTypeModalLabel">Edit VacationType</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editVacationTypeForm">
+                    <div class="row">
+                        <div class="col-2 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-12 col-md-12 col-lg-12">
+                                    <label for="VacationTypeName">VacationType Name</label>
+                                    <input type="text" class="form-control" id="VacationTypeName" name="VacationTypeName" value="@Model.VacationTypeName" />
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label asp-for="ActiveYNID">Active</label>
+                                    <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text", Model.ActiveYNID))" class="form-control">
+                                    </select>
+                                    <span asp-validation-for="ActiveYNID" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="VacationTypeID" name="VacationTypeID" value="@Model.VacationTypeID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

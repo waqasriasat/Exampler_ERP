@@ -1,0 +1,53 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_EmployeeStatusType>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print EmployeeStatusTypees</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>EmployeeStatusType List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>EmployeeStatusType ID</th>
+                <th>EmployeeStatusType Name</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var EmployeeStatusType in Model)
+            {
+                <tr>
+                    <td>@EmployeeStatusType.EmployeeStatusTypeID</td>
+                    <td>@EmployeeStatusType.EmployeeStatusTypeName</td>
+                    <td>@(EmployeeStatusType.ActiveYNID == 1 ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

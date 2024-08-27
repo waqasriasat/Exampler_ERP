@@ -1,0 +1,76 @@
+@model IEnumerable<Exampler_ERP.Models.HR_DeductionSetup>
+@{
+    var deductionValueDict = ViewBag.DeductionValueDict as Dictionary<int, string>;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print DeductionSetupes</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>DeductionSetup List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>DeductionSetup ID</th>
+                <th>DeductionType Name</th>
+                <th>Class</th>
+                <th>SalaryType Name</th>
+                <th>Deduction Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var DeductionSetup in Model)
+            {
+                <tr>
+                    <td>@DeductionSetup.DeductionSetupID</td>
+                    <td>@(DeductionSetup.DeductionType?.DeductionTypeName ?? "N/A")</td>
+                    <td>@(DeductionSetup.ClassID == 1 ? "Absent" : "Late")</td>
+                    <td>@(DeductionSetup.SalaryType?.SalaryTypeName)</td>
+                    <td>
+                        @{
+                            string deductionValueText;
+                            if (DeductionSetup.DeductionValueID == null || DeductionSetup.DeductionValueID == 0)
+                            {
+                                deductionValueText = "Not Set"; 
+                            }
+                            else
+                            {
+                                deductionValueText = deductionValueDict.ContainsKey(DeductionSetup.DeductionValueID.Value)
+                                ? deductionValueDict[DeductionSetup.DeductionValueID.Value]
+                                : "Unknown";
+                            }
+                        }
+                        @deductionValueText
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

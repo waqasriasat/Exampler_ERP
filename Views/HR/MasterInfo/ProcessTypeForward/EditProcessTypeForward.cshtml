@@ -1,0 +1,44 @@
+@model Exampler_ERP.Models.Temp.ProcessTypeForwardViewModel
+
+<div class="modal fade" id="editProcessTypeForwardModal" tabindex="-1" role="dialog" aria-labelledby="editProcessTypeForwardModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProcessTypeForwardModalLabel">Edit ProcessTypeForward</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editProcessTypeForwardForm">
+                    <input type="hidden" asp-for="ProcessTypeID" />
+                    <div class="form-group">
+                        <label for="ProcessTypeID">ProcessType</label>
+                        <select asp-for="ProcessTypeID" asp-items="@(new SelectList(ViewBag.ProcessTypes, "ProcessTypeID", "ProcessTypeName"))" class="form-control" disabled></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Roles</label>
+                        @foreach (var role in ViewBag.Roles)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="SelectedRoleIds" value="@role.RoleID" @(Model.SelectedRoleIds.Contains(role.RoleID) ? "checked" : "") />
+                                <label class="form-check-label">@role.RoleName</label>
+                            </div>
+                        }
+                    </div>
+
+                    
+
+                    <div>
+                        <span asp-validation-summary="ModelOnly"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

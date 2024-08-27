@@ -1,0 +1,53 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_SalaryType>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print SalaryTypees</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>SalaryType List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>SalaryType ID</th>
+                <th>SalaryType Name</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var SalaryType in Model)
+            {
+                <tr>
+                    <td>@SalaryType.SalaryTypeID</td>
+                    <td>@SalaryType.SalaryTypeName</td>
+                    <td>@(SalaryType.ActiveYNID == 1 ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

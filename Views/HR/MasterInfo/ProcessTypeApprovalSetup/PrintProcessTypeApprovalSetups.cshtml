@@ -1,0 +1,55 @@
+@model IEnumerable<Exampler_ERP.Models.CR_ProcessTypeApprovalSetup>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print ProcessTypeApprovalSetupes</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>ProcessTypeApprovalSetup List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ProcessType ApprovalID</th>
+                <th>ProcessType Name</th>
+                <th>Rank Name</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ProcessTypeApprovalSetup in Model)
+            {
+                <tr>
+                    <td>@ProcessTypeApprovalSetup.ProcessTypeApprovalID</td>
+                    <td>@(ProcessTypeApprovalSetup.ProcessType?.ProcessTypeName ?? "N/A")</td>
+                    <td>@ProcessTypeApprovalSetup.Rank</td>
+                    <td>@ProcessTypeApprovalSetup.RoleID</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

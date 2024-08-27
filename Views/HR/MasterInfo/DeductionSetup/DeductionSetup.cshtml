@@ -1,0 +1,148 @@
+@model Exampler_ERP.Models.Temp.DeductionSetupListViewModel
+
+@{
+    ViewData["Title"] = "Master Information - DeductionSetup";
+}
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            // Edit DeductionSetup modal popup
+            $('.editDeductionSetupLink').click(function (e) {
+                e.preventDefault();
+                var DeductionSetupId = $(this).data('id');
+                $.get('@Url.Action("Edit", "DeductionSetup")', { id: DeductionSetupId }, function (data) {
+                    $('#editDeductionSetupModalContainer').html(data);
+                    $('#editDeductionSetupModal').modal('show');
+                });
+            });
+
+            $('#editDeductionSetupModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editDeductionSetupForm').serialize();
+                $.post('@Url.Action("Edit", "DeductionSetup")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        // Show validation errors
+                    }
+                });
+            });
+
+            // Delete DeductionSetup
+            $('.deleteDeductionSetupLink').click(function (e) {
+                e.preventDefault();
+                var DeductionSetupId = $(this).data('id');
+                $.post('@Url.Action("Delete", "DeductionSetup")', { id: DeductionSetupId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        // Handle errors
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+    </script>
+    <script>
+        function printDeductionSetups() {
+            var printWindow = window.open('@Url.Action("Print", "DeductionSetup")', '_blank');
+            printWindow.focus();
+        }
+    </script>
+}
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Master Information /</span> DeductionSetup
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">DeductionSetup List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-10 col-lg-9">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-nowrap">DeductionType Name</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">Class</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Total</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model.DeductionTypeWithRowCount)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-8 col-md-10 col-lg-9">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <p class="text-nowrap"><span class="smallAdd">DeductionType Name : </span>@Html.DisplayFor(modelItem => item.DeductionTypeName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Class : </span>
+                                            @if (item.Class == 1)
+                                            {
+                                                <span>Absent</span>
+                                            }
+                                            else if (item.Class == 2)
+                                            {
+                                                <span>Late</span>
+                                            }
+                                        </p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Total : </span>@Html.DisplayFor(modelItem => item.RowCount)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-2 col-lg-3">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editDeductionSetupLink" data-id="@item.DeductionTypeID">
+                                                <i class="fa fa-pencil" style="font-size: x-large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="deleteDeductionSetupLink" data-id="@item.DeductionTypeID">
+                                                <i class="fa fa-trash-o" style="font-size: x-large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="mt-4">
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "DeductionSetup")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printDeductionSetups()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editDeductionSetupModalContainer"></div>
+<div id="addDeductionSetupModalContainer"></div>

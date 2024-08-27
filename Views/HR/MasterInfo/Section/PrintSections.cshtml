@@ -1,0 +1,55 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_Section>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Sectiones</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Section List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Section ID</th>
+                <th>Department Name</th>
+                <th>Section Name</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Section in Model)
+            {
+                <tr>
+                    <td>@Section.SectionID</td>
+                    <td>@(Section.Department?.DepartmentName ?? "N/A")</td>
+                    <td>@Section.SectionName</td>
+                    <td>@(Section.ActiveYNID == 1 ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

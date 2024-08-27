@@ -1,0 +1,53 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_VacationType>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print VacationTypees</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>VacationType List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>VacationType ID</th>
+                <th>VacationType Name</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var VacationType in Model)
+            {
+                <tr>
+                    <td>@VacationType.VacationTypeID</td>
+                    <td>@VacationType.VacationTypeName</td>
+                    <td>@(VacationType.ActiveYNID == 1 ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

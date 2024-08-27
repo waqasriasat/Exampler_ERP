@@ -1,0 +1,207 @@
+@model Exampler_ERP.Models.HR_Applicant
+
+<div class="modal fade" id="editApplicantModal" tabindex="-1" role="dialog" aria-labelledby="editApplicantModalLabel" aria-hidden="true" style="--bs-modal-width: 60rem;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editApplicantModalLabel">Edit Applicant</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editApplicantForm" method="post" asp-action="Edit" asp-controller="Applicant" enctype="multipart/form-data">
+                    <h5 class="modal-title" style="padding-top:10px">Company Information</h5>
+                    <hr />
+                    <input type="hidden" asp-for="FinalApprovalID" class="form-control" />
+                    <input type="hidden" asp-for="ApprovalProcesslID" class="form-control" />
+                    <input type="hidden" asp-for="ApplicantID" class="form-control" />
+                    <div class="row">
+                        <div class="col-12 col-md-12 col-lg-9">
+                            
+                            <div class="row">
+                                <div class="col-4">
+                                    <label asp-for="BranchID" class="control-label">Branch</label>
+                                    <select asp-for="BranchID" asp-items="@(new SelectList(ViewBag.BranchsList, "Value", "Text", Model.BranchID))" class="form-control">
+                                    </select>
+                                    <span asp-validation-for="BranchID" class="text-danger"></span>
+                                </div>
+                               
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-12 col-lg-3">
+                            <div class="row">
+                                <div class="col-12" style="height:150px">
+                                    <div class="relative" style="text-align: -webkit-center;">
+                                        <img src="@(Model.Picture != null ? "data:image/jpeg;base64," + Convert.ToBase64String(Model.Picture) : "~/img/icons/NoImage.jpg")"
+                                             id="PreviewPhoto" alt="Profile Picture" width="125" height="125"
+                                             style="border:1px; margin-top:0px;border-radius: 50%;" />
+                                        <input asp-for="Picture" class="custom-file-input" id="profilePictureInput" type="file" name="profilePicture"
+                                               class="form-control" style="display:none;" onchange="document.getElementById('PreviewPhoto').src=window.URL.createObjectURL(this.files[0])" />
+                                        <a href="#" onclick="document.getElementById('profilePictureInput').click()">
+                                            <i class="fa fa-pencil" style="font-size: x-large; color:darkslategray; line-height: 2;position: relative;bottom: -55px;right: 16px;"></i>
+                                        </a>
+                                        <span asp-validation-for="Picture" class="text-danger"></span>
+                                        @if (Model.Picture != null)
+                                        {
+                                            <input type="hidden" name="ExistingPicture" value="@Convert.ToBase64String(Model.Picture)" />
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h5 class="modal-title" style="padding-top:10px">Applicantment Biodata</h5>
+                    <hr />
+                    <div class="row">
+
+                        <div class="col-3">
+                            <label asp-for="FirstName" class="control-label">First Name</label>
+                            <input asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="FatherName" class="control-label">Father Name</label>
+                            <input asp-for="FatherName" class="form-control" />
+                            <span asp-validation-for="FatherName" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="FamilyName" class="control-label">Family Name</label>
+                            <input asp-for="FamilyName" class="form-control" />
+                            <span asp-validation-for="FamilyName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <label asp-for="Sex" class="control-label">Gender</label>
+                            <select asp-for="Sex" asp-items="@(new SelectList(ViewBag.GenderList, "Value", "Text"))" class="form-control">
+                            </select>
+                            <span asp-validation-for="Sex" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="DOB" class="control-label">Date of Birth</label>
+                            <input asp-for="DOB" class="form-control" type="date" />
+                            <span asp-validation-for="DOB" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="MaritalStatus" class="control-label">Marital Status</label>
+                            <select asp-for="MaritalStatus" asp-items="@(new SelectList(ViewBag.MaritalStatusList, "Value", "Text"))" class="form-control">
+                            </select>
+                            <span asp-validation-for="MaritalStatus" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="NoOfChildren" class="control-label">Number of Children</label>
+                            <input asp-for="NoOfChildren" class="form-control" />
+                            <span asp-validation-for="NoOfChildren" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <label asp-for="Phone1" class="control-label">Phone 1</label>
+                            <input asp-for="Phone1" class="form-control" />
+                            <span asp-validation-for="Phone1" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="Phone2" class="control-label">Phone 2</label>
+                            <input asp-for="Phone2" class="form-control" />
+                            <span asp-validation-for="Phone2" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="Mobile" class="control-label">Mobile</label>
+                            <input asp-for="Mobile" class="form-control" />
+                            <span asp-validation-for="Mobile" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="Whatsapp" class="control-label">Whatsapp</label>
+                            <input asp-for="Whatsapp" class="form-control" />
+                            <span asp-validation-for="Whatsapp" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-3">
+                            <label asp-for="Religion" class="control-label">Religion</label>
+                            <select asp-for="Religion" asp-items="@(new SelectList(ViewBag.ReligionList, "Value", "Text"))" class="form-control">
+                            </select>
+                            <span asp-validation-for="Religion" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="PlaceOfBirth" class="control-label">Place of Birth</label>
+                            <input asp-for="PlaceOfBirth" class="form-control" />
+                            <span asp-validation-for="PlaceOfBirth" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="CountryID" class="control-label">Country</label>
+                            <select asp-for="CountryID" asp-items="@(new SelectList(ViewBag.CountriesList, "Value", "Text"))" class="form-control">
+                            </select>
+                            <span asp-validation-for="CountryID" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <label asp-for="Fax" class="control-label">Fax</label>
+                            <input asp-for="Fax" class="form-control" />
+                            <span asp-validation-for="Fax" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="Email" class="control-label">Email</label>
+                            <input asp-for="Email" class="form-control" type="email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="POBox" class="control-label">POBox</label>
+                            <input asp-for="POBox" class="form-control" />
+                            <span asp-validation-for="POBox" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label asp-for="Address" class="control-label">Address</label>
+                            <textarea asp-for="Address" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <h5 class="modal-title" style="padding-top:10px">ID Infomation</h5>
+                        <hr />
+                        <div class="col-3">
+                            <label asp-for="IDNumber" class="control-label">Number</label>
+                            <input asp-for="IDNumber" class="form-control" />
+                            <span asp-validation-for="IDNumber" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="IDPlaceOfIssue" class="control-label">Place of Issue</label>
+                            <input asp-for="IDPlaceOfIssue" class="form-control" />
+                            <span asp-validation-for="IDPlaceOfIssue" class="text-danger"></span>
+                        </div>
+                      
+                    </div>
+                    <br />
+                    <div class="row">
+                        <h5 class="modal-title" style="padding-top:10px">Passport Infomation</h5>
+                        <hr />
+                        <div class="col-3">
+                            <label asp-for="PassportNumber" class="control-label">Number</label>
+                            <input asp-for="PassportNumber" class="form-control" />
+                            <span asp-validation-for="PassportNumber" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="PassportPlaceOfIssue" class="control-label">Place of Issue</label>
+                            <input asp-for="PassportPlaceOfIssue" class="form-control" />
+                            <span asp-validation-for="PassportPlaceOfIssue" class="text-danger"></span>
+                        </div>
+                       
+
+                    </div>
+                    <input type="hidden" asp-for="ApplicantID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveApplicantChanges">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>

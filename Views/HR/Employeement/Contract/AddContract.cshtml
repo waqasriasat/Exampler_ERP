@@ -1,0 +1,106 @@
+@model Exampler_ERP.Models.HR_Contract
+
+<div class="modal fade" id="addContractModal" tabindex="-1" role="dialog" aria-labelledby="addContractModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContractModalLabel">Add Contract</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addContractForm" method="post" asp-action="Create" asp-controller="Contract" enctype="multipart/form-data">
+                    <h5 class="modal-title" style="padding-top:10px">Contract Details</h5>
+                    <hr />
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label asp-for="EmployeeID" class="control-label">Employee Name</label>
+                                    <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control">
+                                    </select>
+                                    <span asp-validation-for="EmployeeID" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="IssueDate" class="control-label">Issue Date</label>
+                                    <input asp-for="IssueDate" class="form-control" type="date" />
+                                    <span asp-validation-for="IssueDate" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="ContractType" class="control-label">Contract Type</label>
+                                    <select asp-for="ContractType" asp-items="@(new SelectList(ViewBag.ContractTypesList, "Value", "Text"))" class="form-control" id="contractTypeSelect">
+                                    </select>
+                                    <span asp-validation-for="ContractType" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="StartDate" class="control-label">Start Date</label>
+                                    <input asp-for="StartDate" class="form-control" type="date" />
+                                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                                </div>
+                                <div class="col-6" id="dateSection" style="display: none;">
+                                    <label asp-for="EndDate" class="control-label">End Date</label>
+                                    <input asp-for="EndDate" class="form-control" type="date" />
+                                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="SalaryTypeID" class="control-label">Salary Type</label>
+                                    <select asp-for="SalaryTypeID" asp-items="@(new SelectList(ViewBag.SalaryTypesList, "Value", "Text"))" class="form-control">
+                                    </select>
+                                    <span asp-validation-for="SalaryTypeID" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="VacationDays" class="control-label">Vacation Days</label>
+                                    <input asp-for="VacationDays" class="form-control" type="number" />
+                                    <span asp-validation-for="VacationDays" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="DHours" class="control-label">Duty Hours</label>
+                                    <input asp-for="DHours" class="form-control" type="number" />
+                                    <span asp-validation-for="DHours" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="DMinutes" class="control-label">Duty Minutes</label>
+                                    <input asp-for="DMinutes" class="form-control" type="number" />
+                                    <span asp-validation-for="DMinutes" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" asp-for="ActiveID" />
+                    <input type="hidden" asp-for="DeleteYNID" />
+                    <input type="hidden" asp-for="FinalApprovalID" />
+                    <input type="hidden" asp-for="ApprovalProcessID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveNewContract">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#contractTypeSelect').change(function () {
+            var selectedContractType = $(this).val();
+            if (selectedContractType == '1') { // Show the date fields if ContractType is 1
+                $('#dateSection').show();
+            } else { // Hide the date fields for other ContractTypes
+                $('#dateSection').hide();
+            }
+        });
+
+        // Trigger change event on page load to ensure correct state
+        $('#contractTypeSelect').trigger('change');
+    });
+</script>

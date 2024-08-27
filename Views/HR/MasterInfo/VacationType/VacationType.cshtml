@@ -1,0 +1,170 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_VacationType>
+
+@{
+    ViewData["Title"] = "Master Information - VacationType";
+}
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            // Edit VacationType modal popup
+            $('.editVacationTypeLink').click(function (e) {
+                e.preventDefault();
+                var VacationTypeId = $(this).data('id');
+                $.get('@Url.Action("Edit", "VacationType")', { id: VacationTypeId }, function (data) {
+                    $('#editVacationTypeModalContainer').html(data);
+                    $('#editVacationTypeModal').modal('show');
+                });
+            });
+
+            $('#editVacationTypeModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editVacationTypeForm').serialize();
+                $.post('@Url.Action("Edit", "VacationType")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        // Show validation errors
+                    }
+                });
+            });
+
+            // Add new VacationType modal popup
+            $('.addVacationTypeLink').click(function () {
+                $.get('@Url.Action("Create", "VacationType")', function (data) {
+                    $('#addVacationTypeModalContainer').html(data);
+                    $('#addVacationTypeModal').modal('show');
+                });
+            });
+
+            // Save new VacationType form
+            $('#addVacationTypeModalContainer').on('click', '#saveNewVacationType', function () {
+                var formData = $('#addVacationTypeForm').serialize();
+                $.post('@Url.Action("Create", "VacationType")', formData, function (response) {
+                    if (response.success) {
+                        $('#addVacationTypeModal').modal('hide');
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        // Handle validation errors or other cases
+                    }
+                });
+            });
+
+            // Delete VacationType
+            $('.deleteVacationTypeLink').click(function (e) {
+                e.preventDefault();
+                var VacationTypeId = $(this).data('id');
+                $.post('@Url.Action("Delete", "VacationType")', { id: VacationTypeId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        // Handle errors
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+    </script>
+    <script>
+        function printVacationTypes() {
+            var printWindow = window.open('@Url.Action("Print", "VacationType")', '_blank');
+            printWindow.focus();
+        }
+    </script>
+}
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Master Information /</span> VacationType
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">VacationType List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-10 col-lg-9">
+                            <div class="row">
+                                <div class="col-2">
+                                    <p class="text-nowrap">VacationType ID</p>
+                                </div>
+                                <div class="col-8">
+                                    <p class="text-nowrap">VacationType Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Active</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-8 col-md-10 col-lg-9">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">VacationType ID : </span>@Html.DisplayFor(modelItem => item.VacationTypeID)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-8">
+                                        <p class="text-nowrap"><span class="smallAdd">VacationType Name : </span>@Html.DisplayFor(modelItem => item.VacationTypeName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Active : </span>
+                                            @if (item.ActiveYNID == 1)
+                                            {
+                                                <span>Yes</span>
+                                            }
+                                            else if (item.ActiveYNID == 0)
+                                            {
+                                                <span>No</span>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-2 col-lg-3">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editVacationTypeLink" data-id="@item.VacationTypeID">
+                                                <i class="fa fa-pencil" style="font-size: x-large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="deleteVacationTypeLink" data-id="@item.VacationTypeID">
+                                                <i class="fa fa-trash-o" style="font-size: x-large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="mt-4">
+                        <button type="button" class="btn btn-primary addVacationTypeLink">Add New</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "VacationType")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printVacationTypes()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editVacationTypeModalContainer"></div>
+<div id="addVacationTypeModalContainer"></div>

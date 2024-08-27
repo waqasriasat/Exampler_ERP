@@ -1,0 +1,53 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_Qualification>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Qualificationes</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Qualification List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Qualification ID</th>
+                <th>Qualification Name</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Qualification in Model)
+            {
+                <tr>
+                    <td>@Qualification.QualificationID</td>
+                    <td>@Qualification.QualificationName</td>
+                    <td>@(Qualification.ActiveYNID == 1 ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>
