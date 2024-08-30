@@ -51,6 +51,18 @@
                 });
             });
 
+            // Close Modal Add Contrainer
+            $('#addQualificationModalContainer').on('click', '#Close', function () {
+                $('#addQualificationModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editQualificationModalContainer').on('click', '#Close', function () {
+                $('#editQualificationModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
             // Delete Qualification
             $('.deleteQualificationLink').click(function (e) {
                 e.preventDefault();

@@ -78,6 +78,17 @@
                 });
             });
 
+            // Close Modal Add Contrainer
+            $('#addApplicantModalContainer').on('click', '#Close', function () {
+                $('#addApplicantModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editApplicantModalContainer').on('click', '#Close', function () {
+                $('#editApplicantModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
 
             // Delete Applicant
             $('.deleteApplicantLink').click(function (e) {

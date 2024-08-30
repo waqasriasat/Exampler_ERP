@@ -51,6 +51,18 @@
                 });
             });
 
+            // Close Modal Add Contrainer
+            $('#addProcessTypeModalContainer').on('click', '#Close', function () {
+                $('#addProcessTypeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editProcessTypeModalContainer').on('click', '#Close', function () {
+                $('#editProcessTypeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
             // Delete ProcessType
             $('.deleteProcessTypeLink').click(function (e) {
                 e.preventDefault();

@@ -51,6 +51,18 @@
                 });
             });
 
+            // Close Modal Add Contrainer
+            $('#addEmployeeStatusTypeModalContainer').on('click', '#Close', function () {
+                $('#addEmployeeStatusTypeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editEmployeeStatusTypeModalContainer').on('click', '#Close', function () {
+                $('#editEmployeeStatusTypeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
             // Delete EmployeeStatusType
             $('.deleteEmployeeStatusTypeLink').click(function (e) {
                 e.preventDefault();

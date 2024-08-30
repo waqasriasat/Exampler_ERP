@@ -51,6 +51,18 @@
                 });
             });
 
+            // Close Modal Add Contrainer
+            $('#addDepartmentModalContainer').on('click', '#Close', function () {
+                $('#addDepartmentModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editDepartmentModalContainer').on('click', '#Close', function () {
+                $('#editDepartmentModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
             // Delete Department
             $('.deleteDepartmentLink').click(function (e) {
                 e.preventDefault();

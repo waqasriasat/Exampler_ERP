@@ -51,6 +51,18 @@
                 });
             });
 
+            // Close Modal Add Contrainer
+            $('#addDeductionTypeModalContainer').on('click', '#Close', function () {
+                $('#addDeductionTypeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editDeductionTypeModalContainer').on('click', '#Close', function () {
+                $('#editDeductionTypeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
             // Delete DeductionType
             $('.deleteDeductionTypeLink').click(function (e) {
                 e.preventDefault();

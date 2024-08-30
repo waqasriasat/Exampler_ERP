@@ -30,6 +30,12 @@
                 });
             });
 
+            // Close Modal Edit Contrainer
+            $('#editSalaryModalContainer').on('click', '#Close', function () {
+                $('#editSalaryModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
 
             // Delete Salary
             $('.deleteSalaryLink').click(function (e) {

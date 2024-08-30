@@ -51,6 +51,18 @@
                 });
             });
 
+            // Close Modal Add Contrainer
+            $('#addVacationTypeModalContainer').on('click', '#Close', function () {
+                $('#addVacationTypeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editVacationTypeModalContainer').on('click', '#Close', function () {
+                $('#editVacationTypeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
             // Delete VacationType
             $('.deleteVacationTypeLink').click(function (e) {
                 e.preventDefault();

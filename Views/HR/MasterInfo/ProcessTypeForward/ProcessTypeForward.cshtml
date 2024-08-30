@@ -127,6 +127,19 @@
                 });
             });
 
+            // Close Modal Add Contrainer
+            $('#addNewProcessTypeForwardModalContainer').on('click', '#Close', function () {
+                $('#addNewProcessTypeForwardModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editProcessTypeForwardModalContainer').on('click', '#Close', function () {
+                $('#editProcessTypeForwardModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+
             // Delete ProcessTypeForward
             $('.deleteProcessTypeForwardLink').click(function (e) {
                 e.preventDefault();

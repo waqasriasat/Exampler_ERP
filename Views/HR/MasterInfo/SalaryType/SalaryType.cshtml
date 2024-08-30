@@ -51,6 +51,18 @@
                 });
             });
 
+            // Close Modal Add Contrainer
+            $('#addSalaryTypeModalContainer').on('click', '#Close', function () {
+                $('#addSalaryTypeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editSalaryTypeModalContainer').on('click', '#Close', function () {
+                $('#editSalaryTypeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
             // Delete SalaryType
             $('.deleteSalaryTypeLink').click(function (e) {
                 e.preventDefault();

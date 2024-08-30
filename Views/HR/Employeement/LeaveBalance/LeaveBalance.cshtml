@@ -30,6 +30,12 @@
                 });
             });
 
+            // Close Modal Edit Contrainer
+            $('#editLeaveBlanceModalContainer').on('click', '#Close', function () {
+                $('#editLeaveBlanceModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
 
             // Delete LeaveBlance
             $('.deleteLeaveBlanceLink').click(function (e) {

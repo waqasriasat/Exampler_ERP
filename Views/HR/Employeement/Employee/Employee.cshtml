@@ -78,6 +78,18 @@
                 });
             });
 
+            // Close Modal Add Contrainer
+            $('#addEmployeeModalContainer').on('click', '#Close', function () {
+                $('#addEmployeeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editEmployeeModalContainer').on('click', '#Close', function () {
+                $('#editEmployeeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
 
             // Delete employee
             $('.deleteEmployeeLink').click(function (e) {

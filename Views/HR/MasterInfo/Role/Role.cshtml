@@ -51,6 +51,18 @@
                 });
             });
 
+            // Close Modal Add Contrainer
+            $('#addRoleModalContainer').on('click', '#Close', function () {
+                $('#addRoleModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editRoleModalContainer').on('click', '#Close', function () {
+                $('#editRoleModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
             // Delete Role
             $('.deleteRoleLink').click(function (e) {
                 e.preventDefault();

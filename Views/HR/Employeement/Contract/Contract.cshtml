@@ -50,6 +50,18 @@
                 });
             });
 
+            // Close Modal Add Contrainer
+            $('#addContractModalContainer').on('click', '#Close', function () {
+                $('#addContractModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editContractModalContainer').on('click', '#Close', function () {
+                $('#editContractModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
             // Delete contract
             $('.deleteContractLink').click(function (e) {
                 e.preventDefault();

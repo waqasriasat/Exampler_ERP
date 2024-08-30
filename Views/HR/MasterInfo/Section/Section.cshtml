@@ -51,6 +51,18 @@
                 });
             });
 
+            // Close Modal Add Contrainer
+            $('#addSectionModalContainer').on('click', '#Close', function () {
+                $('#addSectionModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editSectionModalContainer').on('click', '#Close', function () {
+                $('#editSectionModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
             // Delete Section
             $('.deleteSectionLink').click(function (e) {
                 e.preventDefault();

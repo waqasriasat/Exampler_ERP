@@ -51,6 +51,18 @@
                 });
             });
 
+            // Close Modal Add Contrainer
+            $('#addDesignationModalContainer').on('click', '#Close', function () {
+                $('#addDesignationModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editDesignationModalContainer').on('click', '#Close', function () {
+                $('#editDesignationModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
             // Delete Designation
             $('.deleteDesignationLink').click(function (e) {
                 e.preventDefault();

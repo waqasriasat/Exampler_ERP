@@ -953,3 +953,9 @@ a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:h
     background: none;
     -webkit-text-stroke-width: thin;
 }
+
+.CloseButton {
+  font-size: x-large !important;
+  padding: 6px !important;
+  height: 30px !important;
+}
