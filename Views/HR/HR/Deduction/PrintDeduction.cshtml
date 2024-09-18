@@ -1,0 +1,59 @@
+@model IEnumerable<Exampler_ERP.Models.HR_Deduction>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Deductions</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Deduction List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Deduction ID</th>
+                <th>Employee Name</th>
+                <th>Deduction Type</th>
+                <th>Month</th>
+                <th>Year</th>
+                <th>Days</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Deduction in Model)
+            {
+                <tr>
+                    <td>@Deduction.DeductionID</td>
+                    <td>@($"{Deduction.Employee?.FirstName} {Deduction.Employee?.FatherName} {Deduction.Employee?.FamilyName}")</td>
+                    <td>@(Deduction.DeductionType?.DeductionTypeName ?? "N/A")</td>
+                    <td>@Deduction.Month</td>
+                    <td>@Deduction.Year</td>
+                    <td>@Deduction.Days</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

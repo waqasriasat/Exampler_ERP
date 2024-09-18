@@ -30,10 +30,10 @@
                                     <span asp-validation-for="IssueDate" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="ContractType" class="control-label">Contract Type</label>
-                                    <select asp-for="ContractType" asp-items="@(new SelectList(ViewBag.ContractTypesList, "Value", "Text"))" class="form-control" id="contractTypeSelect">
+                                    <label asp-for="ContractTypeID" class="control-label">Contract Type</label>
+                                    <select asp-for="ContractTypeID" asp-items="@(new SelectList(ViewBag.ContractTypesList, "Value", "Text"))" class="form-control" id="contractTypeSelect">
                                     </select>
-                                    <span asp-validation-for="ContractType" class="text-danger"></span>
+                                    <span asp-validation-for="ContractTypeID" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">

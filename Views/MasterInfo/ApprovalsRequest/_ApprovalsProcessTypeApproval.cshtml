@@ -1,0 +1,106 @@
+@model IEnumerable<Exampler_ERP.Models.CR_ProcessTypeApprovalDetail>
+@{
+    var EmployeeList = (List<SelectListItem>)ViewBag.EmployeesList;
+    var RoleList = (List<SelectListItem>)ViewBag.RolesList;
+}
+<div class="modal fade" id="approvalsProcessTypeApprovalModal" tabindex="-1" role="dialog" aria-labelledby="approvalsProcessTypeApprovalModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approvalsProcessTypeApprovalModalLabel">Approval Process Details</h5>
+                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">x</button>
+            </div>
+
+            <div class="modal-body">
+                @if (Model.Any())
+                {
+                    var firstItem = Model.FirstOrDefault(); // Get the first item to display common details
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <h5 class="card-header">Approval Process Overview</h5>
+                                <div class="card-body" style="padding-top: 20px;">
+                                    <div class="row">
+                                        <span>Approval Process ID: @firstItem.CR_ProcessTypeApproval?.ApprovalProcessID</span>
+                                    </div>
+                                    <div class="row">
+                                        <span>Employee Name: @firstItem.CR_ProcessTypeApproval?.Employee?.FirstName @firstItem.CR_ProcessTypeApproval?.Employee?.FatherName @firstItem.CR_ProcessTypeApproval?.Employee?.FamilyName</span>
+                                    </div>
+                                    <div class="row">
+                                        <span>Process Type: @(firstItem.CR_ProcessTypeApproval?.ProcessType?.ProcessTypeName ?? "N/A")</span>
+                                    </div>
+                                    <div class="row">
+                                        <span>Request Date: @(DateTime.Parse(firstItem.CR_ProcessTypeApproval?.RequestDate).ToString("dd-MM-yyyy HH:mm:ss"))</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="row">
+                    <div class="col-12 rolepadding">
+                        @foreach (var item in Model)
+                        {
+                            <div class="col-12 col-md-12 col-lg-12 GVDetailforApproval">
+                                <br />
+                                <div class="row">
+                                    <span class="roleheading">
+                                        Approved by: @(item.RoleID == 0 || item.RoleID == null
+                                    ? ""
+                                    : RoleList.FirstOrDefault(g => g.Value == item.RoleID.ToString())?.Text)
+                                    </span>
+                                </div>
+                                <div class="row">
+                                    <span>
+                                        Approved Name: @(item.AppUserID == 0 || item.AppUserID == null
+                                    ? ""
+                                    : EmployeeList.FirstOrDefault(g => g.Value == item.AppUserID.ToString())?.Text)
+                                    </span>
+                                </div>
+                                <div class="row">
+                                    <span>Approved Date: @item.Date.ToString("dd-MM-yyyy HH:mm:ss")</span>
+                                </div>
+
+                                <!-- Documents Section -->
+                                @foreach (var doc in item.ProcessTypeApprovalDetailDoc)
+                                {
+                                    <div class="row">
+                                        <span>Document: @doc.DocName (@doc.DocExt)</span>
+                                        <span>
+                                            @if (doc.Doc != null && doc.Doc.Length > 0)
+                                            {
+                                                <a href="@Url.Action("DownloadDocument", new { id = doc.ApprovalProcessDetailDocID })">Download</a>
+                                            }
+                                            else
+                                            {
+                                                <span>No Document Available</span>
+                                            }
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .readonly-background {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+
+    .date-placeholder::placeholder {
+        color: #6c757d;
+        opacity: 1; /* Firefox */
+    }
+</style>

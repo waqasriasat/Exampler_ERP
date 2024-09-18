@@ -7,12 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\HR\HR\" />
-    <Folder Include="Controllers\HR\Financial\" />
     <Folder Include="Controllers\HR\Reports\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Views\HR\HR\" />
-    <Folder Include="Views\HR\Financial\" />
     <Folder Include="Views\HR\Reports\" />
     <Folder Include="wwwroot\img\NewFolder\" />
   </ItemGroup>

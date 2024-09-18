@@ -49,7 +49,7 @@
                     <td>@contract.ContractID</td>
                     <td>@contract.ActiveID</td>
                     <td>@($"{contract.Employee?.FirstName} {contract.Employee?.FatherName} {contract.Employee?.FamilyName}")</td>
-                    <td>@contract.ContractType</td>
+                    <td>@contract.Settings_ContractType?.ContractTypeName</td>
                     <td>@contract.SalaryTypeID</td>
                     <td>@contract.VacationDays</td>
                     <td>@contract.DHours</td>

@@ -1,0 +1,229 @@
+@model IEnumerable<Exampler_ERP.Models.CR_ProcessTypeApprovalDetail>
+
+@{
+    ViewData["Title"] = "MasterInfo - ProcessTypeApproval";
+}
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            // approvals ProcessTypeApproval modal popup
+            $('.approvalsProcessTypeApprovalLink').click(function (e) {
+                e.preventDefault();
+                var ProcessTypeApprovalId = $(this).data('id');
+                $.get('@Url.Action("approvals", "ApprovalsRequest")', { id: ProcessTypeApprovalId }, function (data) {
+                    $('#approvalsProcessTypeApprovalModalContainer').html(data);
+                    $('#approvalsProcessTypeApprovalModal').modal('show');
+                });
+            });
+
+          
+            // Close Modal approvals Contrainer
+            $('#approvalsProcessTypeApprovalModalContainer').on('click', '#Close', function () {
+                $('#approvalsProcessTypeApprovalModal').modal('hide'); // Close the modal directly
+                // detailsitional logic if needed
+            });
+
+            // details ProcessTypeApproval modal popup
+            $('.detailsProcessTypeApprovalLink').click(function (e) {
+                e.preventDefault();
+                var ProcessTypeApprovalId = $(this).data('id');
+                $.get('@Url.Action("details", "ApprovalsRequest")', { id: ProcessTypeApprovalId }, function (data) {
+                    $('#detailsProcessTypeApprovalModalContainer').html(data);
+                    $('#detailsProcessTypeApprovalModal').modal('show');
+                });
+            });
+
+          
+            // Close Modal details Contrainer
+            $('#detailsProcessTypeApprovalModalContainer').on('click', '#Close', function () {
+                $('#detailsProcessTypeApprovalModal').modal('hide'); // Close the modal directly
+                // detailsitional logic if needed
+            });
+
+            // actions ProcessTypeApproval modal popup
+            $('.actionsProcessTypeApprovalLink').click(function (e) {
+                e.preventDefault();
+                var ProcessTypeApprovalId = $(this).data('id');
+                $.get('@Url.Action("actions", "ApprovalsRequest")', { id: ProcessTypeApprovalId }, function (data) {
+                    $('#actionsProcessTypeApprovalModalContainer').html(data);
+                    $('#actionsProcessTypeApprovalModal').modal('show');
+                });
+            });
+            $('#actionsProcessTypeApprovalModalContainer').on('click', '#Approved', function () {
+                var formData = new FormData($('#actionsProcessTypeApprovalForm')[0]); // Create FormData object from the form
+
+                $.ajax({
+                    url: '@Url.Action("Approved", "ApprovalsRequest")',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false, // Important for file upload
+                    processData: false, // Prevent jQuery from automatically transforming the data into a query string
+                    success: function (response) {
+                        if (response.success) {
+                            // Reload the page or update the part of the page with the updated data
+                            location.reload();
+                        } else {
+                            // Show validation errors
+                            // You can display errors here
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                        console.log("Error occurred while uploading file:", error);
+                    }
+                });
+            });
+
+            $('#actionsProcessTypeApprovalModalContainer').on('click', '#Reject', function () {
+                var formData = $('#actionsProcessTypeApprovalForm').serialize();
+                $.post('@Url.Action("Reject", "ApprovalsRequest")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        // Show validation errors
+                    }
+                });
+            });
+
+            // Close Modal actions Contrainer
+            $('#actionsProcessTypeApprovalModalContainer').on('click', '#Close', function () {
+                $('#actionsProcessTypeApprovalModal').modal('hide'); // Close the modal directly
+                // actionsitional logic if needed
+            });
+
+            // Delete ProcessTypeApproval
+            $('.deleteProcessTypeApprovalLink').click(function (e) {
+                e.preventDefault();
+                var ProcessTypeApprovalId = $(this).data('id');
+                $.post('@Url.Action("Delete", "ProcessTypeApproval")', { id: ProcessTypeApprovalId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        // Handle errors
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+    </script>
+    <script>
+        function printProcessTypeApprovals() {
+            var printWindow = window.open('@Url.Action("Print", "ProcessTypeApproval")', '_blank');
+            printWindow.focus();
+        }
+    </script>
+}
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Master Info /</span> ProcessTypeApproval
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">ProcessTypeApproval List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-9 col-md-10 col-lg-9">
+                            <div class="row">
+                                <div class="col-3">
+                                    <p class="text-nowrap">Employee Name</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap">ProcessType Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Rank</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Pending Date</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3 col-md-2 col-lg-3">
+                            <div class="row">
+                                <div class="col-4">
+                                    <p class="text-nowrap">Approvals</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">Detail</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">Action</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-9 col-md-10 col-lg-9">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-3">
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.CR_ProcessTypeApproval?.Employee?.FirstName @item.CR_ProcessTypeApproval?.Employee?.FatherName @item.CR_ProcessTypeApproval?.Employee?.FamilyName</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-3">
+                                        <p class="text-nowrap"><span class="smallAdd">ProcessType Name : </span>@(item.CR_ProcessTypeApproval?.ProcessType?.ProcessTypeName ?? "N/A")  </p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Rank : </span>@Html.DisplayFor(modelItem => item.Rank)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Pending Date : </span>@item.Date.ToString("dd-MM-yyyy HH:mm:ss")</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 col-md-2 col-lg-3">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="approvalsProcessTypeApprovalLink" data-id="@item.ApprovalProcessID">
+                                                <i class="bx bx-book-open" style="font-size: x-large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="detailsProcessTypeApprovalLink" data-id="@item.ApprovalProcessID">
+                                                <i class="bx bx-detail" style="font-size: x-large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="actionsProcessTypeApprovalLink" data-id="@item.ApprovalProcessDetailID">
+                                                <i class="bx bx-bookmarks" style="font-size: x-large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="mt-4">
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "ProcessTypeApproval")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printProcessTypeApprovals()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="approvalsProcessTypeApprovalModalContainer"></div>
+<div id="detailsProcessTypeApprovalModalContainer"></div>
+<div id="actionsProcessTypeApprovalModalContainer"></div>

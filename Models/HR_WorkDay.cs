@@ -1,15 +1,12 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Exampler_ERP.Models
 {
-  public class HR_Deduction
+  public class HR_WorkDay
   {
     [Key]
-    public int DeductionID { get; set; }
-    public int DeductionTypeID { get; set; }
-    [ForeignKey("DeductionTypeID")]
-    public virtual Settings_DeductionType? DeductionType { get; set; }
+    public int WorkDayID { get; set; }
     public int EmployeeID { get; set; }
     [ForeignKey("EmployeeID")]
     public virtual HR_Employee? Employee { get; set; }

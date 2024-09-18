@@ -129,8 +129,9 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       var contracts = await _appDBContext.HR_Contracts
           .Where(c => c.DeleteYNID != 1)
           .Include(c => c.Employee)
+          .Include(c => c.Settings_ContractType)
           .ToListAsync();
-
+      var SalaryTypesList = await _utils.GetSalaryOptions();
       using (var package = new ExcelPackage())
       {
         var worksheet = package.Workbook.Worksheets.Add("Contracts");
@@ -149,10 +150,12 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         for (int i = 0; i < contracts.Count; i++)
         {
           worksheet.Cells[i + 2, 1].Value = contracts[i].ContractID;
-          worksheet.Cells[i + 2, 2].Value = contracts[i].EmployeeID; // assuming you want EmployeeID or you could use Employee.Name
+          worksheet.Cells[i + 2, 2].Value = contracts[i].Employee?.FirstName + ' ' + contracts[i].Employee?.FatherName + ' ' + contracts[i].Employee?.FamilyName;
           worksheet.Cells[i + 2, 3].Value = contracts[i].IssueDate.ToString("dd-MMM-yyyy");
-          worksheet.Cells[i + 2, 4].Value = contracts[i].SalaryTypeID;
-          worksheet.Cells[i + 2, 5].Value = contracts[i].ContractType;
+          worksheet.Cells[i + 2, 4].Value = contracts[i].SalaryTypeID == 0 || contracts[i]?.SalaryTypeID == null
+          ? ""
+          : SalaryTypesList.FirstOrDefault(g => g.Value == contracts[i].SalaryTypeID.ToString())?.Text;
+          worksheet.Cells[i + 2, 5].Value = contracts[i].ContractTypeID;
           worksheet.Cells[i + 2, 6].Value = contracts[i].VacationDays;
           worksheet.Cells[i + 2, 7].Value = contracts[i].DHours;
           worksheet.Cells[i + 2, 8].Value = contracts[i].DMinutes;

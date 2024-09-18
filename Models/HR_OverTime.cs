@@ -1,23 +1,18 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Exampler_ERP.Models
 {
-  public class HR_Deduction
+  public class HR_OverTime
   {
     [Key]
-    public int DeductionID { get; set; }
-    public int DeductionTypeID { get; set; }
-    [ForeignKey("DeductionTypeID")]
-    public virtual Settings_DeductionType? DeductionType { get; set; }
+    public int OverTimeID { get; set; }
     public int EmployeeID { get; set; }
     [ForeignKey("EmployeeID")]
     public virtual HR_Employee? Employee { get; set; }
     public int? Month { get; set; }
     public int? Year { get; set; }
-    public int? Days { get; set; }
-    public DateTime FromDate { get; set; }
-    public DateTime ToDate { get; set; }
+    public float? Amount { get; set; }
     public int? DeleteYNID { get; set; }
     public int? FinalApprovalID { get; set; }
     public int? ApprovalProcessID { get; set; }

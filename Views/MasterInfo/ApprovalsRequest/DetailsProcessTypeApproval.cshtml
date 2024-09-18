@@ -1,0 +1,37 @@
+@model Exampler_ERP.Models.CR_User
+
+@{
+    var ProcessTypeID = ViewBag.ProcessTypeID;
+    var TransactionID = ViewBag.TransactionID;
+}
+<style>
+    .modal-body input,
+    .modal-body select,
+    .modal-body textarea {
+        pointer-events: none;
+        background-color: #e9ecef;
+    }
+</style>
+<div class="modal fade" id="detailsProcessTypeApprovalModal" tabindex="-1" role="dialog" aria-labelledby="detailsProcessTypeApprovalModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsProcessTypeApprovalModalLabel">Approval Process Details</h5>
+                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    @if (ProcessTypeID == 1)
+                    {
+                        <h5>User detail</h5>
+                        @Html.Partial("~/Views/HR/MasterInfo/User/_EditUser.cshtml", Model)
+                    }
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

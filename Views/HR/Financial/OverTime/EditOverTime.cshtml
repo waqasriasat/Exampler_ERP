@@ -1,0 +1,113 @@
+@model Exampler_ERP.Models.HR_OverTime
+
+<div class="modal fade" id="editOverTimeModal" tabindex="-1" role="dialog" aria-labelledby="editOverTimeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editOverTimeModalLabel">Edit OverTime</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editOverTimeForm">
+                    <h5 class="modal-title" style="padding-top:10px">OverTime Details</h5>
+                    <hr />
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label asp-for="EmployeeID" class="control-label">Employee Name</label>
+                                    <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control" disabled>
+                                    </select>
+                                    <span asp-validation-for="EmployeeID" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="Month" class="control-label">Month</label>
+                                    <input asp-for="Month" class="form-control readonly-background" type="number" readonly id="MonthInput" />
+                                    <span asp-validation-for="Month" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="Year" class="control-label">Year</label>
+                                    <input asp-for="Year" class="form-control readonly-background" type="number" readonly id="YearInput" />
+                                    <span asp-validation-for="Year" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="Amount" class="control-label">Amount</label>
+                                    <input asp-for="Amount" class="form-control readonly-background" type="number" readonly id="DaysInput" />
+                                    <span asp-validation-for="Amount" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" asp-for="EmployeeID" />
+                    <input type="hidden" asp-for="DeleteYNID" />
+                    <input type="hidden" asp-for="FinalApprovalID" />
+                    <input type="hidden" asp-for="ApprovalProcessID" />
+                    <input type="hidden" asp-for="OverTimeID" />
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="Close" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="saveChanges" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+<script>
+    $(document).ready(function () {
+        // Set placeholder for date inputs
+        $('#FromDateInput, #ToDateInput').attr('placeholder', 'mm/dd/yyyy');
+
+        $('#FromDateInput, #ToDateInput').on('change', function () {
+            var fromDate = new Date($('#FromDateInput').val());
+            var toDate = new Date($('#ToDateInput').val());
+
+            // Check if FromDate and ToDate are in the same month and year
+            if (fromDate.getMonth() === toDate.getMonth() && fromDate.getFullYear() === toDate.getFullYear()) {
+                // Calculate number of days
+                var timeDiff = toDate - fromDate;
+                var days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1; // Include the start date
+
+                // Set Days input value
+                $('#DaysInput').val(days);
+
+                // Set Month and Year input values
+                $('#MonthInput').val(fromDate.getMonth() + 1); // Months are zero-based
+                $('#YearInput').val(fromDate.getFullYear());
+
+                // Change input fields to readonly and apply gray background
+                $('#DaysInput').addClass('readonly-background').attr('readonly', true);
+            } else {
+                // If the month/year is different, reset the fields
+                $('#DaysInput').val('');
+                $('#MonthInput').val('');
+                $('#YearInput').val('');
+                alert("From Date and To Date must be within the same month and year.");
+            }
+        });
+    });
+</script>
+
+<style>
+    .readonly-background {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+
+    .date-placeholder::placeholder {
+        color: #6c757d;
+        opacity: 1; /* Firefox */
+    }
+</style>

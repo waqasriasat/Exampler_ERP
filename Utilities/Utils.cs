@@ -35,6 +35,16 @@ namespace Exampler_ERP.Utilities
       selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
       return selectList;
     }
+    //public async Task<List<SelectListItem>> GetEmployees()
+    //{
+    //  var employees = await _appDBContext.HR_Employees
+    //.Where(e => e.ActiveID == 1)
+    //.ToListAsync();
+
+    //  var selectList = employees.Select(r => new SelectListItem { Value = r.EmployeeID.ToString(), Text = r.FirstName + r.FatherName + r.FamilyName }).ToList();
+    //  selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
+    //  return selectList;
+    //}
     public async Task<List<SelectListItem>> GetGender()
     {
       var genderOptions = await _appDBContext.Settings_Genders.ToListAsync();
@@ -357,16 +367,7 @@ namespace Exampler_ERP.Utilities
       selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
       return selectList;
     }
-    public async Task<List<SelectListItem>> GetEmployees()
-    {
-      var employees = await _appDBContext.HR_Employees
-    .Where(e => e.ActiveID == 1)
-    .ToListAsync();
 
-      var selectList = employees.Select(r => new SelectListItem { Value = r.EmployeeID.ToString(), Text = r.FirstName + r.FatherName + r.FamilyName }).ToList();
-      selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
-      return selectList;
-    }
     public async Task<List<SelectListItem>> GetRoles()
     {
       var roles = await _appDBContext.Settings_Roles
@@ -405,6 +406,20 @@ namespace Exampler_ERP.Utilities
 
       return ContractTypeList;
     }
+     public async Task<List<SelectListItem>> GetEndOfServiceReasonTypes()
+    {
+      var EndOfServiceReasonTypes = await _appDBContext.Settings_EndOfServiceReasonTypes.ToListAsync();
+
+      var EndOfServiceReasonTypeList = EndOfServiceReasonTypes.Select(r => new SelectListItem
+      {
+        Value = r.EndOfServiceReasonTypeId.ToString(),
+        Text = r.EndOfServiceReasonTypeName
+      }).ToList();
+
+      EndOfServiceReasonTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+
+      return EndOfServiceReasonTypeList;
+    }
     public async Task<List<SelectListItem>> GetDeductionValueList()
     {
       var deductionValues = await _appDBContext.Settings_DeductionValues
@@ -432,6 +447,20 @@ namespace Exampler_ERP.Utilities
       classIDList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
 
       return classIDList;
+    }
+    public async Task<List<SelectListItem>> GetDeductionTypes()
+    {
+      var deductionTypeList = await _appDBContext.Settings_DeductionTypes
+          .Select(c => new SelectListItem
+          {
+            Value = c.DeductionTypeID.ToString(),
+            Text = c.DeductionTypeName
+          })
+          .ToListAsync();
+
+      deductionTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+
+      return deductionTypeList;
     }
     public async Task<List<SelectListItem>> GetSalaryTypeList()
     {

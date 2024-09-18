@@ -1,0 +1,168 @@
+@model Exampler_ERP.Models.HR_EndOfService
+
+<div class="modal fade" id="addEndOfServiceModal" tabindex="-1" role="dialog" aria-labelledby="addEndOfServiceModalLabel" aria-hidden="true" style="--bs-modal-width: 60rem;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addEndOfServiceModalLabel">Add EndOfService</h5>
+                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
+                    x
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addEndOfServiceForm" method="post" asp-action="Create" asp-controller="EndOfService" enctype="multipart/form-data">
+                    <h5 class="modal-title" style="padding-top:10px">EndOfService Details</h5>
+                    <hr />
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label asp-for="EmployeeID" class="control-label">Employee Name</label>
+                                    <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control" id="EmployeeID">
+                                    </select>
+                                    <span asp-validation-for="EmployeeID" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label>Contract Type</label>
+                                    <input type="text" id="ContractType" class="form-control readonly-background" readonly />
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="EndOfSerivceReasonTypeId" class="control-label">Reason Type</label>
+                                    <select asp-for="EndOfSerivceReasonTypeId" asp-items="@(new SelectList(ViewBag.EndOfServiceReasonTypesList, "Value", "Text"))" class="form-control">
+                                    </select>
+                                    <span asp-validation-for="EndOfSerivceReasonTypeId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label>Total Salary</label>
+                                    <input type="text" id="Salary" class="form-control readonly-background" readonly />
+                                </div>
+                                <div class="col-6">
+                                        <label>Total Day Of Absent</label>
+                                        <input type="text" id="TotalDayOfAbsent" class="form-control readonly-background" readonly />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label>Date Of Commencement</label>
+                                    <input type="text" id="DateOfCommencement" class="form-control readonly-background" readonly />
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="DateOfCompletionOfWork" class="control-label">Date Of Completion Of Work</label>
+                                    <input asp-for="DateOfCompletionOfWork" class="form-control" type="date" />
+                                    <span asp-validation-for="DateOfCompletionOfWork" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row colHeadgroup">
+                                <div class="col-6 colcliedgroup">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label asp-for="NumberofYears" class="control-label">Number of Years</label>
+                                            <input asp-for="NumberofYears" class="form-control readonly-background" type="number" />
+                                            <span asp-validation-for="NumberofYears" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label asp-for="NumberofMonths" class="control-label">Number of Months</label>
+                                            <input asp-for="NumberofMonths" class="form-control readonly-background" type="number" />
+                                            <span asp-validation-for="NumberofMonths" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label asp-for="NumberofDays" class="control-label">Number of Days</label>
+                                            <input asp-for="NumberofDays" class="form-control readonly-background" type="number" />
+                                            <span asp-validation-for="NumberofDays" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label asp-for="TotalDays" class="control-label">Total Days</label>
+                                            <input asp-for="TotalDays" class="form-control readonly-background" type="number" />
+                                            <span asp-validation-for="TotalDays" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 colcliedgroup">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label asp-for="EndofServiceBenefit" class="control-label">End of Service Benefit</label>
+                                            <input asp-for="EndofServiceBenefit" class="form-control readonly-background" type="number" />
+                                            <span asp-validation-for="EndofServiceBenefit" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label asp-for="BalanceOfTheAnnualLeave" class="control-label">Balance Of The Annual Leave</label>
+                                            <input asp-for="BalanceOfTheAnnualLeave" class="form-control readonly-background" type="number" />
+                                            <span asp-validation-for="BalanceOfTheAnnualLeave" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label asp-for="AmountDueForTheLeave" class="control-label">Amount Dues For The Leave</label>
+                                            <input asp-for="AmountDueForTheLeave" class="form-control readonly-background" type="number" />
+                                            <span asp-validation-for="AmountDueForTheLeave" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label asp-for="TotalEndOfServiceDues" class="control-label">Total End Of Service Dues</label>
+                                            <input asp-for="TotalEndOfServiceDues" class="form-control readonly-background" type="number" />
+                                            <span asp-validation-for="TotalEndOfServiceDues" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" asp-for="DeleteYNID" />
+                    <input type="hidden" asp-for="FinalApprovalID" />
+                    <input type="hidden" asp-for="ApprovalProcessID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="button" class="btn btn-primary" id="saveNewEndOfService">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#EmployeeID').change(function () {
+            var employeeID = $(this).val();
+
+            if (employeeID) {
+                $.ajax({
+                    url: '@Url.Action("GetEmployeeDetails", "EndOfService")', // Ensure this URL is correct
+                    type: 'GET',
+                    data: { employeeID: employeeID },
+                    success: function (data) {
+                        console.log("AJAX Response:", data); // Log the response for debugging
+                        if (data) {
+                            $('#ContractType').val(data.contractTypeName || ""); // Update ContractType field
+                            $('#DateOfCommencement').val(data.hireDate || "");
+                            $('#Salary').val(data.basicSalary || "");
+                            $('#TotalDayOfAbsent').val(data.hireDate || "");
+                        } else {
+                            // Clear fields if no data
+                            $('#ContractType').val("");
+                            $('#DateOfCommencement').val("");
+                            $('#Salary').val("");
+                            $('#TotalDayOfAbsent').val("");
+                        }
+                    },
+                    error: function () {
+                        alert('Error fetching employee details.');
+                    }
+                });
+            }
+        });
+    });
+
+</script>

@@ -1,11 +1,9 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Exampler_ERP.Models
+namespace Exampler_ERP.Models.Temp
 {
-  public class CR_ProcessTypeApproval
+  public class ApprovalsProcessTypeApproval
   {
-   [Key]
     public int ApprovalProcessID { get; set; }
     public int ProcessTypeID { get; set; }
     [ForeignKey("ProcessTypeID")]
@@ -20,6 +18,5 @@ namespace Exampler_ERP.Models
     [ForeignKey("UserID")]
     public virtual CR_User? User { get; set; }
     public int TransactionID { get; set; }
-    public virtual List<CR_ProcessTypeApprovalDetail> ProcessTypeApprovalDetail { get; set; } = new List<CR_ProcessTypeApprovalDetail>();
   }
 }

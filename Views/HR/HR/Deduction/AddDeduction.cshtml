@@ -1,0 +1,125 @@
+@model Exampler_ERP.Models.HR_Deduction
+
+<div class="modal fade" id="addDeductionModal" tabindex="-1" role="dialog" aria-labelledby="addDeductionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDeductionModalLabel">Add Deduction</h5>
+                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
+                    x
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addDeductionForm" method="post" asp-action="Create" asp-controller="Deduction" enctype="multipart/form-data">
+                    <h5 class="modal-title" style="padding-top:10px">Deduction Details</h5>
+                    <hr />
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label asp-for="EmployeeID" class="control-label">Employee Name</label>
+                                    <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control">
+                                    </select>
+                                    <span asp-validation-for="EmployeeID" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <label asp-for="DeductionTypeID" class="control-label">Deduction Type</label>
+                                    <select asp-for="DeductionTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypesList, "Value", "Text"))" class="form-control" id="DeductionTypeSelect">
+                                    </select>
+                                    <span asp-validation-for="DeductionTypeID" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="FromDate" class="control-label">From Date</label>
+                                    <input asp-for="FromDate" class="form-control date-placeholder" type="date" id="FromDateInput" placeholder="mm/dd/yyyy" />
+                                    <span asp-validation-for="FromDate" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="ToDate" class="control-label">To Date</label>
+                                    <input asp-for="ToDate" class="form-control date-placeholder" type="date" id="ToDateInput" placeholder="mm/dd/yyyy" />
+                                    <span asp-validation-for="ToDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="Month" class="control-label">Month</label>
+                                    <input asp-for="Month" class="form-control readonly-background" type="number" readonly id="MonthInput" />
+                                    <span asp-validation-for="Month" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="Year" class="control-label">Year</label>
+                                    <input asp-for="Year" class="form-control readonly-background" type="number" readonly id="YearInput" />
+                                    <span asp-validation-for="Year" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="Days" class="control-label">Days</label>
+                                    <input asp-for="Days" class="form-control readonly-background" type="number" readonly id="DaysInput" />
+                                    <span asp-validation-for="Days" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" asp-for="DeleteYNID" />
+                    <input type="hidden" asp-for="FinalApprovalID" />
+                    <input type="hidden" asp-for="ApprovalProcessID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="button" class="btn btn-primary" id="saveNewDeduction">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Set placeholder for date inputs
+        $('#FromDateInput, #ToDateInput').attr('placeholder', 'mm/dd/yyyy');
+
+        $('#FromDateInput, #ToDateInput').on('change', function () {
+            var fromDate = new Date($('#FromDateInput').val());
+            var toDate = new Date($('#ToDateInput').val());
+
+            // Check if FromDate and ToDate are in the same month and year
+            if (fromDate.getMonth() === toDate.getMonth() && fromDate.getFullYear() === toDate.getFullYear()) {
+                // Calculate number of days
+                var timeDiff = toDate - fromDate;
+                var days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1; // Include the start date
+
+                // Set Days input value
+                $('#DaysInput').val(days);
+
+                // Set Month and Year input values
+                $('#MonthInput').val(fromDate.getMonth() + 1); // Months are zero-based
+                $('#YearInput').val(fromDate.getFullYear());
+
+                // Change input fields to readonly and apply gray background
+                $('#DaysInput').addClass('readonly-background').attr('readonly', true);
+            } else {
+                // If the month/year is different, reset the fields
+                $('#DaysInput').val('');
+                $('#MonthInput').val('');
+                $('#YearInput').val('');
+                alert("From Date and To Date must be within the same month and year.");
+            }
+        });
+    });
+</script>
+
+<style>
+    .readonly-background {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+
+    .date-placeholder::placeholder {
+        color: #6c757d;
+        opacity: 1; /* Firefox */
+    }
+</style>

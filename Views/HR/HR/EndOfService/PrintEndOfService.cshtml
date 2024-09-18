@@ -1,0 +1,80 @@
+@model IEnumerable<Exampler_ERP.Models.HR_EndOfService>
+@{
+    
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print EndOfServices</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>EndOfService List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>EndOfService ID</th>
+                <th>Employee Name</th>
+                <th>Reason Type</th>
+                <th>Total Salary</th>
+                <th>Total Day Of Absent</th>
+                <th>Date Of Commencement</th>
+                <th>Date Of Completion Of Work</th>
+                <th>Number of Years</th>
+                <th>Number of Months</th>
+                <th>Number of Days</th>
+                <th>Total Days</th>
+                <th>End of Service Benefit</th>
+                <th>Balance Of The Annual Leave</th>
+                <th>Amount Dues For The Leave</th>
+                <th>Total End Of Service Dues</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var EndOfService in Model)
+            {
+                <tr>
+                    <td>@EndOfService.EndOfServiceID</td>
+                    <td>@($"{EndOfService.Employee?.FirstName} {EndOfService.Employee?.FatherName} {EndOfService.Employee?.FamilyName}")</td>
+                    <td>@EndOfService.Settings_EndOfSerivceReasonType?.EndOfServiceReasonTypeName</td>
+                    <td></td>
+                    <td></td>
+                    <td>@EndOfService.Employee?.HireDate</td>
+                    <td>@EndOfService.DateOfCompletionOfWork</td>
+                    <td>@EndOfService.NumberofYears</td>
+                    <td>@EndOfService.NumberofMonths</td>
+                    <td>@EndOfService.NumberofDays</td>
+                    <td>@EndOfService.TotalDays</td>
+                    <td>@EndOfService.EndofServiceBenefit</td>
+                    <td>@EndOfService.BalanceOfTheAnnualLeave</td>
+                    <td>@EndOfService.AmountDueForTheLeave</td>
+                    <td>@EndOfService.TotalEndOfServiceDues</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

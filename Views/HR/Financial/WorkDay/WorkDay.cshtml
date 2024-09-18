@@ -1,0 +1,184 @@
+@model IEnumerable<Exampler_ERP.Models.HR_WorkDay>
+
+@{
+    ViewData["Title"] = "HR - WorkDay";
+}
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            // Edit WorkDay modal popup
+            $('.editWorkDayLink').click(function (e) {
+                e.preventDefault();
+                var WorkDayId = $(this).data('id');
+                $.get('@Url.Action("Edit", "WorkDay")', { id: WorkDayId }, function (data) {
+                    $('#editWorkDayModalContainer').html(data);
+                    $('#editWorkDayModal').modal('show');
+                });
+            });
+
+            $('#editWorkDayModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editWorkDayForm').serialize();
+                $.post('@Url.Action("Edit", "WorkDay")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        // Show validation errors
+                    }
+                });
+            });
+
+            // Add new WorkDay modal popup
+            $('.addWorkDayLink').click(function () {
+                $.get('@Url.Action("Create", "WorkDay")', function (data) {
+                    $('#addWorkDayModalContainer').html(data);
+                    $('#addWorkDayModal').modal('show');
+                });
+            });
+
+            // Save new WorkDay form
+            $('#addWorkDayModalContainer').on('click', '#saveNewWorkDay', function () {
+                var formData = $('#addWorkDayForm').serialize();
+                $.post('@Url.Action("Create", "WorkDay")', formData, function (response) {
+                    if (response.success) {
+                        $('#addWorkDayModal').modal('hide');
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        // Handle validation errors or other cases
+                    }
+                });
+            });
+
+            // Close Modal Add Contrainer
+            $('#addWorkDayModalContainer').on('click', '#Close', function () {
+                $('#addWorkDayModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editWorkDayModalContainer').on('click', '#Close', function () {
+                $('#editWorkDayModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Delete WorkDay
+            $('.deleteWorkDayLink').click(function (e) {
+                e.preventDefault();
+                var WorkDayId = $(this).data('id');
+                $.post('@Url.Action("Delete", "WorkDay")', { id: WorkDayId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        // Handle errors
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+    </script>
+    <script>
+        function printWorkDays() {
+            var printWindow = window.open('@Url.Action("Print", "WorkDay")', '_blank');
+            printWindow.focus();
+        }
+    </script>
+}
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Master Information /</span> WorkDay
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">WorkDay List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-10 col-lg-9">
+                            <div class="row">
+                                <div class="col-2">
+                                    <p class="text-nowrap">WorkDay ID</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">Employee Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Month</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Year</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Deducation Days</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-8 col-md-10 col-lg-9">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">WorkDay ID : </span>@Html.DisplayFor(modelItem => item.WorkDayID)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Month : </span>@Html.DisplayFor(modelItem => item.Month)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Year : </span>@Html.DisplayFor(modelItem => item.Year)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Deducation Days : </span>@Html.DisplayFor(modelItem => item.Days)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-2 col-lg-3">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editWorkDayLink" data-id="@item.WorkDayID">
+                                                <i class="fa fa-pencil" style="font-size: x-large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="deleteWorkDayLink" data-id="@item.WorkDayID">
+                                                <i class="fa fa-trash-o" style="font-size: x-large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="mt-4">
+                        <button type="button" class="btn btn-primary addWorkDayLink">Add New</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "WorkDay")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printWorkDays()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editWorkDayModalContainer"></div>
+<div id="addWorkDayModalContainer"></div>

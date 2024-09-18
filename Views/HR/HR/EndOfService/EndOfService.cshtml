@@ -1,24 +1,24 @@
-@model IEnumerable<Exampler_ERP.Models.HR_Contract>
+@model IEnumerable<Exampler_ERP.Models.HR_EndOfService>
 
 @{
-    ViewData["Title"] = "Employeement - Contracts";
+    ViewData["Title"] = "HR - EndOfServices";
 }
 
 @section PageScripts {
     <script>
         $(document).ready(function () {
-            // Edit contract modal popup
-            $('.editContractLink').click(function (e) {
+            // Edit EndOfService modal popup
+            $('.editEndOfServiceLink').click(function (e) {
                 e.preventDefault();
-                var contractId = $(this).data('id');
-                $.get('@Url.Action("Edit", "Contract")', { id: contractId }, function (data) {
-                    $('#editContractModalContainer').html(data);
-                    $('#editContractModal').modal('show');
+                var EndOfServiceId = $(this).data('id');
+                $.get('@Url.Action("Edit", "EndOfService")', { id: EndOfServiceId }, function (data) {
+                    $('#editEndOfServiceModalContainer').html(data);
+                    $('#editEndOfServiceModal').modal('show');
                 });
             });
-            $('#editContractModalContainer').on('click', '#saveContractChanges', function () {
-                var formData = $('#editContractForm').serialize();
-                $.post('@Url.Action("Edit", "Contract")', formData, function (response) {
+            $('#editEndOfServiceModalContainer').on('click', '#saveEndOfServiceChanges', function () {
+                var formData = $('#editEndOfServiceForm').serialize();
+                $.post('@Url.Action("Edit", "EndOfService")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
                         location.reload();
@@ -27,20 +27,20 @@
                     }
                 });
             });
-          
 
-            // Add new contract modal popup
-            $('.addContractLink').click(function () {
-                $.get('@Url.Action("Create", "Contract")', function (data) {
-                    $('#addContractModalContainer').html(data);
-                    $('#addContractModal').modal('show');
+
+            // Add new EndOfService modal popup
+            $('.addEndOfServiceLink').click(function () {
+                $.get('@Url.Action("Create", "EndOfService")', function (data) {
+                    $('#addEndOfServiceModalContainer').html(data);
+                    $('#addEndOfServiceModal').modal('show');
                 });
             });
 
-            // Save new contract form
-             $('#addContractModalContainer').on('click', '#saveNewContract', function () {
-                var formData = $('#addContractForm').serialize();
-                $.post('@Url.Action("Create", "Contract")', formData, function (response) {
+            // Save new EndOfService form
+            $('#addEndOfServiceModalContainer').on('click', '#saveNewEndOfService', function () {
+                var formData = $('#addEndOfServiceForm').serialize();
+                $.post('@Url.Action("Create", "EndOfService")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
                         location.reload();
@@ -51,25 +51,25 @@
             });
 
             // Close Modal Add Contrainer
-            $('#addContractModalContainer').on('click', '#Close', function () {
-                $('#addContractModal').modal('hide'); // Close the modal directly
+            $('#addEndOfServiceModalContainer').on('click', '#Close', function () {
+                $('#addEndOfServiceModal').modal('hide'); // Close the modal directly
                 // Additional logic if needed
             });
 
             // Close Modal Edit Contrainer
-            $('#editContractModalContainer').on('click', '#Close', function () {
-                $('#editContractModal').modal('hide'); // Close the modal directly
+            $('#editEndOfServiceModalContainer').on('click', '#Close', function () {
+                $('#editEndOfServiceModal').modal('hide'); // Close the modal directly
                 // Additional logic if needed
             });
 
-            // Delete contract
-            $('.deleteContractLink').click(function (e) {
+            // Delete EndOfService
+            $('.deleteEndOfServiceLink').click(function (e) {
                 e.preventDefault();
-                var contractId = $(this).data('id');
+                var EndOfServiceId = $(this).data('id');
 
                 // Show confirmation dialog
-                if (confirm('Are you sure you want to delete this contract?')) {
-                    $.post('@Url.Action("Delete", "Contract")', { id: contractId }, function (response) {
+                if (confirm('Are you sure you want to delete this EndOfService?')) {
+                    $.post('@Url.Action("Delete", "EndOfService")', { id: EndOfServiceId }, function (response) {
                         if (response.success) {
                             location.reload();
                         } else {
@@ -88,28 +88,28 @@
         });
     </script>
     <script>
-        function printContracts() {
-            var printWindow = window.open('@Url.Action("Print", "Contract")', '_blank');
+        function printEndOfServices() {
+            var printWindow = window.open('@Url.Action("Print", "EndOfService")', '_blank');
             printWindow.focus();
         }
 
         function closeModal() {
             $('.close').click(function () {
-                $('#addContractModal').modal('hide');
-                $('#editContractModal').modal('hide');
+                $('#addEndOfServiceModal').modal('hide');
+                $('#editEndOfServiceModal').modal('hide');
             });
         }
     </script>
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Employeement /</span> Contracts
+    <span class="text-muted fw-light">Employeement /</span> EndOfServices
 </h4>
 
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Contract List</h5>
+            <h5 class="card-header">EndOfService List</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
@@ -119,10 +119,10 @@
                                     <p class="text-nowrap">Employee Name</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Issue Date</p>
+                                    <p class="text-nowrap">Date of Completion of Work</p>
                                 </div>
                                 <div class="col-4">
-                                    <p class="text-nowrap">Contract Type</p>
+                                    <p class="text-nowrap">Total End Of Service Dues</p>
                                 </div>
                             </div>
                         </div>
@@ -151,24 +151,10 @@
                                         <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Issue Date : </span>@item.IssueDate.ToString("dd/MM/yyyy")</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Issue Date : </span>@item.DateOfCompletionOfWork.ToString("dd/MM/yyyy")</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Contract Type : </span>
-                                            @if (item.ContractTypeID == 1)
-                                            {
-                                                <span>Limited</span>
-                                            }
-                                            else if (item.ContractTypeID == 2)
-                                            {
-                                                <span>Unlimited</span>
-                                            }
-                                            else
-                                            {
-                                                 <span></span>
-                                            }
-                                        </p>
+                                        <p class="text-nowrap"><span class="smallAdd">Total End Of Service Dues : </span>@item.TotalEndOfServiceDues</p>
                                     </div>
                                 </div>
                             </div>
@@ -176,21 +162,21 @@
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="editContractLink" data-id="@item.ContractID">
+                                            <a href="#" class="editEndOfServiceLink" data-id="@item.EndOfServiceID">
                                                 <i class="fa fa-pencil" style="font-size: x-large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="printContractLink" data-id="@item.ContractID">
+                                            <a href="#" class="printEndOfServiceLink" data-id="@item.EndOfServiceID">
                                                 <i class="fa fa-print" style="font-size: x-large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="deleteContractLink" data-id="@item.ContractID">
+                                            <a href="#" class="deleteEndOfServiceLink" data-id="@item.EndOfServiceID">
                                                 <i class="fa fa-trash-o" style="font-size: x-large; color:maroon; line-height: 2;"></i>
                                             </a>
                                         </div>
@@ -205,10 +191,10 @@
             <div class="card-body">
                 <div class="row">
                     <div class="mt-4">
-                        <button type="button" class="btn btn-primary addContractLink">Add New</button>
+                        <button type="button" class="btn btn-primary addEndOfServiceLink">Add New</button>
                         <!-- Example: Add buttons for exporting to Excel and printing -->
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Contract")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printContracts()">Print</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "EndOfService")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printEndOfServices()">Print</button>
                     </div>
                 </div>
             </div>
@@ -217,5 +203,5 @@
 </div>
 
 <!-- Include the modal partial -->
-<div id="editContractModalContainer"></div>
-<div id="addContractModalContainer"></div>
+<div id="editEndOfServiceModalContainer"></div>
+<div id="addEndOfServiceModalContainer"></div>

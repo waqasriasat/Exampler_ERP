@@ -1,0 +1,57 @@
+@model IEnumerable<Exampler_ERP.Models.HR_OverTime>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print OverTimes</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>OverTime List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>OverTime ID</th>
+                <th>Employee Name</th>
+                <th>Month</th>
+                <th>Year</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var OverTime in Model)
+            {
+                <tr>
+                    <td>@OverTime.OverTimeID</td>
+                    <td>@($"{OverTime.Employee?.FirstName} {OverTime.Employee?.FatherName} {OverTime.Employee?.FamilyName}")</td>
+                    <td>@OverTime.Month</td>
+                    <td>@OverTime.Year</td>
+                    <td>@OverTime.Amount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

@@ -41,7 +41,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     public async Task<IActionResult> Edit(int id)
     {
       ViewBag.RoleList = await _utils.GetRoles();
-      ViewBag.EmployeeList = await _utils.GetEmployees();
+      ViewBag.EmployeeList = await _utils.GetEmployee();
       var user = await _appDBContext.CR_Users.FindAsync(id);
       if (user == null)
       {
@@ -76,7 +76,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         return Json(new { success = true });
       }
       ViewBag.RoleList = await _utils.GetRoles();
-      ViewBag.EmployeeList = await _utils.GetEmployees();
+      ViewBag.EmployeeList = await _utils.GetEmployee();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
       return PartialView("~/Views/HR/MasterInfo/User/EditUser.cshtml", user);
     }
@@ -85,7 +85,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     public async Task<IActionResult> Create()
     {
       ViewBag.RoleList = await _utils.GetRoles();
-      ViewBag.EmployeeList = await _utils.GetEmployees();
+      ViewBag.EmployeeList = await _utils.GetEmployee();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
       return PartialView("~/Views/HR/MasterInfo/User/AddUser.cshtml", new CR_User());
     }

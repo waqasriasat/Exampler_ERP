@@ -1,0 +1,96 @@
+@model Exampler_ERP.Models.CR_ProcessTypeApprovalDetail
+
+@{
+    var ProcessTypeID = ViewBag.ProcessTypeID;
+    var TransactionID = ViewBag.TransactionID;
+    var RankID = ViewBag.RankID;
+    var ApprovalProcessDetailID = ViewBag.ApprovalProcessDetailID;
+}
+
+<div class="modal fade" id="actionsProcessTypeApprovalModal" tabindex="-1" role="dialog" aria-labelledby="actionsProcessTypeApprovalModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="actionsProcessTypeApprovalModalLabel">Approval Process Actions</h5>
+                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">x</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="actionsProcessTypeApprovalForm" enctype="multipart/form-data" method="post">
+                    <div class="row">
+                        <!-- Password Dynamic Field -->
+                        <div class="col-6">
+                            <label for="Password">Password</label>
+                            <input type="password" class="form-control" id="Password" name="Password" value="" placeholder="Enter Password" />
+                        </div>
+
+                        <!-- File Uploader -->
+                        <div class="col-12">
+                            <br />
+                            <div class="custom-file">
+                                <label for="FileUpload" class="form-label">Upload File</label>
+                                <input type="file" class="custom-file-input" id="FileUpload" name="FileUpload" />
+                                <label class="custom-file-label" for="FileUpload"></label>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                        <!-- Notes Field -->
+                        <div class="col-12">
+                            <label for="Notes">Notes</label>
+                            <textarea id="Notes" name="Notes" class="form-control" rows="4" placeholder="Enter notes"></textarea>
+                        </div>
+
+                        <!-- Hidden Fields -->
+                        <input type="hidden" id="Rank" name="Rank" value="@RankID" />
+                        <input type="hidden" id="ProcessTypeID" name="ProcessTypeID" value="@ProcessTypeID" />
+                        <input type="hidden" id="TransactionID" name="TransactionID" value="@TransactionID" />
+                        <input type="hidden" id="ApprovalProcessDetailID" name="ApprovalProcessDetailID" value="@ApprovalProcessDetailID" />
+                        <input type="hidden" id="ApprovalProcessID" name="ApprovalProcessID" value="@Model.ApprovalProcessID" />
+                       
+                        <input type="hidden" id="Date" name="Date" value="@Model.Date" />
+                        <input type="hidden" id="RoleID" name="RoleID" value="@Model.RoleID" />
+
+                    </div>
+                </form>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="button" class="btn btn-danger" id="Reject">Reject</button>
+                <button type="button" class="btn btn-primary" id="Approved">Approved</button>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .custom-file-label::after {
+        content: "Browse";
+        background-color: #007bff;
+        color: white;
+        border-radius: 0 0.25rem 0.25rem 0;
+        padding: 0.375rem 0.75rem;
+    }
+
+    .custom-file-label {
+        padding: 0.375rem 0.75rem;
+    }
+
+    .custom-file-input:focus ~ .custom-file-label {
+        border-color: #007bff;
+        box-shadow: none;
+        margin-top: 0.5rem;
+        margin-bottom: 2.5rem;
+    }
+</style>
+<script>
+    // Show the selected file name in the label
+    document.querySelector('.custom-file-input').addEventListener('change', function (e) {
+        debugger;
+        var fileName = document.getElementById("FileUpload").files[0].name;
+        var nextSibling = e.target.nextElementSibling;
+        nextSibling.innerText = fileName;
+    });
+
+</script>

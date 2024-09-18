@@ -115,20 +115,18 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           {
             _appDBContext.HR_Joinings.Add(updatedJoining);
 
-            var deduction = new HR_Deduction
+            var workday = new HR_WorkDay
             {
-              DeductionTypeID = 1,
               EmployeeID = updatedJoining.EmployeeID,
-              ClassID = 1,
               Month = updatedJoining.JoiningDate.Month,
               Year = updatedJoining.JoiningDate.Year,
               FromDate = new DateTime(updatedJoining.JoiningDate.Year, updatedJoining.JoiningDate.Month, 1),
-              ToDate = updatedJoining.JoiningDate,
+              ToDate = updatedJoining.JoiningDate.AddDays(-1),
               Days = updatedJoining.JoiningDate.Day - 1,
               DeleteYNID = 0
             };
 
-            _appDBContext.HR_Deductions.Add(deduction);
+            _appDBContext.HR_WorkDays.Add(workday);
           }
           await _appDBContext.SaveChangesAsync();
           return Json(new { success = true });

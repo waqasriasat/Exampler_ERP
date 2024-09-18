@@ -942,7 +942,11 @@ a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:h
     padding-top: 5px;
     /*padding-bottom: 5px;*/
 }
-
+.GVDetailforApproval {
+  border-bottom-style: ridge;
+  padding-top: 5px;
+  padding-bottom: 25px;
+}
 .ActionHeading {
     padding-left: 20px;
     padding-right: 20px
@@ -958,4 +962,32 @@ a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:h
   font-size: x-large !important;
   padding: 6px !important;
   height: 30px !important;
+}
+.colHeadgroup {
+  padding: 10px;
+  
+}
+.colcliedgroup {
+  padding: 25px;
+  border: groove; 
+  color: black
+}
+.readonly-background {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}
+
+.date-placeholder::placeholder {
+  color: #6c757d;
+  opacity: 1; /* Firefox */
+}
+.roleheading {
+  font-weight: bold;
+  font-size: x-large;
+  background-color: ghostwhite;
+}
+.rolepadding {
+  padding-left: 24px;
+  padding-right: 26px;
+  padding-top: 25px;
 }

@@ -46,8 +46,17 @@ namespace Exampler_ERP.Models
     public DbSet<HR_BankAccount> HR_BankAccounts { get; set; }
     public DbSet<HR_ContractRenewal> HR_ContractRenewals { get; set; }
     public DbSet<HR_Applicant> HR_Applicants { get; set; }
+    public DbSet<HR_WorkDay> HR_WorkDays { get; set; }
+    public DbSet<HR_OverTime> HR_OverTimes { get; set; }
+    public DbSet<HR_EndOfService> HR_EndOfServices { get; set; }
+    public DbSet<Settings_EndOfServiceReasonType> Settings_EndOfServiceReasonTypes { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      modelBuilder.Entity<Settings_ProcessType>().HasData(
+     new Settings_ProcessType() { ProcessTypeID = 1, ProcessTypeName = "Add User", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 2, ProcessTypeName = "Add Employee", ActiveYNID = 1, DeleteYNID = 0 }
+     );
+
       modelBuilder.Entity<Settings_Role>().HasData(
      new Settings_Role() { RoleID = 1, RoleName = "Admin", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_Role() { RoleID = 2, RoleName = "General Manager", ActiveYNID = 1, DeleteYNID = 0 },
@@ -389,18 +398,16 @@ namespace Exampler_ERP.Models
  );
 
       modelBuilder.Entity<Settings_DeductionType>().HasData(
-     new Settings_DeductionType() { DeductionTypeID = 1, DeductionTypeName = "Joining", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 2, DeductionTypeName = "Termination", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 3, DeductionTypeName = "Income Tax", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 4, DeductionTypeName = "Social Security Contributions", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 5, DeductionTypeName = "Health Insurance Premiums", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 6, DeductionTypeName = "Pension Contributions", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 7, DeductionTypeName = "Loan Repayments", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 8, DeductionTypeName = "Union Dues", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 9, DeductionTypeName = "Garnishments", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 10, DeductionTypeName = "Absent Days or Leave Without Pay", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 11, DeductionTypeName = "Wage Advances", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 12, DeductionTypeName = "Miscellaneous Deductions", ActiveYNID = 1, DeleteYNID = 0 }
+     new Settings_DeductionType() { DeductionTypeID = 1, DeductionTypeName = "Income Tax", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_DeductionType() { DeductionTypeID = 2, DeductionTypeName = "Social Security Contributions", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_DeductionType() { DeductionTypeID = 3, DeductionTypeName = "Health Insurance Premiums", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_DeductionType() { DeductionTypeID = 4, DeductionTypeName = "Pension Contributions", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_DeductionType() { DeductionTypeID = 5, DeductionTypeName = "Loan Repayments", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_DeductionType() { DeductionTypeID = 6, DeductionTypeName = "Union Dues", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_DeductionType() { DeductionTypeID = 7, DeductionTypeName = "Garnishments", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_DeductionType() { DeductionTypeID = 8, DeductionTypeName = "Absent Days or Leave Without Pay", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_DeductionType() { DeductionTypeID = 9, DeductionTypeName = "Wage Advances", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_DeductionType() { DeductionTypeID = 10, DeductionTypeName = "Miscellaneous Deductions", ActiveYNID = 1, DeleteYNID = 0 }
  );
 
       modelBuilder.Entity<Settings_ActiveYNIDType>().HasData(
@@ -692,45 +699,15 @@ namespace Exampler_ERP.Models
         // Add more items here if needed
     );
 
+      modelBuilder.Entity<Settings_EndOfServiceReasonType>().HasData(
+        new Settings_EndOfServiceReasonType { EndOfServiceReasonTypeId = 1, EndOfServiceReasonTypeName = "Resignation" },
+        new Settings_EndOfServiceReasonType { EndOfServiceReasonTypeId = 2, EndOfServiceReasonTypeName = "Retirement" },
+        new Settings_EndOfServiceReasonType { EndOfServiceReasonTypeId = 3, EndOfServiceReasonTypeName = "Contract Expiration" },
+        new Settings_EndOfServiceReasonType { EndOfServiceReasonTypeId = 4, EndOfServiceReasonTypeName = "Termination for Cause" },
+        new Settings_EndOfServiceReasonType { EndOfServiceReasonTypeId = 5, EndOfServiceReasonTypeName = "Death" }
+        // Add more items here if needed
+    );
 
-
-
-
-
-
-
-
-
-
-
-
-      // Configure ProcessTypeApproval
-      modelBuilder.Entity<CR_ProcessTypeApproval>()
-           .HasKey(p => p.ApprovalProcessID);
-
-      // Configure ProcessTypeApprovalDetail
-      modelBuilder.Entity<CR_ProcessTypeApprovalDetail>()
-          .HasKey(p => p.ApprovalProcessDetailID);
-
-      modelBuilder.Entity<CR_ProcessTypeApprovalDetail>()
-          .HasOne(p => p.ProcessTypeApproval)
-          .WithMany()
-          .HasForeignKey(p => p.ApprovalProcessID);
-
-      // Configure ProcessTypeApprovalDetailDoc
-      modelBuilder.Entity<CR_ProcessTypeApprovalDetailDoc>()
-          .HasKey(p => p.ApprovalProcessDetailID);
-
-      modelBuilder.Entity<CR_ProcessTypeApprovalDetailDoc>()
-          .HasOne(p => p.ProcessTypeApprovalDetail)
-          .WithMany()
-          .HasForeignKey(p => p.ApprovalProcessDetailID);
-
-      // Configure ProcessTypeApprovalSetup
-      modelBuilder.Entity<CR_ProcessTypeApprovalSetup>()
-            .HasKey(p => p.ProcessTypeApprovalID);
-
-
-    }
+   }
   }
 }

@@ -14,7 +14,9 @@ namespace Exampler_ERP.Models
     public int? ActiveID { get; set; }
     public int? DeleteYNID { get; set; }
     public int SalaryTypeID { get; set; }
-    public int ContractType { get; set; }
+    public int ContractTypeID { get; set; }
+    [ForeignKey("ContractTypeID")]
+    public virtual Settings_ContractType? Settings_ContractType { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime? EndDate { get; set; }
     public int? VacationDays { get; set; }

@@ -26,7 +26,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       var contracts = await _appDBContext.HR_Contracts
           .Where(c => c.DeleteYNID != 1 &&
-                      c.ContractType == 1 &&
+                      c.ContractTypeID == 1 &&
                       c.EndDate != null &&
                       (c.EndDate.Value <= futureDate || c.EndDate.Value < today))
           .Include(c => c.Employee)
