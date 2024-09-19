@@ -434,14 +434,7 @@ namespace Exampler_ERP.Models
           new Settings_VacationType() { VacationTypeID = 11, VacationTypeName = "Compensatory Leave", ActiveYNID = 1, DeleteYNID = 0 }
       );
 
-      modelBuilder.Entity<Settings_ProcessType>().HasData(
-      new Settings_ProcessType()
-      {
-        ProcessTypeID = 1,
-        ProcessTypeName = "Add User",
-        ActiveYNID = 1,
-        DeleteYNID = 0
-      });
+    
       modelBuilder.Entity<Settings_Gender>().HasData(
        new Settings_Gender { GenderID = 1, GenderName = "Male" },
        new Settings_Gender { GenderID = 2, GenderName = "Female" },

@@ -31,7 +31,7 @@
                                         <span>Process Type: @(firstItem.CR_ProcessTypeApproval?.ProcessType?.ProcessTypeName ?? "N/A")</span>
                                     </div>
                                     <div class="row">
-                                        <span>Request Date: @(DateTime.Parse(firstItem.CR_ProcessTypeApproval?.RequestDate).ToString("dd-MM-yyyy HH:mm:ss"))</span>
+                                        <span>Request Date: @(firstItem.CR_ProcessTypeApproval?.Date).ToString("dd-MM-yyyy HH:mm:ss")</span>
                                     </div>
                                 </div>
                             </div>

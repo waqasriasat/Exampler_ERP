@@ -97,14 +97,75 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         User.UserName = CR_CipherKey.Encrypt(User.UserName);
         User.Password = CR_CipherKey.Encrypt(User.Password);
+
         User.ActiveYNID = 0;
         User.DeleteYNID = 0;
+
         _appDBContext.CR_Users.Add(User);
         await _appDBContext.SaveChangesAsync();
+
+        var userId = User.UserID;
+        if (userId > 0)
+        {
+          var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
+                              .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 1)
+                              .CountAsync();
+
+          if (processCount > 0)
+          {
+            var newProcessTypeApproval = new CR_ProcessTypeApproval
+            {
+              ProcessTypeID = 1,
+              Notes = "Create New User",
+              Date = DateTime.Now,
+              EmployeeID = User.EmployeeID ?? 0,
+              UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
+              TransactionID = User.UserID
+            };
+
+            _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
+            await _appDBContext.SaveChangesAsync();
+
+            var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
+                                        .Where(pta => pta.ProcessTypeID == 1 && pta.Rank == 1)
+                                        .FirstOrDefaultAsync();
+
+            if (nextApprovalSetup != null)
+            {
+              var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
+              {
+                ApprovalProcessID = newProcessTypeApproval.ApprovalProcessID,
+                Date = DateTime.Now,
+                RoleID = nextApprovalSetup.RoleID,
+                AppID = 0,
+                AppUserID = 0,
+                Notes = null,
+                Rank = nextApprovalSetup.Rank
+              };
+
+              _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
+              await _appDBContext.SaveChangesAsync();
+            }
+            else
+            {
+              return Json(new { success = false, message = "Next approval setup not found." });
+            }
+          }
+          else
+          {
+            User.ActiveYNID = 1;
+            _appDBContext.CR_Users.Update(User);
+            await _appDBContext.SaveChangesAsync();
+            return Json(new { success = true, message = "No process setup found, User activated." });
+          }
+        }
+
         return Json(new { success = true });
       }
+
       return PartialView("~/Views/HR/MasterInfo/User/AddUser.cshtml", User);
     }
+
     public async Task<IActionResult> Delete(int id)
     {
       var User = await _appDBContext.CR_Users.FindAsync(id);

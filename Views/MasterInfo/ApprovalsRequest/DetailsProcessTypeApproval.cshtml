@@ -26,6 +26,11 @@
                         <h5>User detail</h5>
                         @Html.Partial("~/Views/HR/MasterInfo/User/_EditUser.cshtml", Model)
                     }
+                    @if (ProcessTypeID == 2)
+                    {
+                        <h5>Employee detail</h5>
+                        @Html.Partial("~/Views/HR/Employeement/Employee/_EditEmployee.cshtml", Model)
+                    }
                 </form>
             </div>
 

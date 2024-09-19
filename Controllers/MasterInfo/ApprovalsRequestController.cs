@@ -236,22 +236,31 @@ namespace Exampler_ERP.Controllers.MasterInfo
           return NotFound();
         }
         user.UserName = CR_CipherKey.Decrypt(user.UserName);
-        result = user; 
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", user);
       }
-      else
-      {
-        return NotFound($"No approval record found for ApprovalProcessID = {id}");
-      }
+      //if (result is Exampler_ERP.Models.CR_User)
+      //{
+        
+      //}
 
-      if (result == null)
+      if (processTypeID == 2)
       {
-        return NotFound($"No approval record found for ApprovalProcessID = {id}");
+        ViewBag.GenderList = await _utils.GetGender();
+        ViewBag.MaritalStatusList = await _utils.GetMaritalStatus();
+        ViewBag.ReligionList = await _utils.GetReligion();
+        ViewBag.CountriesList = _utils.GetCountries();
+        ViewBag.BranchsList = await _utils.GetBranchs();
+        ViewBag.DepartmentsList = await _utils.GetDepartments();
+        ViewBag.DesignationsList = await _utils.GetDesignations();
+        var employee = await _appDBContext.HR_Employees.FindAsync(transactionID);
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", employee);
       }
+      //if (result is Exampler_ERP.Models.HR_Employee)
+      //{
+        
+      //}
 
-      if (result is Exampler_ERP.Models.CR_User)
-      {
-        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", result);
-      }
+
 
       return View("~/Views/MasterInfo/ApprovalsRequest/ApprovalsRequest.cshtml", result);
     }

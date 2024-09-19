@@ -15,7 +15,6 @@ namespace Exampler_ERP.Models
     public int EmployeeID { get; set; }
     [ForeignKey("EmployeeID")]
     public virtual HR_Employee? Employee { get; set; }
-    public string RequestDate { get; set; } = null!;
     public int UserID { get; set; }
     [ForeignKey("UserID")]
     public virtual CR_User? User { get; set; }
