@@ -1,4 +1,4 @@
-@model Exampler_ERP.Models.CR_User
+@model dynamic
 
 @{
     var ProcessTypeID = ViewBag.ProcessTypeID;
@@ -23,13 +23,13 @@
                 <form>
                     @if (ProcessTypeID == 1)
                     {
-                        <h5>User detail</h5>
-                        @Html.Partial("~/Views/HR/MasterInfo/User/_EditUser.cshtml", Model)
+                        <h5>User Details</h5>
+                        @Html.Partial("~/Views/HR/MasterInfo/User/_EditUser.cshtml", (Exampler_ERP.Models.CR_User)Model)
                     }
-                    @if (ProcessTypeID == 2)
+                    else if (ProcessTypeID == 2)
                     {
-                        <h5>Employee detail</h5>
-                        @Html.Partial("~/Views/HR/Employeement/Employee/_EditEmployee.cshtml", Model)
+                        <h5>Employee Details</h5>
+                        @Html.Partial("~/Views/HR/Employeement/Employee/_EditEmployee.cshtml", (Exampler_ERP.Models.HR_Employee)Model)
                     }
                 </form>
             </div>

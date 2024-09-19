@@ -214,35 +214,44 @@ namespace Exampler_ERP.Controllers.MasterInfo
     }
     public async Task<IActionResult> Details(int id)
     {
-      var FatchDetail = await _appDBContext.CR_ProcessTypeApprovals
+      // Fetch the ProcessTypeApproval record
+      var fatchDetail = await _appDBContext.CR_ProcessTypeApprovals
           .Where(pta => pta.ApprovalProcessID == id)
           .FirstOrDefaultAsync();
 
-      var processTypeID = FatchDetail?.ProcessTypeID;
-      var transactionID = FatchDetail?.TransactionID;
+      if (fatchDetail == null)
+      {
+        return NotFound();
+      }
 
+      var processTypeID = fatchDetail.ProcessTypeID;
+      var transactionID = fatchDetail.TransactionID;
+
+      // Set ProcessTypeID and TransactionID in ViewBag
       ViewBag.ProcessTypeID = processTypeID;
       ViewBag.TransactionID = transactionID;
 
       object result = null;
 
+      // Handle for ProcessTypeID == 1 (User)
       if (processTypeID == 1)
       {
         ViewBag.RoleList = await _utils.GetRoles();
         ViewBag.EmployeeList = await _utils.GetEmployee();
+
         var user = await _appDBContext.CR_Users.FindAsync(transactionID);
         if (user == null)
         {
           return NotFound();
         }
+
+        // Decrypt user data if needed
         user.UserName = CR_CipherKey.Decrypt(user.UserName);
+
         return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", user);
       }
-      //if (result is Exampler_ERP.Models.CR_User)
-      //{
-        
-      //}
 
+      // Handle for ProcessTypeID == 2 (Employee)
       if (processTypeID == 2)
       {
         ViewBag.GenderList = await _utils.GetGender();
@@ -252,18 +261,20 @@ namespace Exampler_ERP.Controllers.MasterInfo
         ViewBag.BranchsList = await _utils.GetBranchs();
         ViewBag.DepartmentsList = await _utils.GetDepartments();
         ViewBag.DesignationsList = await _utils.GetDesignations();
+
         var employee = await _appDBContext.HR_Employees.FindAsync(transactionID);
+        if (employee == null)
+        {
+          return NotFound();
+        }
+
         return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", employee);
       }
-      //if (result is Exampler_ERP.Models.HR_Employee)
-      //{
-        
-      //}
 
-
-
+      // Fallback view if no ProcessTypeID matches
       return View("~/Views/MasterInfo/ApprovalsRequest/ApprovalsRequest.cshtml", result);
     }
+
 
 
   }
