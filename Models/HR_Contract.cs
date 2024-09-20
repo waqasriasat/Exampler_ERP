@@ -11,7 +11,7 @@ namespace Exampler_ERP.Models
     [ForeignKey("EmployeeID")]
     public virtual HR_Employee? Employee { get; set; }
     public DateTime IssueDate { get; set; }
-    public int? ActiveID { get; set; }
+    public int? ActiveYNID { get; set; }
     public int? DeleteYNID { get; set; }
     public int SalaryTypeID { get; set; }
     public int ContractTypeID { get; set; }

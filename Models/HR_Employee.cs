@@ -55,8 +55,8 @@ namespace Exampler_ERP.Models
 
     public int? ApplicantID { get; set; } //didn't use in registration
     public int? FinalApprovalID { get; set; } //didn't use in registration
-    public int? ApprovalProcesslID { get; set; } //didn't use in registration
-    public int? ActiveID { get; set; } //didn't use in registration
-    public int? DeleteID { get; set; } //didn't use in registration
+    public int? ApprovalProcessID { get; set; } //didn't use in registration
+    public int? ActiveYNID { get; set; } //didn't use in registration
+    public int? DeleteYNID { get; set; } //didn't use in registration
   }
 }

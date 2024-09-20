@@ -27,7 +27,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
                                     join jon in _appDBContext.HR_Joinings
                                     on emp.EmployeeID equals jon.EmployeeID into joinGroup
                                     from j in joinGroup.DefaultIfEmpty()
-                                    where con.ActiveID == 1 && emp.ActiveID == 1
+                                    where con.ActiveYNID == 1 && emp.ActiveYNID == 1
                                     select new
                                     {
                                       emp.EmployeeID,
@@ -104,17 +104,20 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         try
         {
           var existingJoining = await _appDBContext.HR_Joinings
-              .Where(j => j.EmployeeID == updatedJoining.EmployeeID)
-              .FirstOrDefaultAsync();
+    .FirstOrDefaultAsync(j => j.EmployeeID == updatedJoining.EmployeeID);
+
           if (existingJoining != null)
           {
+            // Update existing joining
             existingJoining.JoiningDate = updatedJoining.JoiningDate;
             _appDBContext.HR_Joinings.Update(existingJoining);
           }
           else
           {
-            _appDBContext.HR_Joinings.Add(updatedJoining);
+            // Add new joining record
+            await _appDBContext.HR_Joinings.AddAsync(updatedJoining);
 
+            // Create new workday record
             var workday = new HR_WorkDay
             {
               EmployeeID = updatedJoining.EmployeeID,
@@ -126,10 +129,23 @@ namespace Exampler_ERP.Controllers.HR.Employeement
               DeleteYNID = 0
             };
 
-            _appDBContext.HR_WorkDays.Add(workday);
+            await _appDBContext.HR_WorkDays.AddAsync(workday);
+
+            // Update employee's status if the employee exists
+            var employee = await _appDBContext.HR_Employees
+                                              .FirstOrDefaultAsync(e => e.EmployeeID == updatedJoining.EmployeeID);
+
+            if (employee != null)
+            {
+              employee.EmployeeStatusTypeID = 1; // Set status to 'Working' (assuming ID 1 means 'Working')
+            }
           }
+
+          // Save all changes to the database
           await _appDBContext.SaveChangesAsync();
+
           return Json(new { success = true });
+
         }
         catch (Exception ex)
         {

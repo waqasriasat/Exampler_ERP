@@ -50,11 +50,39 @@ namespace Exampler_ERP.Models
     public DbSet<HR_OverTime> HR_OverTimes { get; set; }
     public DbSet<HR_EndOfService> HR_EndOfServices { get; set; }
     public DbSet<Settings_EndOfServiceReasonType> Settings_EndOfServiceReasonTypes { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      modelBuilder.Entity<Settings_EmployeeStatusType>().HasData(
+    new Settings_EmployeeStatusType() { EmployeeStatusTypeID = 1, EmployeeStatusTypeName = "Working", ActiveYNID = 1, DeleteYNID = 0 },
+    new Settings_EmployeeStatusType() { EmployeeStatusTypeID = 2, EmployeeStatusTypeName = "On Probation", ActiveYNID = 1, DeleteYNID = 0 },
+    new Settings_EmployeeStatusType() { EmployeeStatusTypeID = 3, EmployeeStatusTypeName = "On Leave", ActiveYNID = 1, DeleteYNID = 0 },
+    new Settings_EmployeeStatusType() { EmployeeStatusTypeID = 4, EmployeeStatusTypeName = "Resigned", ActiveYNID = 1, DeleteYNID = 0 },
+    new Settings_EmployeeStatusType() { EmployeeStatusTypeID = 5, EmployeeStatusTypeName = "Terminated", ActiveYNID = 1, DeleteYNID = 0 },
+    new Settings_EmployeeStatusType() { EmployeeStatusTypeID = 6, EmployeeStatusTypeName = "Retired", ActiveYNID = 1, DeleteYNID = 0 },
+    new Settings_EmployeeStatusType() { EmployeeStatusTypeID = 7, EmployeeStatusTypeName = "Contract Ended", ActiveYNID = 1, DeleteYNID = 0 },
+    new Settings_EmployeeStatusType() { EmployeeStatusTypeID = 8, EmployeeStatusTypeName = "Suspended", ActiveYNID = 1, DeleteYNID = 0 },
+    new Settings_EmployeeStatusType() { EmployeeStatusTypeID = 9, EmployeeStatusTypeName = "Deceased", ActiveYNID = 1, DeleteYNID = 0 },
+    new Settings_EmployeeStatusType() { EmployeeStatusTypeID = 10, EmployeeStatusTypeName = "Furloughed", ActiveYNID = 1, DeleteYNID = 0 },
+    new Settings_EmployeeStatusType() { EmployeeStatusTypeID = 11, EmployeeStatusTypeName = "Transferred", ActiveYNID = 1, DeleteYNID = 0 }
+);
+
       modelBuilder.Entity<Settings_ProcessType>().HasData(
      new Settings_ProcessType() { ProcessTypeID = 1, ProcessTypeName = "Add User", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_ProcessType() { ProcessTypeID = 2, ProcessTypeName = "Add Employee", ActiveYNID = 1, DeleteYNID = 0 }
+     new Settings_ProcessType() { ProcessTypeID = 2, ProcessTypeName = "Add Employee", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 3, ProcessTypeName = "Add Contract", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 4, ProcessTypeName = "Contract Renewal", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 5, ProcessTypeName = "End of Service", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 6, ProcessTypeName = "Salary", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 7, ProcessTypeName = "Overtime", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 8, ProcessTypeName = "Allowance", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 9, ProcessTypeName = "Deduction", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 10, ProcessTypeName = "Fixed Deduction", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 11, ProcessTypeName = "Vacation", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 12, ProcessTypeName = "Vacation Settle", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 13, ProcessTypeName = "PayRoll", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 14, ProcessTypeName = "Employee Request", ActiveYNID = 1, DeleteYNID = 0 }
+
      );
 
       modelBuilder.Entity<Settings_Role>().HasData(
@@ -411,13 +439,13 @@ namespace Exampler_ERP.Models
  );
 
       modelBuilder.Entity<Settings_ActiveYNIDType>().HasData(
-   new Settings_ActiveYNIDType() { ActiveID = 1, ActiveName = "Yes" },
-   new Settings_ActiveYNIDType() { ActiveID = 2, ActiveName = "No" }
+   new Settings_ActiveYNIDType() { ActiveYNID = 1, ActiveName = "Yes" },
+   new Settings_ActiveYNIDType() { ActiveYNID = 2, ActiveName = "No" }
 );
 
       modelBuilder.Entity<Settings_DeleteYNIDType>().HasData(
-   new Settings_DeleteYNIDType() { DeleteID = 1, DeleteName = "Yes" },
-   new Settings_DeleteYNIDType() { DeleteID = 2, DeleteName = "No" }
+   new Settings_DeleteYNIDType() { DeleteYNID = 1, DeleteName = "Yes" },
+   new Settings_DeleteYNIDType() { DeleteYNID = 2, DeleteName = "No" }
 );
 
       modelBuilder.Entity<Settings_VacationType>().HasData(

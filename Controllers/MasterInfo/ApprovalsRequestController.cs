@@ -30,6 +30,46 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
       return View("~/Views/MasterInfo/ApprovalsRequest/ApprovalsRequest.cshtml", result);
     }
+    [HttpGet]
+    public async Task<IActionResult> DownloadDocument(int id)
+    {
+      var document = await _appDBContext.CR_ProcessTypeApprovalDetailDocs
+          .FirstOrDefaultAsync(d => d.ApprovalProcessDetailDocID == id);
+
+      if (document == null || document.Doc == null)
+      {
+        return NotFound();
+      }
+
+      return File(document.Doc, "application/octet-stream", document.DocName);
+    }
+    [HttpGet]
+    public async Task<IActionResult> ViewDocument(int id)
+    {
+      // Retrieve the document based on ApprovalProcessDetailDocID
+      var document = await _appDBContext.CR_ProcessTypeApprovalDetailDocs
+          .FirstOrDefaultAsync(d => d.ApprovalProcessDetailDocID == id);
+
+      if (document == null || document.Doc == null)
+      {
+        // If document is not found, return a 404 error.
+        return NotFound();
+      }
+
+      // Determine MIME type based on file extension
+      string mimeType = document.DocExt.ToLower() switch
+      {
+        ".pdf" => "application/pdf",
+        ".jpg" => "image/jpeg",
+        ".jpeg" => "image/jpeg",
+        ".png" => "image/png",
+        _ => "application/octet-stream"
+      };
+
+      // Return the document for inline viewing
+      return File(document.Doc, mimeType, document.DocName);
+    }
+
     public async Task<IActionResult> Approvals(int id)
     {
     
@@ -153,6 +193,94 @@ namespace Exampler_ERP.Controllers.MasterInfo
               await _appDBContext.SaveChangesAsync();
             }
           }
+          if (ProcessTypeID == 2)
+          {
+            var employee = await _appDBContext.HR_Employees
+            .Where(u => u.EmployeeID == transactionID)
+            .FirstOrDefaultAsync();
+
+            if (employee != null)
+            {
+              employee.ActiveYNID = 1;
+              employee.FinalApprovalID = 1;
+              employee.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(employee);
+              await _appDBContext.SaveChangesAsync();
+            }
+          }
+          if (ProcessTypeID == 3)
+          {
+            var contract = await _appDBContext.HR_Contracts
+            .Where(u => u.ContractID == transactionID)
+            .FirstOrDefaultAsync();
+
+            if (contract != null)
+            {
+              contract.ActiveYNID = 1;
+              contract.FinalApprovalID = 1;
+              contract.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(contract);
+              await _appDBContext.SaveChangesAsync();
+            }
+          }
+          if (ProcessTypeID == 4)
+          {
+            var contractRenewal = await _appDBContext.HR_ContractRenewals
+                                                     .Where(u => u.ContractRenewalID == transactionID)
+                                                     .FirstOrDefaultAsync();
+
+            if (contractRenewal != null)
+            {
+              contractRenewal.FinalApprovalID = 1;
+              contractRenewal.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              await _appDBContext.SaveChangesAsync();
+            }
+
+            var contract = await _appDBContext.HR_Contracts
+                                              .Where(u => u.ContractID == contractRenewal.ContractID)
+                                              .FirstOrDefaultAsync();
+
+            if (contract != null)
+            {
+              contract.EndDate = contractRenewal.NEndDate;
+              await _appDBContext.SaveChangesAsync();
+            }
+          }
+          if (ProcessTypeID == 5)
+          {
+
+          }
+          if (ProcessTypeID == 6)
+          {
+
+          }
+          if (ProcessTypeID == 7)
+          {
+
+          }
+          if (ProcessTypeID == 8)
+          {
+
+          }
+          if (ProcessTypeID == 9)
+          {
+
+          }
+          if (ProcessTypeID == 10)
+          {
+
+          }
+          if (ProcessTypeID == 11)
+          {
+
+          }
+          if (ProcessTypeID == 12)
+          {
+
+          }
+
         }
         return Json(new { success = true });
       }
@@ -206,6 +334,85 @@ namespace Exampler_ERP.Controllers.MasterInfo
               _appDBContext.Update(user);
               await _appDBContext.SaveChangesAsync();
             }
+        }
+        if (ProcessTypeID == 2)
+        {
+          var employee = await _appDBContext.HR_Employees
+          .Where(u => u.EmployeeID == transactionID)
+          .FirstOrDefaultAsync();
+
+          if (employee != null)
+          {
+            employee.ActiveYNID = 0;
+            employee.FinalApprovalID = 2;
+            employee.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+            _appDBContext.Update(employee);
+            await _appDBContext.SaveChangesAsync();
+          }
+        }
+        if (ProcessTypeID == 3)
+        {
+          var contract = await _appDBContext.HR_Contracts
+          .Where(u => u.ContractID == transactionID)
+          .FirstOrDefaultAsync();
+
+          if (contract != null)
+          {
+            contract.ActiveYNID = 0;
+            contract.FinalApprovalID = 2;
+            contract.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+            _appDBContext.Update(contract);
+            await _appDBContext.SaveChangesAsync();
+          }
+          if (ProcessTypeID == 4)
+          {
+            var contractRenewal = await _appDBContext.HR_ContractRenewals
+                                                     .Where(u => u.ContractRenewalID == transactionID)
+                                                     .FirstOrDefaultAsync();
+
+            if (contractRenewal != null)
+            {
+              contractRenewal.FinalApprovalID = 2;
+              contractRenewal.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(contractRenewal);
+              await _appDBContext.SaveChangesAsync();
+            }
+          }
+          if (ProcessTypeID == 5)
+          {
+
+          }
+          if (ProcessTypeID == 6)
+          {
+
+          }
+          if (ProcessTypeID == 7)
+          {
+
+          }
+          if (ProcessTypeID == 8)
+          {
+
+          }
+          if (ProcessTypeID == 9)
+          {
+
+          }
+          if (ProcessTypeID == 10)
+          {
+
+          }
+          if (ProcessTypeID == 11)
+          {
+
+          }
+          if (ProcessTypeID == 12)
+          {
+
+          }
         }
         return Json(new { success = true });
       }
@@ -270,7 +477,64 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
         return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", employee);
       }
+      if (processTypeID == 3)
+      {
+        var contract = await _appDBContext.HR_Contracts.FindAsync(transactionID);
+        if (contract == null)
+        {
+          return NotFound();
+        }
 
+        ViewBag.EmployeesList = await _utils.GetEmployee();
+        ViewBag.SalaryTypesList = await _utils.GetSalaryOptions();
+        ViewBag.ContractTypesList = await _utils.GetContractTypes();
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", contract);
+      }
+      if (processTypeID == 4)
+      {
+        var contractRenewal = await _appDBContext.HR_ContractRenewals.FindAsync(transactionID);
+        if (contractRenewal == null)
+        {
+          return NotFound();
+        }
+
+        ViewBag.EmployeesList = await _utils.GetEmployee();
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", contractRenewal);
+      }
+      if (processTypeID == 5)
+      {
+
+      }
+      if (processTypeID == 6)
+      {
+
+      }
+      if (processTypeID == 7)
+      {
+
+      }
+      if (processTypeID == 8)
+      {
+
+      }
+      if (processTypeID == 9)
+      {
+
+      }
+      if (processTypeID == 10)
+      {
+
+      }
+      if (processTypeID == 11)
+      {
+
+      }
+      if (processTypeID == 12)
+      {
+
+      }
       // Fallback view if no ProcessTypeID matches
       return View("~/Views/MasterInfo/ApprovalsRequest/ApprovalsRequest.cshtml", result);
     }

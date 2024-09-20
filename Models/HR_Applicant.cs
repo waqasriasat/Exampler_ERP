@@ -34,8 +34,6 @@ namespace Exampler_ERP.Models
     public int? BranchID { get; set; }
     [ForeignKey("BranchID")]
     public virtual Settings_Branch? Branch { get; set; }
-    public int? FinalApprovalID { get; set; }
-    public int? ApprovalProcesslID { get; set; }
     public int? EducationTitleID { get; set; }
     public string? ForthePost { get; set; }
     public int? ExprienceNumberofYears { get; set; }

@@ -8,37 +8,37 @@
 }
 
 <div class="modal fade" id="actionsProcessTypeApprovalModal" tabindex="-1" role="dialog" aria-labelledby="actionsProcessTypeApprovalModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="actionsProcessTypeApprovalModalLabel">Approval Process Actions</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">x</button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="actionsProcessTypeApprovalModalLabel">
+                    <i class="fas fa-clipboard-check me-2"></i>Approval Process Actions
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
                 <form id="actionsProcessTypeApprovalForm" enctype="multipart/form-data" method="post">
-                    <div class="row">
+                    <div class="row g-3">
                         <!-- Password Dynamic Field -->
-                        <div class="col-6">
-                            <label for="Password">Password</label>
-                            <input type="password" class="form-control" id="Password" name="Password" value="" placeholder="Enter Password" />
+                        <div class="col-md-6">
+                            <label for="Password" class="form-label">Password</label>
+                            <input type="password" class="form-control form-control-lg" id="Password" name="Password" placeholder="Enter Password" />
                         </div>
 
                         <!-- File Uploader -->
-                        <div class="col-12">
-                            <br />
-                            <div class="custom-file">
-                                <label for="FileUpload" class="form-label">Upload File</label>
-                                <input type="file" class="custom-file-input" id="FileUpload" name="FileUpload" />
-                                <label class="custom-file-label" for="FileUpload"></label>
+                        <div class="col-12 mt-4">
+                            <label for="FileUpload" class="form-label">Upload File</label>
+                            <div class="input-group">
+                                <input type="file" class="form-control" id="FileUpload" name="FileUpload" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                                <label class="input-group-text" for="FileUpload">Browse</label>
                             </div>
                         </div>
-                        <br />
-                        <br />
+
                         <!-- Notes Field -->
-                        <div class="col-12">
-                            <label for="Notes">Notes</label>
-                            <textarea id="Notes" name="Notes" class="form-control" rows="4" placeholder="Enter notes"></textarea>
+                        <div class="col-12 mt-4">
+                            <label for="Notes" class="form-label">Notes</label>
+                            <textarea id="Notes" name="Notes" class="form-control form-control-lg" rows="4" placeholder="Enter notes here..."></textarea>
                         </div>
 
                         <!-- Hidden Fields -->
@@ -47,50 +47,66 @@
                         <input type="hidden" id="TransactionID" name="TransactionID" value="@TransactionID" />
                         <input type="hidden" id="ApprovalProcessDetailID" name="ApprovalProcessDetailID" value="@ApprovalProcessDetailID" />
                         <input type="hidden" id="ApprovalProcessID" name="ApprovalProcessID" value="@Model.ApprovalProcessID" />
-                       
                         <input type="hidden" id="Date" name="Date" value="@Model.Date" />
                         <input type="hidden" id="RoleID" name="RoleID" value="@Model.RoleID" />
-
                     </div>
                 </form>
             </div>
 
             <!-- Modal Footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-danger" id="Reject">Reject</button>
-                <button type="button" class="btn btn-primary" id="Approved">Approved</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  <i class="fas fa-times-circle"></i> Close
+                  </button>
+                <div>
+                    <button type="button" class="btn btn-danger me-2" id="Reject">Reject</button>
+                    <button type="button" class="btn btn-success" id="Approved">Approve</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 <style>
-    .custom-file-label::after {
-        content: "Browse";
+    .form-control-lg {
+        border-radius: 0.5rem;
+        padding: 0.75rem 1.25rem;
+    }
+
+    .modal-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .modal-content {
+        border-radius: 0.75rem;
+    }
+
+    .btn-close {
+        color: white;
+        opacity: 1;
+    }
+
+    .input-group-text {
         background-color: #007bff;
         color: white;
-        border-radius: 0 0.25rem 0.25rem 0;
-        padding: 0.375rem 0.75rem;
+        border-radius: 0 0.5rem 0.5rem 0;
     }
 
-    .custom-file-label {
-        padding: 0.375rem 0.75rem;
+    .modal-footer {
+        border-top: none;
     }
 
-    .custom-file-input:focus ~ .custom-file-label {
-        border-color: #007bff;
-        box-shadow: none;
-        margin-top: 0.5rem;
-        margin-bottom: 2.5rem;
+    .btn-secondary, .btn-danger, .btn-success {
+        padding: 0.5rem 1.5rem;
+        font-size: 1rem;
     }
 </style>
+
 <script>
     // Show the selected file name in the label
     document.querySelector('.custom-file-input').addEventListener('change', function (e) {
-        debugger;
         var fileName = document.getElementById("FileUpload").files[0].name;
         var nextSibling = e.target.nextElementSibling;
         nextSibling.innerText = fileName;
     });
-
 </script>

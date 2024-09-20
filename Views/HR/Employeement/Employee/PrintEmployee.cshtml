@@ -66,7 +66,7 @@
                     </td>
                     <td>@employee.EmployeeID</td>
                     <td>@employee.EmployeeCode</td>
-                    <td>@(employee.ActiveID == 1 ? "Yes" : "No")</td>
+                    <td>@(employee.ActiveYNID == 1 ? "Yes" : "No")</td>
                     <td>@($"{employee.FirstName} {employee.FatherName} {employee.FamilyName}")</td>
                     <td>
                         @(employee.Sex == 0 || employee.Sex == null

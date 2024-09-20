@@ -11,78 +11,7 @@
             </div>
             <div class="modal-body">
                 <form id="editContractForm" method="post" asp-action="Edit" asp-controller="Contract" enctype="multipart/form-data">
-                    <input type="hidden" asp-for="ContractID" class="form-control" />
-
-                    <h5 class="modal-title" style="padding-top:10px">Contract Details</h5>
-                    <hr />
-                    <div class="row">
-                        <div class="col-12">
-                            <label asp-for="EmployeeID" class="control-label">Employee Name</label>
-                            <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control" disabled>
-                            </select>
-                            <span asp-validation-for="EmployeeID" class="text-danger"></span>
-                        </div>
-                       
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label asp-for="IssueDate" class="control-label">Issue Date</label>
-                            <input asp-for="IssueDate" class="form-control" type="date" />
-                            <span asp-validation-for="IssueDate" class="text-danger"></span>
-                        </div>
-                        <div class="col-6">
-                            <label asp-for="ContractTypeID" class="control-label">Contract Type</label>
-                            <select asp-for="ContractTypeID" asp-items="@(new SelectList(ViewBag.ContractTypesList, "Value", "Text"))" class="form-control" id="contractTypeSelect">
-                            </select>
-                            <span asp-validation-for="ContractTypeID" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label asp-for="StartDate" class="control-label">Start Date</label>
-                            <input asp-for="StartDate" class="form-control" type="date" />
-                            <span asp-validation-for="StartDate" class="text-danger"></span>
-                        </div>
-                        <div class="col-6" id="dateSection" style="display: none;">
-                            <label asp-for="EndDate" class="control-label">End Date</label>
-                            <input asp-for="EndDate" class="form-control" type="date" />
-                            <span asp-validation-for="EndDate" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label asp-for="SalaryTypeID" class="control-label">Salary Type</label>
-                            <select asp-for="SalaryTypeID" asp-items="@(new SelectList(ViewBag.SalaryTypesList, "Value", "Text"))" class="form-control">
-                            </select>
-                            <span asp-validation-for="SalaryTypeID" class="text-danger"></span>
-                        </div>
-                        <div class="col-6">
-                            <label asp-for="VacationDays" class="control-label">Vacation Days</label>
-                            <input asp-for="VacationDays" class="form-control" type="number" />
-                            <span asp-validation-for="VacationDays" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-6">
-                            <label asp-for="DHours" class="control-label">Duty Hours</label>
-                            <input asp-for="DHours" class="form-control" type="number" />
-                            <span asp-validation-for="DHours" class="text-danger"></span>
-                        </div>
-                        <div class="col-6">
-                            <label asp-for="DMinutes" class="control-label">Duty Minutes</label>
-                            <input asp-for="DMinutes" class="form-control" type="number" />
-                            <span asp-validation-for="DMinutes" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <!-- Add fields for ActiveID, DeleteYNID, FinalApprovalID, and ApprovalProcessID if needed -->
-                    <input type="hidden" asp-for="ActiveID" />
-                    <input type="hidden" asp-for="DeleteYNID" />
-                    <input type="hidden" asp-for="FinalApprovalID" />
-                    <input type="hidden" asp-for="ApprovalProcessID" />
-
-                    <input type="hidden" asp-for="EmployeeID" />
+                    @Html.Partial("~/Views/HR/Employeement/Employee/_EditContract.cshtml", Model)
                 </form>
             </div>
             <div class="modal-footer">

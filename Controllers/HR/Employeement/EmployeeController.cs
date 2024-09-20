@@ -22,7 +22,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     public async Task<IActionResult> Index()
     {
       var employees = await _appDBContext.HR_Employees
-                .Where(e => e.DeleteID != 1)
+                .Where(e => e.DeleteYNID != 1)
                 .ToListAsync();
 
       return View("~/Views/HR/Employeement/Employee/Employee.cshtml", employees);
@@ -101,8 +101,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           }
         }
 
-        employee.DeleteID = 0;
-        employee.ActiveID = 0;
+        employee.DeleteYNID = 0;
+        employee.ActiveYNID = 0;
         _appDBContext.HR_Employees.Add(employee);
         await _appDBContext.SaveChangesAsync();
 
@@ -155,7 +155,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           }
           else
           {
-            employee.ActiveID = 1;
+            employee.ActiveYNID = 1;
             _appDBContext.HR_Employees.Update(employee);
             await _appDBContext.SaveChangesAsync();
             return Json(new { success = true, message = "No process setup found, User activated." });
@@ -177,8 +177,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         return NotFound();
       }
 
-      employee.ActiveID = 0;
-      employee.DeleteID = 1;
+      employee.ActiveYNID = 0;
+      employee.DeleteYNID = 1;
 
       _appDBContext.HR_Employees.Update(employee);
       await _appDBContext.SaveChangesAsync();
@@ -189,7 +189,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     public async Task<IActionResult> Print()
     {
       var employees = await _appDBContext.HR_Employees
-          .Where(b => b.DeleteID != 1)
+          .Where(b => b.DeleteYNID != 1)
           .Include(b => b.Branch)
          .Include(b => b.Department)
          .Include(b => b.Designation)
@@ -208,7 +208,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
       var employees = await _appDBContext.HR_Employees
-          .Where(b => b.DeleteID != 1)
+          .Where(b => b.DeleteYNID != 1)
           .Include(b => b.Branch)
          .Include(b => b.Department)
          .Include(b => b.Designation)
@@ -260,7 +260,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           worksheet.Cells[i + 2, 5].Value = employees[i].EmployeeID;
           worksheet.Cells[i + 2, 6].Value = employees[i].EmployeeCode;
           worksheet.Cells[i + 2, 7].Value = employees[i].FirstName +' '+ employees[i].FatherName + ' ' + employees[i].FamilyName;
-          worksheet.Cells[i + 2, 8].Value = employees[i].ActiveID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 8].Value = employees[i].ActiveYNID == 1 ? "Yes" : "No";
           worksheet.Cells[i + 2, 9].Value = employees[i].Sex == 0 || employees[i].Sex == null
           ? ""
           : GenderList.FirstOrDefault(g => g.Value == employees[i].Sex.ToString())?.Text;

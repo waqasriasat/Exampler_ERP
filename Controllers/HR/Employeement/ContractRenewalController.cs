@@ -3,6 +3,7 @@ using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Contracts;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
@@ -67,6 +68,73 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
         _appDBContext.HR_ContractRenewals.Add(contractRenewal);
         await _appDBContext.SaveChangesAsync();
+
+        var contractRenewalID = contractRenewal.ContractRenewalID;
+        if (contractRenewalID > 0)
+        {
+          var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
+                              .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 4)
+                              .CountAsync();
+
+          var getEmployeeID = await _appDBContext.HR_Contracts
+                              .Where(pta => pta.ContractID == contractRenewal.ContractID)
+                              .FirstOrDefaultAsync();
+
+          if (processCount > 0)
+          {
+            var newProcessTypeApproval = new CR_ProcessTypeApproval
+            {
+              ProcessTypeID = 4,
+              Notes = "Contract Renewal",
+              Date = DateTime.Now,
+              EmployeeID = getEmployeeID.EmployeeID,
+              UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
+              TransactionID = contractRenewalID
+            };
+
+            _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
+            await _appDBContext.SaveChangesAsync();
+
+            var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
+                                        .Where(pta => pta.ProcessTypeID == 4 && pta.Rank == 1)
+                                        .FirstOrDefaultAsync();
+
+            if (nextApprovalSetup != null)
+            {
+              var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
+              {
+                ApprovalProcessID = newProcessTypeApproval.ApprovalProcessID,
+                Date = DateTime.Now,
+                RoleID = nextApprovalSetup.RoleID,
+                AppID = 0,
+                AppUserID = 0,
+                Notes = null,
+                Rank = nextApprovalSetup.Rank
+              };
+
+              _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
+              await _appDBContext.SaveChangesAsync();
+            }
+            else
+            {
+              return Json(new { success = false, message = "Next approval setup not found." });
+            }
+          }
+          else
+          {
+            var contractToUpdate = _appDBContext.HR_Contracts
+                                                .FirstOrDefault(c => c.ContractID == contractRenewal.ContractID);
+
+            if (contractToUpdate != null)
+            {
+              contractToUpdate.EndDate = contractRenewal.NEndDate;
+
+              _appDBContext.SaveChanges();
+            }
+            await _appDBContext.SaveChangesAsync();
+            return Json(new { success = true, message = "No process setup found, User activated." });
+          }
+        }
 
         return Json(new { success = true });
       }

@@ -1,4 +1,5 @@
 using Exampler_ERP.Models;
+using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -82,13 +83,70 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       if (ModelState.IsValid)
       {
         contract.DeleteYNID = 0;
-        contract.ActiveID = 0;
+        contract.ActiveYNID = 0;
         if(contract.ContractID == 2)
         {
           contract.EndDate = null;
         }
         _appDBContext.HR_Contracts.Add(contract);
         await _appDBContext.SaveChangesAsync();
+
+        var contractId = contract.ContractID;
+        if (contractId > 0)
+        {
+          var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
+                              .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 3)
+                              .CountAsync();
+
+          if (processCount > 0)
+          {
+            var newProcessTypeApproval = new CR_ProcessTypeApproval
+            {
+              ProcessTypeID = 3,
+              Notes = "Create New Contract",
+              Date = DateTime.Now,
+              EmployeeID = contract.EmployeeID,
+              UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
+              TransactionID = contract.ContractID
+            };
+
+            _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
+            await _appDBContext.SaveChangesAsync();
+
+            var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
+                                        .Where(pta => pta.ProcessTypeID == 3 && pta.Rank == 1)
+                                        .FirstOrDefaultAsync();
+
+            if (nextApprovalSetup != null)
+            {
+              var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
+              {
+                ApprovalProcessID = newProcessTypeApproval.ApprovalProcessID,
+                Date = DateTime.Now,
+                RoleID = nextApprovalSetup.RoleID,
+                AppID = 0,
+                AppUserID = 0,
+                Notes = null,
+                Rank = nextApprovalSetup.Rank
+              };
+
+              _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
+              await _appDBContext.SaveChangesAsync();
+            }
+            else
+            {
+              return Json(new { success = false, message = "Next approval setup not found." });
+            }
+          }
+          else
+          {
+            contract.ActiveYNID = 1;
+            _appDBContext.HR_Contracts.Update(contract);
+            await _appDBContext.SaveChangesAsync();
+            return Json(new { success = true, message = "No process setup found, User activated." });
+          }
+        }
+
         return Json(new { success = true });
       }
 
@@ -103,7 +161,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         return NotFound();
       }
 
-      contract.ActiveID = 0;
+      contract.ActiveYNID = 0;
       contract.DeleteYNID = 1;
 
       _appDBContext.HR_Contracts.Update(contract);

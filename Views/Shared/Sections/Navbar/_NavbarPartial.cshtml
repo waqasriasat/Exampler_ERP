@@ -5,6 +5,28 @@
     var UserRoleName = Context.Session.GetString("UserRoleName");
 }
 @* ! Brand demo (display only for navbar-full and hide on below xl) *@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("GetNotifications", "Notifications")',
+            type: 'GET',
+            success: function (data) {
+                if (data.count > 0) {
+                    $('#countApprovalsRequest').text(data.count);
+                    $('#liApprovalsRequest').show(); // Ensure it's visible
+                } else {
+                    $('#liApprovalsRequest').hide();
+                }
+                let approvalsCount = parseInt($('#countApprovalsRequest').text().trim());
+                $('#TotalNotificatios').text(approvalsCount);
+            }
+        });
+    });
+</script>
+
+
+
 @if (ViewData["navbarFull"] != null)
 {
     <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-4">
@@ -97,7 +119,7 @@
                     <i class="fa fa fa-bell-o" aria-hidden="true" style="font-size:20px;padding-top: 10px;"></i>
                     <span class="badge badge-center rounded-pill bg-danger"
                           style="position: relative; bottom: 25px; right: 17px; transform: translate(50%, 50%); font-size: 9px; height:18px; width:18px;">
-                        21
+                        <label id="TotalNotificatios"></label>
                     </span>
                 </div>
             </a>
@@ -106,11 +128,11 @@
                     <div class="dropdown-divider"></div>
                 </li>
 
-                <li>
+                <li id="liApprovalsRequest">
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
                         <i class="bx bx-fast-forward-circle me-2"></i>
                         <span class="align-middle">Approvals Request</span>
-                        <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
+                        <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countApprovalsRequest"></label></span>
                     </a>
                 </li>
                 <li>
@@ -195,3 +217,4 @@
         <!--/ User -->
     </ul>
 </div>
+

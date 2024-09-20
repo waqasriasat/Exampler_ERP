@@ -3,36 +3,42 @@
     var EmployeeList = (List<SelectListItem>)ViewBag.EmployeesList;
     var RoleList = (List<SelectListItem>)ViewBag.RolesList;
 }
+
 <div class="modal fade" id="approvalsProcessTypeApprovalModal" tabindex="-1" role="dialog" aria-labelledby="approvalsProcessTypeApprovalModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="approvalsProcessTypeApprovalModalLabel">Approval Process Details</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">x</button>
+    <div class="modal-dialog modal-lg" role="document">
+        <!-- Modal with increased size for better layout -->
+        <div class="modal-content shadow-lg border-0 rounded-lg">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="approvalsProcessTypeApprovalModalLabel">
+                    <i class="fas fa-clipboard-check me-2"></i> Approval Process Details
+                </h5>
+                <button type="button" class="btn-close text-white" data-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body bg-light">
                 @if (Model.Any())
                 {
                     var firstItem = Model.FirstOrDefault(); // Get the first item to display common details
 
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <h5 class="card-header">Approval Process Overview</h5>
-                                <div class="card-body" style="padding-top: 20px;">
-                                    <div class="row">
-                                        <span>Approval Process ID: @firstItem.CR_ProcessTypeApproval?.ApprovalProcessID</span>
-                                    </div>
-                                    <div class="row">
-                                        <span>Employee Name: @firstItem.CR_ProcessTypeApproval?.Employee?.FirstName @firstItem.CR_ProcessTypeApproval?.Employee?.FatherName @firstItem.CR_ProcessTypeApproval?.Employee?.FamilyName</span>
-                                    </div>
-                                    <div class="row">
-                                        <span>Process Type: @(firstItem.CR_ProcessTypeApproval?.ProcessType?.ProcessTypeName ?? "N/A")</span>
-                                    </div>
-                                    <div class="row">
-                                        <span>Request Date: @(firstItem.CR_ProcessTypeApproval?.Date).ToString("dd-MM-yyyy HH:mm:ss")</span>
-                                    </div>
+                    <div class="card border-0 mb-4 shadow-sm">
+                        <div class="card-header text-white">
+                            <h6 class="mb-0">Approval Process Overview</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <span><strong>Approval Process ID:</strong> @firstItem.CR_ProcessTypeApproval?.ApprovalProcessID</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <span><strong>Employee Name:</strong> @firstItem.CR_ProcessTypeApproval?.Employee?.FirstName @firstItem.CR_ProcessTypeApproval?.Employee?.FatherName @firstItem.CR_ProcessTypeApproval?.Employee?.FamilyName</span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <span><strong>Process Type:</strong> @(firstItem.CR_ProcessTypeApproval?.ProcessType?.ProcessTypeName ?? "N/A")</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <span><strong>Request Date:</strong> @(firstItem.CR_ProcessTypeApproval?.Date.ToString("dd-MM-yyyy"))</span>
                                 </div>
                             </div>
                         </div>
@@ -40,46 +46,76 @@
                 }
 
                 <div class="row">
-                    <div class="col-12 rolepadding">
+                    <div class="col-12">
                         @foreach (var item in Model)
                         {
-                            <div class="col-12 col-md-12 col-lg-12 GVDetailforApproval">
-                                <br />
-                                <div class="row">
-                                    <span class="roleheading">
-                                        Approved by: @(item.RoleID == 0 || item.RoleID == null
-                                    ? ""
-                                    : RoleList.FirstOrDefault(g => g.Value == item.RoleID.ToString())?.Text)
-                                    </span>
-                                </div>
-                                <div class="row">
-                                    <span>
-                                        Approved Name: @(item.AppUserID == 0 || item.AppUserID == null
-                                    ? ""
-                                    : EmployeeList.FirstOrDefault(g => g.Value == item.AppUserID.ToString())?.Text)
-                                    </span>
-                                </div>
-                                <div class="row">
-                                    <span>Approved Date: @item.Date.ToString("dd-MM-yyyy HH:mm:ss")</span>
-                                </div>
+                            <div class="card mb-4 border-0 shadow-sm">
+                                <div class="card-body">
+                                    <h6 class="card-title"><i class="fas fa-user-check me-2"></i> Approval Details</h6>
 
-                                <!-- Documents Section -->
-                                @foreach (var doc in item.ProcessTypeApprovalDetailDoc)
-                                {
-                                    <div class="row">
-                                        <span>Document: @doc.DocName (@doc.DocExt)</span>
-                                        <span>
-                                            @if (doc.Doc != null && doc.Doc.Length > 0)
-                                            {
-                                                <a href="@Url.Action("DownloadDocument", new { id = doc.ApprovalProcessDetailDocID })">Download</a>
-                                            }
-                                            else
-                                            {
-                                                <span>No Document Available</span>
-                                            }
-                                        </span>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <span><strong>Approved by:</strong> @(item.RoleID == 0 || item.RoleID == null ? "N/A" : RoleList.FirstOrDefault(g => g.Value == item.RoleID.ToString())?.Text)</span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <span><strong>Approved Name:</strong> @(item.AppUserID == 0 || item.AppUserID == null ? "N/A" : EmployeeList.FirstOrDefault(g => g.Value == item.AppUserID.ToString())?.Text)</span>
+                                        </div>
                                     </div>
-                                }
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <span><strong>Approved Date:</strong> @item.Date.ToString("dd-MM-yyyy HH:mm:ss")</span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <span><strong>Comment:</strong> @item.Notes</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Documents Section with Enhanced UI -->
+                                    <h6 class="mt-3"><i class="fas fa-folder-open me-2"></i> Attached Documents</h6>
+                                    @foreach (var doc in item.ProcessTypeApprovalDetailDoc)
+                                    {
+                                        <div class="row align-items-center mb-3">
+                                            <div class="col-auto">
+                                                @if (doc.DocExt.ToLower() == ".pdf")
+                                                {
+                                                    <i class="fas fa-file-pdf text-danger fa-2x"></i>
+                                                }
+                                                else if (doc.DocExt.ToLower() == ".jpg" || doc.DocExt.ToLower() == ".jpeg" || doc.DocExt.ToLower() == ".png")
+                                                {
+                                                    <i class="fas fa-file-image text-primary fa-2x"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fas fa-file-alt text-secondary fa-2x"></i>
+                                                }
+                                            </div>
+
+                                            <div class="col">
+                                                <span class="fw-bold">Document: @doc.DocName (@doc.DocExt)</span>
+                                                <div class="mt-1">
+                                                    @if (doc.Doc != null && doc.Doc.Length > 0)
+                                                    {
+                                                        <a href="@Url.Action("DownloadDocument", "ApprovalsRequest", new { id = doc.ApprovalProcessDetailDocID })" class="btn btn-outline-primary btn-sm me-2">
+                                                            <i class="fas fa-download"></i> Download
+                                                        </a>
+
+                                                        @if (doc.DocExt.ToLower() == ".pdf" || doc.DocExt.ToLower() == ".jpg" || doc.DocExt.ToLower() == ".png" || doc.DocExt.ToLower() == ".jpeg")
+                                                        {
+                                                            <a href="@Url.Action("ViewDocument", "ApprovalsRequest", new { id = doc.ApprovalProcessDetailDocID })" target="_blank" class="btn btn-outline-secondary btn-sm">
+                                                                <i class="fas fa-eye"></i> View
+                                                            </a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="text-muted">No Document Available</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
                             </div>
                         }
                     </div>
@@ -87,20 +123,75 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">
+                  <i class="fas fa-times-circle"></i>  Close
+                  </button>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    .readonly-background {
-        background-color: #e9ecef;
-        cursor: not-allowed;
+    /* Modal Styles */
+    .modal-content {
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    .date-placeholder::placeholder {
-        color: #6c757d;
-        opacity: 1; /* Firefox */
+    .modal-header {
+        background-color: #007bff;
+        border-bottom: none;
+    }
+
+    .modal-body {
+        background-color: #f8f9fa;
+    }
+
+    .modal-footer {
+        border-top: none;
+    }
+
+
+    /* Approval Process Overview Styles */
+    .card {
+        border-radius: 0.5rem;
+    }
+
+    .card-header {
+        background-color: #f8f9fc;
+        font-weight: bold;
+    }
+
+    /* Document Styles */
+    .fa-file-pdf {
+        color: #e74c3c;
+    }
+
+    .fa-file-image {
+        color: #3498db;
+    }
+
+    .fa-file-alt {
+        color: #95a5a6;
+    }
+
+    .fw-bold {
+        font-weight: bold;
+    }
+
+    .btn-outline-primary {
+        border-radius: 0.25rem;
+    }
+
+    .btn-outline-secondary {
+        border-radius: 0.25rem;
+    }
+
+    .fa-2x {
+        font-size: 1.5em;
+    }
+
+    .mb-3 {
+        margin-bottom: 0rem !important;
     }
 </style>

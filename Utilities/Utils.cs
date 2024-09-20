@@ -16,7 +16,7 @@ namespace Exampler_ERP.Utilities
     {
       var ActiveYNIDList = await _appDBContext.Settings_ActiveYNIDTypes.ToListAsync();
 
-      var selectList = ActiveYNIDList.Select(r => new SelectListItem { Value = r.ActiveID.ToString(), Text = r.ActiveName}).ToList();
+      var selectList = ActiveYNIDList.Select(r => new SelectListItem { Value = r.ActiveYNID.ToString(), Text = r.ActiveName}).ToList();
       return selectList;
     }
 
@@ -24,7 +24,7 @@ namespace Exampler_ERP.Utilities
     {
       var DeleteYNIDList = await _appDBContext.Settings_DeleteYNIDTypes.ToListAsync();
 
-      var selectList = DeleteYNIDList.Select(r => new SelectListItem { Value = r.DeleteID.ToString(), Text = r.DeleteName}).ToList();
+      var selectList = DeleteYNIDList.Select(r => new SelectListItem { Value = r.DeleteYNID.ToString(), Text = r.DeleteName}).ToList();
       return selectList;
     }
     public async Task<List<SelectListItem>> GetEmployee()
@@ -38,7 +38,7 @@ namespace Exampler_ERP.Utilities
     //public async Task<List<SelectListItem>> GetEmployees()
     //{
     //  var employees = await _appDBContext.HR_Employees
-    //.Where(e => e.ActiveID == 1)
+    //.Where(e => e.ActiveYNID == 1)
     //.ToListAsync();
 
     //  var selectList = employees.Select(r => new SelectListItem { Value = r.EmployeeID.ToString(), Text = r.FirstName + r.FatherName + r.FamilyName }).ToList();

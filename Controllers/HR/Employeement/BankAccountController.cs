@@ -27,7 +27,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
                                         join bank in _appDBContext.HR_BankAccounts
                                         on emp.EmployeeID equals bank.EmployeeID into joinGroup
                                         from j in joinGroup.DefaultIfEmpty()
-                                        where con.ActiveID == 1 && emp.ActiveID == 1
+                                        where con.ActiveYNID == 1 && emp.ActiveYNID == 1
                                         select new
                                         {
                                           emp.EmployeeID,

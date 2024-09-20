@@ -4,39 +4,118 @@
     var ProcessTypeID = ViewBag.ProcessTypeID;
     var TransactionID = ViewBag.TransactionID;
 }
-<style>
-    .modal-body input,
-    .modal-body select,
-    .modal-body textarea {
-        pointer-events: none;
-        background-color: #e9ecef;
-    }
-</style>
+
+
 <div class="modal fade" id="detailsProcessTypeApprovalModal" tabindex="-1" role="dialog" aria-labelledby="detailsProcessTypeApprovalModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detailsProcessTypeApprovalModalLabel">Approval Process Details</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">x</button>
+    <div class="modal-dialog modal-lg" role="document">
+        <!-- Modal with increased size for better layout -->
+        <div class="modal-content shadow-lg border-0 rounded-lg">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="detailsProcessTypeApprovalModalLabel">
+                    <i class="fas fa-info-circle"></i> Approval Process Details
+                </h5>
+                <button type="button" class="btn-close text-white" data-dismiss="modal" aria-label="Close"></button>
             </div>
+
+            <!-- Modal body with improved layout and spacing -->
             <div class="modal-body">
                 <form>
                     @if (ProcessTypeID == 1)
                     {
-                        <h5>User Details</h5>
+                        <h5><i class="fas fa-user"></i> User Details</h5>
                         @Html.Partial("~/Views/HR/MasterInfo/User/_EditUser.cshtml", (Exampler_ERP.Models.CR_User)Model)
                     }
                     else if (ProcessTypeID == 2)
                     {
-                        <h5>Employee Details</h5>
+                        <h5><i class="fas fa-id-badge"></i> Employee Details</h5>
                         @Html.Partial("~/Views/HR/Employeement/Employee/_EditEmployee.cshtml", (Exampler_ERP.Models.HR_Employee)Model)
+                    }
+                    else if (ProcessTypeID == 3)
+                    {
+                        <h5><i class="fas fa-file-contract"></i> Contract Details</h5>
+                        @Html.Partial("~/Views/HR/Employeement/Contract/_EditContract.cshtml", (Exampler_ERP.Models.HR_Contract)Model)
+                    }
+                    else if (ProcessTypeID == 4)
+                    {
+                        <h5><i class="fas fa-file-contract"></i> Contract Renewal Details</h5>
+                        @Html.Partial("~/Views/HR/Employeement/ContractRenewal/_EditContractRenewal.cshtml", (Exampler_ERP.Models.HR_ContractRenewal)Model)
                     }
                 </form>
             </div>
 
+            <!-- Footer with redesigned close button -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">
+                    <i class="fas fa-times-circle"></i> Close
+                </button>
             </div>
         </div>
     </div>
 </div>
+<style>
+    /* Modal Enhancements */
+    .modal-content {
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-header {
+        background-color: #007bff;
+        border-bottom: none;
+    }
+
+    .modal-body {
+        background-color: #f8f9fa;
+    }
+
+   
+
+        /* Disable input interactivity and style for readonly inputs */
+        .modal-body input,
+        .modal-body select,
+        .modal-body textarea {
+            pointer-events: none;
+            background-color: #e9ecef;
+            color: #6c757d;
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+            padding: 8px;
+        }
+
+        .modal-body h5 {
+            font-size: 1.25rem;
+            color: #343a40;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+    .modal-footer {
+        border-top: none;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+    /* Utility classes for improving spacing and alignment */
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    /* Add hover effects for buttons */
+    .btn-danger:hover {
+        background-color: #dc3545;
+    }
+
+    /* Enhance icon styling */
+    .fas {
+        margin-right: 8px;
+    }
+</style>

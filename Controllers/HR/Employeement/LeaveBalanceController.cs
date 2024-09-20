@@ -26,7 +26,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       var employeeLeaveBalances = await (from emp in _appDBContext.HR_Employees
                                          join con in _appDBContext.HR_Contracts
                                          on emp.EmployeeID equals con.EmployeeID
-                                         where con.ActiveID == 1 && emp.ActiveID == 1
+                                         where con.ActiveYNID == 1 && emp.ActiveYNID == 1
                                          select new
                                          {
                                            emp.EmployeeID,

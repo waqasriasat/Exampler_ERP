@@ -83,14 +83,91 @@ namespace Exampler_ERP.Controllers.HR.HR
       if (ModelState.IsValid)
       {
         endofservice.DeleteYNID = 0;
-       
         _appDBContext.HR_EndOfServices.Add(endofservice);
-        await _appDBContext.SaveChangesAsync();
+        await _appDBContext.SaveChangesAsync(); // Save EndOfService first
+
+        var endOfServiceID = endofservice.EndOfServiceID;
+        if (endOfServiceID > 0)
+        {
+          // Check if there is any approval process setup for End of Service (ProcessTypeID = 5)
+          var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
+                                                .CountAsync(pta => pta.ProcessTypeID == 5);
+
+          if (processCount > 0)
+          {
+            // Create new process type approval entry
+            var newProcessTypeApproval = new CR_ProcessTypeApproval
+            {
+              ProcessTypeID = 5,
+              Notes = "End Of Service",
+              Date = DateTime.Now,
+              EmployeeID = endofservice.EmployeeID,
+              UserID = HttpContext.Session.GetInt32("UserID") ?? 0,
+              TransactionID = endOfServiceID
+            };
+
+            _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
+            await _appDBContext.SaveChangesAsync(); // Save the process type approval
+
+            // Get the next approval setup with rank 1 for the process type
+            var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
+                                                       .Where(pta => pta.ProcessTypeID == 5 && pta.Rank == 1)
+                                                       .FirstOrDefaultAsync();
+
+            if (nextApprovalSetup != null)
+            {
+              // Create new process type approval detail
+              var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
+              {
+                ApprovalProcessID = newProcessTypeApproval.ApprovalProcessID,
+                Date = DateTime.Now,
+                RoleID = nextApprovalSetup.RoleID,
+                AppID = 0,
+                AppUserID = 0,
+                Notes = null,
+                Rank = nextApprovalSetup.Rank
+              };
+
+              _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
+              await _appDBContext.SaveChangesAsync(); // Save the process type approval detail
+            }
+            else
+            {
+              return Json(new { success = false, message = "Next approval setup not found." });
+            }
+          }
+          else
+          {
+            // If no process setup, deactivate the contract and update employee status
+            var contractToUpdate = _appDBContext.HR_Contracts
+                                                .FirstOrDefault(c => c.EmployeeID == endofservice.EmployeeID);
+
+            if (contractToUpdate != null)
+            {
+              contractToUpdate.ActiveYNID = 0;
+              _appDBContext.SaveChanges();
+            }
+
+            var employee = await _appDBContext.HR_Employees
+                                              .FirstOrDefaultAsync(e => e.EmployeeID == endofservice.EmployeeID);
+
+            if (employee != null)
+            {
+              employee.EmployeeStatusTypeID = 5; // End of Service status
+              employee.ActiveYNID = 0; // Deactivate employee
+            }
+            await _appDBContext.SaveChangesAsync();
+            return Json(new { success = true, message = "No process setup found, Employee deactivated." });
+          }
+        }
+
         return Json(new { success = true });
       }
 
+      // If the model state is invalid, return the view with validation errors
       return PartialView("~/Views/HR/HR/EndOfService/AddEndOfService.cshtml", endofservice);
     }
+
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {

@@ -1,0 +1,92 @@
+@model Exampler_ERP.Models.HR_ContractRenewal
+
+<input type="hidden" asp-for="ContractID" class="form-control" />
+<input type="hidden" asp-for="ContractRenewalID" class="form-control" />
+
+<hr />
+
+<div class="row">
+    <div class="col-6">
+        <label asp-for="PStartDate" class="control-label">Previous Start Date</label>
+        <input asp-for="PStartDate" class="form-control" type="date" readonly style="background-color:#eceef1" />
+        <span asp-validation-for="PStartDate" class="text-danger"></span>
+    </div>
+    <div class="col-6">
+        <label asp-for="PEndDate" class="control-label">Previous End Date</label>
+        <input asp-for="PEndDate" class="form-control" type="date" readonly style="background-color:#eceef1" />
+        <span asp-validation-for="PEndDate" class="text-danger"></span>
+    </div>
+</div>
+
+<!-- Additional Fields -->
+<div class="row">
+    <div class="col-6">
+        <label for="Month">Month</label>
+        <select id="Month" class="form-control">
+            @for (int i = 0; i <= 12; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+    </div>
+    <div class="col-6">
+        <label for="Year">Year</label>
+        <select id="Year" class="form-control">
+            @for (int i = 0; i <= 9; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <label asp-for="NStartDate" class="control-label">New Start Date</label>
+        <input asp-for="NStartDate" class="form-control" type="date" readonly style="background-color:#eceef1" />
+        <span asp-validation-for="NStartDate" class="text-danger"></span>
+    </div>
+    <div class="col-6">
+        <label asp-for="NEndDate" class="control-label">New End Date</label>
+        <input asp-for="NEndDate" class="form-control" type="date" readonly style="background-color:#eceef1" />
+        <span asp-validation-for="NEndDate" class="text-danger"></span>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function updateDates() {
+        var previousEndDate = new Date($('#PEndDate').val());
+        var newEndDate = new Date($('#NEndDate').val());
+
+        var previousYear = previousEndDate.getFullYear();
+        var previousMonth = previousEndDate.getMonth(); // 0-based month
+
+        var newYear = newEndDate.getFullYear();
+        var newMonth = newEndDate.getMonth(); // 0-based month
+
+        // Calculate year difference
+        var yearDifference = newYear - previousYear;
+
+        // Calculate month difference
+        var monthDifference = newMonth - previousMonth;
+
+        // If month difference is negative, adjust the year
+        if (monthDifference < 0) {
+            monthDifference += 12; // Add 12 months
+            yearDifference -= 1;   // Subtract 1 year
+        }
+
+        // Output the month and year differences
+        $('#Month').val(monthDifference); // Set the calculated month difference
+        $('#Year').val(yearDifference);   // Set the calculated year difference
+    }
+
+    // Call the updateDates function when needed, like on date input changes or on page load
+    $(document).ready(function () {
+        updateDates();
+        $('#NEndDate').change(function () {
+            updateDates();
+        });
+    });
+
+</script>
