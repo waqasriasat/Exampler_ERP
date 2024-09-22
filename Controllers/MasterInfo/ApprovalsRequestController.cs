@@ -16,20 +16,46 @@ namespace Exampler_ERP.Controllers.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
-    {
-      var result = await _appDBContext.CR_ProcessTypeApprovalDetails
-    .Include(pta => pta.CR_ProcessTypeApproval)
-    .ThenInclude(pta => pta.Employee)
-    .Include(pta => pta.CR_ProcessTypeApproval)
-    .ThenInclude(pta => pta.ProcessType)
-    .Include(pta => pta.ProcessTypeApprovalDetailDoc)
-    .Where(pta => pta.AppID == 0)
-    .OrderByDescending(pta => pta.ApprovalProcessDetailID)
-    .ToListAsync();
+    //public async Task<IActionResult> Index()
+    //{
+    //  var result = await _appDBContext.CR_ProcessTypeApprovalDetails
+    //.Include(pta => pta.CR_ProcessTypeApproval)
+    //.ThenInclude(pta => pta.Employee)
+    //.Include(pta => pta.CR_ProcessTypeApproval)
+    //.ThenInclude(pta => pta.ProcessType)
+    //.Include(pta => pta.ProcessTypeApprovalDetailDoc)
+    //.Where(pta => pta.AppID == 0)
+    //.OrderByDescending(pta => pta.ApprovalProcessDetailID)
+    //.ToListAsync();
 
+    //  return View("~/Views/MasterInfo/ApprovalsRequest/ApprovalsRequest.cshtml", result);
+    //}
+    public async Task<IActionResult> Index(int? id = null)
+    {
+      // Base query: filter for records where AppID == 0
+      var query = _appDBContext.CR_ProcessTypeApprovalDetails
+          .Include(pta => pta.CR_ProcessTypeApproval)
+              .ThenInclude(pta => pta.Employee)
+          .Include(pta => pta.CR_ProcessTypeApproval)
+              .ThenInclude(pta => pta.ProcessType)
+          .Include(pta => pta.ProcessTypeApprovalDetailDoc)
+          .Where(pta => pta.AppID == 0);
+
+      // If an id is provided, further filter by id
+      if (id.HasValue)
+      {
+        query = query.Where(pta => pta.CR_ProcessTypeApproval.ProcessTypeID == id.Value);
+      }
+
+      // Execute the query and order the results
+      var result = await query
+          .OrderByDescending(pta => pta.ApprovalProcessDetailID)
+          .ToListAsync();
+
+      // Return the view with the filtered results
       return View("~/Views/MasterInfo/ApprovalsRequest/ApprovalsRequest.cshtml", result);
     }
+
     [HttpGet]
     public async Task<IActionResult> DownloadDocument(int id)
     {

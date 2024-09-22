@@ -1,31 +1,28 @@
 @{
-    Layout = "_SidebarLayout";
-    ViewData["Title"] = "User Login";
+    Layout = "_BlankLayout";
+    ViewData["Title"] = "User Login - Pages";
 }
 @section PageStyles {
     <link rel="stylesheet" href="~/vendor/css/pages/page-auth.css">
 }
+
 <div class="container-xxl">
-    <div class="authentication-wrapper authentication-basic container-p-y d-flex align-items-center justify-content-center min-vh-100">
-    <div class="authentication-inner">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
             <div class="card">
                 <div class="card-body">
-                    <!-- Branding -->
                     <div class="app-brand">
                         <a href="/" class="app-brand-link gap-2 justify-content-center">
                             <img src="~/img/favicon/Logo.png" width="50%" />
-                            @* <span class="app-brand-text demo text-body fw-bold">@TempData.Peek("appName")</span> *@
                         </a>
                     </div>
-                    <!-- Welcome Message -->
-                <h4 class="mb-3">Welcome to User Login! 👋</h4>
-                <p class="mb-4">Please sign-in to your user account.</p>
+                    <h4 class="mb-2">Welcome to User Login! 👋</h4>
+                    <p class="mb-4">Please sign-in to your user account.</p>
 
-                <!-- Login Form -->
                     <form id="formAuthentication" class="mb-3" asp-action="Login" asp-controller="Auth" method="post">
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" name="Username" placeholder="Enter your username" value="ibs" autofocus>
+                            <input type="text" class="form-control" id="username" name="Username" placeholder="Enter your username" autofocus>
                         </div>
                         <div class="mb-3 form-password-toggle">
                             <div class="d-flex justify-content-between">
@@ -35,7 +32,7 @@
                                 </a>
                             </div>
                             <div class="input-group input-group-merge">
-                                <input type="password" id="password" class="form-control" name="Password" value="A@123456" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                                <input type="password" id="password" class="form-control" name="Password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
                                 <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                             </div>
                         </div>
@@ -53,13 +50,11 @@
                     </form>
 
                     <p class="text-center">
-                        <span>New on our platform?</span>
-                        <a href="/Auth/Register">
-                            <span>Create an account</span>
-                        </a>
+                        <span>Not a user?</span>
+                        <a href="/Auth/EmployeeLogin">Employee Login</a> | <a href="/Auth/SupplierLogin">Supplier Login</a>
                     </p>
                 </div>
+            </div>
         </div>
     </div>
-</div>
 </div>
