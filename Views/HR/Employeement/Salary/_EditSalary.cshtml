@@ -1,0 +1,103 @@
+@model List<Exampler_ERP.Models.HR_SalaryDetail>
+<script>
+    $(document).ready(function () {
+        console.log('Document is ready.');
+
+        function updateHiddenFields() {
+            $('#hiddenFieldsContainer').empty(); // Clear existing hidden fields
+
+            var salaryID = $('#SalaryID').val(); // Get the SalaryID from the form
+
+            var checkedRoles = $('.salarytype-checkbox:checked');
+            checkedRoles.each(function (index) {
+                var salaryTypeID = $(this).val();
+                var salaryAmountInput = $('#salaryAmount_' + salaryTypeID);
+                var salaryAmount = salaryAmountInput.val();
+
+                $('#hiddenFieldsContainer').append(
+                    `<div class="row">
+                                        <input type="hidden" name="SalaryDetails[${index}].SalaryID" value="${salaryID}" id="hidden_SalaryID_${salaryTypeID}" />
+                                        <input type="hidden" name="SalaryDetails[${index}].SalaryTypeID" value="${salaryTypeID}" id="hidden_SalaryTypeID_${salaryTypeID}" />
+                                        <input type="hidden" name="SalaryDetails[${index}].SalaryAmount" value="${salaryAmount}" id="hidden_SalaryAmount_${salaryTypeID}" />
+                            </div>`
+                );
+            });
+        }
+
+        // Event handler for salarytype checkbox change
+        $(document).on('change', '.salarytype-checkbox', function () {
+            var salaryTypeID = $(this).val();
+            var salaryAmountInput = $('#salaryAmount_' + salaryTypeID);
+
+            if ($(this).is(':checked')) {
+                var maxSalaryAmount = 0;
+                $('.salaryAmount').each(function () {
+                    var val = parseInt($(this).val()) || 0;
+                    if (val > maxSalaryAmount) {
+                        maxSalaryAmount = 0;
+                    }
+                });
+                salaryAmountInput.val(maxSalaryAmount).removeAttr('readonly');
+            } else {
+                salaryAmountInput.val('').attr('readonly', true);
+            }
+
+            // Update hidden fields after checkbox change
+            updateHiddenFields();
+        });
+
+        // Event handler for salary amount input change
+        $(document).on('input', '.salaryAmount', function () {
+            var salaryTypeID = $(this).attr('id').split('_')[1]; // Extract SalaryTypeID from the input id
+            console.log('Salary amount changed for SalaryTypeID:', salaryTypeID);
+
+            // Update hidden fields after salary amount change
+            updateHiddenFields();
+        });
+
+        // Initial call to update hidden fields on page load
+        updateHiddenFields();
+    });
+</script>
+
+<div class="row">
+    <div class="col-12 mb-2">
+        <div class="form-group">
+            <label for="EmployeeName">Employee Name</label>
+            <input type="text" class="form-control" id="EmployeeName" value="@Model.FirstOrDefault()?.Salary?.Employee?.FirstName @Model.FirstOrDefault()?.Salary?.Employee?.FatherName @Model.FirstOrDefault()?.Salary?.Employee?.FamilyName" disabled />
+            <input type="hidden" name="EmployeeID" id="EmployeeID" value="@Model.FirstOrDefault()?.Salary?.Employee?.EmployeeID" />
+            <input type="hidden" class="form-control" id="SalaryID" name="SalaryID" value="@Model.FirstOrDefault()?.SalaryID" />
+        </div>
+    </div>
+</div>
+
+<div class="row salarytype-container">
+    <div class="col-9">
+        @foreach (var salarytype in (IEnumerable<dynamic>)ViewBag.SalaryTypeList)
+        {
+            <div class="form-check">
+                <input class="form-check-input salarytype-checkbox" type="checkbox" name="SalaryTypes" value="@salarytype.Value" id="salarytype_@salarytype.Value" @(Model.Any(m => m.SalaryTypeID == salarytype.Value) ? "checked" : "") />
+                <label class="form-control form-check-label" for="salarytype_@salarytype.Value">@salarytype.Text</label>
+            </div>
+        }
+    </div>
+    <div class="col-3">
+        @foreach (var salarytype in (IEnumerable<dynamic>)ViewBag.SalaryTypeList)
+        {
+            double? salaryAmount = Model.FirstOrDefault(m => m.SalaryTypeID == salarytype.Value)?.SalaryAmount;
+            string formattedSalaryAmount = salaryAmount.HasValue ? salaryAmount.Value.ToString("0.00") : string.Empty;
+            <input type="text" class="form-control salaryAmount" id="salaryAmount_@salarytype.Value" value="@formattedSalaryAmount" @(Model.Any(m => m.SalaryTypeID == salarytype.Value) ? "" : "readonly") />
+        }
+    </div>
+</div>
+
+<div id="hiddenFieldsContainer">
+    @for (var i = 0; i < Model.Count; i++)
+    {
+        <div class="row">
+            <input type="hidden" name="SalaryDetails[@i].SalaryID" value="@Model.FirstOrDefault()?.SalaryID" id="hidden_SalaryID_@Model[i].SalaryID" />
+            <input type="hidden" name="SalaryDetails[@i].SalaryTypeID" value="@Model[i].SalaryTypeID" id="hidden_SalaryTypeID_@Model[i].SalaryTypeID" />
+            <input type="hidden" name="SalaryDetails[@i].SalaryAmount" value="@Model[i].SalaryAmount" id="hidden_SalaryAmount_@Model[i].SalaryTypeID" />
+        </div>
+    }
+</div>

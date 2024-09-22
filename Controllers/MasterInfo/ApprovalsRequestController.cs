@@ -250,11 +250,51 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 5)
           {
+            var endOfService = await _appDBContext.HR_EndOfServices
+                                                     .Where(u => u.EndOfServiceID == transactionID)
+                                                     .FirstOrDefaultAsync();
 
+            if (endOfService != null)
+            {
+              endOfService.FinalApprovalID = 1;
+              endOfService.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              await _appDBContext.SaveChangesAsync();
+            }
+
+            var contractToUpdate = _appDBContext.HR_Contracts
+                                               .FirstOrDefault(c => c.EmployeeID == endOfService.EmployeeID);
+
+            if (contractToUpdate != null)
+            {
+              contractToUpdate.ActiveYNID = 0;
+              _appDBContext.SaveChanges();
+            }
+
+            var employee = await _appDBContext.HR_Employees
+                                              .FirstOrDefaultAsync(e => e.EmployeeID == endOfService.EmployeeID);
+
+            if (employee != null)
+            {
+              employee.EmployeeStatusTypeID = 5; // End of Service status
+              employee.ActiveYNID = 0; // Deactivate employee
+            }
+            await _appDBContext.SaveChangesAsync();
           }
           if (ProcessTypeID == 6)
           {
+            var salary = await _appDBContext.HR_Salarys
+                                                     .Where(u => u.SalaryID == transactionID)
+                                                     .FirstOrDefaultAsync();
+           
 
+            if (salary != null)
+            {
+              salary.FinalApprovalID = 1;
+              salary.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(salary);
+              await _appDBContext.SaveChangesAsync();
+            }
           }
           if (ProcessTypeID == 7)
           {
@@ -383,11 +423,33 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 5)
           {
+            var endOfService = await _appDBContext.HR_EndOfServices
+                                                     .Where(u => u.EndOfServiceID == transactionID)
+                                                     .FirstOrDefaultAsync();
 
+            if (endOfService != null)
+            {
+              endOfService.FinalApprovalID = 2;
+              endOfService.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(endOfService);
+              await _appDBContext.SaveChangesAsync();
+            }
           }
           if (ProcessTypeID == 6)
           {
+            var salary = await _appDBContext.HR_Salarys
+                                                     .Where(u => u.SalaryID == transactionID)
+                                                     .FirstOrDefaultAsync();
 
+            if (salary != null)
+            {
+              salary.FinalApprovalID = 2;
+              salary.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(salary);
+              await _appDBContext.SaveChangesAsync();
+            }
           }
           if (ProcessTypeID == 7)
           {
@@ -505,11 +567,35 @@ namespace Exampler_ERP.Controllers.MasterInfo
       }
       if (processTypeID == 5)
       {
+        var endOfService = await _appDBContext.HR_EndOfServices
+           .Include(e => e.Employee)
+           .FirstOrDefaultAsync(e => e.EndOfServiceID == transactionID);
+
+        if (endOfService == null)
+        {
+          return NotFound();
+        }
+
+        ViewBag.EmployeesList = await _utils.GetEmployee();
+        ViewBag.EndOfServiceReasonTypesList = await _utils.GetEndOfServiceReasonTypes();
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", endOfService);
 
       }
       if (processTypeID == 6)
       {
+   
 
+        var salaryDetails = await _appDBContext.HR_SalaryDetails
+       .Where(pt => pt.SalaryID == transactionID)
+       .Include(pt => pt.Salary.Employee)
+       .ToListAsync();
+
+        ViewBag.SalaryTypeList = await _appDBContext.Settings_SalaryTypes
+            .Select(r => new { Value = r.SalaryTypeID, Text = r.SalaryTypeName })
+            .ToListAsync();
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", salaryDetails);
       }
       if (processTypeID == 7)
       {

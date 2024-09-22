@@ -72,47 +72,7 @@
             </div>
             <div class="modal-body">
                 <form id="editSalaryForm">
-                    <div class="row">
-                        <div class="col-12 mb-2">
-                            <div class="form-group">
-                                <label for="EmployeeName">Employee Name</label>
-                                <input type="text" class="form-control" id="EmployeeName" value="@Model.FirstOrDefault()?.Salary?.Employee?.FirstName @Model.FirstOrDefault()?.Salary?.Employee?.FatherName @Model.FirstOrDefault()?.Salary?.Employee?.FamilyName" disabled />
-                                <input type="hidden" name="EmployeeID" id="EmployeeID" value="@Model.FirstOrDefault()?.Salary?.Employee?.EmployeeID" />
-                                <input type="hidden" class="form-control" id="SalaryID" name="SalaryID" value="@Model.FirstOrDefault()?.SalaryID" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row salarytype-container">
-                        <div class="col-9">
-                            @foreach (var salarytype in (IEnumerable<dynamic>)ViewBag.SalaryTypeList)
-                            {
-                                <div class="form-check">
-                                    <input class="form-check-input salarytype-checkbox" type="checkbox" name="SalaryTypes" value="@salarytype.Value" id="salarytype_@salarytype.Value" @(Model.Any(m => m.SalaryTypeID == salarytype.Value) ? "checked" : "") />
-                                    <label class="form-control form-check-label" for="salarytype_@salarytype.Value">@salarytype.Text</label>
-                                </div>
-                            }
-                        </div>
-                        <div class="col-3">
-                            @foreach (var salarytype in (IEnumerable<dynamic>)ViewBag.SalaryTypeList)
-                            {
-                                double? salaryAmount = Model.FirstOrDefault(m => m.SalaryTypeID == salarytype.Value)?.SalaryAmount;
-                                string formattedSalaryAmount = salaryAmount.HasValue ? salaryAmount.Value.ToString("0.00") : string.Empty;
-                                <input type="text" class="form-control salaryAmount" id="salaryAmount_@salarytype.Value" value="@formattedSalaryAmount" @(Model.Any(m => m.SalaryTypeID == salarytype.Value) ? "" : "readonly") />
-                            }
-                        </div>
-                    </div>
-
-                    <div id="hiddenFieldsContainer">
-                        @for (var i = 0; i < Model.Count; i++)
-                        {
-                            <div class="row">
-                                <input type="hidden" name="SalaryDetails[@i].SalaryID" value="@Model.FirstOrDefault()?.SalaryID" id="hidden_SalaryID_@Model[i].SalaryID" />
-                                <input type="hidden" name="SalaryDetails[@i].SalaryTypeID" value="@Model[i].SalaryTypeID" id="hidden_SalaryTypeID_@Model[i].SalaryTypeID" />
-                                <input type="hidden" name="SalaryDetails[@i].SalaryAmount" value="@Model[i].SalaryAmount" id="hidden_SalaryAmount_@Model[i].SalaryTypeID" />
-                            </div>
-                        }
-                    </div>
+                    @Html.Partial("~/Views/HR/Employeement/Salary/_EditSalary.cshtml", Model)
                 </form>
             </div>
             <div class="modal-footer">

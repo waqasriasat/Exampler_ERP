@@ -40,6 +40,51 @@
                         <h5><i class="fas fa-file-contract"></i> Contract Renewal Details</h5>
                         @Html.Partial("~/Views/HR/Employeement/ContractRenewal/_EditContractRenewal.cshtml", (Exampler_ERP.Models.HR_ContractRenewal)Model)
                     }
+                    else if (ProcessTypeID == 5)
+                    {
+                        <h5><i class="fas fa-file-contract"></i> End of Service Details</h5>
+                        @Html.Partial("~/Views/HR/HR/EndOfService/_EditEndOfService.cshtml", (Exampler_ERP.Models.HR_EndOfService)Model)
+                    }
+                    else if (ProcessTypeID == 6)
+                    {
+                        <h5><i class="fas fa-file-contract"></i> Salary Details</h5>
+                        @Html.Partial("~/Views/HR/Employeement/Salary/_EditSalary.cshtml", (List<Exampler_ERP.Models.HR_SalaryDetail>)Model)
+                    }
+                    else if (ProcessTypeID == 7)
+                    {
+                        <h5><i class="fas fa-file-contract"></i> OverTime Details</h5>
+                        @Html.Partial("~/Views/HR/Financial/OverTime/_EditOverTime.cshtml", (Exampler_ERP.Models.HR_OverTime)Model)
+                    }
+                    else if (ProcessTypeID == 8)
+                    {
+                        <h5><i class="fas fa-file-contract"></i> Allowance Details</h5>
+                        @Html.Partial("~/Views/HR/HR/Deduction/_EditDeduction.cshtml", (Exampler_ERP.Models.HR_Deduction)Model)
+                    }
+                    else if (ProcessTypeID == 9)
+                    {
+                        <h5><i class="fas fa-file-contract"></i> Deducation Details</h5>
+                        @Html.Partial("~/Views/HR/HR/Deduction/_EditDeduction.cshtml", (Exampler_ERP.Models.HR_Deduction)Model)
+                    }
+                    else if (ProcessTypeID == 10)
+                    {
+                        <h5><i class="fas fa-file-contract"></i> Fixed Deducation Details</h5>
+                        @Html.Partial("~/Views/HR/HR/Deduction/_EditDeduction.cshtml", (Exampler_ERP.Models.HR_Deduction)Model)
+                    }
+                    else if (ProcessTypeID == 11)
+                    {
+                        <h5><i class="fas fa-file-contract"></i> Vacation Details</h5>
+                        @Html.Partial("~/Views/HR/HR/EndOfService/_EditEndOfService.cshtml", (Exampler_ERP.Models.HR_EndOfService)Model)
+                    }
+                    else if (ProcessTypeID == 12)
+                    {
+                        <h5><i class="fas fa-file-contract"></i> Vacation Settle Details</h5>
+                        @Html.Partial("~/Views/HR/HR/EndOfService/_EditEndOfService.cshtml", (Exampler_ERP.Models.HR_EndOfService)Model)
+                    }
+                    else if (ProcessTypeID == 13)
+                    {
+                        <h5><i class="fas fa-file-contract"></i> PayRoll Details</h5>
+                        @Html.Partial("~/Views/HR/HR/EndOfService/_EditEndOfService.cshtml", (Exampler_ERP.Models.HR_EndOfService)Model)
+                    }
                 </form>
             </div>
 

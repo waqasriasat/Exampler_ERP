@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/vendor/css/pages/page-auth.css" />
+</head>
+<body>
+    <div class="layout-wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="/UserLogin">User Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/EmployeeLogin">Employee Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/SupplierLogin">Supplier Login</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            @RenderBody()
+        </div>
+    </div>
+
+    @RenderSection("PageStyles", false)
+</body>
+</html>
