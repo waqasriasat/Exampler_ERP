@@ -4,22 +4,114 @@
     var UserRoleID = Context.Session.GetInt32("UserRoleID");
     var UserRoleName = Context.Session.GetString("UserRoleName");
 }
-@* ! Brand demo (display only for navbar-full and hide on below xl) *@
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     $(document).ready(function () {
         $.ajax({
             url: '@Url.Action("GetNotifications", "Notifications")',
             type: 'GET',
             success: function (data) {
-                if (data.count > 0) {
-                    $('#countApprovalsRequest').text(data.count);
-                    $('#liApprovalsRequest').show(); // Ensure it's visible
-                } else {
-                    $('#liApprovalsRequest').hide();
+                // Check if we received counts
+                if (data.notifications) {
+                    let totalNotifications = 0;
+
+                    // Iterate through each process type count
+                    $.each(data.notifications, function (index, notification) {
+                        let processTypeId = notification.processTypeID;
+                        let processCount = notification.processCount;
+                        debugger;
+                        if (processTypeId === 1) {
+                            if (processCount > 0) {
+                                $('#countUser').text(processCount);
+                                $('#liUser').show(); // Ensure the corresponding list item is visible
+                            }
+                        }
+                        if (processTypeId === 2) {
+                            if (processCount > 0) {
+                                $('#countEmployee').text(processCount);
+                                $('#liEmployee').show(); // Ensure the corresponding list item is visible
+                            }
+                        }
+                        if (processTypeId === 3) {
+                            if (processCount > 0) {
+                                $('#countContract').text(processCount);
+                                $('#liContract').show(); // Ensure the corresponding list item is visible
+                            }
+                        }
+                        if (processTypeId === 4) {
+                            if (processCount > 0) {
+                                $('#countContractRenewal').text(processCount);
+                                $('#liContractRenewal').show(); // Ensure the corresponding list item is visible
+                            }
+                        }
+                        if (processTypeId === 5) {
+                            if (processCount > 0) {
+                                $('#countEndofService').text(processCount);
+                                $('#liEndofService').show(); // Ensure the corresponding list item is visible
+                            }
+                        }
+                        if (processTypeId === 6) {
+                            if (processCount > 0) {
+                                $('#countSalary').text(processCount);
+                                $('#liSalary').show(); // Ensure the corresponding list item is visible
+                            }
+                        }
+                        if (processTypeId === 7) {
+                            if (processCount > 0) {
+                                $('#countOvertime').text(processCount);
+                                $('#liOvertime').show(); // Ensure the corresponding list item is visible
+                            }
+                        }
+                        if (processTypeId === 8) {
+                            if (processCount > 0) {
+                                $('#countAllowance').text(processCount);
+                                $('#liAllowance').show(); // Ensure the corresponding list item is visible
+                            }
+                        }
+                        if (processTypeId === 9) {
+                            if (processCount > 0) {
+                                $('#countDeduction').text(processCount);
+                                $('#liDeduction').show(); // Ensure the corresponding list item is visible
+                            }
+                        }
+                        if (processTypeId === 10) {
+                            if (processCount > 0) {
+                                $('#countFixedDeduction').text(processCount);
+                                $('#liFixedDeduction').show(); // Ensure the corresponding list item is visible
+                            }
+                        }
+                        if (processTypeId === 11) {
+                            if (processCount > 0) {
+                                $('#countVacation').text(processCount);
+                                $('#liVacation').show(); // Ensure the corresponding list item is visible
+                            }
+                        }
+                        if (processTypeId === 12) {
+                            if (processCount > 0) {
+                                $('#countVacationSettle').text(processCount);
+                                $('#liVacationSettle').show(); // Ensure the corresponding list item is visible
+                            }
+                        }
+                        if (processTypeId === 13) {
+                            if (processCount > 0) {
+                                $('#countPayRoll').text(processCount);
+                                $('#liPayRoll').show(); // Ensure the corresponding list item is visible
+                            }
+                        }
+
+
+                        // Add to total notification count
+                        totalNotifications += processCount;
+                    });
+
+                    // Set the total notifications count
+                    $('#TotalNotifications').text(totalNotifications);
                 }
-                let approvalsCount = parseInt($('#countApprovalsRequest').text().trim());
-                $('#TotalNotificatios').text(approvalsCount);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching notifications: ", error);
             }
         });
     });
@@ -61,11 +153,11 @@
     <!-- /Search -->
 
     <ul class="navbar-nav flex-row align-items-center ms-auto">
-  
+
         <!-- Messages -->
         <li class="nav-item navbar-dropdown dropdown-user dropdown">
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-                
+
                 <div class="icon">
                     <i class="fa fa fa-envelope-o" aria-hidden="true" style="font-size:20px;padding-top: 10px;"></i>
                     <span class="badge badge-center rounded-pill bg-danger"
@@ -111,7 +203,6 @@
             </ul>
         </li>
         <!--/ Message -->
-
         <!-- Notification -->
         <li class="nav-item navbar-dropdown dropdown-user dropdown">
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -119,7 +210,7 @@
                     <i class="fa fa fa-bell-o" aria-hidden="true" style="font-size:20px;padding-top: 10px;"></i>
                     <span class="badge badge-center rounded-pill bg-danger"
                           style="position: relative; bottom: 25px; right: 17px; transform: translate(50%, 50%); font-size: 9px; height:18px; width:18px;">
-                        <label id="TotalNotificatios"></label>
+                        <label id="TotalNotifications"></label>
                     </span>
                 </div>
             </a>
@@ -128,34 +219,135 @@
                     <div class="dropdown-divider"></div>
                 </li>
 
-                <li id="liApprovalsRequest">
+                <li id="liApprovalsRequest" style="display:none">
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
-                        <i class="bx bx-fast-forward-circle me-2"></i>
-                        <span class="align-middle">Approvals Request</span>
-                        <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countApprovalsRequest"></label></span>
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
-                        <i class="bx bx-cog me-2"></i>
-                        <span class="align-middle">Requests View</span>
-                        <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" href="javascript:void(0);">
                         <span class="d-flex align-items-center align-middle">
-                            <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">Billing</span>
-                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="align-middle">Approvals Request</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countApprovalsRequest"></label></span>
                         </span>
                     </a>
                 </li>
-               
+                <li id="liUser" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">New User Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countUser"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liEmployee" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">New Employee Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countEmployee"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liContract" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">New Contract Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countContract"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liContractRenewal" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Contract Renewal Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countContractRenewal"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liEndofService" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">End of Service Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countEndofService"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liSalary" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">New Salary Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countSalary"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liOvertime" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Overtime Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countOvertime"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liAllowance" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Allowance Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countAllowance"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liDeduction" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Deduction Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countDeduction"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liFixedDeduction" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Fixed Deduction Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countFixedDeduction"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liVacation" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Vacation Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countVacation"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liVacationSettle" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Vacation Settle Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countVacationSettle"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liPayRoll" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">PayRoll Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countPayRoll"></label></span>
+                        </span>
+                    </a>
+                </li>
             </ul>
         </li>
         <!--/ Notification -->
-
         <!-- User -->
         <li class="nav-item navbar-dropdown dropdown-user dropdown" style="margin-left:15px">
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">

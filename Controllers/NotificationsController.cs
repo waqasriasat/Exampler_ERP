@@ -15,26 +15,43 @@ namespace Exampler_ERP.Controllers
       _appDBContext = appDBContext;
       _configuration = configuration;
     }
+
     public async Task<IActionResult> GetNotifications()
     {
       var userId = HttpContext.Session.GetInt32("UserID");
 
       if (userId == null)
-        return Json(new { count = 0, notifications = new List<CR_ProcessTypeApprovalDetail>() });
+        return Json(new { count = 0, notifications = new List<object>() });
 
       // Fetch unread notifications for the logged-in user
-      var notifications = await _appDBContext.CR_ProcessTypeApprovalDetails
-        .Include(pta => pta.CR_ProcessTypeApproval)
-        .ThenInclude(pta => pta.Employee)
-        .Include(pta => pta.CR_ProcessTypeApproval)
-        .ThenInclude(pta => pta.ProcessType)
-        .Include(pta => pta.ProcessTypeApprovalDetailDoc)
-        .Where(pta => pta.AppID == 0)
-        .CountAsync();
+      var processCounts = await _appDBContext.CR_ProcessTypeApprovalDetails
+          .Where(pta => pta.AppID == 0)
+          .Join(_appDBContext.CR_ProcessTypeApprovals,
+              pta => pta.ApprovalProcessID,
+              cta => cta.ApprovalProcessID,
+              (pta, cta) => new { pta, cta })
+          .Join(_appDBContext.HR_Employees,
+              combined => combined.cta.EmployeeID,
+              e => e.EmployeeID,
+              (combined, e) => new { combined.pta, combined.cta, e })
+          .Join(_appDBContext.Settings_ProcessTypes,
+              combined => combined.cta.ProcessTypeID,
+              pt => pt.ProcessTypeID,
+              (combined, pt) => new { combined.pta, combined.cta, combined.e, pt })
+          .GroupBy(x => x.cta.ProcessTypeID)
+          .Select(g => new
+          {
+            ProcessTypeID = g.Key,
+            ProcessCount = g.Count(x => x.pta.ApprovalProcessID != null) // Count only non-null ApprovalProcessIDs
+          })
+          .ToListAsync();
 
-      var count = notifications;
+      // Calculate the total count of notifications
+      var totalCount = processCounts.Sum(pc => pc.ProcessCount);
 
-      return Json(new { count = count, notifications = notifications });
+      // Return the result with only ProcessTypeID and ProcessCount
+      return Json(new { count = totalCount, notifications = processCounts });
     }
+
   }
 }

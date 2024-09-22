@@ -19,6 +19,9 @@ namespace Exampler_ERP.Controllers
     public IActionResult ForgotPassword() => View();
     public IActionResult Login() => View();
     public IActionResult Register() => View();
+    public IActionResult UserLogin() => View();
+    public IActionResult EmployeeLogin() => View();
+    public IActionResult SupplierLogin() => View();
     public IActionResult Logout()
     {
       if (HttpContext.Session.GetInt32("UserID") != null)
@@ -55,6 +58,115 @@ namespace Exampler_ERP.Controllers
         ModelState.AddModelError(string.Empty, "Invalid login attempt.");
         return View();
       }
+
+
+      // Logic for setting up user session or authentication cookie goes here
+      HttpContext.Session.SetInt32("UserID", user.UserID);
+      HttpContext.Session.SetString("UserName", Username);
+      HttpContext.Session.SetInt32("UserRoleID", user.RoleID);
+      HttpContext.Session.SetString("UserRoleName", Username);
+
+
+
+      return RedirectToAction("Index", "Dashboards");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UserLogin(string Username, string Password)
+    {
+      if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
+      {
+        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+        return View();
+      }
+
+      // Hash the user-entered password
+      string encryptedusername = CR_CipherKey.Encrypt(Username);
+      string encryptedpassword = CR_CipherKey.Encrypt(Password);
+
+      // Query the database for the user with the given username and hashed password
+      var user = await _appDBContext.CR_Users
+          .Where(u => u.UserName == encryptedusername && u.Password == encryptedpassword && u.ActiveYNID == 1 && u.DeleteYNID != 1)
+          .FirstOrDefaultAsync();
+
+      if (user == null)
+      {
+        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+        return View();
+      }
+
+
+      // Logic for setting up user session or authentication cookie goes here
+      HttpContext.Session.SetInt32("UserID", user.UserID);
+      HttpContext.Session.SetString("UserName", Username);
+      HttpContext.Session.SetInt32("UserRoleID", user.RoleID);
+      HttpContext.Session.SetString("UserRoleName", Username);
+
+
+
+      return RedirectToAction("Index", "Dashboards");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> EmployeeLogin(string Username, string Password)
+    {
+      if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
+      {
+        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+        return View();
+      }
+
+      // Hash the user-entered password
+      string encryptedusername = CR_CipherKey.Encrypt(Username);
+      string encryptedpassword = CR_CipherKey.Encrypt(Password);
+
+      // Query the database for the user with the given username and hashed password
+      var user = await _appDBContext.CR_Users
+          .Where(u => u.UserName == encryptedusername && u.Password == encryptedpassword && u.ActiveYNID == 1 && u.DeleteYNID != 1)
+          .FirstOrDefaultAsync();
+
+      if (user == null)
+      {
+        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+        return View();
+      }
+
+
+      // Logic for setting up user session or authentication cookie goes here
+      HttpContext.Session.SetInt32("UserID", user.UserID);
+      HttpContext.Session.SetString("UserName", Username);
+      HttpContext.Session.SetInt32("UserRoleID", user.RoleID);
+      HttpContext.Session.SetString("UserRoleName", Username);
+
+
+
+      return RedirectToAction("Index", "Dashboards");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SupplierLogin(string Username, string Password)
+    {
+      if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
+      {
+        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+        return View();
+      }
+
+      // Hash the user-entered password
+      string encryptedusername = CR_CipherKey.Encrypt(Username);
+      string encryptedpassword = CR_CipherKey.Encrypt(Password);
+
+      // Query the database for the user with the given username and hashed password
+      var user = await _appDBContext.CR_Users
+          .Where(u => u.UserName == encryptedusername && u.Password == encryptedpassword && u.ActiveYNID == 1 && u.DeleteYNID != 1)
+          .FirstOrDefaultAsync();
+
+      if (user == null)
+      {
+        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+        return View();
+      }
+
 
       // Logic for setting up user session or authentication cookie goes here
       HttpContext.Session.SetInt32("UserID", user.UserID);
