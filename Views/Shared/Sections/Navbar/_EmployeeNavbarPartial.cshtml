@@ -1,8 +1,8 @@
 @{
-    var UserID = Context.Session.GetInt32("UserID");
-    var UserName = Context.Session.GetString("UserName");
-    var UserRoleID = Context.Session.GetInt32("UserRoleID");
-    var UserRoleName = Context.Session.GetString("UserRoleName");
+    var EmployeeID = Context.Session.GetInt32("EmployeeID");
+    var EmployeeName = Context.Session.GetString("EmployeeName");
+    var EmployeeDepartmentName = Context.Session.GetInt32("EmployeeDepartmentName");
+    var EmployeeDesignationName = Context.Session.GetString("EmployeeDesignationName");
 }
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -348,7 +348,7 @@
         <li class="nav-item navbar-dropdown dropdown-user dropdown" style="margin-left:15px">
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                 <div class="avatar avatar-online">
-                    <img src="@Url.Action("GetEmployeePicture", "Employee", new { userId = Context.Session.GetInt32("UserID") })" alt="Employee Picture" class="w-px-40 h-auto rounded-circle" />
+                    <img src="@Url.Action("GetEmployeePicture", "EmployeeApply_Dashboard", new { employeeId = Context.Session.GetInt32("EmployeeID") })" alt="Employee Picture" class="w-px-40 h-auto rounded-circle" />
                 </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
@@ -357,12 +357,12 @@
                         <div class="d-flex">
                             <div class="flex-shrink-0 me-3">
                                 <div class="avatar avatar-online">
-                                    <img src="@Url.Action("GetEmployeePicture", "Employee", new { userId = Context.Session.GetInt32("UserID") })" alt="Employee Picture" class="w-px-40 h-auto rounded-circle" />
+                                    <img src="@Url.Action("GetEmployeePicture", "EmployeeApply_Dashboard", new { employeeId = Context.Session.GetInt32("EmployeeID") })" alt="Employee Picture" class="w-px-40 h-auto rounded-circle" />
                                 </div>
                             </div>
                             <div class="flex-grow-1">
-                                <span class="fw-medium d-block">@UserName</span>
-                                <small class="text-muted">@UserRoleName</small>
+                                <span class="fw-medium d-block">@EmployeeName</span>
+                                <small class="text-muted">@EmployeeDesignationName</small>
                             </div>
                         </div>
                     </a>

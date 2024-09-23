@@ -48,6 +48,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       {
         return NotFound();
       }
+      employee.UserName = CR_CipherKey.Decrypt(employee.UserName);
+      employee.Password = CR_CipherKey.Decrypt(employee.Password);
       return PartialView("~/Views/HR/Employeement/Employee/EditEmployee.cshtml", employee);
     }
 
@@ -68,6 +70,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         {
           employee.Picture = Convert.FromBase64String(ExistingPicture);
         }
+        employee.UserName = CR_CipherKey.Encrypt(employee.UserName);
+        employee.Password = CR_CipherKey.Encrypt(employee.Password);
         _appDBContext.Update(employee);
         await _appDBContext.SaveChangesAsync();
         return Json(new { success = true });
@@ -100,7 +104,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
             employee.Picture = memoryStream.ToArray();
           }
         }
-
+        employee.UserName = CR_CipherKey.Encrypt(employee.UserName);
+        employee.Password = CR_CipherKey.Encrypt(employee.Password);
         employee.DeleteYNID = 0;
         employee.ActiveYNID = 0;
         _appDBContext.HR_Employees.Add(employee);

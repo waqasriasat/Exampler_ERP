@@ -31,5 +31,23 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Main
 
       return View("~/Views/EmployeePortal/Main/Dashboard/EmployeeApply_Dashboard.cshtml");
     }
+    public IActionResult GetEmployeePicture(int employeeID)
+    {
+      var employeePicture = _appDBContext.HR_Employees
+                      .Where(emp => emp.EmployeeID == employeeID)
+                      .Select(emp => emp.Picture)
+                      .FirstOrDefault();
+
+      if (employeePicture != null)
+      {
+        return File(employeePicture, "image/jpeg"); // or "image/png" depending on your image format
+      }
+      else
+      {
+        var noImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/icons/NoImage.jpg");
+        var noImageFile = System.IO.File.ReadAllBytes(noImagePath);
+        return File(noImageFile, "image/jpeg");
+      }
+    }
   }
 }

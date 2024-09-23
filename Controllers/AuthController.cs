@@ -84,8 +84,13 @@ namespace Exampler_ERP.Controllers
       string encryptedpassword = CR_CipherKey.Encrypt(Password);
 
       var employee = await _appDBContext.HR_Employees
-          .Where(u => u.UserName == encryptedusername && u.Password == encryptedpassword && u.ActiveYNID == 1 && u.DeleteYNID != 1)
-          .FirstOrDefaultAsync();
+    .Include(e => e.Department)
+    .Include(e => e.Designation)
+    .Where(e => e.UserName == encryptedusername
+                && e.Password == encryptedpassword
+                && e.ActiveYNID == 1
+                && e.DeleteYNID != 1)
+    .FirstOrDefaultAsync();
 
       if (employee == null)
       {
@@ -95,8 +100,23 @@ namespace Exampler_ERP.Controllers
 
       HttpContext.Session.SetInt32("EmployeeID", employee.EmployeeID);
       HttpContext.Session.SetString("EmployeeName", employee.FirstName + ' ' + employee.FatherName + ' ' + employee.FamilyName);
-      HttpContext.Session.SetInt32("EmployeeDepartmentID", employee.DepartmentID ?? 0);
-      HttpContext.Session.SetInt32("EmployeeDesignationID", employee.DesignationID ?? 0);
+      if (employee.Department != null)
+      {
+        HttpContext.Session.SetString("EmployeeDepartmentName", employee.Department.DepartmentName);
+      }
+      else
+      {
+        HttpContext.Session.SetString("EmployeeDepartmentName", "Unknown");
+      }
+      if (employee.Designation != null)
+      {
+        HttpContext.Session.SetString("EmployeeDesignationName", employee.Designation.DesignationName);
+      }
+      else
+      {
+        HttpContext.Session.SetString("EmployeeDesignationName", "Unknown");
+      }
+    
 
       return RedirectToAction("Index", "EmployeeDashboards");
     }
