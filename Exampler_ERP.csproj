@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\EmployeePortal\Apply\" />
+    <Folder Include="Controllers\EmployeePortal\Reports\" />
     <Folder Include="Controllers\HR\Reports\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Views\EmployeePortal\Apply\" />
+    <Folder Include="Views\EmployeePortal\Reports\" />
     <Folder Include="Views\HR\Reports\" />
     <Folder Include="wwwroot\img\NewFolder\" />
   </ItemGroup>

@@ -18,7 +18,7 @@
                         </a>
                     </div>
                     <h4 class="mb-2">Welcome to @TempData.Peek("appName")! 👋</h4>
-                    <p class="mb-4">Please sign-in to your account and start the adventure</p>
+                    <p class="mb-4">Please sign-in to your User account.</p>
 
                     <form id="formAuthentication" class="mb-3" asp-action="Login" asp-controller="Auth" method="post">
                         <div class="mb-3">
@@ -51,10 +51,8 @@
                     </form>
 
                     <p class="text-center">
-                        <span>New on our platform?</span>
-                        <a href="/Auth/Register">
-                            <span>Create an account</span>
-                        </a>
+                        <span>Not a User?</span>
+                        <a href="/Auth/EmployeeLogin">Employee Login</a> | <a href="/Auth/SupplierLogin">Supplier Login</a>
                     </p>
                 </div>
             </div>

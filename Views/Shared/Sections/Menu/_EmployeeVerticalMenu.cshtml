@@ -1,0 +1,57 @@
+@{
+
+    string? currentPage = Context.Request.Path;
+
+    TempData.Keep();
+}
+
+<!-- Menu -->
+@* ! Do this simple *@
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+
+    @* ! Hide app brand if navbar-full *@
+    <div class='app-brand demo @((@ViewData["navbarFull"] != null && Convert.ToBoolean(@ViewData["navbarFull"])) ? "d-xl-none" : "")'>
+        <a asp-controller="EmployeeDashboards" asp-action="Index" class="app-brand-link">
+            <span class="app-brand-logo demo">
+                @* @await Html.PartialAsync("../_Partials/_Macros") *@
+                <img src="~/img/favicon/SideLogoWithName.png" width="40%" />
+            </span>
+            @* <span class="app-brand-text demo menu-text fw-bold ms-2">@TempData.Peek("appName")</span> *@
+        </a>
+
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+        </a>
+    </div>
+    <hr />
+    <div class="menu-inner-shadow"></div>
+
+    @* ! Full version menu-items *@
+    <ul class="menu-inner py-1">
+        <!-- Dashboards -->
+        <li class='menu-item@(currentPage.EndsWith("/") || currentPage.StartsWith("/EmployeeDashboards/") ? " active open" : "")'>
+            <a asp-controller="EmployeeDashboards" asp-action="Index" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div>Dashboards</div>
+            </a>
+        </li>
+
+        <!-- Forms -->
+        <li class='menu-item@(currentPage.StartsWith("/EmployeeApply_Dashboard/Index") ? " active open" : "")'>
+            <a asp-controller="EmployeeApply_Dashboard" asp-action="Index" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div>Forms</div>
+            </a>
+        </li>
+
+        <!-- Reports -->
+        <li class='menu-item@(currentPage.StartsWith("/EmployeeReport_Dashboard/Index") ? " active open" : "")'>
+            <a asp-controller="EmployeeReport_Dashboard" asp-action="Index" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <div>Reports</div>
+            </a>
+        </li>
+    </ul>
+
+</aside>
+<!-- / Menu -->

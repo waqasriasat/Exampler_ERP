@@ -19,10 +19,10 @@
                     <h4 class="mb-2">Welcome to Employee Login! 👋</h4>
                     <p class="mb-4">Please sign-in to your employee account.</p>
 
-                    <form id="formAuthentication" class="mb-3" asp-action="Login" asp-controller="Auth" method="post">
+                    <form id="formAuthentication" class="mb-3" asp-action="EmployeeLogin" asp-controller="Auth" method="post">
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" name="Username" placeholder="Enter your employee username" autofocus>
+                            <input type="text" class="form-control" id="username" name="Username" placeholder="Enter your employee username" value="ibs" autofocus>
                         </div>
                         <div class="mb-3 form-password-toggle">
                             <div class="d-flex justify-content-between">
@@ -32,7 +32,7 @@
                                 </a>
                             </div>
                             <div class="input-group input-group-merge">
-                                <input type="password" id="password" class="form-control" name="Password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                                <input type="password" id="password" class="form-control" name="Password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" value="A@123456" aria-describedby="password" />
                                 <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
 
                     <p class="text-center">
                         <span>Not an employee?</span>
-                        <a href="/Auth/UserLogin">User Login</a> | <a href="/Auth/SupplierLogin">Supplier Login</a>
+                        <a href="/Auth/Login">User Login</a> | <a href="/Auth/SupplierLogin">Supplier Login</a>
                     </p>
                 </div>
             </div>
