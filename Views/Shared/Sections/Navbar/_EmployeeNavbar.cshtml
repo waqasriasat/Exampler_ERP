@@ -21,3 +21,24 @@ else
     </nav>
 
 }
+<script>
+    $(document).ready(function () {
+        // changepassword modal popup
+        $('.changepasswordLink').click(function (e) {
+            e.preventDefault();
+
+            $.get('@Url.Action("ChangePassword", "Employee")', function (data) {
+                $('#changepasswordModalContainer').html(data);
+                $('#changepasswordModal').modal('show');
+            });
+        });
+
+
+        // Close Modal changepassword Contrainer
+        $('#changepasswordModalContainer').on('click', '#Close', function () {
+            $('#changepasswordModal').modal('hide'); // Close the modal directly
+            // detailsitional logic if needed
+        });
+    });
+</script>
+<div id="changepasswordModalContainer"></div>

@@ -1,4 +1,5 @@
 using Exampler_ERP.Models;
+using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -335,6 +336,66 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         return File(noImageFile, "image/jpeg");  
       }
     }
+    [HttpGet]
+    public async Task<IActionResult> ChangePassword()
+    {
+      var employeeID = HttpContext.Session.GetInt32("EmployeeID"); // Assume EmployeeID is stored in session
+      if (employeeID == null)
+      {
+        return RedirectToAction("Login", "Auth"); // Redirect to login if not logged in
+      }
 
+      var employee = await _appDBContext.HR_Employees.FindAsync(employeeID);
+      if (employee == null)
+      {
+        return NotFound();
+      }
+
+      var model = new ChangePasswordModel
+      {
+        EmployeeID = employee.EmployeeID,
+        UserName = CR_CipherKey.Decrypt(employee.UserName)
+    };
+
+      return PartialView("~/Views/HR/Employeement/Employee/ChangePassword.cshtml", model);
+    }
+
+    // POST: ChangePassword
+    [HttpPost]
+    public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+    {
+      if (ModelState.IsValid)
+      {
+        var employee = await _appDBContext.HR_Employees.FindAsync(model.EmployeeID);
+        if (employee == null)
+        {
+          return NotFound();
+        }
+
+        // Verify old password
+        if (employee.Password != CR_CipherKey.Encrypt(model.OldPassword)) // Assuming passwords are stored in plain text (you should hash them)
+        {
+          ModelState.AddModelError("", "Old password is incorrect.");
+          var modelChangePassword = new ChangePasswordModel
+          {
+            EmployeeID = employee.EmployeeID,
+            UserName = CR_CipherKey.Decrypt(employee.UserName)
+          };
+          return PartialView("~/Views/HR/Employeement/Employee/ChangePassword.cshtml", modelChangePassword);
+        }
+
+        // Update with new password
+        employee.Password = CR_CipherKey.Encrypt(model.NewPassword);
+
+        // Save changes
+        await _appDBContext.SaveChangesAsync();
+
+        TempData["SuccessMessage"] = "Password changed successfully!";
+        return PartialView("~/Views/EmployeePortal/Index.cshtml", model);
+      }
+
+      
+      return PartialView("~/Views/HR/Employeement/Employee/ChangePassword.cshtml", model);
+    }
   }
 }
