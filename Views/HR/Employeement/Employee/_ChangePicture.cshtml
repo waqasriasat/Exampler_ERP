@@ -1,0 +1,24 @@
+@model Exampler_ERP.Models.Temp.ChangePictureModel
+
+<input type="hidden" asp-for="EmployeeID" />
+
+<div class="row">
+    <div class="col-12" style="height:150px">
+        <div class="relative" style="text-align: -webkit-center;">
+            <img src="@(Model.Picture != null ? "data:image/jpeg;base64," + Convert.ToBase64String(Model.Picture) : "~/img/icons/NoImage.jpg")"
+                 id="PreviewPhoto" alt="Profile Picture" width="125" height="125"
+                 style="border:1px; margin-top:0px;border-radius: 50%;border: solid;" />
+            <input asp-for="Picture" class="custom-file-input" id="profilePictureInput" type="file" name="profilePicture"
+                   class="form-control" style="display:none;" onchange="document.getElementById('PreviewPhoto').src=window.URL.createObjectURL(this.files[0])" />
+            <a href="#" onclick="document.getElementById('profilePictureInput').click()">
+                <i class="fa fa-pencil" style="font-size: x-large; color:darkslategray; line-height: 2;position: relative;bottom: -55px;right: 16px;"></i>
+            </a>
+            <span asp-validation-for="Picture" class="text-danger"></span>
+            @if (Model.Picture != null)
+            {
+                <input type="hidden" name="ExistingPicture" value="@Convert.ToBase64String(Model.Picture)" />
+            }
+
+        </div>
+    </div>
+</div>

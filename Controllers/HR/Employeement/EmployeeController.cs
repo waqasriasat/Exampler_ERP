@@ -173,8 +173,6 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       return PartialView("~/Views/HR/Employeement/Employee/AddEmployee.cshtml", employee);
     }
-
-
     public async Task<IActionResult> Delete(int id)
     {
       var employee = await _appDBContext.HR_Employees.FindAsync(id);
@@ -191,7 +189,6 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       return Json(new { success = true });
     }
-
     public async Task<IActionResult> Print()
     {
       var employees = await _appDBContext.HR_Employees
@@ -208,7 +205,6 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       return View("~/Views/HR/Employeement/Employee/PrintEmployee.cshtml", employees);
     }
-
     public async Task<IActionResult> ExportToExcel()
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -359,8 +355,6 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       return PartialView("~/Views/HR/Employeement/Employee/ChangePassword.cshtml", model);
     }
-
-    // POST: ChangePassword
     [HttpPost]
     public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
     {
@@ -391,11 +385,67 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         await _appDBContext.SaveChangesAsync();
 
         TempData["SuccessMessage"] = "Password changed successfully!";
-        return PartialView("~/Views/EmployeePortal/Index.cshtml", model);
+
+        // Return a JSON response for success
+        return Json(new { success = true, message = "Password changed successfully!" });
       }
 
       
       return PartialView("~/Views/HR/Employeement/Employee/ChangePassword.cshtml", model);
     }
+    [HttpGet]
+    public async Task<IActionResult> ChangePicture()
+    {
+      var employeeID = HttpContext.Session.GetInt32("EmployeeID");
+      if (employeeID == null)
+      {
+        return RedirectToAction("Login", "Auth"); // Redirect to login if not logged in
+      }
+
+      var employee = await _appDBContext.HR_Employees.FindAsync(employeeID);
+      if (employee == null)
+      {
+        return NotFound();
+      }
+
+      var model = new ChangePictureModel
+      {
+        EmployeeID = employee.EmployeeID,
+        Picture = employee.Picture
+      };
+
+      return PartialView("~/Views/HR/Employeement/Employee/ChangePicture.cshtml", model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ChangePicture(ChangePictureModel model, IFormFile profilePicture, string ExistingPicture)
+    {
+      if (profilePicture != null && profilePicture.Length > 0)
+      {
+        using (var memoryStream = new MemoryStream())
+        {
+          await profilePicture.CopyToAsync(memoryStream);
+          model.Picture = memoryStream.ToArray();
+        }
+      }
+      else if (!string.IsNullOrEmpty(ExistingPicture))
+      {
+        model.Picture = Convert.FromBase64String(ExistingPicture);
+      }
+      var employee = await _appDBContext.HR_Employees.FindAsync(model.EmployeeID);
+      if (employee == null)
+      {
+        return NotFound();
+      }
+
+      // Update the employee's picture
+      employee.Picture = model.Picture;
+      await _appDBContext.SaveChangesAsync();
+
+      TempData["SuccessMessage"] = "Profile picture updated successfully!";
+      return Json(new { success = true, message = "Profile picture updated successfully!" });
+     
+    }
+
   }
 }

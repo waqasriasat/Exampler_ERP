@@ -1,25 +1,25 @@
-@model Exampler_ERP.Models.Temp.ChangePasswordModel
+@model Exampler_ERP.Models.Temp.ChangePictureModel
 
-<div class="modal fade" id="changepasswordModal" tabindex="-1" role="dialog" aria-labelledby="changepasswordModalLabel" aria-hidden="true">
+<div class="modal fade" id="changePictureModal" tabindex="-1" role="dialog" aria-labelledby="changePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content shadow-lg border-0">
             <!-- Modal Header -->
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="changepasswordModalLabel">
-                    <i class="fas fa-key me-2"></i>Change Password
+                <h5 class="modal-title" id="changePictureModalLabel">
+                    <i class="fas fa-camera me-2"></i>Change Profile Picture
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <!-- Modal Body -->
             <div class="modal-body">
-                <!-- Change Password Form -->
-                <form id="changePasswordForm" method="post" action="@Url.Action("ChangePassword", "Employee")" enctype="multipart/form-data" novalidate>
-                    @Html.Partial("~/Views/HR/Employeement/Employee/_ChangePassword.cshtml", Model)
+                <!-- Change Picture Form -->
+                <form id="changePictureForm" method="post" action="@Url.Action("ChangePicture", "Employee")" enctype="multipart/form-data">
+                    @Html.Partial("~/Views/HR/Employeement/Employee/_ChangePicture.cshtml", Model)
                 </form>
 
                 <!-- Success Message -->
-                <div id="successMessage" class="alert alert-success text-center mt-3" style="display:none;"></div>
+                <div id="successMessagePicture" class="alert alert-success text-center mt-3" style="display:none;"></div>
             </div>
 
             <!-- Modal Footer -->
@@ -27,7 +27,7 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="fas fa-times-circle"></i> Close
                 </button>
-                <button type="submit" form="changePasswordForm" class="btn btn-success">
+                <button type="submit" form="changePictureForm" class="btn btn-success">
                     <i class="fas fa-check-circle"></i> Save Changes
                 </button>
             </div>

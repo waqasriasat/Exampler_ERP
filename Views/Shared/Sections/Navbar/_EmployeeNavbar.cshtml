@@ -23,7 +23,7 @@ else
 }
 <script>
     $(document).ready(function () {
-        // changepassword modal popup
+        // Open Change Password modal popup
         $('.changepasswordLink').click(function (e) {
             e.preventDefault();
 
@@ -33,12 +33,96 @@ else
             });
         });
 
+        // Handle form submission inside the modal
+        $('#changepasswordModalContainer').on('submit', '#changePasswordForm', function (e) {
+            e.preventDefault();
 
-        // Close Modal changepassword Contrainer
+            $.ajax({
+                url: this.action,
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        // Close the modal (assuming Bootstrap modal)
+                        $('#changepasswordModal').modal('hide');
+
+                        // Display success message (assuming you have a div with id "successMessage")
+                        $('#successMessage').text(response.message).show();
+                    } else {
+                        // You can handle errors or update validation messages here if needed
+                    }
+                }
+            });
+        });
+
+        // Close Modal with the Close button
         $('#changepasswordModalContainer').on('click', '#Close', function () {
-            $('#changepasswordModal').modal('hide'); // Close the modal directly
-            // detailsitional logic if needed
+            $('#changepasswordModal').modal('hide'); // Close the modal
+        });
+
+
+        // Open Change Picture modal popup
+        $('.changepictureLink').click(function (e) {
+            e.preventDefault();
+
+            $.get('@Url.Action("ChangePicture", "Employee")', function (data) {
+                $('#changepictureModalContainer').html(data);
+                $('#changePictureModal').modal('show'); // This line should trigger the modal
+            });
+        });
+
+        // Handle form submission inside the modal
+        // $('#changepictureModalContainer').on('submit', '#changePictureForm', function (e) {
+        //     e.preventDefault();
+            
+        //     $.ajax({
+        //         url: this.action,
+        //         type: 'POST',
+        //         data: $(this).serialize(),
+        //         success: function (response) {
+        //             if (response.success) {
+        //                 // Close the modal (assuming Bootstrap modal)
+        //                 $('#changepictureModal').modal('hide');
+
+        //                 // Display success message (assuming you have a div with id "successMessage")
+        //                 $('#successMessagePicture').text(response.message).show();
+        //             } else {
+        //                 // You can handle errors or update validation messages here if needed
+        //             }
+        //         }
+        //     });
+        // });
+        $('#changepictureModalContainer').on('submit', '#changePictureForm', function (e) {
+            var form = document.getElementById('changePictureForm');
+            var formData = new FormData(form);
+
+            $.ajax({
+                url: '@Url.Action("changePicture", "Employee")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        $('#changepictureModal').modal('hide');
+                        $('#successMessagePicture').text(response.message).show();
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        // Handle validation errors or other cases
+                        // You might want to display validation errors here
+                    }
+                },
+                error: function () {
+                    // Handle errors
+                }
+            });
+        });
+        // Close Modal with the Close button
+        $('#changepictureModalContainer').on('click', '#Close', function () {
+            $('#changepictureModal').modal('hide'); // Close the modal
         });
     });
 </script>
+
 <div id="changepasswordModalContainer"></div>
+<div id="changepictureModalContainer"></div>
