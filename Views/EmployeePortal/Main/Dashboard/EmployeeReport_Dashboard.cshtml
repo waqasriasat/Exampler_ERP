@@ -22,104 +22,14 @@
         <div class="card mb-4">
             <h5 class="card-header">Details</h5>
             <div class="row" style="padding: 30px 30px 0px 30px;">
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="Applicant" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Applicant</strong>
-                                    <h4 class="CardCountFontColor">
-                                        @ViewBag.ApplicantCount
-                                    </h4>
-                                </div>
-                                <div class="icon">
-                                    <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
-                                </div>
-                                <div class="small-box-footer Card1A"></div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="Employee" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Employee</strong>
-                                    <h4 class="CardCountFontColor">
-                                        @ViewBag.EmployeeCount
-                                    </h4>
-                                </div>
-                                <div class="icon">
-                                    <i class="fa fa-print Card1I" aria-hidden="true"></i>
-                                </div>
-                                <div class="small-box-footer Card1A"></div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="Contract" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Contract</strong>
-                                    <h4 class="CardCountFontColor">
-                                        @ViewBag.ContractCount
-                                    </h4>
-                                </div>
-                                <div class="icon">
-                                    <i class="fa fa-book Card1I" aria-hidden="true"></i>
-                                </div>
-                                <div class="small-box-footer Card1A"></div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="Salary" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Salary</strong>
-                                    <h4 class="CardCountFontColor">
-                                        @ViewBag.SalaryCount
-                                    </h4>
-                                </div>
-                                <div class="icon">
-                                    <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
-                                </div>
-                                <div class="small-box-footer Card1A"></div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="Joining" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Joining</strong>
-                                    <h4 class="CardCountFontColor">
-                                        @ViewBag.JoiningCount
-                                    </h4>
-                                </div>
-                                <div class="icon">
-                                    <i class="fa fa-print Card1I" aria-hidden="true"></i>
-                                </div>
-                                <div class="small-box-footer Card1A"></div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="col-lg-4 col-md-6 col-sm-12">
                     <a asp-controller="BankAccount" asp-action="Index">
                         <div class="shadow mb-4">
                             <div class="small-box bg-white">
                                 <div class="inner Card1div">
-                                    <strong class="CardFontColor">Bank Account</strong>
+                                    <strong class="CardFontColor">Contract Print</strong>
                                     <h4 class="CardCountFontColor">
-                                        @ViewBag.BankAccountCount
+                                        0 @ViewBag.BankAccountCount
                                     </h4>
                                 </div>
                                 <div class="icon">
@@ -130,14 +40,14 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="ContractRenewal" asp-action="Index">
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <a asp-controller="Applicant" asp-action="Index">
                         <div class="shadow mb-4">
                             <div class="small-box bg-white">
                                 <div class="inner Card1div">
-                                    <strong class="CardFontColor">Contract Renewal</strong>
+                                    <strong class="CardFontColor">Vacation</strong>
                                     <h4 class="CardCountFontColor">
-                                        @ViewBag.ContractRenewwalCount
+                                       0 @ViewBag.ApplicantCount
                                     </h4>
                                 </div>
                                 <div class="icon">
@@ -148,33 +58,50 @@
                         </div>
                     </a>
                 </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="LeaveBalance" asp-action="Index">
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <a asp-controller="Applicant" asp-action="Index">
                         <div class="shadow mb-4">
                             <div class="small-box bg-white">
                                 <div class="inner Card1div">
-                                    <strong class="CardFontColor">Leaves Balance</strong>
+                                    <strong class="CardFontColor">OverTime</strong>
                                     <h4 class="CardCountFontColor">
-                                        0
+                                       0 @ViewBag.ApplicantCount
                                     </h4>
                                 </div>
                                 <div class="icon">
-                                    <i class="fa fa-print Card1I" aria-hidden="true"></i>
+                                    <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
                                 </div>
                                 <div class="small-box-footer Card1A"></div>
                             </div>
                         </div>
                     </a>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="CardPrint" asp-action="Index">
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <a asp-controller="Applicant" asp-action="Index">
                         <div class="shadow mb-4">
                             <div class="small-box bg-white">
                                 <div class="inner Card1div">
-                                    <strong class="CardFontColor">Card Print</strong>
+                                    <strong class="CardFontColor">Deduction</strong>
                                     <h4 class="CardCountFontColor">
-                                        0
+                                       0 @ViewBag.ApplicantCount
+                                    </h4>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
+                                </div>
+                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <a asp-controller="Contract" asp-action="Index">
+                        <div class="shadow mb-4">
+                            <div class="small-box bg-white">
+                                <div class="inner Card1div">
+                                    <strong class="CardFontColor">Monthly Attendance</strong>
+                                    <h4 class="CardCountFontColor">
+                                       0 @ViewBag.ContractCount
                                     </h4>
                                 </div>
                                 <div class="icon">
@@ -185,6 +112,62 @@
                         </div>
                     </a>
                 </div>
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <a asp-controller="Contract" asp-action="Index">
+                        <div class="shadow mb-4">
+                            <div class="small-box bg-white">
+                                <div class="inner Card1div">
+                                    <strong class="CardFontColor">Daily TimeSheet</strong>
+                                    <h4 class="CardCountFontColor">
+                                       0 @ViewBag.ContractCount
+                                    </h4>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-book Card1I" aria-hidden="true"></i>
+                                </div>
+                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <a asp-controller="Salary" asp-action="Index">
+                        <div class="shadow mb-4">
+                            <div class="small-box bg-white">
+                                <div class="inner Card1div">
+                                    <strong class="CardFontColor">Salary Slip Print</strong>
+                                    <h4 class="CardCountFontColor">
+                                       0 @ViewBag.SalaryCount
+                                    </h4>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
+                                </div>
+                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <a asp-controller="Joining" asp-action="Index">
+                        <div class="shadow mb-4">
+                            <div class="small-box bg-white">
+                                <div class="inner Card1div">
+                                    <strong class="CardFontColor">Tax Deduction</strong>
+                                    <h4 class="CardCountFontColor">
+                                       0 @ViewBag.JoiningCount
+                                    </h4>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-print Card1I" aria-hidden="true"></i>
+                                </div>
+                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+            
             </div>
         </div>
     </div>

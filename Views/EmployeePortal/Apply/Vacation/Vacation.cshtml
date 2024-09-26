@@ -1,0 +1,215 @@
+@model IEnumerable<Exampler_ERP.Models.HR_Vacation>
+
+@{
+    Layout = "_EmployeeContentNavbarLayout";
+    ViewData["Title"] = "Apply - Vacations";
+}
+
+@section PageScripts {
+    <script>
+        $(document).ready(function () {
+            // Edit Vacation modal popup
+            $('.editVacationLink').click(function (e) {
+                e.preventDefault();
+                var VacationId = $(this).data('id');
+                $.get('@Url.Action("Edit", "Vacation")', { id: VacationId }, function (data) {
+                    $('#editVacationModalContainer').html(data);
+                    $('#editVacationModal').modal('show');
+                });
+            });
+            $('#editVacationModalContainer').on('click', '#saveVacationChanges', function () {
+                var formData = $('#editVacationForm').serialize();
+                $.post('@Url.Action("Edit", "Vacation")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        // Show validation errors
+                    }
+                });
+            });
+
+
+            // Add new Vacation modal popup
+            $('.addVacationLink').click(function () {
+                $.get('@Url.Action("Create", "Vacation")', function (data) {
+                    $('#addVacationModalContainer').html(data);
+                    $('#addVacationModal').modal('show');
+                });
+            });
+
+            // Save new Vacation form
+            $('#addVacationModalContainer').on('click', '#saveNewVacation', function () {
+                var formData = $('#addVacationForm').serialize();
+                $.post('@Url.Action("Create", "Vacation")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        // Show validation errors
+                    }
+                });
+            });
+
+            // Close Modal Add Contrainer
+            $('#addVacationModalContainer').on('click', '#Close', function () {
+                $('#addVacationModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editVacationModalContainer').on('click', '#Close', function () {
+                $('#editVacationModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Delete Vacation
+            $('.deleteVacationLink').click(function (e) {
+                e.preventDefault();
+                var VacationId = $(this).data('id');
+
+                // Show confirmation dialog
+                if (confirm('Are you sure you want to delete this Vacation?')) {
+                    $.post('@Url.Action("Delete", "Vacation")', { id: VacationId }, function (response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            // Handle errors
+                        }
+                    });
+                } else {
+                    // If user clicks 'No', do nothing
+                }
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+    </script>
+    <script>
+        function printVacations() {
+            var printWindow = window.open('@Url.Action("Print", "Vacation")', '_blank');
+            printWindow.focus();
+        }
+
+        function closeModal() {
+            $('.close').click(function () {
+                $('#addVacationModal').modal('hide');
+                $('#editVacationModal').modal('hide');
+            });
+        }
+    </script>
+}
+
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Apply /</span> Vacations
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Vacation List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-10 col-lg-8">
+                            <div class="row">
+                                <div class="col-4">
+                                    <p class="text-nowrap">Employee Name</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap">Vacation Type</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap">Date</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Total Days</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-2 col-lg-4">
+                            <div class="row">
+                                <div class="col-12 col-md-12 col-lg-4">
+                                    <p class="text-nowrap">Edit</p>
+                                </div>
+                                <div class="col-12 col-md-12 col-lg-4">
+                                    <p class="text-nowrap">Print</p>
+                                </div>
+                                <div class="col-12 col-md-12 col-lg-4">
+                                    <p class="text-nowrap">Delete</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-8 col-md-10 col-lg-8">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-3">
+                                        <p class="text-nowrap"><span class="smallAdd">Vacation Type : </span>@item.Settings_VacationType?.VacationTypeName</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-3">
+                                        <p class="text-nowrap"><span class="smallAdd">Date : </span>@item.Date.ToString("dd/MM/yyyy")</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Total Days : </span>@item.TotalDays</p>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-2 col-lg-4">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editVacationLink" data-id="@item.VacationID">
+                                                <i class="fa fa-pencil" style="font-size: x-large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="printVacationLink" data-id="@item.VacationID">
+                                                <i class="fa fa-print" style="font-size: x-large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="deleteVacationLink" data-id="@item.VacationID">
+                                                <i class="fa fa-trash-o" style="font-size: x-large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="mt-4">
+                        <button type="button" class="btn btn-primary addVacationLink">Add New</button>
+                        <!-- Example: Add buttons for exporting to Excel and printing -->
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Vacation")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printVacations()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editVacationModalContainer"></div>
+<div id="addVacationModalContainer"></div>

@@ -49,6 +49,7 @@ namespace Exampler_ERP.Models
     public DbSet<HR_WorkDay> HR_WorkDays { get; set; }
     public DbSet<HR_OverTime> HR_OverTimes { get; set; }
     public DbSet<HR_EndOfService> HR_EndOfServices { get; set; }
+    public DbSet<HR_Vacation> HR_Vacations { get; set; }
     public DbSet<Settings_EndOfServiceReasonType> Settings_EndOfServiceReasonTypes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -124,6 +125,7 @@ namespace Exampler_ERP.Models
  );
 
       modelBuilder.Entity<CR_User>().HasData(
+
       new CR_User()
       {
         UserID = 1,

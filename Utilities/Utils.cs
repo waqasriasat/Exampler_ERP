@@ -462,6 +462,20 @@ namespace Exampler_ERP.Utilities
 
       return deductionTypeList;
     }
+    public async Task<List<SelectListItem>> GetVacationTypes()
+    {
+      var vacationTypeList = await _appDBContext.Settings_VacationTypes
+          .Select(c => new SelectListItem
+          {
+            Value = c.VacationTypeID.ToString(),
+            Text = c.VacationTypeName
+          })
+          .ToListAsync();
+
+      vacationTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+
+      return vacationTypeList;
+    }
     public async Task<List<SelectListItem>> GetSalaryTypeList()
     {
       var SalaryTypeList = await _appDBContext.Settings_SalaryTypes
