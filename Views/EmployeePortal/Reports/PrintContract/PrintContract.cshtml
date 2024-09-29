@@ -123,7 +123,7 @@
         <div class="contract-section">
             <h3>Contract Information</h3>
             <p><strong>Start Date:</strong> @Model.StartDate.ToString("dd/MM/yyyy")</p>
-            <p><strong>End Date:</strong> @Model.EndDate?.ToString("dd/MM/yyyy") ?? "N/A"</p>
+            <p><strong>End Date:</strong> @Model.EndDate?.ToString("dd/MM/yyyy")</p>
             <p><strong>Contract Type:</strong> @Model.Settings_ContractType?.ContractTypeName</p>
         </div>
 
@@ -131,20 +131,31 @@
         <div class="contract-section">
             <h3>Terms & Conditions</h3>
             <ul class="terms-list">
-               
-                    <li>The employee agrees to abide by the company rules.</li>
-             <li>The employee will be subject to a probation period of 3 months.</li>
-              <li>The contract can be terminated with a 30-day notice by either party.</li>
+
+                <ol class="terms-list">
+                    <li>The employee agrees to abide by all company rules and regulations as outlined in the employee handbook.</li>
+                    <li>The employee will undergo a probation period of 3 months, during which performance will be evaluated.</li>
+                    <li>Either party can terminate the contract with a 30-day written notice.</li>
+                    <li>The employee is expected to maintain confidentiality regarding company information and sensitive data.</li>
+                    <li>The working hours are from 9:00 AM to 6:00 PM, Monday through Friday, with the possibility of overtime when required.</li>
+                    <li>Any intellectual property created during the course of employment remains the property of the company.</li>
+                    <li>The employee is entitled to annual leave, public holidays, and sick leave as per company policy.</li>
+                    <li>Salary revisions will be conducted annually based on performance and market conditions.</li>
+                    <li>In case of violation of company policies, disciplinary action, including termination, may be taken as deemed necessary.</li>
+                    <li>Any changes to the contract must be mutually agreed upon by both the employee and employer in writing.</li>
+                </ol>
             </ul>
         </div>
-
+        <br />
+        <br />
+        <br />
         <!-- Signatures Section -->
         <div class="signature-section">
             <div>
                 <p>Employee Signature</p>
             </div>
             <div>
-                <p>Employer Signature</p>
+                <p>Chief Executive Officer</p>
             </div>
         </div>
     </div>
