@@ -1,0 +1,264 @@
+@model IEnumerable<Exampler_ERP.Models.HR_DocumentUpload>
+
+@{
+    Layout = "_EmployeeContentNavbarLayout";
+    ViewData["Title"] = "Apply - DocumentUploads";
+}
+
+@section PageScripts {
+    <script>
+        $(document).ready(function () {
+            // Edit DocumentUpload modal popup
+            $('.editDocumentUploadLink').click(function (e) {
+                e.preventDefault();
+                var DocumentUploadId = $(this).data('id');
+                $.get('@Url.Action("Edit", "DocumentUpload")', { id: DocumentUploadId }, function (data) {
+                    $('#editDocumentUploadModalContainer').html(data);
+                    $('#editDocumentUploadModal').modal('show');
+                });
+            });
+
+
+            $('#editDocumentUploadModalContainer').on('click', '#saveDocumentUploadChanges', function (e) {
+                e.preventDefault();  // Prevent default form submission
+
+                var form = $('#editDocumentUploadForm')[0];  // Get the form element
+                var formData = new FormData(form);  // Create FormData object
+
+                $.ajax({
+                    url: '@Url.Action("Edit", "DocumentUpload")',  // URL to submit the form data
+                    type: 'POST',
+                    data: formData,  // Pass the FormData object
+                    contentType: false,  // Tell jQuery not to process the data
+                    processData: false,  // Tell jQuery not to set contentType
+                    success: function (response) {
+                        if (response.success) {
+                            // Hide the modal only on success
+                            $('#editDocumentUploadModal').modal('hide');
+                            // Optionally reload the page to reflect changes
+                            location.reload();
+                        } else {
+                            // Show errors in the modal
+                            let errorMessages = response.errors.join('<br>');
+                            $('#successMessage').removeClass('alert-success').addClass('alert-danger').html(errorMessages).show();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                        alert('An error occurred while uploading the document.');
+                    }
+                });
+            });
+
+            // Add new DocumentUpload modal popup
+            $('.addDocumentUploadLink').click(function () {
+                $.get('@Url.Action("Create", "DocumentUpload")', function (data) {
+                    $('#addDocumentUploadModalContainer').html(data);
+                    $('#addDocumentUploadModal').modal('show');
+                });
+            });
+
+            $('#addDocumentUploadModalContainer').on('click', '#saveDocumentUploadNew', function (e) {
+                e.preventDefault();  // Prevent default form submission
+
+                var form = $('#addDocumentUploadForm')[0];  // Get the form element
+                var formData = new FormData(form);  // Create FormData object
+
+                $.ajax({
+                    url: '@Url.Action("Create", "DocumentUpload")',  // URL to submit the form data
+                    type: 'POST',
+                    data: formData,  // Pass the FormData object
+                    contentType: false,  // Tell jQuery not to process the data
+                    processData: false,  // Tell jQuery not to set contentType
+                    success: function (response) {
+                        if (response.success) {
+                            // Hide the modal only on success
+                            $('#addDocumentUploadModal').modal('hide');
+                            // Optionally reload the page to reflect changes
+                            location.reload();
+                        } else {
+                            // Show errors in the modal
+                            let errorMessages = response.errors.join('<br>');
+                            $('#successMessage').removeClass('alert-success').addClass('alert-danger').html(errorMessages).show();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                        alert('An error occurred while uploading the document.');
+                    }
+                });
+            });
+
+
+            // Close Modal Add Contrainer
+            $('#addDocumentUploadModalContainer').on('click', '#Close', function () {
+                $('#addDocumentUploadModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editDocumentUploadModalContainer').on('click', '#Close', function () {
+                $('#editDocumentUploadModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Delete DocumentUpload
+            $('.deleteDocumentUploadLink').click(function (e) {
+                e.preventDefault();
+                var DocumentUploadId = $(this).data('id');
+
+                // Show confirmation dialog
+                if (confirm('Are you sure you want to delete this DocumentUpload?')) {
+                    $.post('@Url.Action("Delete", "DocumentUpload")', { id: DocumentUploadId }, function (response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            // Handle errors
+                        }
+                    });
+                } else {
+                    // If user clicks 'No', do nothing
+                }
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+    </script>
+    <script>
+        function printDocumentUploads() {
+            var printWindow = window.open('@Url.Action("Print", "DocumentUpload")', '_blank');
+            printWindow.focus();
+        }
+
+        function closeModal() {
+            $('.close').click(function () {
+                $('#addDocumentUploadModal').modal('hide');
+                $('#editDocumentUploadModal').modal('hide');
+            });
+        }
+    </script>
+}
+
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Apply /</span> DocumentUploads
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Document Upload List</h5>
+                <button type="button" class="btn btn-primary addDocumentUploadLink">
+                    <i class="fa fa-plus me-1"></i> Add New
+                </button>
+        </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader" >
+                    <div class="row">
+                        <div class="col-10 col-md-10 col-lg-8">
+                            <div class="row">
+                                <div class="col-3">
+                                    <p class="text-nowrap">Employee Name</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap">Document Name</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap">Date</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap">Description</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-2 col-lg-4">
+                            <div class="row">
+                            <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
+                                    <p class="text-nowrap">Edit</p>
+                                </div>
+                                <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
+                                    <p class="text-nowrap">Download</p>
+                                </div>
+                                <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
+                                    <p class="text-nowrap">Print</p>
+                                </div>
+                            <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
+                                    <p class="text-nowrap">Delete</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-8 col-md-10 col-lg-8">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-3">
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-3">
+                                        <p class="text-nowrap"><span class="smallAdd">Document Name : </span>@item.DocumentName</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-3">
+                                        <p class="text-nowrap"><span class="smallAdd">Date : </span>@item.Date.ToString("dd/MM/yyyy")</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-3">
+                                        <p class="text-nowrap"><span class="smallAdd">Description : </span>@item.Description</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-2 col-lg-4">
+                                <div class="row">
+                                <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editDocumentUploadLink" data-id="@item.DocumentUploadID">
+                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="@Url.Action("DownloadDocument", "DocumentUpload", new { id = @item.DocumentUploadID })" class="btn btn-sm me-2" title="Download Document">
+                                                <i class="fa fa-download" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="@Url.Action("ViewDocument", "DocumentUpload", new { id = @item.DocumentUploadID })" target="_blank" class="btn btn-sm" title="View Document">
+                                                <i class="fa fa-eye" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="deleteDocumentUploadLink" data-id="@item.DocumentUploadID">
+                                                <i class="fa fa-trash-o" style="font-size: large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+     
+            <div class="card-body">
+                <div class="row">
+                    <div class="mt-4">
+                        <button type="button" class="btn btn-primary addDocumentUploadLink">Add New</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editDocumentUploadModalContainer"></div>
+<div id="addDocumentUploadModalContainer"></div>

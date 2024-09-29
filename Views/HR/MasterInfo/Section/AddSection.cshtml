@@ -1,33 +1,35 @@
 @model Exampler_ERP.Models.Settings_Section
 
 <div class="modal fade" id="addSectionModal" tabindex="-1" role="dialog" aria-labelledby="addSectionModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addSectionModalLabel">Add New Section</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
-                    x
-                </button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="addSectionModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Add New Section
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div class="modal-body">
                 <form id="addSectionForm">
                     <div class="row">
                         <div class="col-6">
-                            <label asp-for="DepartmentID" class="control-label">Select Department</label>
-                            <select asp-for="DepartmentID" asp-items="@(new SelectList(ViewBag.DepartmentList, "Value", "Text", Model.DepartmentID))" class="form-control">
+                            <label asp-for="DepartmentID" class="form-label fw-bold">Select Department</label>
+                            <select asp-for="DepartmentID" asp-items="@(new SelectList(ViewBag.DepartmentList, "Value", "Text", Model.DepartmentID))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="DepartmentID" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="ActiveYNID">Active</label>
-                            <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control">
+                            <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
+                            <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
                                 <option>Please select</option>
                             </select>
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                         </div>
                         <div class="col-12">
-                            <label for="SectionName">Section Name</label>
-                            <input type="text" class="form-control" id="SectionName" name="SectionName" value="@Model.SectionName" />
+                            <label for="SectionName" class="form-label fw-bold">Section Name</label>
+                            <input type="text" class="form-control form-control-lg" id="SectionName" name="SectionName" value="@Model.SectionName" />
                         </div>
 
                     </div>
@@ -35,7 +37,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-primary" id="saveNewSection">Save</button>
+                <button type="button" class="btn btn-success" id="saveNewSection">Save</button>
             </div>
         </div>
     </div>

@@ -1,19 +1,19 @@
 @model Exampler_ERP.Models.HR_ContractRenewal
 
-<input type="hidden" asp-for="ContractID" class="form-control" />
-<input type="hidden" asp-for="ContractRenewalID" class="form-control" />
+<input type="hidden" asp-for="ContractID" class="form-control form-control-lg" />
+<input type="hidden" asp-for="ContractRenewalID" class="form-control form-control-lg" />
 
 <hr />
 
 <div class="row">
     <div class="col-6">
-        <label asp-for="PStartDate" class="control-label">Previous Start Date</label>
-        <input asp-for="PStartDate" class="form-control" type="date" readonly style="background-color:#eceef1" />
+        <label asp-for="PStartDate" class="form-label fw-bold">Previous Start Date</label>
+        <input asp-for="PStartDate" class="form-control form-control-lg" type="date" readonly style="background-color:#eceef1" />
         <span asp-validation-for="PStartDate" class="text-danger"></span>
     </div>
     <div class="col-6">
-        <label asp-for="PEndDate" class="control-label">Previous End Date</label>
-        <input asp-for="PEndDate" class="form-control" type="date" readonly style="background-color:#eceef1" />
+        <label asp-for="PEndDate" class="form-label fw-bold">Previous End Date</label>
+        <input asp-for="PEndDate" class="form-control form-control-lg" type="date" readonly style="background-color:#eceef1" />
         <span asp-validation-for="PEndDate" class="text-danger"></span>
     </div>
 </div>
@@ -22,7 +22,7 @@
 <div class="row">
     <div class="col-6">
         <label for="Month">Month</label>
-        <select id="Month" class="form-control">
+        <select id="Month" class="form-control form-control-lg">
             @for (int i = 0; i <= 12; i++)
             {
                 <option value="@i">@i</option>
@@ -31,7 +31,7 @@
     </div>
     <div class="col-6">
         <label for="Year">Year</label>
-        <select id="Year" class="form-control">
+        <select id="Year" class="form-control form-control-lg">
             @for (int i = 0; i <= 9; i++)
             {
                 <option value="@i">@i</option>
@@ -42,13 +42,13 @@
 
 <div class="row">
     <div class="col-6">
-        <label asp-for="NStartDate" class="control-label">New Start Date</label>
-        <input asp-for="NStartDate" class="form-control" type="date" readonly style="background-color:#eceef1" />
+        <label asp-for="NStartDate" class="form-label fw-bold">New Start Date</label>
+        <input asp-for="NStartDate" class="form-control form-control-lg" type="date" readonly style="background-color:#eceef1" />
         <span asp-validation-for="NStartDate" class="text-danger"></span>
     </div>
     <div class="col-6">
-        <label asp-for="NEndDate" class="control-label">New End Date</label>
-        <input asp-for="NEndDate" class="form-control" type="date" readonly style="background-color:#eceef1" />
+        <label asp-for="NEndDate" class="form-label fw-bold">New End Date</label>
+        <input asp-for="NEndDate" class="form-control form-control-lg" type="date" readonly style="background-color:#eceef1" />
         <span asp-validation-for="NEndDate" class="text-danger"></span>
     </div>
 </div>

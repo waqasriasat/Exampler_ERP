@@ -490,5 +490,19 @@ namespace Exampler_ERP.Utilities
 
       return SalaryTypeList;
     }
+    public async Task<List<SelectListItem>> GetEmployeeRequestTypes()
+    {
+      var EmployeeRequestTypeList = await _appDBContext.Settings_EmployeeRequestTypes
+          .Select(d => new SelectListItem
+          {
+            Value = d.EmployeeRequestTypeID.ToString(),
+            Text = d.EmployeeRequestTypeName
+          })
+          .ToListAsync();
+
+      EmployeeRequestTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+
+      return EmployeeRequestTypeList;
+    }
   }
 }

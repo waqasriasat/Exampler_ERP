@@ -1,48 +1,48 @@
 @model Exampler_ERP.Models.HR_EndOfService
 
 <h5 class="modal-title" style="padding-top:10px">End Of Service Details</h5>
-<input type="hidden" asp-for="EndOfServiceID" class="form-control" />
+<input type="hidden" asp-for="EndOfServiceID" class="form-control form-control-lg" />
 <hr />
 <div class="row">
     <div class="col-12">
         <div class="row">
             <div class="col-12">
-                <label asp-for="EmployeeID" class="control-label">Employee Name</label>
-                <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control" disabled>
+                <label asp-for="EmployeeID" class="form-label fw-bold">Employee Name</label>
+                <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control form-control-lg" disabled>
                 </select>
                 <span asp-validation-for="EmployeeID" class="text-danger"></span>
             </div>
         </div>
         <div class="row">
             <div class="col-6">
-                <label>Contract Type</label>
-                <input type="text" id="ContractType" class="form-control readonly-background" readonly />
+                <label class ="form-label fw-bold">Contract Type</label>
+                <input type="text" id="ContractType" class="form-control form-control-lg readonly-background" readonly />
             </div>
             <div class="col-6">
-                <label asp-for="EndOfSerivceReasonTypeId" class="control-label">Reason Type</label>
-                <select asp-for="EndOfSerivceReasonTypeId" asp-items="@(new SelectList(ViewBag.EndOfServiceReasonTypesList, "Value", "Text"))" class="form-control" id="EndOfSerivceReasonTypeId">
+                <label asp-for="EndOfSerivceReasonTypeId" class="form-label fw-bold">Reason Type</label>
+                <select asp-for="EndOfSerivceReasonTypeId" asp-items="@(new SelectList(ViewBag.EndOfServiceReasonTypesList, "Value", "Text"))" class="form-control form-control-lg" id="EndOfSerivceReasonTypeId">
                 </select>
                 <span asp-validation-for="EndOfSerivceReasonTypeId" class="text-danger"></span>
             </div>
         </div>
         <div class="row">
             <div class="col-6">
-                <label>Total Salary</label>
-                <input type="text" id="Salary" class="form-control readonly-background" readonly />
+                <label class="form-label fw-bold">Total Salary</label>
+                <input type="text" id="Salary" class="form-control form-control-lg readonly-background" readonly />
             </div>
             <div class="col-6">
-                <label>Total Day Of Absent</label>
-                <input type="text" id="TotalDayOfAbsent" class="form-control readonly-background" readonly />
+                <label class="form-label fw-bold">Total Day Of Absent</label>
+                <input type="text" id="TotalDayOfAbsent" class="form-control form-control-lg readonly-background" readonly />
             </div>
         </div>
         <div class="row">
             <div class="col-6">
-                <label>Date Of Commencement</label>
-                <input type="text" id="DateOfCommencement" class="form-control readonly-background" readonly />
+                <label class="form-label fw-bold">Date Of Commencement</label>
+                <input type="text" id="DateOfCommencement" class="form-control form-control-lg readonly-background" readonly />
             </div>
             <div class="col-6">
-                <label asp-for="DateOfCompletionOfWork" class="control-label">Date Of Completion Of Work</label>
-                <input asp-for="DateOfCompletionOfWork" class="form-control" type="date" />
+                <label asp-for="DateOfCompletionOfWork" class="form-label fw-bold">Date Of Completion Of Work</label>
+                <input asp-for="DateOfCompletionOfWork" class="form-control form-control-lg" type="date" />
                 <span asp-validation-for="DateOfCompletionOfWork" class="text-danger"></span>
             </div>
         </div>
@@ -50,29 +50,29 @@
             <div class="col-6 colcliedgroup">
                 <div class="row">
                     <div class="col-12">
-                        <label asp-for="NumberofYears" class="control-label">Number of Years</label>
-                        <input asp-for="NumberofYears" class="form-control readonly-background" type="number" />
+                        <label asp-for="NumberofYears" class="form-label fw-bold">Number of Years</label>
+                        <input asp-for="NumberofYears" class="form-control form-control-lg readonly-background" type="number" />
                         <span asp-validation-for="NumberofYears" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <label asp-for="NumberofMonths" class="control-label">Number of Months</label>
-                        <input asp-for="NumberofMonths" class="form-control readonly-background" type="number" />
+                        <label asp-for="NumberofMonths" class="form-label fw-bold">Number of Months</label>
+                        <input asp-for="NumberofMonths" class="form-control form-control-lg readonly-background" type="number" />
                         <span asp-validation-for="NumberofMonths" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <label asp-for="NumberofDays" class="control-label">Number of Days</label>
-                        <input asp-for="NumberofDays" class="form-control readonly-background" type="number" />
+                        <label asp-for="NumberofDays" class="form-label fw-bold">Number of Days</label>
+                        <input asp-for="NumberofDays" class="form-control form-control-lg readonly-background" type="number" />
                         <span asp-validation-for="NumberofDays" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <label asp-for="TotalDays" class="control-label">Total Days</label>
-                        <input asp-for="TotalDays" class="form-control readonly-background" type="number" />
+                        <label asp-for="TotalDays" class="form-label fw-bold">Total Days</label>
+                        <input asp-for="TotalDays" class="form-control form-control-lg readonly-background" type="number" />
                         <span asp-validation-for="TotalDays" class="text-danger"></span>
                     </div>
                 </div>
@@ -80,29 +80,29 @@
             <div class="col-6 colcliedgroup">
                 <div class="row">
                     <div class="col-12">
-                        <label asp-for="EndofServiceBenefit" class="control-label">End of Service Benefit</label>
-                        <input asp-for="EndofServiceBenefit" class="form-control readonly-background" type="number" />
+                        <label asp-for="EndofServiceBenefit" class="form-label fw-bold">End of Service Benefit</label>
+                        <input asp-for="EndofServiceBenefit" class="form-control form-control-lg readonly-background" type="number" />
                         <span asp-validation-for="EndofServiceBenefit" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <label asp-for="BalanceOfTheAnnualLeave" class="control-label">Balance Of The Annual Leave</label>
-                        <input asp-for="BalanceOfTheAnnualLeave" class="form-control readonly-background" type="number" />
+                        <label asp-for="BalanceOfTheAnnualLeave" class="form-label fw-bold">Balance Of The Annual Leave</label>
+                        <input asp-for="BalanceOfTheAnnualLeave" class="form-control form-control-lg readonly-background" type="number" />
                         <span asp-validation-for="BalanceOfTheAnnualLeave" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <label asp-for="AmountDueForTheLeave" class="control-label">Amount Dues For The Leave</label>
-                        <input asp-for="AmountDueForTheLeave" class="form-control readonly-background" type="number" />
+                        <label asp-for="AmountDueForTheLeave" class="form-label fw-bold">Amount Dues For The Leave</label>
+                        <input asp-for="AmountDueForTheLeave" class="form-control form-control-lg readonly-background" type="number" />
                         <span asp-validation-for="AmountDueForTheLeave" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <label asp-for="TotalEndOfServiceDues" class="control-label">Total End Of Service Dues</label>
-                        <input asp-for="TotalEndOfServiceDues" class="form-control readonly-background" type="number" />
+                        <label asp-for="TotalEndOfServiceDues" class="form-label fw-bold">Total End Of Service Dues</label>
+                        <input asp-for="TotalEndOfServiceDues" class="form-control form-control-lg readonly-background" type="number" />
                         <span asp-validation-for="TotalEndOfServiceDues" class="text-danger"></span>
                     </div>
                 </div>

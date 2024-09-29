@@ -1,13 +1,15 @@
 @model Exampler_ERP.Models.HR_Employee
 
 <div class="modal fade" id="editEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="editEmployeeModalLabel" aria-hidden="true" style="--bs-modal-width: 60rem;">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editEmployeeModalLabel">Edit Employee</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
-                    x
-                </button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editEmployeeModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit Employee
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div class="modal-body">
                 <form id="editEmployeeForm" method="post" asp-action="Edit" asp-controller="Employee" enctype="multipart/form-data">
@@ -16,7 +18,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-primary" id="saveEmployeeChanges">Save Changes</button>
+                <button type="button" class="btn btn-success" id="saveEmployeeChanges">Save Changes</button>
             </div>
         </div>
     </div>

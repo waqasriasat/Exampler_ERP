@@ -1,13 +1,15 @@
 @model Exampler_ERP.Models.HR_Deduction
 
 <div class="modal fade" id="editDeductionModal" tabindex="-1" role="dialog" aria-labelledby="editDeductionModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editDeductionModalLabel">Edit Deduction</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editDeductionModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit Deduction
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div class="modal-body">
                 <form id="editDeductionForm">
@@ -17,48 +19,48 @@
                         <div class="col-12">
                             <div class="row">
                                 <div class="col-12">
-                                    <label asp-for="EmployeeID" class="control-label">Employee Name</label>
-                                    <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control" disabled>
+                                    <label asp-for="EmployeeID" class="form-label fw-bold">Employee Name</label>
+                                    <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control form-control-lg" disabled>
                                     </select>
                                     <span asp-validation-for="EmployeeID" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <label asp-for="DeductionTypeID" class="control-label">Deduction Type</label>
-                                    <select asp-for="DeductionTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypesList, "Value", "Text"))" class="form-control" id="DeductionTypeSelect">
+                                    <label asp-for="DeductionTypeID" class="form-label fw-bold">Deduction Type</label>
+                                    <select asp-for="DeductionTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypesList, "Value", "Text"))" class="form-control form-control-lg" id="DeductionTypeSelect">
                                     </select>
                                     <span asp-validation-for="DeductionTypeID" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <label asp-for="FromDate" class="control-label">From Date</label>
+                                    <label asp-for="FromDate" class="form-label fw-bold">From Date</label>
                                     <input asp-for="FromDate" class="form-control date-placeholder" type="date" id="FromDateInput" placeholder="mm/dd/yyyy" />
                                     <span asp-validation-for="FromDate" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="ToDate" class="control-label">To Date</label>
+                                    <label asp-for="ToDate" class="form-label fw-bold">To Date</label>
                                     <input asp-for="ToDate" class="form-control date-placeholder" type="date" id="ToDateInput" placeholder="mm/dd/yyyy" />
                                     <span asp-validation-for="ToDate" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <label asp-for="Month" class="control-label">Month</label>
-                                    <input asp-for="Month" class="form-control readonly-background" type="number" readonly id="MonthInput" />
+                                    <label asp-for="Month" class="form-label fw-bold">Month</label>
+                                    <input asp-for="Month" class="form-control form-control-lg readonly-background" type="number" readonly id="MonthInput" />
                                     <span asp-validation-for="Month" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="Year" class="control-label">Year</label>
-                                    <input asp-for="Year" class="form-control readonly-background" type="number" readonly id="YearInput" />
+                                    <label asp-for="Year" class="form-label fw-bold">Year</label>
+                                    <input asp-for="Year" class="form-control form-control-lg readonly-background" type="number" readonly id="YearInput" />
                                     <span asp-validation-for="Year" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <label asp-for="Days" class="control-label">Days</label>
-                                    <input asp-for="Days" class="form-control readonly-background" type="number" readonly id="DaysInput" />
+                                    <label asp-for="Days" class="form-label fw-bold">Days</label>
+                                    <input asp-for="Days" class="form-control form-control-lg readonly-background" type="number" readonly id="DaysInput" />
                                     <span asp-validation-for="Days" class="text-danger"></span>
                                 </div>
                             </div>
@@ -76,7 +78,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="Close" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="saveChanges" class="btn btn-primary">Save Changes</button>
+                <button type="button" id="saveChanges" class="btn btn-success">Save Changes</button>
             </div>
         </div>
     </div>

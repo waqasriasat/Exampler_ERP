@@ -929,18 +929,22 @@ a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:h
 }
 
 .GVHeader {
-    text-align-last: center;
-    font-weight: 700;
-    border-bottom-style: groove;
-    padding-top: 10px;
-    padding-bottom: 10px;
+
+  font-weight: 500;
+  border-bottom-style: groove;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 50px;
+  padding-left: 50px;
 }
 
 .GVDetail {
-    text-align-last: center;
-    border-bottom-style: ridge;
-    padding-top: 5px;
-    /*padding-bottom: 5px;*/
+  
+  border-bottom-style: ridge;
+  padding-top: 5px;
+  padding-right: 50px;
+  padding-left: 50px;
+  /*padding-bottom: 5px;*/
 }
 .GVDetailforApproval {
   border-bottom-style: ridge;
@@ -951,11 +955,13 @@ a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:h
     padding-left: 20px;
     padding-right: 20px
 }
-
+.text-nowrap {
+  white-space: normal !important;
+}
 .PosPrintControl {
-    border: none;
-    background: none;
-    -webkit-text-stroke-width: thin;
+  border: none;
+  background: none;
+  -webkit-text-stroke-width: thin;
 }
 
 .CloseButton {

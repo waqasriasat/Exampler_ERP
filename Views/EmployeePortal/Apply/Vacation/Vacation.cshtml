@@ -11,20 +11,22 @@
             // Edit Vacation modal popup
             $('.editVacationLink').click(function (e) {
                 e.preventDefault();
-                var VacationId = $(this).data('id');
+                var VacationId = $(this).data('id');  
                 $.get('@Url.Action("Edit", "Vacation")', { id: VacationId }, function (data) {
                     $('#editVacationModalContainer').html(data);
                     $('#editVacationModal').modal('show');
                 });
             });
+
+           
             $('#editVacationModalContainer').on('click', '#saveVacationChanges', function () {
                 var formData = $('#editVacationForm').serialize();
                 $.post('@Url.Action("Edit", "Vacation")', formData, function (response) {
                     if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
                         location.reload();
                     } else {
-                        // Show validation errors
+                        let errorMessages = response.errors.join('<br>');
+                        $('#successMessage').removeClass('alert-success').addClass('alert-danger').html(errorMessages).show();
                     }
                 });
             });
@@ -38,15 +40,14 @@
                 });
             });
 
-            // Save new Vacation form
             $('#addVacationModalContainer').on('click', '#saveNewVacation', function () {
                 var formData = $('#addVacationForm').serialize();
                 $.post('@Url.Action("Create", "Vacation")', formData, function (response) {
                     if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
                         location.reload();
                     } else {
-                        // Show validation errors
+                        let errorMessages = response.errors.join('<br>');
+                        $('#successMessage').removeClass('alert-success').addClass('alert-danger').html(errorMessages).show();
                     }
                 });
             });
@@ -171,21 +172,21 @@
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
                                             <a href="#" class="editVacationLink" data-id="@item.VacationID">
-                                                <i class="fa fa-pencil" style="font-size: x-large; color:steelblue; line-height: 2;"></i>
+                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
                                             <a href="#" class="printVacationLink" data-id="@item.VacationID">
-                                                <i class="fa fa-print" style="font-size: x-large; color:steelblue; line-height: 2;"></i>
+                                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
                                             <a href="#" class="deleteVacationLink" data-id="@item.VacationID">
-                                                <i class="fa fa-trash-o" style="font-size: x-large; color:maroon; line-height: 2;"></i>
+                                                <i class="fa fa-trash-o" style="font-size: large; color:maroon; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>

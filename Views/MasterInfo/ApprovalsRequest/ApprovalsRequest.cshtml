@@ -17,8 +17,6 @@
                     $('#approvalsProcessTypeApprovalModal').modal('show');
                 });
             });
-
-          
             // Close Modal approvals Contrainer
             $('#approvalsProcessTypeApprovalModalContainer').on('click', '#Close', function () {
                 $('#approvalsProcessTypeApprovalModal').modal('hide'); // Close the modal directly
@@ -34,8 +32,6 @@
                     $('#detailsProcessTypeApprovalModal').modal('show');
                 });
             });
-
-          
             // Close Modal details Contrainer
             $('#detailsProcessTypeApprovalModalContainer').on('click', '#Close', function () {
                 $('#detailsProcessTypeApprovalModal').modal('hide'); // Close the modal directly
@@ -75,7 +71,6 @@
                     }
                 });
             });
-
             $('#actionsProcessTypeApprovalModalContainer').on('click', '#Reject', function () {
                 var formData = $('#actionsProcessTypeApprovalForm').serialize();
                 $.post('@Url.Action("Reject", "ApprovalsRequest")', formData, function (response) {
@@ -87,7 +82,6 @@
                     }
                 });
             });
-
             // Close Modal actions Contrainer
             $('#actionsProcessTypeApprovalModalContainer').on('click', '#Close', function () {
                 $('#actionsProcessTypeApprovalModal').modal('hide'); // Close the modal directly
@@ -187,21 +181,21 @@
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
                                             <a href="#" class="approvalsProcessTypeApprovalLink" data-id="@item.ApprovalProcessID">
-                                                <i class="bx bx-book-open" style="font-size: x-large; color:steelblue; line-height: 2;"></i>
+                                                <i class="bx bx-book-open" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
                                             <a href="#" class="detailsProcessTypeApprovalLink" data-id="@item.ApprovalProcessID">
-                                                <i class="bx bx-detail" style="font-size: x-large; color:maroon; line-height: 2;"></i>
+                                                <i class="bx bx-detail" style="font-size: large; color:maroon; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
                                             <a href="#" class="actionsProcessTypeApprovalLink" data-id="@item.ApprovalProcessDetailID">
-                                                <i class="bx bx-bookmarks" style="font-size: x-large; color:maroon; line-height: 2;"></i>
+                                                <i class="bx bx-bookmarks" style="font-size: large; color:maroon; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>

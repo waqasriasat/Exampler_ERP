@@ -1,27 +1,30 @@
 @model Exampler_ERP.Models.Temp.DeductionSetupViewModel
 
 <div class="modal fade" id="editDeductionSetupModal" tabindex="-1" role="dialog" aria-labelledby="editDeductionSetupModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editDeductionSetupModalLabel">Edit DeductionSetup</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
-                    x
-                </button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editDeductionSetupModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit DeductionSetup
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div class="modal-body">
                 <form id="editDeductionSetupForm" method="post" asp-action="SaveChanges">
                     <input type="hidden" asp-for="DeductionTypeID" />
                     <div class="form-group">
-                        <label for="DeductionTypeID">DeductionType</label>
-                        <select asp-for="DeductionTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypes, "DeductionTypeID", "DeductionTypeName"))" class="form-control" disabled></select>
+                        <label for="DeductionTypeID" class="form-label fw-bold">DeductionType</label>
+                        <select asp-for="DeductionTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypes, "DeductionTypeID", "DeductionTypeName"))" class="form-control form-control-lg" disabled></select>
                     </div>
                     <div class="form-group">
-                        <label for="ClassID">Class</label>
-                        <select asp-for="ClassID" asp-items="@(new SelectList(ViewBag.ClassIDList, "Value", "Text"))" class="form-control"></select>
+                        <label for="ClassID" class="form-label fw-bold">Class</label>
+                        <select asp-for="ClassID" asp-items="@(new SelectList(ViewBag.ClassIDList, "Value", "Text"))" class="form-control form-control-lg"></select>
                     </div>
                     <div class="form-group">
-                        <label>Salary Type</label>
+                        <label class ="form-label fw-bold">
+                            Salary Type</labe>
                         @for (var i = 0; i < Model.SalaryTypeDeductions.Count; i++)
                         {
                             <div class="row">
@@ -32,12 +35,12 @@
                                                 <input type="hidden" name="SalaryTypeDeductions[@i].SalaryTypeID" value="@Model.SalaryTypeDeductions[i].SalaryTypeID" />
                                                 <input type="hidden" name="SalaryTypeDeductions[@i].SalaryTypeName" value="@Model.SalaryTypeDeductions[i].SalaryTypeName" />
                                                 <input class="form-check-input" type="checkbox" name="SalaryTypeDeductions[@i].IsSelected" value="true" @(Model.SalaryTypeDeductions[i].IsSelected ? "checked" : "") />
-                                                <label class="form-check-label">@Model.SalaryTypeDeductions[i].SalaryTypeName</label>
+                                                    <label class="form-check-label" class="form-label fw-bold">@Model.SalaryTypeDeductions[i].SalaryTypeName</label>
                                             </div>
                                         </div>
                                         <div class="col-5">
                                             <div class="form-group">
-                                                <select asp-for="@Model.SalaryTypeDeductions[i].DeductionValueID" asp-items="@(new SelectList(ViewBag.DeductionValueList, "Value", "Text"))" class="form-control"></select>
+                                                <select asp-for="@Model.SalaryTypeDeductions[i].DeductionValueID" asp-items="@(new SelectList(ViewBag.DeductionValueList, "Value", "Text"))" class="form-control form-control-lg"></select>
                                             </div>
                                         </div>
                                     </div>
@@ -49,7 +52,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="submit" class="btn btn-primary" id="saveChanges">Save changes</button>
+                <button type="submit" class="btn btn-success" id="saveChanges">Save changes</button>
             </div>
         </div>
     </div>

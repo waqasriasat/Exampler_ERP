@@ -1,28 +1,30 @@
 @model List<Exampler_ERP.Models.HR_Joining>
 
 <div class="modal fade" id="editJoiningModal" tabindex="-1" role="dialog" aria-labelledby="editJoiningModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editJoiningModalLabel">Edit Joining</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
-                    x
-                </button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editJoiningModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit Joining
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div class="modal-body">
                 <form id="editJoiningForm">
                     <div class="row">
                         <div class="col-12 mb-2">
                             <div class="form-group">
-                                <label for="EmployeeName">Employee Name</label>
-                                <input type="text" class="form-control" id="EmployeeName" value="@Model.FirstOrDefault()?.Employee?.FirstName @Model.FirstOrDefault()?.Employee?.FatherName @Model.FirstOrDefault()?.Employee?.FamilyName" disabled />
+                                <label for="EmployeeName" class="form-label fw-bold">Employee Name</label>
+                                <input type="text" class="form-control form-control-lg" id="EmployeeName" value="@Model.FirstOrDefault()?.Employee?.FirstName @Model.FirstOrDefault()?.Employee?.FatherName @Model.FirstOrDefault()?.Employee?.FamilyName" disabled />
                                 <input type="hidden" name="EmployeeID" id="EmployeeID" value="@Model.FirstOrDefault()?.Employee?.EmployeeID" />
                             </div>
                         </div>
                         <div class="col-12 mb-2">
                             <div class="form-group">
-                                <label for="JoiningDate">Joining Date</label>
-                                <input type="date" class="form-control" id="JoiningDate" name="JoiningDate" value="@Model.FirstOrDefault()?.JoiningDate.ToString("yyyy-MM-dd")" />
+                                <label for="JoiningDate" class="form-label fw-bold">Joining Date</label>
+                                <input type="date" class="form-control form-control-lg" id="JoiningDate" name="JoiningDate" value="@Model.FirstOrDefault()?.JoiningDate.ToString("yyyy-MM-dd")" />
                             </div>
                         </div>
                     </div>
@@ -30,7 +32,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="submit" class="btn btn-primary" id="saveChanges">Save changes</button>
+                <button type="submit" class="btn btn-success" id="saveChanges">Save changes</button>
             </div>
         </div>
     </div>

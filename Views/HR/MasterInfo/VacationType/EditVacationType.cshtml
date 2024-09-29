@@ -1,13 +1,15 @@
 @model Exampler_ERP.Models.Settings_VacationType
 
 <div class="modal fade" id="editVacationTypeModal" tabindex="-1" role="dialog" aria-labelledby="editVacationTypeModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editVacationTypeModalLabel">Edit VacationType</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
-                    x
-                </button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editVacationTypeModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit VacationType
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div class="modal-body">
                 <form id="editVacationTypeForm">
@@ -15,12 +17,12 @@
                         <div class="col-2 col-md-12 col-lg-12">
                             <div class="row">
                                 <div class="col-12 col-md-12 col-lg-12">
-                                    <label for="VacationTypeName">VacationType Name</label>
-                                    <input type="text" class="form-control" id="VacationTypeName" name="VacationTypeName" value="@Model.VacationTypeName" />
+                                    <label for="VacationTypeName" class="form-label fw-bold">VacationType Name</label>
+                                    <input type="text" class="form-control form-control-lg" id="VacationTypeName" name="VacationTypeName" value="@Model.VacationTypeName" />
                                 </div>
                                 <div class="col-12 col-md-6 col-lg-6">
-                                    <label asp-for="ActiveYNID">Active</label>
-                                    <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text", Model.ActiveYNID))" class="form-control">
+                                    <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
+                                    <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text", Model.ActiveYNID))" class="form-control form-control-lg">
                                     </select>
                                     <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                                 </div>
@@ -33,7 +35,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+                <button type="button" class="btn btn-success" id="saveChanges">Save changes</button>
             </div>
         </div>
     </div>

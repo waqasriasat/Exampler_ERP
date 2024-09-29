@@ -340,13 +340,44 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 11)
           {
+            var vacation = await _appDBContext.HR_Vacations
+                                                     .Where(u => u.VacationID == transactionID)
+                                                     .FirstOrDefaultAsync();
 
+
+            if (vacation != null)
+            {
+              vacation.FinalApprovalID = 1;
+              vacation.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(vacation);
+              await _appDBContext.SaveChangesAsync();
+            }
           }
           if (ProcessTypeID == 12)
           {
 
           }
+          if (ProcessTypeID == 13)
+          {
 
+          }
+          if (ProcessTypeID == 14)
+          {
+            var EmployeeRequest = await _appDBContext.HR_EmployeeRequests
+                                                     .Where(u => u.EmployeeRequestID == transactionID)
+                                                     .FirstOrDefaultAsync();
+
+
+            if (EmployeeRequest != null)
+            {
+              EmployeeRequest.FinalApprovalID = 1;
+              EmployeeRequest.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(EmployeeRequest);
+              await _appDBContext.SaveChangesAsync();
+            }
+          }
         }
         return Json(new { success = true });
       }
@@ -495,11 +526,43 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 11)
           {
+            var vacation = await _appDBContext.HR_Vacations
+                                                     .Where(u => u.VacationID == transactionID)
+                                                     .FirstOrDefaultAsync();
 
+
+            if (vacation != null)
+            {
+              vacation.FinalApprovalID = 1;
+              vacation.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(vacation);
+              await _appDBContext.SaveChangesAsync();
+            }
           }
           if (ProcessTypeID == 12)
           {
 
+          }
+          if (ProcessTypeID == 13)
+          {
+
+          }
+          if (ProcessTypeID == 14)
+          {
+            var EmployeeRequest = await _appDBContext.HR_EmployeeRequests
+                                                     .Where(u => u.EmployeeRequestID == transactionID)
+                                                     .FirstOrDefaultAsync();
+
+
+            if (EmployeeRequest != null)
+            {
+              EmployeeRequest.FinalApprovalID = 2;
+              EmployeeRequest.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(EmployeeRequest);
+              await _appDBContext.SaveChangesAsync();
+            }
           }
         }
         return Json(new { success = true });
@@ -641,11 +704,32 @@ namespace Exampler_ERP.Controllers.MasterInfo
       }
       if (processTypeID == 11)
       {
+        ViewBag.VacationTypeList = await _utils.GetVacationTypes();
+        var vacations = await _appDBContext.HR_Vacations
+        .Where(v => v.VacationID == transactionID)
+                                     .Include(c => c.Employee)
+                                      .Include(c => c.Settings_VacationType)
+                                     .FirstOrDefaultAsync();
 
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", vacations);
       }
       if (processTypeID == 12)
       {
 
+      }
+      if (processTypeID == 13)
+      {
+
+      }
+      if (processTypeID == 14)
+      {
+        ViewBag.EmployeeRequestTypeList = await _utils.GetEmployeeRequestTypes();
+        var EmployeeRequests = await _appDBContext.HR_EmployeeRequests
+        .Where(v => v.EmployeeRequestID == transactionID)
+                                     .Include(c => c.Employee)
+                                      .Include(c => c.Settings_EmployeeRequestType)
+                                     .FirstOrDefaultAsync();
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", EmployeeRequests);
       }
       // Fallback view if no ProcessTypeID matches
       return View("~/Views/MasterInfo/ApprovalsRequest/ApprovalsRequest.cshtml", result);

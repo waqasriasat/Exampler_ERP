@@ -1,13 +1,15 @@
 @model Exampler_ERP.Models.HR_EndOfService
 
 <div class="modal fade" id="editEndOfServiceModal" tabindex="-1" role="dialog" aria-labelledby="editEndOfServiceModalLabel" aria-hidden="true" style="--bs-modal-width: 60rem;">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editEndOfServiceModalLabel">Edit End Of Service</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
-                    x
-                </button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editEndOfServiceModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit End Of Service
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div class="modal-body">
                 <form id="editEndOfServiceForm" method="post" asp-action="Edit" asp-controller="EndOfService" enctype="multipart/form-data">
@@ -16,7 +18,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-primary" id="saveEndOfServiceChanges">Save</button>
+                <button type="button" class="btn btn-success" id="saveEndOfServiceChanges">Save</button>
             </div>
         </div>
     </div>

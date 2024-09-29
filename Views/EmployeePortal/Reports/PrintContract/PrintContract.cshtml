@@ -1,0 +1,156 @@
+@model Exampler_ERP.Models.HR_Contract
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Contract</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .contract-container {
+            margin: 0 auto;
+            padding: 30px;
+            border: 1px solid #ddd;
+            width: 80%;
+            background-color: #fff;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .contract-header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 20px;
+        }
+        .contract-header img {
+            width: 150px;
+            margin-bottom: 10px;
+        }
+        .contract-header h1 {
+            font-size: 28px;
+            margin: 0;
+            color: #333;
+        }
+        .contract-header p {
+            font-size: 14px;
+            color: #777;
+        }
+        .contract-section {
+            margin-bottom: 30px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .contract-section h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #333;
+            border-left: 4px solid #007bff;
+            padding-left: 10px;
+        }
+        .contract-section p {
+            margin: 5px 0;
+            font-size: 16px;
+            color: #555;
+        }
+        .terms-list {
+            margin-top: 15px;
+            padding-left: 20px;
+        }
+        .terms-list li {
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #444;
+        }
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+        .signature-section div {
+            width: 40%;
+            text-align: center;
+            padding-top: 10px;
+            border-top: 2px solid #333;
+            font-size: 16px;
+            color: #333;
+        }
+        .no-print {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .no-print button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .no-print button:hover {
+            background-color: #0056b3;
+        }
+        
+      
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="contract-container">
+        <!-- Contract Header -->
+        <div class="contract-header">
+            <img src="~/img/favicon/SideLogoWithName.png" alt="Company Logo" />
+            <h1>Contract Agreement</h1>
+            <p><strong>Contract Number:</strong> @Model.ContractID</p>
+            <p><strong>Date:</strong> @Model.StartDate.ToString("dd/MM/yyyy")</p>
+        </div>
+
+        <!-- Contract Details -->
+        <div class="contract-section">
+            <h3>Employee Details</h3>
+            <p><strong>Name:</strong> @Model.Employee?.FirstName @Model.Employee?.FatherName @Model.Employee?.FamilyName</p>
+            <p><strong>Position:</strong> @Model.Employee?.Designation?.DesignationName</p>
+            <p><strong>Department:</strong> @Model.Employee?.Department?.DepartmentName</p>
+        </div>
+
+        <div class="contract-section">
+            <h3>Contract Information</h3>
+            <p><strong>Start Date:</strong> @Model.StartDate.ToString("dd/MM/yyyy")</p>
+            <p><strong>End Date:</strong> @Model.EndDate?.ToString("dd/MM/yyyy") ?? "N/A"</p>
+            <p><strong>Contract Type:</strong> @Model.Settings_ContractType?.ContractTypeName</p>
+        </div>
+
+        <!-- Dynamic Terms and Conditions Section -->
+        <div class="contract-section">
+            <h3>Terms & Conditions</h3>
+            <ul class="terms-list">
+               
+                    <li>The employee agrees to abide by the company rules.</li>
+             <li>The employee will be subject to a probation period of 3 months.</li>
+              <li>The contract can be terminated with a 30-day notice by either party.</li>
+            </ul>
+        </div>
+
+        <!-- Signatures Section -->
+        <div class="signature-section">
+            <div>
+                <p>Employee Signature</p>
+            </div>
+            <div>
+                <p>Employer Signature</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="no-print">
+        <button onclick="window.print()">Print Contract</button>
+    </div>
+</body>
+</html>

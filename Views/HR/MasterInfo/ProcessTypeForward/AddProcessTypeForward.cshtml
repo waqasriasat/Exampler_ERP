@@ -1,21 +1,23 @@
 @model Exampler_ERP.Models.Temp.ProcessTypeForwardViewModel
 
 <div class="modal fade" id="addNewProcessTypeForwardModal" tabindex="-1" role="dialog" aria-labelledby="addNewProcessTypeForwardModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addNewProcessTypeForwardModalLabel">Add New ProcessTypeForward</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
-                    x
-                </button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="addNewProcessTypeForwardModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Add New ProcessTypeForward
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div class="modal-body">
                 <form asp-action="Create" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                     <div class="form-group">
-                        <label for="ProcessTypeID">ProcessType</label>
-                        <select asp-for="ProcessTypeID" asp-items="@(new SelectList(ViewBag.ProcessTypes, "ProcessTypeID", "ProcessTypeName"))" class="form-control"></select>
+                        <label for="ProcessTypeID" class="form-label fw-bold">ProcessType</label>
+                        <select asp-for="ProcessTypeID" asp-items="@(new SelectList(ViewBag.ProcessTypes, "ProcessTypeID", "ProcessTypeName"))" class="form-control form-control-lg"></select>
                         <span asp-validation-for="ProcessTypeID" class="text-danger"></span>
                     </div>
 
@@ -33,7 +35,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                        <button type="submit" class="btn btn-primary" id="saveNewProcessTypeForward">Save</button>
+                        <button type="submit" class="btn btn-success" id="saveNewProcessTypeForward">Save</button>
                     </div>
                 </form>
             </div>

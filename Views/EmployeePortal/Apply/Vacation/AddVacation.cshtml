@@ -11,14 +11,14 @@
             <!-- Modal Header -->
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addVacationModalLabel">
-                    <i class="fas fa-key me-2"></i>Change Password
+                    <i class="fas fa-key me-2"></i>Add Vacation
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <!-- Modal Body -->
             <div class="modal-body">
-                <!-- Change Password Form -->
+                <!-- Add Vacation Form -->
                 <form id="addVacationForm" method="post" asp-action="Create" asp-controller="Vacation" enctype="multipart/form-data">
                   <div class="row">
                     <div class="col-12">
@@ -48,7 +48,7 @@
                     <!-- Notes Field -->
                     <div class="col-12">
                         <label asp-for="Reason" class="form-label fw-bold">Reason</label>
-                        <textarea asp-for="Reason" class="form-control form-control-lg" rows="4" placeholder="Enter Reason here..."></textarea>\
+                        <textarea asp-for="Reason" class="form-control form-control-lg" rows="4" placeholder="Enter Reason here..."></textarea>
                         <span asp-validation-for="Reason" class="text-danger small"></span>
                     </div>
                     </div>
@@ -63,7 +63,7 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="fas fa-times-circle"></i> Close
                 </button>
-                <button type="submit" form="addVacationForm" class="btn btn-success">
+                <button type="submit" id="saveNewVacation" class="btn btn-success">
                     <i class="fas fa-check-circle"></i> Save Changes
                 </button>
             </div>

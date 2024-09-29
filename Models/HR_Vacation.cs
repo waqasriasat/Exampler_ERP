@@ -35,5 +35,6 @@ namespace Exampler_ERP.Models
 
     public int? FinalApprovalID { get; set; }
     public int? ApprovalProcessID { get; set; }
+    public int? DeleteYNID { get; set; }
   }
 }

@@ -71,7 +71,7 @@
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
   --bs-root-font-size: 16px;
   --bs-body-font-family: var(--bs-font-sans-serif);
-  --bs-body-font-size: 0.9375rem;
+  --bs-body-font-size: 0.7375rem;
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.53;
   --bs-body-color: #697a8d;
@@ -193,7 +193,7 @@ h3, .h3 {
 }
 
 h4, .h4 {
-  font-size: calc(1.2625rem + 0.15vw);
+  font-size: calc(1rem + 0.15vw);
 }
 @media (min-width: 1200px) {
   h4, .h4 {
@@ -202,7 +202,7 @@ h4, .h4 {
 }
 
 h5, .h5 {
-  font-size: 1.125rem;
+  font-size: 1rem;
 }
 
 h6, .h6 {
@@ -2836,7 +2836,7 @@ textarea.form-control-lg {
   --bs-dropdown-padding-x: 0;
   --bs-dropdown-padding-y: 0.3125rem;
   --bs-dropdown-spacer: 0.125rem;
-  --bs-dropdown-font-size: 0.9375rem;
+  --bs-dropdown-font-size: 0.7375rem;
   --bs-dropdown-color: var(--bs-body-color);
   --bs-dropdown-bg: #fff;
   --bs-dropdown-border-color: transparent;
@@ -3066,7 +3066,7 @@ textarea.form-control-lg {
   width: 100%;
   padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
   clear: both;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--bs-dropdown-link-color);
   text-align: inherit;
   white-space: nowrap;
@@ -7930,7 +7930,7 @@ button:focus-visible {
 }
 
 .dropdown-item {
-  line-height: 1.54;
+  line-height: 1.64;
 }
 
 .dropdown-toggle.hide-arrow::before, .dropdown-toggle.hide-arrow::after,
@@ -16446,9 +16446,9 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
   margin: 1rem 0 0.5rem 0;
   padding: 0.625rem 2rem 0.625rem 2rem;
 }
-.menu-vertical .menu-item .menu-link {
-  font-size: 0.9375rem;
-}
+  .menu-vertical .menu-item .menu-link {
+    font-size: 0.8375rem;
+  }
 .menu-vertical .menu-item.active:not(.open) > .menu-link {
   font-weight: 500;
 }

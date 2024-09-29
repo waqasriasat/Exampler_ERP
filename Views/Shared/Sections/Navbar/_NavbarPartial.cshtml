@@ -99,6 +99,12 @@
                                 $('#liPayRoll').show(); // Ensure the corresponding list item is visible
                             }
                         }
+                        if (processTypeId === 14) {
+                            if (processCount > 0) {
+                                $('#countEmployeeRequest').text(processCount);
+                                $('#liEmployeeRequest').show(); // Ensure the corresponding list item is visible
+                            }
+                        }
 
 
                         // Add to total notification count
@@ -329,6 +335,15 @@
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">PayRoll Approval</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countPayRoll"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liEmployeeRequest" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index" asp-route-id="14">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Employee Request Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countEmployeeRequest"></label></span>
                         </span>
                     </a>
                 </li>

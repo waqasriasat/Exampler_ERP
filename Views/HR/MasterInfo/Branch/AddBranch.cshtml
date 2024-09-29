@@ -1,66 +1,68 @@
 @model Exampler_ERP.Models.Settings_Branch
 
 <div class="modal fade" id="addBranchModal" tabindex="-1" role="dialog" aria-labelledby="addBranchModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addBranchModalLabel">Add New Branch</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
-                    x
-                </button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="addBranchModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Add New Branch
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div class="modal-body">
                 <form id="addBranchForm">
                     <div class="row">
                         <div class="col-12">
-                            <label for="BranchName">Branch Name</label>
-                            <input type="text" class="form-control" id="BranchName" name="BranchName" value="@Model.BranchName" />
+                            <label for="BranchName" class="form-label fw-bold">Branch Name</label>
+                            <input type="text" class="form-control form-control-lg" id="BranchName" name="BranchName" value="@Model.BranchName" />
                         </div>
                         <div class="col-6">
-                            <label asp-for="ActiveYNID">Active</label>
-                            <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control">
+                            <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
+                            <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
                                 <option>Please select</option>
                             </select>
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label for="POBox">PO Box</label>
-                            <input type="text" class="form-control" id="POBox" name="POBox" value="@Model.POBox" />
+                            <label for="POBox" class="form-label fw-bold">PO Box</label>
+                            <input type="text" class="form-control form-control-lg" id="POBox" name="POBox" value="@Model.POBox" />
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label for="Country">Country</label>
-                            <input type="text" class="form-control" id="Country" name="Country" value="@Model.Country" />
+                            <label for="Country" class="form-label fw-bold">Country</label>
+                            <input type="text" class="form-control form-control-lg" id="Country" name="Country" value="@Model.Country" />
                         </div>
                         <div class="col-6">
-                            <label for="City">City</label>
-                            <input type="text" class="form-control" id="City" name="City" value="@Model.City" />
+                            <label for="City" class="form-label fw-bold">City</label>
+                            <input type="text" class="form-control form-control-lg" id="City" name="City" value="@Model.City" />
                         </div>
                         <div class="col-6">
-                            <label for="Street">Street</label>
-                            <input type="text" class="form-control" id="Street" name="Street" value="@Model.Street" />
+                            <label for="Street" class="form-label fw-bold">Street</label>
+                            <input type="text" class="form-control form-control-lg" id="Street" name="Street" value="@Model.Street" />
                         </div>
                         <div class="col-6">
-                            <label for="Phone">Phone</label>
-                            <input type="text" class="form-control" id="Phone" name="Phone" value="@Model.Phone" />
+                            <label for="Phone" class="form-label fw-bold">Phone</label>
+                            <input type="text" class="form-control form-control-lg" id="Phone" name="Phone" value="@Model.Phone" />
                         </div>
                         <div class="col-6">
-                            <label for="Fax">Fax</label>
-                            <input type="text" class="form-control" id="Fax" name="Fax" value="@Model.Fax" />
+                            <label for="Fax" class="form-label fw-bold">Fax</label>
+                            <input type="text" class="form-control form-control-lg" id="Fax" name="Fax" value="@Model.Fax" />
                         </div>
                         <div class="col-6">
-                            <label for="Mobile">Mobile</label>
-                            <input type="text" class="form-control" id="Mobile" name="Mobile" value="@Model.Mobile" />
+                            <label for="Mobile" class="form-label fw-bold">Mobile</label>
+                            <input type="text" class="form-control form-control-lg" id="Mobile" name="Mobile" value="@Model.Mobile" />
                         </div>
                         <div class="col-12">
-                            <label for="Address">Address</label>
-                            <input type="text" class="form-control" id="Address" name="Address" style="height: 100px;" value="@Model.Address" />
+                            <label for="Address" class="form-label fw-bold">Address</label>
+                            <input type="text" class="form-control form-control-lg" id="Address" name="Address" style="height: 100px;" value="@Model.Address" />
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-primary" id="saveNewBranch">Save</button>
+                <button type="button" class="btn btn-success" id="saveNewBranch">Save</button>
             </div>
         </div>
     </div>

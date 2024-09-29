@@ -51,9 +51,72 @@ namespace Exampler_ERP.Models
     public DbSet<HR_EndOfService> HR_EndOfServices { get; set; }
     public DbSet<HR_Vacation> HR_Vacations { get; set; }
     public DbSet<Settings_EndOfServiceReasonType> Settings_EndOfServiceReasonTypes { get; set; }
+    public DbSet<Settings_EmployeeRequestType> Settings_EmployeeRequestTypes { get; set; }
+    public DbSet<HR_EmployeeRequest> HR_EmployeeRequests { get; set; }
 
+    public DbSet<HR_DocumentUpload> HR_DocumentUploads { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      modelBuilder.Entity<Settings_EmployeeRequestType>().HasData(
+           // Attendance Requests
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 1, EmployeeRequestTypeName = "Overtime Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 2, EmployeeRequestTypeName = "Early Going Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 3, EmployeeRequestTypeName = "Late Coming Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 4, EmployeeRequestTypeName = "Timesheet Correction Request", ActiveYNID = 1, DeleteYNID = 0 },
+
+           // Expense Requests
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 5, EmployeeRequestTypeName = "Travel Expenses Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 6, EmployeeRequestTypeName = "Accommodation Expense Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 7, EmployeeRequestTypeName = "Reimbursement Request", ActiveYNID = 1, DeleteYNID = 0 },
+
+           // Shift & Work Requests
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 8, EmployeeRequestTypeName = "Shift Timing Change Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 9, EmployeeRequestTypeName = "Rotational Shift/Shift Swapping Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 10, EmployeeRequestTypeName = "Work from Home Request", ActiveYNID = 1, DeleteYNID = 0 },
+
+           // Office Equipment Requests
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 11, EmployeeRequestTypeName = "Office Desk Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 12, EmployeeRequestTypeName = "Office Chair Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 13, EmployeeRequestTypeName = "Filing Cabinets Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 14, EmployeeRequestTypeName = "Storage Shelves Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 15, EmployeeRequestTypeName = "Bookshelves Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 16, EmployeeRequestTypeName = "Meeting Tables Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 17, EmployeeRequestTypeName = "Reception Desk Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 18, EmployeeRequestTypeName = "Side Tables Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 19, EmployeeRequestTypeName = "Footrest Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 20, EmployeeRequestTypeName = "Laptops Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 21, EmployeeRequestTypeName = "Desktop Computers Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 22, EmployeeRequestTypeName = "Monitors Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 23, EmployeeRequestTypeName = "LED Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 24, EmployeeRequestTypeName = "Keyboard Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 25, EmployeeRequestTypeName = "Mouse Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 26, EmployeeRequestTypeName = "External Hard Drives Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 27, EmployeeRequestTypeName = "USB Flash Drives Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 28, EmployeeRequestTypeName = "Webcam Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 29, EmployeeRequestTypeName = "Headset with Microphone Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 30, EmployeeRequestTypeName = "Printers Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 31, EmployeeRequestTypeName = "Scanners Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 32, EmployeeRequestTypeName = "Projector Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 33, EmployeeRequestTypeName = "External Speakers Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 34, EmployeeRequestTypeName = "External Microphone Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 35, EmployeeRequestTypeName = "UPS Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 36, EmployeeRequestTypeName = "Wi-Fi Router Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 37, EmployeeRequestTypeName = "Ethernet Cables Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 38, EmployeeRequestTypeName = "Switches and Hubs Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 39, EmployeeRequestTypeName = "LAN Cards Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 40, EmployeeRequestTypeName = "Modems Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 41, EmployeeRequestTypeName = "VPN Devices Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 42, EmployeeRequestTypeName = "Mouse Pads Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 43, EmployeeRequestTypeName = "Desk Lamps Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 44, EmployeeRequestTypeName = "Laptop Cooling Pads Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 45, EmployeeRequestTypeName = "Phone Stands Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 46, EmployeeRequestTypeName = "Pen Holders & Desk Organizers Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 47, EmployeeRequestTypeName = "Whiteboards/Notice Boards Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 48, EmployeeRequestTypeName = "Presentation Pointer/Clicker Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 49, EmployeeRequestTypeName = "Pens/Pencils Request", ActiveYNID = 1, DeleteYNID = 0 },
+           new Settings_EmployeeRequestType { EmployeeRequestTypeID = 50, EmployeeRequestTypeName = "Notebooks/Sticky Notes Request", ActiveYNID = 1, DeleteYNID = 0 }
+       );
+
       modelBuilder.Entity<Settings_EmployeeStatusType>().HasData(
     new Settings_EmployeeStatusType() { EmployeeStatusTypeID = 1, EmployeeStatusTypeName = "Working", ActiveYNID = 1, DeleteYNID = 0 },
     new Settings_EmployeeStatusType() { EmployeeStatusTypeID = 2, EmployeeStatusTypeName = "On Probation", ActiveYNID = 1, DeleteYNID = 0 },
@@ -81,7 +144,8 @@ namespace Exampler_ERP.Models
      new Settings_ProcessType() { ProcessTypeID = 10, ProcessTypeName = "Fixed Deduction", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_ProcessType() { ProcessTypeID = 11, ProcessTypeName = "Vacation", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_ProcessType() { ProcessTypeID = 12, ProcessTypeName = "Vacation Settle", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_ProcessType() { ProcessTypeID = 13, ProcessTypeName = "PayRoll", ActiveYNID = 1, DeleteYNID = 0 }
+     new Settings_ProcessType() { ProcessTypeID = 13, ProcessTypeName = "PayRoll", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 14, ProcessTypeName = "Employee Request", ActiveYNID = 1, DeleteYNID = 0 }
 
      );
 

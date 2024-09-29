@@ -1,43 +1,45 @@
 @model Exampler_ERP.Models.CR_User
 
 <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
-                    x
-                </button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="addUserModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Add New User
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div class="modal-body">
                 <form id="addUserForm">
                     <div class="row">
                         <div class="col-6">
-                            <label asp-for="RoleID" class="control-label">Select Role</label>
-                            <select asp-for="RoleID" asp-items="@(new SelectList(ViewBag.RoleList, "Value", "Text", Model.RoleID))" class="form-control">
+                            <label asp-for="RoleID" class="form-label fw-bold">Select Role</label>
+                            <select asp-for="RoleID" asp-items="@(new SelectList(ViewBag.RoleList, "Value", "Text", Model.RoleID))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="RoleID" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="EmployeeID">Employee</label>
-                            <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeeList, "Value", "Text"))" class="form-control">
+                           <label asp-for="EmployeeID" class="form-label fw-bold">Employee</label>
+                            <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeeList, "Value", "Text"))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="EmployeeID" class="text-danger"></span>
                         </div>
                         <div class="col-12">
-                            <label for="UserName">User Name</label>
-                            <input type="text" class="form-control" id="UserName" name="UserName" value="@Model.UserName" />
+                            <label for="UserName" class="form-label fw-bold">User Name</label>
+                            <input type="text" class="form-control form-control-lg" id="UserName" name="UserName" value="@Model.UserName" />
                         </div>
                         <div class="col-12">
-                            <label for="Password">Password</label>
-                            <input type="text" class="form-control" id="Password" name="Password" value="@Model.Password" />
+                            <label for="Password" class="form-label fw-bold">Password</label>
+                            <input type="text" class="form-control form-control-lg" id="Password" name="Password" value="@Model.Password" />
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-primary" id="saveNewUser">Save</button>
+                <button type="button" class="btn btn-success" id="saveNewUser">Save</button>
             </div>
         </div>
     </div>

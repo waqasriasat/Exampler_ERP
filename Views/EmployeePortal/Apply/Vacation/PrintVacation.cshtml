@@ -1,5 +1,59 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+@model IEnumerable<Exampler_ERP.Models.HR_Vacation>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Vacationes</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Vacation List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Vacation ID</th>
+                <th>Vacation Type</th>
+                <th>Apply Date</th>
+                <th>Start Date</th>
+                <th>Date Date</th>
+                <th>Total Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Vacation in Model)
+            {
+                <tr>
+                    <td>@Vacation.VacationID</td>
+                    <td>@(Vacation.Settings_VacationType?.VacationTypeName ?? "N/A")</td>
+                    <td>@Vacation.Date</td>
+                    <td>@Vacation.StartDate</td>
+                    <td>@Vacation.EndDate</td>
+                    <td>@(Vacation.TotalDays)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

@@ -1,13 +1,15 @@
 @model Exampler_ERP.Models.HR_Contract
 
 <div class="modal fade" id="editContractModal" tabindex="-1" role="dialog" aria-labelledby="editContractModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editContractModalLabel">Edit Contract</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
-                    x
-                </button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editContractModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit Contract
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div class="modal-body">
                 <form id="editContractForm" method="post" asp-action="Edit" asp-controller="Contract" enctype="multipart/form-data">
@@ -16,7 +18,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-primary" id="saveContractChanges">Save Changes</button>
+                <button type="button" class="btn btn-success" id="saveContractChanges">Save Changes</button>
             </div>
         </div>
     </div>

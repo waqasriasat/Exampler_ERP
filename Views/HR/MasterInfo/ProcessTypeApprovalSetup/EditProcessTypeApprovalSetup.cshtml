@@ -74,21 +74,23 @@
 </script>
 
 <div class="modal fade" id="editProcessTypeApprovalSetupModal" tabindex="-1" role="dialog" aria-labelledby="editProcessTypeApprovalSetupModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editProcessTypeApprovalSetupModalLabel">Edit ProcessTypeApprovalSetup</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
-                    x
-                </button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editProcessTypeApprovalSetupModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit ProcessTypeApprovalSetup
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div class="modal-body">
                 <form id="editProcessTypeApprovalSetupForm">
                         <div class="row">
                             <div class="col-12 mb-2">
                                 <div class="form-group">
-                                    <label for="processTypeName">ProcessType Name</label>
-                                <input type="text" class="form-control" id="processTypeName" value="@Model.FirstOrDefault()?.ProcessType?.ProcessTypeName" disabled />
+                                <label for="processTypeName" class="form-label fw-bold">ProcessType Name</label>
+                                <input type="text" class="form-control form-control-lg" id="processTypeName" value="@Model.FirstOrDefault()?.ProcessType?.ProcessTypeName" disabled />
                                 <input type="hidden" id="processTypeId" value="@Model.FirstOrDefault()?.ProcessTypeID" />
                                 </div>
                             </div>
@@ -127,7 +129,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="submit" class="btn btn-primary" id="saveChanges">Save changes</button>
+                <button type="submit" class="btn btn-success" id="saveChanges">Save changes</button>
             </div>
         </div>
     </div>

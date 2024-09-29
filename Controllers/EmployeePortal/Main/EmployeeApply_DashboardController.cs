@@ -1,6 +1,7 @@
 using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Exampler_ERP.Controllers.EmployeePortal.Main
 {
@@ -19,9 +20,9 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Main
     }
     public async Task<IActionResult> Index()
     {
-      //ViewBag.ApplicantCount = await _appDBContext.HR_Applicants.CountAsync();
-      //ViewBag.EmployeeCount = await _appDBContext.HR_Employees.CountAsync();
-      //ViewBag.ContractCount = await _appDBContext.HR_Contracts.CountAsync();
+      ViewBag.VacationCount = await _appDBContext.HR_Vacations.CountAsync();
+      ViewBag.EmployeeRequestCount = await _appDBContext.HR_EmployeeRequests.CountAsync();
+      ViewBag.DocumentsUploadCount = await _appDBContext.HR_DocumentUploads.CountAsync();
       //ViewBag.SalaryCount = await _appDBContext.HR_Salarys.CountAsync();
       //ViewBag.JoiningCount = await _appDBContext.HR_Joinings.CountAsync();
       //ViewBag.BankAccountCount = await _appDBContext.HR_BankAccounts.CountAsync();

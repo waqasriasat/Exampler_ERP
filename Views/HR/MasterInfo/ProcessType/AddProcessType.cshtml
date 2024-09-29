@@ -1,24 +1,26 @@
 @model Exampler_ERP.Models.Settings_ProcessType
 
 <div class="modal fade" id="addProcessTypeModal" tabindex="-1" role="dialog" aria-labelledby="addProcessTypeModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addProcessTypeModalLabel">Add New ProcessType</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
-                    x
-                </button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="addProcessTypeModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Add New ProcessType
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div class="modal-body">
                 <form id="addProcessTypeForm">
                     <div class="row">
                         <div class="col-12">
-                            <label for="ProcessTypeName">ProcessType Name</label>
-                            <input type="text" class="form-control" id="ProcessTypeName" name="ProcessTypeName" value="@Model.ProcessTypeName" />
+                            <label for="ProcessTypeName" class="form-label fw-bold">ProcessType Name</label>
+                            <input type="text" class="form-control form-control-lg" id="ProcessTypeName" name="ProcessTypeName" value="@Model.ProcessTypeName" />
                         </div>
                         <div class="col-6">
-                            <label asp-for="ActiveYNID">Active</label>
-                            <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control">
+                            <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
+                            <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
                                 <option>Please select</option>
                             </select>
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
@@ -29,7 +31,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-primary" id="saveNewProcessType">Save</button>
+                <button type="button" class="btn btn-success" id="saveNewProcessType">Save</button>
             </div>
         </div>
     </div>

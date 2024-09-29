@@ -1,0 +1,30 @@
+@model Exampler_ERP.Models.HR_EmployeeRequest
+
+@{
+    var EmployeeName = Context.Session.GetString("EmployeeName");
+}
+<div class="row">
+    <div class="col-12">
+        <input type="hidden" asp-for="EmployeeRequestID" class="form-control form-control-lg" />
+        <input type="hidden" asp-for="EmployeeID" class="form-control form-control-lg" />
+        <input type="hidden" asp-for="Date" class="form-control form-control-lg" />
+        <label class="form-label fw-bold">Employee Name</label>
+        <input type="text" class="form-control form-control-lg" value="@EmployeeName" readonly />
+    </div>
+
+    <div class="col-12">
+        <label asp-for="EmployeeRequestTypeID" class="form-label fw-bold">EmployeeRequest Type</label>
+        <select asp-for="EmployeeRequestTypeID" asp-items="@(new SelectList(ViewBag.EmployeeRequestTypeList, "Value", "Text"))" class="form-control form-control-lg">
+        </select>
+        <span asp-validation-for="EmployeeRequestTypeID" class="text-danger small"></span>
+    </div>
+
+    
+
+    <!-- Reason Field -->
+    <div class="col-12">
+        <label asp-for="Notes" class="form-label fw-bold">Notes</label>
+        <textarea asp-for="Notes" class="form-control form-control-lg" rows="4" placeholder="Enter Notes here..."></textarea>
+        <span asp-validation-for="Notes" class="text-danger small"></span>
+    </div>
+</div>

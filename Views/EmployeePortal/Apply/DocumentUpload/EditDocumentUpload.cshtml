@@ -1,0 +1,75 @@
+@model Exampler_ERP.Models.HR_DocumentUpload
+
+@{
+    var EmployeeName = Context.Session.GetString("EmployeeName");
+}
+
+<div class="modal fade" id="editDocumentUploadModal" tabindex="-1" role="dialog" aria-labelledby="editDocumentUploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editDocumentUploadModalLabel">
+                    <i class="fas fa-edit me-2"></i>Edit DocumentUpload
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <input type="hidden" asp-for="DocumentUploadID" class="form-control form-control-lg" />
+            <input type="hidden" asp-for="EmployeeID" class="form-control form-control-lg" />
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- Edit DocumentUpload Form -->
+                <form id="editDocumentUploadForm" method="post" asp-action="Edit" asp-controller="DocumentUpload" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="hidden" asp-for="DocumentUploadID" class="form-control form-control-lg" />
+                            <input type="hidden" asp-for="EmployeeID" class="form-control form-control-lg" />
+                            <label class="form-label fw-bold">Employee Name</label>
+                            <input type="text" class="form-control form-control-lg" value="@EmployeeName" readonly />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Current Document</label>
+                            <p>@Model.DocumentName (Existing)</p> <!-- Display existing document name -->
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="DocumentData" class="form-label fw-bold">Upload New Document (optional)</label>
+                            <input type="file" asp-for="DocumentData" class="form-control form-control-lg" name="DocumentData" accept=".pdf" />
+                            <span asp-validation-for="DocumentData" class="text-danger small"></span>
+                            <small class="form-text text-muted">Leave empty if you don't want to change the current document.</small>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="DocumentName" class="form-label fw-bold">Document Name</label>
+                            <input type="text" asp-for="DocumentName" class="form-control form-control-lg" required />
+                            <span asp-validation-for="DocumentName" class="text-danger small"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="DocumentType" class="form-label fw-bold">Document Type</label>
+                            <input type="text" asp-for="DocumentType" class="form-control  form-control-lg" value=".pdf" readonly />
+                            <span asp-validation-for="DocumentType" class="text-danger small"></span>
+                        </div>
+                        <!-- Notes Field -->
+                        <div class="col-12">
+                            <label asp-for="Description" class="form-label fw-bold">Description</label>
+                            <textarea asp-for="Description" class="form-control form-control-lg" rows="4" placeholder="Enter Description here..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Success Message -->
+                <div id="successMessage" class="alert alert-success text-center mt-3" style="display:none;"></div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times-circle"></i> Close
+                </button>
+                <button type="submit" id="saveDocumentUploadChanges" class="btn btn-success">
+                    <i class="fas fa-check-circle"></i> Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

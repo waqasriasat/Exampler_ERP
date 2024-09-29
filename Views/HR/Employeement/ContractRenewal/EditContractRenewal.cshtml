@@ -1,121 +1,26 @@
 @model Exampler_ERP.Models.HR_Contract
 
 <div class="modal fade" id="editContractRenewalModal" tabindex="-1" role="dialog" aria-labelledby="editContractRenewalModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editContractRenewalModalLabel">Edit Contract</h5>
-                <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
-                    x
-                </button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editContractRenewalModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit Contract
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div class="modal-body">
                 <form id="editContractRenewalForm" method="post" asp-action="Edit" asp-controller="ContractRenewal" enctype="multipart/form-data">
-                    <input type="hidden" asp-for="ContractID" class="form-control" />
-                    <input type="hidden" asp-for="EmployeeID" class="form-control" />
-
-                    <h5 class="modal-title" style="padding-top:10px">Contract Renewal Details</h5>
-                    <hr />
-                    <div class="row">
-                        <div class="col-12">
-                            <label asp-for="EmployeeID" class="control-label">Employee Name</label>
-                            <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control" disabled>
-                            </select>
-                            <span asp-validation-for="EmployeeID" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-6">
-                            <label asp-for="StartDate" class="control-label">Previous Start Date</label>
-                            <input asp-for="StartDate" class="form-control" type="date" readonly style="background-color:#eceef1" />
-                            <span asp-validation-for="StartDate" class="text-danger"></span>
-                        </div>
-                        <div class="col-6">
-                            <label asp-for="EndDate" class="control-label">Previous End Date</label>
-                            <input asp-for="EndDate" class="form-control" type="date" readonly style="background-color:#eceef1" />
-                            <span asp-validation-for="EndDate" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <!-- Additional Fields -->
-                    <div class="row">
-                        <div class="col-6">
-                            <label for="Month">Month</label>
-                            <select id="Month" class="form-control">
-                                @for (int i = 0; i <= 12; i++)
-                                {
-                                    <option value="@i">@i</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-6">
-                            <label for="Year">Year</label>
-                            <select id="Year" class="form-control">
-                                @for (int i = 0; i <= 9; i++)
-                                {
-                                    <option value="@i">@i</option>
-                                }
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-6">
-                            <label>New Start Date</label>
-                            <input id="NewStartDate" name="NewStartDate" class="form-control" type="date" readonly style="background-color:#eceef1" />
-                        </div>
-                        <div class="col-6">
-                            <label>New End Date</label>
-                            <input id="NewEndDate" name="NewEndDate" class="form-control" type="date" readonly style="background-color:#eceef1" />
-                        </div>
-                    </div>
-
-                    
+                    @Html.Partial("~/Views/HR/Employeement/ContractRenewal/_EditContractRenewal.cshtml", Model)
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-primary" id="saveContractChanges">Save Changes</button>
+                <button type="button" class="btn btn-success" id="saveContractChanges">Save Changes</button>
             </div>
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        function updateDates() {
-            var previousStartDate = new Date($('#StartDate').val());
-            var previousEndDate = new Date($('#EndDate').val());
-
-            var month = parseInt($('#Month').val());
-            var year = parseInt($('#Year').val());
-
-            var newStartDate = new Date(previousStartDate);
-            var newEndDate = new Date(previousEndDate);
-
-            // Set New Start Date to be the same as Previous Start Date
-            $('#NewStartDate').val(newStartDate.toISOString().substring(0, 10));
-
-            // Calculate New End Date
-            newEndDate.setMonth(newEndDate.getMonth() + month);
-            newEndDate.setFullYear(newEndDate.getFullYear() + year);
-
-            $('#NewEndDate').val(newEndDate.toISOString().substring(0, 10));
-        }
-
-        // Update dates when dropdown values change
-        $('#Month, #Year').change(function () {
-            updateDates();
-        });
-
-        // Initialize dates on load
-        updateDates();
-
-        // Handle form submission
-        // $('#saveContractChanges').click(function () {
-        //     $('#editContractRenewalForm').submit();
-        // });
-    });
-</script>
 
