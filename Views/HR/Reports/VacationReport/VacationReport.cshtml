@@ -1,13 +1,13 @@
-@model IEnumerable<Exampler_ERP.Models.Temp.VacationBalanceViewModel>
+@model IEnumerable<Exampler_ERP.Models.Temp.VacationReportViewModel>
 
 @{
-    ViewData["Title"] = "Reports - Vacation Balance";
+    ViewData["Title"] = "Reports - Vacation Report";
 }
 
 @section PageScripts {
     <script>
         $(document).ready(function () {
-           
+
 
             // Print functionality
             $('#printButton').click(function () {
@@ -16,40 +16,40 @@
         });
 
         function printVacations() {
-            var printWindow = window.open('@Url.Action("Print", "VacationBalance")', '_blank');
+            var printWindow = window.open('@Url.Action("Print", "VacationReport")', '_blank');
             printWindow.focus();
         }
     </script>
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Reports /</span> Vacation Balance
+    <span class="text-muted fw-light">Reports /</span> Vacation Report
 </h4>
 
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Vacation Balance List</h5>
+            <h5 class="card-header">Vacation Report List</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                         <div class="col-10 col-md-10 col-lg-12">
                             <div class="row">
-                             
+
                                 <div class="col-4">
                                     <p class="text-nowrap">Employee Name</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Contract Start Date</p>
+                                    <p class="text-nowrap">Start Date</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Contract End Date</p>
+                                    <p class="text-nowrap">End Date</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Total Vacation</p>
+                                    <p class="text-nowrap">Total Days</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Vacation Balance</p>
+                                    <p class="text-nowrap">Type of Vacation</p>
                                 </div>
                             </div>
                         </div>
@@ -72,14 +72,14 @@
                                         <p class="text-nowrap"><span class="smallAdd">End Date: </span>@item.EndDate?.ToString("dd-MMM-yyyy")</p>
                                     </div>
                                     <div class="col-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Total Vacation: </span>@item.TotalVacation</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Total Days: </span>@item.TotalDays</p>
                                     </div>
                                     <div class="col-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Vacation Balance: </span>@item.VacationBalance</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Type of Vacation: </span>@item.TypeOfVacation</p>
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 }

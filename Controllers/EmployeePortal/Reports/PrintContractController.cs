@@ -17,7 +17,7 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Reports
       _utils = utils;
     }
   
-    public async Task<IActionResult> PrintContract()
+    public async Task<IActionResult> Index()
     {
       var employeeID = HttpContext.Session.GetInt32("EmployeeID");
 
