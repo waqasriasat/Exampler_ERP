@@ -1,4 +1,5 @@
 using Exampler_ERP.Models;
+using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,20 +17,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    //public async Task<IActionResult> Index()
-    //{
-    //  var result = await _appDBContext.CR_ProcessTypeApprovalDetails
-    //.Include(pta => pta.CR_ProcessTypeApproval)
-    //.ThenInclude(pta => pta.Employee)
-    //.Include(pta => pta.CR_ProcessTypeApproval)
-    //.ThenInclude(pta => pta.ProcessType)
-    //.Include(pta => pta.ProcessTypeApprovalDetailDoc)
-    //.Where(pta => pta.AppID == 0)
-    //.OrderByDescending(pta => pta.ApprovalProcessDetailID)
-    //.ToListAsync();
-
-    //  return View("~/Views/MasterInfo/ApprovalsRequest/ApprovalsRequest.cshtml", result);
-    //}
+    
     public async Task<IActionResult> Index(int? id = null)
     {
       // Base query: filter for records where AppID == 0
@@ -356,7 +344,19 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 12)
           {
+            var vacationSettle = await _appDBContext.HR_VacationSettles
+                                                     .Where(u => u.VacationSettleID == transactionID)
+                                                     .FirstOrDefaultAsync();
 
+
+            if (vacationSettle != null)
+            {
+              vacationSettle.FinalApprovalID = 1;
+              vacationSettle.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(vacationSettle);
+              await _appDBContext.SaveChangesAsync();
+            }
           }
           if (ProcessTypeID == 13)
           {
@@ -533,7 +533,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
             if (vacation != null)
             {
-              vacation.FinalApprovalID = 1;
+              vacation.FinalApprovalID = 2;
               vacation.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
 
               _appDBContext.Update(vacation);
@@ -542,7 +542,19 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 12)
           {
+            var vacationSettle = await _appDBContext.HR_VacationSettles
+                                                    .Where(u => u.VacationSettleID == transactionID)
+                                                    .FirstOrDefaultAsync();
 
+
+            if (vacationSettle != null)
+            {
+              vacationSettle.FinalApprovalID = 1;
+              vacationSettle.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(vacationSettle);
+              await _appDBContext.SaveChangesAsync();
+            }
           }
           if (ProcessTypeID == 13)
           {
@@ -715,7 +727,33 @@ namespace Exampler_ERP.Controllers.MasterInfo
       }
       if (processTypeID == 12)
       {
+        var vacationSettle = await _appDBContext.HR_VacationSettles
+          .Where(vs => vs.VacationSettleID == transactionID)
+          .Include(d => d.Vacation)
+          .Select(vs => new VacationSettleViewModel
+          {
+            VacationSettleID = vs.VacationSettleID,
+            VacationID = vs.VacationID,
+            EmployeeID = vs.Vacation.EmployeeID,
+            StartDate = vs.Vacation.StartDate,
+            EndDate = vs.Vacation.EndDate,
+            TotalDays = vs.Vacation.TotalDays,
+            SettleDays = vs.SettleDays,
+            SettleAmount = vs.SettleAmount,
+          })
+          .FirstOrDefaultAsync();
 
+        // If no record is found, return NotFound result
+        if (vacationSettle == null)
+        {
+          return NotFound();
+        }
+
+        // Populate Employee and Vacation Date lists for the view
+        ViewBag.EmployeesList = await _utils.GetEmployee();
+        ViewBag.VacationDateList = await _utils.GetVacationDates();
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", vacationSettle);
       }
       if (processTypeID == 13)
       {

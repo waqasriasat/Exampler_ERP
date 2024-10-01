@@ -5,6 +5,7 @@ namespace Exampler_ERP.Models.Temp
 {
   public class VacationSettleViewModel
   {
+    public int VacationSettleID { get; set; }
     public int VacationID { get; set; }
     [ForeignKey("VacationID")]
     public virtual HR_Vacation? Vacation { get; set; }

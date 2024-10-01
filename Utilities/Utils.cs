@@ -490,6 +490,21 @@ namespace Exampler_ERP.Utilities
 
       return vacationDateList;
     }
+    public async Task<List<SelectListItem>> GetVacationDatesByVacationD(int vacationID)
+    {
+      var vacationDateList = await _appDBContext.HR_Vacations
+          .Where(v => v.VacationID == vacationID) // Filter by EmployeeID
+          .Select(v => new SelectListItem
+          {
+            Value = v.VacationID.ToString(),
+            Text = v.Date.ToString("dd-MMM-yyyy")
+          })
+          .ToListAsync();
+
+      // Add a default 'Please Select' option
+     
+      return vacationDateList;
+    }
     public async Task<List<SelectListItem>> GetVacationDatesByEmployeeID(int employeeID)
     {
       var vacationDateList = await _appDBContext.HR_Vacations
@@ -506,7 +521,23 @@ namespace Exampler_ERP.Utilities
 
       return vacationDateList;
     }
+    public async Task<List<SelectListItem>> GetVacationDatesByEmployeeIDWithoutSettled(int employeeID)
+    {
+      var vacationDateList = await _appDBContext.HR_Vacations
+     .Where(v => v.EmployeeID == employeeID &&
+                 !_appDBContext.HR_VacationSettles.Select(vs => vs.VacationID).Contains(v.VacationID)) // Filter by EmployeeID and exclude settled vacations
+     .Select(v => new SelectListItem
+     {
+       Value = v.VacationID.ToString(),
+       Text = v.Date.ToString("dd-MMM-yyyy") // Format the date
+     })
+     .ToListAsync();
+     
+      // Add a default 'Please Select' option
+      vacationDateList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
 
+      return vacationDateList;
+    }
     public async Task<List<SelectListItem>> GetSalaryTypeList()
     {
       var SalaryTypeList = await _appDBContext.Settings_SalaryTypes

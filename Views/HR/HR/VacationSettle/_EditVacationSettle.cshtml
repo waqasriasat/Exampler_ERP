@@ -1,40 +1,117 @@
-@model Exampler_ERP.Models.HR_VacationSettle
+@model Exampler_ERP.Models.Temp.VacationSettleViewModel
 
 @{
     var EmployeeName = Context.Session.GetString("EmployeeName");
 }
 <div class="row">
-    @* <div class="col-12">
-        <input type="hidden" asp-for="VacationSettleID" class="form-control form-control-lg" />
-        <input type="hidden" asp-for="EmployeeID" class="form-control form-control-lg" />
-        <input type="hidden" asp-for="Date" class="form-control form-control-lg" />
-        <label class="form-label fw-bold">Employee Name</label>
-        <input type="text" class="form-control form-control-lg" value="@EmployeeName" readonly />
+    <div class="col-12">
+        <label asp-for="EmployeeID" class="form-label fw-bold">Employee Name</label>
+        <select id="EmployeeID" asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control form-control-lg" disabled>
+        </select>
+        <span asp-validation-for="EmployeeID" class="text-danger"></span>
     </div>
 
     <div class="col-12">
-        <label asp-for="VacationSettleTypeID" class="form-label fw-bold">VacationSettle Type</label>
-        <select asp-for="VacationSettleTypeID" asp-items="@(new SelectList(ViewBag.VacationSettleTypeList, "Value", "Text"))" class="form-control form-control-lg">
+        <label asp-for="VacationID" class="form-label fw-bold">Vacation Date</label>
+        <select id="VacationID" asp-for="VacationID" class="form-control form-control-lg">
+          
         </select>
-        <span asp-validation-for="VacationSettleTypeID" class="text-danger small"></span>
+        <span asp-validation-for="VacationID" class="text-danger small"></span>
     </div>
 
     <div class="col-6">
         <label asp-for="StartDate" class="form-label fw-bold">Start Date</label>
-        <input asp-for="StartDate" class="form-control form-control-lg" type="date" />
+        <input asp-for="StartDate" class="form-control form-control-lg" type="date" disabled />
+        <span class="text-muted">MM/DD/YYYY</span> <!-- To show dd/MM/yyyy format -->
         <span asp-validation-for="StartDate" class="text-danger small"></span>
     </div>
 
     <div class="col-6">
         <label asp-for="EndDate" class="form-label fw-bold">End Date</label>
-        <input asp-for="EndDate" class="form-control form-control-lg" type="date" />
+        <input asp-for="EndDate" class="form-control form-control-lg" type="date" disabled />
+        <span class="text-muted">MM/DD/YYYY</span> <!-- To show dd/MM/yyyy format -->
         <span asp-validation-for="EndDate" class="text-danger small"></span>
     </div>
 
-    <!-- Reason Field -->
-    <div class="col-12">
-        <label asp-for="Reason" class="form-label fw-bold">Reason</label>
-        <textarea asp-for="Reason" class="form-control form-control-lg" rows="4" placeholder="Enter reason here..."></textarea>
-        <span asp-validation-for="Reason" class="text-danger small"></span>
-    </div> *@
+    <div class="col-6">
+        <label asp-for="TotalDays" class="form-label fw-bold">Total Days</label>
+        <input asp-for="TotalDays" class="form-control form-control-lg" placeholder="Enter Total Days here..." disabled />
+        <span asp-validation-for="TotalDays" class="text-danger small"></span>
+    </div>
+
+
 </div>
+<div class="row">
+    <div class="col-6">
+        <label asp-for="SettleDays" class="form-label fw-bold">Settle Days</label>
+        <input asp-for="SettleDays" class="form-control form-control-lg readonly-background" placeholder="Enter Settle Days here..." readonly>
+        <span asp-validation-for="SettleDays" class="text-danger small"></span>
+    </div>
+    <div class="col-6">
+        <label asp-for="SettleAmount" class="form-label fw-bold">Settle Amount</label>
+        <input asp-for="SettleAmount" class="form-control form-control-lg readonly-background" placeholder="Enter Settle Amount here..." readonly>
+        <span asp-validation-for="SettleAmount" class="text-danger small"></span>
+    </div>
+</div>
+<input type="hidden" asp-for="VacationSettleID" id="VacationSettleID" />
+<input type="hidden" asp-for="EmployeeID" id="HiddenEmployeeID" />
+<input type="hidden" asp-for="VacationID" id="HiddenVacationID" />
+<script>
+    $(document).ready(function () {
+        $('#VacationID').prop('disabled', true);
+
+        // Function to populate vacation dates
+        function populateVacationDates() {
+            var vacationID = $('#HiddenVacationID').val(); // Get the selected employee ID from hidden field
+
+            // Check if an employee is selected
+            if (vacationID && vacationID !== "0") {
+                // Make an AJAX request to fetch vacation dates
+                $.ajax({
+                    url: '@Url.Action("GetVacationDatesByVacationID", "VacationSettle")', // Adjust controller name if necessary
+                    type: 'GET',
+                    data: { vacationID: vacationID },
+                    success: function (data) {
+                        var $vacationDropdown = $('#VacationID');
+                        $vacationDropdown.empty(); // Clear the current options
+
+                        // Check if data is not empty
+                        if (data.length > 0) {
+                            // Populate the vacation dates dropdown with only valid options
+                            $.each(data, function (index, option) {
+                                $vacationDropdown.append($('<option></option>').val(option.value).text(option.text));
+                            });
+                            // disabled the dropdown if records are found
+                            $vacationDropdown.prop('disabled', true);
+
+                            // Check if a vacation ID is set in the hidden field and select it
+                            var vacationID = $('#HiddenVacationID').val();
+                            if (vacationID) {
+                                $vacationDropdown.val(vacationID);
+                            }
+                        } else {
+                            // If no vacation records, keep it disabled
+                            $vacationDropdown.prop('disabled', true);
+                        }
+                    },
+                    error: function () {
+                        alert('Error fetching vacation dates.');
+                        // Keep the dropdown disabled on error
+                        $('#VacationID').prop('disabled', true);
+                    }
+                });
+            } else {
+                // If no employee is selected, reset the vacation dropdown and keep it disabled
+                $('#VacationID').empty().prop('disabled', true);
+            }
+        }
+
+        // Call the function on Employee dropdown change
+        $('#EmployeeID').change(function () {
+            populateVacationDates();
+        });
+
+        // Call the function on page load to populate vacation dates if an employee is already selected
+        populateVacationDates();
+    });
+</script>

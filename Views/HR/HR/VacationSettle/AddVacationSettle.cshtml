@@ -59,12 +59,12 @@
                     <div class="row">
                         <div class="col-6">
                             <label asp-for="SettleDays" class="form-label fw-bold">Settle Days</label>
-                            <input asp-for="SettleDays" class="form-control form-control-lg"  placeholder="Enter Settle Days here..." disabled></input>
+                            <input asp-for="SettleDays" class="form-control form-control-lg readonly-background" placeholder="Enter Settle Days here..." readonly>
                             <span asp-validation-for="SettleDays" class="text-danger small"></span>
                         </div>
                         <div class="col-6">
                             <label asp-for="SettleAmount" class="form-label fw-bold">Settle Amount</label>
-                            <input asp-for="SettleAmount" class="form-control form-control-lg"  placeholder="Enter Settle Amount here..." disabled></input>
+                            <input asp-for="SettleAmount" class="form-control form-control-lg readonly-background" placeholder="Enter Settle Amount here..." readonly>
                             <span asp-validation-for="SettleAmount" class="text-danger small"></span>
                         </div>
                     </div>
@@ -97,7 +97,7 @@
             if (employeeID && employeeID !== "0") {
                 // Make an AJAX request to fetch vacation dates
                 $.ajax({
-                    url: '@Url.Action("GetVacationDates", "VacationSettle")', // Adjust controller name if necessary
+                    url: '@Url.Action("GetVacationDatesByEmployeeIDWithoutSettled", "VacationSettle")', // Adjust controller name if necessary
                     type: 'GET',
                     data: { employeeID: employeeID },
                     success: function (data) {
@@ -157,6 +157,7 @@
 
                         $('#TotalDays').val(data.totalDays);
                         $('#SettleDays').val(Math.round(data.settleDays));
+                        $('#SettleAmount').val(Math.round(data.settleAmount));
                     },
                     error: function () {
                         alert('Error fetching vacation details.');

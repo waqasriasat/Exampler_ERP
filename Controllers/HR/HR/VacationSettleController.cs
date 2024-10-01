@@ -4,6 +4,7 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using System.Globalization;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
@@ -24,41 +25,75 @@ namespace Exampler_ERP.Controllers.HR.HR
       var vacationSettle = await _appDBContext.HR_VacationSettles
         .Where(b => b.FinalApprovalID != 1)
         .Include(d => d.Vacation)
+        .Include(d => d.Vacation.Settings_VacationType)
         .Include(d => d.Vacation.Employee)
         .OrderBy(emp => emp.VacationSettleID)
         .ToListAsync();
       return View("~/Views/HR/HR/VacationSettle/VacationSettle.cshtml", vacationSettle);
     }
+    // [HttpGet] Edit action method
+    [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
+      // Fetch the existing VacationSettle record by ID
+      var vacationSettle = await _appDBContext.HR_VacationSettles
+          .Where(vs => vs.VacationSettleID == id)
+          .Include(d => d.Vacation)
+          .Select(vs => new VacationSettleViewModel
+          {
+            VacationSettleID = vs.VacationSettleID,
+            VacationID = vs.VacationID,
+            EmployeeID = vs.Vacation.EmployeeID,
+            StartDate = vs.Vacation.StartDate,
+            EndDate = vs.Vacation.EndDate,
+            TotalDays = vs.Vacation.TotalDays,
+            SettleDays = vs.SettleDays,
+            SettleAmount = vs.SettleAmount,
+          })
+          .FirstOrDefaultAsync();
+
+      // If no record is found, return NotFound result
+      if (vacationSettle == null)
+      {
+        return NotFound();
+      }
+
+      // Populate Employee and Vacation Date lists for the view
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.VacationDateList = await _utils.GetVacationDates();
-      var vacations = await _appDBContext.HR_Vacations
-      .Where(v => v.VacationID == id)
-                                   .Include(c => c.Employee)
-                                    .Include(c => c.Settings_VacationType)
-                                   .FirstOrDefaultAsync();
-      //var viewModel = new DeductionSetupViewModel
-      //{
-      //  DeductionTypeID = id,
-      //  ClassID = deductionSetups.FirstOrDefault()?.ClassID ?? 1,
-      //  SalaryTypeDeductions = salaryTypeDeductions
-      //};
-      return PartialView("~/Views/HR/HR/VacationSettle/EditVacationSettle.cshtml", vacations);
+
+      return PartialView("~/Views/HR/HR/VacationSettle/EditVacationSettle.cshtml", vacationSettle);
     }
 
+    // [HttpPost] Edit action method
     [HttpPost]
-    public async Task<IActionResult> Edit(HR_Vacation vacation)
+    public async Task<IActionResult> Edit(VacationSettleViewModel model)
     {
+      // Check if the model state is valid
       if (ModelState.IsValid)
       {
-        // Calculate total days between StartDate and EndDate
-        vacation.TotalDays = (int)(vacation.EndDate - vacation.StartDate).TotalDays + 1;
+        // Find the existing record by ID
+        var vacationSettle = await _appDBContext.HR_VacationSettles
+            .FirstOrDefaultAsync(vs => vs.VacationID == model.VacationID);
 
-        _appDBContext.Update(vacation);
+        if (vacationSettle == null)
+        {
+          return NotFound();
+        }
+
+        // Update the properties of the VacationSettle object
+        vacationSettle.SettleDays = model.SettleDays;
+        vacationSettle.SettleAmount = model.SettleAmount;
+
+        // Save changes to the database
+        _appDBContext.HR_VacationSettles.Update(vacationSettle);
         await _appDBContext.SaveChangesAsync();
+
+        // Return success response
         return Json(new { success = true });
       }
+
+      // If the model state is invalid, return a failure response with validation errors
       return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
     }
 
@@ -72,43 +107,45 @@ namespace Exampler_ERP.Controllers.HR.HR
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(HR_Vacation vacation)
+    public async Task<IActionResult> Create(VacationSettleViewModel model)
     {
       if (ModelState.IsValid)
       {
-        vacation.Date = DateTime.Now;
+     
+        var vacationSettle = new HR_VacationSettle
+        {
+          VacationID = model.VacationID,
+          SettleDays = model.SettleDays,
+          SettleAmount = model.SettleAmount, 
+        };
 
-        // Calculate total days between StartDate and EndDate
-        vacation.TotalDays = (int)(vacation.EndDate - vacation.StartDate).TotalDays + 1;
-
-        // Add the vacation entry to the database
-        _appDBContext.Add(vacation);
+        _appDBContext.HR_VacationSettles.Add(vacationSettle);
         await _appDBContext.SaveChangesAsync();
 
-        var vacationId = vacation.VacationID;
-        if (vacationId > 0)
+        var vacationSettleId = vacationSettle.VacationSettleID;
+        if (vacationSettleId > 0)
         {
           var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
-                             .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 11)
+                             .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 12)
                              .CountAsync();
 
           if (processCount > 0)
           {
             var newProcessTypeApproval = new CR_ProcessTypeApproval
             {
-              ProcessTypeID = 11,
-              Notes = vacation.Reason,
+              ProcessTypeID = 12,
+              Notes = "Vacation Settle",
               Date = DateTime.Now,
-              EmployeeID = vacation.EmployeeID,
+              EmployeeID = model.EmployeeID,
               UserID = 1, // Using session value
-              TransactionID = vacation.VacationID
+              TransactionID = vacationSettleId
             };
 
             _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
             await _appDBContext.SaveChangesAsync();
 
             var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
-                                     .Where(pta => pta.ProcessTypeID == 11 && pta.Rank == 1)
+                                     .Where(pta => pta.ProcessTypeID == 12 && pta.Rank == 1)
                                      .FirstOrDefaultAsync();
 
             if (nextApprovalSetup != null)
@@ -135,9 +172,9 @@ namespace Exampler_ERP.Controllers.HR.HR
           }
           else
           {
-            vacation.FinalApprovalID = 1;
-            vacation.ApprovalProcessID = 0;
-            _appDBContext.HR_Vacations.Update(vacation);
+            vacationSettle.FinalApprovalID = 1;
+            vacationSettle.ApprovalProcessID = 0;
+            _appDBContext.HR_VacationSettles.Update(vacationSettle);
             await _appDBContext.SaveChangesAsync();
             return Json(new { success = true });
           }
@@ -150,9 +187,21 @@ namespace Exampler_ERP.Controllers.HR.HR
       return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
     }
     [HttpGet]
-    public async Task<IActionResult> GetVacationDates(int employeeID)
+    public async Task<IActionResult> GetVacationDatesByVacationID(int vacationID)
+    {
+      var vacationDates = await _utils.GetVacationDatesByVacationD(vacationID);
+      return Json(vacationDates); // Return the data as JSON
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetVacationDatesByEmployeeID(int employeeID)
     {
       var vacationDates = await _utils.GetVacationDatesByEmployeeID(employeeID);
+      return Json(vacationDates); // Return the data as JSON
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetVacationDatesByEmployeeIDWithoutSettled(int employeeID)
+    {
+      var vacationDates = await _utils.GetVacationDatesByEmployeeIDWithoutSettled(employeeID);
       return Json(vacationDates); // Return the data as JSON
     }
     [HttpGet]
@@ -182,6 +231,8 @@ namespace Exampler_ERP.Controllers.HR.HR
             SettleDays = (VacationBalanceresult.VacationBalance < v.TotalDays)
                   ? VacationBalanceresult.VacationBalance
                   : v.TotalDays
+            
+
           })
           .FirstOrDefaultAsync();
 
@@ -190,8 +241,29 @@ namespace Exampler_ERP.Controllers.HR.HR
       {
         return NotFound(); // Return 404 if the vacation record isn't found
       }
+      var salarySum = await _appDBContext.HR_SalaryDetails
+          .Where(sd => sd.Salary.EmployeeID == employeeID
+                       && sd.Salary.FinalApprovalID == 1
+                       && (sd.SalaryTypeID == 1 || sd.SalaryTypeID == 2))
+          .SumAsync(sd => sd.SalaryAmount ?? 0);
 
-      return Json(vacation); // Return the vacation data as JSON
+      DateTime endDate = DateTime.ParseExact(vacation.EndDate, "dd/MM/yyyy", CultureInfo.InvariantCulture); // Parse EndDate to DateTime
+      int daysInMonth = DateTime.DaysInMonth(endDate.Year, endDate.Month);
+
+      double dailySalary = salarySum / daysInMonth;
+
+      double SettleAmount = dailySalary * vacation.SettleDays ?? 0.0;
+
+      var result = new
+      {
+        vacation.StartDate,
+        vacation.EndDate,
+        vacation.TotalDays,
+        vacation.SettleDays,
+        SettleAmount = Math.Round(SettleAmount, 0) // Round to the nearest integer if required
+      };
+
+      return Json(result); // Return the vacation data as JSON
     }
 
     public async Task<IActionResult> Delete(int id)
