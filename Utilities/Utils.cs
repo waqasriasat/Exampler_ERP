@@ -476,6 +476,37 @@ namespace Exampler_ERP.Utilities
 
       return vacationTypeList;
     }
+    public async Task<List<SelectListItem>> GetVacationDates()
+    {
+      var vacationDateList = await _appDBContext.HR_Vacations
+          .Select(c => new SelectListItem
+          {
+            Value = c.VacationID.ToString(),
+            Text = c.Date.ToString()
+          })
+          .ToListAsync();
+
+      vacationDateList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+
+      return vacationDateList;
+    }
+    public async Task<List<SelectListItem>> GetVacationDatesByEmployeeID(int employeeID)
+    {
+      var vacationDateList = await _appDBContext.HR_Vacations
+          .Where(v => v.EmployeeID == employeeID) // Filter by EmployeeID
+          .Select(v => new SelectListItem
+          {
+            Value = v.VacationID.ToString(),
+            Text = v.Date.ToString("dd-MMM-yyyy")
+          })
+          .ToListAsync();
+
+      // Add a default 'Please Select' option
+      vacationDateList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+
+      return vacationDateList;
+    }
+
     public async Task<List<SelectListItem>> GetSalaryTypeList()
     {
       var SalaryTypeList = await _appDBContext.Settings_SalaryTypes

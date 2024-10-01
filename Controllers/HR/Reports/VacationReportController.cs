@@ -28,10 +28,10 @@ namespace Exampler_ERP.Controllers.HR.Reports
           StartDate = emp.StartDate,
           EndDate = emp.EndDate,
           TotalDays = emp.TotalDays,
-          TypeOfVacation = ""
-          //TypeOfVacation = await _appDBContext.vaca
-          //          .Where(vac => vac.EmployeeID == emp.Employee.EmployeeID && vac.FinalApprovalID == 1)
-          //          .Sum(vac => (int?)vac.TotalDays) ?? 0,
+          TypeOfVacation = _appDBContext.HR_VacationSettles
+                .Where(vac => vac.VacationID == emp.VacationID && vac.FinalApprovalID == 1)
+                .Any() ? "Paid" : "UnPaid"
+
 
         })
         .OrderBy(emp => emp.EmployeeID)

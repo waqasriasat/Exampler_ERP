@@ -53,10 +53,16 @@ namespace Exampler_ERP.Models
     public DbSet<Settings_EndOfServiceReasonType> Settings_EndOfServiceReasonTypes { get; set; }
     public DbSet<Settings_EmployeeRequestType> Settings_EmployeeRequestTypes { get; set; }
     public DbSet<HR_EmployeeRequest> HR_EmployeeRequests { get; set; }
-
+    public DbSet<HR_VacationSettle> HR_VacationSettles { get; set; }
     public DbSet<HR_DocumentUpload> HR_DocumentUploads { get; set; }
+
+
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+    
+
       modelBuilder.Entity<Settings_EmployeeRequestType>().HasData(
            // Attendance Requests
            new Settings_EmployeeRequestType { EmployeeRequestTypeID = 1, EmployeeRequestTypeName = "Overtime Request", ActiveYNID = 1, DeleteYNID = 0 },

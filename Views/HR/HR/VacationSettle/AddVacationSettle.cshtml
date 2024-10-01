@@ -1,0 +1,174 @@
+@model Exampler_ERP.Models.Temp.VacationSettleViewModel
+@{
+    ViewData["Title"] = "HR - Vacation Settle";
+}
+
+<div class="modal fade" id="addVacationSettleModal" tabindex="-1" role="dialog" aria-labelledby="addVacationSettleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="addVacationSettleModalLabel">
+                    <i class="fas fa-key me-2"></i>Add Vacation Settle
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- Add VacationSettle Form -->
+                <form id="addVacationSettleForm" method="post" asp-action="Create" asp-controller="VacationSettle" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-12">
+                            <label asp-for="EmployeeID" class="form-label fw-bold">Employee Name</label>
+                            <select id="EmployeeID" asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control form-control-lg">
+                            </select>
+                            <span asp-validation-for="EmployeeID" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="VacationID" class="form-label fw-bold">Vacation Date</label>
+                            <select id="VacationID" asp-for="VacationID" class="form-control form-control-lg">
+                                <option value="0">Please Select</option>
+                            </select>
+                            <span asp-validation-for="VacationID" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-6">
+                            <label asp-for="StartDate" class="form-label fw-bold">Start Date</label>
+                            <input asp-for="StartDate" class="form-control form-control-lg" type="date" disabled />
+                            <span class="text-muted">MM/DD/YYYY</span> <!-- To show dd/MM/yyyy format -->
+                            <span asp-validation-for="StartDate" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-6">
+                            <label asp-for="EndDate" class="form-label fw-bold">End Date</label>
+                            <input asp-for="EndDate" class="form-control form-control-lg" type="date" disabled />
+                            <span class="text-muted">MM/DD/YYYY</span> <!-- To show dd/MM/yyyy format -->
+                            <span asp-validation-for="EndDate" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-6">
+                            <label asp-for="TotalDays" class="form-label fw-bold">Total Days</label>
+                            <input asp-for="TotalDays" class="form-control form-control-lg" placeholder="Enter Total Days here..." disabled />
+                            <span asp-validation-for="TotalDays" class="text-danger small"></span>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label asp-for="SettleDays" class="form-label fw-bold">Settle Days</label>
+                            <input asp-for="SettleDays" class="form-control form-control-lg"  placeholder="Enter Settle Days here..." disabled></input>
+                            <span asp-validation-for="SettleDays" class="text-danger small"></span>
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="SettleAmount" class="form-label fw-bold">Settle Amount</label>
+                            <input asp-for="SettleAmount" class="form-control form-control-lg"  placeholder="Enter Settle Amount here..." disabled></input>
+                            <span asp-validation-for="SettleAmount" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Success Message -->
+                <div id="successMessage" class="alert alert-success text-center mt-3" style="display:none;"></div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times-circle"></i> Close
+                </button>
+                <button type="submit" id="saveNewVacationSettle" class="btn btn-success">
+                    <i class="fas fa-check-circle"></i> Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#VacationID').prop('disabled', true);
+        // On Employee dropdown change
+        $('#EmployeeID').change(function () {
+            var employeeID = $(this).val();
+
+            // Check if an employee is selected
+            if (employeeID && employeeID !== "0") {
+                // Make an AJAX request to fetch vacation dates
+                $.ajax({
+                    url: '@Url.Action("GetVacationDates", "VacationSettle")', // Adjust controller name if necessary
+                    type: 'GET',
+                    data: { employeeID: employeeID },
+                    success: function (data) {
+                        var $vacationDropdown = $('#VacationID');
+                        $vacationDropdown.empty(); // Clear the current options
+
+                        // Check if data is not empty
+                        if (data.length > 0) {
+                            // Populate the vacation dates dropdown
+                            $.each(data, function (index, option) {
+                                $vacationDropdown.append($('<option></option>').val(option.value).text(option.text));
+                            });
+                            // Enable the dropdown if records are found
+                            $vacationDropdown.prop('disabled', false);
+                        } else {
+                            // If no vacation records, keep it disabled
+                            $vacationDropdown.prop('disabled', true);
+                        }
+                    },
+                    error: function () {
+                        alert('Error fetching vacation dates.');
+                        // Keep the dropdown disabled on error
+                        $('#VacationID').prop('disabled', true);
+                    }
+                });
+            } else {
+                // If no employee is selected, reset the vacation dropdown and keep it disabled
+                $('#VacationID').empty().append('<option value="0">Please Select</option>').prop('disabled', true);
+            }
+        });
+        // On Vacation dropdown change
+        $('#VacationID').change(function () {
+            var vacationID = $(this).val();
+            var employeeID = $('#EmployeeID').val();
+            if (vacationID && vacationID !== "0") {
+                $.ajax({
+                    url: '@Url.Action("GetVacationRecord", "VacationSettle")',
+                    type: 'GET',
+                    data: { vacationID: vacationID, employeeID: employeeID },
+
+                    success: function (data) {
+                        // Parse the dates (assumes they are returned in dd/MM/yyyy format)
+                        var startDateParts = data.startDate.split('/'); // dd/MM/yyyy
+                        var endDateParts = data.endDate.split('/');     // dd/MM/yyyy
+
+                        // Convert to yyyy-MM-dd format for the date input
+                        var formattedStartDate = `${startDateParts[2]}-${startDateParts[1]}-${startDateParts[0]}`;
+                        var formattedEndDate = `${endDateParts[2]}-${endDateParts[1]}-${endDateParts[0]}`;
+
+                        // Set the values in the date input fields
+                        $('#StartDate').val(formattedStartDate);
+                        $('#EndDate').val(formattedEndDate);
+
+                        // Display the dates in dd/MM/yyyy format next to the inputs
+                        $('.start-date-display').text(data.startDate); // Show in dd/MM/yyyy
+                        $('.end-date-display').text(data.endDate);     // Show in dd/MM/yyyy
+
+                        $('#TotalDays').val(data.totalDays);
+                        $('#SettleDays').val(Math.round(data.settleDays));
+                    },
+                    error: function () {
+                        alert('Error fetching vacation details.');
+                    }
+                });
+            } else {
+                // Reset the fields if no vacation is selected
+                $('#StartDate, #EndDate, #TotalDays').val('');
+                $('.start-date-display, .end-date-display').text(''); // Clear displayed dates
+            }
+        });
+
+
+    });
+</script>
