@@ -55,13 +55,41 @@ namespace Exampler_ERP.Models
     public DbSet<HR_EmployeeRequest> HR_EmployeeRequests { get; set; }
     public DbSet<HR_VacationSettle> HR_VacationSettles { get; set; }
     public DbSet<HR_DocumentUpload> HR_DocumentUploads { get; set; }
+    public DbSet<Settings_OverTimeRate> Settings_OverTimeRates { get; set; }
+    public DbSet<Settings_OverTimeType> Settings_OverTimeTypes { get; set; }
+    public DbSet<Settings_MonthType> Settings_MonthTypes { get; set; }
 
 
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-    
+      modelBuilder.Entity<Settings_MonthType>().HasData(
+    new Settings_MonthType() { MonthTypeID = 1, MonthTypeName = "January" },
+    new Settings_MonthType() { MonthTypeID = 2, MonthTypeName = "February" },
+    new Settings_MonthType() { MonthTypeID = 3, MonthTypeName = "March" },
+    new Settings_MonthType() { MonthTypeID = 4, MonthTypeName = "April" },
+    new Settings_MonthType() { MonthTypeID = 5, MonthTypeName = "May" },
+    new Settings_MonthType() { MonthTypeID = 6, MonthTypeName = "June" },
+    new Settings_MonthType() { MonthTypeID = 7, MonthTypeName = "July" },
+    new Settings_MonthType() { MonthTypeID = 8, MonthTypeName = "August" },
+    new Settings_MonthType() { MonthTypeID = 9, MonthTypeName = "September" },
+    new Settings_MonthType() { MonthTypeID = 10, MonthTypeName = "October" },
+    new Settings_MonthType() { MonthTypeID = 11, MonthTypeName = "November" },
+    new Settings_MonthType() { MonthTypeID = 12, MonthTypeName = "December" }
+);
+
+
+      modelBuilder.Entity<Settings_OverTimeType>().HasData(
+        new Settings_OverTimeType() { OverTimeTypeID = 1, OverTimeTypeName = "Basic Salary", ActiveYNID = 1, DeleteYNID = 0 },
+        new Settings_OverTimeType() { OverTimeTypeID = 2, OverTimeTypeName = "Full Salary", ActiveYNID = 1, DeleteYNID = 0 }
+        );
+
+      modelBuilder.Entity<Settings_OverTimeRate>().HasData(
+        new Settings_OverTimeRate() { OverTimeRateTypeID = 1, OverTimeRateValue = 1, ActiveYNID = 1, DeleteYNID = 0 },
+        new Settings_OverTimeRate() { OverTimeRateTypeID = 2, OverTimeRateValue = 1.5, ActiveYNID = 1, DeleteYNID = 0 },
+        new Settings_OverTimeRate() { OverTimeRateTypeID = 3, OverTimeRateValue = 2, ActiveYNID = 1, DeleteYNID = 0 }
+        );
 
       modelBuilder.Entity<Settings_EmployeeRequestType>().HasData(
            // Attendance Requests

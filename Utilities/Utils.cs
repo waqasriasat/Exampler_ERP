@@ -462,6 +462,36 @@ namespace Exampler_ERP.Utilities
 
       return deductionTypeList;
     }
+    //GetOverTimeTypes
+    public async Task<List<SelectListItem>> GetOverTimeTypes()
+    {
+      var overTimeTypeList = await _appDBContext.Settings_OverTimeTypes
+          .Select(c => new SelectListItem
+          {
+            Value = c.OverTimeTypeID.ToString(),
+            Text = c.OverTimeTypeName
+          })
+          .ToListAsync();
+
+      overTimeTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+
+      return overTimeTypeList;
+    }
+    public async Task<List<SelectListItem>> GetOverTimeRates()
+    {
+      var overTimeRateList = await _appDBContext.Settings_OverTimeRates
+          .Select(c => new SelectListItem
+          {
+            Value = c.OverTimeRateTypeID.ToString(), // Use OvertimeRateTypeID here
+            Text = c.OverTimeRateValue.ToString() // Ensure OvertimeRateValue is a string
+          })
+          .ToListAsync();
+
+      // Add the default "0" item
+      overTimeRateList.Insert(0, new SelectListItem { Value = "0", Text = "0" });
+
+      return overTimeRateList;
+    }
     public async Task<List<SelectListItem>> GetVacationTypes()
     {
       var vacationTypeList = await _appDBContext.Settings_VacationTypes
@@ -565,6 +595,20 @@ namespace Exampler_ERP.Utilities
       EmployeeRequestTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
 
       return EmployeeRequestTypeList;
+    }
+    public async Task<List<SelectListItem>> GetMonthsTypes()
+    {
+      var monthTypeList = await _appDBContext.Settings_MonthTypes
+          .Select(d => new SelectListItem
+          {
+            Value = d.MonthTypeID.ToString(),
+            Text = d.MonthTypeName
+          })
+          .ToListAsync();
+
+      monthTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+
+      return monthTypeList;
     }
   }
 }

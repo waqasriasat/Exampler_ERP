@@ -32,8 +32,12 @@
             <tr>
                 <th>OverTime ID</th>
                 <th>Employee Name</th>
+                <th>OverTime Type</th>
                 <th>Month</th>
                 <th>Year</th>
+                <th>Total Days</th>
+                <th>Total Hours</th>
+                <th>Rate</th>
                 <th>Amount</th>
             </tr>
         </thead>
@@ -43,8 +47,12 @@
                 <tr>
                     <td>@OverTime.OverTimeID</td>
                     <td>@($"{OverTime.Employee?.FirstName} {OverTime.Employee?.FatherName} {OverTime.Employee?.FamilyName}")</td>
-                    <td>@OverTime.Month</td>
+                    <td>@(OverTime.OverTimeType?.OverTimeTypeName ?? "N/A")</td>
+                    <td>@OverTime.MonthType?.MonthTypeName</td>
                     <td>@OverTime.Year</td>
+                    <td>@OverTime.Days</td>
+                    <td>@OverTime.Hours</td>
+                    <td>@OverTime.OverTimeRate?.OverTimeRateValue</td>
                     <td>@OverTime.Amount</td>
                 </tr>
             }

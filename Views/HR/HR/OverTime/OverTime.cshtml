@@ -102,19 +102,25 @@
                     <div class="row">
                         <div class="col-10 col-md-10 col-lg-9">
                             <div class="row">
-                                <div class="col-2">
+                                <div class="col-1">
                                     <p class="text-nowrap">OverTime ID</p>
                                 </div>
                                 <div class="col-4">
                                     <p class="text-nowrap">Employee Name</p>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-1">
                                     <p class="text-nowrap">Month</p>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-1">
                                     <p class="text-nowrap">Year</p>
                                 </div>
                                 <div class="col-2">
+                                    <p class="text-nowrap">Total OverTime Days</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Per Day Hours</p>
+                                </div>
+                                <div class="col-1">
                                     <p class="text-nowrap">Amount</p>
                                 </div>
                             </div>
@@ -127,19 +133,25 @@
                         <div class="row">
                             <div class="col-8 col-md-10 col-lg-9">
                                 <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-2">
+                                    <div class="col-12 col-md-12 col-lg-1">
                                         <p class="text-nowrap"><span class="smallAdd">OverTime ID : </span>@Html.DisplayFor(modelItem => item.OverTimeID)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
                                     </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Month : </span>@Html.DisplayFor(modelItem => item.Month)</p>
+                                    <div class="col-12 col-md-12 col-lg-1">
+                                        <p class="text-nowrap"><span class="smallAdd">Month : </span>@item.MonthType?.MonthTypeName</p>
                                     </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
+                                    <div class="col-12 col-md-12 col-lg-1">
                                         <p class="text-nowrap"><span class="smallAdd">Year : </span>@Html.DisplayFor(modelItem => item.Year)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Total OverTime Days : </span>@Html.DisplayFor(modelItem => item.Days)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Per Day Hours : </span>@Html.DisplayFor(modelItem => item.Hours)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-1">
                                         <p class="text-nowrap"><span class="smallAdd">Amount : </span>@Html.DisplayFor(modelItem => item.Amount)</p>
                                     </div>
                                 </div>

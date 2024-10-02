@@ -1,0 +1,112 @@
+@model Exampler_ERP.Models.HR_OverTime
+
+<div class="modal fade" id="addOverTimeModal" tabindex="-1" role="dialog" aria-labelledby="addOverTimeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="addOverTimeModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Add OverTime
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addOverTimeForm" method="post" asp-action="Create" asp-controller="OverTime" enctype="multipart/form-data">
+                    <h5 class="modal-title" style="padding-top:10px">OverTime Details</h5>
+                    <hr />
+                    <div class="row">
+                        <div class="col-12">
+                            <!-- Employee Selection -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <label asp-for="EmployeeID" class="form-label fw-bold">Employee Name</label>
+                                    <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control form-control-lg"></select>
+                                    <span asp-validation-for="EmployeeID" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!-- OverTime Type Selection -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <label asp-for="OverTimeTypeID" class="form-label fw-bold">OverTime Type</label>
+                                    <select asp-for="OverTimeTypeID" asp-items="@(new SelectList(ViewBag.OverTimeTypesList, "Value", "Text"))" class="form-control form-control-lg"></select>
+                                    <span asp-validation-for="OverTimeTypeID" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                          
+                            <!-- Calculated Month, Year, Days -->
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="MonthTypeID" class="form-label fw-bold">Month</label>
+                                    <select asp-for="MonthTypeID" asp-items="@(new SelectList(ViewBag.MonthsList, "Value", "Text"))" class="form-control form-control-lg"></select>
+                                    <span asp-validation-for="MonthTypeID" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="Year" class="form-label fw-bold">Year</label>
+                                    <select asp-for="Year" class="form-control form-control-lg">
+                                        @for (int year = DateTime.Now.Year; year >= 1900; year--)
+                                        {
+                                            <option value="@year">@year</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Year" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <!-- New Fields: Hours, Overtime Rate, Amount -->
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="Days" class="form-label fw-bold">Total Days</label>
+                                    <input asp-for="Days" class="form-control form-control-lg" type="number" placeholder="Enter overtime Days" />
+                                    <span asp-validation-for="Days" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="Hours" class="form-label fw-bold"> Total Hours</label>
+                                    <input asp-for="Hours" class="form-control form-control-lg" type="number" placeholder="Enter overtime hours" />
+                                    <span asp-validation-for="Hours" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="OvertimeRateID" class="form-label fw-bold">Overtime Rate</label>
+                                    <select asp-for="OvertimeRateID" asp-items="@(new SelectList(ViewBag.OvertimeRatesList, "Value", "Text"))" class="form-control form-control-lg"></select>
+                                    <span asp-validation-for="OvertimeRateID" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="Amount" class="form-label fw-bold">Amount</label>
+                                    <input asp-for="Amount" class="form-control form-control-lg" type="number" placeholder="Enter overtime amount" />
+                                    <span asp-validation-for="Amount" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Fields -->
+                    <input type="hidden" asp-for="DeleteYNID" />
+                    <input type="hidden" asp-for="FinalApprovalID" />
+                    <input type="hidden" asp-for="ApprovalProcessID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" id="saveNewOverTime">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Existing JS logic for date and field management
+</script>
+
+<style>
+    .readonly-background {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+
+    .date-placeholder::placeholder {
+        color: #6c757d;
+        opacity: 1; /* Firefox */
+    }
+</style>

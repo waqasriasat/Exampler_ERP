@@ -1,5 +1,100 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model Exampler_ERP.Models.HR_Employee
 @{
+   
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Print Card</title>
+    <style>
+        .card {
+            width: 400px;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: Arial, sans-serif;
+            text-align: left;
+            background-color: #f9f9f9;
+        }
+        .card-header {
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .card-body {
+            padding: 10px 0;
+        }
+        .card-body img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 10px auto;
+        }
+        .card-body .field-label {
+            font-weight: bold;
+        }
+        .card-footer {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="card-header">
+            Employee ID Card
+        </div>
+        
+        <div class="card-body">
+            <!-- Display Employee Picture -->
+            @if (Model.Picture != null)
+            {
+                <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Picture))" alt="Employee Picture" />
+            }
+            else
+            {
+                <img src="~/images/default-profile.png" alt="Default Profile Picture" />
+            }
+
+            <!-- Employee Name -->
+            <p><span class="field-label">Name:</span> @Model.FirstName @Model.FatherName @Model.FamilyName</p>
+
+            <!-- Employee Code -->
+            <p><span class="field-label">Employee Code:</span> @Model.EmployeeCode</p>
+
+            <!-- Designation -->
+            <p><span class="field-label">Designation:</span> @Model.Designation?.DesignationName</p>
+
+            <!-- Department -->
+            <p><span class="field-label">Department:</span> @Model.Department?.DepartmentName</p>
+
+            <!-- Phone Number -->
+            <p><span class="field-label">Phone:</span> @Model.Phone1</p>
+
+            <!-- Email -->
+            <p><span class="field-label">Email:</span> @Model.Email</p>
+
+            <!-- ID Number -->
+            <p><span class="field-label">ID Number:</span> @Model.IDNumber</p>
+
+            <!-- Date of Birth -->
+            <p><span class="field-label">Date of Birth:</span> @Model.DOB?.ToString("dd/MM/yyyy")</p>
+
+           
+        </div>
+        
+        <div class="card-footer">
+            Company Name <br />
+            Address, City, Country <br />
+            Contact Info: +1-234-567-890
+        </div>
+</div>
+</body>
+</html>

@@ -47,5 +47,24 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       return View("~/Views/HR/Employeement/CardPrint/CardPrint.cshtml", viewModel);
     }
+    public async Task<IActionResult> PrintCard(int employeeId)
+    {
+      // Fetch the employee details asynchronously, including related entities like Designation and Department
+      var employee = await _appDBContext.HR_Employees
+          .Include(e => e.Designation)
+          .Include(e => e.Department)
+          .FirstOrDefaultAsync(e => e.EmployeeID == employeeId);
+
+      // If employee is not found, return a 404 Not Found result
+      if (employee == null)
+      {
+        return NotFound();
+      }
+
+      // Return the custom view for printing the employee card, passing the employee model
+      return View("~/Views/HR/Employeement/CardPrint/PrintCardPrint.cshtml", employee);
+    }
+
+
   }
 }
