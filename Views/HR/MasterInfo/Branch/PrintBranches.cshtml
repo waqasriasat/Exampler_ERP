@@ -1,4 +1,4 @@
-@model IEnumerable<Exampler_ERP.Models.Settings_Branch>
+@model IEnumerable<Exampler_ERP.Models.Settings_BranchType>
 
 <!DOCTYPE html>
 <html>
@@ -48,9 +48,9 @@
             @foreach (var branch in Model)
             {
                 <tr>
-                    <td>@branch.BranchID</td>
+                    <td>@branch.BranchTypeID</td>
                     <td>@branch.Date</td>
-                    <td>@branch.BranchName</td>
+                    <td>@branch.BranchTypeName</td>
                     <td>@(branch.ActiveYNID == 1 ? "Yes" : "No")</td>
                     <td>@branch.POBox</td>
                     <td>@branch.Country</td>

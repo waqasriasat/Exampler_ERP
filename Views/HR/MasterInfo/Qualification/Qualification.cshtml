@@ -1,4 +1,4 @@
-@model IEnumerable<Exampler_ERP.Models.Settings_Qualification>
+@model IEnumerable<Exampler_ERP.Models.Settings_QualificationType>
 
 @{
     ViewData["Title"] = "Master Information - Qualification";
@@ -122,10 +122,10 @@
                             <div class="col-8 col-md-10 col-lg-9">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Qualification ID : </span>@Html.DisplayFor(modelItem => item.QualificationID)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Qualification ID : </span>@Html.DisplayFor(modelItem => item.QualificationTypeID)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-8">
-                                        <p class="text-nowrap"><span class="smallAdd">Qualification Name : </span>@Html.DisplayFor(modelItem => item.QualificationName)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Qualification Name : </span>@Html.DisplayFor(modelItem => item.QualificationTypeName)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap">
@@ -146,14 +146,14 @@
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="editQualificationLink" data-id="@item.QualificationID">
+                                            <a href="#" class="editQualificationLink" data-id="@item.QualificationTypeID">
                                                 <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="deleteQualificationLink" data-id="@item.QualificationID">
+                                            <a href="#" class="deleteQualificationLink" data-id="@item.QualificationTypeID">
                                                 <i class="fa fa-trash-o" style="font-size: large; color:maroon; line-height: 2;"></i>
                                             </a>
                                         </div>

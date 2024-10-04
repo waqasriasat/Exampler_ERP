@@ -179,7 +179,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
           {
             ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID,
             Date = processTypeApprovalDetail.Date,
-            RoleID = nextApprovalSetup.RoleID,
+            RoleID = nextApprovalSetup.RoleTypeID,
             AppID = 0,
             AppUserID = 0,
             Notes = null,

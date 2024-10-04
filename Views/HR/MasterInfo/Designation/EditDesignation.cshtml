@@ -1,4 +1,4 @@
-@model Exampler_ERP.Models.Settings_Designation
+@model Exampler_ERP.Models.Settings_DesignationType
 
 <div class="modal fade" id="editDesignationModal" tabindex="-1" role="dialog" aria-labelledby="editDesignationModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -18,7 +18,7 @@
                             <div class="row">
                                 <div class="col-12 col-md-12 col-lg-12">
                                     <label for="DesignationName" class="form-label fw-bold">Designation Name</label>
-                                    <input type="text" class="form-control form-control-lg" id="DesignationName" name="DesignationName" value="@Model.DesignationName" />
+                                    <input type="text" class="form-control form-control-lg" id="DesignationName" name="DesignationName" value="@Model.DesignationTypeName" />
                                 </div>
                                 <div class="col-12 col-md-6 col-lg-6">
                                     <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
@@ -30,7 +30,7 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" id="DesignationID" name="DesignationID" value="@Model.DesignationID" />
+                    <input type="hidden" id="DesignationID" name="DesignationID" value="@Model.DesignationTypeID" />
                 </form>
             </div>
             <div class="modal-footer">

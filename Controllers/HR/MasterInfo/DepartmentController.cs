@@ -24,9 +24,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Index()
     {
-      var Departments = await _appDBContext.Settings_Departments
+      var Departments = await _appDBContext.Settings_DepartmentTypes
     .Where(b => b.DeleteYNID != 1)
-    .Include(d => d.Branch) // Eagerly load the related Branch data
+    .Include(d => d.BranchType) // Eagerly load the related Branch data
     .ToListAsync();
 
       return View("~/Views/HR/MasterInfo/Department/Department.cshtml", Departments);
@@ -34,14 +34,14 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Department()
     {
-      var Departments = await _appDBContext.Settings_Departments.ToListAsync();
+      var Departments = await _appDBContext.Settings_DepartmentTypes.ToListAsync();
       return Ok(Departments);
     }// Add the Edit action
     public async Task<IActionResult> Edit(int id)
     {
       ViewBag.BranchList = await _utils.GetBranchs();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      var Department = await _appDBContext.Settings_Departments.FindAsync(id);
+      var Department = await _appDBContext.Settings_DepartmentTypes.FindAsync(id);
       if (Department == null)
       {
         return NotFound();
@@ -50,7 +50,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(Settings_Department Department)
+    public async Task<IActionResult> Edit(Settings_DepartmentType Department)
     {
       if (ModelState.IsValid)
       {
@@ -65,16 +65,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       ViewBag.BranchList = await _utils.GetBranchs();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      return PartialView("~/Views/HR/MasterInfo/Department/AddDepartment.cshtml", new Settings_Department());
+      return PartialView("~/Views/HR/MasterInfo/Department/AddDepartment.cshtml", new Settings_DepartmentType());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Settings_Department Department)
+    public async Task<IActionResult> Create(Settings_DepartmentType Department)
     {
       if (ModelState.IsValid)
       {
         Department.DeleteYNID = 0;
-        _appDBContext.Settings_Departments.Add(Department);
+        _appDBContext.Settings_DepartmentTypes.Add(Department);
         await _appDBContext.SaveChangesAsync();
         return Json(new { success = true });
       }
@@ -82,7 +82,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Delete(int id)
     {
-      var Department = await _appDBContext.Settings_Departments.FindAsync(id);
+      var Department = await _appDBContext.Settings_DepartmentTypes.FindAsync(id);
       if (Department == null)
       {
         return NotFound();
@@ -91,7 +91,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       Department.ActiveYNID = 0;
       Department.DeleteYNID = 1;
 
-      _appDBContext.Settings_Departments.Update(Department);
+      _appDBContext.Settings_DepartmentTypes.Update(Department);
       await _appDBContext.SaveChangesAsync();
 
       return Json(new { success = true });
@@ -100,9 +100,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var Departments = await _appDBContext.Settings_Departments
+      var Departments = await _appDBContext.Settings_DepartmentTypes
         .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Branch) // Eagerly load the related Branch data
+        .Include(d => d.BranchType) // Eagerly load the related Branch data
         .ToListAsync();
 
 
@@ -117,9 +117,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
         for (int i = 0; i < Departments.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = Departments[i].DepartmentID;
-          worksheet.Cells[i + 2, 2].Value = Departments[i].Branch?.BranchName;
-          worksheet.Cells[i + 2, 3].Value = Departments[i].DepartmentName;
+          worksheet.Cells[i + 2, 1].Value = Departments[i].DepartmentTypeID;
+          worksheet.Cells[i + 2, 2].Value = Departments[i].BranchType?.BranchTypeName;
+          worksheet.Cells[i + 2, 3].Value = Departments[i].DepartmentTypeName;
           worksheet.Cells[i + 2, 4].Value = Departments[i].ActiveYNID == 1 ? "Yes" : "No";
         }
 
@@ -136,9 +136,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Print()
     {
-      var Departments = await _appDBContext.Settings_Departments
+      var Departments = await _appDBContext.Settings_DepartmentTypes
         .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Branch) // Eagerly load the related Branch data
+        .Include(d => d.BranchType) // Eagerly load the related Branch data
         .ToListAsync();
       return View("~/Views/HR/MasterInfo/Department/PrintDepartments.cshtml", Departments);
     }

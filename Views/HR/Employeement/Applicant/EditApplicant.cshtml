@@ -21,10 +21,10 @@
                             
                             <div class="row">
                                 <div class="col-4">
-                                    <label asp-for="BranchID" class="form-label fw-bold">Branch</label>
-                                    <select asp-for="BranchID" asp-items="@(new SelectList(ViewBag.BranchsList, "Value", "Text", Model.BranchID))" class="form-control form-control-lg">
+                                    <label asp-for="BranchTypeID" class="form-label fw-bold">Branch</label>
+                                    <select asp-for="BranchTypeID" asp-items="@(new SelectList(ViewBag.BranchsList, "Value", "Text", Model.BranchTypeID))" class="form-control form-control-lg">
                                     </select>
-                                    <span asp-validation-for="BranchID" class="text-danger"></span>
+                                    <span asp-validation-for="BranchTypeID" class="text-danger"></span>
                                 </div>
                                
                             </div>

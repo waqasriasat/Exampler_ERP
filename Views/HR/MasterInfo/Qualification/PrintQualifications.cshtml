@@ -1,4 +1,4 @@
-@model IEnumerable<Exampler_ERP.Models.Settings_Qualification>
+@model IEnumerable<Exampler_ERP.Models.Settings_QualificationType>
 
 <!DOCTYPE html>
 <html>
@@ -39,8 +39,8 @@
             @foreach (var Qualification in Model)
             {
                 <tr>
-                    <td>@Qualification.QualificationID</td>
-                    <td>@Qualification.QualificationName</td>
+                    <td>@Qualification.QualificationTypeID</td>
+                    <td>@Qualification.QualificationTypeName</td>
                     <td>@(Qualification.ActiveYNID == 1 ? "Yes" : "No")</td>
                 </tr>
             }

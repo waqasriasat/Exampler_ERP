@@ -117,7 +117,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     public async Task<IActionResult> Print()
     {
       var Applicants = await _appDBContext.HR_Applicants
-          .Include(b => b.Branch)
+          .Include(b => b.BranchType)
           .ToListAsync();
 
       ViewBag.GenderList = _utils.GetGender();
@@ -132,7 +132,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
       var Applicants = await _appDBContext.HR_Applicants
-          .Include(b => b.Branch)
+          .Include(b => b.BranchType)
           .ToListAsync();
 
       var GenderList = await _utils.GetGender();
@@ -168,7 +168,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
         for (int i = 0; i < Applicants.Count; i++)
         {
-          worksheet.Cells[i + 2, 2].Value = Applicants[i].Branch?.BranchName;
+          worksheet.Cells[i + 2, 2].Value = Applicants[i].BranchType?.BranchTypeName;
           worksheet.Cells[i + 2, 5].Value = Applicants[i].ApplicantID;
           worksheet.Cells[i + 2, 7].Value = Applicants[i].FirstName + ' ' + Applicants[i].FatherName + ' ' + Applicants[i].FamilyName;
           worksheet.Cells[i + 2, 9].Value = Applicants[i].Sex == 0 || Applicants[i].Sex == null

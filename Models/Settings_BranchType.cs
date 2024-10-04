@@ -2,11 +2,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Exampler_ERP.Models
 {
-  public class Settings_Branch
+  public class Settings_BranchType
   {
     [Key]
-    public int BranchID { get; set; }
-    public string? BranchName { get; set; }
+    public int BranchTypeID { get; set; }
+    public string? BranchTypeName { get; set; }
     public int? DeleteYNID { get; set; }
     public int? ActiveYNID { get; set; }
     public string? POBox { get; set; }

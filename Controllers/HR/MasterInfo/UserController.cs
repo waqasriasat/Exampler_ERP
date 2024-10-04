@@ -23,7 +23,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       var users = await _appDBContext.CR_Users
           .Where(b => b.DeleteYNID != 1)
-          .Include(d => d.Role)
+          .Include(d => d.RoleType)
           .ToListAsync();
 
       var decryptedUsers = users.Select(user => new CR_User
@@ -31,8 +31,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         UserID = user.UserID,
         UserName = CR_CipherKey.Decrypt(user.UserName),
         ActiveYNID = user.ActiveYNID,
-        RoleID = user.RoleID,
-        Role = user.Role // Include the role information
+        RoleTypeID = user.RoleTypeID,
+        RoleType = user.RoleType // Include the role information
       }).ToList();
 
       return View("~/Views/HR/MasterInfo/User/User.cshtml", decryptedUsers);
@@ -69,7 +69,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         // Encrypt UserName and Password before saving
         userInDb.UserName = CR_CipherKey.Encrypt(user.UserName);
         userInDb.Password = CR_CipherKey.Encrypt(user.Password);
-        userInDb.RoleID = user.RoleID;
+        userInDb.RoleTypeID = user.RoleTypeID;
         userInDb.ActiveYNID = user.ActiveYNID;
 
         await _appDBContext.SaveChangesAsync();
@@ -136,7 +136,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
               {
                 ApprovalProcessID = newProcessTypeApproval.ApprovalProcessID,
                 Date = DateTime.Now,
-                RoleID = nextApprovalSetup.RoleID,
+                RoleID = nextApprovalSetup.RoleTypeID,
                 AppID = 0,
                 AppUserID = 0,
                 Notes = null,
@@ -188,7 +188,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       var Users = await _appDBContext.CR_Users
         .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Role)
+        .Include(d => d.RoleType)
         .ToListAsync();
 
       var decryptedUsers = Users.Select(user => new CR_User
@@ -196,8 +196,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         UserID = user.UserID,
         UserName = CR_CipherKey.Decrypt(user.UserName),
         ActiveYNID = user.ActiveYNID,
-        RoleID = user.RoleID,
-        Role = user.Role // Include the role information
+        RoleTypeID = user.RoleTypeID,
+        RoleType = user.RoleType // Include the role information
       }).ToList();
 
       using (var package = new ExcelPackage())
@@ -213,7 +213,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         {
           worksheet.Cells[i + 2, 1].Value = decryptedUsers[i].UserID;
           worksheet.Cells[i + 2, 2].Value = decryptedUsers[i].UserName;
-          worksheet.Cells[i + 2, 3].Value = decryptedUsers[i].Role?.RoleName;
+          worksheet.Cells[i + 2, 3].Value = decryptedUsers[i].RoleType?.RoleTypeName;
           worksheet.Cells[i + 2, 4].Value = decryptedUsers[i].ActiveYNID == 1 ? "Yes" : "No";
         }
 
@@ -232,7 +232,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       var Users = await _appDBContext.CR_Users
         .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Role) // Eagerly load the related Role data
+        .Include(d => d.RoleType) // Eagerly load the related Role data
         .ToListAsync();
 
       var decryptedUsers = Users.Select(user => new CR_User
@@ -240,8 +240,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         UserID = user.UserID,
         UserName = CR_CipherKey.Decrypt(user.UserName),
         ActiveYNID = user.ActiveYNID,
-        RoleID = user.RoleID,
-        Role = user.Role // Include the role information
+        RoleTypeID = user.RoleTypeID,
+        RoleType = user.RoleType // Include the role information
       }).ToList();
       return View("~/Views/HR/MasterInfo/User/PrintUsers.cshtml", decryptedUsers);
     }

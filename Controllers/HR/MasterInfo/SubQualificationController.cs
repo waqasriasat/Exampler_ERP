@@ -21,9 +21,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Index()
     {
-      var SubQualification = await _appDBContext.Settings_SubQualifications
+      var SubQualification = await _appDBContext.Settings_SubQualificationTypes
     .Where(b => b.DeleteYNID != 1)
-    .Include(d => d.Qualification) // Eagerly load the related Qualification data
+    .Include(d => d.QualificationType) // Eagerly load the related Qualification data
     .ToListAsync();
 
       return View("~/Views/HR/MasterInfo/SubQualification/SubQualification.cshtml", SubQualification);
@@ -31,14 +31,14 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> SubQualification()
     {
-      var SubQualification = await _appDBContext.Settings_SubQualifications.ToListAsync();
+      var SubQualification = await _appDBContext.Settings_SubQualificationTypes.ToListAsync();
       return Ok(SubQualification);
     }// Add the Edit action
     public async Task<IActionResult> Edit(int id)
     {
       ViewBag.QualificationList = await _utils.GetQualifications();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      var SubQualification = await _appDBContext.Settings_SubQualifications.FindAsync(id);
+      var SubQualification = await _appDBContext.Settings_SubQualificationTypes.FindAsync(id);
       if (SubQualification == null)
       {
         return NotFound();
@@ -47,7 +47,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(Settings_SubQualification SubQualification)
+    public async Task<IActionResult> Edit(Settings_SubQualificationType SubQualification)
     {
       if (ModelState.IsValid)
       {
@@ -62,16 +62,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       ViewBag.QualificationList = await _utils.GetQualifications();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      return PartialView("~/Views/HR/MasterInfo/SubQualification/AddSubQualification.cshtml", new Settings_SubQualification());
+      return PartialView("~/Views/HR/MasterInfo/SubQualification/AddSubQualification.cshtml", new Settings_SubQualificationType());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Settings_SubQualification SubQualification)
+    public async Task<IActionResult> Create(Settings_SubQualificationType SubQualification)
     {
       if (ModelState.IsValid)
       {
         SubQualification.DeleteYNID = 0;
-        _appDBContext.Settings_SubQualifications.Add(SubQualification);
+        _appDBContext.Settings_SubQualificationTypes.Add(SubQualification);
         await _appDBContext.SaveChangesAsync();
         return Json(new { success = true });
       }
@@ -79,7 +79,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Delete(int id)
     {
-      var SubQualification = await _appDBContext.Settings_SubQualifications.FindAsync(id);
+      var SubQualification = await _appDBContext.Settings_SubQualificationTypes.FindAsync(id);
       if (SubQualification == null)
       {
         return NotFound();
@@ -88,7 +88,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       SubQualification.ActiveYNID = 0;
       SubQualification.DeleteYNID = 1;
 
-      _appDBContext.Settings_SubQualifications.Update(SubQualification);
+      _appDBContext.Settings_SubQualificationTypes.Update(SubQualification);
       await _appDBContext.SaveChangesAsync();
 
       return Json(new { success = true });
@@ -97,9 +97,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var SubQualification = await _appDBContext.Settings_SubQualifications
+      var SubQualification = await _appDBContext.Settings_SubQualificationTypes
         .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Qualification) // Eagerly load the related Qualification data
+        .Include(d => d.QualificationType) // Eagerly load the related Qualification data
         .ToListAsync();
 
 
@@ -114,9 +114,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
         for (int i = 0; i < SubQualification.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = SubQualification[i].SubQualificationID;
-          worksheet.Cells[i + 2, 2].Value = SubQualification[i].Qualification?.QualificationName;
-          worksheet.Cells[i + 2, 3].Value = SubQualification[i].SubQualificationName;
+          worksheet.Cells[i + 2, 1].Value = SubQualification[i].SubQualificationTypeID;
+          worksheet.Cells[i + 2, 2].Value = SubQualification[i].QualificationType?.QualificationTypeName;
+          worksheet.Cells[i + 2, 3].Value = SubQualification[i].SubQualificationTypeName;
           worksheet.Cells[i + 2, 4].Value = SubQualification[i].ActiveYNID == 1 ? "Yes" : "No";
         }
 
@@ -133,9 +133,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Print()
     {
-      var SubQualification = await _appDBContext.Settings_SubQualifications
+      var SubQualification = await _appDBContext.Settings_SubQualificationTypes
         .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Qualification) // Eagerly load the related Qualification data
+        .Include(d => d.QualificationType) // Eagerly load the related Qualification data
         .ToListAsync();
       return View("~/Views/HR/MasterInfo/SubQualification/PrintSubQualifications.cshtml", SubQualification);
     }

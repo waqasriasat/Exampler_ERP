@@ -50,7 +50,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       var processTypeApprovalSetups = await _appDBContext.CR_ProcessTypeApprovalSetups
        .Where(pt => pt.ProcessTypeID == id)
        .Include(pt => pt.ProcessType)
-       .Include(pt => pt.Role)
+       .Include(pt => pt.RoleType)
        .ToListAsync();
 
       if (processTypeApprovalSetups == null || !processTypeApprovalSetups.Any())
@@ -76,8 +76,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         }
       }
 
-      ViewBag.RoleList = await _appDBContext.Settings_Roles
-          .Select(r => new { Value = r.RoleID, Text = r.RoleName })
+      ViewBag.RoleList = await _appDBContext.Settings_RoleTypes
+          .Select(r => new { Value = r.RoleTypeID, Text = r.RoleTypeName })
           .ToListAsync();
 
       ViewBag.ProcessTypes = await _appDBContext.Settings_ProcessTypes.ToListAsync();
@@ -92,7 +92,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       foreach (var setup in ProcessTypeApprovalSetups)
       {
-        _logger.LogInformation("Received Setup: ID={ID}, Rank={Rank}, RoleID={RoleID}", setup.ProcessTypeApprovalID, setup.Rank, setup.RoleID);
+        _logger.LogInformation("Received Setup: ID={ID}, Rank={Rank}, RoleID={RoleID}", setup.ProcessTypeApprovalID, setup.Rank, setup.RoleTypeID);
       }
 
       if (ProcessTypeApprovalSetups == null || ProcessTypeApprovalSetups.Count == 0)
@@ -119,7 +119,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
           foreach (var setup in ProcessTypeApprovalSetups)
           {
-            if (setup.RoleID != 0 && setup.Rank != 0)
+            if (setup.RoleTypeID != 0 && setup.Rank != 0)
             {
               _appDBContext.CR_ProcessTypeApprovalSetups.Add(setup);
             }
@@ -181,7 +181,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           worksheet.Cells[i + 2, 1].Value = ProcessTypeApprovalSetups[i].ProcessTypeApprovalID;
           worksheet.Cells[i + 2, 2].Value = ProcessTypeApprovalSetups[i].ProcessType?.ProcessTypeName;
           worksheet.Cells[i + 2, 3].Value = ProcessTypeApprovalSetups[i].Rank;
-          worksheet.Cells[i + 2, 4].Value = ProcessTypeApprovalSetups[i].RoleID;
+          worksheet.Cells[i + 2, 4].Value = ProcessTypeApprovalSetups[i].RoleTypeID;
         }
 
         worksheet.Cells["A1:l1"].Style.Font.Bold = true;

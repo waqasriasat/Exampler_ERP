@@ -26,8 +26,8 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Reports
       var contract = await _appDBContext.HR_Contracts
                                         .Include(c => c.Settings_ContractType)
                                         .Include(c => c.Employee)  // Assuming Contract has a relationship with Employee
-                                        .Include(c => c.Employee.Department)
-                                        .Include(c => c.Employee.Designation)
+                                        .Include(c => c.Employee.DepartmentType)
+                                        .Include(c => c.Employee.DesignationType)
                                         .FirstOrDefaultAsync(c => c.EmployeeID == employeeID);
 
       if (contract == null)

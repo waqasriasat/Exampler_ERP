@@ -1,4 +1,4 @@
-@model IEnumerable<Exampler_ERP.Models.Settings_Department>
+@model IEnumerable<Exampler_ERP.Models.Settings_DepartmentType>
 
 @{
     ViewData["Title"] = "Master Information - Department";
@@ -125,13 +125,13 @@
                             <div class="col-8 col-md-10 col-lg-9">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Department ID : </span>@Html.DisplayFor(modelItem => item.DepartmentID)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Department ID : </span>@Html.DisplayFor(modelItem => item.DepartmentTypeID)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Branch Name : </span>@(item.Branch?.BranchName ?? "N/A")  </p>
+                                        <p class="text-nowrap"><span class="smallAdd">Branch Name : </span>@(item.BranchType?.BranchTypeName ?? "N/A")  </p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Department Name : </span>@Html.DisplayFor(modelItem => item.DepartmentName)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Department Name : </span>@Html.DisplayFor(modelItem => item.DepartmentTypeName)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap">
@@ -152,14 +152,14 @@
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="editDepartmentLink" data-id="@item.DepartmentID">
+                                            <a href="#" class="editDepartmentLink" data-id="@item.DepartmentTypeID">
                                                 <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="deleteDepartmentLink" data-id="@item.DepartmentID">
+                                            <a href="#" class="deleteDepartmentLink" data-id="@item.DepartmentTypeID">
                                                 <i class="fa fa-trash-o" style="font-size: large; color:maroon; line-height: 2;"></i>
                                             </a>
                                         </div>

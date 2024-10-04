@@ -31,20 +31,20 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       string encryptedText1 = CR_CipherKey.Encrypt(plainText1);
       Console.WriteLine($"Encrypted: {encryptedText1}");
 
-      var branches = await _appDBContext.Settings_Branchs
+      var branches = await _appDBContext.Settings_BranchTypes
         .Where(b => b.DeleteYNID != 1)
         .ToListAsync();
       return View("~/Views/HR/MasterInfo/Branch/Branch.cshtml", branches);
     }
     public async Task<IActionResult> Branch()
     {
-      var Branchs = await _appDBContext.Settings_Branchs.ToListAsync();
+      var Branchs = await _appDBContext.Settings_BranchTypes.ToListAsync();
       return Ok(Branchs);
     }// Add the Edit action
     public async Task<IActionResult> Edit(int id)
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      var branch = await _appDBContext.Settings_Branchs.FindAsync(id);
+      var branch = await _appDBContext.Settings_BranchTypes.FindAsync(id);
       if (branch == null)
       {
         return NotFound();
@@ -53,7 +53,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(Settings_Branch branch)
+    public async Task<IActionResult> Edit(Settings_BranchType branch)
     {
       if (ModelState.IsValid)
       {
@@ -67,17 +67,17 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     public async Task<IActionResult> Create()
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      return PartialView("~/Views/HR/MasterInfo/Branch/AddBranch.cshtml", new Settings_Branch());
+      return PartialView("~/Views/HR/MasterInfo/Branch/AddBranch.cshtml", new Settings_BranchType());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Settings_Branch branch)
+    public async Task<IActionResult> Create(Settings_BranchType branch)
     {
       if (ModelState.IsValid)
       {
         branch.Date = DateTime.Now;
         branch.DeleteYNID = 0;
-        _appDBContext.Settings_Branchs.Add(branch);
+        _appDBContext.Settings_BranchTypes.Add(branch);
         await _appDBContext.SaveChangesAsync();
         return Json(new { success = true });
       }
@@ -85,7 +85,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Delete(int id)
     {
-      var branch = await _appDBContext.Settings_Branchs.FindAsync(id);
+      var branch = await _appDBContext.Settings_BranchTypes.FindAsync(id);
       if (branch == null)
       {
         return NotFound();
@@ -94,7 +94,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       branch.ActiveYNID = 0;
       branch.DeleteYNID = 1;
 
-      _appDBContext.Settings_Branchs.Update(branch);
+      _appDBContext.Settings_BranchTypes.Update(branch);
       await _appDBContext.SaveChangesAsync();
 
       return Json(new { success = true });
@@ -103,7 +103,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var branches = await _appDBContext.Settings_Branchs
+      var branches = await _appDBContext.Settings_BranchTypes
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
 
@@ -126,9 +126,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
         for (int i = 0; i < branches.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = branches[i].BranchID;
+          worksheet.Cells[i + 2, 1].Value = branches[i].BranchTypeID;
           worksheet.Cells[i + 2, 2].Value = branches[i].Date;
-          worksheet.Cells[i + 2, 3].Value = branches[i].BranchName;
+          worksheet.Cells[i + 2, 3].Value = branches[i].BranchTypeName;
           worksheet.Cells[i + 2, 4].Value = branches[i].ActiveYNID == 1 ? "Yes" : "No";
           worksheet.Cells[i + 2, 5].Value = branches[i].POBox;
           worksheet.Cells[i + 2, 6].Value = branches[i].Country;
@@ -153,7 +153,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Print()
     {
-      var branches = await _appDBContext.Settings_Branchs
+      var branches = await _appDBContext.Settings_BranchTypes
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
       return View("~/Views/HR/MasterInfo/Branch/PrintBranches.cshtml", branches);

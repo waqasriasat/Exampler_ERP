@@ -1,4 +1,4 @@
-@model Exampler_ERP.Models.Settings_Branch
+@model Exampler_ERP.Models.Settings_BranchType
 
 <div class="modal fade" id="editBranchModal" tabindex="-1" role="dialog" aria-labelledby="editBranchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -17,7 +17,7 @@
                             <div class="row">
                                 <div class="col-12 col-md-12 col-lg-12">
                                     <label for="BranchName" class="form-label fw-bold">Branch Name</label>
-                                    <input type="text" class="form-control form-control-lg" id="BranchName" name="BranchName" value="@Model.BranchName" />
+                                    <input type="text" class="form-control form-control-lg" id="BranchName" name="BranchName" value="@Model.BranchTypeName" />
                                 </div>
                                 <div class="col-12 col-md-6 col-lg-6">
                                     <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" id="BranchID" name="BranchID" value="@Model.BranchID" />
+                    <input type="hidden" id="BranchID" name="BranchID" value="@Model.BranchTypeID" />
                 </form>
             </div>
             <div class="modal-footer">

@@ -22,20 +22,20 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     public async Task<IActionResult> Index()
     {
 
-      var Designationes = await _appDBContext.Settings_Designations
+      var Designationes = await _appDBContext.Settings_DesignationTypes
         .Where(b => b.DeleteYNID != 1)
         .ToListAsync();
       return View("~/Views/HR/MasterInfo/Designation/Designation.cshtml", Designationes);
     }
     public async Task<IActionResult> Designation()
     {
-      var Designations = await _appDBContext.Settings_Designations.ToListAsync();
+      var Designations = await _appDBContext.Settings_DesignationTypes.ToListAsync();
       return Ok(Designations);
     }// Add the Edit action
     public async Task<IActionResult> Edit(int id)
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      var Designation = await _appDBContext.Settings_Designations.FindAsync(id);
+      var Designation = await _appDBContext.Settings_DesignationTypes.FindAsync(id);
       if (Designation == null)
       {
         return NotFound();
@@ -44,7 +44,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(Settings_Designation Designation)
+    public async Task<IActionResult> Edit(Settings_DesignationType Designation)
     {
       if (ModelState.IsValid)
       {
@@ -58,16 +58,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     public async Task<IActionResult> Create()
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      return PartialView("~/Views/HR/MasterInfo/Designation/AddDesignation.cshtml", new Settings_Designation());
+      return PartialView("~/Views/HR/MasterInfo/Designation/AddDesignation.cshtml", new Settings_DesignationType());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Settings_Designation Designation)
+    public async Task<IActionResult> Create(Settings_DesignationType Designation)
     {
       if (ModelState.IsValid)
       {
         Designation.DeleteYNID = 0;
-        _appDBContext.Settings_Designations.Add(Designation);
+        _appDBContext.Settings_DesignationTypes.Add(Designation);
         await _appDBContext.SaveChangesAsync();
         return Json(new { success = true });
       }
@@ -75,7 +75,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Delete(int id)
     {
-      var Designation = await _appDBContext.Settings_Designations.FindAsync(id);
+      var Designation = await _appDBContext.Settings_DesignationTypes.FindAsync(id);
       if (Designation == null)
       {
         return NotFound();
@@ -84,7 +84,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       Designation.ActiveYNID = 0;
       Designation.DeleteYNID = 1;
 
-      _appDBContext.Settings_Designations.Update(Designation);
+      _appDBContext.Settings_DesignationTypes.Update(Designation);
       await _appDBContext.SaveChangesAsync();
 
       return Json(new { success = true });
@@ -93,7 +93,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var Designationes = await _appDBContext.Settings_Designations
+      var Designationes = await _appDBContext.Settings_DesignationTypes
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
 
@@ -107,8 +107,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
         for (int i = 0; i < Designationes.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = Designationes[i].DesignationID;
-          worksheet.Cells[i + 2, 2].Value = Designationes[i].DesignationName;
+          worksheet.Cells[i + 2, 1].Value = Designationes[i].DesignationTypeID;
+          worksheet.Cells[i + 2, 2].Value = Designationes[i].DesignationTypeName;
           worksheet.Cells[i + 2, 3].Value = Designationes[i].ActiveYNID == 1 ? "Yes" : "No";
         }
 
@@ -125,7 +125,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Print()
     {
-      var Designationes = await _appDBContext.Settings_Designations
+      var Designationes = await _appDBContext.Settings_DesignationTypes
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
       return View("~/Views/HR/MasterInfo/Designation/PrintDesignations.cshtml", Designationes);

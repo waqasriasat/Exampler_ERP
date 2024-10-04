@@ -22,20 +22,20 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     public async Task<IActionResult> Index()
     {
 
-      var Rolees = await _appDBContext.Settings_Roles
+      var Rolees = await _appDBContext.Settings_RoleTypes
         .Where(b => b.DeleteYNID != 1)
         .ToListAsync();
       return View("~/Views/HR/MasterInfo/Role/Role.cshtml", Rolees);
     }
     public async Task<IActionResult> Role()
     {
-      var Roles = await _appDBContext.Settings_Roles.ToListAsync();
+      var Roles = await _appDBContext.Settings_RoleTypes.ToListAsync();
       return Ok(Roles);
     }// Add the Edit action
     public async Task<IActionResult> Edit(int id)
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      var Role = await _appDBContext.Settings_Roles.FindAsync(id);
+      var Role = await _appDBContext.Settings_RoleTypes.FindAsync(id);
       if (Role == null)
       {
         return NotFound();
@@ -44,7 +44,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(Settings_Role Role)
+    public async Task<IActionResult> Edit(Settings_RoleType Role)
     {
       if (ModelState.IsValid)
       {
@@ -58,16 +58,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     public async Task<IActionResult> Create()
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      return PartialView("~/Views/HR/MasterInfo/Role/AddRole.cshtml", new Settings_Role());
+      return PartialView("~/Views/HR/MasterInfo/Role/AddRole.cshtml", new Settings_RoleType());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Settings_Role Role)
+    public async Task<IActionResult> Create(Settings_RoleType Role)
     {
       if (ModelState.IsValid)
       {
         Role.DeleteYNID = 0;
-        _appDBContext.Settings_Roles.Add(Role);
+        _appDBContext.Settings_RoleTypes.Add(Role);
         await _appDBContext.SaveChangesAsync();
         return Json(new { success = true });
       }
@@ -75,7 +75,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Delete(int id)
     {
-      var Role = await _appDBContext.Settings_Roles.FindAsync(id);
+      var Role = await _appDBContext.Settings_RoleTypes.FindAsync(id);
       if (Role == null)
       {
         return NotFound();
@@ -84,7 +84,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       Role.ActiveYNID = 0;
       Role.DeleteYNID = 1;
 
-      _appDBContext.Settings_Roles.Update(Role);
+      _appDBContext.Settings_RoleTypes.Update(Role);
       await _appDBContext.SaveChangesAsync();
 
       return Json(new { success = true });
@@ -93,7 +93,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var Rolees = await _appDBContext.Settings_Roles
+      var Rolees = await _appDBContext.Settings_RoleTypes
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
 
@@ -107,8 +107,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
         for (int i = 0; i < Rolees.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = Rolees[i].RoleID;
-          worksheet.Cells[i + 2, 2].Value = Rolees[i].RoleName;
+          worksheet.Cells[i + 2, 1].Value = Rolees[i].RoleTypeID;
+          worksheet.Cells[i + 2, 2].Value = Rolees[i].RoleTypeName;
           worksheet.Cells[i + 2, 3].Value = Rolees[i].ActiveYNID == 1 ? "Yes" : "No";
         }
 
@@ -125,7 +125,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Print()
     {
-      var Rolees = await _appDBContext.Settings_Roles
+      var Rolees = await _appDBContext.Settings_RoleTypes
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
       return View("~/Views/HR/MasterInfo/Role/PrintRoles.cshtml", Rolees);

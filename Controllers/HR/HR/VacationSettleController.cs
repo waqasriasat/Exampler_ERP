@@ -154,7 +154,7 @@ namespace Exampler_ERP.Controllers.HR.HR
               {
                 ApprovalProcessID = newProcessTypeApproval.ApprovalProcessID,
                 Date = DateTime.Now,
-                RoleID = nextApprovalSetup.RoleID,
+                RoleID = nextApprovalSetup.RoleTypeID,
                 AppID = 0,
                 AppUserID = 0,
                 Notes = null,

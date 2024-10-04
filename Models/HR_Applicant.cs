@@ -31,9 +31,9 @@ namespace Exampler_ERP.Models
     public string? PassportNumber { get; set; }
     public string? PassportPlaceOfIssue { get; set; }
     public int? CountryID { get; set; }
-    public int? BranchID { get; set; }
-    [ForeignKey("BranchID")]
-    public virtual Settings_Branch? Branch { get; set; }
+    public int? BranchTypeID { get; set; }
+    [ForeignKey("BranchTypeID")]
+    public virtual Settings_BranchType? BranchType { get; set; }
     public int? EducationTitleID { get; set; }
     public string? ForthePost { get; set; }
     public int? ExprienceNumberofYears { get; set; }

@@ -1,0 +1,103 @@
+@model List<Exampler_ERP.Models.HR_AddionalAllowanceDetail>
+<script>
+    $(document).ready(function () {
+        console.log('Document is ready.');
+
+        function updateHiddenFields() {
+            $('#hiddenFieldsContainer').empty(); // Clear existing hidden fields
+
+            var AddionalAllowanceID = $('#AddionalAllowanceID').val(); // Get the AddionalAllowanceID from the form
+
+            var checkedRoles = $('.AddionalAllowancetype-checkbox:checked');
+            checkedRoles.each(function (index) {
+                var AddionalAllowanceTypeID = $(this).val();
+                var AddionalAllowanceAmountInput = $('#AddionalAllowanceAmount_' + AddionalAllowanceTypeID);
+                var AddionalAllowanceAmount = AddionalAllowanceAmountInput.val();
+
+                $('#hiddenFieldsContainer').append(
+                    `<div class="row">
+                                            <input type="hidden" name="AddionalAllowanceDetails[${index}].AddionalAllowanceID" value="${AddionalAllowanceID}" id="hidden_AddionalAllowanceID_${AddionalAllowanceTypeID}" />
+                                            <input type="hidden" name="AddionalAllowanceDetails[${index}].AddionalAllowanceTypeID" value="${AddionalAllowanceTypeID}" id="hidden_AddionalAllowanceTypeID_${AddionalAllowanceTypeID}" />
+                                            <input type="hidden" name="AddionalAllowanceDetails[${index}].AddionalAllowanceAmount" value="${AddionalAllowanceAmount}" id="hidden_AddionalAllowanceAmount_${AddionalAllowanceTypeID}" />
+                                </div>`
+                );
+            });
+        }
+
+        // Event handler for AddionalAllowancetype checkbox change
+        $(document).on('change', '.AddionalAllowancetype-checkbox', function () {
+            var AddionalAllowanceTypeID = $(this).val();
+            var AddionalAllowanceAmountInput = $('#AddionalAllowanceAmount_' + AddionalAllowanceTypeID);
+
+            if ($(this).is(':checked')) {
+                var maxAddionalAllowanceAmount = 0;
+                $('.AddionalAllowanceAmount').each(function () {
+                    var val = parseInt($(this).val()) || 0;
+                    if (val > maxAddionalAllowanceAmount) {
+                        maxAddionalAllowanceAmount = 0;
+                    }
+                });
+                AddionalAllowanceAmountInput.val(maxAddionalAllowanceAmount).removeAttr('readonly');
+            } else {
+                AddionalAllowanceAmountInput.val('').attr('readonly', true);
+            }
+
+            // Update hidden fields after checkbox change
+            updateHiddenFields();
+        });
+
+        // Event handler for AddionalAllowance amount input change
+        $(document).on('input', '.AddionalAllowanceAmount', function () {
+            var AddionalAllowanceTypeID = $(this).attr('id').split('_')[1]; // Extract AddionalAllowanceTypeID from the input id
+            console.log('AddionalAllowance amount changed for AddionalAllowanceTypeID:', AddionalAllowanceTypeID);
+
+            // Update hidden fields after AddionalAllowance amount change
+            updateHiddenFields();
+        });
+
+        // Initial call to update hidden fields on page load
+        updateHiddenFields();
+    });
+</script>
+
+<div class="row">
+    <div class="col-12 mb-2">
+        <div class="form-group">
+            <label for="EmployeeName" class="form-label fw-bold">Employee Name</label>
+            <input type="text" class="form-control form-control-lg" id="EmployeeName" value="@Model.FirstOrDefault()?.AddionalAllowance?.Employee?.FirstName @Model.FirstOrDefault()?.AddionalAllowance?.Employee?.FatherName @Model.FirstOrDefault()?.AddionalAllowance?.Employee?.FamilyName" disabled />
+            <input type="hidden" name="EmployeeID" id="EmployeeID" value="@Model.FirstOrDefault()?.AddionalAllowance?.Employee?.EmployeeID" />
+            <input type="hidden" class="form-control form-control-lg" id="AddionalAllowanceID" name="AddionalAllowanceID" value="@Model.FirstOrDefault()?.AddionalAllowanceID" />
+        </div>
+    </div>
+</div>
+
+<div class="row AddionalAllowancetype-container">
+    <div class="col-9">
+        @foreach (var AddionalAllowancetype in (IEnumerable<dynamic>)ViewBag.AddionalAllowanceTypeList)
+        {
+            <div class="form-check">
+                <input class="form-check-input AddionalAllowancetype-checkbox" type="checkbox" name="AddionalAllowanceTypes" value="@AddionalAllowancetype.Value" id="AddionalAllowancetype_@AddionalAllowancetype.Value" @(Model.Any(m => m.AddionalAllowanceTypeID == AddionalAllowancetype.Value) ? "checked" : "") />
+                <label class="form-control form-check-label" for="AddionalAllowancetype_@AddionalAllowancetype.Value">@AddionalAllowancetype.Text</label>
+            </div>
+        }
+    </div>
+    <div class="col-3">
+        @foreach (var AddionalAllowancetype in (IEnumerable<dynamic>)ViewBag.AddionalAllowanceTypeList)
+        {
+            double? AddionalAllowanceAmount = Model.FirstOrDefault(m => m.AddionalAllowanceTypeID == AddionalAllowancetype.Value)?.AddionalAllowanceAmount;
+            string formattedAddionalAllowanceAmount = AddionalAllowanceAmount.HasValue ? AddionalAllowanceAmount.Value.ToString("0.00") : string.Empty;
+            <input type="text" class="form-control AddionalAllowanceAmount" id="AddionalAllowanceAmount_@AddionalAllowancetype.Value" value="@formattedAddionalAllowanceAmount" @(Model.Any(m => m.AddionalAllowanceTypeID == AddionalAllowancetype.Value) ? "" : "readonly") />
+        }
+    </div>
+</div>
+
+<div id="hiddenFieldsContainer">
+    @for (var i = 0; i < Model.Count; i++)
+    {
+        <div class="row">
+            <input type="hidden" name="AddionalAllowanceDetails[@i].AddionalAllowanceID" value="@Model.FirstOrDefault()?.AddionalAllowanceID" id="hidden_AddionalAllowanceID_@Model[i].AddionalAllowanceID" />
+            <input type="hidden" name="AddionalAllowanceDetails[@i].AddionalAllowanceTypeID" value="@Model[i].AddionalAllowanceTypeID" id="hidden_AddionalAllowanceTypeID_@Model[i].AddionalAllowanceTypeID" />
+            <input type="hidden" name="AddionalAllowanceDetails[@i].AddionalAllowanceAmount" value="@Model[i].AddionalAllowanceAmount" id="hidden_AddionalAllowanceAmount_@Model[i].AddionalAllowanceTypeID" />
+        </div>
+    }
+</div>

@@ -51,8 +51,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     {
       // Fetch the employee details asynchronously, including related entities like Designation and Department
       var employee = await _appDBContext.HR_Employees
-          .Include(e => e.Designation)
-          .Include(e => e.Department)
+          .Include(e => e.DesignationType)
+          .Include(e => e.DepartmentType)
           .FirstOrDefaultAsync(e => e.EmployeeID == employeeId);
 
       // If employee is not found, return a 404 Not Found result

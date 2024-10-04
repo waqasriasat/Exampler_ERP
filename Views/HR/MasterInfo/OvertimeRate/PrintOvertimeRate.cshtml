@@ -1,0 +1,53 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_OverTimeRate>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print OverTimeRatees</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>OverTimeRate List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>OverTimeRate ID</th>
+                <th>OverTimeRate Name</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var OverTimeRate in Model)
+            {
+                <tr>
+                    <td>@OverTimeRate.OverTimeRateTypeID</td>
+                    <td>@OverTimeRate.OverTimeRateValue</td>
+                    <td>@(OverTimeRate.ActiveYNID == 1 ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

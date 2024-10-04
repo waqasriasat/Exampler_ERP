@@ -1,0 +1,86 @@
+@model List<Exampler_ERP.Models.HR_AddionalAllowanceDetail>
+
+<script>
+    $(document).ready(function () {
+        console.log('Document is ready.');
+
+        function updateHiddenFields() {
+            $('#hiddenFieldsContainer').empty(); // Clear existing hidden fields
+
+            var AddionalAllowanceID = $('#AddionalAllowanceID').val(); // Get the AddionalAllowanceID from the form
+
+            var checkedRoles = $('.AddionalAllowancetype-checkbox:checked');
+            checkedRoles.each(function (index) {
+                var AddionalAllowanceTypeID = $(this).val();
+                var AddionalAllowanceAmountInput = $('#AddionalAllowanceAmount_' + AddionalAllowanceTypeID);
+                var AddionalAllowanceAmount = AddionalAllowanceAmountInput.val();
+
+                $('#hiddenFieldsContainer').append(
+                    `<div class="row">
+                                        <input type="hidden" name="AddionalAllowanceDetails[${index}].AddionalAllowanceID" value="${AddionalAllowanceID}" id="hidden_AddionalAllowanceID_${AddionalAllowanceTypeID}" />
+                                        <input type="hidden" name="AddionalAllowanceDetails[${index}].AddionalAllowanceTypeID" value="${AddionalAllowanceTypeID}" id="hidden_AddionalAllowanceTypeID_${AddionalAllowanceTypeID}" />
+                                        <input type="hidden" name="AddionalAllowanceDetails[${index}].AddionalAllowanceAmount" value="${AddionalAllowanceAmount}" id="hidden_AddionalAllowanceAmount_${AddionalAllowanceTypeID}" />
+                            </div>`
+                );
+            });
+        }
+
+        // Event handler for AddionalAllowancetype checkbox change
+        $(document).on('change', '.AddionalAllowancetype-checkbox', function () {
+            var AddionalAllowanceTypeID = $(this).val();
+            var AddionalAllowanceAmountInput = $('#AddionalAllowanceAmount_' + AddionalAllowanceTypeID);
+
+            if ($(this).is(':checked')) {
+                var maxAddionalAllowanceAmount = 0;
+                $('.AddionalAllowanceAmount').each(function () {
+                    var val = parseInt($(this).val()) || 0;
+                    if (val > maxAddionalAllowanceAmount) {
+                        maxAddionalAllowanceAmount = 0;
+                    }
+                });
+                AddionalAllowanceAmountInput.val(maxAddionalAllowanceAmount).removeAttr('readonly');
+            } else {
+                AddionalAllowanceAmountInput.val('').attr('readonly', true);
+            }
+
+            // Update hidden fields after checkbox change
+            updateHiddenFields();
+        });
+
+        // Event handler for AddionalAllowance amount input change
+        $(document).on('input', '.AddionalAllowanceAmount', function () {
+            var AddionalAllowanceTypeID = $(this).attr('id').split('_')[1]; // Extract AddionalAllowanceTypeID from the input id
+            console.log('AddionalAllowance amount changed for AddionalAllowanceTypeID:', AddionalAllowanceTypeID);
+
+            // Update hidden fields after AddionalAllowance amount change
+            updateHiddenFields();
+        });
+
+        // Initial call to update hidden fields on page load
+        updateHiddenFields();
+    });
+</script>
+
+<div class="modal fade" id="editAddionalAllowanceModal" tabindex="-1" role="dialog" aria-labelledby="editAddionalAllowanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editAddionalAllowanceModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit AddionalAllowance
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <form id="editAddionalAllowanceForm">
+                    @Html.Partial("~/Views/HR/Employeement/AddionalAllowance/_EditAddionalAllowance.cshtml", Model)
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="submit" class="btn btn-success" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

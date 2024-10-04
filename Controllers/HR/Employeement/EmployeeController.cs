@@ -144,7 +144,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
               {
                 ApprovalProcessID = newProcessTypeApproval.ApprovalProcessID,
                 Date = DateTime.Now,
-                RoleID = nextApprovalSetup.RoleID,
+                RoleID = nextApprovalSetup.RoleTypeID,
                 AppID = 0,
                 AppUserID = 0,
                 Notes = null,
@@ -193,9 +193,9 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     {
       var employees = await _appDBContext.HR_Employees
           .Where(b => b.DeleteYNID != 1)
-          .Include(b => b.Branch)
-         .Include(b => b.Department)
-         .Include(b => b.Designation)
+          .Include(b => b.BranchType)
+         .Include(b => b.DepartmentType)
+         .Include(b => b.DesignationType)
           .ToListAsync();
 
       ViewBag.GenderList = _utils.GetGender();
@@ -211,9 +211,9 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       var employees = await _appDBContext.HR_Employees
           .Where(b => b.DeleteYNID != 1)
-          .Include(b => b.Branch)
-         .Include(b => b.Department)
-         .Include(b => b.Designation)
+          .Include(b => b.BranchType)
+         .Include(b => b.DepartmentType)
+         .Include(b => b.DesignationType)
           .ToListAsync();
       var GenderList = await _utils.GetGender();
       var MaritalStatusList = await _utils.GetMaritalStatus();
@@ -256,9 +256,9 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         for (int i = 0; i < employees.Count; i++)
         {
           worksheet.Cells[i + 2, 1].Value = employees[i].HireDate?.ToString("dd-MMM-yyyy");
-          worksheet.Cells[i + 2, 2].Value = employees[i].Branch?.BranchName;
-          worksheet.Cells[i + 2, 3].Value = employees[i].Department?.DepartmentName;
-          worksheet.Cells[i + 2, 4].Value = employees[i].Designation?.DesignationName;
+          worksheet.Cells[i + 2, 2].Value = employees[i].BranchType?.BranchTypeName;
+          worksheet.Cells[i + 2, 3].Value = employees[i].DepartmentType?.DepartmentTypeName;
+          worksheet.Cells[i + 2, 4].Value = employees[i].DesignationType?.DesignationTypeName;
           worksheet.Cells[i + 2, 5].Value = employees[i].EmployeeID;
           worksheet.Cells[i + 2, 6].Value = employees[i].EmployeeCode;
           worksheet.Cells[i + 2, 7].Value = employees[i].FirstName +' '+ employees[i].FatherName + ' ' + employees[i].FamilyName;

@@ -63,7 +63,7 @@ namespace Exampler_ERP.Controllers
       // Logic for setting up user session or authentication cookie goes here
       HttpContext.Session.SetInt32("UserID", user.UserID);
       HttpContext.Session.SetString("UserName", Username);
-      HttpContext.Session.SetInt32("UserRoleID", user.RoleID);
+      HttpContext.Session.SetInt32("UserRoleID", user.RoleTypeID);
       HttpContext.Session.SetString("UserRoleName", Username);
 
 
@@ -84,8 +84,8 @@ namespace Exampler_ERP.Controllers
       string encryptedpassword = CR_CipherKey.Encrypt(Password);
 
       var employee = await _appDBContext.HR_Employees
-    .Include(e => e.Department)
-    .Include(e => e.Designation)
+    .Include(e => e.DepartmentType)
+    .Include(e => e.DesignationType)
     .Where(e => e.UserName == encryptedusername
                 && e.Password == encryptedpassword
                 && e.ActiveYNID == 1
@@ -100,17 +100,17 @@ namespace Exampler_ERP.Controllers
 
       HttpContext.Session.SetInt32("EmployeeID", employee.EmployeeID);
       HttpContext.Session.SetString("EmployeeName", employee.FirstName + ' ' + employee.FatherName + ' ' + employee.FamilyName);
-      if (employee.Department != null)
+      if (employee.DepartmentType != null)
       {
-        HttpContext.Session.SetString("EmployeeDepartmentName", employee.Department.DepartmentName);
+        HttpContext.Session.SetString("EmployeeDepartmentName", employee.DepartmentType.DepartmentTypeName);
       }
       else
       {
         HttpContext.Session.SetString("EmployeeDepartmentName", "Unknown");
       }
-      if (employee.Designation != null)
+      if (employee.DesignationType != null)
       {
-        HttpContext.Session.SetString("EmployeeDesignationName", employee.Designation.DesignationName);
+        HttpContext.Session.SetString("EmployeeDesignationName", employee.DesignationType.DesignationTypeName);
       }
       else
       {
@@ -149,7 +149,7 @@ namespace Exampler_ERP.Controllers
       // Logic for setting up user session or authentication cookie goes here
       HttpContext.Session.SetInt32("UserID", user.UserID);
       HttpContext.Session.SetString("UserName", Username);
-      HttpContext.Session.SetInt32("UserRoleID", user.RoleID);
+      HttpContext.Session.SetInt32("UserRoleID", user.RoleTypeID);
       HttpContext.Session.SetString("UserRoleName", Username);
 
 

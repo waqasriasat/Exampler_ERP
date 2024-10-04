@@ -1,4 +1,4 @@
-@model IEnumerable<Exampler_ERP.Models.Settings_Designation>
+@model IEnumerable<Exampler_ERP.Models.Settings_DesignationType>
 
 <!DOCTYPE html>
 <html>
@@ -39,8 +39,8 @@
             @foreach (var Designation in Model)
             {
                 <tr>
-                    <td>@Designation.DesignationID</td>
-                    <td>@Designation.DesignationName</td>
+                    <td>@Designation.DesignationTypeID</td>
+                    <td>@Designation.DesignationTypeName</td>
                     <td>@(Designation.ActiveYNID == 1 ? "Yes" : "No")</td>
                 </tr>
             }

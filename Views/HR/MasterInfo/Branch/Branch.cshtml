@@ -1,4 +1,4 @@
-@model IEnumerable<Exampler_ERP.Models.Settings_Branch>
+@model IEnumerable<Exampler_ERP.Models.Settings_BranchType>
 
 @{
     ViewData["Title"] = "Master Information - Branch";
@@ -122,10 +122,10 @@
                             <div class="col-8 col-md-10 col-lg-9">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Branch ID : </span>@Html.DisplayFor(modelItem => item.BranchID)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Branch ID : </span>@Html.DisplayFor(modelItem => item.BranchTypeID)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-8">
-                                        <p class="text-nowrap"><span class="smallAdd">Branch Name : </span>@Html.DisplayFor(modelItem => item.BranchName)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Branch Name : </span>@Html.DisplayFor(modelItem => item.BranchTypeName)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap">
@@ -146,14 +146,14 @@
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="editBranchLink" data-id="@item.BranchID">
+                                            <a href="#" class="editBranchLink" data-id="@item.BranchTypeID">
                                                 <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="deleteBranchLink" data-id="@item.BranchID">
+                                            <a href="#" class="deleteBranchLink" data-id="@item.BranchTypeID">
                                                 <i class="fa fa-trash-o" style="font-size: large; color:maroon; line-height: 2;"></i>
                                             </a>
                                         </div>

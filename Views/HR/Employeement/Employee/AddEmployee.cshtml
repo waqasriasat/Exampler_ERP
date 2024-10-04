@@ -43,22 +43,22 @@
                             </div>
                             <div class="row">
                                 <div class="col-4">
-                                    <label asp-for="BranchID" class="form-label fw-bold">Branch</label>
-                                    <select asp-for="BranchID" asp-items="@(new SelectList(ViewBag.BranchsList, "Value", "Text", Model.BranchID))" class="form-control form-control-lg">
+                                    <label asp-for="BranchTypeID" class="form-label fw-bold">Branch</label>
+                                    <select asp-for="BranchTypeID" asp-items="@(new SelectList(ViewBag.BranchsList, "Value", "Text", Model.BranchTypeID))" class="form-control form-control-lg">
                                     </select>
-                                    <span asp-validation-for="BranchID" class="text-danger"></span>
+                                    <span asp-validation-for="BranchTypeID" class="text-danger"></span>
                                 </div>
                                 <div class="col-4">
-                                    <label asp-for="DepartmentID" class="form-label fw-bold">Department</label>
-                                    <select asp-for="DepartmentID" asp-items="@(new SelectList(ViewBag.DepartmentsList, "Value", "Text"))" class="form-control form-control-lg">
+                                    <label asp-for="DepartmentTypeID" class="form-label fw-bold">Department</label>
+                                    <select asp-for="DepartmentTypeID" asp-items="@(new SelectList(ViewBag.DepartmentsList, "Value", "Text"))" class="form-control form-control-lg">
                                     </select>
-                                    <span asp-validation-for="DepartmentID" class="text-danger"></span>
+                                    <span asp-validation-for="DepartmentTypeID" class="text-danger"></span>
                                 </div>
                                 <div class="col-4">
-                                    <label asp-for="DesignationID" class="form-label fw-bold">Designation</label>
-                                    <select asp-for="DesignationID" asp-items="@(new SelectList(ViewBag.DesignationsList, "Value", "Text"))" class="form-control form-control-lg">
+                                    <label asp-for="DesignationTypeID" class="form-label fw-bold">Designation</label>
+                                    <select asp-for="DesignationTypeID" asp-items="@(new SelectList(ViewBag.DesignationsList, "Value", "Text"))" class="form-control form-control-lg">
                                     </select>
-                                    <span asp-validation-for="DesignationID" class="text-danger"></span>
+                                    <span asp-validation-for="DesignationTypeID" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>

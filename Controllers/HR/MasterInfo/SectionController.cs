@@ -21,9 +21,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Index()
     {
-      var Sections = await _appDBContext.Settings_Sections
+      var Sections = await _appDBContext.Settings_SectionTypes
     .Where(b => b.DeleteYNID != 1)
-    .Include(d => d.Department) // Eagerly load the related Department data
+    .Include(d => d.DepartmentType) // Eagerly load the related Department data
     .ToListAsync();
 
       return View("~/Views/HR/MasterInfo/Section/Section.cshtml", Sections);
@@ -31,14 +31,14 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Section()
     {
-      var Sections = await _appDBContext.Settings_Sections.ToListAsync();
+      var Sections = await _appDBContext.Settings_SectionTypes.ToListAsync();
       return Ok(Sections);
     }// Add the Edit action
     public async Task<IActionResult> Edit(int id)
     {
       ViewBag.DepartmentList = await _utils.GetDepartments();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      var Section = await _appDBContext.Settings_Sections.FindAsync(id);
+      var Section = await _appDBContext.Settings_SectionTypes.FindAsync(id);
       if (Section == null)
       {
         return NotFound();
@@ -47,7 +47,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(Settings_Section Section)
+    public async Task<IActionResult> Edit(Settings_SectionType Section)
     {
       if (ModelState.IsValid)
       {
@@ -62,16 +62,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       ViewBag.DepartmentList = await _utils.GetDepartments();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      return PartialView("~/Views/HR/MasterInfo/Section/AddSection.cshtml", new Settings_Section());
+      return PartialView("~/Views/HR/MasterInfo/Section/AddSection.cshtml", new Settings_SectionType());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Settings_Section Section)
+    public async Task<IActionResult> Create(Settings_SectionType Section)
     {
       if (ModelState.IsValid)
       {
         Section.DeleteYNID = 0;
-        _appDBContext.Settings_Sections.Add(Section);
+        _appDBContext.Settings_SectionTypes.Add(Section);
         await _appDBContext.SaveChangesAsync();
         return Json(new { success = true });
       }
@@ -79,7 +79,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Delete(int id)
     {
-      var Section = await _appDBContext.Settings_Sections.FindAsync(id);
+      var Section = await _appDBContext.Settings_SectionTypes.FindAsync(id);
       if (Section == null)
       {
         return NotFound();
@@ -88,7 +88,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       Section.ActiveYNID = 0;
       Section.DeleteYNID = 1;
 
-      _appDBContext.Settings_Sections.Update(Section);
+      _appDBContext.Settings_SectionTypes.Update(Section);
       await _appDBContext.SaveChangesAsync();
 
       return Json(new { success = true });
@@ -97,9 +97,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var Sections = await _appDBContext.Settings_Sections
+      var Sections = await _appDBContext.Settings_SectionTypes
         .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Department) // Eagerly load the related Department data
+        .Include(d => d.DepartmentType) // Eagerly load the related Department data
         .ToListAsync();
 
 
@@ -114,9 +114,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
         for (int i = 0; i < Sections.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = Sections[i].SectionID;
-          worksheet.Cells[i + 2, 2].Value = Sections[i].Department?.DepartmentName;
-          worksheet.Cells[i + 2, 3].Value = Sections[i].SectionName;
+          worksheet.Cells[i + 2, 1].Value = Sections[i].SectionTypeID;
+          worksheet.Cells[i + 2, 2].Value = Sections[i].DepartmentType?.DepartmentTypeName;
+          worksheet.Cells[i + 2, 3].Value = Sections[i].SectionTypeName;
           worksheet.Cells[i + 2, 4].Value = Sections[i].ActiveYNID == 1 ? "Yes" : "No";
         }
 
@@ -133,9 +133,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Print()
     {
-      var Sections = await _appDBContext.Settings_Sections
+      var Sections = await _appDBContext.Settings_SectionTypes
         .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Department) // Eagerly load the related Department data
+        .Include(d => d.DepartmentType) // Eagerly load the related Department data
         .ToListAsync();
       return View("~/Views/HR/MasterInfo/Section/PrintSections.cshtml", Sections);
     }

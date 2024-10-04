@@ -1,4 +1,4 @@
-@model Exampler_ERP.Models.Settings_Department
+@model Exampler_ERP.Models.Settings_DepartmentType
 
 <div class="modal fade" id="addDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="addDepartmentModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -11,10 +11,10 @@
                 <form id="addDepartmentForm">
                     <div class="row">
                         <div class="col-6">
-                            <label asp-for="BranchID" class="form-label fw-bold">Select Branch</label>
-                            <select asp-for="BranchID" asp-items="@(new SelectList(ViewBag.BranchList, "Value", "Text", Model.BranchID))" class="form-control form-control-lg">
+                            <label asp-for="BranchTypeID" class="form-label fw-bold">Select Branch</label>
+                            <select asp-for="BranchTypeID" asp-items="@(new SelectList(ViewBag.BranchList, "Value", "Text", Model.BranchTypeID))" class="form-control form-control-lg">
                             </select>
-                            <span asp-validation-for="BranchID" class="text-danger"></span>
+                            <span asp-validation-for="BranchTypeID" class="text-danger"></span>
                         </div>
                         <div class="col-6">
                             <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
@@ -25,7 +25,7 @@
                         </div>
                         <div class="col-12">
                             <label for="DepartmentName" class="form-label fw-bold">Department Name</label>
-                            <input type="text" class="form-control form-control-lg" id="DepartmentName" name="DepartmentName" value="@Model.DepartmentName" />
+                            <input type="text" class="form-control form-control-lg" id="DepartmentName" name="DepartmentName" value="@Model.DepartmentTypeName" />
                         </div>
                         
                       </div>

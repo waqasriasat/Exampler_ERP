@@ -42,7 +42,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     public async Task<IActionResult> Create()
     {
       ViewBag.ProcessTypes = await _appDBContext.Settings_ProcessTypes.ToListAsync();
-      ViewBag.Roles = await _appDBContext.Settings_Roles.ToListAsync();
+      ViewBag.Roles = await _appDBContext.Settings_RoleTypes.ToListAsync();
       return PartialView("~/Views/HR/MasterInfo/ProcessTypeForward/AddProcessTypeForward.cshtml");
     }
 
@@ -56,7 +56,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           var processTypeForward = new CR_ProcessTypeForward
           {
             ProcessTypeID = model.ProcessTypeID,
-            RoleID = roleId
+            RoleTypeID = roleId
           };
           _appDBContext.CR_ProcessTypeForwards.Add(processTypeForward);
         }
@@ -76,7 +76,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       }
 
       ViewBag.ProcessTypes = await _appDBContext.Settings_ProcessTypes.ToListAsync();
-      ViewBag.Roles = await _appDBContext.Settings_Roles.ToListAsync();
+      ViewBag.Roles = await _appDBContext.Settings_RoleTypes.ToListAsync();
       return PartialView("~/Views/HR/MasterInfo/ProcessTypeForward/AddProcessTypeForward.cshtml", model);
     }
 
@@ -90,7 +90,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       var selectedRoleIds = await _appDBContext.CR_ProcessTypeForwards
           .Where(ptf => ptf.ProcessTypeID == id)
-          .Select(ptf => ptf.RoleID)
+          .Select(ptf => ptf.RoleTypeID)
           .ToListAsync();
 
       var viewModel = new ProcessTypeForwardViewModel
@@ -100,7 +100,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       };
 
       ViewBag.ProcessTypes = await _appDBContext.Settings_ProcessTypes.ToListAsync();
-      ViewBag.Roles = await _appDBContext.Settings_Roles.ToListAsync();
+      ViewBag.Roles = await _appDBContext.Settings_RoleTypes.ToListAsync();
       return PartialView("~/Views/HR/MasterInfo/ProcessTypeForward/EditProcessTypeForward.cshtml", viewModel);
     }
 
@@ -120,7 +120,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           var processTypeForward = new CR_ProcessTypeForward
           {
             ProcessTypeID = model.ProcessTypeID,
-            RoleID = roleId
+            RoleTypeID = roleId
           };
           _appDBContext.CR_ProcessTypeForwards.Add(processTypeForward);
         }
@@ -140,7 +140,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       }
 
       ViewBag.ProcessTypes = await _appDBContext.Settings_ProcessTypes.ToListAsync();
-      ViewBag.Roles = await _appDBContext.Settings_Roles.ToListAsync();
+      ViewBag.Roles = await _appDBContext.Settings_RoleTypes.ToListAsync();
       return PartialView("~/Views/HR/MasterInfo/ProcessTypeForward/EditProcessTypeForward.cshtml", model);
     }
   }

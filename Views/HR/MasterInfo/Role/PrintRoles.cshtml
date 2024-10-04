@@ -1,4 +1,4 @@
-@model IEnumerable<Exampler_ERP.Models.Settings_Role>
+@model IEnumerable<Exampler_ERP.Models.Settings_RoleType>
 
 <!DOCTYPE html>
 <html>
@@ -39,8 +39,8 @@
             @foreach (var Role in Model)
             {
                 <tr>
-                    <td>@Role.RoleID</td>
-                    <td>@Role.RoleName</td>
+                    <td>@Role.RoleTypeID</td>
+                    <td>@Role.RoleTypeName</td>
                     <td>@(Role.ActiveYNID == 1 ? "Yes" : "No")</td>
                 </tr>
             }

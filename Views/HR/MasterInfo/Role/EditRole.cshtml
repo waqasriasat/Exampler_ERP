@@ -1,4 +1,4 @@
-@model Exampler_ERP.Models.Settings_Role
+@model Exampler_ERP.Models.Settings_RoleType
 
 <div class="modal fade" id="editRoleModal" tabindex="-1" role="dialog" aria-labelledby="editRoleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -18,7 +18,7 @@
                             <div class="row">
                                 <div class="col-12 col-md-12 col-lg-12">
                                     <label for="RoleName" class="form-label fw-bold">Role Name</label>
-                                    <input type="text" class="form-control form-control-lg" id="RoleName" name="RoleName" value="@Model.RoleName" />
+                                    <input type="text" class="form-control form-control-lg" id="RoleName" name="RoleName" value="@Model.RoleTypeName" />
                                 </div>
                                 <div class="col-12 col-md-6 col-lg-6">
                                     <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
@@ -30,7 +30,7 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" id="RoleID" name="RoleID" value="@Model.RoleID" />
+                    <input type="hidden" id="RoleID" name="RoleID" value="@Model.RoleTypeID" />
                 </form>
             </div>
             <div class="modal-footer">

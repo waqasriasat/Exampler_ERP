@@ -22,20 +22,20 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     public async Task<IActionResult> Index()
     {
      
-      var Qualificationes = await _appDBContext.Settings_Qualifications
+      var Qualificationes = await _appDBContext.Settings_QualificationTypes
         .Where(b => b.DeleteYNID != 1)
         .ToListAsync();
       return View("~/Views/HR/MasterInfo/Qualification/Qualification.cshtml", Qualificationes);
     }
     public async Task<IActionResult> Qualification()
     {
-      var Qualifications = await _appDBContext.Settings_Qualifications.ToListAsync();
+      var Qualifications = await _appDBContext.Settings_QualificationTypes.ToListAsync();
       return Ok(Qualifications);
     }// Add the Edit action
     public async Task<IActionResult> Edit(int id)
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      var Qualification = await _appDBContext.Settings_Qualifications.FindAsync(id);
+      var Qualification = await _appDBContext.Settings_QualificationTypes.FindAsync(id);
       if (Qualification == null)
       {
         return NotFound();
@@ -44,7 +44,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(Settings_Qualification Qualification)
+    public async Task<IActionResult> Edit(Settings_QualificationType Qualification)
     {
       if (ModelState.IsValid)
       {
@@ -58,16 +58,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     public async Task<IActionResult> Create()
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      return PartialView("~/Views/HR/MasterInfo/Qualification/AddQualification.cshtml", new Settings_Qualification());
+      return PartialView("~/Views/HR/MasterInfo/Qualification/AddQualification.cshtml", new Settings_QualificationType());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Settings_Qualification Qualification)
+    public async Task<IActionResult> Create(Settings_QualificationType Qualification)
     {
       if (ModelState.IsValid)
       {
         Qualification.DeleteYNID = 0;
-        _appDBContext.Settings_Qualifications.Add(Qualification);
+        _appDBContext.Settings_QualificationTypes.Add(Qualification);
         await _appDBContext.SaveChangesAsync();
         return Json(new { success = true });
       }
@@ -75,7 +75,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Delete(int id)
     {
-      var Qualification = await _appDBContext.Settings_Qualifications.FindAsync(id);
+      var Qualification = await _appDBContext.Settings_QualificationTypes.FindAsync(id);
       if (Qualification == null)
       {
         return NotFound();
@@ -84,7 +84,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       Qualification.ActiveYNID = 0;
       Qualification.DeleteYNID = 1;
 
-      _appDBContext.Settings_Qualifications.Update(Qualification);
+      _appDBContext.Settings_QualificationTypes.Update(Qualification);
       await _appDBContext.SaveChangesAsync();
 
       return Json(new { success = true });
@@ -93,7 +93,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var Qualificationes = await _appDBContext.Settings_Qualifications
+      var Qualificationes = await _appDBContext.Settings_QualificationTypes
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
 
@@ -107,8 +107,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
         for (int i = 0; i < Qualificationes.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = Qualificationes[i].QualificationID;
-          worksheet.Cells[i + 2, 2].Value = Qualificationes[i].QualificationName;
+          worksheet.Cells[i + 2, 1].Value = Qualificationes[i].QualificationTypeID;
+          worksheet.Cells[i + 2, 2].Value = Qualificationes[i].QualificationTypeName;
           worksheet.Cells[i + 2, 3].Value = Qualificationes[i].ActiveYNID == 1 ? "Yes" : "No";
         }
 
@@ -125,7 +125,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Print()
     {
-      var Qualificationes = await _appDBContext.Settings_Qualifications
+      var Qualificationes = await _appDBContext.Settings_QualificationTypes
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
       return View("~/Views/HR/MasterInfo/Qualification/PrintQualifications.cshtml", Qualificationes);

@@ -1,0 +1,53 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_AddionalAllowanceType>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print AddionalAllowanceTypees</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>AddionalAllowanceType List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>AddionalAllowanceType ID</th>
+                <th>AddionalAllowanceType Name</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var AddionalAllowanceType in Model)
+            {
+                <tr>
+                    <td>@AddionalAllowanceType.AddionalAllowanceTypeID</td>
+                    <td>@AddionalAllowanceType.AddionalAllowanceTypeName</td>
+                    <td>@(AddionalAllowanceType.ActiveYNID == 1 ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

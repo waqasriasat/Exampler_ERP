@@ -108,7 +108,7 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
               {
                 ApprovalProcessID = newProcessTypeApproval.ApprovalProcessID,
                 Date = DateTime.Now,
-                RoleID = nextApprovalSetup.RoleID,
+                RoleID = nextApprovalSetup.RoleTypeID,
                 AppID = 0,
                 AppUserID = 0,
                 Notes = null,

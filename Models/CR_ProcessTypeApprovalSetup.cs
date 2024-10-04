@@ -11,9 +11,9 @@ namespace Exampler_ERP.Models
     [ForeignKey("ProcessTypeID")]
     public virtual Settings_ProcessType? ProcessType { get; set; }
     public int Rank { get; set; }
-    public int RoleID { get; set; }
-    [ForeignKey("RoleID")]
-    public virtual Settings_Role? Role { get; set; }
+    public int RoleTypeID { get; set; }
+    [ForeignKey("RoleTypeID")]
+    public virtual Settings_RoleType? RoleType { get; set; }
 
   }
 }

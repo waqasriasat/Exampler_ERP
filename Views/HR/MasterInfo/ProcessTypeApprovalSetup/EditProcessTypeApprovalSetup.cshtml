@@ -101,7 +101,7 @@
                                 @foreach (var role in (IEnumerable<dynamic>)ViewBag.RoleList)
                                 {
                                     <div class="form-check">
-                                        <input class="form-check-input role-checkbox" type="checkbox" name="RoleIDs" value="@role.Value" id="role_@role.Value" @(Model.Any(m => m.RoleID == role.Value) ? "checked" : "") />
+                                    <input class="form-check-input role-checkbox" type="checkbox" name="RoleIDs" value="@role.Value" id="role_@role.Value" @(Model.Any(m => m.RoleTypeID == role.Value) ? "checked" : "") />
                                         <label class="form-control form-check-label" for="role_@role.Value">@role.Text</label>
                                     </div>
                                 }
@@ -109,7 +109,7 @@
                             <div class="col-3">
                                 @foreach (var role in (IEnumerable<dynamic>)ViewBag.RoleList)
                                 {
-                                    int? rank = Model.FirstOrDefault(m => m.RoleID == role.Value)?.Rank;
+                                int? rank = Model.FirstOrDefault(m => m.RoleTypeID == role.Value)?.Rank;
                                     <input type="text" class="form-control rank" id="rank_@role.Value" value="@rank?.ToString()" readonly />
                                 }
                             </div>
@@ -120,8 +120,8 @@
                             {
                                 <div class="row">
                                     <input style="width:100px" type="text" name="ProcessTypeApprovalSetups[@i].ProcessTypeID" value="@Model[i].ProcessTypeID" id="hidden_ProcessTypeID_@Model[i].ProcessTypeID" />
-                                    <input style="width:100px" type="text" name="ProcessTypeApprovalSetups[@i].RoleID" value="@Model[i].RoleID" id="hidden_RoleID_@Model[i].RoleID" />
-                                    <input style="width:100px" type="text" name="ProcessTypeApprovalSetups[@i].Rank" value="@Model[i].Rank" id="hidden_Rank_@Model[i].RoleID" />
+                                <input style="width:100px" type="text" name="ProcessTypeApprovalSetups[@i].RoleID" value="@Model[i].RoleTypeID" id="hidden_RoleID_@Model[i].RoleTypeID" />
+                                <input style="width:100px" type="text" name="ProcessTypeApprovalSetups[@i].Rank" value="@Model[i].Rank" id="hidden_Rank_@Model[i].RoleTypeID" />
                                 </div>
                             }
                         </div>

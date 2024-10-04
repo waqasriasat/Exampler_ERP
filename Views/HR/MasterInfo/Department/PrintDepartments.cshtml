@@ -1,4 +1,4 @@
-@model IEnumerable<Exampler_ERP.Models.Settings_Department>
+@model IEnumerable<Exampler_ERP.Models.Settings_DepartmentType>
 
 <!DOCTYPE html>
 <html>
@@ -40,9 +40,9 @@
             @foreach (var Department in Model)
             {
                 <tr>
-                    <td>@Department.DepartmentID</td>
-                    <td>@(Department.Branch?.BranchName ?? "N/A")</td>
-                    <td>@Department.DepartmentName</td>
+                    <td>@Department.DepartmentTypeID</td>
+                    <td>@(Department.BranchType?.BranchTypeName ?? "N/A")</td>
+                    <td>@Department.DepartmentTypeName</td>
                     <td>@(Department.ActiveYNID == 1 ? "Yes" : "No")</td>
                 </tr>
             }

@@ -20,12 +20,12 @@ namespace Exampler_ERP.Controllers.HR.Main
     }
     public async Task<IActionResult> Index()
     {
-      ViewBag.BranchCount = await _appDBContext.Settings_Branchs.CountAsync();
-      ViewBag.DepartmentCount = await _appDBContext.Settings_Departments.CountAsync();
-      ViewBag.SectionCount = await _appDBContext.Settings_Sections.CountAsync();
-      ViewBag.QualificationCount = await _appDBContext.Settings_Qualifications.CountAsync();
-      ViewBag.SubQualificationCount = await _appDBContext.Settings_SubQualifications.CountAsync();
-      ViewBag.DesignationCount = await _appDBContext.Settings_Designations.CountAsync();
+      ViewBag.BranchCount = await _appDBContext.Settings_BranchTypes.CountAsync();
+      ViewBag.DepartmentCount = await _appDBContext.Settings_DepartmentTypes.CountAsync();
+      ViewBag.SectionCount = await _appDBContext.Settings_SectionTypes.CountAsync();
+      ViewBag.QualificationCount = await _appDBContext.Settings_QualificationTypes.CountAsync();
+      ViewBag.SubQualificationCount = await _appDBContext.Settings_SubQualificationTypes.CountAsync();
+      ViewBag.DesignationCount = await _appDBContext.Settings_DesignationTypes.CountAsync();
       ViewBag.SalaryTypeCount = await _appDBContext.Settings_SalaryTypes.CountAsync();
       ViewBag.DeductionTypeCount = await _appDBContext.Settings_DeductionTypes.CountAsync();
       ViewBag.DeductionSetupCount = await _appDBContext.HR_DeductionSetups.CountAsync();
@@ -34,8 +34,11 @@ namespace Exampler_ERP.Controllers.HR.Main
       ViewBag.ProcessTypeCount = await _appDBContext.Settings_ProcessTypes.CountAsync();
       ViewBag.ProcessTypeApprovalSetupCount = await _appDBContext.CR_ProcessTypeApprovalSetups.CountAsync();
       ViewBag.ProcessTypeForwardCount = await _appDBContext.CR_ProcessTypeForwards.CountAsync();
-      ViewBag.RolesCount = await _appDBContext.Settings_Roles.CountAsync();
+      ViewBag.RolesCount = await _appDBContext.Settings_RoleTypes.CountAsync();
       ViewBag.UsersCount = await _appDBContext.CR_Users.CountAsync();
+      ViewBag.AddionalAllowanceTypeCount = await _appDBContext.Settings_AddionalAllowanceTypes.CountAsync();
+      ViewBag.OvertimeRateCount = await _appDBContext.Settings_OverTimeRates.CountAsync();
+      ViewBag.EmployeeRequestTypeCount = await _appDBContext.Settings_EmployeeRequestTypes.CountAsync();
       //ViewBag.AccessRightsCount = await _appDBContext.Branchs.CountAsync();
       //ViewBag.CopyAccessRightsCount = await _appDBContext.Branchs.CountAsync();
       //ViewBag.EvaluationQuestionsCount = await _appDBContext.Branchs.CountAsync();

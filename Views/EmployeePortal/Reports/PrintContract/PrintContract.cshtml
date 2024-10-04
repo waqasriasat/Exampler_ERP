@@ -119,8 +119,8 @@
         <div class="contract-section">
             <h3>Employee Details</h3>
             <p><strong>Name:</strong> @Model.Employee?.FirstName @Model.Employee?.FatherName @Model.Employee?.FamilyName</p>
-            <p><strong>Position:</strong> @Model.Employee?.Designation?.DesignationName</p>
-            <p><strong>Department:</strong> @Model.Employee?.Department?.DepartmentName</p>
+            <p><strong>Position:</strong> @Model.Employee?.DesignationType?.DesignationTypeName</p>
+            <p><strong>Department:</strong> @Model.Employee?.DepartmentType?.DepartmentTypeName</p>
         </div>
 
         <div class="contract-section">

@@ -41,17 +41,17 @@ namespace Exampler_ERP.Models
     public virtual Settings_EmployeeStatusType? EmployeeStatusType { get; set; }
     public int? CountryID { get; set; }
 
-    public int? DesignationID { get; set; }
-    [ForeignKey("DesignationID")]
-    public virtual Settings_Designation? Designation { get; set; }
+    public int? DesignationTypeID { get; set; }
+    [ForeignKey("DesignationTypeID")]
+    public virtual Settings_DesignationType? DesignationType { get; set; }
 
-    public int? DepartmentID { get; set; }
-    [ForeignKey("DepartmentID")]
-    public virtual Settings_Department? Department { get; set; }
+    public int? DepartmentTypeID { get; set; }
+    [ForeignKey("DepartmentTypeID")]
+    public virtual Settings_DepartmentType? DepartmentType { get; set; }
 
-    public int? BranchID { get; set; }
-    [ForeignKey("BranchID")]
-    public virtual Settings_Branch? Branch { get; set; }
+    public int? BranchTypeID { get; set; }
+    [ForeignKey("BranchTypeID")]
+    public virtual Settings_BranchType? BranchType { get; set; }
 
     public int? ApplicantID { get; set; } //didn't use in registration
     public int? FinalApprovalID { get; set; } //didn't use in registration

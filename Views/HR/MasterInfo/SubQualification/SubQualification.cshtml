@@ -1,4 +1,4 @@
-@model IEnumerable<Exampler_ERP.Models.Settings_SubQualification>
+@model IEnumerable<Exampler_ERP.Models.Settings_SubQualificationType>
 
 @{
     ViewData["Title"] = "Master Information - SubQualification";
@@ -125,13 +125,13 @@
                             <div class="col-8 col-md-10 col-lg-9">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">SubQualification ID : </span>@Html.DisplayFor(modelItem => item.SubQualificationID)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">SubQualification ID : </span>@Html.DisplayFor(modelItem => item.SubQualificationTypeID)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Qualification Name : </span>@(item.Qualification?.QualificationName ?? "N/A")  </p>
+                                        <p class="text-nowrap"><span class="smallAdd">Qualification Name : </span>@(item.QualificationType?.QualificationTypeName ?? "N/A")  </p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">SubQualification Name : </span>@Html.DisplayFor(modelItem => item.SubQualificationName)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">SubQualification Name : </span>@Html.DisplayFor(modelItem => item.SubQualificationTypeName)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap">
@@ -152,14 +152,14 @@
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="editSubQualificationLink" data-id="@item.SubQualificationID">
+                                            <a href="#" class="editSubQualificationLink" data-id="@item.SubQualificationTypeID">
                                                 <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="deleteSubQualificationLink" data-id="@item.SubQualificationID">
+                                            <a href="#" class="deleteSubQualificationLink" data-id="@item.SubQualificationTypeID">
                                                 <i class="fa fa-trash-o" style="font-size: large; color:maroon; line-height: 2;"></i>
                                             </a>
                                         </div>

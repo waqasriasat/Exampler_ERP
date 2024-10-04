@@ -17,10 +17,10 @@ namespace Exampler_ERP.Models
     public int? LoginStatus { get; set; }
     public int? DeleteYNID { get; set; }
     public int? ActiveYNID { get; set; }
-    public int RoleID { get; set; }
+    public int RoleTypeID { get; set; }
 
-    [ForeignKey("RoleID")]
-    public virtual Settings_Role? Role { get; set; }
+    [ForeignKey("RoleTypeID")]
+    public virtual Settings_RoleType? RoleType { get; set; }
     public int? FinalApprovalID { get; set; }
     public int? ApprovalProcessID { get; set; }
   }

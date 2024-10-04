@@ -1,4 +1,4 @@
-@model Exampler_ERP.Models.Settings_SubQualification
+@model Exampler_ERP.Models.Settings_SubQualificationType
 
 <div class="modal fade" id="editSubQualificationModal" tabindex="-1" role="dialog" aria-labelledby="editSubQualificationModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -17,10 +17,10 @@
                         <div class="col-2 col-md-12 col-lg-12">
                             <div class="row">
                                 <div class="col-6">
-                                    <label asp-for="QualificationID" class="form-label fw-bold">Select Qualification</label>
-                                    <select asp-for="QualificationID" asp-items="@(new SelectList(ViewBag.QualificationList, "Value", "Text", Model.QualificationID))" class="form-control form-control-lg">
+                                    <label asp-for="QualificationTypeID" class="form-label fw-bold">Select Qualification</label>
+                                    <select asp-for="QualificationTypeID" asp-items="@(new SelectList(ViewBag.QualificationList, "Value", "Text", Model.QualificationTypeID))" class="form-control form-control-lg">
                                     </select>
-                                    <span asp-validation-for="QualificationID" class="text-danger"></span>
+                                    <span asp-validation-for="QualificationTypeID" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
@@ -31,12 +31,12 @@
                                 </div>
                                 <div class="col-12">
                                     <label for="SubQualificationName" class="form-label fw-bold">SubQualification Name</label>
-                                    <input type="text" class="form-control form-control-lg" id="SubQualificationName" name="SubQualificationName" value="@Model.SubQualificationName" />
+                                    <input type="text" class="form-control form-control-lg" id="SubQualificationName" name="SubQualificationName" value="@Model.SubQualificationTypeName" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" id="SubQualificationID" name="SubQualificationID" value="@Model.SubQualificationID" />
+                    <input type="hidden" id="SubQualificationID" name="SubQualificationID" value="@Model.SubQualificationTypeID" />
                 </form>
             </div>
             <div class="modal-footer">

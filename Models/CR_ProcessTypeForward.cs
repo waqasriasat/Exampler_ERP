@@ -8,11 +8,11 @@ namespace Exampler_ERP.Models
     [Key]
     public int ProcessTypeForwardID { get; set; }
     public int ProcessTypeID { get; set; }
-    public int RoleID { get; set; }
+    public int RoleTypeID { get; set; }
 
     [ForeignKey("ProcessTypeID")]
     public virtual Settings_ProcessType? ProcessType { get; set; }
-    [ForeignKey("RoleID")]
-    public virtual Settings_Role? Role { get; set; }
+    [ForeignKey("RoleTypeID")]
+    public virtual Settings_RoleType? RoleType { get; set; }
   }
 }

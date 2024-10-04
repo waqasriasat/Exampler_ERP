@@ -47,12 +47,12 @@ namespace Exampler_ERP.Utilities
     //}
     public async Task<List<SelectListItem>> GetGender()
     {
-      var genderOptions = await _appDBContext.Settings_Genders.ToListAsync();
+      var genderOptions = await _appDBContext.Settings_GenderTypes.ToListAsync();
 
       var GenderList = genderOptions.Select(g => new SelectListItem
       {
-        Value = g.GenderID.ToString(),
-        Text = g.GenderName
+        Value = g.GenderTypeID.ToString(),
+        Text = g.GenderTypeName
       }).ToList();
 
       GenderList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
@@ -61,12 +61,12 @@ namespace Exampler_ERP.Utilities
     }
     public async Task<List<SelectListItem>> GetMaritalStatus()
     {
-      var maritalStatusOptions = await _appDBContext.Settings_MaritalStatuses.ToListAsync();
+      var maritalStatusOptions = await _appDBContext.Settings_MaritalStatusTypes.ToListAsync();
 
       var MaritalStatusList = maritalStatusOptions.Select(ms => new SelectListItem
       {
-        Value = ms.MaritalStatusID.ToString(),
-        Text = ms.MaritalStatusName
+        Value = ms.MaritalStatusTypeID.ToString(),
+        Text = ms.MaritalStatusTypeName
       }).ToList();
 
       MaritalStatusList.Insert(0, new SelectListItem { Value = "0", Text = "Select Marital Status" });
@@ -75,12 +75,12 @@ namespace Exampler_ERP.Utilities
     }
     public async Task<List<SelectListItem>> GetReligion()
     {
-      var religionOptions = await _appDBContext.Settings_Religions.ToListAsync();
+      var religionOptions = await _appDBContext.Settings_ReligionTypes.ToListAsync();
 
       var ReligionList = religionOptions.Select(r => new SelectListItem
       {
-        Value = r.ReligionID.ToString(),
-        Text = r.ReligionName
+        Value = r.ReligionTypeID.ToString(),
+        Text = r.ReligionTypeName
       }).ToList();
 
       ReligionList.Insert(0, new SelectListItem { Value = "0", Text = "Select Religion" });
@@ -329,33 +329,33 @@ namespace Exampler_ERP.Utilities
     }
     public async Task<List<SelectListItem>> GetBranchs()
     {
-      var branchs = await _appDBContext.Settings_Branchs.ToListAsync();
+      var branchs = await _appDBContext.Settings_BranchTypes.ToListAsync();
 
-      var selectList = branchs.Select(r => new SelectListItem { Value = r.BranchID.ToString(), Text = r.BranchName }).ToList();
+      var selectList = branchs.Select(r => new SelectListItem { Value = r.BranchTypeID.ToString(), Text = r.BranchTypeName }).ToList();
       selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
       return selectList;
     }
     public async Task<List<SelectListItem>> GetDepartments()
     {
-      var departments = await _appDBContext.Settings_Departments.ToListAsync();
+      var departments = await _appDBContext.Settings_DepartmentTypes.ToListAsync();
 
-      var selectList = departments.Select(r => new SelectListItem { Value = r.DepartmentID.ToString(), Text = r.DepartmentName }).ToList();
+      var selectList = departments.Select(r => new SelectListItem { Value = r.DepartmentTypeID.ToString(), Text = r.DepartmentTypeName }).ToList();
       selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
       return selectList;
     }
     public async Task<List<SelectListItem>> GetDesignations()
     {
-      var designations = await _appDBContext.Settings_Designations.ToListAsync();
+      var designations = await _appDBContext.Settings_DesignationTypes.ToListAsync();
 
-      var selectList = designations.Select(r => new SelectListItem { Value = r.DesignationID.ToString(), Text = r.DesignationName }).ToList();
+      var selectList = designations.Select(r => new SelectListItem { Value = r.DesignationTypeID.ToString(), Text = r.DesignationTypeName }).ToList();
       selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
       return selectList;
     }
     public async Task<List<SelectListItem>> GetQualifications()
     {
-      var qualifications = await _appDBContext.Settings_Qualifications.ToListAsync();
+      var qualifications = await _appDBContext.Settings_QualificationTypes.ToListAsync();
 
-      var selectList = qualifications.Select(r => new SelectListItem { Value = r.QualificationID.ToString(), Text = r.QualificationName }).ToList();
+      var selectList = qualifications.Select(r => new SelectListItem { Value = r.QualificationTypeID.ToString(), Text = r.QualificationTypeName }).ToList();
       selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
       return selectList;
     }
@@ -370,11 +370,11 @@ namespace Exampler_ERP.Utilities
 
     public async Task<List<SelectListItem>> GetRoles()
     {
-      var roles = await _appDBContext.Settings_Roles
+      var roles = await _appDBContext.Settings_RoleTypes
     .Where(e => e.ActiveYNID == 1)
     .ToListAsync();
 
-      var selectList = roles.Select(r => new SelectListItem { Value = r.RoleID.ToString(), Text = r.RoleName }).ToList();
+      var selectList = roles.Select(r => new SelectListItem { Value = r.RoleTypeID.ToString(), Text = r.RoleTypeName }).ToList();
       selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
       return selectList;
     }

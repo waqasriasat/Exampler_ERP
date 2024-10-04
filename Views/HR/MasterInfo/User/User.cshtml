@@ -128,7 +128,7 @@
                                         <p class="text-nowrap"><span class="smallAdd">User ID : </span>@Html.DisplayFor(modelItem => item.UserID)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Role Name : </span>@(item.Role?.RoleName ?? "N/A")  </p>
+                                        <p class="text-nowrap"><span class="smallAdd">Role Name : </span>@(item.RoleType?.RoleTypeName ?? "N/A")  </p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <p class="text-nowrap"><span class="smallAdd">User Name : </span>@Html.DisplayFor(modelItem => item.UserName)</p>
