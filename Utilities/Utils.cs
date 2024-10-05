@@ -610,5 +610,20 @@ namespace Exampler_ERP.Utilities
 
       return monthTypeList;
     }
+
+    public async Task<dynamic> GetDirectManager()
+    {
+      var directManagerList = await _appDBContext.CR_Users
+           .Select(d => new SelectListItem
+           {
+             Value = d.UserID.ToString(),
+             Text = CR_CipherKey.Decrypt(d.UserName)
+            })
+           .ToListAsync();
+
+      directManagerList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+
+      return directManagerList;
+    }
   }
 }

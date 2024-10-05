@@ -53,4 +53,10 @@ namespace Exampler_ERP.Models.Temp
     public int EmployeeID { get; set; }
     public string? EmployeeName { get; set; }
   }
+  public class UpdateReportToViewModel
+  {
+    public int EmployeeID { get; set; }
+    public int? ReportToID { get; set; }
+    
+  }
 }

@@ -1,0 +1,32 @@
+@model Exampler_ERP.Models.Temp.UpdateReportToViewModel
+
+<div class="modal fade" id="directManagerEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="directManagerEmployeeModalLabel" aria-hidden="true" style="--bs-modal-width: 70rem;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="directManagerEmployeeModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    DirectManager Employee
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <form id="DirectManagerEmployeeForm" method="post" >
+                    <input type="hidden" asp-for="EmployeeID" class="form-control form-control-lg" />
+                    <div class="col-12">
+                        <label asp-for="ReportToID" class="form-label fw-bold">Direct Manager</label>
+                        <select asp-for="ReportToID" asp-items="@(new SelectList(ViewBag.DirectManagerList, "Value", "Text"))" class="form-control form-control-lg">
+                        </select>
+                        <span asp-validation-for="ReportToID" class="text-danger"></span>
+                    </div>
+                    <div id="errorContainer" class="text-danger"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="button" class="btn btn-success" id="saveEmployeeChanges">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>

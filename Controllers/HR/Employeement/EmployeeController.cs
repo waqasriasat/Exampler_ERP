@@ -2,6 +2,7 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 
@@ -261,7 +262,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           worksheet.Cells[i + 2, 4].Value = employees[i].DesignationType?.DesignationTypeName;
           worksheet.Cells[i + 2, 5].Value = employees[i].EmployeeID;
           worksheet.Cells[i + 2, 6].Value = employees[i].EmployeeCode;
-          worksheet.Cells[i + 2, 7].Value = employees[i].FirstName +' '+ employees[i].FatherName + ' ' + employees[i].FamilyName;
+          worksheet.Cells[i + 2, 7].Value = employees[i].FirstName + ' ' + employees[i].FatherName + ' ' + employees[i].FamilyName;
           worksheet.Cells[i + 2, 8].Value = employees[i].ActiveYNID == 1 ? "Yes" : "No";
           worksheet.Cells[i + 2, 9].Value = employees[i].Sex == 0 || employees[i].Sex == null
           ? ""
@@ -292,11 +293,11 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           worksheet.Cells[i + 2, 27].Value = employees[i].IDExpiryDate?.ToString("dd-MMM-yyyy");
           worksheet.Cells[i + 2, 28].Value = employees[i].PassportNumber;
           worksheet.Cells[i + 2, 29].Value = employees[i].PassportPlaceOfIssue;
-          worksheet.Cells[i + 2, 30].Value = employees[i].PassportIssueDate?.ToString("dd-MMM-yyyy"); 
-          worksheet.Cells[i + 2, 31].Value = employees[i].PassportExpiryDate?.ToString("dd-MMM-yyyy"); 
+          worksheet.Cells[i + 2, 30].Value = employees[i].PassportIssueDate?.ToString("dd-MMM-yyyy");
+          worksheet.Cells[i + 2, 31].Value = employees[i].PassportExpiryDate?.ToString("dd-MMM-yyyy");
 
         }
-         
+
         worksheet.Cells["G1"].Style.Font.Bold = true;
         worksheet.Cells["A1"].Style.Numberformat.Format = "dd-mmm-yyyy";
         worksheet.Cells["J1"].Style.Numberformat.Format = "dd-mmm-yyyy";
@@ -329,7 +330,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       {
         var noImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/icons/NoImage.jpg");
         var noImageFile = System.IO.File.ReadAllBytes(noImagePath);
-        return File(noImageFile, "image/jpeg");  
+        return File(noImageFile, "image/jpeg");
       }
     }
     [HttpGet]
@@ -351,7 +352,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       {
         EmployeeID = employee.EmployeeID,
         UserName = CR_CipherKey.Decrypt(employee.UserName)
-    };
+      };
 
       return PartialView("~/Views/HR/Employeement/Employee/ChangePassword.cshtml", model);
     }
@@ -390,7 +391,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         return Json(new { success = true, message = "Password changed successfully!" });
       }
 
-      
+
       return PartialView("~/Views/HR/Employeement/Employee/ChangePassword.cshtml", model);
     }
     [HttpGet]
@@ -444,8 +445,181 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       TempData["SuccessMessage"] = "Profile picture updated successfully!";
       return Json(new { success = true, message = "Profile picture updated successfully!" });
-     
+
+    }
+    public async Task<IActionResult> DirectManager(int id)
+    {
+      var employee = await _appDBContext.HR_Employees.FindAsync(id);
+
+      if (employee == null)
+      {
+        return NotFound();
+      }
+
+      var employees = await _appDBContext.HR_Employees
+          .Where(e => e.EmployeeID != id) // Ensure employee can't report to themselves
+          .Select(e => new SelectListItem
+          {
+            Value = e.EmployeeID.ToString(),
+            Text = e.FirstName + " " + e.FamilyName
+          }).ToListAsync();
+
+      var viewModel = new UpdateReportToViewModel
+      {
+        EmployeeID = employee.EmployeeID,
+        ReportToID = employee.ReportToID
+      };
+      ViewBag.DirectManagerList = await _utils.GetDirectManager();
+      return PartialView("~/Views/HR/Employeement/Employee/DirectManagerEmployee.cshtml", viewModel);
     }
 
+    [HttpPost]
+    public async Task<IActionResult> DirectManager(UpdateReportToViewModel model)
+    {
+      var employee = await _appDBContext.HR_Employees.FindAsync(model.EmployeeID);
+
+      if (employee == null)
+      {
+        return NotFound();
+      }
+
+      if (model.ReportToID == model.EmployeeID)
+      {
+        ModelState.AddModelError("", "An employee cannot report to themselves.");
+        return View(model); // Return with validation error
+      }
+
+      employee.ReportToID = model.ReportToID;
+
+      await _appDBContext.SaveChangesAsync();
+
+      return Json(new { success = true, message = "Direct Manager updated successfully!" });
+    }
+
+    public async Task<IActionResult> Education(int id)
+    {
+      var education = await _appDBContext.HR_EmployeeEducations
+          .FirstOrDefaultAsync(e => e.EducationID == id);
+
+      if (education == null)
+      {
+        education = new HR_EmployeeEducation();
+      }
+
+      // Populate ViewBags for dropdowns like QualificationType, CountryType, etc.
+      ViewBag.QualificationTypes = _utils.GetQualifications();
+      ViewBag.CountryTypes = _utils.GetCountries();
+      ViewBag.MonthTypes = _utils.GetMonthsTypes();
+
+      return PartialView("~/Views/HR/Employeement/Employee/EmployeeEducation.cshtml", education);
+    }
+    [HttpPost]
+    public async Task<IActionResult> Education(HR_EmployeeEducation model, IFormFile? pdfFile)
+    {
+      if (ModelState.IsValid)
+      {
+        if (pdfFile != null && pdfFile.Length > 0)
+        {
+          // Ensure the file is a PDF
+          if (pdfFile.ContentType == "application/pdf" && Path.GetExtension(pdfFile.FileName).ToLower() == ".pdf")
+          {
+            using (var memoryStream = new MemoryStream())
+            {
+              await pdfFile.CopyToAsync(memoryStream);
+              model.DocImage = memoryStream.ToArray();  // Store PDF as binary
+            }
+
+            model.DocExt = Path.GetExtension(pdfFile.FileName).ToLower();
+          }
+          else
+          {
+            ModelState.AddModelError("", "Only PDF files are allowed.");
+            return PartialView("~/Views/HR/Employeement/Employee/EmployeeEducation.cshtml", model);
+          }
+        }
+
+        if (model.EducationID == 0)
+        {
+          _appDBContext.HR_EmployeeEducations.Add(model);
+        }
+        else
+        {
+          _appDBContext.HR_EmployeeEducations.Update(model);
+        }
+
+        await _appDBContext.SaveChangesAsync();
+
+        return Json(new { success = true });
+      }
+
+      // Populate ViewBags for dropdowns
+      ViewBag.QualificationTypes = _utils.GetQualifications();
+      ViewBag.CountryTypes = _utils.GetCountries();
+      ViewBag.MonthTypes = _utils.GetMonthsTypes();
+
+      return PartialView("~/Views/HR/Employeement/Employee/EmployeeEducation.cshtml", model);
+    }
+
+    public async Task<IActionResult> Experience(int id)
+    {
+      var experience = await _appDBContext.HR_EmployeeExperiences
+          .FirstOrDefaultAsync(e => e.ExperienceID == id);
+
+      if (experience == null)
+      {
+        experience = new HR_EmployeeExperience();
+      }
+
+      // Populate ViewBags for dropdowns like QualificationType, CountryType, etc.
+      ViewBag.CountryTypes = _utils.GetCountries();
+      ViewBag.MonthTypes = _utils.GetMonthsTypes();
+
+      return PartialView("~/Views/HR/Employeement/Employee/EmployeeExperience.cshtml", experience);
+    }
+    [HttpPost]
+    public async Task<IActionResult> Experience(HR_EmployeeExperience model, IFormFile? pdfFile)
+    {
+      if (ModelState.IsValid)
+      {
+        if (pdfFile != null && pdfFile.Length > 0)
+        {
+          // Ensure the file is a PDF
+          if (pdfFile.ContentType == "application/pdf" && Path.GetExtension(pdfFile.FileName).ToLower() == ".pdf")
+          {
+            using (var memoryStream = new MemoryStream())
+            {
+              await pdfFile.CopyToAsync(memoryStream);
+              model.DocImage = memoryStream.ToArray();  // Store PDF as binary
+            }
+
+            model.DocExt = Path.GetExtension(pdfFile.FileName).ToLower();
+          }
+          else
+          {
+            ModelState.AddModelError("", "Only PDF files are allowed.");
+            return PartialView("~/Views/HR/Employeement/Employee/EmployeeExperience.cshtml", model);
+          }
+        }
+
+        if (model.ExperienceID == 0)
+        {
+          _appDBContext.HR_EmployeeExperiences.Add(model);
+        }
+        else
+        {
+          _appDBContext.HR_EmployeeExperiences.Update(model);
+        }
+
+        await _appDBContext.SaveChangesAsync();
+
+        return Json(new { success = true });
+      }
+
+      // Populate ViewBags for dropdowns
+      ViewBag.CountryTypes = _utils.GetCountries();
+      ViewBag.MonthTypes = _utils.GetMonthsTypes();
+
+      return PartialView("~/Views/HR/Employeement/Employee/EmployeeExperience.cshtml", model);
+    }
   }
 }

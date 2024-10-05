@@ -1,0 +1,103 @@
+@model List<Exampler_ERP.Models.HR_FixedDeductionDetail>
+<script>
+    $(document).ready(function () {
+        console.log('Document is ready.');
+
+        function updateHiddenFields() {
+            $('#hiddenFieldsContainer').empty(); // Clear existing hidden fields
+
+            var FixedDeductionID = $('#FixedDeductionID').val(); // Get the FixedDeductionID from the form
+
+            var checkedRoles = $('.FixedDeductiontype-checkbox:checked');
+            checkedRoles.each(function (index) {
+                var FixedDeductionTypeID = $(this).val();
+                var FixedDeductionAmountInput = $('#FixedDeductionAmount_' + FixedDeductionTypeID);
+                var FixedDeductionAmount = FixedDeductionAmountInput.val();
+
+                $('#hiddenFieldsContainer').append(
+                    `<div class="row">
+                                            <input type="hidden" name="FixedDeductionDetails[${index}].FixedDeductionID" value="${FixedDeductionID}" id="hidden_FixedDeductionID_${FixedDeductionTypeID}" />
+                                            <input type="hidden" name="FixedDeductionDetails[${index}].FixedDeductionTypeID" value="${FixedDeductionTypeID}" id="hidden_FixedDeductionTypeID_${FixedDeductionTypeID}" />
+                                            <input type="hidden" name="FixedDeductionDetails[${index}].FixedDeductionAmount" value="${FixedDeductionAmount}" id="hidden_FixedDeductionAmount_${FixedDeductionTypeID}" />
+                                </div>`
+                );
+            });
+        }
+
+        // Event handler for FixedDeductiontype checkbox change
+        $(document).on('change', '.FixedDeductiontype-checkbox', function () {
+            var FixedDeductionTypeID = $(this).val();
+            var FixedDeductionAmountInput = $('#FixedDeductionAmount_' + FixedDeductionTypeID);
+
+            if ($(this).is(':checked')) {
+                var maxFixedDeductionAmount = 0;
+                $('.FixedDeductionAmount').each(function () {
+                    var val = parseInt($(this).val()) || 0;
+                    if (val > maxFixedDeductionAmount) {
+                        maxFixedDeductionAmount = 0;
+                    }
+                });
+                FixedDeductionAmountInput.val(maxFixedDeductionAmount).removeAttr('readonly');
+            } else {
+                FixedDeductionAmountInput.val('').attr('readonly', true);
+            }
+
+            // Update hidden fields after checkbox change
+            updateHiddenFields();
+        });
+
+        // Event handler for FixedDeduction amount input change
+        $(document).on('input', '.FixedDeductionAmount', function () {
+            var FixedDeductionTypeID = $(this).attr('id').split('_')[1]; // Extract FixedDeductionTypeID from the input id
+            console.log('FixedDeduction amount changed for FixedDeductionTypeID:', FixedDeductionTypeID);
+
+            // Update hidden fields after FixedDeduction amount change
+            updateHiddenFields();
+        });
+
+        // Initial call to update hidden fields on page load
+        updateHiddenFields();
+    });
+</script>
+
+<div class="row">
+    <div class="col-12 mb-2">
+        <div class="form-group">
+            <label for="EmployeeName" class="form-label fw-bold">Employee Name</label>
+            <input type="text" class="form-control form-control-lg" id="EmployeeName" value="@Model.FirstOrDefault()?.FixedDeduction?.Employee?.FirstName @Model.FirstOrDefault()?.FixedDeduction?.Employee?.FatherName @Model.FirstOrDefault()?.FixedDeduction?.Employee?.FamilyName" disabled />
+            <input type="hidden" name="EmployeeID" id="EmployeeID" value="@Model.FirstOrDefault()?.FixedDeduction?.Employee?.EmployeeID" />
+            <input type="hidden" class="form-control form-control-lg" id="FixedDeductionID" name="FixedDeductionID" value="@Model.FirstOrDefault()?.FixedDeductionID" />
+        </div>
+    </div>
+</div>
+
+<div class="row FixedDeductiontype-container">
+    <div class="col-9">
+        @foreach (var FixedDeductiontype in (IEnumerable<dynamic>)ViewBag.FixedDeductionTypeList)
+        {
+            <div class="form-check">
+                <input class="form-check-input FixedDeductiontype-checkbox" type="checkbox" name="FixedDeductionTypes" value="@FixedDeductiontype.Value" id="FixedDeductiontype_@FixedDeductiontype.Value" @(Model.Any(m => m.FixedDeductionTypeID == FixedDeductiontype.Value) ? "checked" : "") />
+                <label class="form-control form-check-label" for="FixedDeductiontype_@FixedDeductiontype.Value">@FixedDeductiontype.Text</label>
+            </div>
+        }
+    </div>
+    <div class="col-3">
+        @foreach (var FixedDeductiontype in (IEnumerable<dynamic>)ViewBag.FixedDeductionTypeList)
+        {
+            double? FixedDeductionAmount = Model.FirstOrDefault(m => m.FixedDeductionTypeID == FixedDeductiontype.Value)?.FixedDeductionAmount;
+            string formattedFixedDeductionAmount = FixedDeductionAmount.HasValue ? FixedDeductionAmount.Value.ToString("0.00") : string.Empty;
+            <input type="text" class="form-control FixedDeductionAmount" id="FixedDeductionAmount_@FixedDeductiontype.Value" value="@formattedFixedDeductionAmount" @(Model.Any(m => m.FixedDeductionTypeID == FixedDeductiontype.Value) ? "" : "readonly") />
+        }
+    </div>
+</div>
+
+<div id="hiddenFieldsContainer">
+    @for (var i = 0; i < Model.Count; i++)
+    {
+        <div class="row">
+            <input type="hidden" name="FixedDeductionDetails[@i].FixedDeductionID" value="@Model.FirstOrDefault()?.FixedDeductionID" id="hidden_FixedDeductionID_@Model[i].FixedDeductionID" />
+            <input type="hidden" name="FixedDeductionDetails[@i].FixedDeductionTypeID" value="@Model[i].FixedDeductionTypeID" id="hidden_FixedDeductionTypeID_@Model[i].FixedDeductionTypeID" />
+            <input type="hidden" name="FixedDeductionDetails[@i].FixedDeductionAmount" value="@Model[i].FixedDeductionAmount" id="hidden_FixedDeductionAmount_@Model[i].FixedDeductionTypeID" />
+        </div>
+    }
+</div>

@@ -1,0 +1,131 @@
+@model Exampler_ERP.Models.Temp.EmployeeListViewModel
+
+@{
+    ViewData["Title"] = "Financial - FixedDeduction";
+}
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            $('.editFixedDeductionLink').click(function (e) {
+                e.preventDefault();
+                var FixedDeductionTypeId = $(this).data('id');
+                $.get('@Url.Action("Edit", "FixedDeduction")', { id: FixedDeductionTypeId }, function (data) {
+                    $('#editFixedDeductionModalContainer').html(data);
+                    $('#editFixedDeductionModal').modal('show');
+                });
+            });
+
+            $('#editFixedDeductionModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editFixedDeductionForm').serialize();
+                console.log("Serialized form data:", formData); // Log serialized data for debugging
+                $.post('@Url.Action("Edit", "FixedDeduction")', formData, function (response) {
+                    if (response.success) {
+                        $('#editFixedDeductionModal').modal('hide');
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        // Handle validation errors or other cases
+                    }
+                });
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editFixedDeductionModalContainer').on('click', '#Close', function () {
+                $('#editFixedDeductionModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+
+            // Delete FixedDeduction
+            $('.deleteFixedDeductionLink').click(function (e) {
+                e.preventDefault();
+                var FixedDeductionId = $(this).data('id');
+                $.post('@Url.Action("Delete", "FixedDeduction")', { id: FixedDeductionId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        // Handle errors
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+    </script>
+    <script>
+        function printFixedDeductions() {
+            var printWindow = window.open('@Url.Action("Print", "FixedDeduction")', '_blank');
+            printWindow.focus();
+        }
+    </script>
+}
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Financial /</span> FixedDeduction
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">FixedDeduction List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-8 col-md-10 col-lg-7">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-nowrap">Employee Name</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">Type Count</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-2 col-lg-5">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p class="text-nowrap">Edit</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model.EmployeeCount)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-8 col-md-10 col-lg-7">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@Html.DisplayFor(modelItem => item.EmployeeName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <p class="text-nowrap"><span class="smallAdd">Type Count : </span>@Html.DisplayFor(modelItem => item.TypeCount)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-2 col-lg-5">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-12">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editFixedDeductionLink" data-id="@item.EmployeeID">
+                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Include the modal partial -->
+<div id="editFixedDeductionModalContainer"></div>

@@ -1,0 +1,86 @@
+@model List<Exampler_ERP.Models.HR_FixedDeductionDetail>
+
+<script>
+    $(document).ready(function () {
+        console.log('Document is ready.');
+
+        function updateHiddenFields() {
+            $('#hiddenFieldsContainer').empty(); // Clear existing hidden fields
+
+            var FixedDeductionID = $('#FixedDeductionID').val(); // Get the FixedDeductionID from the form
+
+            var checkedRoles = $('.FixedDeductiontype-checkbox:checked');
+            checkedRoles.each(function (index) {
+                var FixedDeductionTypeID = $(this).val();
+                var FixedDeductionAmountInput = $('#FixedDeductionAmount_' + FixedDeductionTypeID);
+                var FixedDeductionAmount = FixedDeductionAmountInput.val();
+
+                $('#hiddenFieldsContainer').append(
+                    `<div class="row">
+                                        <input type="hidden" name="FixedDeductionDetails[${index}].FixedDeductionID" value="${FixedDeductionID}" id="hidden_FixedDeductionID_${FixedDeductionTypeID}" />
+                                        <input type="hidden" name="FixedDeductionDetails[${index}].FixedDeductionTypeID" value="${FixedDeductionTypeID}" id="hidden_FixedDeductionTypeID_${FixedDeductionTypeID}" />
+                                        <input type="hidden" name="FixedDeductionDetails[${index}].FixedDeductionAmount" value="${FixedDeductionAmount}" id="hidden_FixedDeductionAmount_${FixedDeductionTypeID}" />
+                            </div>`
+                );
+            });
+        }
+
+        // Event handler for FixedDeductiontype checkbox change
+        $(document).on('change', '.FixedDeductiontype-checkbox', function () {
+            var FixedDeductionTypeID = $(this).val();
+            var FixedDeductionAmountInput = $('#FixedDeductionAmount_' + FixedDeductionTypeID);
+
+            if ($(this).is(':checked')) {
+                var maxFixedDeductionAmount = 0;
+                $('.FixedDeductionAmount').each(function () {
+                    var val = parseInt($(this).val()) || 0;
+                    if (val > maxFixedDeductionAmount) {
+                        maxFixedDeductionAmount = 0;
+                    }
+                });
+                FixedDeductionAmountInput.val(maxFixedDeductionAmount).removeAttr('readonly');
+            } else {
+                FixedDeductionAmountInput.val('').attr('readonly', true);
+            }
+
+            // Update hidden fields after checkbox change
+            updateHiddenFields();
+        });
+
+        // Event handler for FixedDeduction amount input change
+        $(document).on('input', '.FixedDeductionAmount', function () {
+            var FixedDeductionTypeID = $(this).attr('id').split('_')[1]; // Extract FixedDeductionTypeID from the input id
+            console.log('FixedDeduction amount changed for FixedDeductionTypeID:', FixedDeductionTypeID);
+
+            // Update hidden fields after FixedDeduction amount change
+            updateHiddenFields();
+        });
+
+        // Initial call to update hidden fields on page load
+        updateHiddenFields();
+    });
+</script>
+
+<div class="modal fade" id="editFixedDeductionModal" tabindex="-1" role="dialog" aria-labelledby="editFixedDeductionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editFixedDeductionModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit FixedDeduction
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <form id="editFixedDeductionForm">
+                    @Html.Partial("~/Views/HR/Financial/FixedDeduction/_EditFixedDeduction.cshtml", Model)
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="submit" class="btn btn-success" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

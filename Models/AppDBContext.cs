@@ -62,12 +62,23 @@ namespace Exampler_ERP.Models
     public DbSet<HR_AddionalAllowanceDetail> HR_AddionalAllowanceDetails { get; set; }
     public DbSet<Settings_AddionalAllowanceType> Settings_AddionalAllowanceTypes { get; set; }
 
+    public DbSet<HR_FixedDeduction> HR_FixedDeductions { get; set; }
+    public DbSet<HR_FixedDeductionDetail> HR_FixedDeductionDetails { get; set; }
+    public DbSet<Settings_FixedDeductionType> Settings_FixedDeductionTypes { get; set; }
+    public DbSet<HR_EmployeeEducation> HR_EmployeeEducations { get; set; }
+    public DbSet<HR_EmployeeExperience> HR_EmployeeExperiences { get; set; }
+
 
 
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      modelBuilder.Entity<Settings_FixedDeductionType>().HasData(
+   new Settings_FixedDeductionType() { FixedDeductionTypeID = 1, FixedDeductionTypeName = "Social Insurance", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_FixedDeductionType() { FixedDeductionTypeID = 2, FixedDeductionTypeName = "Income Tax", ActiveYNID = 1, DeleteYNID = 0 }
+);
+
       modelBuilder.Entity<Settings_AddionalAllowanceType>().HasData(
     new Settings_AddionalAllowanceType() { AddionalAllowanceTypeID = 1, AddionalAllowanceTypeName = "Bonus", ActiveYNID = 1, DeleteYNID = 0 },
     new Settings_AddionalAllowanceType() { AddionalAllowanceTypeID = 2, AddionalAllowanceTypeName = "Month Perfection Bonus", ActiveYNID = 1, DeleteYNID = 0 }

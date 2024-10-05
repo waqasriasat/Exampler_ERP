@@ -336,7 +336,19 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 10)
           {
+            var fixedDeduction = await _appDBContext.HR_FixedDeductions
+                                                     .Where(u => u.FixedDeductionID == transactionID)
+                                                     .FirstOrDefaultAsync();
 
+
+            if (fixedDeduction != null)
+            {
+              fixedDeduction.FinalApprovalID = 1;
+              fixedDeduction.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(fixedDeduction);
+              await _appDBContext.SaveChangesAsync();
+            }
           }
           if (ProcessTypeID == 11)
           {
@@ -546,6 +558,19 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 10)
           {
+            var fixedDeduction = await _appDBContext.HR_FixedDeductions
+                                                     .Where(u => u.FixedDeductionID == transactionID)
+                                                     .FirstOrDefaultAsync();
+
+
+            if (fixedDeduction != null)
+            {
+              fixedDeduction.FinalApprovalID = 2;
+              fixedDeduction.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(fixedDeduction);
+              await _appDBContext.SaveChangesAsync();
+            }
 
           }
           if (ProcessTypeID == 11)
@@ -573,7 +598,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
             if (vacationSettle != null)
             {
-              vacationSettle.FinalApprovalID = 1;
+              vacationSettle.FinalApprovalID = 2;
               vacationSettle.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
 
               _appDBContext.Update(vacationSettle);
@@ -754,7 +779,16 @@ namespace Exampler_ERP.Controllers.MasterInfo
       }
       if (processTypeID == 10)
       {
+        var FixedDeductionDetails = await _appDBContext.HR_FixedDeductionDetails
+      .Where(pt => pt.FixedDeductionID == transactionID)
+      .Include(pt => pt.FixedDeduction.Employee)
+      .ToListAsync();
 
+        ViewBag.FixedDeductionTypeList = await _appDBContext.Settings_FixedDeductionTypes
+            .Select(r => new { Value = r.FixedDeductionTypeID, Text = r.FixedDeductionTypeName })
+            .ToListAsync();
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", FixedDeductionDetails);
       }
       if (processTypeID == 11)
       {

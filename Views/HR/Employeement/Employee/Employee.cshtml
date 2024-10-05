@@ -78,6 +78,95 @@
                 });
             });
 
+            // directManager employee modal popup
+            $('.directManagerEmployeeLink').click(function (e) {
+                e.preventDefault();
+                var employeeId = $(this).data('id');
+                $.get('@Url.Action("DirectManager", "Employee")', { id: employeeId }, function (data) {
+                    $('#directManagerEmployeeModalContainer').html(data);
+                    $('#directManagerEmployeeModal').modal('show');
+                });
+            });
+            $('#directManagerEmployeeModalContainer').on('click', '#saveEmployeeChanges', function () {
+                var formData = $('#DirectManagerEmployeeForm').serialize();
+                $.post('@Url.Action("DirectManager", "Employee")', formData, function (response) {
+                    if (response.success) {
+                        $('#directManagerEmployeeModal').modal('hide');
+                        // Reload the page or update part of the page with the updated data
+                        location.reload();
+                    } else {
+                        // Show validation errors
+                        $('#errorContainer').html(response.message); // Display error in a container
+                    }
+                });
+            });
+
+            // education employee modal popup
+           
+            $('.employeeEducationLink').click(function (e) {
+                e.preventDefault();
+                var educationId = $(this).data('id');
+
+                $.get('@Url.Action("Education", "Employee")', { id: educationId }, function (data) {
+                    $('#employeeEducationModalContainer').html(data);
+                    $('#employeeEducationModal').modal('show');
+                });
+            });
+
+            // Handle form submission
+            $('#employeeEducationModalContainer').on('submit', '#employeeEducationForm', function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '@Url.Action("Education", "Employee")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            location.reload();  // Refresh the page or update the UI
+                        } else {
+                            // Handle validation errors
+                        }
+                    }
+                });
+            });
+
+            // experience employee modal popup
+            $('.employeeExperienceLink').click(function (e) {
+                e.preventDefault();
+                var educationId = $(this).data('id');
+
+                $.get('@Url.Action("Experience", "Employee")', { id: educationId }, function (data) {
+                    $('#employeeExperienceModalContainer').html(data);
+                    $('#employeeExperienceModal').modal('show');
+                });
+            });
+
+            // Handle form submission
+            $('#employeeExperienceModalContainer').on('submit', '#employeeExperienceForm', function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '@Url.Action("Experience", "Employee")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            location.reload();  // Refresh the page or update the UI
+                        } else {
+                            // Handle validation errors
+                        }
+                    }
+                });
+            });
+
+
             // Close Modal Add Contrainer
             $('#addEmployeeModalContainer').on('click', '#Close', function () {
                 $('#addEmployeeModal').modal('hide'); // Close the modal directly
@@ -156,7 +245,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-4 col-md-2 col-lg-6">
+                        <div class="col-2 col-md-2 col-lg-6">
                             <div class="row">
                                 <div class="col-12 col-md-12 col-lg-2">
                                     <p class="text-nowrap">Edit BioData</p>
@@ -184,7 +273,7 @@
                 {
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
                         <div class="row">
-                            <div class="col-8 col-md-10 col-lg-6">
+                            <div class="col-11 col-md-10 col-lg-6">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-3">
                                         <p class="text-nowrap">
@@ -217,7 +306,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4 col-md-2 col-lg-6">
+                            <div class="col-1 col-md-2 col-lg-6">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <div class="btn-group" role="group" aria-label="Actions">
@@ -228,21 +317,21 @@
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="editEmployeeLink" data-id="@item.EmployeeID">
+                                            <a href="#" class="directManagerEmployeeLink" data-id="@item.EmployeeID">
                                                 <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="editEmployeeLink" data-id="@item.EmployeeID">
+                                            <a href="#" class="employeeEducationLink" data-id="@item.EmployeeID">
                                                 <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="editEmployeeLink" data-id="@item.EmployeeID">
+                                            <a href="#" class="employeeExperienceLink" data-id="@item.EmployeeID">
                                                 <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
@@ -285,3 +374,6 @@
 <!-- Include the modal partial -->
 <div id="editEmployeeModalContainer"></div>
 <div id="addEmployeeModalContainer"></div>
+<div id="directManagerEmployeeModalContainer"></div>
+<div id="employeeEducationModalContainer"></div>
+<div id="employeeExperienceModalContainer"></div>

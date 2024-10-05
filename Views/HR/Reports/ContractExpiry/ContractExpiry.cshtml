@@ -1,0 +1,98 @@
+@model IEnumerable<Exampler_ERP.Models.Temp.ContractEndDaysViewModel>
+
+@{
+    ViewData["Title"] = "Reports - Contract Expiry";
+}
+
+@section PageScripts {
+    <script>
+        $(document).ready(function () {
+
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+
+        function printVacations() {
+            var printWindow = window.open('@Url.Action("Print", "ContractExpiry")', '_blank');
+            printWindow.focus();
+        }
+    </script>
+}
+
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Reports /</span> Contract Expiry
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Contract End Days List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-10 col-lg-12">
+                            <div class="row">
+
+                                <div class="col-4">
+                                    <p class="text-nowrap">Employee Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Branch</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Department</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Contract Type</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Remaining End Days</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-10 col-md-10 col-lg-12">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name: </span>@item.EmployeeName</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Branch: </span>@item.BranchName</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Department: </span>@item.DepartmentName</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Contract Type: </span>@item.ContractTypeName</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Remaining End Days: </span>@item.EndDays</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="mt-4">
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Vacation")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printVacations()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

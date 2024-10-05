@@ -1,22 +1,19 @@
-using Exampler_ERP.Models;
 using Exampler_ERP.Models.Temp;
+using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using OfficeOpenXml;
 using System.Diagnostics.Contracts;
-using Contract = Exampler_ERP.Models.HR_Contract;
 
-namespace Exampler_ERP.Controllers.HR.Employeement
+namespace Exampler_ERP.Controllers.HR.Financial
 {
-   public class SalaryController : Controller
+  public class FixedDeductionController : Controller
   {
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
-    private readonly ILogger<SalaryController> _logger;
+    private readonly ILogger<FixedDeductionController> _logger;
     private readonly Utils _utils;
-    public SalaryController(AppDBContext appDBContext, IConfiguration configuration, ILogger<SalaryController> logger, Utils utils)
+    public FixedDeductionController(AppDBContext appDBContext, IConfiguration configuration, ILogger<FixedDeductionController> logger, Utils utils)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
@@ -25,9 +22,9 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     }
     public async Task<IActionResult> Index()
     {
-      var salarytypes = await _appDBContext.Settings_SalaryTypes.ToListAsync();
-      var salarys = await _appDBContext.HR_Salarys.ToListAsync();
-      var salaryDetails = await _appDBContext.HR_SalaryDetails.ToListAsync();
+      var FixedDeductiontypes = await _appDBContext.Settings_FixedDeductionTypes.ToListAsync();
+      var FixedDeductions = await _appDBContext.HR_FixedDeductions.ToListAsync();
+      var FixedDeductionDetails = await _appDBContext.HR_FixedDeductionDetails.ToListAsync();
       var employees = await (from emp in _appDBContext.HR_Employees
                              join con in _appDBContext.HR_Contracts
                              on emp.EmployeeID equals con.EmployeeID
@@ -38,8 +35,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       foreach (var pt in employees)
       {
-        var typeCount = await _appDBContext.HR_SalaryDetails
-            .Where(sd => sd.Salary.EmployeeID == pt.EmployeeID)
+        var typeCount = await _appDBContext.HR_FixedDeductionDetails
+            .Where(sd => sd.FixedDeduction.EmployeeID == pt.EmployeeID)
             .CountAsync();
 
         employeeCounts.Add(new EmployeeCountViewModel
@@ -55,17 +52,17 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         EmployeeCount = employeeCounts
       };
 
-      return View("~/Views/HR/Employeement/Salary/Salary.cshtml", viewModel);
+      return View("~/Views/HR/Financial/FixedDeduction/FixedDeduction.cshtml", viewModel);
     }
 
     public async Task<IActionResult> Edit(int id)
     {
-      var SalaryDetails = await _appDBContext.HR_SalaryDetails
-       .Where(pt => pt.Salary.EmployeeID == id)
-       .Include(pt => pt.Salary.Employee)
+      var FixedDeductionDetails = await _appDBContext.HR_FixedDeductionDetails
+       .Where(pt => pt.FixedDeduction.EmployeeID == id)
+       .Include(pt => pt.FixedDeduction.Employee)
        .ToListAsync();
 
-      if (SalaryDetails == null || !SalaryDetails.Any())
+      if (FixedDeductionDetails == null || !FixedDeductionDetails.Any())
       {
         var employee = await _appDBContext.HR_Employees
             .Where(p => p.EmployeeID == id)
@@ -73,12 +70,12 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
         if (employee != null)
         {
-          // Create a new SalaryDetails list with an initial entry
-          SalaryDetails = new List<HR_SalaryDetail>
+          // Create a new FixedDeductionDetails list with an initial entry
+          FixedDeductionDetails = new List<HR_FixedDeductionDetail>
             {
-                new HR_SalaryDetail
+                new HR_FixedDeductionDetail
                 {
-                    Salary = new HR_Salary
+                    FixedDeduction = new HR_FixedDeduction
                     {
                             Employee = employee
                     }
@@ -91,24 +88,24 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         }
       }
 
-      ViewBag.SalaryTypeList = await _appDBContext.Settings_SalaryTypes
-          .Select(r => new { Value = r.SalaryTypeID, Text = r.SalaryTypeName })
+      ViewBag.FixedDeductionTypeList = await _appDBContext.Settings_FixedDeductionTypes
+          .Select(r => new { Value = r.FixedDeductionTypeID, Text = r.FixedDeductionTypeName })
           .ToListAsync();
 
-   
-      return PartialView("~/Views/HR/Employeement/Salary/EditSalary.cshtml", SalaryDetails);
+
+      return PartialView("~/Views/HR/Financial/FixedDeduction/EditFixedDeduction.cshtml", FixedDeductionDetails);
 
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(int EmployeeID, List<HR_SalaryDetail> SalaryDetails)
+    public async Task<IActionResult> Edit(int EmployeeID, List<HR_FixedDeductionDetail> FixedDeductionDetails)
     {
-      foreach (var setup in SalaryDetails)
+      foreach (var setup in FixedDeductionDetails)
       {
-        _logger.LogInformation("Received Setup: ID={SalaryID}, SalaryTypeID={SalaryTypeID}, SalaryAmount={SalaryAmount}", setup.SalaryID, setup.SalaryTypeID, setup.SalaryAmount);
+        _logger.LogInformation("Received Setup: ID={FixedDeductionID}, FixedDeductionTypeID={FixedDeductionTypeID}, FixedDeductionAmount={FixedDeductionAmount}", setup.FixedDeductionID, setup.FixedDeductionTypeID, setup.FixedDeductionAmount);
       }
 
-      if (SalaryDetails == null || SalaryDetails.Count == 0)
+      if (FixedDeductionDetails == null || FixedDeductionDetails.Count == 0)
       {
         _logger.LogWarning("No data received for edit.");
         return Json(new { success = false, message = "No data received." });
@@ -118,70 +115,71 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       {
         try
         {
-          var SalaryId = SalaryDetails.FirstOrDefault()?.SalaryID;
-          int generatedSalaryID;
+          var FixedDeductionId = FixedDeductionDetails.FirstOrDefault()?.FixedDeductionID;
+          int generatedFixedDeductionID;
           int getemployeeID;
 
-          if (SalaryId != null && SalaryId != 0)
+          if (FixedDeductionId != null && FixedDeductionId != 0)
           {
-            var existingRecords = await _appDBContext.HR_SalaryDetails
-                                        .Where(p => p.SalaryID == SalaryId)
+            var existingRecords = await _appDBContext.HR_FixedDeductionDetails
+                                        .Where(p => p.FixedDeductionID == FixedDeductionId)
                                         .ToListAsync();
 
-            _appDBContext.HR_SalaryDetails.RemoveRange(existingRecords);
-            generatedSalaryID = SalaryId.Value;
+            _appDBContext.HR_FixedDeductionDetails.RemoveRange(existingRecords);
+            generatedFixedDeductionID = FixedDeductionId.Value;
           }
           else
           {
 
-            var salary = new HR_Salary()
+            var FixedDeduction = new HR_FixedDeduction()
             {
               EmployeeID = EmployeeID,
               FinalApprovalID = 0,
               ApprovalProcessID = 0
             };
-            _appDBContext.HR_Salarys.Add(salary);
+            _appDBContext.HR_FixedDeductions.Add(FixedDeduction);
             await _appDBContext.SaveChangesAsync();
 
-            generatedSalaryID = salary.SalaryID;
+            generatedFixedDeductionID = FixedDeduction.FixedDeductionID;
 
-            foreach (var setup in SalaryDetails)
+
+            foreach (var setup in FixedDeductionDetails)
             {
-              if (setup.SalaryTypeID != 0 && setup.SalaryAmount != 0)
+              if (setup.FixedDeductionTypeID != 0 && setup.FixedDeductionAmount != 0)
               {
-                setup.SalaryID = generatedSalaryID;
-                _appDBContext.HR_SalaryDetails.Add(setup);
+                setup.FixedDeductionID = generatedFixedDeductionID;
+                _appDBContext.HR_FixedDeductionDetails.Add(setup);
               }
             }
 
             await _appDBContext.SaveChangesAsync();
 
 
-            if (generatedSalaryID > 0)
+            if (generatedFixedDeductionID > 0)
             {
               var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
-                                  .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 6)
+                                  .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 10)
                                   .CountAsync();
-              var getEmployeeID = await _appDBContext.HR_Salarys
-                                .Where(pta => pta.SalaryID == generatedSalaryID)
+              var getEmployeeID = await _appDBContext.HR_FixedDeductions
+                                .Where(pta => pta.FixedDeductionID == generatedFixedDeductionID)
                                 .FirstOrDefaultAsync();
               if (processCount > 0)
               {
                 var newProcessTypeApproval = new CR_ProcessTypeApproval
                 {
-                  ProcessTypeID = 6,
-                  Notes = "Employee Salary",
+                  ProcessTypeID = 10,
+                  Notes = "Fixed Deduction",
                   Date = DateTime.Now,
                   EmployeeID = getEmployeeID.EmployeeID,
                   UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
-                  TransactionID = generatedSalaryID
+                  TransactionID = generatedFixedDeductionID
                 };
 
                 _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
                 await _appDBContext.SaveChangesAsync();
 
                 var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
-                                            .Where(pta => pta.ProcessTypeID == 6 && pta.Rank == 1)
+                                            .Where(pta => pta.ProcessTypeID == 10 && pta.Rank == 1)
                                             .FirstOrDefaultAsync();
 
                 if (nextApprovalSetup != null)
@@ -207,27 +205,28 @@ namespace Exampler_ERP.Controllers.HR.Employeement
               }
               else
               {
-                salary.FinalApprovalID = 1;
-                _appDBContext.HR_Salarys.Update(salary);
+                FixedDeduction.FinalApprovalID = 1;
+                _appDBContext.HR_FixedDeductions.Update(FixedDeduction);
                 await _appDBContext.SaveChangesAsync();
                 return Json(new { success = true, message = "No process setup found, User activated." });
               }
             }
           }
+
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
-          _logger.LogError(ex, "Error updating SalaryDetails");
+          _logger.LogError(ex, "Error updating FixedDeductionDetails");
           return Json(new { success = false, message = "An error occurred while updating the data." });
         }
       }
 
       var errors = ModelState.Values.SelectMany(v => v.Errors);
-      return PartialView("~/Views/HR/Employeement/Salary/EditSalary.cshtml", SalaryDetails);
+      return PartialView("~/Views/HR/Financial/FixedDeduction/EditFixedDeduction.cshtml", FixedDeductionDetails);
     }
 
-   
+
 
   }
 }
