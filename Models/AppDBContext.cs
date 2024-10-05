@@ -182,7 +182,7 @@ namespace Exampler_ERP.Models
      new Settings_ProcessType() { ProcessTypeID = 5, ProcessTypeName = "End of Service", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_ProcessType() { ProcessTypeID = 6, ProcessTypeName = "New Salary", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_ProcessType() { ProcessTypeID = 7, ProcessTypeName = "Overtime", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_ProcessType() { ProcessTypeID = 8, ProcessTypeName = "Allowance", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 8, ProcessTypeName = "Addional Allowance", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_ProcessType() { ProcessTypeID = 9, ProcessTypeName = "Deduction", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_ProcessType() { ProcessTypeID = 10, ProcessTypeName = "Fixed Deduction", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_ProcessType() { ProcessTypeID = 11, ProcessTypeName = "Vacation", ActiveYNID = 1, DeleteYNID = 0 },

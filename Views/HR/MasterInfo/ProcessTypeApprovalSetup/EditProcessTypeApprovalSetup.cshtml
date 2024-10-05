@@ -12,15 +12,15 @@
             var processtypeid = $('#processTypeId').val(); // Get the ProcessTypeID value
             var checkedRoles = $('.role-checkbox:checked');
             checkedRoles.each(function (index) {
-                var roleId = $(this).val();
-                var rankInput = $('#rank_' + roleId);
+                var roleTypeId = $(this).val();
+                var rankInput = $('#rank_' + roleTypeId);
                 var rank = rankInput.val();
 
                 $('#hiddenFieldsContainer').append(
                     `<div class="row">
-                            <input type="hidden" name="ProcessTypeApprovalSetups[${index}].ProcessTypeID" value="${processtypeid}" id="hidden_ProcessTypeID_${roleId}" />
-                            <input type="hidden" name="ProcessTypeApprovalSetups[${index}].RoleID" value="${roleId}" id="hidden_RoleID_${roleId}" />
-                            <input type="hidden" name="ProcessTypeApprovalSetups[${index}].Rank" value="${rank}" id="hidden_Rank_${roleId}" />
+                                <input type="hidden" name="ProcessTypeApprovalSetups[${index}].ProcessTypeID" value="${processtypeid}" id="hidden_ProcessTypeID_${roleTypeId}" />
+                                            <input type="hidden" name="ProcessTypeApprovalSetups[${index}].RoleTypeID" value="${roleTypeId}" id="hidden_RoleTypeID_${roleTypeId}" />
+                                <input type="hidden" name="ProcessTypeApprovalSetups[${index}].Rank" value="${rank}" id="hidden_Rank_${roleTypeId}" />
                         </div>`
                 );
             });
@@ -29,8 +29,8 @@
         // Event handler for role checkbox change
         $(document).on('change', '.role-checkbox', function () {
             // debugger;
-            var roleId = $(this).val();
-            var rankInput = $('#rank_' + roleId);
+            var roleTypeId = $(this).val();
+            var rankInput = $('#rank_' + roleTypeId);
 
             if ($(this).is(':checked')) {
                 var maxRank = 0;
@@ -101,7 +101,7 @@
                                 @foreach (var role in (IEnumerable<dynamic>)ViewBag.RoleList)
                                 {
                                     <div class="form-check">
-                                    <input class="form-check-input role-checkbox" type="checkbox" name="RoleIDs" value="@role.Value" id="role_@role.Value" @(Model.Any(m => m.RoleTypeID == role.Value) ? "checked" : "") />
+                                    <input class="form-check-input role-checkbox" type="checkbox" name="RoleTypeIDs" value="@role.Value" id="role_@role.Value" @(Model.Any(m => m.RoleTypeID == role.Value) ? "checked" : "") />
                                         <label class="form-control form-check-label" for="role_@role.Value">@role.Text</label>
                                     </div>
                                 }
@@ -120,7 +120,7 @@
                             {
                                 <div class="row">
                                     <input style="width:100px" type="text" name="ProcessTypeApprovalSetups[@i].ProcessTypeID" value="@Model[i].ProcessTypeID" id="hidden_ProcessTypeID_@Model[i].ProcessTypeID" />
-                                <input style="width:100px" type="text" name="ProcessTypeApprovalSetups[@i].RoleID" value="@Model[i].RoleTypeID" id="hidden_RoleID_@Model[i].RoleTypeID" />
+                                <input style="width:100px" type="text" name="ProcessTypeApprovalSetups[@i].RoleTypeID" value="@Model[i].RoleTypeID" id="hidden_RoleTypeID_@Model[i].RoleTypeID" />
                                 <input style="width:100px" type="text" name="ProcessTypeApprovalSetups[@i].Rank" value="@Model[i].Rank" id="hidden_Rank_@Model[i].RoleTypeID" />
                                 </div>
                             }

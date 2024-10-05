@@ -17,9 +17,9 @@
 
                 $('#hiddenFieldsContainer').append(
                     `<div class="row">
-                            <input type="hidden" name="AddionalAllowanceDetails[${index}].AddionalAllowanceID" value="${AddionalAllowanceID}" id="hidden_AddionalAllowanceID_${AddionalAllowanceTypeID}" />
-                            <input type="hidden" name="AddionalAllowanceDetails[${index}].AddionalAllowanceTypeID" value="${AddionalAllowanceTypeID}" id="hidden_AddionalAllowanceTypeID_${AddionalAllowanceTypeID}" />
-                            <input type="hidden" name="AddionalAllowanceDetails[${index}].AddionalAllowanceAmount" value="${AddionalAllowanceAmount}" id="hidden_AddionalAllowanceAmount_${AddionalAllowanceTypeID}" />
+                                <input type="hidden" name="AddionalAllowanceDetails[${index}].AddionalAllowanceID" value="${AddionalAllowanceID}" id="hidden_AddionalAllowanceID_${AddionalAllowanceTypeID}" />
+                                <input type="hidden" name="AddionalAllowanceDetails[${index}].AddionalAllowanceTypeID" value="${AddionalAllowanceTypeID}" id="hidden_AddionalAllowanceTypeID_${AddionalAllowanceTypeID}" />
+                                    <input type="hidden" name="AddionalAllowanceDetails[${index}].AddionalAllowanceAmount" value="${AddionalAllowanceAmount}" id="hidden_AddionalAllowanceAmount_${AddionalAllowanceTypeID}" />
                         </div>`
                 );
             });
@@ -120,7 +120,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-success" id="saveNewChanges">Save changes</button>
+                <button type="button" class="btn btn-success" id="saveNewChanges">Save changes</button>
             </div>
         </div>
     </div>

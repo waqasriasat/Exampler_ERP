@@ -31,7 +31,7 @@
             });
 
             $('.addAddionalAllowanceLink').click(function () {
-                debugger;
+                
                 $.get('@Url.Action("Create", "AddionalAllowance")', function (data) {
                     $('#addAddionalAllowanceModalContainer').html(data);
                     $('#addAddionalAllowanceModal').modal('show');
@@ -39,21 +39,23 @@
             });
 
             $('#addAddionalAllowanceModalContainer').on('click', '#saveNewChanges', function () {
-                debugger;
+                
                 var formData = $('#addAddionalAllowanceForm').serialize();
                 console.log('@Url.Action("Create", "AddionalAllowance")');
                 console.log("Serialized form data:", formData); // Log serialized data for debugging
-                $.post('@Url.Action("Create", "AddionalAllowance")', formData, function (response) {
-                    console.log("Server response:", response); // Log the full response
-                    if (response.success) {
-                        debugger;
-                        $('#addAddionalAllowanceModal').modal('hide');
-                        location.reload(); // Reload the page to reflect changes
-                    } else {
-                        console.log("Validation error or other issue:", response);
-                        // Handle validation errors or other cases
-                    }
-                });
+                $.post('@Url.Action("Create", "AddionalAllowance")', formData)
+                    .done(function (response) {
+                        console.log("Response:", response);
+                        if (response.success) {
+                            $('#addAddionalAllowanceModal').modal('hide');
+                            location.reload();
+                        } else {
+                            console.log("Validation error or other issue:", response);
+                        }
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log("AJAX request failed:", textStatus, errorThrown);
+                    });
             });
 
             // Close Modal Edit Contrainer
@@ -105,7 +107,7 @@
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
-                        <div class="col-8 col-md-10 col-lg-7">
+                        <div class="col-8 col-md-10 col-lg-9">
                             <div class="row">
                                 <div class="col-6">
                                     <p class="text-nowrap">Employee Name</p>
@@ -118,7 +120,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-4 col-md-2 col-lg-5">
+                        <div class="col-4 col-md-2 col-lg-3">
                             <div class="row">
                                 <div class="col-6">
                                     <p class="text-nowrap">Edit</p>
@@ -134,7 +136,7 @@
                 {
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
                         <div class="row">
-                            <div class="col-8 col-md-10 col-lg-7">
+                            <div class="col-8 col-md-10 col-lg-9">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
@@ -147,7 +149,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4 col-md-2 col-lg-5">
+                            <div class="col-4 col-md-2 col-lg-3">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <div class="btn-group" role="group" aria-label="Actions">

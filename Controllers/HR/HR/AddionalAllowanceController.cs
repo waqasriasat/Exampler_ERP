@@ -30,168 +30,98 @@ namespace Exampler_ERP.Controllers.HR.HR
       return View("~/Views/HR/HR/AddionalAllowance/AddionalAllowance.cshtml", addionalAllowances);
     }
 
+    [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
-      var AddionalAllowanceDetails = await _appDBContext.HR_AddionalAllowanceDetails
-       .Where(pt => pt.AddionalAllowance.EmployeeID == id)
-       .Include(pt => pt.AddionalAllowance.Employee)
-       .ToListAsync();
+      // Fetch the allowance record with the specified id
+      var allowance = await _appDBContext.HR_AddionalAllowances
+          .Include(a => a.AddionalAllowanceDetails) // Include the details for editing
+          .FirstOrDefaultAsync(a => a.AddionalAllowanceID == id);
 
-      if (AddionalAllowanceDetails == null || !AddionalAllowanceDetails.Any())
+      if (allowance == null)
       {
-        var employee = await _appDBContext.HR_Employees
-            .Where(p => p.EmployeeID == id)
-            .FirstOrDefaultAsync();
-
-        if (employee != null)
-        {
-          // Create a new AddionalAllowanceDetails list with an initial entry
-          AddionalAllowanceDetails = new List<HR_AddionalAllowanceDetail>
-            {
-                new HR_AddionalAllowanceDetail
-                {
-                    AddionalAllowance = new HR_AddionalAllowance
-                    {
-                            Employee = employee
-                    }
-                }
-            };
-        }
-        else
-        {
-          return NotFound(); // Handle accordingly if the Employee is not found
-        }
+        return NotFound(); // Handle not found case
       }
 
+      // Prepare necessary ViewBag data for the edit view
       ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
           .Select(r => new { Value = r.AddionalAllowanceTypeID, Text = r.AddionalAllowanceTypeName })
           .ToListAsync();
 
+      ViewBag.EmployeesList = await _utils.GetEmployee();
+      ViewBag.MonthsList = await _utils.GetMonthsTypes();
 
-      return PartialView("~/Views/HR/HR/AddionalAllowance/EditAddionalAllowance.cshtml", AddionalAllowanceDetails);
-
+      return PartialView("~/Views/HR/HR/AddionalAllowance/EditAddionalAllowance.cshtml", allowance);
     }
-
     [HttpPost]
-    public async Task<IActionResult> Edit(int EmployeeID, List<HR_AddionalAllowanceDetail> AddionalAllowanceDetails)
+    public async Task<IActionResult> Edit(HR_AddionalAllowance model)
     {
-      foreach (var setup in AddionalAllowanceDetails)
-      {
-        _logger.LogInformation("Received Setup: ID={AddionalAllowanceID}, AddionalAllowanceTypeID={AddionalAllowanceTypeID}, AddionalAllowanceAmount={AddionalAllowanceAmount}", setup.AddionalAllowanceID, setup.AddionalAllowanceTypeID, setup.AddionalAllowanceAmount);
-      }
-
-      if (AddionalAllowanceDetails == null || AddionalAllowanceDetails.Count == 0)
-      {
-        _logger.LogWarning("No data received for edit.");
-        return Json(new { success = false, message = "No data received." });
-      }
-
       if (ModelState.IsValid)
       {
-        try
+        // Get the existing allowance record including its details
+        var existingAllowance = await _appDBContext.HR_AddionalAllowances
+            .Include(a => a.AddionalAllowanceDetails)
+            .FirstOrDefaultAsync(a => a.AddionalAllowanceID == model.AddionalAllowanceID);
+
+        if (existingAllowance == null)
         {
-          var AddionalAllowanceId = AddionalAllowanceDetails.FirstOrDefault()?.AddionalAllowanceID;
-          int generatedAddionalAllowanceID;
-          int getemployeeID;
+          return NotFound(); // Handle the case where the allowance is not found
+        }
 
-          if (AddionalAllowanceId != null && AddionalAllowanceId != 0)
+        // Update the main allowance properties
+        existingAllowance.EmployeeID = model.EmployeeID;
+        existingAllowance.MonthTypeID = model.MonthTypeID;
+        existingAllowance.Year = model.Year;
+        // Add any other fields that need to be updated...
+
+        // Compare and update detail entries
+        foreach (var existingDetail in existingAllowance.AddionalAllowanceDetails.ToList())
+        {
+          // Check if the detail is in the incoming model
+          var updatedDetail = model.AddionalAllowanceDetails
+              .FirstOrDefault(d => d.AddionalAllowanceDetailID == existingDetail.AddionalAllowanceDetailID);
+
+          if (updatedDetail == null)
           {
-            var existingRecords = await _appDBContext.HR_AddionalAllowanceDetails
-                                        .Where(p => p.AddionalAllowanceID == AddionalAllowanceId)
-                                        .ToListAsync();
-
-            _appDBContext.HR_AddionalAllowanceDetails.RemoveRange(existingRecords);
-            generatedAddionalAllowanceID = AddionalAllowanceId.Value;
+            // If the detail is not in the incoming model, remove it from the database
+            _appDBContext.HR_AddionalAllowanceDetails.Remove(existingDetail);
           }
           else
           {
-
-            var AddionalAllowance = new HR_AddionalAllowance()
-            {
-              EmployeeID = EmployeeID,
-              FinalApprovalID = 0,
-              ApprovalProcessID = 0
-            };
-            _appDBContext.HR_AddionalAllowances.Add(AddionalAllowance);
-            await _appDBContext.SaveChangesAsync();
-
-            generatedAddionalAllowanceID = AddionalAllowance.AddionalAllowanceID;
+            // If it exists, update its properties
+            existingDetail.AddionalAllowanceTypeID = updatedDetail.AddionalAllowanceTypeID;
+            existingDetail.AddionalAllowanceAmount = updatedDetail.AddionalAllowanceAmount;
           }
-
-          foreach (var setup in AddionalAllowanceDetails)
-          {
-            if (setup.AddionalAllowanceTypeID != 0 && setup.AddionalAllowanceAmount != 0)
-            {
-              setup.AddionalAllowanceID = generatedAddionalAllowanceID;
-              _appDBContext.HR_AddionalAllowanceDetails.Add(setup);
-            }
-          }
-
-          await _appDBContext.SaveChangesAsync();
-
-
-          if (generatedAddionalAllowanceID > 0)
-          {
-            var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
-                                .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 6)
-                                .CountAsync();
-            var getEmployeeID = await _appDBContext.HR_AddionalAllowances
-                              .Where(pta => pta.AddionalAllowanceID == generatedAddionalAllowanceID)
-                              .FirstOrDefaultAsync();
-            if (processCount > 0)
-            {
-              var newProcessTypeApproval = new CR_ProcessTypeApproval
-              {
-                ProcessTypeID = 6,
-                Notes = "Employee AddionalAllowance",
-                Date = DateTime.Now,
-                EmployeeID = getEmployeeID.EmployeeID,
-                UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
-                TransactionID = generatedAddionalAllowanceID
-              };
-
-              _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
-              await _appDBContext.SaveChangesAsync();
-
-              var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
-                                          .Where(pta => pta.ProcessTypeID == 6 && pta.Rank == 1)
-                                          .FirstOrDefaultAsync();
-
-              if (nextApprovalSetup != null)
-              {
-                var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
-                {
-                  ApprovalProcessID = newProcessTypeApproval.ApprovalProcessID,
-                  Date = DateTime.Now,
-                  RoleID = nextApprovalSetup.RoleTypeID,
-                  AppID = 0,
-                  AppUserID = 0,
-                  Notes = null,
-                  Rank = nextApprovalSetup.Rank
-                };
-
-                _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
-                await _appDBContext.SaveChangesAsync();
-              }
-              else
-              {
-                return Json(new { success = false, message = "Next approval setup not found." });
-              }
-            }
-          }
-
-          return Json(new { success = true });
         }
-        catch (Exception ex)
+
+        // Add new details that are in the incoming model but not in the existing model
+        foreach (var newDetail in model.AddionalAllowanceDetails)
         {
-          _logger.LogError(ex, "Error updating AddionalAllowanceDetails");
-          return Json(new { success = false, message = "An error occurred while updating the data." });
+          if (newDetail.AddionalAllowanceDetailID == 0) // Assuming 0 means it's a new entry
+          {
+            existingAllowance.AddionalAllowanceDetails.Add(newDetail);
+          }
         }
+
+        // Save changes to the database
+        await _appDBContext.SaveChangesAsync();
+
+        return Json(new { success = true });
       }
 
-      var errors = ModelState.Values.SelectMany(v => v.Errors);
-      return PartialView("~/Views/HR/HR/AddionalAllowance/EditAddionalAllowance.cshtml", AddionalAllowanceDetails);
+      // If validation fails, return the view with errors
+      ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
+          .Select(r => new { Value = r.AddionalAllowanceTypeID, Text = r.AddionalAllowanceTypeName })
+          .ToListAsync();
+
+      ViewBag.EmployeesList = await _utils.GetEmployee();
+      ViewBag.MonthsList = await _utils.GetMonthsTypes();
+
+      return PartialView("~/Views/HR/HR/AddionalAllowance/EditAddionalAllowance.cshtml", model);
     }
+
+ 
+
     [HttpGet]
     public async Task<IActionResult> Create()
     {
@@ -208,26 +138,73 @@ namespace Exampler_ERP.Controllers.HR.HR
     [HttpPost]
     public async Task<IActionResult> Create(HR_AddionalAllowance model)
     {
-      if (ModelState.IsValid)
-      {
-        _appDBContext.HR_AddionalAllowances.Add(model);
-        await _appDBContext.SaveChangesAsync();
-
-        if (model.AddionalAllowanceDetails != null && model.AddionalAllowanceDetails.Any())
+     
+        if (ModelState.IsValid)
         {
-          foreach (var detail in model.AddionalAllowanceDetails)
-          {
-            detail.AddionalAllowanceID = model.AddionalAllowanceID; // Set the foreign key
-            _appDBContext.HR_AddionalAllowanceDetails.Add(detail);
-          }
-
+          _appDBContext.HR_AddionalAllowances.Add(model);
           await _appDBContext.SaveChangesAsync();
+
+        int generatedAddionalAllowanceID = model.AddionalAllowanceID;
+        if (generatedAddionalAllowanceID > 0)
+        {
+          var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
+                              .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 8)
+                              .CountAsync();
+          var getEmployeeID = await _appDBContext.HR_AddionalAllowances
+                            .Where(pta => pta.AddionalAllowanceID == generatedAddionalAllowanceID)
+                            .FirstOrDefaultAsync();
+          if (processCount > 0)
+          {
+            var newProcessTypeApproval = new CR_ProcessTypeApproval
+            {
+              ProcessTypeID = 8,
+              Notes = "Addional Allowance",
+              Date = DateTime.Now,
+              EmployeeID = getEmployeeID.EmployeeID,
+              UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
+              TransactionID = generatedAddionalAllowanceID
+            };
+
+            _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
+            await _appDBContext.SaveChangesAsync();
+
+            var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
+                                        .Where(pta => pta.ProcessTypeID == 8 && pta.Rank == 1)
+                                        .FirstOrDefaultAsync();
+
+            if (nextApprovalSetup != null)
+            {
+              var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
+              {
+                ApprovalProcessID = newProcessTypeApproval.ApprovalProcessID,
+                Date = DateTime.Now,
+                RoleID = nextApprovalSetup.RoleTypeID,
+                AppID = 0,
+                AppUserID = 0,
+                Notes = null,
+                Rank = nextApprovalSetup.Rank
+              };
+
+              _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
+              await _appDBContext.SaveChangesAsync();
+            }
+            else
+            {
+              return Json(new { success = false, message = "Next approval setup not found." });
+            }
+          }
+          else
+          {
+            model.FinalApprovalID = 1;
+            _appDBContext.HR_AddionalAllowances.Update(model);
+            await _appDBContext.SaveChangesAsync();
+            return Json(new { success = true, message = "No process setup found, User activated." });
+          }
         }
 
+        return Json(new { success = true });
+        }
      
-        return PartialView("~/Views/HR/HR/AddionalAllowance/AddAddionalAllowance.cshtml", model);
-      }
-
       ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
           .Select(r => new { Value = r.AddionalAllowanceTypeID, Text = r.AddionalAllowanceTypeName })
           .ToListAsync();
@@ -236,7 +213,6 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       return PartialView("~/Views/HR/HR/AddionalAllowance/AddAddionalAllowance.cshtml", model);
     }
-
 
 
   }

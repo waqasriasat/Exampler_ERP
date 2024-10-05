@@ -312,7 +312,19 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 7)
           {
+            var addionalAllowance = await _appDBContext.HR_AddionalAllowances
+                                                     .Where(u => u.AddionalAllowanceID == transactionID)
+                                                     .FirstOrDefaultAsync();
 
+
+            if (addionalAllowance != null)
+            {
+              addionalAllowance.FinalApprovalID = 1;
+              addionalAllowance.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(addionalAllowance);
+              await _appDBContext.SaveChangesAsync();
+            }
           }
           if (ProcessTypeID == 8)
           {
@@ -514,7 +526,19 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 8)
           {
+            var addionalAllowance = await _appDBContext.HR_AddionalAllowances
+                                                     .Where(u => u.AddionalAllowanceID == transactionID)
+                                                     .FirstOrDefaultAsync();
 
+
+            if (addionalAllowance != null)
+            {
+              addionalAllowance.FinalApprovalID = 2;
+              addionalAllowance.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+
+              _appDBContext.Update(addionalAllowance);
+              await _appDBContext.SaveChangesAsync();
+            }
           }
           if (ProcessTypeID == 9)
           {
@@ -704,6 +728,24 @@ namespace Exampler_ERP.Controllers.MasterInfo
       }
       if (processTypeID == 8)
       {
+        var allowance = await _appDBContext.HR_AddionalAllowances
+         .Include(a => a.AddionalAllowanceDetails) // Include the details for editing
+         .FirstOrDefaultAsync(a => a.AddionalAllowanceID == transactionID);
+
+        if (allowance == null)
+        {
+          return NotFound(); // Handle not found case
+        }
+
+        // Prepare necessary ViewBag data for the edit view
+        ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
+            .Select(r => new { Value = r.AddionalAllowanceTypeID, Text = r.AddionalAllowanceTypeName })
+            .ToListAsync();
+
+        ViewBag.EmployeesList = await _utils.GetEmployee();
+        ViewBag.MonthsList = await _utils.GetMonthsTypes();
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", allowance);
 
       }
       if (processTypeID == 9)
