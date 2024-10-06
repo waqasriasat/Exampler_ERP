@@ -30,7 +30,7 @@ namespace Exampler_ERP.Models
 
     public int EndYear { get; set; }     // End year of education
 
-    public byte[] DocImage { get; set; }  // PDF document stored as binary data
+    public byte[]? DocImage { get; set; }  // PDF document stored as binary data
 
     public string DocContent { get; set; } = "application/pdf";  // Content type for PDF
 

@@ -59,4 +59,9 @@ namespace Exampler_ERP.Models.Temp
     public int? ReportToID { get; set; }
     
   }
+  public class EmployeeEducationViewModel
+  {
+    public HR_EmployeeEducation NewEducation { get; set; }
+    public List<HR_EmployeeEducation>? EmployeeEducations { get; set; }
+  }
 }

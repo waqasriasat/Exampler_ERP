@@ -33,7 +33,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       ViewBag.GenderList = await _utils.GetGender();
       ViewBag.MaritalStatusList = await _utils.GetMaritalStatus();
       ViewBag.ReligionList = await _utils.GetReligion();
-      ViewBag.CountriesList = _utils.GetCountries();
+      ViewBag.CountriesList = await _utils.GetCountries();
       ViewBag.BranchsList = await _utils.GetBranchs();
       ViewBag.DepartmentsList = await _utils.GetDepartments();
       ViewBag.DesignationsList = await _utils.GetDesignations();
@@ -73,7 +73,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       ViewBag.GenderList = await _utils.GetGender();
       ViewBag.MaritalStatusList = await _utils.GetMaritalStatus();
       ViewBag.ReligionList = await _utils.GetReligion();
-      ViewBag.CountriesList = _utils.GetCountries();
+      ViewBag.CountriesList = await _utils.GetCountries();
       ViewBag.BranchsList = await _utils.GetBranchs();
       ViewBag.DepartmentsList = await _utils.GetDepartments();
       ViewBag.DesignationsList = await _utils.GetDesignations();
@@ -138,7 +138,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       var GenderList = await _utils.GetGender();
       var MaritalStatusList = await _utils.GetMaritalStatus();
       var ReligionList = await _utils.GetReligion();
-      var CountriesList = _utils.GetCountries();
+      var CountriesList = await _utils.GetCountries();
 
       using (var package = new ExcelPackage())
       {

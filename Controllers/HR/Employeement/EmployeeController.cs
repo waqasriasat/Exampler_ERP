@@ -29,19 +29,17 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       return View("~/Views/HR/Employeement/Employee/Employee.cshtml", employees);
     }
-
     public async Task<IActionResult> Employee()
     {
       var employees = await _appDBContext.HR_Employees.ToListAsync();
       return Ok(employees);
     }// Add the Edit action
-
     public async Task<IActionResult> Edit(int id)
     {
       ViewBag.GenderList = await _utils.GetGender();
       ViewBag.MaritalStatusList = await _utils.GetMaritalStatus();
       ViewBag.ReligionList = await _utils.GetReligion();
-      ViewBag.CountriesList = _utils.GetCountries();
+      ViewBag.CountriesList = await _utils.GetCountries();
       ViewBag.BranchsList = await _utils.GetBranchs();
       ViewBag.DepartmentsList = await _utils.GetDepartments();
       ViewBag.DesignationsList = await _utils.GetDesignations();
@@ -54,7 +52,6 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       employee.Password = CR_CipherKey.Decrypt(employee.Password);
       return PartialView("~/Views/HR/Employeement/Employee/EditEmployee.cshtml", employee);
     }
-
     [HttpPost]
     public async Task<IActionResult> Edit(HR_Employee employee, IFormFile profilePicture, string ExistingPicture)
     {
@@ -80,14 +77,13 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       }
       return PartialView("~/Views/HR/Employeement/Employee/EditEmployee.cshtml", employee);
     }
-
     [HttpGet]
     public async Task<IActionResult> Create()
     {
       ViewBag.GenderList = await _utils.GetGender();
       ViewBag.MaritalStatusList = await _utils.GetMaritalStatus();
       ViewBag.ReligionList = await _utils.GetReligion();
-      ViewBag.CountriesList = _utils.GetCountries();
+      ViewBag.CountriesList = await _utils.GetCountries();
       ViewBag.BranchsList = await _utils.GetBranchs();
       ViewBag.DepartmentsList = await _utils.GetDepartments();
       ViewBag.DesignationsList = await _utils.GetDesignations();
@@ -219,7 +215,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       var GenderList = await _utils.GetGender();
       var MaritalStatusList = await _utils.GetMaritalStatus();
       var ReligionList = await _utils.GetReligion();
-      var CountriesList = _utils.GetCountries();
+      var CountriesList = await _utils.GetCountries();
       using (var package = new ExcelPackage())
       {
         var worksheet = package.Workbook.Worksheets.Add("Employees");
@@ -417,7 +413,6 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       return PartialView("~/Views/HR/Employeement/Employee/ChangePicture.cshtml", model);
     }
-
     [HttpPost]
     public async Task<IActionResult> ChangePicture(ChangePictureModel model, IFormFile profilePicture, string ExistingPicture)
     {
@@ -472,7 +467,6 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       ViewBag.DirectManagerList = await _utils.GetDirectManager();
       return PartialView("~/Views/HR/Employeement/Employee/DirectManagerEmployee.cshtml", viewModel);
     }
-
     [HttpPost]
     public async Task<IActionResult> DirectManager(UpdateReportToViewModel model)
     {
@@ -495,26 +489,32 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       return Json(new { success = true, message = "Direct Manager updated successfully!" });
     }
-
     public async Task<IActionResult> Education(int id)
     {
-      var education = await _appDBContext.HR_EmployeeEducations
-          .FirstOrDefaultAsync(e => e.EducationID == id);
-
-      if (education == null)
-      {
-        education = new HR_EmployeeEducation();
-      }
+      // Create a new education form (empty form)
+      var education = new HR_EmployeeEducation();
+      ViewBag.EmployeeID = id.ToString();
 
       // Populate ViewBags for dropdowns like QualificationType, CountryType, etc.
-      ViewBag.QualificationTypes = _utils.GetQualifications();
-      ViewBag.CountryTypes = _utils.GetCountries();
-      ViewBag.MonthTypes = _utils.GetMonthsTypes();
+      ViewBag.QualificationTypes = await _utils.GetQualifications();
+      ViewBag.CountryTypes = await _utils.GetCountries();
+      ViewBag.MonthTypes = await _utils.GetMonthsTypes();
 
-      return PartialView("~/Views/HR/Employeement/Employee/EmployeeEducation.cshtml", education);
+      // Fetch the existing education records for the employee
+      var employeeEducations = await _appDBContext.HR_EmployeeEducations
+          .Where(e => e.EmployeeID == id)
+          .ToListAsync();
+
+      // Return the main view with the empty form and list of records
+      return PartialView("~/Views/HR/Employeement/Employee/EmployeeEducation.cshtml", new EmployeeEducationViewModel
+      {
+        NewEducation = education,
+        EmployeeEducations = employeeEducations
+      });
     }
+
     [HttpPost]
-    public async Task<IActionResult> Education(HR_EmployeeEducation model, IFormFile? pdfFile)
+    public async Task<IActionResult> Education(EmployeeEducationViewModel model, IFormFile? pdfFile)
     {
       if (ModelState.IsValid)
       {
@@ -526,10 +526,10 @@ namespace Exampler_ERP.Controllers.HR.Employeement
             using (var memoryStream = new MemoryStream())
             {
               await pdfFile.CopyToAsync(memoryStream);
-              model.DocImage = memoryStream.ToArray();  // Store PDF as binary
+              model.NewEducation.DocImage = memoryStream.ToArray();  // Store PDF as binary
             }
 
-            model.DocExt = Path.GetExtension(pdfFile.FileName).ToLower();
+            model.NewEducation.DocExt = Path.GetExtension(pdfFile.FileName).ToLower();
           }
           else
           {
@@ -538,27 +538,31 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           }
         }
 
-        if (model.EducationID == 0)
+        if (model.NewEducation.EducationID == 0)
         {
-          _appDBContext.HR_EmployeeEducations.Add(model);
+          _appDBContext.HR_EmployeeEducations.Add(model.NewEducation);
         }
         else
         {
-          _appDBContext.HR_EmployeeEducations.Update(model);
+          _appDBContext.HR_EmployeeEducations.Update(model.NewEducation);
         }
 
         await _appDBContext.SaveChangesAsync();
 
         return Json(new { success = true });
       }
+      model.EmployeeEducations = await _appDBContext.HR_EmployeeEducations
+        .Where(e => e.EmployeeID == model.NewEducation.EmployeeID)
+        .ToListAsync();
 
       // Populate ViewBags for dropdowns
-      ViewBag.QualificationTypes = _utils.GetQualifications();
-      ViewBag.CountryTypes = _utils.GetCountries();
-      ViewBag.MonthTypes = _utils.GetMonthsTypes();
+      ViewBag.QualificationTypes = await _utils.GetQualifications();
+      ViewBag.CountryTypes = await _utils.GetCountries();
+      ViewBag.MonthTypes = await _utils.GetMonthsTypes();
 
       return PartialView("~/Views/HR/Employeement/Employee/EmployeeEducation.cshtml", model);
     }
+
 
     public async Task<IActionResult> Experience(int id)
     {

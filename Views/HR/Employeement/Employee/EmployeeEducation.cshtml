@@ -1,4 +1,4 @@
-@model Exampler_ERP.Models.HR_EmployeeEducation
+@model Exampler_ERP.Models.Temp.EmployeeEducationViewModel
 
 <div class="modal fade" id="employeeEducationModal" tabindex="-1" role="dialog" aria-labelledby="employeeEducationModalLabel" aria-hidden="true" style="--bs-modal-width: 60rem;">
     <div class="modal-dialog modal-lg" role="document">
@@ -9,74 +9,72 @@
                     Education Employee
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
             </div>
             <div class="modal-body">
                 <form id="employeeEducationForm" method="post" asp-action="Education" asp-controller="Employee" enctype="multipart/form-data">
-                    <input type="hidden" asp-for="EducationID" />
-                    <input type="hidden" asp-for="EmployeeID" />
-
-                    <div class="form-group">
-                        <label asp-for="QualificationTypeID" class="form-label">Qualification</label>
-                        <select asp-for="QualificationTypeID" asp-items="@(new SelectList(ViewBag.QualificationTypes, "Value", "Text"))" class="form-control"></select>
-                        <span asp-validation-for="QualificationTypeID" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="InstituteName" class="form-label">Institute Name</label>
-                        <input asp-for="InstituteName" class="form-control" />
-                        <span asp-validation-for="InstituteName" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="City" class="form-label">City</label>
-                        <input asp-for="City" class="form-control" />
-                        <span asp-validation-for="City" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="CountryTypeID" class="form-label">Country</label>
-                        <select asp-for="CountryTypeID" asp-items="@(new SelectList(ViewBag.CountryTypes, "Value", "Text"))" class="form-control"></select>
-                        <span asp-validation-for="CountryTypeID" class="text-danger"></span>
-                    </div>
+                    <input type="hidden" asp-for="NewEducation.EmployeeID" value="@ViewBag.EmployeeID" />
 
                     <div class="form-group row">
                         <div class="col-6">
-                            <label asp-for="StartMonth" class="form-label">Start Month</label>
-                            <select asp-for="StartMonth" asp-items="@(new SelectList(ViewBag.MonthTypes, "Value", "Text"))" class="form-control"></select>
-                            <span asp-validation-for="StartMonth" class="text-danger"></span>
+                            <label asp-for="NewEducation.QualificationTypeID" class="form-label">Qualification</label>
+                            <select asp-for="NewEducation.QualificationTypeID" asp-items="@(new SelectList(ViewBag.QualificationTypes, "Value", "Text"))" class="form-control"></select>
+                            <span asp-validation-for="NewEducation.QualificationTypeID" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="StartYear" class="form-label">Start Year</label>
-                            <input asp-for="StartYear" class="form-control" />
-                            <span asp-validation-for="StartYear" class="text-danger"></span>
+                            <label asp-for="NewEducation.InstituteName" class="form-label">Institute Name</label>
+                            <input asp-for="NewEducation.InstituteName" class="form-control" />
+                            <span asp-validation-for="NewEducation.InstituteName" class="text-danger"></span>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <div class="col-6">
-                            <label asp-for="EndMonth" class="form-label">End Month</label>
-                            <select asp-for="EndMonth" asp-items="@(new SelectList(ViewBag.MonthTypes, "Value", "Text"))" class="form-control"></select>
-                            <span asp-validation-for="EndMonth" class="text-danger"></span>
+                            <label asp-for="NewEducation.City" class="form-label">City</label>
+                            <input asp-for="NewEducation.City" class="form-control" />
+                            <span asp-validation-for="NewEducation.City" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="EndYear" class="form-label">End Year</label>
-                            <input asp-for="EndYear" class="form-control" />
-                            <span asp-validation-for="EndYear" class="text-danger"></span>
+                            <label asp-for="NewEducation.CountryTypeID" class="form-label">Country</label>
+                            <select asp-for="NewEducation.CountryTypeID" asp-items="@(new SelectList(ViewBag.CountryTypes, "Value", "Text"))" class="form-control"></select>
+                            <span asp-validation-for="NewEducation.CountryTypeID" class="text-danger"></span>
                         </div>
                     </div>
-
+                    <div class="form-group row">
+                        <div class="col-3">
+                            <label asp-for="NewEducation.StartMonth" class="form-label">Start Month</label>
+                            <select asp-for="NewEducation.StartMonth" asp-items="@(new SelectList(ViewBag.MonthTypes, "Value", "Text"))" class="form-control"></select>
+                            <span asp-validation-for="NewEducation.StartMonth" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="NewEducation.StartYear" class="form-label">Start Year</label>
+                            <input asp-for="NewEducation.StartYear" class="form-control" />
+                            <span asp-validation-for="NewEducation.StartYear" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="NewEducation.EndMonth" class="form-label">End Month</label>
+                            <select asp-for="NewEducation.EndMonth" asp-items="@(new SelectList(ViewBag.MonthTypes, "Value", "Text"))" class="form-control"></select>
+                            <span asp-validation-for="NewEducation.EndMonth" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="NewEducation.EndYear" class="form-label">End Year</label>
+                            <input asp-for="NewEducation.EndYear" class="form-control" />
+                            <span asp-validation-for="NewEducation.EndYear" class="text-danger"></span>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="form-label">Document (PDF)</label>
                         <input type="file" name="pdfFile" accept=".pdf" class="form-control" />
                     </div>
-
+                   
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
                 <button type="button" class="btn btn-success" id="saveEmployeeChanges" form="employeeEducationForm">Save Changes</button>
             </div>
+            @Html.Partial("~/Views/HR/Employeement/Employee/_EmployeeEducation.cshtml", Model.EmployeeEducations)
         </div>
     </div>
 </div>
+
+<!-- Partial view for listing education records -->
+

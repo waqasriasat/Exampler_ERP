@@ -113,10 +113,16 @@
                 });
             });
 
-            // Handle form submission
-            $('#employeeEducationModalContainer').on('submit', '#employeeEducationForm', function (e) {
+            $('#employeeEducationModalContainer').on('click', '#saveEmployeeChanges', function (e) {
                 e.preventDefault();
-                var formData = new FormData(this);
+
+                // Select the form element properly
+                var form = $('#employeeEducationForm')[0]; // [0] gets the DOM element from the jQuery object
+
+                // Check if the form is selected correctly
+                console.log(form); // Ensure this logs the actual form element
+
+                var formData = new FormData(form); // Create FormData object from the form
 
                 $.ajax({
                     url: '@Url.Action("Education", "Employee")',
@@ -129,7 +135,12 @@
                             location.reload();  // Refresh the page or update the UI
                         } else {
                             // Handle validation errors
+                            alert('There was an error processing your request.');
                         }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('AJAX Error: ' + error); // Log the error for debugging
+                        alert('An unexpected error occurred. Please try again later.');
                     }
                 });
             });
