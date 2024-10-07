@@ -64,4 +64,9 @@ namespace Exampler_ERP.Models.Temp
     public HR_EmployeeEducation NewEducation { get; set; }
     public List<HR_EmployeeEducation>? EmployeeEducations { get; set; }
   }
+  public class EmployeeExperienceViewModel
+  {
+    public HR_EmployeeExperience NewExperience { get; set; }
+    public List<HR_EmployeeExperience>? EmployeeExperiences { get; set; }
+  }
 }

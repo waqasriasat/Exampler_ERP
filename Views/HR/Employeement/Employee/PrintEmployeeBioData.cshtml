@@ -1,0 +1,113 @@
+@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Print Employee Bio Data";
+}
+
+<h2>Employee Bio Data</h2>
+
+@foreach (var item in Model)
+{
+    <div class="employee-bio-data">
+        <h3>Personal Information</h3>
+        <table class="table table-bordered">
+            <tr>
+                <th>Employee Code</th>
+                <td>@item.Employee.EmployeeCode</td>
+            </tr>
+            <tr>
+                <th>First Name</th>
+                <td>@item.Employee.FirstName</td>
+            </tr>
+            <tr>
+                <th>Father Name</th>
+                <td>@item.Employee.FatherName</td>
+            </tr>
+            <tr>
+                <th>Family Name</th>
+                <td>@item.Employee.FamilyName</td>
+            </tr>
+            <tr>
+                <th>Sex</th>
+                <td>
+                    @ViewBag.GenderList.FirstOrDefault(item.Employee.Sex.HasValue ? item.Employee.Sex.Value.ToString() : ""))?.Text
+                </td>
+
+            </tr>
+            <tr>
+                <th>Marital Status</th>
+                <td>@ViewBag.MaritalStatusList.FirstOrDefault(item.Employee.MaritalStatus.ToString())?.Text</td>
+            </tr>
+            <tr>
+                <th>Religion</th>
+                <td>@ViewBag.ReligionList.FirstOrDefault(item.Employee.Religion.ToString())?.Text</td>
+            </tr>
+            <tr>
+                <th>Date of Birth</th>
+                <td>@item.Employee.DOB?.ToString("dd/MM/yyyy")</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>@item.Employee.Phone1</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>@item.Employee.Email</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>@item.Employee.Address</td>
+            </tr>
+        </table>
+
+        @* Displaying Education Information *@
+        <h3>Education Details</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Qualification</th>
+                    <th>Institute</th>
+                    <th>City</th>
+                    <th>Country</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@item.Education.QualificationType.QualificationTypeName</td>
+                    <td>@item.Education.InstituteName</td>
+                    <td>@item.Education.City</td>
+                    <td>@ViewBag.CountryTypes.FirstOrDefault(item.Education.CountryTypeID.ToString())?.Text</td>
+                    <td>@item.Education.StartMonth/@item.Education.StartYear</td>
+                    <td>@item.Education.EndMonth/@item.Education.EndYear</td>
+                </tr>
+            </tbody>
+        </table>
+
+        @* Displaying Experience Information *@
+        <h3>Experience Details</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Job Title</th>
+                    <th>Company</th>
+                    <th>City</th>
+                    <th>Country</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@item.Experience.ExperienceTittle</td>
+                    <td>@item.Experience.CompanyName</td>
+                    <td>@item.Experience.City</td>
+                    <td>@ViewBag.CountryTypes.FirstOrDefault(item.Experience.CountryTypeID.ToString())?.Text</td>
+                    <td>@item.Experience.StartMonth/@item.Experience.StartYear</td>
+                    <td>@item.Experience.EndMonth/@item.Experience.EndYear</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}

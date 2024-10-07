@@ -1,4 +1,4 @@
-@model Exampler_ERP.Models.HR_EmployeeExperience
+@model Exampler_ERP.Models.Temp.EmployeeExperienceViewModel
 
 <div class="modal fade" id="employeeExperienceModal" tabindex="-1" role="dialog" aria-labelledby="employeeExperienceModalLabel" aria-hidden="true" style="--bs-modal-width: 60rem;">
     <div class="modal-dialog modal-lg" role="document">
@@ -9,63 +9,57 @@
                     Experience Employee
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
             </div>
             <div class="modal-body">
                 <form id="employeeExperienceForm" method="post" asp-action="Experience" asp-controller="Employee" enctype="multipart/form-data">
-                    <input type="hidden" asp-for="ExperienceID" />
-                    <input type="hidden" asp-for="EmployeeID" />
-
-                    <div class="form-group">
-                        <label asp-for="ExperienceTittle" class="form-label">Experience Tittle</label>
-                        <input asp-for="ExperienceTittle" class="form-control" />
-                        <span asp-validation-for="ExperienceTittle" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="CompanyName" class="form-label">Company Name</label>
-                        <input asp-for="CompanyName" class="form-control" />
-                        <span asp-validation-for="CompanyName" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="City" class="form-label">City</label>
-                        <input asp-for="City" class="form-control" />
-                        <span asp-validation-for="City" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="CountryTypeID" class="form-label">Country</label>
-                        <select asp-for="CountryTypeID" asp-items="@(new SelectList(ViewBag.CountryTypes, "Value", "Text"))" class="form-control"></select>
-                        <span asp-validation-for="CountryTypeID" class="text-danger"></span>
-                    </div>
+                    <input type="hidden" asp-for="NewExperience.EmployeeID" value="@ViewBag.EmployeeID" />
 
                     <div class="form-group row">
                         <div class="col-6">
-                            <label asp-for="StartMonth" class="form-label">Start Month</label>
-                            <select asp-for="StartMonth" asp-items="@(new SelectList(ViewBag.MonthTypes, "Value", "Text"))" class="form-control"></select>
-                            <span asp-validation-for="StartMonth" class="text-danger"></span>
+                            <label asp-for="NewExperience.ExperienceTittle" class="form-label">Tittle</label>
+                            <input asp-for="NewExperience.ExperienceTittle" class="form-control" />
+                            <span asp-validation-for="NewExperience.ExperienceTittle" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="StartYear" class="form-label">Start Year</label>
-                            <input asp-for="StartYear" class="form-control" />
-                            <span asp-validation-for="StartYear" class="text-danger"></span>
+                            <label asp-for="NewExperience.CompanyName" class="form-label">Company Name</label>
+                            <input asp-for="NewExperience.CompanyName" class="form-control" />
+                            <span asp-validation-for="NewExperience.CompanyName" class="text-danger"></span>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <div class="col-6">
-                            <label asp-for="EndMonth" class="form-label">End Month</label>
-                            <select asp-for="EndMonth" asp-items="@(new SelectList(ViewBag.MonthTypes, "Value", "Text"))" class="form-control"></select>
-                            <span asp-validation-for="EndMonth" class="text-danger"></span>
+                            <label asp-for="NewExperience.City" class="form-label">City</label>
+                            <input asp-for="NewExperience.City" class="form-control" />
+                            <span asp-validation-for="NewExperience.City" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="EndYear" class="form-label">End Year</label>
-                            <input asp-for="EndYear" class="form-control" />
-                            <span asp-validation-for="EndYear" class="text-danger"></span>
+                            <label asp-for="NewExperience.CountryTypeID" class="form-label">Country</label>
+                            <select asp-for="NewExperience.CountryTypeID" asp-items="@(new SelectList(ViewBag.CountryTypes, "Value", "Text"))" class="form-control"></select>
+                            <span asp-validation-for="NewExperience.CountryTypeID" class="text-danger"></span>
                         </div>
                     </div>
-
+                    <div class="form-group row">
+                        <div class="col-3">
+                            <label asp-for="NewExperience.StartMonth" class="form-label">Start Month</label>
+                            <select asp-for="NewExperience.StartMonth" asp-items="@(new SelectList(ViewBag.MonthTypes, "Value", "Text"))" class="form-control"></select>
+                            <span asp-validation-for="NewExperience.StartMonth" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="NewExperience.StartYear" class="form-label">Start Year</label>
+                            <input asp-for="NewExperience.StartYear" class="form-control" />
+                            <span asp-validation-for="NewExperience.StartYear" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="NewExperience.EndMonth" class="form-label">End Month</label>
+                            <select asp-for="NewExperience.EndMonth" asp-items="@(new SelectList(ViewBag.MonthTypes, "Value", "Text"))" class="form-control"></select>
+                            <span asp-validation-for="NewExperience.EndMonth" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="NewExperience.EndYear" class="form-label">End Year</label>
+                            <input asp-for="NewExperience.EndYear" class="form-control" />
+                            <span asp-validation-for="NewExperience.EndYear" class="text-danger"></span>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="form-label">Document (PDF)</label>
                         <input type="file" name="pdfFile" accept=".pdf" class="form-control" />
@@ -73,10 +67,13 @@
 
                 </form>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" style="padding-top: 20px;">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-success" id="saveEmployeeChanges">Save Changes</button>
+                <button type="button" class="btn btn-success" id="saveEmployeeChanges" form="employeeExperienceForm">Save Changes</button>
             </div>
+            @Html.Partial("~/Views/HR/Employeement/Employee/_EmployeeExperience.cshtml", Model.EmployeeExperiences)
         </div>
     </div>
 </div>
+
+<!-- Partial view for listing Experience records -->

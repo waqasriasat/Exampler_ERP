@@ -200,7 +200,40 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       ViewBag.ReligionList = _utils.GetReligion();
 
 
+
       return View("~/Views/HR/Employeement/Employee/PrintEmployee.cshtml", employees);
+    }
+    public async Task<IActionResult> PrintEmployeeBioData(int id)
+    {
+      var employees = await (from e in _appDBContext.HR_Employees
+                             join edu in _appDBContext.HR_EmployeeEducations
+                             on e.EmployeeID equals edu.EmployeeID
+                             join exp in _appDBContext.HR_EmployeeExperiences
+                             on e.EmployeeID equals exp.EmployeeID
+                             where e.DeleteYNID != 1 && e.EmployeeID == id
+                             select new
+                             {
+                               Employee = e,
+                               Education = edu,
+                               Experience = exp
+                             })
+                       .Include(e => e.Employee.BranchType)
+                       .Include(e => e.Employee.DepartmentType)
+                       .Include(e => e.Employee.DesignationType)
+                       .Include(e => e.Education.QualificationType)
+                       .ToListAsync();
+
+
+      ViewBag.GenderList = _utils.GetGender();
+      ViewBag.MaritalStatusList = _utils.GetMaritalStatus();
+      ViewBag.ReligionList = _utils.GetReligion();
+      ViewBag.QualificationTypes = await _utils.GetQualifications();
+      ViewBag.CountryTypes = await _utils.GetCountries();
+      ViewBag.MonthTypes = await _utils.GetMonthsTypes();
+
+
+
+      return View("~/Views/HR/Employeement/Employee/PrintEmployeeBioData.cshtml", employees);
     }
     public async Task<IActionResult> ExportToExcel()
     {
@@ -512,7 +545,6 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         EmployeeEducations = employeeEducations
       });
     }
-
     [HttpPost]
     public async Task<IActionResult> Education(EmployeeEducationViewModel model, IFormFile? pdfFile)
     {
@@ -562,26 +594,88 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       return PartialView("~/Views/HR/Employeement/Employee/EmployeeEducation.cshtml", model);
     }
+    [HttpGet]
+    public async Task<IActionResult> EducationDocumentDownload(int id)
+    {
+      var document = await _appDBContext.HR_EmployeeEducations
+        .Include(d => d.QualificationType)
+          .FirstOrDefaultAsync(d => d.EducationID == id);
 
+      if (document == null || document.DocImage == null)
+      {
+        return NotFound();
+      }
+
+      return File(document.DocImage, "application/octet-stream", "(" + document.EmployeeID + ") " + document.QualificationType?.QualificationTypeName + document.DocExt);
+    }
+    [HttpGet]
+    public async Task<IActionResult> EducationDocumentView(int id)
+    {
+      var document = await _appDBContext.HR_EmployeeEducations
+        .Include(d => d.QualificationType)
+          .FirstOrDefaultAsync(d => d.EducationID == id);
+
+      if (document == null || document.DocImage == null)
+      {
+        // If document is not found, return a 404 error.
+        return NotFound();
+      }
+
+      // Determine MIME type based on file extension
+      string mimeType = document.DocExt.ToLower() switch
+      {
+        ".pdf" => "application/pdf",   // Ensure PDF is returned correctly
+        ".jpg" => "image/jpeg",
+        ".jpeg" => "image/jpeg",
+        ".png" => "image/png",
+        _ => "application/octet-stream"
+      };
+
+      // Return the document for inline viewing
+      return File(document.DocImage, mimeType, "("+document.EmployeeID+") "+document.QualificationType?.QualificationTypeName+document.DocExt);
+    }
+    public async Task<IActionResult> DeleteEmployeeEducation(int id)
+    {
+      var education = await _appDBContext.HR_EmployeeEducations.FindAsync(id);
+      if (education == null)
+      {
+        return NotFound();
+      }
+
+      _appDBContext.HR_EmployeeEducations.Remove(education);
+      await _appDBContext.SaveChangesAsync();
+
+      return Json(new { success = true });
+    }
+
+    //////
+    ///
 
     public async Task<IActionResult> Experience(int id)
     {
-      var experience = await _appDBContext.HR_EmployeeExperiences
-          .FirstOrDefaultAsync(e => e.ExperienceID == id);
-
-      if (experience == null)
-      {
-        experience = new HR_EmployeeExperience();
-      }
+      // Create a new Experience form (empty form)
+      var Experience = new HR_EmployeeExperience();
+      ViewBag.EmployeeID = id.ToString();
 
       // Populate ViewBags for dropdowns like QualificationType, CountryType, etc.
-      ViewBag.CountryTypes = _utils.GetCountries();
-      ViewBag.MonthTypes = _utils.GetMonthsTypes();
+      ViewBag.QualificationTypes = await _utils.GetQualifications();
+      ViewBag.CountryTypes = await _utils.GetCountries();
+      ViewBag.MonthTypes = await _utils.GetMonthsTypes();
 
-      return PartialView("~/Views/HR/Employeement/Employee/EmployeeExperience.cshtml", experience);
+      // Fetch the existing Experience records for the employee
+      var employeeExperiences = await _appDBContext.HR_EmployeeExperiences
+          .Where(e => e.EmployeeID == id)
+          .ToListAsync();
+
+      // Return the main view with the empty form and list of records
+      return PartialView("~/Views/HR/Employeement/Employee/EmployeeExperience.cshtml", new EmployeeExperienceViewModel
+      {
+        NewExperience = Experience,
+        EmployeeExperiences = employeeExperiences
+      });
     }
     [HttpPost]
-    public async Task<IActionResult> Experience(HR_EmployeeExperience model, IFormFile? pdfFile)
+    public async Task<IActionResult> Experience(EmployeeExperienceViewModel model, IFormFile? pdfFile)
     {
       if (ModelState.IsValid)
       {
@@ -593,10 +687,10 @@ namespace Exampler_ERP.Controllers.HR.Employeement
             using (var memoryStream = new MemoryStream())
             {
               await pdfFile.CopyToAsync(memoryStream);
-              model.DocImage = memoryStream.ToArray();  // Store PDF as binary
+              model.NewExperience.DocImage = memoryStream.ToArray();  // Store PDF as binary
             }
 
-            model.DocExt = Path.GetExtension(pdfFile.FileName).ToLower();
+            model.NewExperience.DocExt = Path.GetExtension(pdfFile.FileName).ToLower();
           }
           else
           {
@@ -605,25 +699,80 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           }
         }
 
-        if (model.ExperienceID == 0)
+        if (model.NewExperience.ExperienceID == 0)
         {
-          _appDBContext.HR_EmployeeExperiences.Add(model);
+          _appDBContext.HR_EmployeeExperiences.Add(model.NewExperience);
         }
         else
         {
-          _appDBContext.HR_EmployeeExperiences.Update(model);
+          _appDBContext.HR_EmployeeExperiences.Update(model.NewExperience);
         }
 
         await _appDBContext.SaveChangesAsync();
 
         return Json(new { success = true });
       }
+      model.EmployeeExperiences = await _appDBContext.HR_EmployeeExperiences
+        .Where(e => e.EmployeeID == model.NewExperience.EmployeeID)
+        .ToListAsync();
 
       // Populate ViewBags for dropdowns
-      ViewBag.CountryTypes = _utils.GetCountries();
-      ViewBag.MonthTypes = _utils.GetMonthsTypes();
+      ViewBag.QualificationTypes = await _utils.GetQualifications();
+      ViewBag.CountryTypes = await _utils.GetCountries();
+      ViewBag.MonthTypes = await _utils.GetMonthsTypes();
 
       return PartialView("~/Views/HR/Employeement/Employee/EmployeeExperience.cshtml", model);
+    }
+    [HttpGet]
+    public async Task<IActionResult> ExperienceDocumentDownload(int id)
+    {
+      var document = await _appDBContext.HR_EmployeeExperiences
+          .FirstOrDefaultAsync(d => d.ExperienceID == id);
+
+      if (document == null || document.DocImage == null)
+      {
+        return NotFound();
+      }
+
+      return File(document.DocImage, "application/octet-stream", "(" + document.EmployeeID + ") " + document.CompanyName + document.DocExt);
+    }
+    [HttpGet]
+    public async Task<IActionResult> ExperienceDocumentView(int id)
+    {
+      var document = await _appDBContext.HR_EmployeeExperiences
+          .FirstOrDefaultAsync(d => d.ExperienceID == id);
+
+      if (document == null || document.DocImage == null)
+      {
+        // If document is not found, return a 404 error.
+        return NotFound();
+      }
+
+      // Determine MIME type based on file extension
+      string mimeType = document.DocExt.ToLower() switch
+      {
+        ".pdf" => "application/pdf",   // Ensure PDF is returned correctly
+        ".jpg" => "image/jpeg",
+        ".jpeg" => "image/jpeg",
+        ".png" => "image/png",
+        _ => "application/octet-stream"
+      };
+
+      // Return the document for inline viewing
+      return File(document.DocImage, mimeType, "(" + document.EmployeeID + ") " + document.CompanyName + document.DocExt);
+    }
+    public async Task<IActionResult> DeleteEmployeeExperience(int id)
+    {
+      var Experience = await _appDBContext.HR_EmployeeExperiences.FindAsync(id);
+      if (Experience == null)
+      {
+        return NotFound();
+      }
+
+      _appDBContext.HR_EmployeeExperiences.Remove(Experience);
+      await _appDBContext.SaveChangesAsync();
+
+      return Json(new { success = true });
     }
   }
 }

@@ -157,9 +157,16 @@
             });
 
             // Handle form submission
-            $('#employeeExperienceModalContainer').on('submit', '#employeeExperienceForm', function (e) {
+            $('#employeeExperienceModalContainer').on('click', '#saveEmployeeChanges', function (e) {
                 e.preventDefault();
-                var formData = new FormData(this);
+
+                // Select the form element properly
+                var form = $('#employeeExperienceForm')[0]; // [0] gets the DOM element from the jQuery object
+
+                // Check if the form is selected correctly
+                console.log(form); // Ensure this logs the actual form element
+
+                var formData = new FormData(form); // Create FormData object from the form
 
                 $.ajax({
                     url: '@Url.Action("Experience", "Employee")',
@@ -172,7 +179,12 @@
                             location.reload();  // Refresh the page or update the UI
                         } else {
                             // Handle validation errors
+                            alert('There was an error processing your request.');
                         }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('AJAX Error: ' + error); // Log the error for debugging
+                        alert('An unexpected error occurred. Please try again later.');
                     }
                 });
             });
@@ -210,16 +222,40 @@
                     // If user clicks 'No', do nothing
                 }
             });
+            // Delete employeeEducation
+           
 
             // Print functionality
             $('#printButton').click(function () {
                 window.print();
             });
+
+            // $('.PrintEmployeeBioDataLink').click(function () {
+            //     window.print();
+            // });
         });
     </script>
     <script>
         function printEmployees() {
             var printWindow = window.open('@Url.Action("Print", "Employee")', '_blank');
+            printWindow.focus();
+        }
+
+        $(document).on('click', '.PrintEmployeeBioDataLink', function (e) {
+            e.preventDefault();
+
+            // Get the EmployeeID from the data-id attribute
+            var employeeID = $(this).data('id');
+
+            // Call the function to open the print window and pass EmployeeID
+            PrintEmployeeBioData(employeeID);
+        });
+        function PrintEmployeeBioData(employeeID) {
+            // Construct the URL with the EmployeeID parameter
+            var url = '@Url.Action("PrintEmployeeBioData", "Employee")' + '?employeeID=' + employeeID;
+
+            // Open the new window for printing
+            var printWindow = window.open(url, '_blank');
             printWindow.focus();
         }
         //Close Modal
@@ -349,7 +385,7 @@
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="editEmployeeLink" data-id="@item.EmployeeID">
+                                            <a href="#" class="PrintEmployeeBioDataLink" data-id="@item.EmployeeID">
                                                 <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
