@@ -252,7 +252,7 @@
         });
         function PrintEmployeeBioData(employeeID) {
             // Construct the URL with the EmployeeID parameter
-            var url = '@Url.Action("PrintEmployeeBioData", "Employee")' + '?employeeID=' + employeeID;
+            var url = '@Url.Action("PrintEmployeeBioData", "Employee")' + '?id=' + employeeID;
 
             // Open the new window for printing
             var printWindow = window.open(url, '_blank');

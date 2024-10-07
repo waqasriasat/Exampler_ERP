@@ -205,35 +205,37 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     }
     public async Task<IActionResult> PrintEmployeeBioData(int id)
     {
-      var employees = await (from e in _appDBContext.HR_Employees
-                             join edu in _appDBContext.HR_EmployeeEducations
-                             on e.EmployeeID equals edu.EmployeeID
-                             join exp in _appDBContext.HR_EmployeeExperiences
-                             on e.EmployeeID equals exp.EmployeeID
-                             where e.DeleteYNID != 1 && e.EmployeeID == id
-                             select new
-                             {
-                               Employee = e,
-                               Education = edu,
-                               Experience = exp
-                             })
-                       .Include(e => e.Employee.BranchType)
-                       .Include(e => e.Employee.DepartmentType)
-                       .Include(e => e.Employee.DesignationType)
-                       .Include(e => e.Education.QualificationType)
-                       .ToListAsync();
+      var employee = await _appDBContext.HR_Employees
+        .Where(e => e.DeleteYNID != 1 && e.EmployeeID == id)
+        .FirstOrDefaultAsync();
 
+      if (employee == null)
+      {
+        return NotFound(); // Handle employee not found
+      }
 
-      ViewBag.GenderList = _utils.GetGender();
-      ViewBag.MaritalStatusList = _utils.GetMaritalStatus();
-      ViewBag.ReligionList = _utils.GetReligion();
+      var educations = await _appDBContext.HR_EmployeeEducations
+          .Where(edu => edu.EmployeeID == id)
+          .ToListAsync();
+
+      var experiences = await _appDBContext.HR_EmployeeExperiences
+          .Where(exp => exp.EmployeeID == id)
+          .ToListAsync();
+
+      var employeeBioData = new EmployeeBioDataViewModel
+      {
+        Employee = employee,
+        Educations = educations,
+        Experiences = experiences
+      };
+
+      ViewBag.GenderList = await _utils.GetGender();
+      ViewBag.MaritalStatusList = await _utils.GetMaritalStatus();
+      ViewBag.ReligionList = await _utils.GetReligion();
       ViewBag.QualificationTypes = await _utils.GetQualifications();
       ViewBag.CountryTypes = await _utils.GetCountries();
-      ViewBag.MonthTypes = await _utils.GetMonthsTypes();
 
-
-
-      return View("~/Views/HR/Employeement/Employee/PrintEmployeeBioData.cshtml", employees);
+      return View("~/Views/HR/Employeement/Employee/PrintEmployeeBioData.cshtml", employeeBioData);
     }
     public async Task<IActionResult> ExportToExcel()
     {

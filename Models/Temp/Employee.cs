@@ -69,4 +69,10 @@ namespace Exampler_ERP.Models.Temp
     public HR_EmployeeExperience NewExperience { get; set; }
     public List<HR_EmployeeExperience>? EmployeeExperiences { get; set; }
   }
+  public class EmployeeBioDataViewModel
+  {
+    public HR_Employee Employee { get; set; }
+    public List<HR_EmployeeEducation> Educations { get; set; }
+    public List<HR_EmployeeExperience> Experiences { get; set; }
+  }
 }
