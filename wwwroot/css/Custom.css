@@ -213,7 +213,7 @@
 
       .small-box .icon > i.fa, .small-box .icon > i.fab, .small-box .icon > i.fad, .small-box .icon > i.fal, .small-box .icon > i.far, .small-box .icon > i.fas, .small-box .icon > i.ion {
         font-size: 350%;
-        top: 20px
+        top: 32px
       }
 
   .small-box .icon svg {
@@ -244,7 +244,6 @@
     border-radius: .25rem;
     box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2);
     display: block;
-    margin-bottom: 20px;
     position: relative
 }
 
@@ -386,7 +385,7 @@ a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:h
 .Card1I {
   text-align: right;
   right: 20px;
-  Color: #36b9cc !important;
+  Color: #696cff !important;
 }
 
 .Card1div {
@@ -545,9 +544,9 @@ a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:h
     }
 
 .card-footer {
-    padding: .75rem 1.25rem;
-    background-color: #f8f9fc;
-    border-top: 1px solid #e3e6f0
+  padding: 0.3rem 1.25rem;
+  background-color: #f8f9fc;
+  border-top: 1px solid #e3e6f0
 }
 
     .card-footer:last-child {
@@ -1065,3 +1064,63 @@ a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:h
 .btn-danger:hover {
   background-color: #dc3545;
 }
+.modern-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  /*padding: 20px;*/
+  /*display: flex;*/
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+  .modern-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+  }
+
+.modern-card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.modern-card-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 15px;
+}
+
+.modern-card-label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.modern-card-count {
+  font-size: 2.2rem;
+  color: #696cff; /* Light blue for a softer look */
+  margin: 0;
+}
+
+.modern-card-icon-container {
+  background-color: #696cff; /* Light blue background for the icon */
+  padding: 12px;
+  border-radius: 10px; /* Soft rectangular shape */
+  color: white;
+}
+
+.modern-card-icon {
+  font-size: 1.8rem;
+}
+
+.modern-shadow {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+

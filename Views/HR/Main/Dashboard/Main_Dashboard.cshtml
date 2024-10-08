@@ -8,69 +8,7 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
     <style>
-        .modern-card {
-            background-color: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-
-            .modern-card:hover {
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-                transform: translateY(-3px);
-            }
-
-        .modern-card-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-
-        .modern-card-info {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding-left: 15px;
-        }
-
-        .modern-card-label {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: #444;
-            margin-bottom: 8px;
-        }
-
-        .modern-card-count {
-            font-size: 2.2rem;
-            color: #2D9CDB; /* Light blue for a softer look */
-            margin: 0;
-        }
-
-        .modern-card-icon-container {
-            background-color: #2D9CDB; /* Light blue background for the icon */
-            padding: 12px;
-            border-radius: 10px; /* Soft rectangular shape */
-            color: white;
-        }
-
-        .modern-card-icon {
-            font-size: 1.8rem;
-        }
-
-        .shadow {
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .mb-4 {
-            margin-bottom: 1.5rem;
-        }
+        
     </style>
 }
 
@@ -93,430 +31,452 @@
             <div class="row" style="padding: 30px 30px 0px 30px;">
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="Branch" asp-action="Index">
-                        @* <div class="modern-card shadow mb-4">
-                            <div class="modern-card-content bg-white">
-                                <div class="modern-card-info">
-                                    <span class="modern-card-label">Branch</span>
-                                    <h4 class="modern-card-count">@ViewBag.BranchCount</h4>
-                                </div>
-                                <div class="modern-card-icon-container">
-                                    <i class="fa fa-print modern-card-icon" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div> *@
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Branch</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Branch</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.BranchCount
                                     </h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white ">
                                     <i class="fa fa-print Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="Department" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Department</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Department</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.DepartmentCount
                                     </h4>
                                 </div>
-                                <div class="icon">
-                                    <i class="fa fa fa-file Card1I" aria-hidden="true"></i>
+                                <div class="icon bg-primary text-white ">
+                                    <i class="fa fa-file Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="Section" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Section</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Section</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.SectionCount
                                     </h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white ">
                                     <i class="fa fa-book Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="Qualification" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Qualification</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Qualification</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.QualificationCount
                                     </h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white ">
                                     <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="SubQualification" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Sub Qualification</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Sub Qualification</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.SubQualificationCount
                                     </h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white">
                                     <i class="fa fa-print Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="Designation" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Designation</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Designation</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.DesignationCount
                                     </h4>
                                 </div>
-                                <div class="icon">
-                                    <i class="fa fa fa-file Card1I" aria-hidden="true"></i>
+                                <div class="icon bg-primary text-white">
+                                    <i class="fa fa-file Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="SalaryType" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Salary Type</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Salary Type</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.SalaryTypeCount
                                     </h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white">
                                     <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="AddionalAllowanceType" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Addional Allowance Type</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Additional Allowance Type</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.AddionalAllowanceTypeCount
                                     </h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white">
                                     <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="DeductionType" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Deduction Type</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Deduction Type</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.DeductionTypeCount
                                     </h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white">
                                     <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="DeductionSetup" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Deduction Setup</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Deduction Setup</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.DeductionSetupCount
                                     </h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white">
                                     <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="EmployeeStatusType" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Employee Status Type</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Employee Status Type</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.EmployeeStatusTypeCount
                                     </h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white">
                                     <i class="fa fa-print Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="OvertimeRate" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Overtime Rate</strong>
-                                    <h4 class="CardCountFontColor">
-                                        @ViewBag.OvertimeRateCount
-                                    </h4>
-                                </div>
-                                <div class="icon">
-                                    <i class="fa fa-print Card1I" aria-hidden="true"></i>
-                                </div>
-                                <div class="small-box-footer Card1A"></div>
-                            </div>
-                        </div>
-                    </a>
+        <a asp-controller="OvertimeRate" asp-action="Index">
+            <div class="modern-card shadow mb-4">
+                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                    <div class="card-details">
+                        <strong class="text-primary">Overtime Rate</strong>
+                        <h4 class="font-weight-bold text-dark">
+                            @ViewBag.OvertimeRateCount
+                        </h4>
+                    </div>
+                    <div class="icon bg-primary text-white">
+                        <i class="fa fa-print Card1I" aria-hidden="true"></i>
+                    </div>
                 </div>
+                <div class="card-footer bg-white text-muted text-center">
+                    View Details <i class="fa fa-arrow-right"></i>
+                </div>
+            </div>
+        </a>
+    </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="VacationType" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Vacation Type</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Vacation Type</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.VacationTypeCount
                                     </h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white">
                                     <i class="fa fa-print Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="EmployeeRequestType" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Employee Request Type</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Employee Request Type</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.EmployeeRequestTypeCount
                                     </h4>
                                 </div>
-                                <div class="icon">
-                                    <i class="fa fa fa-file Card1I" aria-hidden="true"></i>
+                                <div class="icon bg-primary text-white">
+                                    <i class="fa fa-file Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="ProcessType" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Process Type</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Process Type</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.ProcessTypeCount
                                     </h4>
                                 </div>
-                                <div class="icon">
-                                    <i class="fa fa fa-file Card1I" aria-hidden="true"></i>
+                                <div class="icon bg-primary text-white">
+                                    <i class="fa fa-file Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
-
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="ProcessTypeApprovalSetup" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Process Type Approval</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Process Type Approval</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.ProcessTypeApprovalSetupCount
                                     </h4>
                                 </div>
-                                <div class="icon">
-                                    <i class="fa fa fa-file Card1I" aria-hidden="true"></i>
+                                <div class="icon bg-primary text-white">
+                                    <i class="fa fa-file Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
-
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="ProcessTypeForward" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Process Type Forward</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Process Type Forward</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.ProcessTypeForwardCount
                                     </h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white">
                                     <i class="fa fa-book Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="Role" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Roles</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Roles</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.RolesCount
                                     </h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white">
                                     <i class="fa fa-book Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a asp-controller="User" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Users</strong>
-                                    <h4 class="CardCountFontColor">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Users</strong>
+                                    <h4 class="font-weight-bold text-dark">
                                         @ViewBag.UsersCount
                                     </h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white">
                                     <i class="fa fa-book Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a href="#">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Access Rights</strong>
-                                    <h4 class="CardCountFontColor">
-                                        @* @ViewBag.AccessRightsCount *@ 0
-                                    </h4>
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Access Rights</strong>
+                                    <h4 class="font-weight-bold text-dark">0</h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white">
                                     <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a href="#">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Copy Access Rights</strong>
-                                    <h4 class="CardCountFontColor">
-                                        @* @ViewBag.CopyAccessRightsCount *@ 0
-                                    </h4>
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Copy Access Rights</strong>
+                                    <h4 class="font-weight-bold text-dark">0</h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white">
                                     <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-                
-                
-               
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a href="#">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Evaluation Questions</strong>
-                                    <h4 class="CardCountFontColor">
-                                        @* @ViewBag.EvaluationQuestionsCount *@ 0
-                                    </h4>
-                                </div>
-                                <div class="icon">
-                                    <i class="fa fa fa-file Card1I" aria-hidden="true"></i>
-                                </div>
-                                <div class="small-box-footer Card1A"></div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <a href="#">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">Evaluation Template</strong>
-                                    <h4 class="CardCountFontColor">
-                                        @* @ViewBag.EvaluationTemplateCount *@ 0
-                                    </h4>
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Evaluation Questions</strong>
+                                    <h4 class="font-weight-bold text-dark">0</h4>
                                 </div>
-                                <div class="icon">
+                                <div class="icon bg-primary text-white">
+                                    <i class="fa fa-file Card1I" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <a href="#">
+                        <div class="modern-card shadow mb-4">
+                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                <div class="card-details">
+                                    <strong class="text-primary">Evaluation Template</strong>
+                                    <h4 class="font-weight-bold text-dark">0</h4>
+                                </div>
+                                <div class="icon bg-primary text-white">
                                     <i class="fa fa-book Card1I" aria-hidden="true"></i>
                                 </div>
-                                <div class="small-box-footer Card1A"></div>
+                            </div>
+                            <div class="card-footer bg-white text-muted text-center">
+                                View Details <i class="fa fa-arrow-right"></i>
                             </div>
                         </div>
                     </a>
