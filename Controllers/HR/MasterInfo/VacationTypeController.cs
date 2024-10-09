@@ -19,13 +19,20 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchVacationTypeName)
     {
 
-      var VacationTypees = await _appDBContext.Settings_VacationTypes
-        .Where(b => b.DeleteYNID != 1)
-        .ToListAsync();
-      return View("~/Views/HR/MasterInfo/VacationType/VacationType.cshtml", VacationTypees);
+      var VacationTypesQuery = _appDBContext.Settings_VacationTypes
+          .Where(b => b.DeleteYNID != 1);
+
+      if (!string.IsNullOrEmpty(searchVacationTypeName))
+      {
+        VacationTypesQuery = VacationTypesQuery.Where(b => b.VacationTypeName.Contains(searchVacationTypeName));
+      }
+
+      var VacationTypes = await VacationTypesQuery.ToListAsync();
+
+      return View("~/Views/HR/MasterInfo/VacationType/VacationType.cshtml", VacationTypes);
     }
     public async Task<IActionResult> VacationType()
     {
@@ -81,7 +88,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         return NotFound();
       }
 
-      VacationType.ActiveYNID = 0;
+      VacationType.ActiveYNID = 2;
       VacationType.DeleteYNID = 1;
 
       _appDBContext.Settings_VacationTypes.Update(VacationType);

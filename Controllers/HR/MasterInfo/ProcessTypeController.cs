@@ -19,14 +19,22 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchProcessTypeName)
     {
 
-      var ProcessTypees = await _appDBContext.Settings_ProcessTypes
-        .Where(b => b.DeleteYNID != 1)
-        .ToListAsync();
-      return View("~/Views/HR/MasterInfo/ProcessType/ProcessType.cshtml", ProcessTypees);
+      var ProcessTypesQuery = _appDBContext.Settings_ProcessTypes
+          .Where(b => b.DeleteYNID != 1);
+
+      if (!string.IsNullOrEmpty(searchProcessTypeName))
+      {
+        ProcessTypesQuery = ProcessTypesQuery.Where(b => b.ProcessTypeName.Contains(searchProcessTypeName));
+      }
+
+      var ProcessTypes = await ProcessTypesQuery.ToListAsync();
+
+      return View("~/Views/HR/MasterInfo/ProcessType/ProcessType.cshtml", ProcessTypes);
     }
+   
     public async Task<IActionResult> ProcessType()
     {
       var ProcessTypes = await _appDBContext.Settings_ProcessTypes.ToListAsync();

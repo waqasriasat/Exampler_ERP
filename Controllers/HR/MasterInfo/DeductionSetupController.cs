@@ -20,12 +20,18 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchDeductionTypeName)
     {
-      var classIDList = await _utils.GetClassIDList();
-      var deductionTypes = await _appDBContext.Settings_DeductionTypes.ToListAsync();
-      var deductionSetups = await _appDBContext.HR_DeductionSetups.ToListAsync();
+      // Query for Deduction Types with optional search filter
+      var deductionTypesQuery = _appDBContext.Settings_DeductionTypes.AsQueryable();
+      if (!string.IsNullOrEmpty(searchDeductionTypeName))
+      {
+        deductionTypesQuery = deductionTypesQuery
+            .Where(dt => dt.DeductionTypeName.Contains(searchDeductionTypeName));
+      }
 
+      var deductionTypes = await deductionTypesQuery.ToListAsync();
+      var deductionSetups = await _appDBContext.HR_DeductionSetups.ToListAsync();
       var viewModel = new DeductionSetupListViewModel
       {
         DeductionTypeWithRowCount = deductionTypes.Select(dt => new DeductionTypeWithRowCountViewModel
@@ -42,6 +48,29 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       return View("~/Views/HR/MasterInfo/DeductionSetup/DeductionSetup.cshtml", viewModel);
     }
+
+    //public async Task<IActionResult> Index()
+    //{
+    //  var classIDList = await _utils.GetClassIDList();
+    //  var deductionTypes = await _appDBContext.Settings_DeductionTypes.ToListAsync();
+    //  var deductionSetups = await _appDBContext.HR_DeductionSetups.ToListAsync();
+
+    //  var viewModel = new DeductionSetupListViewModel
+    //  {
+    //    DeductionTypeWithRowCount = deductionTypes.Select(dt => new DeductionTypeWithRowCountViewModel
+    //    {
+    //      DeductionTypeID = dt.DeductionTypeID,
+    //      DeductionTypeName = dt.DeductionTypeName,
+    //      Class = deductionSetups.Where(ds => ds.DeductionTypeID == dt.DeductionTypeID)
+    //                               .Select(ds => ds.ClassID)
+    //                               .Distinct()
+    //                               .FirstOrDefault(),
+    //      RowCount = deductionSetups.Count(ds => ds.DeductionTypeID == dt.DeductionTypeID)
+    //    }).ToList()
+    //  };
+
+    //  return View("~/Views/HR/MasterInfo/DeductionSetup/DeductionSetup.cshtml", viewModel);
+    //}
 
     public async Task<IActionResult> DeductionSetup()
     {

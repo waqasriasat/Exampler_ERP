@@ -92,7 +92,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         return NotFound();
       }
 
-      Qualification.ActiveYNID = 0;
+      Qualification.ActiveYNID = 2;
       Qualification.DeleteYNID = 1;
 
       _appDBContext.Settings_QualificationTypes.Update(Qualification);

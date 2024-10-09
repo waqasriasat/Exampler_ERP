@@ -18,14 +18,22 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchAddionalAllowanceTypeName)
     {
 
-      var AddionalAllowanceTypees = await _appDBContext.Settings_AddionalAllowanceTypes
-        .Where(b => b.DeleteYNID != 1)
-        .ToListAsync();
-      return View("~/Views/HR/MasterInfo/AddionalAllowanceType/AddionalAllowanceType.cshtml", AddionalAllowanceTypees);
+      var AddionalAllowanceTypesQuery = _appDBContext.Settings_AddionalAllowanceTypes
+          .Where(b => b.DeleteYNID != 1);
+
+      if (!string.IsNullOrEmpty(searchAddionalAllowanceTypeName))
+      {
+        AddionalAllowanceTypesQuery = AddionalAllowanceTypesQuery.Where(b => b.AddionalAllowanceTypeName.Contains(searchAddionalAllowanceTypeName));
+      }
+
+      var AddionalAllowanceTypes = await AddionalAllowanceTypesQuery.ToListAsync();
+
+      return View("~/Views/HR/MasterInfo/AddionalAllowanceType/AddionalAllowanceType.cshtml", AddionalAllowanceTypes);
     }
+  
     public async Task<IActionResult> AddionalAllowanceType()
     {
       var AddionalAllowanceTypes = await _appDBContext.Settings_AddionalAllowanceTypes.ToListAsync();
@@ -80,7 +88,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         return NotFound();
       }
 
-      AddionalAllowanceType.ActiveYNID = 0;
+      AddionalAllowanceType.ActiveYNID = 2;
       AddionalAllowanceType.DeleteYNID = 1;
 
       _appDBContext.Settings_AddionalAllowanceTypes.Update(AddionalAllowanceType);

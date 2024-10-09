@@ -1,7 +1,7 @@
 @model IEnumerable<Exampler_ERP.Models.Settings_RoleType>
 
 @{
-    ViewData["Title"] = "Master Information - Role";
+    ViewData["Title"] = "Master Information - Role Type";
 }
 
 @section PageScripts {
@@ -87,12 +87,44 @@
             var printWindow = window.open('@Url.Action("Print", "Role")', '_blank');
             printWindow.focus();
         }
+
+        $('#searchRoleTypeButton').click(function () {
+            var searchValue = $('#searchRoleTypeInput').val();
+            window.location.href = '@Url.Action("Index", "Role")?searchRoleTypeName=' + searchValue;
+        });
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Master Information /</span> Role
+    <span class="text-muted fw-light">Master Information /</span> Role Type
 </h4>
+<div class="row">
+    <div class="col-md-12">
 
+        <div class="card">
+            <h5 class="card-header">Searhing Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search RoleType name" id="searchRoleTypeInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchRoleTypeButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <!-- Action Buttons -->
+                        <button type="button" class="btn btn-primary addRoleLink">Add New</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Role")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printRoles()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -102,14 +134,21 @@
                     <div class="row">
                        <div class="col-10 col-md-10 col-lg-10">
                             <div class="row">
-                                <div class="col-2">
-                                    <p class="text-nowrap">Role ID</p>
-                                </div>
                                 <div class="col-8">
                                     <p class="text-nowrap">Role Name</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Active</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-nowrap">Edit</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">Delete</p>
                                 </div>
                             </div>
                         </div>
@@ -121,9 +160,6 @@
                         <div class="row">
                             <div class="col-10 col-md-10 col-lg-10">
                                 <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Role ID : </span>@Html.DisplayFor(modelItem => item.RoleTypeID)</p>
-                                    </div>
                                     <div class="col-12 col-md-12 col-lg-8">
                                         <p class="text-nowrap"><span class="smallAdd">Role Name : </span>@Html.DisplayFor(modelItem => item.RoleTypeName)</p>
                                     </div>
@@ -134,7 +170,7 @@
                                             {
                                                 <span>Yes</span>
                                             }
-                                            else if (item.ActiveYNID == 0)
+                                            else if (item.ActiveYNID == 2)
                                             {
                                                 <span>No</span>
                                             }
@@ -164,15 +200,7 @@
                     </div>
                 }
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="mt-4">
-                        <button type="button" class="btn btn-primary addRoleLink">Add New</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Role")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printRoles()">Print</button>
-                    </div>
-                </div>
-            </div>
+           
         </div>
     </div>
 </div>

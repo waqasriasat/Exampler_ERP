@@ -19,13 +19,20 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchSalaryTypeName)
     {
 
-      var SalaryTypees = await _appDBContext.Settings_SalaryTypes
-        .Where(b => b.DeleteYNID != 1)
-        .ToListAsync();
-      return View("~/Views/HR/MasterInfo/SalaryType/SalaryType.cshtml", SalaryTypees);
+      var SalaryTypesQuery = _appDBContext.Settings_SalaryTypes
+          .Where(b => b.DeleteYNID != 1);
+
+      if (!string.IsNullOrEmpty(searchSalaryTypeName))
+      {
+        SalaryTypesQuery = SalaryTypesQuery.Where(b => b.SalaryTypeName.Contains(searchSalaryTypeName));
+      }
+
+      var SalaryTypes = await SalaryTypesQuery.ToListAsync();
+
+      return View("~/Views/HR/MasterInfo/SalaryType/SalaryType.cshtml", SalaryTypes);
     }
     public async Task<IActionResult> SalaryType()
     {
@@ -81,7 +88,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         return NotFound();
       }
 
-      SalaryType.ActiveYNID = 0;
+      SalaryType.ActiveYNID = 2;
       SalaryType.DeleteYNID = 1;
 
       _appDBContext.Settings_SalaryTypes.Update(SalaryType);

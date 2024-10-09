@@ -17,8 +17,8 @@
                         <div class="col-2 col-md-12 col-lg-12">
                             <div class="row">
                                 <div class="col-12 col-md-12 col-lg-12">
-                                    <label for="OverTimeRateName" class="form-label fw-bold">OverTimeRate Name</label>
-                                    <input type="text" class="form-control form-control-lg" id="OverTimeRateName" name="OverTimeRateName" value="@Model.OverTimeRateValue" />
+                                    <label for="OverTimeRateValue" class="form-label fw-bold">OverTimeRate Value</label>
+                                    <input type="text" class="form-control form-control-lg" id="OverTimeRateValue" name="OverTimeRateValue" value="@Model.OverTimeRateValue" />
                                 </div>
                                 <div class="col-12 col-md-6 col-lg-6">
                                     <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
@@ -30,7 +30,7 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" id="OverTimeRateID" name="OverTimeRateID" value="@Model.OverTimeRateTypeID" />
+                    <input type="hidden" id="OverTimeRateTypeID" name="OverTimeRateTypeID" value="@Model.OverTimeRateTypeID" />
                 </form>
             </div>
             <div class="modal-footer">

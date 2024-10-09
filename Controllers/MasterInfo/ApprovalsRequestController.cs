@@ -280,7 +280,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
             if (contractToUpdate != null)
             {
-              contractToUpdate.ActiveYNID = 0;
+              contractToUpdate.ActiveYNID = 2;
               _appDBContext.SaveChanges();
             }
 
@@ -290,7 +290,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             if (employee != null)
             {
               employee.EmployeeStatusTypeID = 5; // End of Service status
-              employee.ActiveYNID = 0; // Deactivate employee
+              employee.ActiveYNID = 2; // Deactivate employee
             }
             await _appDBContext.SaveChangesAsync();
           }
@@ -448,7 +448,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
             if (user != null)
             {
-              user.ActiveYNID = 0;
+              user.ActiveYNID = 2;
               user.FinalApprovalID = 2;
               user.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
 
@@ -464,7 +464,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
           if (employee != null)
           {
-            employee.ActiveYNID = 0;
+            employee.ActiveYNID = 2;
             employee.FinalApprovalID = 2;
             employee.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
 
@@ -480,7 +480,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
           if (contract != null)
           {
-            contract.ActiveYNID = 0;
+            contract.ActiveYNID = 2;
             contract.FinalApprovalID = 2;
             contract.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
 

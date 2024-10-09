@@ -19,14 +19,22 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchDeductionTypeName)
     {
 
-      var DeductionTypees = await _appDBContext.Settings_DeductionTypes
-        .Where(b => b.DeleteYNID != 1)
-        .ToListAsync();
-      return View("~/Views/HR/MasterInfo/DeductionType/DeductionType.cshtml", DeductionTypees);
+      var DeductionTypesQuery = _appDBContext.Settings_DeductionTypes
+          .Where(b => b.DeleteYNID != 1);
+
+      if (!string.IsNullOrEmpty(searchDeductionTypeName))
+      {
+        DeductionTypesQuery = DeductionTypesQuery.Where(b => b.DeductionTypeName.Contains(searchDeductionTypeName));
+      }
+
+      var DeductionTypes = await DeductionTypesQuery.ToListAsync();
+
+      return View("~/Views/HR/MasterInfo/DeductionType/DeductionType.cshtml", DeductionTypes);
     }
+  
     public async Task<IActionResult> DeductionType()
     {
       var DeductionTypes = await _appDBContext.Settings_DeductionTypes.ToListAsync();
@@ -81,7 +89,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         return NotFound();
       }
 
-      DeductionType.ActiveYNID = 0;
+      DeductionType.ActiveYNID = 2;
       DeductionType.DeleteYNID = 1;
 
       _appDBContext.Settings_DeductionTypes.Update(DeductionType);

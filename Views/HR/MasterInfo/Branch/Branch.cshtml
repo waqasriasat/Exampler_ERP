@@ -87,6 +87,10 @@
             var printWindow = window.open('@Url.Action("Print", "Branch")', '_blank');
             printWindow.focus();
         }
+        $('#searchBranchButton').click(function () {
+            var searchValue = $('#searchBranchInput').val();
+            window.location.href = '@Url.Action("Index", "Branch")?searchBranchName=' + searchValue;
+        });
     </script>
 }
 <h4 class="py-3 mb-4">
@@ -165,7 +169,7 @@
                                             {
                                                 <span>Yes</span>
                                             }
-                                            else if (item.ActiveYNID == 0)
+                                            else if (item.ActiveYNID == 2)
                                             {
                                                 <span>No</span>
                                             }
@@ -205,9 +209,6 @@
 <div id="addBranchModalContainer"></div>
 
 <script>
-    $('#searchBranchButton').click(function () {
-        var searchValue = $('#searchBranchInput').val();
-        window.location.href = '@Url.Action("Index", "Branch")?searchBranchName=' + searchValue;
-    });
+   
 
 </script>

@@ -18,14 +18,23 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchOverTimeRateName)
     {
 
-      var OvertimeRatees = await _appDBContext.Settings_OverTimeRates
-        .Where(b => b.DeleteYNID != 1)
-        .ToListAsync();
-      return View("~/Views/HR/MasterInfo/OvertimeRate/OvertimeRate.cshtml", OvertimeRatees);
+      var OverTimeRatesQuery = _appDBContext.Settings_OverTimeRates
+          .Where(b => b.DeleteYNID != 1);
+
+      if (float.TryParse(searchOverTimeRateName, out float searchValue))
+      {
+        OverTimeRatesQuery = OverTimeRatesQuery.Where(b => b.OverTimeRateValue == searchValue);
+      }
+
+
+      var OverTimeRates = await OverTimeRatesQuery.ToListAsync();
+
+      return View("~/Views/HR/MasterInfo/OverTimeRate/OverTimeRate.cshtml", OverTimeRates);
     }
+  
     public async Task<IActionResult> OvertimeRate()
     {
       var OvertimeRates = await _appDBContext.Settings_OverTimeRates.ToListAsync();
@@ -80,7 +89,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         return NotFound();
       }
 
-      OvertimeRate.ActiveYNID = 0;
+      OvertimeRate.ActiveYNID = 2;
       OvertimeRate.DeleteYNID = 1;
 
       _appDBContext.Settings_OverTimeRates.Update(OvertimeRate);

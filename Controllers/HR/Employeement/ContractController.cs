@@ -83,7 +83,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       if (ModelState.IsValid)
       {
         contract.DeleteYNID = 0;
-        contract.ActiveYNID = 0;
+        contract.ActiveYNID = 2;
         if(contract.ContractID == 2)
         {
           contract.EndDate = null;
@@ -161,7 +161,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         return NotFound();
       }
 
-      contract.ActiveYNID = 0;
+      contract.ActiveYNID = 2;
       contract.DeleteYNID = 1;
 
       _appDBContext.HR_Contracts.Update(contract);

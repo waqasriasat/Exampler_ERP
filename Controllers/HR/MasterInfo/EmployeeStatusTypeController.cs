@@ -19,14 +19,22 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchEmployeeStatusTypeName)
     {
 
-      var EmployeeStatusTypees = await _appDBContext.Settings_EmployeeStatusTypes
-        .Where(b => b.DeleteYNID != 1)
-        .ToListAsync();
-      return View("~/Views/HR/MasterInfo/EmployeeStatusType/EmployeeStatusType.cshtml", EmployeeStatusTypees);
+      var EmployeeStatusTypesQuery = _appDBContext.Settings_EmployeeStatusTypes
+          .Where(b => b.DeleteYNID != 1);
+
+      if (!string.IsNullOrEmpty(searchEmployeeStatusTypeName))
+      {
+        EmployeeStatusTypesQuery = EmployeeStatusTypesQuery.Where(b => b.EmployeeStatusTypeName.Contains(searchEmployeeStatusTypeName));
+      }
+
+      var EmployeeStatusTypes = await EmployeeStatusTypesQuery.ToListAsync();
+
+      return View("~/Views/HR/MasterInfo/EmployeeStatusType/EmployeeStatusType.cshtml", EmployeeStatusTypes);
     }
+ 
     public async Task<IActionResult> EmployeeStatusType()
     {
       var EmployeeStatusTypes = await _appDBContext.Settings_EmployeeStatusTypes.ToListAsync();
@@ -81,7 +89,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         return NotFound();
       }
 
-      EmployeeStatusType.ActiveYNID = 0;
+      EmployeeStatusType.ActiveYNID = 2;
       EmployeeStatusType.DeleteYNID = 1;
 
       _appDBContext.Settings_EmployeeStatusTypes.Update(EmployeeStatusType);

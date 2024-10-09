@@ -105,7 +105,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         employee.UserName = CR_CipherKey.Encrypt(employee.UserName);
         employee.Password = CR_CipherKey.Encrypt(employee.Password);
         employee.DeleteYNID = 0;
-        employee.ActiveYNID = 0;
+        employee.ActiveYNID = 2;
         _appDBContext.HR_Employees.Add(employee);
         await _appDBContext.SaveChangesAsync();
 
@@ -178,7 +178,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         return NotFound();
       }
 
-      employee.ActiveYNID = 0;
+      employee.ActiveYNID = 2;
       employee.DeleteYNID = 1;
 
       _appDBContext.HR_Employees.Update(employee);

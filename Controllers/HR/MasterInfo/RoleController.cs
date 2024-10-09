@@ -19,19 +19,22 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchRoleTypeName)
     {
 
-      var Rolees = await _appDBContext.Settings_RoleTypes
-        .Where(b => b.DeleteYNID != 1)
-        .ToListAsync();
-      return View("~/Views/HR/MasterInfo/Role/Role.cshtml", Rolees);
+      var RoleTypesQuery = _appDBContext.Settings_RoleTypes
+          .Where(b => b.DeleteYNID != 1);
+
+      if (!string.IsNullOrEmpty(searchRoleTypeName))
+      {
+        RoleTypesQuery = RoleTypesQuery.Where(b => b.RoleTypeName.Contains(searchRoleTypeName));
+      }
+
+      var RoleTypes = await RoleTypesQuery.ToListAsync();
+
+      return View("~/Views/HR/MasterInfo/Role/Role.cshtml", RoleTypes);
     }
-    public async Task<IActionResult> Role()
-    {
-      var Roles = await _appDBContext.Settings_RoleTypes.ToListAsync();
-      return Ok(Roles);
-    }// Add the Edit action
+   
     public async Task<IActionResult> Edit(int id)
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
@@ -81,7 +84,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         return NotFound();
       }
 
-      Role.ActiveYNID = 0;
+      Role.ActiveYNID = 2;
       Role.DeleteYNID = 1;
 
       _appDBContext.Settings_RoleTypes.Update(Role);

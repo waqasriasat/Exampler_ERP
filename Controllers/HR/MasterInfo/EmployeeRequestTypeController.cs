@@ -7,130 +7,138 @@ using OfficeOpenXml;
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
 
-     public class EmployeeRequestTypeController : Controller
+  public class EmployeeRequestTypeController : Controller
+  {
+    private readonly AppDBContext _appDBContext;
+    private readonly IConfiguration _configuration;
+    private readonly Utils _utils;
+
+    public EmployeeRequestTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
     {
-      private readonly AppDBContext _appDBContext;
-      private readonly IConfiguration _configuration;
-      private readonly Utils _utils;
+      _appDBContext = appDBContext;
+      _configuration = configuration;
+      _utils = utils;
+    }
+    public async Task<IActionResult> Index(string searchEmployeeRequestTypeName)
+    {
 
-      public EmployeeRequestTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
-      {
-        _appDBContext = appDBContext;
-        _configuration = configuration;
-        _utils = utils;
-      }
-      public async Task<IActionResult> Index()
-      {
+      var EmployeeRequestTypesQuery = _appDBContext.Settings_EmployeeRequestTypes
+          .Where(b => b.DeleteYNID != 1);
 
-        var EmployeeRequestTypees = await _appDBContext.Settings_EmployeeRequestTypes
-          .Where(b => b.DeleteYNID != 1)
-          .ToListAsync();
-        return View("~/Views/HR/MasterInfo/EmployeeRequestType/EmployeeRequestType.cshtml", EmployeeRequestTypees);
-      }
-      public async Task<IActionResult> EmployeeRequestType()
+      if (!string.IsNullOrEmpty(searchEmployeeRequestTypeName))
       {
-        var EmployeeRequestTypes = await _appDBContext.Settings_EmployeeRequestTypes.ToListAsync();
-        return Ok(EmployeeRequestTypes);
-      }// Add the Edit action
-      public async Task<IActionResult> Edit(int id)
-      {
-        ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-        var EmployeeRequestType = await _appDBContext.Settings_EmployeeRequestTypes.FindAsync(id);
-        if (EmployeeRequestType == null)
-        {
-          return NotFound();
-        }
-        return PartialView("~/Views/HR/MasterInfo/EmployeeRequestType/EditEmployeeRequestType.cshtml", EmployeeRequestType);
+        EmployeeRequestTypesQuery = EmployeeRequestTypesQuery.Where(b => b.EmployeeRequestTypeName.Contains(searchEmployeeRequestTypeName));
       }
 
-      [HttpPost]
-      public async Task<IActionResult> Edit(Settings_EmployeeRequestType EmployeeRequestType)
-      {
-        if (ModelState.IsValid)
-        {
-          _appDBContext.Update(EmployeeRequestType);
-          await _appDBContext.SaveChangesAsync();
-          return Json(new { success = true });
-        }
-        return PartialView("~/Views/HR/MasterInfo/EmployeeRequestType/EditEmployeeRequestType.cshtml", EmployeeRequestType);
-      }
-      [HttpGet]
-      public async Task<IActionResult> Create()
-      {
-        ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-        return PartialView("~/Views/HR/MasterInfo/EmployeeRequestType/AddEmployeeRequestType.cshtml", new Settings_EmployeeRequestType());
-      }
+      var EmployeeRequestTypes = await EmployeeRequestTypesQuery.ToListAsync();
 
-      [HttpPost]
-      public async Task<IActionResult> Create(Settings_EmployeeRequestType EmployeeRequestType)
+      return View("~/Views/HR/MasterInfo/EmployeeRequestType/EmployeeRequestType.cshtml", EmployeeRequestTypes);
+    }
+
+    public async Task<IActionResult> EmployeeRequestType()
+    {
+      var EmployeeRequestTypes = await _appDBContext.Settings_EmployeeRequestTypes.ToListAsync();
+      return Ok(EmployeeRequestTypes);
+    }// Add the Edit action
+    public async Task<IActionResult> Edit(int id)
+    {
+      ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
+      var EmployeeRequestType = await _appDBContext.Settings_EmployeeRequestTypes.FindAsync(id);
+      if (EmployeeRequestType == null)
       {
-        if (ModelState.IsValid)
-        {
-          EmployeeRequestType.DeleteYNID = 0;
-          _appDBContext.Settings_EmployeeRequestTypes.Add(EmployeeRequestType);
-          await _appDBContext.SaveChangesAsync();
-          return Json(new { success = true });
-        }
-        return PartialView("~/Views/HR/MasterInfo/EmployeeRequestType/AddEmployeeRequestType.cshtml", EmployeeRequestType);
+        return NotFound();
       }
-      public async Task<IActionResult> Delete(int id)
+      return PartialView("~/Views/HR/MasterInfo/EmployeeRequestType/EditEmployeeRequestType.cshtml", EmployeeRequestType);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(Settings_EmployeeRequestType EmployeeRequestType)
+    {
+      if (ModelState.IsValid)
       {
-        var EmployeeRequestType = await _appDBContext.Settings_EmployeeRequestTypes.FindAsync(id);
-        if (EmployeeRequestType == null)
-        {
-          return NotFound();
-        }
-
-        EmployeeRequestType.ActiveYNID = 0;
-        EmployeeRequestType.DeleteYNID = 1;
-
-        _appDBContext.Settings_EmployeeRequestTypes.Update(EmployeeRequestType);
+        _appDBContext.Update(EmployeeRequestType);
         await _appDBContext.SaveChangesAsync();
-
         return Json(new { success = true });
       }
-      public async Task<IActionResult> ExportToExcel()
-      {
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
-        var EmployeeRequestTypees = await _appDBContext.Settings_EmployeeRequestTypes
-            .Where(b => b.DeleteYNID != 1)
-            .ToListAsync();
-
-        using (var package = new ExcelPackage())
-        {
-          var worksheet = package.Workbook.Worksheets.Add("EmployeeRequestTypees");
-          worksheet.Cells["A1"].Value = "EmployeeRequestType ID";
-          worksheet.Cells["B1"].Value = "EmployeeRequestType Name";
-          worksheet.Cells["C1"].Value = "Active";
-
-
-          for (int i = 0; i < EmployeeRequestTypees.Count; i++)
-          {
-            worksheet.Cells[i + 2, 1].Value = EmployeeRequestTypees[i].EmployeeRequestTypeID;
-            worksheet.Cells[i + 2, 2].Value = EmployeeRequestTypees[i].EmployeeRequestTypeName;
-            worksheet.Cells[i + 2, 3].Value = EmployeeRequestTypees[i].ActiveYNID == 1 ? "Yes" : "No";
-          }
-
-          worksheet.Cells["A1:C1"].Style.Font.Bold = true;
-          worksheet.Cells.AutoFitColumns();
-
-          var stream = new MemoryStream();
-          package.SaveAs(stream);
-          stream.Position = 0;
-          string excelName = $"EmployeeRequestTypees-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
-
-          return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
-        }
-      }
-      public async Task<IActionResult> Print()
-      {
-        var EmployeeRequestTypees = await _appDBContext.Settings_EmployeeRequestTypes
-            .Where(b => b.DeleteYNID != 1)
-            .ToListAsync();
-        return View("~/Views/HR/MasterInfo/EmployeeRequestType/PrintEmployeeRequestTypes.cshtml", EmployeeRequestTypees);
-      }
-
+      return PartialView("~/Views/HR/MasterInfo/EmployeeRequestType/EditEmployeeRequestType.cshtml", EmployeeRequestType);
     }
+    [HttpGet]
+    public async Task<IActionResult> Create()
+    {
+      ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
+      return PartialView("~/Views/HR/MasterInfo/EmployeeRequestType/AddEmployeeRequestType.cshtml", new Settings_EmployeeRequestType());
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(Settings_EmployeeRequestType EmployeeRequestType)
+    {
+      if (ModelState.IsValid)
+      {
+        EmployeeRequestType.DeleteYNID = 0;
+        _appDBContext.Settings_EmployeeRequestTypes.Add(EmployeeRequestType);
+        await _appDBContext.SaveChangesAsync();
+        return Json(new { success = true });
+      }
+      return PartialView("~/Views/HR/MasterInfo/EmployeeRequestType/AddEmployeeRequestType.cshtml", EmployeeRequestType);
+    }
+    public async Task<IActionResult> Delete(int id)
+    {
+      var EmployeeRequestType = await _appDBContext.Settings_EmployeeRequestTypes.FindAsync(id);
+      if (EmployeeRequestType == null)
+      {
+        return NotFound();
+      }
+
+      EmployeeRequestType.ActiveYNID = 2;
+      EmployeeRequestType.DeleteYNID = 1;
+
+      _appDBContext.Settings_EmployeeRequestTypes.Update(EmployeeRequestType);
+      await _appDBContext.SaveChangesAsync();
+
+      return Json(new { success = true });
+    }
+    public async Task<IActionResult> ExportToExcel()
+    {
+      ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+      var EmployeeRequestTypees = await _appDBContext.Settings_EmployeeRequestTypes
+          .Where(b => b.DeleteYNID != 1)
+          .ToListAsync();
+
+      using (var package = new ExcelPackage())
+      {
+        var worksheet = package.Workbook.Worksheets.Add("EmployeeRequestTypees");
+        worksheet.Cells["A1"].Value = "EmployeeRequestType ID";
+        worksheet.Cells["B1"].Value = "EmployeeRequestType Name";
+        worksheet.Cells["C1"].Value = "Active";
+
+
+        for (int i = 0; i < EmployeeRequestTypees.Count; i++)
+        {
+          worksheet.Cells[i + 2, 1].Value = EmployeeRequestTypees[i].EmployeeRequestTypeID;
+          worksheet.Cells[i + 2, 2].Value = EmployeeRequestTypees[i].EmployeeRequestTypeName;
+          worksheet.Cells[i + 2, 3].Value = EmployeeRequestTypees[i].ActiveYNID == 1 ? "Yes" : "No";
+        }
+
+        worksheet.Cells["A1:C1"].Style.Font.Bold = true;
+        worksheet.Cells.AutoFitColumns();
+
+        var stream = new MemoryStream();
+        package.SaveAs(stream);
+        stream.Position = 0;
+        string excelName = $"EmployeeRequestTypees-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+
+        return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+      }
+    }
+    public async Task<IActionResult> Print()
+    {
+      var EmployeeRequestTypees = await _appDBContext.Settings_EmployeeRequestTypes
+          .Where(b => b.DeleteYNID != 1)
+          .ToListAsync();
+      return View("~/Views/HR/MasterInfo/EmployeeRequestType/PrintEmployeeRequestTypes.cshtml", EmployeeRequestTypees);
+    }
+
+  }
 
 }

@@ -102,7 +102,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         return NotFound();
       }
 
-      branch.ActiveYNID = 0;
+      branch.ActiveYNID = 2;
       branch.DeleteYNID = 1;
 
       _appDBContext.Settings_BranchTypes.Update(branch);

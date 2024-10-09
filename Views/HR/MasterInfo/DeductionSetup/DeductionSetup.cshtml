@@ -60,12 +60,42 @@
             var printWindow = window.open('@Url.Action("Print", "DeductionSetup")', '_blank');
             printWindow.focus();
         }
+        $('#searchDeductionTypeButton').click(function () {
+            var searchValue = $('#searchDeductionTypeInput').val();
+            window.location.href = '@Url.Action("Index", "DeductionSetup")?searchDeductionTypeName=' + searchValue;
+        });
     </script>
 }
 <h4 class="py-3 mb-4">
     <span class="text-muted fw-light">Master Information /</span> DeductionSetup
 </h4>
+<div class="row">
+    <div class="col-md-12">
 
+        <div class="card">
+            <h5 class="card-header">Searhing Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search DeductionType name" id="searchDeductionTypeInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchDeductionTypeButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <!-- Action Buttons -->
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "DeductionSetup")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printDeductionSetups()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -78,11 +108,21 @@
                                 <div class="col-6">
                                     <p class="text-nowrap">DeductionType Name</p>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-2">
                                     <p class="text-nowrap">Class</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Total</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-nowrap">Edit</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">Delete</p>
                                 </div>
                             </div>
                         </div>
@@ -97,7 +137,7 @@
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <p class="text-nowrap"><span class="smallAdd">DeductionType Name : </span>@Html.DisplayFor(modelItem => item.DeductionTypeName)</p>
                                     </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
+                                    <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap">
                                             <span class="smallAdd">Class : </span>
                                             @if (item.Class == 1)
@@ -136,14 +176,6 @@
                         </div>
                     </div>
                 }
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="mt-4">
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "DeductionSetup")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printDeductionSetups()">Print</button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

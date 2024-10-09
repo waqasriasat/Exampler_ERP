@@ -1,4 +1,37 @@
-@model Exampler_ERP.Models.Temp.ProcessTypeForwardViewModel
+@model List<Exampler_ERP.Models.CR_ProcessTypeForward>
+<script>
+    $(document).ready(function () {
+        console.log('Document is ready.');
+
+        // Function to update hidden fields based on checkboxes
+        function updateHiddenFields() {
+            $('#hiddenFieldsContainer').empty(); // Clear existing hidden fields
+
+            var processtypeid = $('#processTypeId').val(); // Get the ProcessTypeID value
+            var checkedRoles = $('.role-checkbox:checked');
+            checkedRoles.each(function (index) {
+                var roleTypeId = $(this).val();
+
+                $('#hiddenFieldsContainer').append(
+                    `<div class="row">
+                            <input type="hidden" name="ProcessTypeForwards[${index}].ProcessTypeID" value="${processtypeid}" id="hidden_ProcessTypeID_${roleTypeId}" />
+                                <input type="hidden" name="ProcessTypeForwards[${index}].RoleTypeID" value="${roleTypeId}" id="hidden_RoleTypeID_${roleTypeId}" />
+                        </div>`
+                );
+            });
+        }
+
+        // Event handler for role checkbox change
+        $(document).on('change', '.role-checkbox', function () {
+            // Update hidden fields after checkbox change
+            updateHiddenFields();
+        });
+
+        // Initial call to update hidden fields on page load
+        updateHiddenFields();
+    });
+</script>
+
 
 <div class="modal fade" id="editProcessTypeForwardModal" tabindex="-1" role="dialog" aria-labelledby="editProcessTypeForwardModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -13,27 +46,34 @@
             </div>
             <div class="modal-body">
                 <form id="editProcessTypeForwardForm">
-                    <input type="hidden" asp-for="ProcessTypeID" />
-                    <div class="form-group">
-                        <label for="ProcessTypeID" class="form-label fw-bold">ProcessType</label>
-                        <select asp-for="ProcessTypeID" asp-items="@(new SelectList(ViewBag.ProcessTypes, "ProcessTypeID", "ProcessTypeName"))" class="form-control form-control-lg" disabled></select>
+                    <div class="row">
+                        <div class="col-12 mb-2">
+                            <div class="form-group">
+                                <label for="processTypeName" class="form-label fw-bold">ProcessType Name</label>
+                                <input type="text" class="form-control form-control-lg" id="processTypeName" value="@Model.FirstOrDefault()?.ProcessType?.ProcessTypeName" disabled />
+                                <input type="hidden" id="processTypeId" value="@Model.FirstOrDefault()?.ProcessTypeID" />
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="form-group">
-                        <label>Roles</label>
-                        @foreach (var role in ViewBag.Roles)
+                    <div class="row role-container">
+                        <div class="col-12">
+                            @foreach (var role in (IEnumerable<dynamic>)ViewBag.RoleList)
+                            {
+                                <div class="form-check">
+                                    <input class="form-check-input role-checkbox" type="checkbox" name="RoleTypeIDs" value="@role.Value" id="role_@role.Value" @(Model.Any(m => m.RoleTypeID == role.Value) ? "checked" : "") />
+                                    <label class="form-control form-check-label" for="role_@role.Value">@role.Text</label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div id="hiddenFieldsContainer">
+                        @for (var i = 0; i < Model.Count; i++)
                         {
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="SelectedRoleIds" value="@role.RoleID" @(Model.SelectedRoleIds.Contains(role.RoleID) ? "checked" : "") />
-                                <label class="form-check-label">@role.RoleName</label>
+                            <div class="row">
+                                <input style="width:100px" type="hidden" name="ProcessTypeApprovalSetups[@i].ProcessTypeID" value="@Model[i].ProcessTypeID" id="hidden_ProcessTypeID_@Model[i].ProcessTypeID" />
+                                <input style="width:100px" type="hidden" name="ProcessTypeApprovalSetups[@i].RoleTypeID" value="@Model[i].RoleTypeID" id="hidden_RoleTypeID_@Model[i].RoleTypeID" />
                             </div>
                         }
-                    </div>
-
-                    
-
-                    <div>
-                        <span asp-validation-summary="ModelOnly"></span>
                     </div>
                 </form>
             </div>

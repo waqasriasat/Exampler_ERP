@@ -19,24 +19,34 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchUserName)
     {
-      var users = await _appDBContext.CR_Users
+      var usersQuery = _appDBContext.CR_Users
           .Where(b => b.DeleteYNID != 1)
-          .Include(d => d.RoleType)
-          .ToListAsync();
+          .Include(d => d.RoleType);
+
+      var users = await usersQuery.ToListAsync();
 
       var decryptedUsers = users.Select(user => new CR_User
       {
         UserID = user.UserID,
-        UserName = CR_CipherKey.Decrypt(user.UserName),
+        UserName = CR_CipherKey.Decrypt(user.UserName), // Decrypt the UserName
         ActiveYNID = user.ActiveYNID,
         RoleTypeID = user.RoleTypeID,
-        RoleType = user.RoleType // Include the role information
+        RoleType = user.RoleType // Preserve RoleType information
       }).ToList();
+
+      if (!string.IsNullOrEmpty(searchUserName))
+      {
+        decryptedUsers = decryptedUsers
+            .Where(user => user.UserName.Contains(searchUserName))
+            .ToList();
+      }
 
       return View("~/Views/HR/MasterInfo/User/User.cshtml", decryptedUsers);
     }
+
+
 
     public async Task<IActionResult> Edit(int id)
     {
@@ -98,7 +108,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         User.UserName = CR_CipherKey.Encrypt(User.UserName);
         User.Password = CR_CipherKey.Encrypt(User.Password);
 
-        User.ActiveYNID = 0;
+        User.ActiveYNID = 2;
         User.DeleteYNID = 0;
 
         _appDBContext.CR_Users.Add(User);
@@ -174,7 +184,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         return NotFound();
       }
 
-      User.ActiveYNID = 0;
+      User.ActiveYNID = 2;
       User.DeleteYNID = 1;
 
       _appDBContext.CR_Users.Update(User);

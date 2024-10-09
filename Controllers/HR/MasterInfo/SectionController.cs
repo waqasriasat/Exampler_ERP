@@ -95,7 +95,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         return NotFound();
       }
 
-      Section.ActiveYNID = 0;
+      Section.ActiveYNID = 2;
       Section.DeleteYNID = 1;
 
       _appDBContext.Settings_SectionTypes.Update(Section);

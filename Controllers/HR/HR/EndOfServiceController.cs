@@ -144,7 +144,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
             if (contractToUpdate != null)
             {
-              contractToUpdate.ActiveYNID = 0;
+              contractToUpdate.ActiveYNID = 2;
               _appDBContext.SaveChanges();
             }
 
@@ -154,7 +154,7 @@ namespace Exampler_ERP.Controllers.HR.HR
             if (employee != null)
             {
               employee.EmployeeStatusTypeID = 5; // End of Service status
-              employee.ActiveYNID = 0; // Deactivate employee
+              employee.ActiveYNID = 2; // Deactivate employee
             }
             await _appDBContext.SaveChangesAsync();
             return Json(new { success = true, message = "No process setup found, Employee deactivated." });

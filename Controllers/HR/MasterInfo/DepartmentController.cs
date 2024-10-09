@@ -99,7 +99,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         return NotFound();
       }
 
-      Department.ActiveYNID = 0;
+      Department.ActiveYNID = 2;
       Department.DeleteYNID = 1;
 
       _appDBContext.Settings_DepartmentTypes.Update(Department);

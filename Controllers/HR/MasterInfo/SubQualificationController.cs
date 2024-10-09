@@ -92,7 +92,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         return NotFound();
       }
 
-      SubQualification.ActiveYNID = 0;
+      SubQualification.ActiveYNID = 2;
       SubQualification.DeleteYNID = 1;
 
       _appDBContext.Settings_SubQualificationTypes.Update(SubQualification);

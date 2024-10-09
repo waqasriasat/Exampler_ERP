@@ -19,14 +19,22 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchDesignationName)
     {
+  
+      var DesignationsQuery = _appDBContext.Settings_DesignationTypes
+          .Where(b => b.DeleteYNID != 1);
 
-      var Designationes = await _appDBContext.Settings_DesignationTypes
-        .Where(b => b.DeleteYNID != 1)
-        .ToListAsync();
-      return View("~/Views/HR/MasterInfo/Designation/Designation.cshtml", Designationes);
+      if (!string.IsNullOrEmpty(searchDesignationName))
+      {
+        DesignationsQuery = DesignationsQuery.Where(b => b.DesignationTypeName.Contains(searchDesignationName));
+      }
+
+      var Designations = await DesignationsQuery.ToListAsync();
+
+      return View("~/Views/HR/MasterInfo/Designation/Designation.cshtml", Designations);
     }
+   
     public async Task<IActionResult> Designation()
     {
       var Designations = await _appDBContext.Settings_DesignationTypes.ToListAsync();
@@ -81,7 +89,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         return NotFound();
       }
 
-      Designation.ActiveYNID = 0;
+      Designation.ActiveYNID = 2;
       Designation.DeleteYNID = 1;
 
       _appDBContext.Settings_DesignationTypes.Update(Designation);
@@ -93,23 +101,23 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var Designationes = await _appDBContext.Settings_DesignationTypes
+      var Designations = await _appDBContext.Settings_DesignationTypes
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("Designationes");
+        var worksheet = package.Workbook.Worksheets.Add("Designations");
         worksheet.Cells["A1"].Value = "Designation ID";
         worksheet.Cells["B1"].Value = "Designation Name";
         worksheet.Cells["C1"].Value = "Active";
 
 
-        for (int i = 0; i < Designationes.Count; i++)
+        for (int i = 0; i < Designations.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = Designationes[i].DesignationTypeID;
-          worksheet.Cells[i + 2, 2].Value = Designationes[i].DesignationTypeName;
-          worksheet.Cells[i + 2, 3].Value = Designationes[i].ActiveYNID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 1].Value = Designations[i].DesignationTypeID;
+          worksheet.Cells[i + 2, 2].Value = Designations[i].DesignationTypeName;
+          worksheet.Cells[i + 2, 3].Value = Designations[i].ActiveYNID == 1 ? "Yes" : "No";
         }
 
         worksheet.Cells["A1:C1"].Style.Font.Bold = true;
@@ -118,17 +126,17 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"Designationes-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = $"Designations-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }
     }
     public async Task<IActionResult> Print()
     {
-      var Designationes = await _appDBContext.Settings_DesignationTypes
+      var Designations = await _appDBContext.Settings_DesignationTypes
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
-      return View("~/Views/HR/MasterInfo/Designation/PrintDesignations.cshtml", Designationes);
+      return View("~/Views/HR/MasterInfo/Designation/PrintDesignations.cshtml", Designations);
     }
 
   }

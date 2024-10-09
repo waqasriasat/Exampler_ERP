@@ -23,11 +23,21 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _logger = logger;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchProcessTypeName)
     {
-      var processTypes = await _appDBContext.Settings_ProcessTypes.ToListAsync();
+      // Query for Process Types with an optional search filter
+      var processTypesQuery = _appDBContext.Settings_ProcessTypes.AsQueryable();
+
+      if (!string.IsNullOrEmpty(searchProcessTypeName))
+      {
+        processTypesQuery = processTypesQuery
+            .Where(pt => pt.ProcessTypeName.Contains(searchProcessTypeName));
+      }
+
+      var processTypes = await processTypesQuery.ToListAsync();
       var processTypeApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups.ToListAsync();
 
+      // Create ViewModel based on query results
       var viewModel = new ProcessTypeApprovalSetupListViewModel
       {
         ProcessTypesWithRankCount = processTypes.Select(pt => new ProcessTypeWithRankCountViewModel
@@ -40,6 +50,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       return View("~/Views/HR/MasterInfo/ProcessTypeApprovalSetup/ProcessTypeApprovalSetup.cshtml", viewModel);
     }
+
+   
     public async Task<IActionResult> ProcessTypeApprovalSetup()
     {
       var ProcessTypeApprovalSetups = await _appDBContext.CR_ProcessTypeApprovalSetups.ToListAsync();
