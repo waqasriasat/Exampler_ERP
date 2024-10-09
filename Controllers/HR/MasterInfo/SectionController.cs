@@ -19,16 +19,26 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchSectionName)
     {
-      var Sections = await _appDBContext.Settings_SectionTypes
-    .Where(b => b.DeleteYNID != 1)
-    .Include(d => d.DepartmentType) // Eagerly load the related Department data
-    .ToListAsync();
+      // Query to fetch all non-deleted Section types and include BranchType details
+      var SectionsQuery = _appDBContext.Settings_SectionTypes
+          .Where(d => d.DeleteYNID != 1);
 
+      // Apply search filter if provided
+      if (!string.IsNullOrEmpty(searchSectionName))
+      {
+        SectionsQuery = SectionsQuery.Where(d => d.SectionTypeName.Contains(searchSectionName));
+      }
+
+      // Execute the query and convert the result to a list
+      var Sections = await SectionsQuery
+          .Include(d => d.DepartmentType).ToListAsync();
+
+      // Return the filtered list to the view
       return View("~/Views/HR/MasterInfo/Section/Section.cshtml", Sections);
-
     }
+  
     public async Task<IActionResult> Section()
     {
       var Sections = await _appDBContext.Settings_SectionTypes.ToListAsync();

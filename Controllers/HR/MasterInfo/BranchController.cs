@@ -20,22 +20,33 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchBranchName)
     {
       string plainText = "ibs";
       string encryptedText = CR_CipherKey.Encrypt(plainText);
       Console.WriteLine($"Encrypted: {encryptedText}");
 
-
       string plainText1 = "A@123456";
       string encryptedText1 = CR_CipherKey.Encrypt(plainText1);
       Console.WriteLine($"Encrypted: {encryptedText1}");
 
-      var branches = await _appDBContext.Settings_BranchTypes
-        .Where(b => b.DeleteYNID != 1)
-        .ToListAsync();
+      // Query to fetch all non-deleted branch types
+      var branchesQuery = _appDBContext.Settings_BranchTypes
+          .Where(b => b.DeleteYNID != 1);
+
+      // Apply search filter if provided
+      if (!string.IsNullOrEmpty(searchBranchName))
+      {
+        branchesQuery = branchesQuery.Where(b => b.BranchTypeName.Contains(searchBranchName));
+      }
+
+      // Execute the query and convert the result to a list
+      var branches = await branchesQuery.ToListAsync();
+
       return View("~/Views/HR/MasterInfo/Branch/Branch.cshtml", branches);
     }
+
+  
     public async Task<IActionResult> Branch()
     {
       var Branchs = await _appDBContext.Settings_BranchTypes.ToListAsync();

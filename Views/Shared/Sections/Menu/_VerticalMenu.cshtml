@@ -42,7 +42,49 @@
                     currentPage.StartsWith("/Employeement_Dashboard/Index") ||
                     currentPage.StartsWith("/HR_Dashboard/Index") ||
                     currentPage.StartsWith("/Finance_Dashboard/Index") ||
-                    currentPage.StartsWith("/Report_Dashboard/Index") ? " active open" : "")'>
+                    currentPage.StartsWith("/Report_Dashboard/Index")||
+                    currentPage.StartsWith("/AddionalAllowanceType/Index")||
+                    currentPage.StartsWith("/DeductionSetup/Index")||
+                    currentPage.StartsWith("/Branch/Index")||
+                    currentPage.StartsWith("/DeductionType/Index")||
+                    currentPage.StartsWith("/Department/Index")||
+                    currentPage.StartsWith("/Designation/Index")||
+                    currentPage.StartsWith("/EmployeeRequestType/Index")||
+                    currentPage.StartsWith("/EmployeeStatusType/Index")||
+                    currentPage.StartsWith("/OvertimeRate/Index")||
+                    currentPage.StartsWith("/ProcessTypeApprovalSetup/Index")||
+                    currentPage.StartsWith("/ProcessType/Index")||
+                    currentPage.StartsWith("/ProcessTypeForward/Index")||
+                    currentPage.StartsWith("/Qualification/Index")||
+                    currentPage.StartsWith("/Role/Index")||
+                    currentPage.StartsWith("/SalaryType/Index")||
+                    currentPage.StartsWith("/Section/Index")||
+                    currentPage.StartsWith("/SubQualification/Index")||
+                    currentPage.StartsWith("/User/Index")||
+                    currentPage.StartsWith("/VacationType/Index")||
+
+                    currentPage.StartsWith("/Applicant/Index")||
+                    currentPage.StartsWith("/BankAccount/Index")||
+                    currentPage.StartsWith("/CardPrint/Index")||
+                    currentPage.StartsWith("/Contract/Index")||
+                    currentPage.StartsWith("/ContractRenewal/Index")||
+                    currentPage.StartsWith("/Employee/Index")||
+                    currentPage.StartsWith("/Joining/Index")||
+                    currentPage.StartsWith("/Salary/Index")||
+
+                    currentPage.StartsWith("/AddionalAllowance/Index")||
+                    currentPage.StartsWith("/Deduction/Index")||
+                    currentPage.StartsWith("/EndOfService/Index")||
+                    currentPage.StartsWith("/OverTime/Index")||
+                    currentPage.StartsWith("/VacationSettle/Index")||
+
+                    currentPage.StartsWith("/FixedDeduction/Index")||
+                    currentPage.StartsWith("/WorkDay/Index")||
+
+                    currentPage.StartsWith("/ContractExpiry/Index")||
+                    currentPage.StartsWith("/EmployeeBioData/Index")||
+                    currentPage.StartsWith("/VacationBalance/Index")||
+                    currentPage.StartsWith("/VacationReport/Index") ? " active open" : "")'>
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div>Human Resources</div>
@@ -50,35 +92,53 @@
 
             <ul class="menu-sub">
                 <!-- Master Information -->
-                <li class='menu-item@(currentPage ==  "/Main_Dashboard/Index" ? " active" : "")'>
+                <li class='menu-item@(currentPage == "/Main_Dashboard/Index" || currentPage == "/AddionalAllowanceType/Index" ||
+                                      currentPage == "/DeductionSetup/Index" || currentPage == "/Branch/Index" ||
+                                      currentPage == "/DeductionType/Index" || currentPage == "/Department/Index" ||
+                                      currentPage == "/Designation/Index" || currentPage == "/EmployeeRequestType/Index" ||
+                                      currentPage == "/EmployeeStatusType/Index" || currentPage == "/OvertimeRate/Index" ||
+                                      currentPage == "/ProcessTypeApprovalSetup/Index" || currentPage == "/ProcessType/Index" ||
+                                      currentPage == "/ProcessTypeForward/Index" || currentPage == "/Qualification/Index" ||
+                                      currentPage == "/Role/Index" || currentPage == "/SalaryType/Index" ||
+                                      currentPage == "/Section/Index" || currentPage == "/SubQualification/Index" ||
+                                      currentPage == "/User/Index" || currentPage == "/VacationType/Index" ? " active" : "")'>
                     <a asp-controller="Main_Dashboard" asp-action="Index" class="menu-link">
                         <div>Master Information</div>
                     </a>
                 </li>
 
                 <!-- Employeement -->
-                <li class='menu-item@(currentPage == "/Employeement_Dashboard/Index" ? " active" : "")'>
+                <li class='menu-item@(currentPage == "/Employeement_Dashboard/Index" || currentPage == "/Applicant/Index" ||
+                                      currentPage == "/BankAccount/Index" || currentPage == "/CardPrint/Index" ||
+                                      currentPage == "/Contract/Index" || currentPage == "/ContractRenewal/Index" ||
+                                      currentPage == "/Employee/Index" || currentPage == "/Joining/Index" ||
+                                      currentPage == "/Salary/Index"  ? " active" : "")'>
                     <a asp-controller="Employeement_Dashboard" asp-action="Index" class="menu-link">
                         <div>Employeement</div>
                     </a>
                 </li>
 
                 <!-- HR -->
-                <li class='menu-item@(currentPage == "/HR_Dashboard/Index" ? " active" : "")'>
+                <li class='menu-item@(currentPage == "/HR_Dashboard/Index" || currentPage == "/AddionalAllowance/Index" ||
+                                      currentPage == "/Deduction/Index" || currentPage == "/EndOfService/Index" ||
+                                      currentPage == "/OverTime/Index" || currentPage == "/VacationSettle/Index"? " active" : "")'>
                     <a asp-controller="HR_Dashboard" asp-action="Index" class="menu-link">
                         <div>HR</div>
                     </a>
                 </li>
 
                 <!-- Finance -->
-                <li class='menu-item@(currentPage == "/Finance_Dashboard/Index" ? " active" : "")'>
+                <li class='menu-item@(currentPage == "/Finance_Dashboard/Index" || currentPage == "/FixedDeduction/Index" ||
+                                      currentPage == "/WorkDay/Index"  ? " active" : "")'>
                     <a asp-controller="Finance_Dashboard" asp-action="Index" class="menu-link">
                         <div>Finance</div>
                     </a>
                 </li>
 
                 <!-- Report -->
-                <li class='menu-item@(currentPage == "/Report_Dashboard/Index" ? " active" : "")'>
+                <li class='menu-item@(currentPage == "/Report_Dashboard/Index"|| currentPage == "/ContractExpiry/Index" ||
+                                      currentPage == "/EmployeeBioData/Index" || currentPage == "/VacationBalance/Index" ||
+                                      currentPage == "/VacationReport/Index"  ? " active" : "")'>
                     <a asp-controller="Report_Dashboard" asp-action="Index" class="menu-link">
                         <div>Report</div>
                     </a>

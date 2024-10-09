@@ -87,12 +87,43 @@
             var printWindow = window.open('@Url.Action("Print", "Qualification")', '_blank');
             printWindow.focus();
         }
+        $('#searchQualificationButton').click(function () {
+            var searchValue = $('#searchQualificationInput').val();
+            window.location.href = '@Url.Action("Index", "Qualification")?searchQualificationName=' + searchValue;
+        });
     </script>
 }
 <h4 class="py-3 mb-4">
     <span class="text-muted fw-light">Master Information /</span> Qualification
 </h4>
+<div class="row">
+    <div class="col-md-12">
 
+        <div class="card">
+            <h5 class="card-header">Searhing Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search Qualification name" id="searchQualificationInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchQualificationButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <!-- Action Buttons -->
+                        <button type="button" class="btn btn-primary addQualificationLink">Add New</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Qualification")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printQualifications()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -100,16 +131,23 @@
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
-                        <div class="col-10 col-md-10 col-lg-9">
+                        <div class="col-10 col-md-10 col-lg-10">
                             <div class="row">
-                                <div class="col-2">
-                                    <p class="text-nowrap">Qualification ID</p>
-                                </div>
                                 <div class="col-8">
                                     <p class="text-nowrap">Qualification Name</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Active</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-nowrap">Edit</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">Delete</p>
                                 </div>
                             </div>
                         </div>
@@ -119,11 +157,8 @@
                 {
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
                         <div class="row">
-                            <div class="col-8 col-md-10 col-lg-9">
+                            <div class="col-10 col-md-10 col-lg-10">
                                 <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Qualification ID : </span>@Html.DisplayFor(modelItem => item.QualificationTypeID)</p>
-                                    </div>
                                     <div class="col-12 col-md-12 col-lg-8">
                                         <p class="text-nowrap"><span class="smallAdd">Qualification Name : </span>@Html.DisplayFor(modelItem => item.QualificationTypeName)</p>
                                     </div>
@@ -142,7 +177,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4 col-md-2 col-lg-3">
+                            <div class="col-2 col-md-2 col-lg-2">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <div class="btn-group" role="group" aria-label="Actions">
@@ -164,15 +199,7 @@
                     </div>
                 }
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="mt-4">
-                        <button type="button" class="btn btn-primary addQualificationLink">Add New</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Qualification")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printQualifications()">Print</button>
-                    </div>
-                </div>
-            </div>
+          
         </div>
     </div>
 </div>

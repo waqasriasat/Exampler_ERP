@@ -19,14 +19,25 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchQualificationName)
     {
-     
-      var Qualificationes = await _appDBContext.Settings_QualificationTypes
-        .Where(b => b.DeleteYNID != 1)
-        .ToListAsync();
+  
+      // Query to fetch all non-deleted Qualification types
+      var QualificationesQuery = _appDBContext.Settings_QualificationTypes
+          .Where(b => b.DeleteYNID != 1);
+
+      // Apply search filter if provided
+      if (!string.IsNullOrEmpty(searchQualificationName))
+      {
+        QualificationesQuery = QualificationesQuery.Where(b => b.QualificationTypeName.Contains(searchQualificationName));
+      }
+
+      // Execute the query and convert the result to a list
+      var Qualificationes = await QualificationesQuery.ToListAsync();
+
       return View("~/Views/HR/MasterInfo/Qualification/Qualification.cshtml", Qualificationes);
     }
+    
     public async Task<IActionResult> Qualification()
     {
       var Qualifications = await _appDBContext.Settings_QualificationTypes.ToListAsync();

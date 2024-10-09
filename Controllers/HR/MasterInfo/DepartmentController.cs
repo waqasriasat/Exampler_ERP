@@ -22,16 +22,27 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchDepartmentName)
     {
-      var Departments = await _appDBContext.Settings_DepartmentTypes
-    .Where(b => b.DeleteYNID != 1)
-    .Include(d => d.BranchType) // Eagerly load the related Branch data
-    .ToListAsync();
+      // Query to fetch all non-deleted Department types and include BranchType details
+      var departmentsQuery = _appDBContext.Settings_DepartmentTypes
+          .Where(d => d.DeleteYNID != 1);
 
-      return View("~/Views/HR/MasterInfo/Department/Department.cshtml", Departments);
+      // Apply search filter if provided
+      if (!string.IsNullOrEmpty(searchDepartmentName))
+      {
+        departmentsQuery = departmentsQuery.Where(d => d.DepartmentTypeName.Contains(searchDepartmentName));
+      }
 
+      // Execute the query and convert the result to a list
+      var departments = await departmentsQuery
+          .Include(d => d.BranchType).ToListAsync();
+
+      // Return the filtered list to the view
+      return View("~/Views/HR/MasterInfo/Department/Department.cshtml", departments);
     }
+
+   
     public async Task<IActionResult> Department()
     {
       var Departments = await _appDBContext.Settings_DepartmentTypes.ToListAsync();

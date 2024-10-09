@@ -19,16 +19,23 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchSubQualificationName)
     {
-      var SubQualification = await _appDBContext.Settings_SubQualificationTypes
-    .Where(b => b.DeleteYNID != 1)
-    .Include(d => d.QualificationType) // Eagerly load the related Qualification data
-    .ToListAsync();
 
-      return View("~/Views/HR/MasterInfo/SubQualification/SubQualification.cshtml", SubQualification);
+      var SubQualificationsQuery = _appDBContext.Settings_SubQualificationTypes
+          .Where(b => b.DeleteYNID != 1);
 
+      if (!string.IsNullOrEmpty(searchSubQualificationName))
+      {
+        SubQualificationsQuery = SubQualificationsQuery.Where(b => b.SubQualificationTypeName.Contains(searchSubQualificationName));
+      }
+
+      var SubQualifications = await SubQualificationsQuery.Include(d => d.QualificationType).ToListAsync();
+
+      return View("~/Views/HR/MasterInfo/SubQualification/SubQualification.cshtml", SubQualifications);
     }
+
+  
     public async Task<IActionResult> SubQualification()
     {
       var SubQualification = await _appDBContext.Settings_SubQualificationTypes.ToListAsync();
