@@ -22,17 +22,14 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     public async Task<IActionResult> Index(string searchQualificationName)
     {
   
-      // Query to fetch all non-deleted Qualification types
       var QualificationesQuery = _appDBContext.Settings_QualificationTypes
           .Where(b => b.DeleteYNID != 1);
 
-      // Apply search filter if provided
       if (!string.IsNullOrEmpty(searchQualificationName))
       {
         QualificationesQuery = QualificationesQuery.Where(b => b.QualificationTypeName.Contains(searchQualificationName));
       }
 
-      // Execute the query and convert the result to a list
       var Qualificationes = await QualificationesQuery.ToListAsync();
 
       return View("~/Views/HR/MasterInfo/Qualification/Qualification.cshtml", Qualificationes);

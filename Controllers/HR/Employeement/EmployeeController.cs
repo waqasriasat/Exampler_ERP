@@ -21,14 +21,69 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? id)
     {
-      var employees = await _appDBContext.HR_Employees
-                .Where(e => e.DeleteYNID != 1)
-                .ToListAsync();
+      var employeesQuery = _appDBContext.HR_Employees
+          .Where(e => e.DeleteYNID != 1);  // Ensure employees are not marked as deleted
+
+      if (id.HasValue)
+      {
+        employeesQuery = employeesQuery.Where(e => e.EmployeeID == id.Value);
+      }
+
+      var employees = await employeesQuery.ToListAsync();
 
       return View("~/Views/HR/Employeement/Employee/Employee.cshtml", employees);
     }
+
+
+    public async Task<IActionResult> GetEmployeeSuggestions(string term)
+    {
+      // Perform a search with multiple fields using the term, including related entities.
+      var employees = await _appDBContext.HR_Employees
+          .Where(b => b.DeleteYNID != 1 &&
+              (
+                  // Search in Employee names
+                  (b.FirstName + " " + b.FatherName + " " + b.FamilyName).Contains(term) ||
+                  // Search in Department name
+                  (b.DepartmentType.DepartmentTypeName != null && b.DepartmentType.DepartmentTypeName.Contains(term)) ||
+                  // Search in Branch name
+                  (b.BranchType.BranchTypeName != null && b.BranchType.BranchTypeName.Contains(term)) ||
+                  // Search in Designation name
+                  (b.DesignationType.DesignationTypeName != null && b.DesignationType.DesignationTypeName.Contains(term)) ||
+                  // Search in Phone numbers
+                  (b.Phone1 != null && b.Phone1.Contains(term)) ||
+                  (b.Phone2 != null && b.Phone2.Contains(term)) ||
+                  (b.Mobile != null && b.Mobile.Contains(term)) ||
+                  (b.Whatsapp != null && b.Whatsapp.Contains(term)) ||
+                  // Search in ID and Passport numbers
+                  (b.IDNumber != null && b.IDNumber.Contains(term)) ||
+                  (b.PassportNumber != null && b.PassportNumber.Contains(term))
+              )
+          )
+          .Include(b => b.BranchType)
+          .Include(b => b.DepartmentType)
+          .Include(b => b.DesignationType)
+          .Select(e => new
+          {
+            // Label showing employee's full name
+            label = e.FirstName + " " + e.FatherName + " " + e.FamilyName,
+            id = e.EmployeeID,
+            // Additional details like department, branch, and designation for display (optional)
+            department = e.DepartmentType.DepartmentTypeName,
+            branch = e.BranchType.BranchTypeName,
+            designation = e.DesignationType.DesignationTypeName,
+            phone = e.Phone1 ?? e.Phone2 ?? e.Mobile, // Prefer Phone1, else Phone2, else Mobile
+            whatsapp = e.Whatsapp,
+            idNumber = e.IDNumber,
+            passportNumber = e.PassportNumber
+          })
+          .ToListAsync();
+
+      // Return the result as JSON for autocomplete
+      return Json(employees);
+    }
+
     public async Task<IActionResult> Employee()
     {
       var employees = await _appDBContext.HR_Employees.ToListAsync();

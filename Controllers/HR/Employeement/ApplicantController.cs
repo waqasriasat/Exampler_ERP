@@ -17,11 +17,60 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? id)
     {
-      var Applicants = await _appDBContext.HR_Applicants.ToListAsync();
+      var ApplicantsQuery = _appDBContext.HR_Applicants
+          .Where(a => !_appDBContext.HR_Employees.Select(e => e.ApplicantID).Contains(a.ApplicantID));
+
+      if (id.HasValue)
+      {
+        ApplicantsQuery = ApplicantsQuery.Where(a => a.ApplicantID == id.Value);
+      }
+
+      var Applicants = await ApplicantsQuery.ToListAsync();
 
       return View("~/Views/HR/Employeement/Applicant/Applicant.cshtml", Applicants);
+    }
+
+    public async Task<IActionResult> GetApplicantSuggestions(string term)
+    {
+      var EmployeeList = await _appDBContext.HR_Employees
+          .Select(e => e.EmployeeID)
+          .ToListAsync();
+      var applicants = await _appDBContext.HR_Applicants
+          .Where(b => !_appDBContext.HR_Employees.Select(e => e.ApplicantID).Contains(b.ApplicantID) &&
+              (
+                  // Search in Employee names
+                  (b.FirstName + " " + b.FatherName + " " + b.FamilyName).Contains(term) ||
+                  // Search in Department name
+                  (b.BranchType.BranchTypeName != null && b.BranchType.BranchTypeName.Contains(term)) ||
+                  // Search in Phone numbers
+                  (b.Phone1 != null && b.Phone1.Contains(term)) ||
+                  (b.Phone2 != null && b.Phone2.Contains(term)) ||
+                  (b.Mobile != null && b.Mobile.Contains(term)) ||
+                  (b.Whatsapp != null && b.Whatsapp.Contains(term)) ||
+                  // Search in ID and Passport numbers
+                  (b.IDNumber != null && b.IDNumber.Contains(term)) ||
+                  (b.PassportNumber != null && b.PassportNumber.Contains(term))
+              )
+          )
+          .Include(b => b.BranchType)
+          .Select(e => new
+          {
+            // Label showing employee's full name
+            label = e.FirstName + " " + e.FatherName + " " + e.FamilyName,
+            id = e.ApplicantID,
+            // Additional details like department, branch, and designation for display (optional)
+            branch = e.BranchType.BranchTypeName,
+            phone = e.Phone1 ?? e.Phone2 ?? e.Mobile, // Prefer Phone1, else Phone2, else Mobile
+            whatsapp = e.Whatsapp,
+            idNumber = e.IDNumber,
+            passportNumber = e.PassportNumber
+          })
+          .ToListAsync();
+
+      // Return the result as JSON for autocomplete
+      return Json(applicants);
     }
     public async Task<IActionResult> Applicant()
     {
