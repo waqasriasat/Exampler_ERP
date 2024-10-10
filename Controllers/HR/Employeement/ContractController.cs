@@ -20,16 +20,23 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       _utils = utils;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? id)
     {
-      var contracts = await _appDBContext.HR_Contracts
-          .Where(c => c.DeleteYNID != 1)
-          .Include(c => c.Employee)
-          .ToListAsync();
+      var contractQuery = _appDBContext.HR_Contracts
+          .Where(c => c.DeleteYNID != 1); 
+
+      if (id.HasValue)
+      {
+        contractQuery = contractQuery.Where(c => c.EmployeeID == id.Value);
+      }
+
+      var contracts = await contractQuery
+          .Include(c => c.Employee).
+          ToListAsync();
 
       return View("~/Views/HR/Employeement/Contract/Contract.cshtml", contracts);
     }
-
+  
     public async Task<IActionResult> Contract()
     {
       var contracts = await _appDBContext.HR_Contracts.ToListAsync();

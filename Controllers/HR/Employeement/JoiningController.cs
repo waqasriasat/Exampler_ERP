@@ -19,23 +19,29 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       _logger = logger;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? id) // EmployeeID
     {
-      var employeeJoinings = await (from emp in _appDBContext.HR_Employees
-                                    join con in _appDBContext.HR_Contracts
-                                    on emp.EmployeeID equals con.EmployeeID
-                                    join jon in _appDBContext.HR_Joinings
-                                    on emp.EmployeeID equals jon.EmployeeID into joinGroup
-                                    from j in joinGroup.DefaultIfEmpty()
-                                    where con.ActiveYNID == 1 && emp.ActiveYNID == 1
-                                    select new
-                                    {
-                                      emp.EmployeeID,
-                                      emp.FirstName,
-                                      emp.FatherName,
-                                      emp.FamilyName,
-                                      JoiningDate = j != null ? j.JoiningDate : (DateTime?)null
-                                    }).ToListAsync();
+      var employeeJoiningsQuery = from emp in _appDBContext.HR_Employees
+                                  join con in _appDBContext.HR_Contracts
+                                  on emp.EmployeeID equals con.EmployeeID
+                                  join jon in _appDBContext.HR_Joinings
+                                  on emp.EmployeeID equals jon.EmployeeID into joinGroup
+                                  from j in joinGroup.DefaultIfEmpty()
+                                  where con.ActiveYNID == 1 && emp.ActiveYNID == 1
+                                  select new
+                                  {
+                                    emp.EmployeeID,
+                                    emp.FirstName,
+                                    emp.FatherName,
+                                    emp.FamilyName,
+                                    JoiningDate = j != null ? j.JoiningDate : (DateTime?)null
+                                  };
+
+      if (id.HasValue)
+      {
+        employeeJoiningsQuery = employeeJoiningsQuery.Where(e => e.EmployeeID == id.Value);
+      }
+      var employeeJoinings = await employeeJoiningsQuery.ToListAsync();
 
       var employeeCounts = employeeJoinings.Select(ej => new EmployeeJoiningViewModel
       {
@@ -51,6 +57,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       return View("~/Views/HR/Employeement/Joining/Joining.cshtml", viewModel);
     }
+
 
     public async Task<IActionResult> Edit(int id)
     {

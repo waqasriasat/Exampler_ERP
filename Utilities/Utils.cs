@@ -1,4 +1,5 @@
 using Exampler_ERP.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
@@ -407,5 +408,41 @@ namespace Exampler_ERP.Utilities
 
       return directManagerList;
     }
+
+    public async Task<dynamic> GetSearchingEmployee(string term)
+    {
+      var employees = await _appDBContext.HR_Employees
+          .Where(b => b.DeleteYNID != 1 &&
+              (
+                  (b.FirstName + " " + b.FatherName + " " + b.FamilyName).Contains(term) ||
+                  (b.DepartmentType.DepartmentTypeName != null && b.DepartmentType.DepartmentTypeName.Contains(term)) ||
+                  (b.BranchType.BranchTypeName != null && b.BranchType.BranchTypeName.Contains(term)) ||
+                  (b.DesignationType.DesignationTypeName != null && b.DesignationType.DesignationTypeName.Contains(term)) ||
+                  (b.Phone1 != null && b.Phone1.Contains(term)) ||
+                  (b.Phone2 != null && b.Phone2.Contains(term)) ||
+                  (b.Mobile != null && b.Mobile.Contains(term)) ||
+                  (b.Whatsapp != null && b.Whatsapp.Contains(term)) ||
+                  (b.IDNumber != null && b.IDNumber.Contains(term)) ||
+                  (b.PassportNumber != null && b.PassportNumber.Contains(term))
+              )
+          )
+          .Include(b => b.BranchType)
+          .Include(b => b.DepartmentType)
+          .Include(b => b.DesignationType)
+          .Select(e => new
+          {
+            id = e.EmployeeID,
+            label = $@"
+                <div class='employee-suggestion'>
+                    <strong>{e.FirstName} {e.FatherName} {e.FamilyName}</strong><br />
+                    <span>{e.DepartmentType.DepartmentTypeName}, {e.BranchType.BranchTypeName}</span><br />
+                    <span>{e.Phone1 ?? e.Phone2 ?? e.Mobile ?? e.Whatsapp}</span>
+                </div>"
+          })
+          .ToListAsync();
+
+      return employees;
+    }
+
   }
 }

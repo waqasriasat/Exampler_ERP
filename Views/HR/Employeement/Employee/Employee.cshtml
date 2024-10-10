@@ -5,8 +5,8 @@
 }
 
 @section PageScripts {
-    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
-    <link href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css" rel="stylesheet">
+    
+    
     <script>
         $(document).ready(function () {
             $('.editEmployeeLink').click(function (e) {
@@ -191,28 +191,39 @@
             $('#printButton').click(function () {
                 window.print();
             });
-
-     
-            $(function () {
-                $("#searchEmployeeInput").autocomplete({
-                    source: function (request, response) {
-                        $.ajax({
-                            url: '@Url.Action("GetEmployeeSuggestions", "Employee")',
-                            type: 'GET',
-                            data: { term: request.term },
-                            success: function (data) {
-                                response(data); 
-                            }
-                        });
-                    },
-                    select: function (event, ui) {
-                        console.log("Selected Employee ID: " + ui.item.id);
-                        window.location.href = '@Url.Action("Index", "Employee")?id=' + ui.item.id;
-                    },
-                    minLength: 2
-                });
+            $.widget("custom.autocomplete", $.ui.autocomplete, {
+                _renderItem: function (ul, item) {
+                    return $("<li>")
+                        .append(item.label)  // Render the HTML content in `label`
+                        .appendTo(ul);
+                }
             });
-            
+
+            $("#searchEmployeeInput").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '@Url.Action("GetEmployeeSuggestions", "Employee")',
+                        type: 'GET',
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.label,  // HTML content
+                                    value: item.id      // Employee ID
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    // Do something when an employee is selected
+                    console.log(ui.item.value); // Employee ID
+                    window.location.href = '@Url.Action("Index", "Employee")?id=' + ui.item.value;
+                }
+            });
+     
+           
         });
     </script>
     <script>

@@ -23,16 +23,25 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       _logger = logger;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? id) // EmployeeID
     {
       var salarytypes = await _appDBContext.Settings_SalaryTypes.ToListAsync();
       var salarys = await _appDBContext.HR_Salarys.ToListAsync();
       var salaryDetails = await _appDBContext.HR_SalaryDetails.ToListAsync();
-      var employees = await (from emp in _appDBContext.HR_Employees
-                             join con in _appDBContext.HR_Contracts
-                             on emp.EmployeeID equals con.EmployeeID
-                             where con.ActiveYNID == 1 && emp.ActiveYNID == 1
-                             select emp).ToListAsync();
+
+      // Filter employees based on id (if provided)
+      var employeesQuery = from emp in _appDBContext.HR_Employees
+                           join con in _appDBContext.HR_Contracts
+                           on emp.EmployeeID equals con.EmployeeID
+                           where con.ActiveYNID == 1 && emp.ActiveYNID == 1
+                           select emp;
+
+      if (id.HasValue)
+      {
+        employeesQuery = employeesQuery.Where(e => e.EmployeeID == id.Value);
+      }
+
+      var employees = await employeesQuery.ToListAsync();
 
       var employeeCounts = new List<EmployeeCountViewModel>();
 
@@ -57,6 +66,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       return View("~/Views/HR/Employeement/Salary/Salary.cshtml", viewModel);
     }
+
 
     public async Task<IActionResult> Edit(int id)
     {
