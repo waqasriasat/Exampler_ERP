@@ -85,6 +85,42 @@
             $('#printButton').click(function () {
                 window.print();
             });
+            $.widget("custom.autocomplete", $.ui.autocomplete, {
+                _renderItem: function (ul, item) {
+                    return $("<li>")
+                        .append(item.label)  // Render the HTML content in `label`
+                        .appendTo(ul);
+                }
+            });
+
+            $("#searchEmployeeInput").autocomplete({
+                source: function (request, response) {
+
+                    $.ajax({
+                        url: '@Url.Action("GetEmployeeSuggestions", "Employee")', // Ensure this matches the C# method
+                        type: 'GET',
+                        data: { term: request.term },
+                        success: function (data) {
+
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.label,  // HTML content to be displayed in suggestions
+                                    id: item.id,     // Employee ID for the hidden input
+                                    name: item.name,      // Full name to be used in the input field
+                                    value: item.name
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    debugger;
+                    // Set the selected employee's ID and name
+                    $("#EmployeeID").val(ui.item.id); // Set the hidden input for Employee ID
+                    $("#searchEmployeeInput").val(ui.item.name); // Set the input field for Employee Name
+                }
+            });
         });
     </script>
     <script>
@@ -103,9 +139,71 @@
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Employeement /</span> EndOfServices
+    <span class="text-muted fw-light">HR /</span> EndOfServices
 </h4>
+<form method="get" action="@Url.Action("Index", "EndOfService")">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <h5 class="card-header">Search Box</h5>
+                <div class="Searching-Box-padding" style="padding-bottom: 15px;">
+                    <div class="row mb-4">
+                        <!-- From Date Field -->
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label fw-bold">From Date</label>
+                            <input class="form-control" type="date" name="FromDate" value="@ViewBag.FromDate?.ToString("yyyy-MM-dd")" />
+                        </div>
 
+                        <!-- To Date Field -->
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label fw-bold">To Date</label>
+                            <input class="form-control" type="date" name="ToDate" value="@ViewBag.ToDate?.ToString("yyyy-MM-dd")" />
+                        </div>
+
+                        <!-- Employee Name Search Field -->
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label fw-bold">Employee Name</label>
+                            <input type="text" class="form-control" id="searchEmployeeInput" placeholder="Search Employee" name="EmployeeName" value="@ViewBag.EmployeeName" />
+                            <input type="hidden" class="form-control" id="EmployeeID" placeholder="Search Employee" name="EmployeeID" value="@ViewBag.EmployeeID" />
+                        </div>
+
+                        <!-- EndOfServiceReason Type Dropdown -->
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label fw-bold">Reason Type</label>
+                            <select name="EndOfServiceReasonTypeID" class="form-control">
+                                @foreach (var item in ViewBag.EndOfServiceReasonTypeList)
+                                {
+                                    if (item.Value == ViewBag.EndOfServiceReasonTypeID?.ToString())
+                                    {
+                                        <option value="@item.Value" selected>@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="row">
+                        <div class="col-md-12 text-end">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="button" class="btn btn-primary addEndOfServiceLink">Add New</button>
+                            <!-- Example: Add buttons for exporting to Excel and printing -->
+                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "EndOfService")'">Excel</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="printEndOfServices()">Print</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+<br />
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -113,12 +211,12 @@
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
-                        <div class="col-10 col-md-10 col-lg-8">
+                        <div class="col-10 col-md-11 col-lg-9">
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-4">
                                     <p class="text-nowrap">Employee Name</p>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-4">
                                     <p class="text-nowrap">Date of Completion of Work</p>
                                 </div>
                                 <div class="col-4">
@@ -126,7 +224,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-4 col-md-2 col-lg-4">
+                        <div class="col-4 col-md-1 col-lg-3">
                             <div class="row">
                                 <div class="col-12 col-md-12 col-lg-4">
                                     <p class="text-nowrap">Edit</p>
@@ -145,12 +243,12 @@
                 {
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
                         <div class="row">
-                            <div class="col-8 col-md-10 col-lg-8">
+                            <div class="col-10 col-md-11 col-lg-9">
                                 <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
+                                    <div class="col-12 col-md-12 col-lg-4">
                                         <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
                                     </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
+                                    <div class="col-12 col-md-12 col-lg-4">
                                         <p class="text-nowrap"><span class="smallAdd">Issue Date : </span>@item.DateOfCompletionOfWork.ToString("dd/MM/yyyy")</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
@@ -158,7 +256,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4 col-md-2 col-lg-4">
+                            <div class="col-4 col-md-1 col-lg-3">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
@@ -186,17 +284,6 @@
                         </div>
                     </div>
                 }
-            </div>
-
-            <div class="card-body">
-                <div class="row">
-                    <div class="mt-4">
-                        <button type="button" class="btn btn-primary addEndOfServiceLink">Add New</button>
-                        <!-- Example: Add buttons for exporting to Excel and printing -->
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "EndOfService")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printEndOfServices()">Print</button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

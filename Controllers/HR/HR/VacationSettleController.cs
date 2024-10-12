@@ -20,15 +20,55 @@ namespace Exampler_ERP.Controllers.HR.HR
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? VacationTypeID)
     {
-      var vacationSettle = await _appDBContext.HR_VacationSettles
+      var query = _appDBContext.HR_VacationSettles
         .Where(b => b.FinalApprovalID != 1)
         .Include(d => d.Vacation)
         .Include(d => d.Vacation.Settings_VacationType)
         .Include(d => d.Vacation.Employee)
         .OrderBy(emp => emp.VacationSettleID)
-        .ToListAsync();
+        .AsQueryable();
+
+      if (FromDate.HasValue)
+      {
+        var fromDateTime = FromDate.Value.Date.AddSeconds(1);
+        query = query.Where(d => d.Vacation.Date >= fromDateTime);
+      }
+
+      if (ToDate.HasValue)
+      {
+        var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+        query = query.Where(d => d.Vacation.Date <= toDateTime);
+      }
+
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(d => d.Vacation.EmployeeID == EmployeeID.Value);
+      }
+
+      if (!string.IsNullOrEmpty(EmployeeName))
+      {
+        query = query.Where(d =>
+            (d.Vacation.Employee.FirstName + " " + d.Vacation.Employee.FatherName + " " + d.Vacation.Employee.FamilyName)
+            .Contains(EmployeeName));
+      }
+
+      if (VacationTypeID.HasValue && VacationTypeID != 0)
+      {
+        query = query.Where(d => d.Vacation.VacationTypeID == VacationTypeID.Value);
+      }
+
+      var vacationSettle = await query.ToListAsync();
+
+      ViewBag.FromDate = FromDate;
+      ViewBag.ToDate = ToDate;
+      ViewBag.VacationTypeID = VacationTypeID;
+      ViewBag.EmployeeID = EmployeeID;
+      ViewBag.EmployeeName = EmployeeName;
+
+      ViewBag.VacationTypeList = await _utils.GetVacationTypes();
+
       return View("~/Views/HR/HR/VacationSettle/VacationSettle.cshtml", vacationSettle);
     }
     // [HttpGet] Edit action method

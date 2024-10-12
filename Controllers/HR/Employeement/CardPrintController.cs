@@ -20,9 +20,9 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       _utils = utils;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? id)
     {
-      var employeeCardPrints = await (from emp in _appDBContext.HR_Employees
+      var employeeCards = from emp in _appDBContext.HR_Employees
                                       join con in _appDBContext.HR_Contracts
                                          on emp.EmployeeID equals con.EmployeeID
                                          where con.ActiveYNID == 1 && emp.ActiveYNID == 1
@@ -32,7 +32,13 @@ namespace Exampler_ERP.Controllers.HR.Employeement
                                            emp.FirstName,
                                            emp.FatherName,
                                            emp.FamilyName
-                                         }).ToListAsync();
+                                         };
+
+      if (id.HasValue)
+      {
+        employeeCards = employeeCards.Where(e => e.EmployeeID == id.Value);
+      }
+      var employeeCardPrints = await employeeCards.ToListAsync();
 
       var employeeCounts = employeeCardPrints.Select(ej => new EmployeeCardPrintViewModel
       {

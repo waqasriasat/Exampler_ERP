@@ -371,6 +371,20 @@ namespace Exampler_ERP.Utilities
 
       return EmployeeRequestTypeList;
     }
+    public async Task<List<SelectListItem>> GetProcessTypes()
+    {
+      var processTypeList = await _appDBContext.Settings_ProcessTypes
+          .Select(d => new SelectListItem
+          {
+            Value = d.ProcessTypeID.ToString(),
+            Text = d.ProcessTypeName
+          })
+          .ToListAsync();
+
+      processTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+
+      return processTypeList;
+    }
     public async Task<List<SelectListItem>> GetMonthsTypes()
     {
       try
@@ -437,7 +451,9 @@ namespace Exampler_ERP.Utilities
                     <strong>{e.FirstName} {e.FatherName} {e.FamilyName}</strong><br />
                     <span>{e.DepartmentType.DepartmentTypeName}, {e.BranchType.BranchTypeName}</span><br />
                     <span>{e.Phone1 ?? e.Phone2 ?? e.Mobile ?? e.Whatsapp}</span>
-                </div>"
+                </div>",
+            Name = $"{e.FirstName} {e.FatherName} {e.FamilyName}" // Full name to be returned
+
           })
           .ToListAsync();
 

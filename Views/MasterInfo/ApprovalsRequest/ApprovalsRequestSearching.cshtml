@@ -113,17 +113,22 @@
                 }
             });
 
+          
             $("#searchEmployeeInput").autocomplete({
                 source: function (request, response) {
+                 
                     $.ajax({
-                        url: '@Url.Action("GetEmployeeSuggestions", "Employee")',
+                        url: '@Url.Action("GetEmployeeSuggestions", "Employee")', // Ensure this matches the C# method
                         type: 'GET',
                         data: { term: request.term },
                         success: function (data) {
+                         
                             response($.map(data, function (item) {
                                 return {
-                                    label: item.label,  // HTML content
-                                    value: item.id      // Employee ID
+                                    label: item.label,  // HTML content to be displayed in suggestions
+                                    id: item.id,     // Employee ID for the hidden input
+                                    name: item.name,      // Full name to be used in the input field
+                                    value: item.name
                                 };
                             }));
                         }
@@ -131,10 +136,13 @@
                 },
                 minLength: 2,
                 select: function (event, ui) {
-                    // Do something when an employee is selected
-                    console.log(ui.item.value); // Employee ID
+                    debugger;
+                    // Set the selected employee's ID and name
+                    $("#EmployeeID").val(ui.item.id); // Set the hidden input for Employee ID
+                    $("#searchEmployeeInput").val(ui.item.name); // Set the input field for Employee Name
                 }
             });
+          
         });
     </script>
     <script>
@@ -151,6 +159,8 @@
 <h4 class="py-3 mb-4">
     <span class="text-muted fw-light">Master Info /</span> Process Approvals
 </h4>
+@Html.Partial("~/Views/MasterInfo/ApprovalsRequest/_ApprovalsRequestSearching.cshtml", Model)
+<br />
 @Html.Partial("~/Views/MasterInfo/ApprovalsRequest/_ApprovalsRequest.cshtml", Model)
 <!-- Include the modal partial -->
 <div id="approvalsProcessTypeApprovalModalContainer"></div>

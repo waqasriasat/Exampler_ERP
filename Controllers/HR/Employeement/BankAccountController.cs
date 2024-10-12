@@ -19,9 +19,9 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       _logger = logger;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? id)
     {
-      var employeeBankAccounts = await (from emp in _appDBContext.HR_Employees
+      var employeeBankAccountsQuery = from emp in _appDBContext.HR_Employees
                                         join con in _appDBContext.HR_Contracts
                                         on emp.EmployeeID equals con.EmployeeID
                                         join bank in _appDBContext.HR_BankAccounts
@@ -35,7 +35,13 @@ namespace Exampler_ERP.Controllers.HR.Employeement
                                           emp.FatherName,
                                           emp.FamilyName,
                                           BankName = j != null ? j.BankName : "N/A"
-                                        }).ToListAsync();
+                                        };
+
+      if (id.HasValue)
+      {
+        employeeBankAccountsQuery = employeeBankAccountsQuery.Where(e => e.EmployeeID == id.Value);
+      }
+      var employeeBankAccounts = await employeeBankAccountsQuery.ToListAsync();
 
       var employeeCounts = employeeBankAccounts.Select(ej => new EmployeeBankAccountViewModel
       {

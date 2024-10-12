@@ -18,9 +18,8 @@ namespace Exampler_ERP.Controllers.MasterInfo
       _utils = utils;
     }
     
-    public async Task<IActionResult> Index(int? id = null)
+    public async Task<IActionResult> Index(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? ProcessTypeID)
     {
-      // Base query: filter for records where AppID == 0
       var query = _appDBContext.CR_ProcessTypeApprovalDetails
           .Include(pta => pta.CR_ProcessTypeApproval)
               .ThenInclude(pta => pta.Employee)
@@ -29,21 +28,65 @@ namespace Exampler_ERP.Controllers.MasterInfo
           .Include(pta => pta.ProcessTypeApprovalDetailDoc)
           .Where(pta => pta.AppID == 0);
 
-      // If an id is provided, further filter by id
+      if (FromDate.HasValue)
+      {
+        var fromDateTime = FromDate.Value.Date.AddSeconds(1);
+        query = query.Where(pta => pta.CR_ProcessTypeApproval.Date >= fromDateTime);
+      }
+
+      if (ToDate.HasValue)
+      {
+        var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+        query = query.Where(pta => pta.CR_ProcessTypeApproval.Date <= toDateTime);
+      }
+
+      // Filter by EmployeeName
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(pta => pta.CR_ProcessTypeApproval.EmployeeID <= EmployeeID.Value);
+      }
+
+      // Filter by ProcessTypeID
+      if (ProcessTypeID.HasValue && ProcessTypeID != 0)
+      {
+        query = query.Where(pta => pta.CR_ProcessTypeApproval.ProcessTypeID == ProcessTypeID.Value);
+      }
+
+      ViewBag.FromDate = FromDate;
+      ViewBag.ToDate = ToDate;
+      ViewBag.ProcessTypeID = ProcessTypeID;
+      ViewBag.EmployeeID = EmployeeID;
+      ViewBag.EmployeeName = EmployeeName;
+
+      var result = await query
+          .OrderByDescending(pta => pta.ApprovalProcessDetailID)
+          .ToListAsync();
+
+      ViewBag.ProcessTypeList = await _utils.GetProcessTypes();
+      return View("~/Views/MasterInfo/ApprovalsRequest/ApprovalsRequestSearching.cshtml", result);
+    }
+    public async Task<IActionResult> SelectedIndex(int? id = null)
+    {
+      var query = _appDBContext.CR_ProcessTypeApprovalDetails
+          .Include(pta => pta.CR_ProcessTypeApproval)
+              .ThenInclude(pta => pta.Employee)
+          .Include(pta => pta.CR_ProcessTypeApproval)
+              .ThenInclude(pta => pta.ProcessType)
+          .Include(pta => pta.ProcessTypeApprovalDetailDoc)
+          .Where(pta => pta.AppID == 0);
+
       if (id.HasValue)
       {
         query = query.Where(pta => pta.CR_ProcessTypeApproval.ProcessTypeID == id.Value);
       }
 
-      // Execute the query and order the results
       var result = await query
           .OrderByDescending(pta => pta.ApprovalProcessDetailID)
           .ToListAsync();
 
-      // Return the view with the filtered results
+      ViewBag.ProcessTypeList = await _utils.GetProcessTypes();
       return View("~/Views/MasterInfo/ApprovalsRequest/ApprovalsRequest.cshtml", result);
     }
-
     [HttpGet]
     public async Task<IActionResult> DownloadDocument(int id)
     {

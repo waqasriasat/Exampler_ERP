@@ -18,15 +18,73 @@ namespace Exampler_ERP.Controllers.HR.HR
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    //public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID, int? DeducationTypeID)
+    //{
+    //  var deductions = await _appDBContext.HR_Deductions
+    //    .Where(b => b.DeleteYNID != 1)
+    //    .Include(d => d.Employee)
+    //    .Include(d => d.DeductionType)
+    //    .ToListAsync();
+
+    //  ViewBag.MonthsTypeID = MonthsTypeID;
+    //  ViewBag.YearsTypeID = YearsTypeID;
+    //  ViewBag.DeducationTypeID = DeducationTypeID;
+    //  ViewBag.EmployeeID = EmployeeID;
+    //  ViewBag.EmployeeName = EmployeeName;
+
+    //  ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
+    //  ViewBag.DeducationTypeList = await _utils.GetDeductionTypes();
+    //  return View("~/Views/HR/HR/Deduction/Deduction.cshtml", deductions);
+    //}
+    public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID, int? DeducationTypeID)
     {
-      var deductions = await _appDBContext.HR_Deductions
-        .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Employee)
-        .Include(d => d.DeductionType)
-        .ToListAsync();
+      var query = _appDBContext.HR_Deductions
+          .Where(b => b.DeleteYNID != 1)
+          .Include(d => d.Employee)
+          .Include(d => d.DeductionType)
+          .AsQueryable();
+
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0)
+      {
+        query = query.Where(d => d.Month == MonthsTypeID.Value);
+      }
+
+      if (YearsTypeID.HasValue)
+      {
+        query = query.Where(d => d.Year == YearsTypeID.Value);
+      }
+
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(d => d.EmployeeID == EmployeeID.Value);
+      }
+
+      if (!string.IsNullOrEmpty(EmployeeName))
+      {
+        query = query.Where(d =>
+            (d.Employee.FirstName + " " + d.Employee.FatherName + " " + d.Employee.FamilyName)
+            .Contains(EmployeeName));
+      }
+
+      if (DeducationTypeID.HasValue && DeducationTypeID != 0)
+      {
+        query = query.Where(d => d.DeductionTypeID == DeducationTypeID.Value);
+      }
+
+      var deductions = await query.ToListAsync();
+
+      ViewBag.MonthsTypeID = MonthsTypeID;
+      ViewBag.YearsTypeID = YearsTypeID;
+      ViewBag.DeducationTypeID = DeducationTypeID;
+      ViewBag.EmployeeID = EmployeeID;
+      ViewBag.EmployeeName = EmployeeName;
+
+      ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
+      ViewBag.DeducationTypeList = await _utils.GetDeductionTypes();
+
       return View("~/Views/HR/HR/Deduction/Deduction.cshtml", deductions);
     }
+
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {

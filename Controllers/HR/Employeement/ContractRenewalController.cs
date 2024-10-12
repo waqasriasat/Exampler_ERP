@@ -20,16 +20,22 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       _utils = utils;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? id)
     {
       var today = DateTime.Today;
       var futureDate = today.AddDays(30);
 
-      var contracts = await _appDBContext.HR_Contracts
+      var employeecontractQuery = _appDBContext.HR_Contracts
           .Where(c => c.DeleteYNID != 1 &&
                       c.ContractTypeID == 1 &&
                       c.EndDate != null &&
-                      (c.EndDate.Value <= futureDate || c.EndDate.Value < today))
+                      (c.EndDate.Value <= futureDate || c.EndDate.Value < today));
+
+      if (id.HasValue)
+      {
+        employeecontractQuery = employeecontractQuery.Where(c => c.EmployeeID == id.Value);
+      }
+      var contracts = await employeecontractQuery
           .Include(c => c.Employee)
           .ToListAsync();
 

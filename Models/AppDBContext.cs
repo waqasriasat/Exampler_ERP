@@ -30,11 +30,20 @@ namespace Exampler_ERP.Models
     public DbSet<Settings_ContractType> Settings_ContractTypes { get; set; }
     public DbSet<Settings_DeductionValue> Settings_DeductionValues { get; set; }
     public DbSet<Settings_DeductionClass> Settings_DeductionClasses { get; set; }
+    public DbSet<Settings_EndOfServiceReasonType> Settings_EndOfServiceReasonTypes { get; set; }
+    public DbSet<Settings_EmployeeRequestType> Settings_EmployeeRequestTypes { get; set; }
+    public DbSet<Settings_OverTimeRate> Settings_OverTimeRates { get; set; }
+    public DbSet<Settings_OverTimeType> Settings_OverTimeTypes { get; set; }
+    public DbSet<Settings_MonthType> Settings_MonthTypes { get; set; }
+    public DbSet<Settings_AddionalAllowanceType> Settings_AddionalAllowanceTypes { get; set; }
+    public DbSet<Settings_FixedDeductionType> Settings_FixedDeductionTypes { get; set; }
     public DbSet<CR_ProcessTypeApproval> CR_ProcessTypeApprovals { get; set; }
     public DbSet<CR_ProcessTypeApprovalDetail> CR_ProcessTypeApprovalDetails { get; set; }
     public DbSet<CR_ProcessTypeApprovalDetailDoc> CR_ProcessTypeApprovalDetailDocs { get; set; }
     public DbSet<CR_ProcessTypeApprovalSetup> CR_ProcessTypeApprovalSetups { get; set; }
     public DbSet<CR_ProcessTypeForward> CR_ProcessTypeForwards { get; set; }
+    public DbSet<CR_FaceAttenance> CR_FaceAttenances { get; set; }
+    public DbSet<CR_ThumbAttendance> CR_ThumbAttendances { get; set; }
     public DbSet<CR_User> CR_Users { get; set; }
     public DbSet<HR_DeductionSetup> HR_DeductionSetups { get; set; }
     public DbSet<HR_Employee> HR_Employees { get; set; }
@@ -50,21 +59,13 @@ namespace Exampler_ERP.Models
     public DbSet<HR_OverTime> HR_OverTimes { get; set; }
     public DbSet<HR_EndOfService> HR_EndOfServices { get; set; }
     public DbSet<HR_Vacation> HR_Vacations { get; set; }
-    public DbSet<Settings_EndOfServiceReasonType> Settings_EndOfServiceReasonTypes { get; set; }
-    public DbSet<Settings_EmployeeRequestType> Settings_EmployeeRequestTypes { get; set; }
     public DbSet<HR_EmployeeRequest> HR_EmployeeRequests { get; set; }
     public DbSet<HR_VacationSettle> HR_VacationSettles { get; set; }
     public DbSet<HR_DocumentUpload> HR_DocumentUploads { get; set; }
-    public DbSet<Settings_OverTimeRate> Settings_OverTimeRates { get; set; }
-    public DbSet<Settings_OverTimeType> Settings_OverTimeTypes { get; set; }
-    public DbSet<Settings_MonthType> Settings_MonthTypes { get; set; }
     public DbSet<HR_AddionalAllowance> HR_AddionalAllowances { get; set; }
     public DbSet<HR_AddionalAllowanceDetail> HR_AddionalAllowanceDetails { get; set; }
-    public DbSet<Settings_AddionalAllowanceType> Settings_AddionalAllowanceTypes { get; set; }
-
     public DbSet<HR_FixedDeduction> HR_FixedDeductions { get; set; }
     public DbSet<HR_FixedDeductionDetail> HR_FixedDeductionDetails { get; set; }
-    public DbSet<Settings_FixedDeductionType> Settings_FixedDeductionTypes { get; set; }
     public DbSet<HR_EmployeeEducation> HR_EmployeeEducations { get; set; }
     public DbSet<HR_EmployeeExperience> HR_EmployeeExperiences { get; set; }
 

@@ -18,16 +18,56 @@ namespace Exampler_ERP.Controllers.HR.HR
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID, int? OvertimeTypeID)
     {
-      var OverTimes = await _appDBContext.HR_OverTimes
-        .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Employee)
-        .Include(d => d.OverTimeType)
-        .Include(d => d.MonthType)
-        .ToListAsync();
-      return View("~/Views/HR/HR/OverTime/OverTime.cshtml", OverTimes);
+      var query = _appDBContext.HR_OverTimes
+          .Where(b => b.DeleteYNID != 1)
+          .Include(d => d.Employee)
+          .Include(d => d.OverTimeType)
+          .Include(d => d.MonthType)
+          .AsQueryable();  // Move this up to allow further filtering
+
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0)
+      {
+        query = query.Where(d => d.MonthTypeID == MonthsTypeID.Value);
+      }
+
+      if (YearsTypeID.HasValue)
+      {
+        query = query.Where(d => d.Year == YearsTypeID.Value);
+      }
+
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(d => d.EmployeeID == EmployeeID.Value);
+      }
+
+      if (!string.IsNullOrEmpty(EmployeeName))
+      {
+        query = query.Where(d =>
+            (d.Employee.FirstName + " " + d.Employee.FatherName + " " + d.Employee.FamilyName)
+            .Contains(EmployeeName));
+      }
+
+      if (OvertimeTypeID.HasValue && OvertimeTypeID != 0)
+      {
+        query = query.Where(d => d.OverTimeTypeID == OvertimeTypeID.Value);
+      }
+
+      var overTimes = await query.ToListAsync();
+
+      ViewBag.MonthsTypeID = MonthsTypeID;
+      ViewBag.YearsTypeID = YearsTypeID;
+      ViewBag.OvertimeTypeID = OvertimeTypeID;
+      ViewBag.EmployeeID = EmployeeID;
+      ViewBag.EmployeeName = EmployeeName;
+
+      ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
+      ViewBag.OvertimeTypeList = await _utils.GetOverTimeTypes();  // Assuming a similar utility exists for overtime types
+
+      return View("~/Views/HR/HR/OverTime/OverTime.cshtml", overTimes);
     }
+
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {

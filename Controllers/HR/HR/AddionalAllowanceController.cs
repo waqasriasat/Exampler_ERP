@@ -19,13 +19,42 @@ namespace Exampler_ERP.Controllers.HR.HR
       _logger = logger;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
     {
-      var addionalAllowances = await _appDBContext.HR_AddionalAllowances
+      var query = _appDBContext.HR_AddionalAllowances
         .Include(d => d.Employee)
         .Include(d => d.MonthType)
-        .ToListAsync();
-      
+        .AsQueryable();
+
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0)
+      {
+        query = query.Where(d => d.MonthTypeID == MonthsTypeID.Value);
+      }
+
+      if (YearsTypeID.HasValue)
+      {
+        query = query.Where(d => d.Year == YearsTypeID.Value);
+      }
+
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(d => d.EmployeeID == EmployeeID.Value);
+      }
+
+      if (!string.IsNullOrEmpty(EmployeeName))
+      {
+        query = query.Where(d =>
+            (d.Employee.FirstName + " " + d.Employee.FatherName + " " + d.Employee.FamilyName)
+            .Contains(EmployeeName));
+      }
+      var addionalAllowances = await query.ToListAsync();
+
+      ViewBag.MonthsTypeID = MonthsTypeID;
+      ViewBag.YearsTypeID = YearsTypeID;
+      ViewBag.EmployeeID = EmployeeID;
+      ViewBag.EmployeeName = EmployeeName;
+
+      ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
 
       return View("~/Views/HR/HR/AddionalAllowance/AddionalAllowance.cshtml", addionalAllowances);
     }

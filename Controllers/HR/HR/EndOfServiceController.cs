@@ -18,12 +18,52 @@ namespace Exampler_ERP.Controllers.HR.HR
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? EndOfServiceReasonTypeID)
     {
-      var EndOfService = await _appDBContext.HR_EndOfServices
+      var query = _appDBContext.HR_EndOfServices
         .Where(b => b.DeleteYNID != 1)
         .Include(d => d.Employee)
-        .ToListAsync();
+        .AsQueryable();
+
+      if (FromDate.HasValue)
+      {
+        var fromDateTime = FromDate.Value.Date.AddSeconds(1);
+        query = query.Where(d => d.DateOfCompletionOfWork >= fromDateTime);
+      }
+
+      if (ToDate.HasValue)
+      {
+        var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+        query = query.Where(d => d.DateOfCompletionOfWork <= toDateTime);
+      }
+
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(d => d.EmployeeID == EmployeeID.Value);
+      }
+
+      if (!string.IsNullOrEmpty(EmployeeName))
+      {
+        query = query.Where(d =>
+            (d.Employee.FirstName + " " + d.Employee.FatherName + " " + d.Employee.FamilyName)
+            .Contains(EmployeeName));
+      }
+
+      if (EndOfServiceReasonTypeID.HasValue && EndOfServiceReasonTypeID != 0)
+      {
+        query = query.Where(d => d.EndOfSerivceReasonTypeId == EndOfServiceReasonTypeID.Value);
+      }
+
+      var EndOfService = await query.ToListAsync();
+
+      ViewBag.FromDate = FromDate;
+      ViewBag.ToDate = ToDate;
+      ViewBag.EndOfServiceReasonTypeID = EndOfServiceReasonTypeID;
+      ViewBag.EmployeeID = EmployeeID;
+      ViewBag.EmployeeName = EmployeeName;
+
+      ViewBag.EndOfServiceReasonTypeList = await _utils.GetEndOfServiceReasonTypes();
+
       return View("~/Views/HR/HR/EndOfService/EndOfService.cshtml", EndOfService);
     }
     [HttpGet]
