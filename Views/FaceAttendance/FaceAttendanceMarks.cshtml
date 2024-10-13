@@ -1,0 +1,173 @@
+@{
+    Layout = "_CommonMasterLayout";
+
+    ViewData["Title"] = "Mark Attendance via Webcam";
+}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Modern Card UI for Attendance -->
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Mark Attendance via Webcam</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Webcam and Attendance submission -->
+                        <div class="col-md-8">
+                            <div id="webcamContainer" class="mt-3 text-center">
+                                <video id="webcam" autoplay playsinline class="border rounded shadow-sm" style="width: 100%; height: auto;"></video>
+                                <button id="captureButton" class="btn btn-primary mt-3 w-100" style="display:none;">Capture Photo</button>
+                                <canvas id="canvas" style="display:none;" width="400" height="300"></canvas>
+                                <input type="hidden" id="imageData" />
+                                <button id="submitAttendance" class="btn btn-success mt-3 w-100" disabled>Submit Attendance</button>
+                            </div>
+                        </div>
+
+                        <!-- Employee details and Inputs -->
+                        <div class="col-md-4">
+                            <div id="employeeDetails" class="p-3 bg-light rounded shadow-sm">
+                                <h5>Employee Details</h5>
+                                <p><strong>Name:</strong> <span id="EmployeeName"></span></p>
+                                <p><strong>Branch:</strong> <span id="Branch"></span></p>
+                                <p><strong>Department:</strong> <span id="Department"></span></p>
+                                <p><strong>Designation:</strong> <span id="Designation"></span></p>
+                            </div>
+
+                            <!-- Employee ID Input -->
+                            <div class="form-group mt-4">
+                                <label for="EmployeeID">Employee ID:</label>
+                                <input type="text" id="EmployeeID" name="employeeID" class="form-control" placeholder="Enter Employee ID" />
+                                <button id="fetchEmployee" class="btn btn-primary mt-3 w-100">Fetch Employee</button>
+                            </div>
+
+                            <!-- Password Input -->
+                            <div class="form-group mt-4">
+                                <label for="Password">Password:</label>
+                                <input type="password" id="Password" class="form-control" placeholder="Enter Password" />
+                                <button id="verifyPassword" class="btn btn-success mt-3 w-100" disabled>Verify Password</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section PageScripts {
+    <script>
+        // Fetch Employee Details
+        document.getElementById('fetchEmployee').addEventListener('click', function () {
+            var employeeID = parseInt(document.getElementById('EmployeeID').value); // Convert to integer
+            console.log("EmployeeID in JavaScript: ", employeeID); // Debug output
+            if (!isNaN(employeeID)) { // Check if employeeID is a valid number
+                fetch('/FaceAttendance/FetchEmployeeDetails', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ employeeID: employeeID })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Display employee details
+                            document.getElementById('EmployeeName').textContent = data.employee.FirstName + ' ' + data.employee.FatherName + ' ' + data.employee.FamilyName;
+                            document.getElementById('Branch').textContent = data.employee.branch;
+                            document.getElementById('Department').textContent = data.employee.department;
+                            document.getElementById('Designation').textContent = data.employee.designation;
+                            document.getElementById('employeeDetails').style.display = 'block';
+
+                            // Disable Fetch Employee button
+                            document.getElementById('fetchEmployee').disabled = true;
+
+                            // Enable Verify Password button
+                            document.getElementById('verifyPassword').disabled = false;
+                        } else {
+                            alert(data.message);
+                        }
+                    });
+            } else {
+                alert("Please enter a valid Employee ID."); // Alert if invalid
+            }
+        });
+
+        // Verify Password and enable webcam
+        document.getElementById('verifyPassword').addEventListener('click', function () {
+            var employeeID = parseInt(document.getElementById('EmployeeID').value);
+            var password = document.getElementById('Password').value;
+
+            fetch('/FaceAttendance/VerifyPassword', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ employeeID: employeeID, password: password })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Enable webcam
+                        document.getElementById('webcamContainer').style.display = 'block';
+                        navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
+                            document.getElementById('webcam').srcObject = stream;
+                        });
+
+                        // Disable Verify Password button
+                        document.getElementById('verifyPassword').disabled = true;
+
+                        // Enable Capture Photo button
+                        document.getElementById('submitAttendance').disabled = false;
+                    } else {
+                        alert(data.message);
+                    }
+                });
+        });
+
+        // Capture photo and enable Submit Attendance button
+        document.getElementById('captureButton').addEventListener('click', function () {
+            var canvas = document.getElementById('canvas');
+            var video = document.getElementById('webcam');
+            var context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            var imageData = canvas.toDataURL('image/png');
+            document.getElementById('imageData').value = imageData;
+
+            // Enable Submit Attendance button
+            //document.getElementById('submitAttendance').disabled = false;
+        });
+
+       
+        document.getElementById('submitAttendance').addEventListener('click', function () {
+
+            // Capture photo and enable Submit Attendance button
+           var canvas = document.getElementById('canvas');
+            var video = document.getElementById('webcam');
+            var context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            var imageData = canvas.toDataURL('image/png');
+            document.getElementById('imageData').value = imageData;
+
+            document.getElementById('submitAttendance').disabled = false;
+
+            // Submit attendance
+            var employeeID = parseInt(document.getElementById('EmployeeID').value);
+            var imageData = document.getElementById('imageData').value;
+
+            fetch('/FaceAttendance/SubmitAttendance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ employeeID: employeeID, imageData: imageData })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    // Reload the page on success
+                    if (data.success) {
+                        location.reload(); // This will refresh the page
+                    }
+                });
+        });
+    </script>
+}

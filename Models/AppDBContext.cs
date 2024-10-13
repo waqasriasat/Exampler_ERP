@@ -42,7 +42,7 @@ namespace Exampler_ERP.Models
     public DbSet<CR_ProcessTypeApprovalDetailDoc> CR_ProcessTypeApprovalDetailDocs { get; set; }
     public DbSet<CR_ProcessTypeApprovalSetup> CR_ProcessTypeApprovalSetups { get; set; }
     public DbSet<CR_ProcessTypeForward> CR_ProcessTypeForwards { get; set; }
-    public DbSet<CR_FaceAttenance> CR_FaceAttenances { get; set; }
+    public DbSet<CR_FaceAttendance> CR_FaceAttendances { get; set; }
     public DbSet<CR_ThumbAttendance> CR_ThumbAttendances { get; set; }
     public DbSet<CR_User> CR_Users { get; set; }
     public DbSet<HR_DeductionSetup> HR_DeductionSetups { get; set; }

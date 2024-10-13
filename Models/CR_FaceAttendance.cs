@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Exampler_ERP.Models
 {
-  public class CR_FaceAttenance
+  public class CR_FaceAttendance
   {
     [Key]
     public int AttenanceID { get; set; }

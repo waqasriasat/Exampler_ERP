@@ -17,32 +17,37 @@ namespace Exampler_ERP.Controllers.HR.Reports
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+ 
+    public async Task<IActionResult> Index(int? id)
     {
-      var result = await _appDBContext.HR_Contracts
-        .Where(emp => emp.ActiveYNID == 1)
-        .Select(emp => new VacationBalanceViewModel // Use the view model
-        {
-          EmployeeID = emp.EmployeeID,
-          EmployeeName = emp.Employee.FirstName + " " + emp.Employee.FatherName + " " + emp.Employee.FamilyName,
-          StartDate = emp.StartDate,
-          EndDate = emp.EndDate,
-          YearlyVacation = emp.VacationDays,
-          TotalVacation = (EF.Functions.DateDiffDay(emp.StartDate, emp.EndDate) / 365.25) * emp.VacationDays,
-          VacationBalance = (EF.Functions.DateDiffDay(emp.StartDate, emp.EndDate) / 365.25) * emp.VacationDays
-          -(_appDBContext.HR_Vacations
-                    .Where(vac => vac.EmployeeID == emp.Employee.EmployeeID && vac.FinalApprovalID == 1)
-                    .Sum(vac => (int?)vac.TotalDays) ?? 0),
+      var contractsQuery = _appDBContext.HR_Contracts
+          .Where(emp => emp.ActiveYNID == 1);
 
-        })
-        .OrderBy(emp => emp.EmployeeID)
-        .ToListAsync();
+      if (id.HasValue)
+      {
+        contractsQuery = contractsQuery.Where(emp => emp.EmployeeID == id.Value);
+      }
+
+      var result = await contractsQuery
+          .Select(emp => new VacationBalanceViewModel
+          {
+            EmployeeID = emp.EmployeeID,
+            EmployeeName = emp.Employee.FirstName + " " + emp.Employee.FatherName + " " + emp.Employee.FamilyName,
+            StartDate = emp.StartDate,
+            EndDate = emp.EndDate,
+            YearlyVacation = emp.VacationDays,
+
+            TotalVacation = (EF.Functions.DateDiffDay(emp.StartDate, emp.EndDate) / 365.25) * emp.VacationDays,
+
+            VacationBalance = ((EF.Functions.DateDiffDay(emp.StartDate, emp.EndDate) / 365.25) * emp.VacationDays)
+                  - (_appDBContext.HR_Vacations
+                      .Where(vac => vac.EmployeeID == emp.Employee.EmployeeID && vac.FinalApprovalID == 1)
+                      .Sum(vac => (int?)vac.TotalDays) ?? 0)
+          })
+          .OrderBy(emp => emp.EmployeeID)
+          .ToListAsync();
 
       return View("~/Views/HR/Reports/VacationBalance/VacationBalance.cshtml", result);
     }
-
-
-
-
   }
 }

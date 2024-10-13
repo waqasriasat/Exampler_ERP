@@ -17,27 +17,79 @@ namespace Exampler_ERP.Controllers.HR.Reports
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    //public async Task<IActionResult> Index(DateTime? FromDate, DateTime? ToDate, int? EmployeeID, int? VacationTypeID)
+    //{
+    //  var result = await _appDBContext.HR_Vacations
+    //    .Where(emp => emp.FinalApprovalID == 1)
+    //    .Select(emp => new VacationReportViewModel // Use the view model
+    //    {
+    //      EmployeeID = emp.EmployeeID,
+    //      EmployeeName = emp.Employee.FirstName + " " + emp.Employee.FatherName + " " + emp.Employee.FamilyName,
+    //      StartDate = emp.StartDate,
+    //      EndDate = emp.EndDate,
+    //      TotalDays = emp.TotalDays,
+    //      TypeOfVacation = _appDBContext.HR_VacationSettles
+    //            .Where(vac => vac.VacationID == emp.VacationID && vac.FinalApprovalID == 1)
+    //            .Any() ? "Paid" : "UnPaid"
+
+
+    //    })
+    //    .OrderBy(emp => emp.EmployeeID)
+    //    .ToListAsync();
+
+    //  return View("~/Views/HR/Reports/VacationReport/VacationReport.cshtml", result);
+    //}
+    public async Task<IActionResult> Index(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? VacationTypeID)
     {
-      var result = await _appDBContext.HR_Vacations
-        .Where(emp => emp.FinalApprovalID == 1)
-        .Select(emp => new VacationReportViewModel // Use the view model
-        {
-          EmployeeID = emp.EmployeeID,
-          EmployeeName = emp.Employee.FirstName + " " + emp.Employee.FatherName + " " + emp.Employee.FamilyName,
-          StartDate = emp.StartDate,
-          EndDate = emp.EndDate,
-          TotalDays = emp.TotalDays,
-          TypeOfVacation = _appDBContext.HR_VacationSettles
-                .Where(vac => vac.VacationID == emp.VacationID && vac.FinalApprovalID == 1)
-                .Any() ? "Paid" : "UnPaid"
+      var vacationQuery = _appDBContext.HR_Vacations
+          .Where(emp => emp.FinalApprovalID == 1);
 
+      if (FromDate.HasValue)
+      {
+        vacationQuery = vacationQuery.Where(emp => emp.StartDate >= FromDate.Value);
+      }
 
-        })
-        .OrderBy(emp => emp.EmployeeID)
-        .ToListAsync();
+      if (ToDate.HasValue)
+      {
+        vacationQuery = vacationQuery.Where(emp => emp.EndDate <= ToDate.Value);
+      }
+
+      if (EmployeeID.HasValue)
+      {
+        vacationQuery = vacationQuery.Where(emp => emp.EmployeeID == EmployeeID.Value);
+      }
+
+      if (VacationTypeID.HasValue)
+      {
+        vacationQuery = vacationQuery.Where(emp => emp.VacationTypeID == VacationTypeID.Value);
+      }
+
+      var result = await vacationQuery
+          .Select(emp => new VacationReportViewModel
+          {
+            EmployeeID = emp.EmployeeID,
+            EmployeeName = emp.Employee.FirstName + " " + emp.Employee.FatherName + " " + emp.Employee.FamilyName,
+            StartDate = emp.StartDate,
+            EndDate = emp.EndDate,
+            TotalDays = emp.TotalDays,
+
+            TypeOfVacation = _appDBContext.HR_VacationSettles
+                  .Where(vac => vac.VacationID == emp.VacationID && vac.FinalApprovalID == 1)
+                  .Any() ? "Paid" : "UnPaid"
+          })
+          .OrderBy(emp => emp.EmployeeID)
+          .ToListAsync();
+
+      ViewBag.FromDate = FromDate;
+      ViewBag.ToDate = ToDate;
+      ViewBag.VacationTypeID = VacationTypeID;
+      ViewBag.EmployeeID = EmployeeID;
+      ViewBag.EmployeeName = EmployeeName;
+
+      ViewBag.VacationTypeList = await _utils.GetVacationTypes();
 
       return View("~/Views/HR/Reports/VacationReport/VacationReport.cshtml", result);
     }
+
   }
 }

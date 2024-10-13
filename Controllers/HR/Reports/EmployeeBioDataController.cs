@@ -17,14 +17,23 @@ namespace Exampler_ERP.Controllers.HR.Reports
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? id)
     {
-      var employees = await _appDBContext.HR_Employees
-        .Include(c => c.BranchType)
-        .Include(c => c.DepartmentType)
-        .ToListAsync();
+      var employeesQuery = _appDBContext.HR_Employees
+       .Where(c => c.DeleteYNID != 1 && c.FinalApprovalID==1);
+
+      if (id.HasValue)
+      {
+        employeesQuery = employeesQuery.Where(c => c.EmployeeID == id.Value);
+      }
+
+      var employees = await employeesQuery
+          .Include(c => c.BranchType)
+          .Include(c => c.DepartmentType)
+          .ToListAsync();
 
       return View("~/Views/HR/Reports/EmployeeBioData/EmployeeBioData.cshtml", employees);
     }
+
   }
 }

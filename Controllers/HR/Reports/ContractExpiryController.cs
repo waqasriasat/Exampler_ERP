@@ -17,25 +17,36 @@ namespace Exampler_ERP.Controllers.HR.Reports
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+ 
+    public async Task<IActionResult> Index(int? id)
     {
-      var contracts = await _appDBContext.HR_Contracts
-        .Include(c => c.Employee)
-        .Include(c => c.Employee.BranchType)
-        .Include(c => c.Employee.DepartmentType)
-        .Include(c => c.Settings_ContractType)
-        .Select(c => new ContractEndDaysViewModel
-        {
-          EmployeeName = c.Employee.FirstName +' '+ c.Employee.FatherName + ' ' + c.Employee.FamilyName,
-          BranchName = c.Employee.BranchType.BranchTypeName,
-          DepartmentName = c.Employee.DepartmentType.DepartmentTypeName,
-          ContractTypeName = c.Settings_ContractType.ContractTypeName,
-          EndDays = c.EndDate.HasValue ? (c.EndDate.Value - DateTime.Now).Days : 0
-        }).ToListAsync();
+      var contractsQuery = _appDBContext.HR_Contracts
+        .Where(c => c.DeleteYNID != 1 && c.FinalApprovalID == 1)
+          .Include(c => c.Employee)
+          .ThenInclude(e => e.BranchType)
+          .Include(c => c.Employee)
+          .ThenInclude(e => e.DepartmentType)
+          .Include(c => c.Settings_ContractType)
+          .AsQueryable();
+
+      if (id.HasValue)
+      {
+        contractsQuery = contractsQuery.Where(c => c.Employee.EmployeeID == id.Value);
+      }
+
+      var contracts = await contractsQuery
+          .Select(c => new ContractEndDaysViewModel
+          {
+            EmployeeName = c.Employee.FirstName + ' ' + c.Employee.FatherName + ' ' + c.Employee.FamilyName,
+            BranchName = c.Employee.BranchType.BranchTypeName,
+            DepartmentName = c.Employee.DepartmentType.DepartmentTypeName,
+            ContractTypeName = c.Settings_ContractType.ContractTypeName,
+            EndDays = c.EndDate.HasValue ? (c.EndDate.Value - DateTime.Now).Days : 0
+          })
+          .ToListAsync();
 
       return View("~/Views/HR/Reports/ContractExpiry/ContractExpiry.cshtml", contracts);
     }
-
 
 
 

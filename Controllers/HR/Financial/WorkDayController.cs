@@ -18,12 +18,46 @@ namespace Exampler_ERP.Controllers.HR.Financial
       _configuration = configuration;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
     {
-      var WorkDays = await _appDBContext.HR_WorkDays
+      var query = _appDBContext.HR_WorkDays
         .Where(b => b.DeleteYNID != 1)
         .Include(d => d.Employee)
-        .ToListAsync();
+        .AsQueryable();
+
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0)
+      {
+        query = query.Where(d => d.Month == MonthsTypeID.Value);
+      }
+
+      if (YearsTypeID.HasValue)
+      {
+        query = query.Where(d => d.Year == YearsTypeID.Value);
+      }
+
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(d => d.EmployeeID == EmployeeID.Value);
+      }
+
+      if (!string.IsNullOrEmpty(EmployeeName))
+      {
+        query = query.Where(d =>
+            (d.Employee.FirstName + " " + d.Employee.FatherName + " " + d.Employee.FamilyName)
+            .Contains(EmployeeName));
+      }
+
+    
+
+      var WorkDays = await query.ToListAsync();
+
+      ViewBag.MonthsTypeID = MonthsTypeID;
+      ViewBag.YearsTypeID = YearsTypeID;
+      ViewBag.EmployeeID = EmployeeID;
+      ViewBag.EmployeeName = EmployeeName;
+
+      ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
+  
       return View("~/Views/HR/financial/WorkDay/WorkDay.cshtml", WorkDays);
     }
     [HttpGet]

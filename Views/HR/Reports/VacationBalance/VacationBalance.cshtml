@@ -13,19 +13,73 @@
             $('#printButton').click(function () {
                 window.print();
             });
+            $.widget("custom.autocomplete", $.ui.autocomplete, {
+                _renderItem: function (ul, item) {
+                    return $("<li>")
+                        .append(item.label)  // Render the HTML content in `label`
+                        .appendTo(ul);
+                }
+            });
+
+            $("#searchEmployeeInput").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '@Url.Action("GetEmployeeSuggestions", "Employee")',
+                        type: 'GET',
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.label,  // HTML content
+                                    value: item.id      // Employee ID
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    // Do something when an employee is selected
+                    console.log(ui.item.value); // Employee ID
+                    window.location.href = '@Url.Action("Index", "VacationBalance")?id=' + ui.item.value;
+                }
+            });
         });
 
         function printVacations() {
             var printWindow = window.open('@Url.Action("Print", "VacationBalance")', '_blank');
             printWindow.focus();
         }
+
     </script>
 }
 
 <h4 class="py-3 mb-4">
     <span class="text-muted fw-light">Reports /</span> Vacation Balance
 </h4>
+<div class="row">
+    <div class="col-md-12">
 
+        <div class="card">
+            <h5 class="card-header">Searhing Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8" style="padding-bottom: 15px;">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search Employee" id="searchEmployeeInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchEmployeeButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
 <div class="row">
     <div class="col-md-12">
         <div class="card">

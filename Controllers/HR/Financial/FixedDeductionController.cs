@@ -4,6 +4,7 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Contracts;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Exampler_ERP.Controllers.HR.Financial
 {
@@ -20,32 +21,38 @@ namespace Exampler_ERP.Controllers.HR.Financial
       _logger = logger;
       _utils = utils;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? id)
     {
       var FixedDeductiontypes = await _appDBContext.Settings_FixedDeductionTypes.ToListAsync();
       var FixedDeductions = await _appDBContext.HR_FixedDeductions.ToListAsync();
       var FixedDeductionDetails = await _appDBContext.HR_FixedDeductionDetails.ToListAsync();
-      var employees = await (from emp in _appDBContext.HR_Employees
-                             join con in _appDBContext.HR_Contracts
-                             on emp.EmployeeID equals con.EmployeeID
-                             where con.ActiveYNID == 1 && emp.ActiveYNID == 1
-                             select emp).ToListAsync();
 
-      var employeeCounts = new List<EmployeeCountViewModel>();
+      var employeesQuery = from emp in _appDBContext.HR_Employees
+                           join con in _appDBContext.HR_Contracts
+                           on emp.EmployeeID equals con.EmployeeID
+                           where con.ActiveYNID == 1 && emp.ActiveYNID == 1
+                           select emp;
 
-      foreach (var pt in employees)
+      if (id.HasValue)
       {
-        var typeCount = await _appDBContext.HR_FixedDeductionDetails
-            .Where(sd => sd.FixedDeduction.EmployeeID == pt.EmployeeID)
-            .CountAsync();
-
-        employeeCounts.Add(new EmployeeCountViewModel
-        {
-          EmployeeID = pt.EmployeeID,
-          EmployeeName = pt.FirstName + " " + pt.FatherName + " " + pt.FamilyName,
-          TypeCount = typeCount
-        });
+        employeesQuery = employeesQuery.Where(e => e.EmployeeID == id);
       }
+
+      var employees = await employeesQuery.ToListAsync();
+
+      var employeeIds = employees.Select(e => e.EmployeeID).ToList();
+      var deductionCounts = await _appDBContext.HR_FixedDeductionDetails
+          .Where(sd => employeeIds.Contains(sd.FixedDeduction.EmployeeID))
+          .GroupBy(sd => sd.FixedDeduction.EmployeeID)
+          .Select(g => new { EmployeeID = g.Key, Count = g.Count() })
+          .ToListAsync();
+
+      var employeeCounts = employees.Select(emp => new EmployeeCountViewModel
+      {
+        EmployeeID = emp.EmployeeID,
+        EmployeeName = emp.FirstName + " " + emp.FatherName + " " + emp.FamilyName,
+        TypeCount = deductionCounts.FirstOrDefault(dc => dc.EmployeeID == emp.EmployeeID)?.Count ?? 0
+      }).ToList();
 
       var viewModel = new EmployeeListViewModel
       {
@@ -54,6 +61,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
       return View("~/Views/HR/Financial/FixedDeduction/FixedDeduction.cshtml", viewModel);
     }
+
 
     public async Task<IActionResult> Edit(int id)
     {
