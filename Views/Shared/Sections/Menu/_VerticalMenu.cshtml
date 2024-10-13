@@ -84,7 +84,9 @@
                     currentPage.StartsWith("/ContractExpiry/Index")||
                     currentPage.StartsWith("/EmployeeBioData/Index")||
                     currentPage.StartsWith("/VacationBalance/Index")||
-                    currentPage.StartsWith("/VacationReport/Index") ? " active open" : "")'>
+                    currentPage.StartsWith("/VacationReport/Index")||
+                    currentPage.StartsWith("/ExperienceCertificate/Index")||
+                    currentPage.StartsWith("/EducationDocument/Index") ? " active open" : "")'>
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-group"></i>
                 <div>Human Resources</div>
@@ -138,7 +140,8 @@
                 <!-- Report -->
                 <li class='menu-item@(currentPage == "/Report_Dashboard/Index"|| currentPage == "/ContractExpiry/Index" ||
                                       currentPage == "/EmployeeBioData/Index" || currentPage == "/VacationBalance/Index" ||
-                                      currentPage == "/VacationReport/Index"  ? " active" : "")'>
+                                      currentPage == "/VacationReport/Index"|| currentPage == "/ExperienceCertificate/Index" ||
+                                      currentPage == "/EducationDocument/Index"  ? " active" : "")'>
                     <a asp-controller="Report_Dashboard" asp-action="Index" class="menu-link">
                         <div>Report</div>
                     </a>

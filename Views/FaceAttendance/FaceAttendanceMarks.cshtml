@@ -8,13 +8,14 @@
         <div class="col-md-8">
             <!-- Modern Card UI for Attendance -->
             <div class="card shadow-lg">
-                <div class="card-header bg-primary text-white text-center">
-                    <h3>Mark Attendance via Webcam</h3>
+                <div class="card-header bg-warning   text-white text-center">
+                    @* <h3>Mark Attendance via Webcam</h3> *@
+                    <img src="~/img/favicon/SideLogoWithName.png" width="40%" />
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <!-- Webcam and Attendance submission -->
-                        <div class="col-md-8">
+                        <div class="col-md-7">
                             <div id="webcamContainer" class="mt-3 text-center">
                                 <video id="webcam" autoplay playsinline class="border rounded shadow-sm" style="width: 100%; height: auto;"></video>
                                 <button id="captureButton" class="btn btn-primary mt-3 w-100" style="display:none;">Capture Photo</button>
@@ -25,7 +26,7 @@
                         </div>
 
                         <!-- Employee details and Inputs -->
-                        <div class="col-md-4">
+                        <div class="col-md-5" style="padding-top: 17px;">
                             <div id="employeeDetails" class="p-3 bg-light rounded shadow-sm">
                                 <h5>Employee Details</h5>
                                 <p><strong>Name:</strong> <span id="EmployeeName"></span></p>
@@ -35,17 +36,17 @@
                             </div>
 
                             <!-- Employee ID Input -->
-                            <div class="form-group mt-4">
+                            <div class="form-group mt-2" style="padding-top: 37px;">
                                 <label for="EmployeeID">Employee ID:</label>
                                 <input type="text" id="EmployeeID" name="employeeID" class="form-control" placeholder="Enter Employee ID" />
-                                <button id="fetchEmployee" class="btn btn-primary mt-3 w-100">Fetch Employee</button>
+                                <button id="fetchEmployee" class="btn btn-primary mt-3 w-100" style="display:none">Fetch Employee</button>
                             </div>
 
                             <!-- Password Input -->
-                            <div class="form-group mt-4">
+                            <div class="form-group mt-2">
                                 <label for="Password">Password:</label>
                                 <input type="password" id="Password" class="form-control" placeholder="Enter Password" />
-                                <button id="verifyPassword" class="btn btn-success mt-3 w-100" disabled>Verify Password</button>
+                                <button id="verifyPassword" class="btn btn-success mt-3 w-100">Verify ID & Password</button>
                             </div>
                         </div>
                     </div>
@@ -73,7 +74,7 @@
                     .then(data => {
                         if (data.success) {
                             // Display employee details
-                            document.getElementById('EmployeeName').textContent = data.employee.FirstName + ' ' + data.employee.FatherName + ' ' + data.employee.FamilyName;
+                            document.getElementById('EmployeeName').textContent = data.employee.firstName + ' ' + data.employee.fatherName + ' ' + data.employee.familyName;
                             document.getElementById('Branch').textContent = data.employee.branch;
                             document.getElementById('Department').textContent = data.employee.department;
                             document.getElementById('Designation').textContent = data.employee.designation;
@@ -95,6 +96,37 @@
 
         // Verify Password and enable webcam
         document.getElementById('verifyPassword').addEventListener('click', function () {
+            var employeeID = parseInt(document.getElementById('EmployeeID').value); // Convert to integer
+            console.log("EmployeeID in JavaScript: ", employeeID); // Debug output
+            if (!isNaN(employeeID)) { // Check if employeeID is a valid number
+                fetch('/FaceAttendance/FetchEmployeeDetails', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ employeeID: employeeID })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Display employee details
+                            document.getElementById('EmployeeName').textContent = data.employee.firstName + ' ' + data.employee.fatherName + ' ' + data.employee.familyName;
+                            document.getElementById('Branch').textContent = data.employee.branch;
+                            document.getElementById('Department').textContent = data.employee.department;
+                            document.getElementById('Designation').textContent = data.employee.designation;
+                            document.getElementById('employeeDetails').style.display = 'block';
+
+                            // Disable Fetch Employee button
+                            document.getElementById('fetchEmployee').disabled = true;
+
+                            // Enable Verify Password button
+                            document.getElementById('verifyPassword').disabled = false;
+                        } else {
+                            alert(data.message);
+                        }
+                    });
+            } else {
+                alert("Please enter a valid Employee ID."); // Alert if invalid
+            }
+
             var employeeID = parseInt(document.getElementById('EmployeeID').value);
             var password = document.getElementById('Password').value;
 

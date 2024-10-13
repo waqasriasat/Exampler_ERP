@@ -1,0 +1,36 @@
+@model Exampler_ERP.Models.HR_ThumbEnrollment
+
+<div class="modal fade" id="editThumbEnrollmentModal" tabindex="-1" role="dialog" aria-labelledby="editThumbEnrollmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editThumbEnrollmentModalLabel">Edit Thumb Enrollment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editThumbEnrollmentForm" method="post">
+                    <input type="hidden" asp-for="ThumbID" />
+                    <div class="form-group">
+                        <label for="EmployeeID">Employee</label>
+                        <select asp-for="EmployeeID" class="form-control" asp-items="ViewBag.Employees"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ThumbFormat">Thumb Format</label>
+                        <input type="text" class="form-control" asp-for="ThumbFormat" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ThumbImpression">Thumb Impression (Binary)</label>
+                        <input type="file" class="form-control" asp-for="ThumbImpression" />
+                    </div>
+                    <div class="form-group">
+                        <label for="EnrollmentDate">Enrollment Date</label>
+                        <input type="date" class="form-control" asp-for="EnrollmentDate" />
+                    </div>
+                    <button type="button" id="saveThumbEnrollmentChanges" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+@model Exampler_ERP.Models.HR_ThumbEnrollment
+
+<div class="modal fade" id="addThumbEnrollmentModal" tabindex="-1" role="dialog" aria-labelledby="addThumbEnrollmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addThumbEnrollmentModalLabel">Add Thumb Enrollment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addThumbEnrollmentForm" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="EmployeeID">Employee</label>
+                        <select asp-for="EmployeeID" class="form-control" asp-items="ViewBag.EmployeesList"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ThumbFormat">Thumb Format</label>
+                        <input type="text" class="form-control" asp-for="ThumbFormat" placeholder="Format (ISO, ANSI, etc.)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Thumb Impression</label>
+                        <div>
+                            <video id="video" width="320" height="240" autoplay></video>
+                            <button type="button" id="capture" class="btn btn-primary">Capture</button>
+                        </div>
+                        <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+                        <input type="hidden" name="ThumbImpression" id="thumbImpression" />
+                        <span asp-validation-for="ThumbImpression" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="EnrollmentDate">Enrollment Date</label>
+                        <input type="date" class="form-control" asp-for="EnrollmentDate" />
+                    </div>
+                    <button type="button" id="saveNewThumbEnrollment" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

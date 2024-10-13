@@ -41,17 +41,19 @@ namespace Exampler_ERP.Controllers.HR.Financial
       var employees = await employeesQuery.ToListAsync();
 
       var employeeIds = employees.Select(e => e.EmployeeID).ToList();
+      //var deductionCounts = await _appDBContext.HR_FixedDeductionDetails
+      //    .Where(sd => employeeIds.Contains(sd.FixedDeduction.EmployeeID))
+      //    .GroupBy(sd => sd.FixedDeduction.EmployeeID)
+      //    .Select(g => new { EmployeeID = g.Key, Count = g.Count() })
+      //    .ToListAsync();
       var deductionCounts = await _appDBContext.HR_FixedDeductionDetails
-          .Where(sd => employeeIds.Contains(sd.FixedDeduction.EmployeeID))
-          .GroupBy(sd => sd.FixedDeduction.EmployeeID)
-          .Select(g => new { EmployeeID = g.Key, Count = g.Count() })
-          .ToListAsync();
+    .CountAsync(sd => employeeIds.Contains(sd.FixedDeduction.EmployeeID));
 
       var employeeCounts = employees.Select(emp => new EmployeeCountViewModel
       {
         EmployeeID = emp.EmployeeID,
         EmployeeName = emp.FirstName + " " + emp.FatherName + " " + emp.FamilyName,
-        TypeCount = deductionCounts.FirstOrDefault(dc => dc.EmployeeID == emp.EmployeeID)?.Count ?? 0
+        TypeCount = deductionCounts
       }).ToList();
 
       var viewModel = new EmployeeListViewModel
