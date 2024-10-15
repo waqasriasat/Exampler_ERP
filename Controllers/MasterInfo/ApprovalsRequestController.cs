@@ -59,7 +59,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
       ViewBag.EmployeeName = EmployeeName;
 
       var result = await query
-          .OrderByDescending(pta => pta.ApprovalProcessDetailID)
+          .OrderByDescending(pta => pta.ProcessTypeApprovalDetailID)
           .ToListAsync();
 
       ViewBag.ProcessTypeList = await _utils.GetProcessTypes();
@@ -81,7 +81,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
       }
 
       var result = await query
-          .OrderByDescending(pta => pta.ApprovalProcessDetailID)
+          .OrderByDescending(pta => pta.ProcessTypeApprovalDetailID)
           .ToListAsync();
 
       ViewBag.ProcessTypeList = await _utils.GetProcessTypes();
@@ -91,7 +91,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
     public async Task<IActionResult> DownloadDocument(int id)
     {
       var document = await _appDBContext.CR_ProcessTypeApprovalDetailDocs
-          .FirstOrDefaultAsync(d => d.ApprovalProcessDetailDocID == id);
+          .FirstOrDefaultAsync(d => d.ProcessTypeApprovalDetailDocID == id);
 
       if (document == null || document.Doc == null)
       {
@@ -103,9 +103,9 @@ namespace Exampler_ERP.Controllers.MasterInfo
     [HttpGet]
     public async Task<IActionResult> ViewDocument(int id)
     {
-      // Retrieve the document based on ApprovalProcessDetailDocID
+      // Retrieve the document based on ProcessTypeApprovalDetailDocID
       var document = await _appDBContext.CR_ProcessTypeApprovalDetailDocs
-          .FirstOrDefaultAsync(d => d.ApprovalProcessDetailDocID == id);
+          .FirstOrDefaultAsync(d => d.ProcessTypeApprovalDetailDocID == id);
 
       if (document == null || document.Doc == null)
       {
@@ -137,7 +137,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
     .Include(pta => pta.CR_ProcessTypeApproval) 
     .ThenInclude(pta => pta.ProcessType)
     .Include(pta => pta.ProcessTypeApprovalDetailDoc) 
-    .Where(pta => pta.AppID == 1 && pta.ApprovalProcessID == id)
+    .Where(pta => pta.AppID == 1 && pta.ProcessTypeApprovalID == id)
     .OrderBy(pta => pta.Rank) 
     .ToListAsync();
 
@@ -147,7 +147,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
       if (result == null)
       {
-        return NotFound($"No approval record found for ApprovalProcessID = {id}");
+        return NotFound($"No approval record found for ProcessTypeApprovalID = {id}");
       }
 
       return PartialView("~/Views/MasterInfo/ApprovalsRequest/ApprovalsProcessTypeApproval.cshtml", result);
@@ -155,24 +155,24 @@ namespace Exampler_ERP.Controllers.MasterInfo
     public async Task<IActionResult> Actions(int id)
     {
       var result = await _appDBContext.CR_ProcessTypeApprovalDetails
-               .Where(pta => pta.ApprovalProcessDetailID == id)
+               .Where(pta => pta.ProcessTypeApprovalDetailID == id)
                .Include(pta => pta.CR_ProcessTypeApproval)
                .FirstOrDefaultAsync();
 
       var ProcessTypeID = result?.CR_ProcessTypeApproval?.ProcessTypeID;
       var TransactionID = result?.CR_ProcessTypeApproval?.TransactionID;
       var RankID = result?.Rank;
-      var ApprovalProcessDetailID = result?.ApprovalProcessDetailID;
+      var ProcessTypeApprovalDetailID = result?.ProcessTypeApprovalDetailID;
 
       ViewBag.ProcessTypeID = ProcessTypeID;
       ViewBag.TransactionID = TransactionID;
       ViewBag.RankID = RankID;
-      ViewBag.ApprovalProcessDetailID = ApprovalProcessDetailID;
+      ViewBag.ProcessTypeApprovalDetailID = ProcessTypeApprovalDetailID;
 
 
       if (result == null)
       {
-        return NotFound($"No approval record found for ApprovalProcessID = {id}");
+        return NotFound($"No approval record found for ProcessTypeApprovalID = {id}");
       }
 
       return PartialView("~/Views/MasterInfo/ApprovalsRequest/ActionsProcessTypeApproval.cshtml", result);
@@ -195,7 +195,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
             var processTypeApprovalDetailDoc = new CR_ProcessTypeApprovalDetailDoc
             {
-              ApprovalProcessDetailID = processTypeApprovalDetail.ApprovalProcessDetailID,
+              ProcessTypeApprovalDetailID = processTypeApprovalDetail.ProcessTypeApprovalDetailID,
               Doc = memoryStream.ToArray(),
               DocName = FileUpload.FileName,
               DocExt = Path.GetExtension(FileUpload.FileName)
@@ -220,7 +220,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
         {
           var newApprovalSetup = new CR_ProcessTypeApprovalDetail
           {
-            ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID,
+            ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID,
             Date = processTypeApprovalDetail.Date,
             RoleID = nextApprovalSetup.RoleTypeID,
             AppID = 0,
@@ -244,7 +244,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             {
               user.ActiveYNID = 1;
               user.FinalApprovalID = 1;
-              user.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              user.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(user);
               await _appDBContext.SaveChangesAsync();
@@ -260,7 +260,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             {
               employee.ActiveYNID = 1;
               employee.FinalApprovalID = 1;
-              employee.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              employee.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(employee);
               await _appDBContext.SaveChangesAsync();
@@ -276,7 +276,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             {
               contract.ActiveYNID = 1;
               contract.FinalApprovalID = 1;
-              contract.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              contract.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(contract);
               await _appDBContext.SaveChangesAsync();
@@ -291,7 +291,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             if (contractRenewal != null)
             {
               contractRenewal.FinalApprovalID = 1;
-              contractRenewal.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              contractRenewal.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
               await _appDBContext.SaveChangesAsync();
             }
 
@@ -314,7 +314,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             if (endOfService != null)
             {
               endOfService.FinalApprovalID = 1;
-              endOfService.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              endOfService.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
               await _appDBContext.SaveChangesAsync();
             }
 
@@ -347,7 +347,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             if (salary != null)
             {
               salary.FinalApprovalID = 1;
-              salary.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              salary.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(salary);
               await _appDBContext.SaveChangesAsync();
@@ -363,7 +363,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             if (addionalAllowance != null)
             {
               addionalAllowance.FinalApprovalID = 1;
-              addionalAllowance.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              addionalAllowance.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(addionalAllowance);
               await _appDBContext.SaveChangesAsync();
@@ -387,7 +387,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             if (fixedDeduction != null)
             {
               fixedDeduction.FinalApprovalID = 1;
-              fixedDeduction.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              fixedDeduction.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(fixedDeduction);
               await _appDBContext.SaveChangesAsync();
@@ -403,7 +403,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             if (vacation != null)
             {
               vacation.FinalApprovalID = 1;
-              vacation.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              vacation.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(vacation);
               await _appDBContext.SaveChangesAsync();
@@ -419,7 +419,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             if (vacationSettle != null)
             {
               vacationSettle.FinalApprovalID = 1;
-              vacationSettle.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              vacationSettle.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(vacationSettle);
               await _appDBContext.SaveChangesAsync();
@@ -431,19 +431,19 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 14)
           {
-            var EmployeeRequest = await _appDBContext.HR_EmployeeRequests
-                                                     .Where(u => u.EmployeeRequestID == transactionID)
-                                                     .FirstOrDefaultAsync();
+            //var EmployeeRequest = await _appDBContext.HR_EmployeeRequests
+            //                                         .Where(u => u.EmployeeRequestID == transactionID)
+            //                                         .FirstOrDefaultAsync();
 
 
-            if (EmployeeRequest != null)
-            {
-              EmployeeRequest.FinalApprovalID = 1;
-              EmployeeRequest.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+            //if (EmployeeRequest != null)
+            //{
+            //  EmployeeRequest.FinalApprovalID = 1;
+            //  EmployeeRequest.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
-              _appDBContext.Update(EmployeeRequest);
-              await _appDBContext.SaveChangesAsync();
-            }
+            //  _appDBContext.Update(EmployeeRequest);
+            //  await _appDBContext.SaveChangesAsync();
+            //}
           }
         }
         return Json(new { success = true });
@@ -468,7 +468,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
             var processTypeApprovalDetailDoc = new CR_ProcessTypeApprovalDetailDoc
             {
-              ApprovalProcessDetailID = processTypeApprovalDetail.ApprovalProcessDetailID,
+              ProcessTypeApprovalDetailID = processTypeApprovalDetail.ProcessTypeApprovalDetailID,
               Doc = memoryStream.ToArray(),
               DocName = FileUpload.FileName,
               DocExt = Path.GetExtension(FileUpload.FileName)
@@ -493,7 +493,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             {
               user.ActiveYNID = 2;
               user.FinalApprovalID = 2;
-              user.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              user.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(user);
               await _appDBContext.SaveChangesAsync();
@@ -509,7 +509,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
           {
             employee.ActiveYNID = 2;
             employee.FinalApprovalID = 2;
-            employee.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+            employee.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
             _appDBContext.Update(employee);
             await _appDBContext.SaveChangesAsync();
@@ -525,7 +525,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
           {
             contract.ActiveYNID = 2;
             contract.FinalApprovalID = 2;
-            contract.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+            contract.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
             _appDBContext.Update(contract);
             await _appDBContext.SaveChangesAsync();
@@ -539,7 +539,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             if (contractRenewal != null)
             {
               contractRenewal.FinalApprovalID = 2;
-              contractRenewal.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              contractRenewal.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(contractRenewal);
               await _appDBContext.SaveChangesAsync();
@@ -554,7 +554,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             if (endOfService != null)
             {
               endOfService.FinalApprovalID = 2;
-              endOfService.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              endOfService.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(endOfService);
               await _appDBContext.SaveChangesAsync();
@@ -569,7 +569,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             if (salary != null)
             {
               salary.FinalApprovalID = 2;
-              salary.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              salary.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(salary);
               await _appDBContext.SaveChangesAsync();
@@ -589,7 +589,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             if (addionalAllowance != null)
             {
               addionalAllowance.FinalApprovalID = 2;
-              addionalAllowance.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              addionalAllowance.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(addionalAllowance);
               await _appDBContext.SaveChangesAsync();
@@ -609,7 +609,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             if (fixedDeduction != null)
             {
               fixedDeduction.FinalApprovalID = 2;
-              fixedDeduction.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              fixedDeduction.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(fixedDeduction);
               await _appDBContext.SaveChangesAsync();
@@ -626,7 +626,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             if (vacation != null)
             {
               vacation.FinalApprovalID = 2;
-              vacation.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              vacation.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(vacation);
               await _appDBContext.SaveChangesAsync();
@@ -642,7 +642,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
             if (vacationSettle != null)
             {
               vacationSettle.FinalApprovalID = 2;
-              vacationSettle.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+              vacationSettle.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(vacationSettle);
               await _appDBContext.SaveChangesAsync();
@@ -654,19 +654,19 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 14)
           {
-            var EmployeeRequest = await _appDBContext.HR_EmployeeRequests
-                                                     .Where(u => u.EmployeeRequestID == transactionID)
-                                                     .FirstOrDefaultAsync();
+            //var EmployeeRequest = await _appDBContext.HR_EmployeeRequests
+            //                                         .Where(u => u.EmployeeRequestID == transactionID)
+            //                                         .FirstOrDefaultAsync();
 
 
-            if (EmployeeRequest != null)
-            {
-              EmployeeRequest.FinalApprovalID = 2;
-              EmployeeRequest.ApprovalProcessID = processTypeApprovalDetail.ApprovalProcessID;
+            //if (EmployeeRequest != null)
+            //{
+            //  EmployeeRequest.FinalApprovalID = 2;
+            //  EmployeeRequest.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
-              _appDBContext.Update(EmployeeRequest);
-              await _appDBContext.SaveChangesAsync();
-            }
+            //  _appDBContext.Update(EmployeeRequest);
+            //  await _appDBContext.SaveChangesAsync();
+            //}
           }
         }
         return Json(new { success = true });
@@ -678,7 +678,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
     {
       // Fetch the ProcessTypeApproval record
       var fatchDetail = await _appDBContext.CR_ProcessTypeApprovals
-          .Where(pta => pta.ApprovalProcessID == id)
+          .Where(pta => pta.ProcessTypeApprovalID == id)
           .FirstOrDefaultAsync();
 
       if (fatchDetail == null)
@@ -880,13 +880,13 @@ namespace Exampler_ERP.Controllers.MasterInfo
       }
       if (processTypeID == 14)
       {
-        ViewBag.EmployeeRequestTypeList = await _utils.GetEmployeeRequestTypes();
-        var EmployeeRequests = await _appDBContext.HR_EmployeeRequests
-        .Where(v => v.EmployeeRequestID == transactionID)
-                                     .Include(c => c.Employee)
-                                      .Include(c => c.Settings_EmployeeRequestType)
-                                     .FirstOrDefaultAsync();
-        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", EmployeeRequests);
+        //ViewBag.EmployeeRequestTypeList = await _utils.GetEmployeeRequestTypes();
+        //var EmployeeRequests = await _appDBContext.HR_EmployeeRequests
+        //.Where(v => v.EmployeeRequestID == transactionID)
+        //                             .Include(c => c.Employee)
+        //                              .Include(c => c.Settings_EmployeeRequestType)
+        //                             .FirstOrDefaultAsync();
+        //return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", EmployeeRequests);
       }
       // Fallback view if no ProcessTypeID matches
       return View("~/Views/MasterInfo/ApprovalsRequest/ApprovalsRequest.cshtml", result);

@@ -146,7 +146,7 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
     [HttpGet]
     public async Task<IActionResult> ViewDocument(int id)
     {
-      // Retrieve the document based on ApprovalProcessDetailDocID
+      // Retrieve the document based on ProcessTypeApprovalDetailDocID
       var document = await _appDBContext.HR_DocumentUploads
          .FirstOrDefaultAsync(d => d.DocumentUploadID == id);
 

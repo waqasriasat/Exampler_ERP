@@ -15,6 +15,6 @@ namespace Exampler_ERP.Models
     public DateTime NStartDate { get; set; }
     public DateTime? NEndDate { get; set; }
     public int? FinalApprovalID { get; set; }
-    public int? ApprovalProcessID { get; set; }
+    public int? ProcessTypeApprovalID { get; set; }
   }
 }

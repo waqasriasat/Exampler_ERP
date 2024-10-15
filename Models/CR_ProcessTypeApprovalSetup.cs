@@ -6,7 +6,7 @@ namespace Exampler_ERP.Models
   public class CR_ProcessTypeApprovalSetup
   {
     [Key]
-    public int ProcessTypeApprovalID { get; set; }
+    public int ProcessTypeApprovalSetupID { get; set; }
     public int ProcessTypeID { get; set; }
     [ForeignKey("ProcessTypeID")]
     public virtual Settings_ProcessType? ProcessType { get; set; }

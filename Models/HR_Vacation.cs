@@ -34,7 +34,7 @@ namespace Exampler_ERP.Models
     public DateTime Date { get; set; } // Date when the leave was applied
 
     public int? FinalApprovalID { get; set; }
-    public int? ApprovalProcessID { get; set; }
+    public int? ProcessTypeApprovalID { get; set; }
     public int? DeleteYNID { get; set; }
   }
 }

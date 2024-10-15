@@ -16,7 +16,7 @@ namespace Exampler_ERP.Models
     public virtual Settings_MonthType? MonthType { get; set; }
     public int? Year { get; set; }
     public int? FinalApprovalID { get; set; }
-    public int? ApprovalProcessID { get; set; }
+    public int? ProcessTypeApprovalID { get; set; }
 
     public List<HR_AddionalAllowanceDetail> AddionalAllowanceDetails { get; set; } = new List<HR_AddionalAllowanceDetail>();
   }

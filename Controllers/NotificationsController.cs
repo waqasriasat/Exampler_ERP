@@ -27,8 +27,8 @@ namespace Exampler_ERP.Controllers
       var processCounts = await _appDBContext.CR_ProcessTypeApprovalDetails
           .Where(pta => pta.AppID == 0)
           .Join(_appDBContext.CR_ProcessTypeApprovals,
-              pta => pta.ApprovalProcessID,
-              cta => cta.ApprovalProcessID,
+              pta => pta.ProcessTypeApprovalID,
+              cta => cta.ProcessTypeApprovalID,
               (pta, cta) => new { pta, cta })
           .Join(_appDBContext.HR_Employees,
               combined => combined.cta.EmployeeID,
@@ -42,7 +42,7 @@ namespace Exampler_ERP.Controllers
           .Select(g => new
           {
             ProcessTypeID = g.Key,
-            ProcessCount = g.Count(x => x.pta.ApprovalProcessID != null) // Count only non-null ApprovalProcessIDs
+            ProcessCount = g.Count(x => x.pta.ProcessTypeApprovalID != null) // Count only non-null ProcessTypeApprovalIDs
           })
           .ToListAsync();
 

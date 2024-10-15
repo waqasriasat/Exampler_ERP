@@ -1,0 +1,44 @@
+@model Exampler_ERP.Models.Temp.EmployeeRequestTypeForwardViewModel
+
+<div class="modal fade" id="addNewEmployeeRequestTypeForwardModal" tabindex="-1" role="dialog" aria-labelledby="addNewEmployeeRequestTypeForwardModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="addNewEmployeeRequestTypeForwardModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Add New EmployeeRequestTypeForward
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label for="EmployeeRequestTypeID" class="form-label fw-bold">EmployeeRequestType</label>
+                        <select asp-for="EmployeeRequestTypeID" asp-items="@(new SelectList(ViewBag.EmployeeRequestTypes, "EmployeeRequestTypeID", "EmployeeRequestTypeName"))" class="form-control form-control-lg"></select>
+                        <span asp-validation-for="EmployeeRequestTypeID" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Roles</label>
+                        @foreach (var role in ViewBag.Roles)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="SelectedRoleIds" value="@role.RoleID" />
+                                <label class="form-check-label">@role.RoleName</label>
+                            </div>
+                        }
+                        <span asp-validation-for="SelectedRoleIds" class="text-danger"></span>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                        <button type="submit" class="btn btn-success" id="saveNewEmployeeRequestTypeForward">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

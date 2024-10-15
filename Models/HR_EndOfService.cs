@@ -24,6 +24,6 @@ namespace Exampler_ERP.Models
     public float TotalEndOfServiceDues { get; set; }
     public int? DeleteYNID { get; set; }
     public int? FinalApprovalID { get; set; }
-    public int? ApprovalProcessID { get; set; }
+    public int? ProcessTypeApprovalID { get; set; }
   }
 }

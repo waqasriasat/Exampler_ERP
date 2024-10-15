@@ -25,6 +25,6 @@ namespace Exampler_ERP.Models
     public float? Amount { get; set; }
     public int? DeleteYNID { get; set; }
     public int? FinalApprovalID { get; set; }
-    public int? ApprovalProcessID { get; set; }
+    public int? ProcessTypeApprovalID { get; set; }
   }
 }

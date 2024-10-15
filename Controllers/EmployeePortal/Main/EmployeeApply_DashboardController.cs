@@ -21,7 +21,7 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Main
     public async Task<IActionResult> Index()
     {
       ViewBag.VacationCount = await _appDBContext.HR_Vacations.CountAsync();
-      ViewBag.EmployeeRequestCount = await _appDBContext.HR_EmployeeRequests.CountAsync();
+      ViewBag.EmployeeRequestCount = await _appDBContext.HR_EmployeeRequestTypeApprovals.CountAsync();
       ViewBag.DocumentsUploadCount = await _appDBContext.HR_DocumentUploads.CountAsync();
       //ViewBag.SalaryCount = await _appDBContext.HR_Salarys.CountAsync();
       //ViewBag.JoiningCount = await _appDBContext.HR_Joinings.CountAsync();

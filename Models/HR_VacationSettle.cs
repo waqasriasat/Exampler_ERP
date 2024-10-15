@@ -13,6 +13,6 @@ namespace Exampler_ERP.Models
     public int SettleDays { get; set; }
     public int SettleAmount { get; set; }
     public int? FinalApprovalID { get; set; } 
-    public int? ApprovalProcessID { get; set; } 
+    public int? ProcessTypeApprovalID { get; set; } 
   }
 }

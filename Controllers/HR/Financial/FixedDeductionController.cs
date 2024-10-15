@@ -145,7 +145,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
             {
               EmployeeID = EmployeeID,
               FinalApprovalID = 0,
-              ApprovalProcessID = 0
+              ProcessTypeApprovalID = 0
             };
             _appDBContext.HR_FixedDeductions.Add(FixedDeduction);
             await _appDBContext.SaveChangesAsync();
@@ -196,7 +196,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
                 {
                   var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
                   {
-                    ApprovalProcessID = newProcessTypeApproval.ApprovalProcessID,
+                    ProcessTypeApprovalID = newProcessTypeApproval.ProcessTypeApprovalID,
                     Date = DateTime.Now,
                     RoleID = nextApprovalSetup.RoleTypeID,
                     AppID = 0,

@@ -192,7 +192,7 @@ namespace Exampler_ERP.Controllers.HR.HR
             {
               var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
               {
-                ApprovalProcessID = newProcessTypeApproval.ApprovalProcessID,
+                ProcessTypeApprovalID = newProcessTypeApproval.ProcessTypeApprovalID,
                 Date = DateTime.Now,
                 RoleID = nextApprovalSetup.RoleTypeID,
                 AppID = 0,
@@ -213,7 +213,7 @@ namespace Exampler_ERP.Controllers.HR.HR
           else
           {
             vacationSettle.FinalApprovalID = 1;
-            vacationSettle.ApprovalProcessID = 0;
+            vacationSettle.ProcessTypeApprovalID = 0;
             _appDBContext.HR_VacationSettles.Update(vacationSettle);
             await _appDBContext.SaveChangesAsync();
             return Json(new { success = true });

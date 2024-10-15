@@ -22,6 +22,6 @@ namespace Exampler_ERP.Models
     [ForeignKey("RoleTypeID")]
     public virtual Settings_RoleType? RoleType { get; set; }
     public int? FinalApprovalID { get; set; }
-    public int? ApprovalProcessID { get; set; }
+    public int? ProcessTypeApprovalID { get; set; }
   }
 }

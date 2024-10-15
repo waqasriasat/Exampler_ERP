@@ -4,7 +4,7 @@
     var ProcessTypeID = ViewBag.ProcessTypeID;
     var TransactionID = ViewBag.TransactionID;
     var RankID = ViewBag.RankID;
-    var ApprovalProcessDetailID = ViewBag.ApprovalProcessDetailID;
+    var ProcessTypeApprovalDetailID = ViewBag.ProcessTypeApprovalDetailID;
 }
 
 <div class="modal fade" id="actionsProcessTypeApprovalModal" tabindex="-1" role="dialog" aria-labelledby="actionsProcessTypeApprovalModalLabel" aria-hidden="true">
@@ -45,8 +45,8 @@
                         <input type="hidden" id="Rank" name="Rank" value="@RankID" />
                         <input type="hidden" id="ProcessTypeID" name="ProcessTypeID" value="@ProcessTypeID" />
                         <input type="hidden" id="TransactionID" name="TransactionID" value="@TransactionID" />
-                        <input type="hidden" id="ApprovalProcessDetailID" name="ApprovalProcessDetailID" value="@ApprovalProcessDetailID" />
-                        <input type="hidden" id="ApprovalProcessID" name="ApprovalProcessID" value="@Model.ApprovalProcessID" />
+                        <input type="hidden" id="ProcessTypeApprovalDetailID" name="ProcessTypeApprovalDetailID" value="@ProcessTypeApprovalDetailID" />
+                        <input type="hidden" id="ProcessTypeApprovalID" name="ProcessTypeApprovalID" value="@Model.ProcessTypeApprovalID" />
                         <input type="hidden" id="Date" name="Date" value="@Model.Date" />
                         <input type="hidden" id="RoleID" name="RoleID" value="@Model.RoleID" />
                     </div>

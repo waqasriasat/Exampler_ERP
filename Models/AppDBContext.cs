@@ -60,7 +60,11 @@ namespace Exampler_ERP.Models
     public DbSet<HR_OverTime> HR_OverTimes { get; set; }
     public DbSet<HR_EndOfService> HR_EndOfServices { get; set; }
     public DbSet<HR_Vacation> HR_Vacations { get; set; }
-    public DbSet<HR_EmployeeRequest> HR_EmployeeRequests { get; set; }
+    public DbSet<HR_EmployeeRequestTypeApproval> HR_EmployeeRequestTypeApprovals { get; set; }
+    public DbSet<HR_EmployeeRequestTypeApprovalDetail> HR_EmployeeRequestTypeApprovalDetails { get; set; }
+    public DbSet<HR_EmployeeRequestTypeApprovalDetailDoc> HR_EmployeeRequestTypeApprovalDetailDocs { get; set; }
+    public DbSet<HR_EmployeeRequestTypeApprovalSetup> HR_EmployeeRequestTypeApprovalSetups { get; set; }
+    public DbSet<HR_EmployeeRequestTypeForward> HR_EmployeeRequestTypeForwards { get; set; }
     public DbSet<HR_VacationSettle> HR_VacationSettles { get; set; }
     public DbSet<HR_DocumentUpload> HR_DocumentUploads { get; set; }
     public DbSet<HR_AddionalAllowance> HR_AddionalAllowances { get; set; }

@@ -104,7 +104,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       foreach (var setup in ProcessTypeApprovalSetups)
       {
-        _logger.LogInformation("Received Setup: ID={ID}, Rank={Rank}, RoleID={RoleID}", setup.ProcessTypeApprovalID, setup.Rank, setup.RoleTypeID);
+        _logger.LogInformation("Received Setup: ID={ID}, Rank={Rank}, RoleID={RoleID}", setup.ProcessTypeApprovalSetupID, setup.Rank, setup.RoleTypeID);
       }
 
       if (ProcessTypeApprovalSetups == null || ProcessTypeApprovalSetups.Count == 0)
@@ -182,7 +182,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       using (var package = new ExcelPackage())
       {
         var worksheet = package.Workbook.Worksheets.Add("ProcessTypeApprovalSetups");
-        worksheet.Cells["A1"].Value = "ProcessType ApprovalID";
+        worksheet.Cells["A1"].Value = "ProcessType SetupID";
         worksheet.Cells["B1"].Value = "ProcessType Name";
         worksheet.Cells["C1"].Value = "Rank";
         worksheet.Cells["D1"].Value = "Role";
@@ -190,7 +190,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
         for (int i = 0; i < ProcessTypeApprovalSetups.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = ProcessTypeApprovalSetups[i].ProcessTypeApprovalID;
+          worksheet.Cells[i + 2, 1].Value = ProcessTypeApprovalSetups[i].ProcessTypeApprovalSetupID;
           worksheet.Cells[i + 2, 2].Value = ProcessTypeApprovalSetups[i].ProcessType?.ProcessTypeName;
           worksheet.Cells[i + 2, 3].Value = ProcessTypeApprovalSetups[i].Rank;
           worksheet.Cells[i + 2, 4].Value = ProcessTypeApprovalSetups[i].RoleTypeID;

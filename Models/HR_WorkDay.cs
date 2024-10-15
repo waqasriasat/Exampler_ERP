@@ -17,6 +17,6 @@ namespace Exampler_ERP.Models
     public DateTime ToDate { get; set; }
     public int? DeleteYNID { get; set; }
     public int? FinalApprovalID { get; set; }
-    public int? ApprovalProcessID { get; set; }
+    public int? ProcessTypeApprovalID { get; set; }
   }
 }

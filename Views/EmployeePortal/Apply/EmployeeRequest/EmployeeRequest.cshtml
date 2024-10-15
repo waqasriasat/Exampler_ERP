@@ -1,4 +1,4 @@
-@model IEnumerable<Exampler_ERP.Models.HR_EmployeeRequest>
+@model IEnumerable<Exampler_ERP.Models.HR_EmployeeRequestTypeApproval>
 
 @{
     Layout = "_EmployeeContentNavbarLayout";
@@ -153,7 +153,7 @@
                                         <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">EmployeeRequest Type : </span>@item.Settings_EmployeeRequestType?.EmployeeRequestTypeName</p>
+                                        <p class="text-nowrap"><span class="smallAdd">EmployeeRequest Type : </span>@item.EmployeeRequestType?.EmployeeRequestTypeName</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <p class="text-nowrap"><span class="smallAdd">Date : </span>@item.Date.ToString("dd/MM/yyyy")</p>
@@ -165,21 +165,21 @@
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="editEmployeeRequestLink" data-id="@item.EmployeeRequestID">
+                                            <a href="#" class="editEmployeeRequestLink" data-id="@item.EmployeeRequestTypeApprovalID">
                                                 <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="printEmployeeRequestLink" data-id="@item.EmployeeRequestID">
+                                            <a href="#" class="printEmployeeRequestLink" data-id="@item.EmployeeRequestTypeApprovalID">
                                                 <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="deleteEmployeeRequestLink" data-id="@item.EmployeeRequestID">
+                                            <a href="#" class="deleteEmployeeRequestLink" data-id="@item.EmployeeRequestTypeApprovalID">
                                                 <i class="fa fa-trash-o" style="font-size: large; color:maroon; line-height: 2;"></i>
                                             </a>
                                         </div>

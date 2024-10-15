@@ -205,7 +205,7 @@ namespace Exampler_ERP.Controllers.HR.HR
             {
               var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
               {
-                ApprovalProcessID = newProcessTypeApproval.ApprovalProcessID,
+                ProcessTypeApprovalID = newProcessTypeApproval.ProcessTypeApprovalID,
                 Date = DateTime.Now,
                 RoleID = nextApprovalSetup.RoleTypeID,
                 AppID = 0,

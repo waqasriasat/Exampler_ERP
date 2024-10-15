@@ -128,7 +128,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
             {
               var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
               {
-                ApprovalProcessID = newProcessTypeApproval.ApprovalProcessID,
+                ProcessTypeApprovalID = newProcessTypeApproval.ProcessTypeApprovalID,
                 Date = DateTime.Now,
                 RoleID = nextApprovalSetup.RoleTypeID,
                 AppID = 0,
@@ -225,7 +225,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           worksheet.Cells[i + 2, 7].Value = contracts[i].DHours;
           worksheet.Cells[i + 2, 8].Value = contracts[i].DMinutes;
           worksheet.Cells[i + 2, 9].Value = contracts[i].FinalApprovalID;
-          worksheet.Cells[i + 2, 10].Value = contracts[i].ApprovalProcessID;
+          worksheet.Cells[i + 2, 10].Value = contracts[i].ProcessTypeApprovalID;
         }
 
         worksheet.Cells["A1:J1"].Style.Font.Bold = true;

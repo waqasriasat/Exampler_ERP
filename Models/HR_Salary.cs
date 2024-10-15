@@ -13,6 +13,6 @@ namespace Exampler_ERP.Models
     [ForeignKey("EmployeeID")]
     public virtual HR_Employee? Employee { get; set; }
     public int? FinalApprovalID { get; set; }
-    public int? ApprovalProcessID { get; set; }
+    public int? ProcessTypeApprovalID { get; set; }
   }
 }
