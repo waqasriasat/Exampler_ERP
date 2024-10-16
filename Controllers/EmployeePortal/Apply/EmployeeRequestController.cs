@@ -7,12 +7,12 @@ using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.EmployeePortal.Apply
 {
-  public class EmployeeRequestTypeController : Controller
+  public class EmployeeRequestController : Controller
   {
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    public EmployeeRequestTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+    public EmployeeRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
@@ -22,34 +22,34 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
     {
       var employeeID = HttpContext.Session.GetInt32("EmployeeID");
 
-      var EmployeeRequestTypes = await _appDBContext.HR_EmployeeRequestTypeApprovals
+      var EmployeeRequests = await _appDBContext.HR_EmployeeRequestTypeApprovals
                                    .Where(v => employeeID != null && v.EmployeeID == employeeID && v.DeleteYNID != 1)
                                    .OrderByDescending(v => v.EmployeeRequestTypeID)
                                    .Include(c => c.Employee)
                                     .Include(c => c.EmployeeRequestType)
                                    .ToListAsync();
 
-      return View("~/Views/EmployeePortal/Apply/EmployeeRequestType/EmployeeRequestType.cshtml", EmployeeRequestTypes);
+      return View("~/Views/EmployeePortal/Apply/EmployeeRequest/EmployeeRequest.cshtml", EmployeeRequests);
     }
     public async Task<IActionResult> Edit(int id)
     {
       ViewBag.EmployeeRequestTypeList = await _utils.GetEmployeeRequestTypes();
-      var EmployeeRequestTypes = await _appDBContext.HR_EmployeeRequestTypeApprovals
-      .Where(v => v.EmployeeRequestTypeID == id)
+      var EmployeeRequests = await _appDBContext.HR_EmployeeRequestTypeApprovals
+      .Where(v => v.EmployeeRequestTypeApprovalID == id)
                                    .Include(c => c.Employee)
-                                    .Include(c => c.EmployeeRequestType)
+                                   .Include(c => c.EmployeeRequestType)
                                    .FirstOrDefaultAsync();
 
-      return PartialView("~/Views/EmployeePortal/Apply/EmployeeRequestType/EditEmployeeRequestType.cshtml", EmployeeRequestTypes);
+      return PartialView("~/Views/EmployeePortal/Apply/EmployeeRequest/EditEmployeeRequest.cshtml", EmployeeRequests);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(HR_EmployeeRequestTypeApproval EmployeeRequestType)
+    public async Task<IActionResult> Edit(HR_EmployeeRequestTypeApproval EmployeeRequest)
     {
       if (ModelState.IsValid)
       {
      
-        _appDBContext.Update(EmployeeRequestType);
+        _appDBContext.Update(EmployeeRequest);
         await _appDBContext.SaveChangesAsync();
         return Json(new { success = true });
       }
@@ -61,23 +61,23 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
     {
       ViewBag.EmployeeRequestTypeList = await _utils.GetEmployeeRequestTypes();
 
-      return PartialView("~/Views/EmployeePortal/Apply/EmployeeRequestType/AddEmployeeRequestType.cshtml", new HR_EmployeeRequestTypeApproval());
+      return PartialView("~/Views/EmployeePortal/Apply/EmployeeRequest/AddEmployeeRequest.cshtml", new HR_EmployeeRequestTypeApproval());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(HR_EmployeeRequestTypeApproval EmployeeRequestType)
+    public async Task<IActionResult> Create(HR_EmployeeRequestTypeApproval EmployeeRequest)
     {
       if (ModelState.IsValid)
       {
-        EmployeeRequestType.Date = DateTime.Now;
+        EmployeeRequest.Date = DateTime.Now;
 
     
-        // Add the EmployeeRequestType entry to the database
-        _appDBContext.Add(EmployeeRequestType);
+        // Add the EmployeeRequest entry to the database
+        _appDBContext.Add(EmployeeRequest);
         await _appDBContext.SaveChangesAsync();
 
-        var EmployeeRequestTypeId = EmployeeRequestType.EmployeeRequestTypeID;
-        if (EmployeeRequestTypeId > 0)
+        var EmployeeRequestTypeID = EmployeeRequest.EmployeeRequestTypeID;
+        if (EmployeeRequestTypeID > 0)
         {
           var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
                              .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 14)
@@ -88,11 +88,11 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
             var newProcessTypeApproval = new CR_ProcessTypeApproval
             {
               ProcessTypeID = 14,
-              Notes = EmployeeRequestType.Notes,
+              Notes = EmployeeRequest.Notes,
               Date = DateTime.Now,
-              EmployeeID = EmployeeRequestType.EmployeeID,
+              EmployeeID = EmployeeRequest.EmployeeID,
               UserID = 1, // Using session value
-              TransactionID = EmployeeRequestType.EmployeeRequestTypeID
+              TransactionID = EmployeeRequest.EmployeeRequestTypeID
             };
 
             _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
@@ -126,9 +126,9 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
           }
           else
           {
-            EmployeeRequestType.FinalApprovalID = 1;
-            EmployeeRequestType.ProcessTypeApprovalID = 0;
-            _appDBContext.HR_EmployeeRequestTypeApprovals.Update(EmployeeRequestType);
+            EmployeeRequest.FinalApprovalID = 1;
+            EmployeeRequest.ProcessTypeApprovalID = 0;
+            _appDBContext.HR_EmployeeRequestTypeApprovals.Update(EmployeeRequest);
             await _appDBContext.SaveChangesAsync();
             return Json(new { success = true });
           }
@@ -144,15 +144,15 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
 
     public async Task<IActionResult> Delete(int id)
     {
-      var EmployeeRequestTypes = await _appDBContext.HR_EmployeeRequestTypeApprovals.FindAsync(id);
-      if (EmployeeRequestTypes == null)
+      var EmployeeRequests = await _appDBContext.HR_EmployeeRequestTypeApprovals.FindAsync(id);
+      if (EmployeeRequests == null)
       {
         return NotFound();
       }
 
-      EmployeeRequestTypes.DeleteYNID = 1;
+      EmployeeRequests.DeleteYNID = 1;
 
-      _appDBContext.HR_EmployeeRequestTypeApprovals.Update(EmployeeRequestTypes);
+      _appDBContext.HR_EmployeeRequestTypeApprovals.Update(EmployeeRequests);
       await _appDBContext.SaveChangesAsync();
 
       return Json(new { success = true });
@@ -162,14 +162,14 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
     {
       var employeeID = HttpContext.Session.GetInt32("EmployeeID");
 
-      var EmployeeRequestTypes = await _appDBContext.HR_EmployeeRequestTypeApprovals
+      var EmployeeRequests = await _appDBContext.HR_EmployeeRequestTypeApprovals
                                    .Where(v => employeeID != null && v.EmployeeID == employeeID && v.DeleteYNID != 1)
                                    .OrderByDescending(v => v.EmployeeRequestTypeID)
                                    .Include(c => c.Employee)
                                     .Include(c => c.EmployeeRequestType)
                                    .ToListAsync();
 
-      return View("~/Views/EmployeePortal/Apply/EmployeeRequestType/PrintEmployeeRequestType.cshtml", EmployeeRequestTypes);
+      return View("~/Views/EmployeePortal/Apply/EmployeeRequest/PrintEmployeeRequest.cshtml", EmployeeRequests);
     }
 
     public async Task<IActionResult> ExportToExcel()
@@ -178,7 +178,7 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
 
       var employeeID = HttpContext.Session.GetInt32("EmployeeID");
 
-      var EmployeeRequestTypes = await _appDBContext.HR_EmployeeRequestTypeApprovals
+      var EmployeeRequests = await _appDBContext.HR_EmployeeRequestTypeApprovals
                                    .Where(v => employeeID != null && v.EmployeeID == employeeID && v.DeleteYNID != 1)
                                    .OrderByDescending(v => v.EmployeeRequestTypeID)
                                    .Include(c => c.Employee)
@@ -186,27 +186,27 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
                                    .ToListAsync();
 
 
-      var EmployeeRequestTypesList = await _utils.GetEmployeeRequestTypes();
+      var EmployeeRequestsList = await _utils.GetEmployeeRequestTypes();
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("EmployeeRequestTypes");
+        var worksheet = package.Workbook.Worksheets.Add("EmployeeRequests");
 
-        worksheet.Cells["A1"].Value = "EmployeeRequestType ID";
+        worksheet.Cells["A1"].Value = "EmployeeRequest ID";
         worksheet.Cells["B1"].Value = "Employee Name";
-        worksheet.Cells["C1"].Value = "EmployeeRequestType Type";
+        worksheet.Cells["C1"].Value = "EmployeeRequest Type";
         worksheet.Cells["D1"].Value = "Apply Date";
         worksheet.Cells["E1"].Value = "Notes";
        
 
-        for (int i = 0; i < EmployeeRequestTypes.Count; i++)
+        for (int i = 0; i < EmployeeRequests.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = EmployeeRequestTypes[i].EmployeeRequestTypeID;
-          worksheet.Cells[i + 2, 2].Value = EmployeeRequestTypes[i].Employee?.FirstName + ' ' + EmployeeRequestTypes[i].Employee?.FatherName + ' ' + EmployeeRequestTypes[i].Employee?.FamilyName;
-          worksheet.Cells[i + 2, 3].Value = EmployeeRequestTypes[i].EmployeeRequestTypeID == 0 || EmployeeRequestTypes[i]?.EmployeeRequestTypeID == null
+          worksheet.Cells[i + 2, 1].Value = EmployeeRequests[i].EmployeeRequestTypeID;
+          worksheet.Cells[i + 2, 2].Value = EmployeeRequests[i].Employee?.FirstName + ' ' + EmployeeRequests[i].Employee?.FatherName + ' ' + EmployeeRequests[i].Employee?.FamilyName;
+          worksheet.Cells[i + 2, 3].Value = EmployeeRequests[i].EmployeeRequestTypeID == 0 || EmployeeRequests[i]?.EmployeeRequestTypeID == null
           ? ""
-          : EmployeeRequestTypesList.FirstOrDefault(g => g.Value == EmployeeRequestTypes[i].EmployeeRequestTypeID.ToString())?.Text;
-          worksheet.Cells[i + 2, 4].Value = EmployeeRequestTypes[i].Date.ToString("dd-MMM-yyyy");
-          worksheet.Cells[i + 2, 5].Value = EmployeeRequestTypes[i].Notes;
+          : EmployeeRequestsList.FirstOrDefault(g => g.Value == EmployeeRequests[i].EmployeeRequestTypeID.ToString())?.Text;
+          worksheet.Cells[i + 2, 4].Value = EmployeeRequests[i].Date.ToString("dd-MMM-yyyy");
+          worksheet.Cells[i + 2, 5].Value = EmployeeRequests[i].Notes;
           
 
         }
@@ -217,7 +217,7 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"EmployeeRequestTypes-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = $"EmployeeRequests-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

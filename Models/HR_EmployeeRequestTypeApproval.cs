@@ -15,11 +15,8 @@ namespace Exampler_ERP.Models
     public int EmployeeID { get; set; }
     [ForeignKey("EmployeeID")]
     public virtual HR_Employee? Employee { get; set; }
-    public int UserID { get; set; }
-    [ForeignKey("UserID")]
-    public virtual CR_User? User { get; set; }
-    public int TransactionID { get; set; }
-    public virtual List<HR_EmployeeRequestTypeApprovalDetail> EmployeeRequestTypeApprovalDetail { get; set; } = new List<HR_EmployeeRequestTypeApprovalDetail>();
+   
+    public virtual List<HR_EmployeeRequestTypeApprovalDetail?> EmployeeRequestTypeApprovalDetail { get; set; } = new List<HR_EmployeeRequestTypeApprovalDetail?>();
     public int? ProcessTypeApprovalID { get; set; } //didn't use in registration
     public int? FinalApprovalID { get; set; } //didn't use in registration
     public int? DeleteYNID { get; set; } //didn't use in registration

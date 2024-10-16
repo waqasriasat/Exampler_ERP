@@ -16,7 +16,7 @@ namespace Exampler_ERP.Controllers
       _configuration = configuration;
     }
 
-    public async Task<IActionResult> GetNotifications()
+    public async Task<IActionResult> GetProcessNotifications()
     {
       var userId = HttpContext.Session.GetInt32("UserID");
 
