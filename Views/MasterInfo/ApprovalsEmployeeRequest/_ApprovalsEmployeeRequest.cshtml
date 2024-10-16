@@ -1,10 +1,10 @@
-@model IEnumerable<Exampler_ERP.Models.CR_ProcessTypeApprovalDetail>
+@model IEnumerable<Exampler_ERP.Models.HR_EmployeeRequestTypeApprovalDetail>
 
 
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Process Approvals List</h5>
+            <h5 class="card-header">EmployeeRequest Approvals List</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
@@ -14,7 +14,7 @@
                                     <p class="text-nowrap">Employee Name</p>
                                 </div>
                                 <div class="col-3">
-                                    <p class="text-nowrap">Process Name</p>
+                                    <p class="text-nowrap">EmployeeRequest Name</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Rank</p>
@@ -46,10 +46,10 @@
                             <div class="col-11 col-md-11 col-lg-8">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.CR_ProcessTypeApproval?.Employee?.FirstName @item.CR_ProcessTypeApproval?.Employee?.FatherName @item.CR_ProcessTypeApproval?.Employee?.FamilyName</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.HR_EmployeeRequestTypeApproval?.Employee?.FirstName @item.HR_EmployeeRequestTypeApproval?.Employee?.FatherName @item.HR_EmployeeRequestTypeApproval?.Employee?.FamilyName</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Process Name : </span>@(item.CR_ProcessTypeApproval?.ProcessType?.ProcessTypeName ?? "N/A")  </p>
+                                        <p class="text-nowrap"><span class="smallAdd">EmployeeRequest Name : </span>@(item.HR_EmployeeRequestTypeApproval?.EmployeeRequestType?.EmployeeRequestTypeName ?? "N/A")  </p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap"><span class="smallAdd">Rank : </span>@Html.DisplayFor(modelItem => item.Rank)</p>
@@ -63,21 +63,21 @@
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="approvalsProcessTypeApprovalLink" data-id="@item.ProcessTypeApprovalID">
+                                            <a href="#" class="approvalsEmployeeRequestTypeApprovalLink" data-id="@item.EmployeeRequestTypeApprovalID">
                                                 <i class="bx bx-book-open" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="detailsProcessTypeApprovalLink" data-id="@item.ProcessTypeApprovalID">
+                                            <a href="#" class="detailsEmployeeRequestTypeApprovalLink" data-id="@item.EmployeeRequestTypeApprovalID">
                                                 <i class="bx bx-detail" style="font-size: large; color:maroon; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="actionsProcessTypeApprovalLink" data-id="@item.ProcessTypeApprovalDetailID">
+                                            <a href="#" class="actionsEmployeeRequestTypeApprovalLink" data-id="@item.EmployeeRequestTypeApprovalDetailID">
                                                 <i class="bx bx-bookmarks" style="font-size: large; color:maroon; line-height: 2;"></i>
                                             </a>
                                         </div>

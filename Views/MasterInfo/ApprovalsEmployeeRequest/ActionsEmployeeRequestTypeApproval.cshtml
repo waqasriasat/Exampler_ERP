@@ -1,24 +1,23 @@
-@model Exampler_ERP.Models.CR_ProcessTypeApprovalDetail
+@model Exampler_ERP.Models.HR_EmployeeRequestTypeApprovalDetail
 
 @{
-    var ProcessTypeID = ViewBag.ProcessTypeID;
-    var TransactionID = ViewBag.TransactionID;
+    var EmployeeRequestTypeID = ViewBag.EmployeeRequestTypeID;
     var RankID = ViewBag.RankID;
-    var ProcessTypeApprovalDetailID = ViewBag.ProcessTypeApprovalDetailID;
+    var EmployeeRequestTypeApprovalDetailID = ViewBag.EmployeeRequestTypeApprovalDetailID;
 }
 
-<div class="modal fade" id="actionsProcessTypeApprovalModal" tabindex="-1" role="dialog" aria-labelledby="actionsProcessTypeApprovalModalLabel" aria-hidden="true">
+<div class="modal fade" id="actionsEmployeeRequestTypeApprovalModal" tabindex="-1" role="dialog" aria-labelledby="actionsEmployeeRequestTypeApprovalModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="actionsProcessTypeApprovalModalLabel">
-                    <i class="fas fa-clipboard-check me-2"></i>Approval Process Actions
+                <h5 class="modal-title" id="actionsEmployeeRequestTypeApprovalModalLabel">
+                    <i class="fas fa-clipboard-check me-2"></i>Approval EmployeeRequest Actions
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
-                <form id="actionsProcessTypeApprovalForm" enctype="multipart/form-data" method="post">
+                <form id="actionsEmployeeRequestTypeApprovalForm" enctype="multipart/form-data" method="post">
                     <div class="row g-3">
                         <!-- Password Dynamic Field -->
                         <div class="col-md-6">
@@ -38,15 +37,14 @@
                         <!-- Notes Field -->
                         <div class="col-12 mt-4">
                             <label for="Notes" class="form-label">Notes</label>
-                            <textarea id="Notes" name="Notes"  class="form-control form-control-lg" rows="4" placeholder="Enter notes here..."></textarea>
+                            <textarea id="Notes" name="Notes" class="form-control form-control-lg" rows="4" placeholder="Enter notes here..."></textarea>
                         </div>
 
                         <!-- Hidden Fields -->
                         <input type="hidden" id="Rank" name="Rank" value="@RankID" />
-                        <input type="hidden" id="ProcessTypeID" name="ProcessTypeID" value="@ProcessTypeID" />
-                        <input type="hidden" id="TransactionID" name="TransactionID" value="@TransactionID" />
-                        <input type="hidden" id="ProcessTypeApprovalDetailID" name="ProcessTypeApprovalDetailID" value="@ProcessTypeApprovalDetailID" />
-                        <input type="hidden" id="ProcessTypeApprovalID" name="ProcessTypeApprovalID" value="@Model.ProcessTypeApprovalID" />
+                        <input type="hidden" id="EmployeeRequestTypeID" name="EmployeeRequestTypeID" value="@EmployeeRequestTypeID" />
+                        <input type="hidden" id="EmployeeRequestTypeApprovalDetailID" name="EmployeeRequestTypeApprovalDetailID" value="@EmployeeRequestTypeApprovalDetailID" />
+                        <input type="hidden" id="EmployeeRequestTypeApprovalID" name="EmployeeRequestTypeApprovalID" value="@Model.EmployeeRequestTypeApprovalID" />
                         <input type="hidden" id="Date" name="Date" value="@Model.Date" />
                         <input type="hidden" id="RoleID" name="RoleID" value="@Model.RoleID" />
                     </div>
@@ -56,8 +54,8 @@
             <!-- Modal Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                  <i class="fas fa-times-circle"></i> Close
-                  </button>
+                    <i class="fas fa-times-circle"></i> Close
+                </button>
                 <div>
                     <button type="button" class="btn btn-danger me-2" id="Reject">Reject</button>
                     <button type="button" class="btn btn-success" id="Approved">Approve</button>
@@ -68,10 +66,10 @@
 </div>
 
 <script>
-    $(document).on('change', '#FileUpload', function (e) {
-    var fileName = document.getElementById("FileUpload").files[0].name;
-    var nextSibling = e.target.nextElementSibling;
-    nextSibling.innerText = fileName;
-});
-
+    // Show the selected file name in the label
+    document.querySelector('.custom-file-input').addEventListener('change', function (e) {
+        var fileName = document.getElementById("FileUpload").files[0].name;
+        var nextSibling = e.target.nextElementSibling;
+        nextSibling.innerText = fileName;
+    });
 </script>

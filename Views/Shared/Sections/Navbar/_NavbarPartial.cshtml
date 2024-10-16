@@ -1,7 +1,10 @@
 @{
     var UserID = Context.Session.GetInt32("UserID");
+
     var UserName = Context.Session.GetString("UserName");
+
     var UserRoleID = Context.Session.GetInt32("UserRoleID");
+
     var UserRoleName = Context.Session.GetString("UserRoleName");
 }
 
@@ -9,13 +12,21 @@
 
 <script>
     $(document).ready(function () {
-        function fetchNotifications() {
+        let processNotificationsTotal = 0;
+        let employeeRequestNotificationsTotal = 0;
+
+        function updateGrandTotal() {
+            let grandTotal = processNotificationsTotal + employeeRequestNotificationsTotal;
+            $('#TotalNotifications').text(grandTotal);  // Update the grand total
+        }
+
+        function fetchProcessNotifications() {
             $.ajax({
                 url: '@Url.Action("GetProcessNotifications", "Notifications")',
                 type: 'GET',
                 success: function (data) {
                     if (data.notifications) {
-                        let totalNotifications = 0;
+                        processNotificationsTotal = 0;  // Reset total for this fetch
 
                         // Iterate through each process type count
                         $.each(data.notifications, function (index, notification) {
@@ -26,14 +37,14 @@
                                 $('#li' + getNotificationName(processTypeID)).show();
                             }
 
-                            totalNotifications += processCount;
+                            processNotificationsTotal += processCount;
                         });
 
-                        $('#TotalNotifications').text(totalNotifications);
+                        updateGrandTotal();  // Update grand total after process notifications are fetched
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.error("Error fetching notifications: ", error);
+                    console.error("Error fetching process notifications: ", error);
                 }
             });
         }
@@ -44,14 +55,20 @@
                 type: 'GET',
                 success: function (data) {
                     if (data.notifications) {
-                        $.each(data.notifications, function (index, notification) {
-                            const { EmployeeRequestTypeID, EmployeeRequestCount } = notification;
+                        employeeRequestNotificationsTotal = 0;  // Reset total for this fetch
 
-                            if (EmployeeRequestCount > 0) {
-                                $('#count' + getEmployeeRequestName(EmployeeRequestTypeID)).text(EmployeeRequestCount);
-                                $('#li' + getEmployeeRequestName(EmployeeRequestTypeID)).show();
+                        $.each(data.notifications, function (index, notification) {
+                            const { employeeRequestTypeID, employeeRequestCount } = notification;
+
+                            if (employeeRequestCount > 0) {
+                                $('#count' + getemployeeRequestName(employeeRequestTypeID)).text(employeeRequestCount);
+                                $('#li' + getemployeeRequestName(employeeRequestTypeID)).show();
                             }
+
+                            employeeRequestNotificationsTotal += employeeRequestCount;
                         });
+
+                        updateGrandTotal();  // Update grand total after employee request notifications are fetched
                     }
                 },
                 error: function (xhr, status, error) {
@@ -59,6 +76,7 @@
                 }
             });
         }
+
 
         function getNotificationName(processTypeID) {
             const names = [
@@ -81,7 +99,7 @@
             return names[processTypeID] || '';
         }
 
-        function getEmployeeRequestName(EmployeeRequestTypeID) {
+        function getemployeeRequestName(employeeRequestTypeID) {
             const names = [
                 '',          // 0 (not used)
                 'OvertimeRequest', // 1
@@ -135,11 +153,11 @@
                 'PensPencilsRequest', // 49
                 'NotebooksStickyNotesRequest' // 50
             ];
-            return names[EmployeeRequestTypeID] || '';
+            return names[employeeRequestTypeID] || '';
         }
 
         // Fetch notifications on page load
-        fetchNotifications();
+        fetchProcessNotifications();
         fetchEmployeeRequestNotifications();
     });
 
@@ -148,6 +166,7 @@
 
 
 @if (ViewData["navbarFull"] != null)
+
 {
     <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-4">
         <a asp-controller="Dashboards" asp-action="Index" class="app-brand-link gap-2">
@@ -161,6 +180,7 @@
 
 @* ! Not required for layout-without-menu *@
 @if (ViewData["navbarHideToggle"] == null)
+
 {
     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
         <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
@@ -243,7 +263,7 @@
                 </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
-                
+
                 <li id="liUser" style="display:none">
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="1">
                         <span class="d-flex align-items-center align-middle">
@@ -374,7 +394,7 @@
                     <div class="dropdown-divider"></div>
                 </li>
                 <li id="liOvertimeRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="14">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="1">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">OverTime Request</span>
@@ -385,7 +405,7 @@
                     </a>
                 </li>
                 <li id="liEarlyGoingRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="15">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="2">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Early Going Request</span>
@@ -396,7 +416,7 @@
                     </a>
                 </li>
                 <li id="liLateComingRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="16">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="3">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Late Coming Request</span>
@@ -407,7 +427,7 @@
                     </a>
                 </li>
                 <li id="liTimesheetCorrectionRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="17">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="4">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Timesheet Correction Request</span>
@@ -418,7 +438,7 @@
                     </a>
                 </li>
                 <li id="liTravelExpensesRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="18">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="5">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Travel Expenses Request</span>
@@ -429,7 +449,7 @@
                     </a>
                 </li>
                 <li id="liAccommodationExpenseRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="19">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="6">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Accommodation Expense Request</span>
@@ -440,7 +460,7 @@
                     </a>
                 </li>
                 <li id="liReimbursementRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="20">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="7">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Reimbursement Request</span>
@@ -451,7 +471,7 @@
                     </a>
                 </li>
                 <li id="liShiftTimingChangeRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="21">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="8">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Shift Timing Change Request</span>
@@ -462,7 +482,7 @@
                     </a>
                 </li>
                 <li id="liRotationalShiftSwappingRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="22">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="9">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Rotational Shift/Shift Swapping Request</span>
@@ -473,7 +493,7 @@
                     </a>
                 </li>
                 <li id="liWorkFromHomeRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="23">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="10">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Work from Home Request</span>
@@ -484,7 +504,7 @@
                     </a>
                 </li>
                 <li id="liOfficeDeskRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="24">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="11">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Office Desk Request</span>
@@ -495,7 +515,7 @@
                     </a>
                 </li>
                 <li id="liOfficeChairRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="25">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="12">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Office Chair Request</span>
@@ -506,7 +526,7 @@
                     </a>
                 </li>
                 <li id="liFilingCabinetsRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="26">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="13">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Filing Cabinets Request</span>
@@ -517,7 +537,7 @@
                     </a>
                 </li>
                 <li id="liStorageShelvesRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="27">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="14">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Storage Shelves Request</span>
@@ -528,7 +548,7 @@
                     </a>
                 </li>
                 <li id="liBookshelvesRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="15">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="15">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-book me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Bookshelves Request</span>
@@ -539,7 +559,7 @@
                     </a>
                 </li>
                 <li id="liMeetingTablesRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="16">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="16">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-table me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Meeting Tables Request</span>
@@ -550,7 +570,7 @@
                     </a>
                 </li>
                 <li id="liReceptionDeskRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="17">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="17">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-desk me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Reception Desk Request</span>
@@ -561,7 +581,7 @@
                     </a>
                 </li>
                 <li id="liSideTablesRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="18">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="18">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-table me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Side Tables Request</span>
@@ -572,7 +592,7 @@
                     </a>
                 </li>
                 <li id="liFootrestRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="19">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="19">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-shoe me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Footrest Request</span>
@@ -583,7 +603,7 @@
                     </a>
                 </li>
                 <li id="liLaptopsRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="20">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="20">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-laptop me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Laptops Request</span>
@@ -594,7 +614,7 @@
                     </a>
                 </li>
                 <li id="liDesktopComputersRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="21">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="21">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-desktop me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Desktop Computers Request</span>
@@ -605,7 +625,7 @@
                     </a>
                 </li>
                 <li id="liMonitorsRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="22">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="22">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-monitor me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Monitors Request</span>
@@ -616,7 +636,7 @@
                     </a>
                 </li>
                 <li id="liLEDRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="23">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="23">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-tv me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">LED Request</span>
@@ -627,7 +647,7 @@
                     </a>
                 </li>
                 <li id="liKeyboardRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="24">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="24">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-keyboard me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Keyboard Request</span>
@@ -638,7 +658,7 @@
                     </a>
                 </li>
                 <li id="liMouseRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="25">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="25">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-mouse me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Mouse Request</span>
@@ -649,7 +669,7 @@
                     </a>
                 </li>
                 <li id="liExternalHardDrivesRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="26">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="26">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-hdd me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">External Hard Drives Request</span>
@@ -660,7 +680,7 @@
                     </a>
                 </li>
                 <li id="liUSBFlashDrivesRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="27">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="27">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-usb me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">USB Flash Drives Request</span>
@@ -671,7 +691,7 @@
                     </a>
                 </li>
                 <li id="liWebcamRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="28">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="28">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-camera me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Webcam Request</span>
@@ -682,7 +702,7 @@
                     </a>
                 </li>
                 <li id="liHeadsetWithMicrophoneRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="29">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="29">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-headphone me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Headset with Microphone Request</span>
@@ -693,7 +713,7 @@
                     </a>
                 </li>
                 <li id="liPrintersRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="30">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="30">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-printer me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Printers Request</span>
@@ -704,7 +724,7 @@
                     </a>
                 </li>
                 <li id="liScannersRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="31">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="31">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-scanner me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Scanners Request</span>
@@ -715,7 +735,7 @@
                     </a>
                 </li>
                 <li id="liProjectorRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="32">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="32">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-projector me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Projector Request</span>
@@ -726,7 +746,7 @@
                     </a>
                 </li>
                 <li id="liExternalSpeakersRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="33">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="33">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-speaker me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">External Speakers Request</span>
@@ -737,7 +757,7 @@
                     </a>
                 </li>
                 <li id="liExternalMicrophoneRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="34">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="34">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-microphone me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">External Microphone Request</span>
@@ -748,7 +768,7 @@
                     </a>
                 </li>
                 <li id="liUPSRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="35">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="35">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-battery me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">UPS Request</span>
@@ -759,7 +779,7 @@
                     </a>
                 </li>
                 <li id="liWiFiRouterRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="36">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="36">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-router me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Wi-Fi Router Request</span>
@@ -770,7 +790,7 @@
                     </a>
                 </li>
                 <li id="liEthernetCablesRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="37">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="37">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-cable me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Ethernet Cables Request</span>
@@ -781,7 +801,7 @@
                     </a>
                 </li>
                 <li id="liSwitchesAndHubsRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="38">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="38">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-network me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Switches and Hubs Request</span>
@@ -792,7 +812,7 @@
                     </a>
                 </li>
                 <li id="liLANCardsRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="39">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="39">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-lan me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">LAN Cards Request</span>
@@ -803,7 +823,7 @@
                     </a>
                 </li>
                 <li id="liModemsRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="40">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="40">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-modem me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Modems Request</span>
@@ -814,7 +834,7 @@
                     </a>
                 </li>
                 <li id="liVPNDevicesRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="41">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="41">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-network-chart me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">VPN Devices Request</span>
@@ -825,7 +845,7 @@
                     </a>
                 </li>
                 <li id="liMousePadsRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="42">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="42">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-mouse-alt me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Mouse Pads Request</span>
@@ -836,7 +856,7 @@
                     </a>
                 </li>
                 <li id="liDeskLampsRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="43">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="43">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-bulb me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Desk Lamps Request</span>
@@ -847,7 +867,7 @@
                     </a>
                 </li>
                 <li id="liLaptopCoolingPadsRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="44">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="44">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-cooling me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Laptop Cooling Pads Request</span>
@@ -858,7 +878,7 @@
                     </a>
                 </li>
                 <li id="liPhoneStandsRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="45">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="45">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-phone me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Phone Stands Request</span>
@@ -869,7 +889,7 @@
                     </a>
                 </li>
                 <li id="liPenHoldersAndDeskOrganizersRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="46">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="46">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-folder me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Pen Holders & Desk Organizers Request</span>
@@ -880,7 +900,7 @@
                     </a>
                 </li>
                 <li id="liWhiteboardsNoticeBoardsRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="47">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="47">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-board me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Whiteboards/Notice Boards Request</span>
@@ -891,7 +911,7 @@
                     </a>
                 </li>
                 <li id="liPresentationPointerClickerRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="48">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="48">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-pointer me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Presentation Pointer/Clicker Request</span>
@@ -902,7 +922,7 @@
                     </a>
                 </li>
                 <li id="liPensPencilsRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="49">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="49">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-pencil me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Pens/Pencils Request</span>
@@ -913,7 +933,7 @@
                     </a>
                 </li>
                 <li id="liNotebooksStickyNotesRequest" style="display:none">
-                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="50">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="SelectedIndex" asp-route-id="50">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-notepad me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Notebooks/Sticky Notes Request</span>
@@ -929,7 +949,12 @@
                 </li>
                 <li id="liApprovalsRequest">
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index" asp-route-id="" style="text-align-last: center;">
-                        <span class="align-middle" >Show all Notifications</span>
+                        <span class="align-middle">Show all Process Approval</span>
+                    </a>
+                </li>
+                <li id="liApprovalsRequest">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="Index" asp-route-id="" style="text-align-last: center;">
+                        <span class="align-middle">Show all Employee Request</span>
                     </a>
                 </li>
             </ul>

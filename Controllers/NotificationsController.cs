@@ -52,6 +52,42 @@ namespace Exampler_ERP.Controllers
       // Return the result with only ProcessTypeID and ProcessCount
       return Json(new { count = totalCount, notifications = processCounts });
     }
+    public async Task<IActionResult> GetEmployeeRequestNotifications()
+    {
+      var userId = HttpContext.Session.GetInt32("UserID");
+
+      if (userId == null)
+        return Json(new { count = 0, notifications = new List<object>() });
+
+      // Fetch unread notifications for the logged-in user
+      var EmployeeRequestCounts = await _appDBContext.HR_EmployeeRequestTypeApprovalDetails
+          .Where(pta => pta.AppID == 0)
+          .Join(_appDBContext.HR_EmployeeRequestTypeApprovals,
+              pta => pta.EmployeeRequestTypeApprovalID,
+              cta => cta.EmployeeRequestTypeApprovalID,
+              (pta, cta) => new { pta, cta })
+          .Join(_appDBContext.HR_Employees,
+              combined => combined.cta.EmployeeID,
+              e => e.EmployeeID,
+              (combined, e) => new { combined.pta, combined.cta, e })
+          .Join(_appDBContext.Settings_EmployeeRequestTypes,
+              combined => combined.cta.EmployeeRequestTypeID,
+              pt => pt.EmployeeRequestTypeID,
+              (combined, pt) => new { combined.pta, combined.cta, combined.e, pt })
+          .GroupBy(x => x.cta.EmployeeRequestTypeID)
+          .Select(g => new
+          {
+            EmployeeRequestTypeID = g.Key,
+            EmployeeRequestCount = g.Count(x => x.pta.EmployeeRequestTypeApprovalID != null) // Count only non-null EmployeeRequestTypeApprovalIDs
+          })
+          .ToListAsync();
+
+      // Calculate the total count of notifications
+      var totalCount = EmployeeRequestCounts.Sum(pc => pc.EmployeeRequestCount);
+
+      // Return the result with only EmployeeRequestTypeID and EmployeeRequestCount
+      return Json(new { count = totalCount, notifications = EmployeeRequestCounts });
+    }
 
   }
 }

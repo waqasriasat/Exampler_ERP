@@ -1,0 +1,63 @@
+@model dynamic
+
+@{
+    var EmployeeRequestTypeID = ViewBag.EmployeeRequestTypeID;
+    var TransactionID = ViewBag.TransactionID;
+}
+
+
+<div class="modal fade" id="detailsEmployeeRequestTypeApprovalModal" tabindex="-1" role="dialog" aria-labelledby="detailsEmployeeRequestTypeApprovalModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <!-- Modal with increased size for better layout -->
+        <div class="modal-content shadow-lg border-0 rounded-lg">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="detailsEmployeeRequestTypeApprovalModalLabel">
+                    <i class="fas fa-info-circle"></i> Approval EmployeeRequest Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal body with improved layout and spacing -->
+            <div class="modal-body">
+                <form>
+                    <h5><i class="fas fa-user"></i> Employee Request Details</h5>
+                    @Html.Partial("~/Views/EmployeePortal/Apply/EmployeeRequest/_EditEmployeeRequest.cshtml", (Exampler_ERP.Models.HR_EmployeeRequestTypeApproval)Model)
+
+                </form>
+            </div>
+
+            <!-- Footer with redesigned close button -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times-circle"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .modal-body {
+    background-color: #f8f9fa;
+    }
+
+
+
+    /* Disable input interactivity and style for readonly inputs */
+    .modal-body input,
+    .modal-body select,
+    .modal-body textarea {
+    /* pointer-events: none; */
+    background-color: #e9ecef;
+    color: #6c757d;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    padding: 8px;
+    }
+
+    .modal-body h5 {
+    font-size: 1.25rem;
+    color: #343a40;
+    margin-bottom: 15px;
+    font-weight: 600;
+    }
+</style>

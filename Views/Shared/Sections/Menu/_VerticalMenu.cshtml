@@ -50,6 +50,8 @@
                     currentPage.StartsWith("/Department/Index")||
                     currentPage.StartsWith("/Designation/Index")||
                     currentPage.StartsWith("/EmployeeRequestType/Index")||
+                    currentPage.StartsWith("/EmployeeRequestTypeApprovalSetup/Index")||
+                    currentPage.StartsWith("/EmployeeRequestTypeForward/Index")||
                     currentPage.StartsWith("/EmployeeStatusType/Index")||
                     currentPage.StartsWith("/OvertimeRate/Index")||
                     currentPage.StartsWith("/ProcessTypeApprovalSetup/Index")||
@@ -86,7 +88,9 @@
                     currentPage.StartsWith("/VacationBalance/Index")||
                     currentPage.StartsWith("/VacationReport/Index")||
                     currentPage.StartsWith("/ExperienceCertificate/Index")||
-                    currentPage.StartsWith("/EducationDocument/Index") ? " active open" : "")'>
+                    currentPage.StartsWith("/EducationDocument/Index")||
+                    currentPage.StartsWith("/ProcessApprovalDetail/Index")||
+                    currentPage.StartsWith("/EmployeeRequestApprovalDetail/Index") ? " active open" : "")'>
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-group"></i>
                 <div>Human Resources</div>
@@ -103,7 +107,8 @@
                                       currentPage == "/ProcessTypeForward/Index" || currentPage == "/Qualification/Index" ||
                                       currentPage == "/Role/Index" || currentPage == "/SalaryType/Index" ||
                                       currentPage == "/Section/Index" || currentPage == "/SubQualification/Index" ||
-                                      currentPage == "/User/Index" || currentPage == "/VacationType/Index" ? " active" : "")'>
+                                      currentPage == "/User/Index" || currentPage == "/VacationType/Index" ||
+                                      currentPage == "/EmployeeRequestTypeApprovalSetup/Index" || currentPage == "/EmployeeRequestTypeForward/Index" ? " active" : "")'>
                     <a asp-controller="Main_Dashboard" asp-action="Index" class="menu-link">
                         <div>Master Information</div>
                     </a>
@@ -141,7 +146,8 @@
                 <li class='menu-item@(currentPage == "/Report_Dashboard/Index"|| currentPage == "/ContractExpiry/Index" ||
                                       currentPage == "/EmployeeBioData/Index" || currentPage == "/VacationBalance/Index" ||
                                       currentPage == "/VacationReport/Index"|| currentPage == "/ExperienceCertificate/Index" ||
-                                      currentPage == "/EducationDocument/Index"  ? " active" : "")'>
+                                      currentPage == "/EducationDocument/Index"|| currentPage == "/ProcessApprovalDetail/Index" ||
+                                      currentPage == "/EmployeeRequestApprovalDetail/Index"  ? " active" : "")'>
                     <a asp-controller="Report_Dashboard" asp-action="Index" class="menu-link">
                         <div>Report</div>
                     </a>

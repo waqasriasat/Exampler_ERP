@@ -77,36 +77,24 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
         await _appDBContext.SaveChangesAsync();
 
         var EmployeeRequestTypeID = EmployeeRequest.EmployeeRequestTypeID;
+        var EmployeeRequestTypeApprovalID = EmployeeRequest.EmployeeRequestTypeApprovalID;
         if (EmployeeRequestTypeID > 0)
         {
-          var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
-                             .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 14)
+          var EmployeeRequestCount = await _appDBContext.HR_EmployeeRequestTypeApprovalSetups
+                             .Where(pta => pta.EmployeeRequestTypeID > 0 && pta.EmployeeRequestTypeID == EmployeeRequestTypeID)
                              .CountAsync();
 
-          if (processCount > 0)
+          if (EmployeeRequestCount > 0)
           {
-            var newProcessTypeApproval = new CR_ProcessTypeApproval
-            {
-              ProcessTypeID = 14,
-              Notes = EmployeeRequest.Notes,
-              Date = DateTime.Now,
-              EmployeeID = EmployeeRequest.EmployeeID,
-              UserID = 1, // Using session value
-              TransactionID = EmployeeRequest.EmployeeRequestTypeID
-            };
-
-            _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
-            await _appDBContext.SaveChangesAsync();
-
-            var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
-                                     .Where(pta => pta.ProcessTypeID == 14 && pta.Rank == 1)
+            var nextApprovalSetup = await _appDBContext.HR_EmployeeRequestTypeApprovalSetups
+                                     .Where(pta => pta.EmployeeRequestTypeID == EmployeeRequestTypeID && pta.Rank == 1)
                                      .FirstOrDefaultAsync();
 
             if (nextApprovalSetup != null)
             {
-              var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
+              var newEmployeeRequestTypeApprovalDetail = new HR_EmployeeRequestTypeApprovalDetail
               {
-                ProcessTypeApprovalID = newProcessTypeApproval.ProcessTypeApprovalID,
+                EmployeeRequestTypeApprovalID = EmployeeRequestTypeApprovalID,
                 Date = DateTime.Now,
                 RoleID = nextApprovalSetup.RoleTypeID,
                 AppID = 0,
@@ -115,7 +103,7 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
                 Rank = nextApprovalSetup.Rank
               };
 
-              _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
+              _appDBContext.HR_EmployeeRequestTypeApprovalDetails.Add(newEmployeeRequestTypeApprovalDetail);
               await _appDBContext.SaveChangesAsync();
               return Json(new { success = true });
             }
@@ -127,7 +115,6 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
           else
           {
             EmployeeRequest.FinalApprovalID = 1;
-            EmployeeRequest.ProcessTypeApprovalID = 0;
             _appDBContext.HR_EmployeeRequestTypeApprovals.Update(EmployeeRequest);
             await _appDBContext.SaveChangesAsync();
             return Json(new { success = true });

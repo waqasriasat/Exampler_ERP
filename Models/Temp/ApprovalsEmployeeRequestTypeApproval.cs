@@ -1,11 +1,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
-namespace Exampler_ERP.Models
+namespace Exampler_ERP.Models.Temp
 {
-  public class HR_EmployeeRequestTypeApproval
+  public class ApprovalsEmployeeRequestTypeApproval
   {
-    [Key]
     public int EmployeeRequestTypeApprovalID { get; set; }
     public int EmployeeRequestTypeID { get; set; }
     [ForeignKey("EmployeeRequestTypeID")]
@@ -15,9 +13,6 @@ namespace Exampler_ERP.Models
     public int EmployeeID { get; set; }
     [ForeignKey("EmployeeID")]
     public virtual HR_Employee? Employee { get; set; }
-   
-    public virtual List<HR_EmployeeRequestTypeApprovalDetail?> EmployeeRequestTypeApprovalDetail { get; set; } = new List<HR_EmployeeRequestTypeApprovalDetail?>();
-    public int? FinalApprovalID { get; set; } //didn't use in registration
-    public int? DeleteYNID { get; set; } //didn't use in registration
+    public string RequestDate { get; set; } = null!;
   }
 }
