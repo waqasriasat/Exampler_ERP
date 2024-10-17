@@ -6,7 +6,7 @@ namespace Exampler_ERP.Models
   public class CR_FaceAttendance
   {
     [Key]
-    public int AttenanceID { get; set; }
+    public int FaceAttendanceID { get; set; }
     [Required]
     public int EmployeeID { get; set; }
     [ForeignKey("EmployeeID")]

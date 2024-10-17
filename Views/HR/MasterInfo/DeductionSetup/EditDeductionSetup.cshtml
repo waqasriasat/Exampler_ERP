@@ -6,7 +6,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editDeductionSetupModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit DeductionSetup
+                    Edit Deduction Setup
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -15,7 +15,7 @@
                 <form id="editDeductionSetupForm" method="post" asp-action="SaveChanges">
                     <input type="hidden" asp-for="DeductionTypeID" />
                     <div class="form-group">
-                        <label for="DeductionTypeID" class="form-label fw-bold">DeductionType</label>
+                        <label for="DeductionTypeID" class="form-label fw-bold">Deduction Type</label>
                         <select asp-for="DeductionTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypes, "DeductionTypeID", "DeductionTypeName"))" class="form-control form-control-lg" disabled></select>
                     </div>
                     <div class="form-group">

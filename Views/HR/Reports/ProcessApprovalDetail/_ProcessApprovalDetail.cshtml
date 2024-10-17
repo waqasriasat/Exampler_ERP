@@ -38,7 +38,7 @@
                                     <p class="text-nowrap">Employee Name</p>
                                 </div>
                                 <div class="col-3">
-                                    <p class="text-nowrap">Process Name</p>
+                                    <p class="text-nowrap">Process Type Name</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Rank</p>
@@ -70,7 +70,7 @@
                                         <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.CR_ProcessTypeApproval?.Employee?.FirstName @item.CR_ProcessTypeApproval?.Employee?.FatherName @item.CR_ProcessTypeApproval?.Employee?.FamilyName</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Process Name : </span>@(item.CR_ProcessTypeApproval?.ProcessType?.ProcessTypeName ?? "N/A")  </p>
+                                        <p class="text-nowrap"><span class="smallAdd">Process Type Name : </span>@(item.CR_ProcessTypeApproval?.ProcessType?.ProcessTypeName ?? "N/A")  </p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap"><span class="smallAdd">Rank : </span>@Html.DisplayFor(modelItem => item.Rank)</p>

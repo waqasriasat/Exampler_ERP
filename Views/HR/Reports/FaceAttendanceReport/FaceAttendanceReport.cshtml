@@ -1,26 +1,26 @@
-@model IEnumerable<Exampler_ERP.Models.HR_OverTime>
+@model IEnumerable<Exampler_ERP.Models.CR_FaceAttendance>
 
 @{
-    ViewData["Title"] = "HR - Over Time";
+    ViewData["Title"] = "HR - Face Attendance Report";
 }
 
 @section PageScripts {
 
     <script>
         $(document).ready(function () {
-            // Edit OverTime modal popup
-            $('.editOverTimeLink').click(function (e) {
+            // Edit FaceAttendanceReport modal popup
+            $('.editFaceAttendanceReportLink').click(function (e) {
                 e.preventDefault();
-                var OverTimeId = $(this).data('id');
-                $.get('@Url.Action("Edit", "OverTime")', { id: OverTimeId }, function (data) {
-                    $('#editOverTimeModalContainer').html(data);
-                    $('#editOverTimeModal').modal('show');
+                var FaceAttendanceReportId = $(this).data('id');
+                $.get('@Url.Action("Edit", "FaceAttendanceReport")', { id: FaceAttendanceReportId }, function (data) {
+                    $('#editFaceAttendanceReportModalContainer').html(data);
+                    $('#editFaceAttendanceReportModal').modal('show');
                 });
             });
 
-            $('#editOverTimeModalContainer').on('click', '#saveChanges', function () {
-                var formData = $('#editOverTimeForm').serialize();
-                $.post('@Url.Action("Edit", "OverTime")', formData, function (response) {
+            $('#editFaceAttendanceReportModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editFaceAttendanceReportForm').serialize();
+                $.post('@Url.Action("Edit", "FaceAttendanceReport")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
                         location.reload();
@@ -30,20 +30,20 @@
                 });
             });
 
-            // Add new OverTime modal popup
-            $('.addOverTimeLink').click(function () {
-                $.get('@Url.Action("Create", "OverTime")', function (data) {
-                    $('#addOverTimeModalContainer').html(data);
-                    $('#addOverTimeModal').modal('show');
+            // Add new FaceAttendanceReport modal popup
+            $('.addFaceAttendanceReportLink').click(function () {
+                $.get('@Url.Action("Create", "FaceAttendanceReport")', function (data) {
+                    $('#addFaceAttendanceReportModalContainer').html(data);
+                    $('#addFaceAttendanceReportModal').modal('show');
                 });
             });
 
-            // Save new OverTime form
-            $('#addOverTimeModalContainer').on('click', '#saveNewOverTime', function () {
-                var formData = $('#addOverTimeForm').serialize();
-                $.post('@Url.Action("Create", "OverTime")', formData, function (response) {
+            // Save new FaceAttendanceReport form
+            $('#addFaceAttendanceReportModalContainer').on('click', '#saveNewFaceAttendanceReport', function () {
+                var formData = $('#addFaceAttendanceReportForm').serialize();
+                $.post('@Url.Action("Create", "FaceAttendanceReport")', formData, function (response) {
                     if (response.success) {
-                        $('#addOverTimeModal').modal('hide');
+                        $('#addFaceAttendanceReportModal').modal('hide');
                         location.reload(); // Reload the page to reflect changes
                     } else {
                         // Handle validation errors or other cases
@@ -52,22 +52,22 @@
             });
 
             // Close Modal Add Contrainer
-            $('#addOverTimeModalContainer').on('click', '#Close', function () {
-                $('#addOverTimeModal').modal('hide'); // Close the modal directly
+            $('#addFaceAttendanceReportModalContainer').on('click', '#Close', function () {
+                $('#addFaceAttendanceReportModal').modal('hide'); // Close the modal directly
                 // Additional logic if needed
             });
 
             // Close Modal Edit Contrainer
-            $('#editOverTimeModalContainer').on('click', '#Close', function () {
-                $('#editOverTimeModal').modal('hide'); // Close the modal directly
+            $('#editFaceAttendanceReportModalContainer').on('click', '#Close', function () {
+                $('#editFaceAttendanceReportModal').modal('hide'); // Close the modal directly
                 // Additional logic if needed
             });
 
-            // Delete OverTime
-            $('.deleteOverTimeLink').click(function (e) {
+            // Delete FaceAttendanceReport
+            $('.deleteFaceAttendanceReportLink').click(function (e) {
                 e.preventDefault();
-                var OverTimeId = $(this).data('id');
-                $.post('@Url.Action("Delete", "OverTime")', { id: OverTimeId }, function (response) {
+                var FaceAttendanceReportId = $(this).data('id');
+                $.post('@Url.Action("Delete", "FaceAttendanceReport")', { id: FaceAttendanceReportId }, function (response) {
                     if (response.success) {
                         location.reload();
                     } else {
@@ -120,16 +120,16 @@
         });
     </script>
     <script>
-        function printOverTimes() {
-            var printWindow = window.open('@Url.Action("Print", "OverTime")', '_blank');
+        function printFaceAttendanceReports() {
+            var printWindow = window.open('@Url.Action("Print", "FaceAttendanceReport")', '_blank');
             printWindow.focus();
         }
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">HR /</span> Over Time
+    <span class="text-muted fw-light">HR /</span> Face Attendance Report
 </h4>
-<form method="get" action="@Url.Action("Index", "OverTime")">
+<form method="get" action="@Url.Action("Index", "FaceAttendanceReport")">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -137,68 +137,65 @@
                 <div class="Searching-Box-padding" style="padding-bottom: 15px;">
                     <div class="row mb-4">
                         <!-- From Date Field -->
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-4 mb-4">
                             <label class="form-label fw-bold">Month Type</label>
                             <select name="MonthsTypeID" class="form-control">
                                 @foreach (var item in ViewBag.MonthsTypeList)
+
                                 {
+
                                     if (item.Value == ViewBag.MonthsTypeID?.ToString())
+
                                     {
                                         <option value="@item.Value" selected>@item.Text</option>
                                     }
+
                                     else
+
                                     {
                                         <option value="@item.Value">@item.Text</option>
                                     }
+
                                 }
                             </select>
                         </div>
 
 
                         <!-- To Date Field -->
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-4 mb-4">
                             <label for="YearsTypeID" class="form-label fw-bold">Year</label>
                             <select name="YearsTypeID" class="form-control">
                                 @for (int year = DateTime.Now.Year; year >= 1900; year--)
+
                                 {
+
                                     // Corrected to compare with ViewBag.YearsTypeID
+
                                     if (year == (ViewBag.YearsTypeID ?? 0))
+
                                     {
                                         <option value="@year" selected>@year</option>
                                     }
+
                                     else
+
                                     {
                                         <option value="@year">@year</option>
                                     }
+
                                 }
                             </select>
                         </div>
 
 
                         <!-- Employee Name Search Field -->
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-4 mb-4">
                             <label class="form-label fw-bold">Employee Name</label>
                             <input type="text" class="form-control" id="searchEmployeeInput" placeholder="Search Employee" name="EmployeeName" value="@ViewBag.EmployeeName" />
                             <input type="hidden" class="form-control" id="EmployeeID" placeholder="Search Employee" name="EmployeeID" value="@ViewBag.EmployeeID" />
                         </div>
 
-                        <!-- Process Type Dropdown -->
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">Over Time Type</label>
-                            <select name="OvertimeTypeID" class="form-control">
-                                @foreach (var item in ViewBag.OvertimeTypeList)
-                                {
-                                    if (item.Value == ViewBag.OvertimeTypeID?.ToString())
-                                    {
-                                        <option value="@item.Value" selected>@item.Text</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@item.Value">@item.Text</option>
-                                    }
-                                }
-                            </select>
-                        </div>
+                        
 
                     </div>
 
@@ -221,29 +218,29 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Over Time List</h5>
+            <h5 class="card-header">Face Attendance Report List</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                         <div class="col-10 col-md-11 col-lg-10">
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-2">
                                     <p class="text-nowrap">Employee Name</p>
                                 </div>
-                                <div class="col-1">
-                                    <p class="text-nowrap">Month</p>
-                                </div>
-                                <div class="col-1">
-                                    <p class="text-nowrap">Year</p>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Date</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Total OverTime Days</p>
+                                    <p class="text-nowrap">In Time</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Per Day Hours</p>
+                                    <p class="text-nowrap">Out Times</p>
                                 </div>
-                                <div class="col-1">
-                                    <p class="text-nowrap">Amount</p>
+                                <div class="col-2">
+                                    <p class="text-nowrap">D-Hours</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">D-Minute</p>
                                 </div>
                             </div>
                         </div>
@@ -260,28 +257,29 @@
                     </div>
                 </div>
                 @foreach (var item in Model)
+
                 {
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
                         <div class="row">
                             <div class="col-10 col-md-11 col-lg-10">
                                 <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-4">
+                                    <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
                                     </div>
-                                    <div class="col-12 col-md-12 col-lg-1">
-                                        <p class="text-nowrap"><span class="smallAdd">Month : </span>@item.MonthType?.MonthTypeName</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-1">
-                                        <p class="text-nowrap"><span class="smallAdd">Year : </span>@Html.DisplayFor(modelItem => item.Year)</p>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Date : </span>@item.MarkDate.ToString("dd/MMM/yyyy")</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Total OverTime Days : </span>@Html.DisplayFor(modelItem => item.Days)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">In Time : </span>@item.InTime.ToString("hh:mm:ss")</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Per Day Hours : </span>@Html.DisplayFor(modelItem => item.Hours)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Out Time : </span>@item.OutTime.ToString("hh:mm:ss")</p>
                                     </div>
-                                    <div class="col-12 col-md-12 col-lg-1">
-                                        <p class="text-nowrap"><span class="smallAdd">Amount : </span>@Html.DisplayFor(modelItem => item.Amount)</p>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">D-Hours : </span>@item.DHours</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">D-Minute : </span>@item.DMinutes</p>
                                     </div>
                                 </div>
                             </div>
@@ -289,14 +287,14 @@
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="editOverTimeLink" data-id="@item.OverTimeID">
+                                            <a href="#" class="editFaceAttendanceReportLink" data-id="@item.FaceAttendanceID">
                                                 <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="deleteOverTimeLink" data-id="@item.OverTimeID">
+                                            <a href="#" class="deleteFaceAttendanceReportLink" data-id="@item.FaceAttendanceID">
                                                 <i class="fa fa-trash-o" style="font-size: large; color:maroon; line-height: 2;"></i>
                                             </a>
                                         </div>
@@ -312,5 +310,5 @@
 </div>
 
 <!-- Include the modal partial -->
-<div id="editOverTimeModalContainer"></div>
-<div id="addOverTimeModalContainer"></div>
+<div id="editFaceAttendanceReportModalContainer"></div>
+<div id="addFaceAttendanceReportModalContainer"></div>

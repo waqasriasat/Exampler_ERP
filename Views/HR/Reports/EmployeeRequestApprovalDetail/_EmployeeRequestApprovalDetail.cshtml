@@ -5,7 +5,7 @@
     <div class="col-md-12">
         <div class="card">
             <h5 class="card-header">
-                EmployeeRequest Approvals List
+                Employee Request Approvals List
 
                 @{
                     var status = ViewBag.Status != null ? ViewBag.Status.ToString() : "";
@@ -38,7 +38,7 @@
                                     <p class="text-nowrap">Employee Name</p>
                                 </div>
                                 <div class="col-3">
-                                    <p class="text-nowrap">EmployeeRequest Name</p>
+                                    <p class="text-nowrap">Request Type Name</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Rank</p>
@@ -70,7 +70,7 @@
                                         <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.HR_EmployeeRequestTypeApproval?.Employee?.FirstName @item.HR_EmployeeRequestTypeApproval?.Employee?.FatherName @item.HR_EmployeeRequestTypeApproval?.Employee?.FamilyName</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">EmployeeRequest Name : </span>@(item.HR_EmployeeRequestTypeApproval?.EmployeeRequestType?.EmployeeRequestTypeName ?? "N/A")  </p>
+                                        <p class="text-nowrap"><span class="smallAdd">Request Type Name : </span>@(item.HR_EmployeeRequestTypeApproval?.EmployeeRequestType?.EmployeeRequestTypeName ?? "N/A")  </p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap"><span class="smallAdd">Rank : </span>@Html.DisplayFor(modelItem => item.Rank)</p>

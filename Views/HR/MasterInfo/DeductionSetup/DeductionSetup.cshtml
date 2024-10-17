@@ -1,7 +1,7 @@
 @model Exampler_ERP.Models.Temp.DeductionSetupListViewModel
 
 @{
-    ViewData["Title"] = "Master Information - DeductionSetup";
+    ViewData["Title"] = "Master Information - Deduction Setup";
 }
 
 @section PageScripts {
@@ -67,7 +67,7 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Master Information /</span> DeductionSetup
+    <span class="text-muted fw-light">Master Information /</span> Deduction Setup
 </h4>
 <div class="row">
     <div class="col-md-12">
@@ -79,7 +79,7 @@
                     <div class="col-md-8" style="padding-bottom: 15px;">
                         <!-- Search Field and Button -->
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search DeductionType name" id="searchDeductionTypeInput">
+                            <input type="text" class="form-control" placeholder="Search Deduction Type name" id="searchDeductionTypeInput">
                             <button class="btn btn-outline-secondary" type="button" id="searchDeductionTypeButton">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -99,14 +99,14 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">DeductionSetup List</h5>
+            <h5 class="card-header">Deduction Setup List</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                        <div class="col-10 col-md-10 col-lg-10">
                             <div class="row">
                                 <div class="col-6">
-                                    <p class="text-nowrap">DeductionType Name</p>
+                                    <p class="text-nowrap">Deduction Type Name</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Class</p>
@@ -135,7 +135,7 @@
                             <div class="col-10 col-md-10 col-lg-10">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-6">
-                                        <p class="text-nowrap"><span class="smallAdd">DeductionType Name : </span>@Html.DisplayFor(modelItem => item.DeductionTypeName)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Deduction Type Name : </span>@Html.DisplayFor(modelItem => item.DeductionTypeName)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap">

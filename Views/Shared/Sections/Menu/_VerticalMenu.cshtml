@@ -79,6 +79,7 @@
                     currentPage.StartsWith("/EndOfService/Index")||
                     currentPage.StartsWith("/OverTime/Index")||
                     currentPage.StartsWith("/VacationSettle/Index")||
+                    currentPage.StartsWith("/FaceAttendanceTimeAdjust/Index")||
 
                     currentPage.StartsWith("/FixedDeduction/Index")||
                     currentPage.StartsWith("/WorkDay/Index")||
@@ -90,7 +91,8 @@
                     currentPage.StartsWith("/ExperienceCertificate/Index")||
                     currentPage.StartsWith("/EducationDocument/Index")||
                     currentPage.StartsWith("/ProcessApprovalDetail/Index")||
-                    currentPage.StartsWith("/EmployeeRequestApprovalDetail/Index") ? " active open" : "")'>
+                    currentPage.StartsWith("/EmployeeRequestApprovalDetail/Index")||
+                    currentPage.StartsWith("/FaceAttendanceReport/Index") ? " active open" : "")'>
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-group"></i>
                 <div>Human Resources</div>
@@ -128,7 +130,8 @@
                 <!-- HR -->
                 <li class='menu-item@(currentPage == "/HR_Dashboard/Index" || currentPage == "/AddionalAllowance/Index" ||
                                       currentPage == "/Deduction/Index" || currentPage == "/EndOfService/Index" ||
-                                      currentPage == "/OverTime/Index" || currentPage == "/VacationSettle/Index"? " active" : "")'>
+                                      currentPage == "/OverTime/Index" || currentPage == "/VacationSettle/Index"||
+                                      currentPage == "/FaceAttendanceTimeAdjust/Index"? " active" : "")'>
                     <a asp-controller="HR_Dashboard" asp-action="Index" class="menu-link">
                         <div>HR</div>
                     </a>
@@ -147,7 +150,7 @@
                                       currentPage == "/EmployeeBioData/Index" || currentPage == "/VacationBalance/Index" ||
                                       currentPage == "/VacationReport/Index"|| currentPage == "/ExperienceCertificate/Index" ||
                                       currentPage == "/EducationDocument/Index"|| currentPage == "/ProcessApprovalDetail/Index" ||
-                                      currentPage == "/EmployeeRequestApprovalDetail/Index"  ? " active" : "")'>
+                                      currentPage == "/EmployeeRequestApprovalDetail/Index"|| currentPage == "/FaceAttendanceReport/Index"  ? " active" : "")'>
                     <a asp-controller="Report_Dashboard" asp-action="Index" class="menu-link">
                         <div>Report</div>
                     </a>

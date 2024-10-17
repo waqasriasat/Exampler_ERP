@@ -6,7 +6,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editOverTimeModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit OverTime
+                    Edit Over Time
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -29,7 +29,7 @@
                             <!-- OverTime Type Selection -->
                             <div class="row">
                                 <div class="col-12">
-                                    <label asp-for="OverTimeTypeID" class="form-label fw-bold">OverTime Type</label>
+                                    <label asp-for="OverTimeTypeID" class="form-label fw-bold">Over Time Type</label>
                                     <select asp-for="OverTimeTypeID" asp-items="@(new SelectList(ViewBag.OverTimeTypesList, "Value", "Text"))" class="form-control form-control-lg"></select>
                                     <span asp-validation-for="OverTimeTypeID" class="text-danger"></span>
                                 </div>

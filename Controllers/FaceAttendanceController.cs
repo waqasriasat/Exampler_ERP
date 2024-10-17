@@ -91,6 +91,12 @@ namespace Exampler_ERP.Controllers
           existingAttendance.MarkSourceID = 2;
           existingAttendance.OutTime = DateTime.Now;
           existingAttendance.OutPicture = imageBytes;
+
+          // Calculate the duration between InTime and OutTime
+          var duration = existingAttendance.OutTime - existingAttendance.InTime;
+          existingAttendance.DHours = (int)duration.TotalHours;
+          existingAttendance.DMinutes = duration.Minutes;
+
           await _appDBContext.SaveChangesAsync();
           return Json(new { success = true, message = "Attendance updated (out)." });
         }
