@@ -91,7 +91,6 @@ namespace Exampler_ERP.Controllers.HR.HR
       // Return the partial view with the OverTime model
       return PartialView("~/Views/HR/HR/OverTime/EditOverTime.cshtml", OverTime);
     }
-
     [HttpPost]
     public async Task<IActionResult> Edit(HR_OverTime OverTime)
     {
@@ -118,7 +117,6 @@ namespace Exampler_ERP.Controllers.HR.HR
       // Return the partial view with validation errors
       return PartialView("~/Views/HR/HR/OverTime/EditOverTime.cshtml", OverTime);
     }
-
     [HttpGet]
     public async Task<IActionResult> Create()
     {
@@ -128,7 +126,6 @@ namespace Exampler_ERP.Controllers.HR.HR
       ViewBag.MonthsList = await _utils.GetMonthsTypes();
       return PartialView("~/Views/HR/HR/OverTime/AddOverTime.cshtml", new HR_OverTime());
     }
-
     [HttpPost]
     public async Task<IActionResult> Create(HR_OverTime OverTime)
     {

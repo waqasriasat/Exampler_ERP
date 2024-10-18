@@ -40,16 +40,16 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var FaceAttendanceReport in Model)
+            @foreach (var FaceAttendanceTimeAdjust in Model)
             {
                 <tr>
-                    <td>@FaceAttendanceReport.FaceAttendanceID</td>
-                    <td>@($"{FaceAttendanceReport.Employee?.FirstName} {FaceAttendanceReport.Employee?.FatherName} {FaceAttendanceReport.Employee?.FamilyName}")</td>
-                    <td>@FaceAttendanceReport.MarkDate.ToString("dd/MMM/yyyy")</td>
-                    <td>@FaceAttendanceReport.InTime.ToString("hh:mm:ss")</td>
-                    <td>@FaceAttendanceReport.OutTime.ToString("hh:mm:ss")</td>
-                    <td>@FaceAttendanceReport.DHours</td>
-                    <td>@FaceAttendanceReport.DMinutes</td>
+                    <td>@FaceAttendanceTimeAdjust.FaceAttendanceID</td>
+                    <td>@($"{FaceAttendanceTimeAdjust.Employee?.FirstName} {FaceAttendanceTimeAdjust.Employee?.FatherName} {FaceAttendanceTimeAdjust.Employee?.FamilyName}")</td>
+                    <td>@FaceAttendanceTimeAdjust.MarkDate.ToString("dd/MMM/yyyy")</td>
+                    <td>@FaceAttendanceTimeAdjust.InTime.ToString("hh:mm:ss")</td>
+                    <td>@FaceAttendanceTimeAdjust.OutTime.ToString("hh:mm:ss")</td>
+                    <td>@FaceAttendanceTimeAdjust.DHours</td>
+                    <td>@FaceAttendanceTimeAdjust.DMinutes</td>
                 </tr>
             }
         </tbody>

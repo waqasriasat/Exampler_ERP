@@ -1,18 +1,17 @@
 @model Exampler_ERP.Models.CR_FaceAttendance
 
-<div class="modal fade" id="editFaceAttendanceTimeAdjustModal" tabindex="-1" role="dialog" aria-labelledby="editFaceAttendanceTimeAdjustModalLabel" aria-hidden="true">
+<div class="modal fade" id="addFaceAttendanceTimeAdjustModal" tabindex="-1" role="dialog" aria-labelledby="addFaceAttendanceTimeAdjustModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="editFaceAttendanceTimeAdjustModalLabel">
+                <h5 class="modal-title" id="addFaceAttendanceTimeAdjustModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit Over Time
+                    Add Over Time
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
             </div>
             <div class="modal-body">
-                <form id="editFaceAttendanceTimeAdjustForm">
+                <form id="addFaceAttendanceTimeAdjustForm" method="post" asp-action="Create" asp-controller="FaceAttendanceTimeAdjust" enctype="multipart/form-data">
                     <h5 class="modal-title" style="padding-top:10px">FaceAttendanceTimeAdjust Details</h5>
                     <hr />
                     <div class="row">
@@ -21,7 +20,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <label asp-for="EmployeeID" class="form-label fw-bold">Employee Name</label>
-                                    <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control form-control-lg" disabled></select>
+                                    <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control form-control-lg"></select>
                                     <span asp-validation-for="EmployeeID" class="text-danger"></span>
                                 </div>
                             </div>
@@ -48,27 +47,34 @@
                                     <span asp-validation-for="OutTime" class="text-danger"></span>
                                 </div>
                             </div>
+
                         </div>
                     </div>
-                    <input type="hidden" asp-for="EmployeeID" />
+
+                    <!-- Hidden Fields -->
                     <input type="hidden" asp-for="DeleteYNID" />
-                    <input type="hidden" asp-for="FaceAttendanceID" />
-
-
-
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" id="Close" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="saveChanges" class="btn btn-success">Save Changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" id="saveNewFaceAttendanceTimeAdjust">Save</button>
             </div>
         </div>
     </div>
 </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
 <script>
-
+    // Existing JS logic for date and field management
 </script>
+
+<style>
+    .readonly-background {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+
+    .date-placeholder::placeholder {
+        color: #6c757d;
+        opacity: 1; /* Firefox */
+    }
+</style>

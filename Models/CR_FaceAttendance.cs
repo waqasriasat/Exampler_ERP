@@ -19,5 +19,6 @@ namespace Exampler_ERP.Models
     public byte[]? OutPicture { get; set; }
     public int? DHours { get; set; }
     public int? DMinutes { get; set; }
+    public int? DeleteYNID { get; set;}
   }
 }
