@@ -1,0 +1,75 @@
+@model IEnumerable<Exampler_ERP.Models.Temp.MonthlySalarySheetViewModel>
+
+<table>
+    <thead>
+        <tr>
+            <th>Employee ID</th>
+
+            @* Dynamically generate headers for each type of detail *@
+            @foreach (var model in Model)
+            {
+                foreach (var column in model.SalaryDetails.Keys)
+                {
+                    <th>Salary Detail @column</th>
+                }
+                foreach (var column in model.AdditionalAllowances.Keys)
+                {
+                    <th>Additional Allowance @column</th>
+                }
+                foreach (var column in model.OvertimeDetails.Keys)
+                {
+                    <th>Overtime @column</th>
+                }
+                foreach (var column in model.Deductions.Keys)
+                {
+                    <th>Deduction @column</th>
+                }
+                foreach (var column in model.FixedDeductions.Keys)
+                {
+                    <th>Fixed Deduction @column</th>
+                }
+                break; // Only need to do this once
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var model in Model)
+        {
+            <tr>
+                <td>@(model.EmployeeID)</td>
+
+                @* Generate cells for each employee's salary details *@
+                @foreach (var column in Model.First().SalaryDetails.Keys)
+                {
+                    <td>@(model.SalaryDetails.ContainsKey(column) && model.SalaryDetails[column].HasValue 
+                        ? model.SalaryDetails[column].Value.ToString("C") 
+                        : "N/A")</td>
+                }
+                @foreach (var column in Model.First().AdditionalAllowances.Keys)
+                {
+                    <td>@(model.AdditionalAllowances.ContainsKey(column) && model.AdditionalAllowances[column].HasValue 
+                        ? model.AdditionalAllowances[column].Value.ToString("C") 
+                        : "N/A")</td>
+                }
+                @foreach (var column in Model.First().OvertimeDetails.Keys)
+                {
+                    <td>@(model.OvertimeDetails.ContainsKey(column) && model.OvertimeDetails[column].HasValue 
+                        ? model.OvertimeDetails[column].Value.ToString("C") 
+                        : "N/A")</td>
+                }
+                @foreach (var column in Model.First().Deductions.Keys)
+                {
+                    <td>@(model.Deductions.ContainsKey(column) && model.Deductions[column].HasValue 
+                        ? model.Deductions[column].Value.ToString("C") 
+                        : "N/A")</td>
+                }
+                @foreach (var column in Model.First().FixedDeductions.Keys)
+                {
+                    <td>@(model.FixedDeductions.ContainsKey(column) && model.FixedDeductions[column].HasValue 
+                        ? model.FixedDeductions[column].Value.ToString("C") 
+                        : "N/A")</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
