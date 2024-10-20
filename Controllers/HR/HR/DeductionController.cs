@@ -18,24 +18,7 @@ namespace Exampler_ERP.Controllers.HR.HR
       _configuration = configuration;
       _utils = utils;
     }
-    //public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID, int? DeducationTypeID)
-    //{
-    //  var deductions = await _appDBContext.HR_Deductions
-    //    .Where(b => b.DeleteYNID != 1)
-    //    .Include(d => d.Employee)
-    //    .Include(d => d.DeductionType)
-    //    .ToListAsync();
-
-    //  ViewBag.MonthsTypeID = MonthsTypeID;
-    //  ViewBag.YearsTypeID = YearsTypeID;
-    //  ViewBag.DeducationTypeID = DeducationTypeID;
-    //  ViewBag.EmployeeID = EmployeeID;
-    //  ViewBag.EmployeeName = EmployeeName;
-
-    //  ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
-    //  ViewBag.DeducationTypeList = await _utils.GetDeductionTypes();
-    //  return View("~/Views/HR/HR/Deduction/Deduction.cshtml", deductions);
-    //}
+   
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID, int? DeducationTypeID)
     {
       var query = _appDBContext.HR_Deductions
@@ -96,7 +79,7 @@ namespace Exampler_ERP.Controllers.HR.HR
       var deduction = await _appDBContext.HR_Deductions
                                          .Include(d => d.Employee)
                                          .Include(d => d.DeductionType)
-                                         .FirstOrDefaultAsync(d => d.DeductionID == id && d.DeleteYNID != 1);
+                                         .FirstOrDefaultAsync(d => d.DeductionID == id && d.DeleteYNID != 1 && (d.PostedID == 0 || d.PostedID == null));
 
       if (deduction == null)
       {

@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Exampler_ERP.Models
 {
-  public class HR_AddionalAllowance
+  public class HR_MonthlyPayroll_FixedDeduction
   {
     [Key]
-    public int AddionalAllowanceID { get; set; }
+    public int PayrollFixedDeductionID { get; set; }
     [Required]
     public int EmployeeID { get; set; }
     [ForeignKey("EmployeeID")]
@@ -15,11 +15,7 @@ namespace Exampler_ERP.Models
     [ForeignKey("MonthTypeID")]
     public virtual Settings_MonthType? MonthType { get; set; }
     public int? Year { get; set; }
-    public int? FinalApprovalID { get; set; }
-    public int? ProcessTypeApprovalID { get; set; }
     public int? PostedID { get; set; }
     public int? PayRollID { get; set; }
-
-    public List<HR_AddionalAllowanceDetail> AddionalAllowanceDetails { get; set; } = new List<HR_AddionalAllowanceDetail>();
   }
 }

@@ -110,6 +110,13 @@ namespace Exampler_ERP.Utilities
       selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
       return selectList;
     }
+    public async Task<List<SelectListItem>> GetBranchsWithoutZeroLine()
+    {
+      var branchs = await _appDBContext.Settings_BranchTypes.ToListAsync();
+
+      var selectList = branchs.Select(r => new SelectListItem { Value = r.BranchTypeID.ToString(), Text = r.BranchTypeName }).ToList();
+      return selectList;
+    }
     public async Task<List<SelectListItem>> GetDepartments()
     {
       var departments = await _appDBContext.Settings_DepartmentTypes.ToListAsync();
@@ -407,7 +414,27 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
+    public async Task<List<SelectListItem>> GetMonthsTypesWithoutZeroLine()
+    {
+      try
+      {
+        var monthTypeList = await _appDBContext.Settings_MonthTypes
+            .Select(d => new SelectListItem
+            {
+              Value = d.MonthTypeID.ToString(),
+              Text = d.MonthTypeName
+            })
+            .ToListAsync();
 
+ 
+        return monthTypeList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
     public async Task<dynamic> GetDirectManager()
     {
       var directManagerList = await _appDBContext.CR_Users

@@ -81,7 +81,7 @@ namespace Exampler_ERP.Controllers.HR.HR
       var OverTime = await _appDBContext.HR_OverTimes
                                          .Include(d => d.Employee)
                                          .Include(d => d.OverTimeType)
-                                         .FirstOrDefaultAsync(d => d.OverTimeID == id && d.DeleteYNID != 1);
+                                         .FirstOrDefaultAsync(d => d.OverTimeID == id && d.DeleteYNID != 1 && (d.PostedID == 0 || d.PostedID == null));
 
       if (OverTime == null)
       {

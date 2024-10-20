@@ -65,7 +65,7 @@ namespace Exampler_ERP.Controllers.HR.HR
       // Fetch the allowance record with the specified id
       var allowance = await _appDBContext.HR_AddionalAllowances
           .Include(a => a.AddionalAllowanceDetails) // Include the details for editing
-          .FirstOrDefaultAsync(a => a.AddionalAllowanceID == id);
+          .FirstOrDefaultAsync(a => a.AddionalAllowanceID == id && (a.PostedID == 0 || a.PostedID == null));
 
       if (allowance == null)
       {

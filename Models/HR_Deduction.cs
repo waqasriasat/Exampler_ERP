@@ -21,5 +21,7 @@ namespace Exampler_ERP.Models
     public int? DeleteYNID { get; set; }
     public int? FinalApprovalID { get; set; }
     public int? ProcessTypeApprovalID { get; set; }
+    public int? PostedID { get; set; }
+    public int? PayRollID { get; set; }
   }
 }

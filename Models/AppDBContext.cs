@@ -73,6 +73,12 @@ namespace Exampler_ERP.Models
     public DbSet<HR_FixedDeductionDetail> HR_FixedDeductionDetails { get; set; }
     public DbSet<HR_EmployeeEducation> HR_EmployeeEducations { get; set; }
     public DbSet<HR_EmployeeExperience> HR_EmployeeExperiences { get; set; }
+    public DbSet<HR_MonthlyPayroll_FixedDeduction> HR_MonthlyPayroll_FixedDeductions { get; set; }
+    public DbSet<HR_MonthlyPayroll_FixedDeductionDetail> HR_MonthlyPayroll_FixedDeductionDetails { get; set; }
+    public DbSet<HR_MonthlyPayroll_Salary> HR_MonthlyPayroll_Salarys { get; set; }
+    public DbSet<HR_MonthlyPayroll_SalaryDetail> HR_MonthlyPayroll_SalaryDetails { get; set; }
+    public DbSet<HR_MonthlyPayroll> HR_MonthlyPayrolls { get; set; }
+    public DbSet<HR_MonthlyPayrollPosted> HR_MonthlyPayrollPosteds { get; set; }
 
 
 

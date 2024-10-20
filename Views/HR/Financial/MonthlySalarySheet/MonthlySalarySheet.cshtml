@@ -1,38 +1,164 @@
 @model IEnumerable<Exampler_ERP.Models.Temp.MonthlySalarySheetViewModel>
+
+<script>
+          $(document) . ready(function() {
+        $('#postedButton').click(function() {
+            // Get MonthID and Year from hidden fields
+            var branchID = $('#BranchID').val();
+            var monthID = $('#MonthID').val();
+            var year = $('#Year').val();
+
+            // Send the values to the controller using AJAX
+            $.ajax({
+                url: '/MonthlySalarySheet/UpdatePosted',  // Replace with the correct URL
+                type: 'POST',
+                data: {
+                    BranchID : branchID,
+                    MonthID: monthID,
+                    Year: year
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert("Posted ID updated successfully!");
+                        // Clear the search results or do any additional UI handling
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function() {
+                    alert("An error occurred while updating Posted ID.");
+                }
+            });
+        });
+    });
+
+</script>
+
 <h4 class="py-3 mb-4">
     <span class="text-muted fw-light">Financial /</span> Monthly Salary Sheet
 </h4>
-<div class="row">
-    <div class="col-md-12">
+<form method="get" action="@Url.Action("GeneratePayroll", "MonthlySalarySheet")">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <h5 class="card-header">Search Box</h5>
+                <div class="Searching-Box-padding" style="padding-bottom: 15px;">
+                    <div class="row mb-4">
+                        <!-- From Date Field -->
+                        <div class="col-md-4 mb-4">
+                            <label class="form-label fw-bold">Month Type</label>
+                            <select name="MonthsTypeID" class="form-control">
+                                @foreach (var item in ViewBag.MonthsTypeList)
 
-        <div class="card">
-            <h5 class="card-header">Searhing Box</h5>
-            <div class="Searching-Box-padding">
-                <div class="row mb-4">
-                    <div class="col-md-8" style="padding-bottom: 15px;">
-                        <!-- Search Field and Button -->
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search Employee" id="searchEmployeeInput">
-                            <button class="btn btn-outline-secondary" type="button" id="searchEmployeeButton">
-                                <i class="fa fa-search"></i>
-                            </button>
+                                {
+
+                                    if (item.Value == ViewBag.MonthsTypeID?.ToString())
+
+                                    {
+                                        <option value="@item.Value" selected>@item.Text</option>
+                                    }
+
+                                    else
+
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+
+
+                        <!-- To Date Field -->
+                        <div class="col-md-4 mb-4">
+                            <label for="YearsTypeID" class="form-label fw-bold">Year</label>
+                            <select name="YearsTypeID" class="form-control">
+                                @for (int year = DateTime.Now.Year; year >= 1900; year--)
+
+                                {
+
+                                    // Corrected to compare with ViewBag.YearsTypeID
+
+                                    if (year == (ViewBag.YearsTypeID ?? 0))
+
+                                    {
+                                        <option value="@year" selected>@year</option>
+                                    }
+
+                                    else
+
+                                    {
+                                        <option value="@year">@year</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+
+
+
+                        <!-- Branch Dropdown -->
+                        <div class="col-md-4 mb-4">
+                            <label class="form-label fw-bold">Branch</label>
+                            <select name="Branch" class="form-control">
+                                @foreach (var item in ViewBag.BranchList)
+                                {
+                                    if (item.Value == ViewBag.BranchID?.ToString())
+
+
+
+                                    {
+                                        <option value="@item.Value" selected>@item.Text</option>
+                                    }
+
+                                    else
+
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="row">
+                        <div class="col-md-12 text-end">
+                            <button type="submit" class="btn btn-primary">Search</button>
+
+                            <button type="button" class="btn btn-primary" id="postedButton">Posted</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "OverTime")'">Excel</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="printOverTimes()">Print</button>
+
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
-</div>
+</form>
 <br />
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <h5 class="card-header">Salary Sheet Detail</h5>
-            <div class="row" style="overflow-y: scroll; padding: 15px;">
+            <div class="row" style="overflow-y: Overlay; padding: 15px;">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row" style="display: flex; flex-wrap: nowrap;">
                         <div class="col-12 col-md-1 col-lg-1">
                             <p class="text-nowrap">Employee ID</p>
+                        </div>
+                        <div class="col-12 col-md-2 col-lg-2">
+                            <p class="text-nowrap">Employee Name</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Month</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Year</p>
                         </div>
                         @foreach (var model in Model)
                         {
@@ -68,8 +194,13 @@
                             }
                             break;
                         }
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Deserved Amount</p>
+                        </div>
+                        
                     </div>
                 </div>
+                
                 @foreach (var model in Model)
                 {
                         <div class="col-12 col-md-12 col-lg-12 GVDetail">
@@ -80,7 +211,41 @@
                                         @(model.EmployeeID)
                                     </p>
                                 </div>
-
+                            <div class="col-12 col-md-2 col-lg-2">
+                                <p class="text-nowrap">
+                                    <span class="smallAdd">Employee Name : </span>
+                                    @(model.EmployeeName)
+                                </p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1" style="display:none">
+                                @*  *@
+                                <p class="text-nowrap">
+                                    <span class="smallAdd">Branch : </span>
+                                    <input type="hidden" id="BranchID" value="@(model.BranchID)" />
+                                    @(model.BranchID)
+                                </p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1" style="display:none">
+                                @*  *@
+                                <p class="text-nowrap">
+                                    <span class="smallAdd">Month : </span>
+                                    <input type="hidden" id="MonthID" value="@(model.MonthID)" />
+                                    @(model.MonthID)
+                                </p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap">
+                                    <span class="smallAdd">Month : </span>
+                                    @(model.MonthName)
+                                </p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap">
+                                    <span class="smallAdd">Year : </span>
+                                    <input type="hidden" id="Year" value="@(model.Year)" />
+                                    @(model.Year)
+                                </p>
+                            </div>
                                 @* Dynamically generate cells for Salary Details *@
                                 @foreach (var column in Model.First().SalaryDetails.Keys)
                                 {
@@ -134,7 +299,12 @@
                                         </p>
                                     </div>
                                 }
-
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap">
+                                    <span class="smallAdd">Deserved Amount : </span>
+                                    @(model.DeservedAmount)
+                                </p>
+                            </div>
                             </div>
                         </div>
                 }
