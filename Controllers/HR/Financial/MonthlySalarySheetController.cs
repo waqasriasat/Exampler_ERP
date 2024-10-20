@@ -46,20 +46,18 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
       return View("~/Views/HR/Financial/MonthlySalarySheet/MonthlySalarySheet.cshtml", salarySheets);
     }
-
     private async Task<MonthlySalarySheetViewModel> GetMonthlySalarySheetAsync(string employeeId, int month, int year)
     {
       var salarySheet = new MonthlySalarySheetViewModel
       {
-        EmployeeID = int.Parse(employeeId) // Assuming EmployeeID is an integer
+        EmployeeID = int.Parse(employeeId)
       };
 
-      var connectionString = _configuration.GetConnectionString("AppDb"); // Adjust connection string name
+      var connectionString = _configuration.GetConnectionString("AppDb");
       using (var connection = new SqlConnection(connectionString))
       {
         await connection.OpenAsync();
 
-        // Execute the stored procedure to get salary details
         var commandText = "EXEC GetMonthlySalarySheet @EmployeeID, @Month, @Year;";
         using (var command = new SqlCommand(commandText, connection))
         {
@@ -71,32 +69,34 @@ namespace Exampler_ERP.Controllers.HR.Financial
           {
             while (await reader.ReadAsync())
             {
-              // Adjusting the reading logic based on actual column types
-              string salaryTypeName = reader.GetString(1); // Assuming SalaryTypeName is still a string
+              for (int i = 0; i < reader.FieldCount; i++)
+              {
+                string columnName = reader.GetName(i);
 
-              // Check if the salary value is a double
-              decimal salaryValue = reader.IsDBNull(2) ? 0 : (decimal)reader.GetDouble(2); // Assuming SalaryValue is a double
+                // Handle nullable or non-nullable values
+                var value = reader.IsDBNull(i) ? "0" : reader.GetValue(i).ToString();
 
-              // Assuming salary type names have unique prefixes for each dictionary
-              if (salaryTypeName.StartsWith("Salary_"))
-              {
-                salarySheet.SalaryDetails.Add(int.Parse(salaryTypeName.Split('_')[1]), salaryValue);
-              }
-              else if (salaryTypeName.StartsWith("AdditionalAllowance_"))
-              {
-                salarySheet.AdditionalAllowances.Add(int.Parse(salaryTypeName.Split('_')[1]), salaryValue);
-              }
-              else if (salaryTypeName.StartsWith("OverTime_"))
-              {
-                salarySheet.OvertimeDetails.Add(int.Parse(salaryTypeName.Split('_')[1]), salaryValue);
-              }
-              else if (salaryTypeName.StartsWith("Deduction_"))
-              {
-                salarySheet.Deductions.Add(int.Parse(salaryTypeName.Split('_')[1]), salaryValue);
-              }
-              else if (salaryTypeName.StartsWith("FixedDeduction_"))
-              {
-                salarySheet.FixedDeductions.Add(int.Parse(salaryTypeName.Split('_')[1]), salaryValue);
+                // Process each column by category
+                if (columnName.StartsWith("Salary_"))
+                {
+                  salarySheet.SalaryDetails.Add(columnName.Split('_')[1], decimal.Parse(value));
+                }
+                else if (columnName.StartsWith("AdditionalAllowance_"))
+                {
+                  salarySheet.AdditionalAllowances.Add(columnName.Split('_')[1], decimal.Parse(value));
+                }
+                else if (columnName.StartsWith("OverTime_"))
+                {
+                  salarySheet.OvertimeDetails.Add(columnName.Split('_')[1], decimal.Parse(value));
+                }
+                else if (columnName.StartsWith("Deduction_"))
+                {
+                  salarySheet.Deductions.Add(columnName.Split('_')[1], decimal.Parse(value));
+                }
+                else if (columnName.StartsWith("FixedDeduction_"))
+                {
+                  salarySheet.FixedDeductions.Add(columnName.Split('_')[1], decimal.Parse(value));
+                }
               }
             }
           }
@@ -105,6 +105,66 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
       return salarySheet;
     }
+
+
+    //private async Task<MonthlySalarySheetViewModel> GetMonthlySalarySheetAsync(string employeeId, int month, int year)
+    //{
+    //  var salarySheet = new MonthlySalarySheetViewModel
+    //  {
+    //    EmployeeID = int.Parse(employeeId) // Assuming EmployeeID is an integer
+    //  };
+
+    //  var connectionString = _configuration.GetConnectionString("AppDb"); // Adjust connection string name
+    //  using (var connection = new SqlConnection(connectionString))
+    //  {
+    //    await connection.OpenAsync();
+
+    //    // Execute the stored procedure to get salary details
+    //    var commandText = "EXEC GetMonthlySalarySheet @EmployeeID, @Month, @Year;";
+    //    using (var command = new SqlCommand(commandText, connection))
+    //    {
+    //      command.Parameters.AddWithValue("@EmployeeID", employeeId);
+    //      command.Parameters.AddWithValue("@Month", month);
+    //      command.Parameters.AddWithValue("@Year", year);
+
+    //      using (var reader = await command.ExecuteReaderAsync())
+    //      {
+    //        while (await reader.ReadAsync())
+    //        {
+    //          // Adjusting the reading logic based on actual column types
+    //          string salaryTypeName = reader.GetString(1); // Assuming SalaryTypeName is still a string
+
+    //          // Check if the salary value is a double
+    //          decimal salaryValue = reader.IsDBNull(2) ? 0 : (decimal)reader.GetDouble(2); // Assuming SalaryValue is a double
+
+    //          // Assuming salary type names have unique prefixes for each dictionary
+    //          if (salaryTypeName.StartsWith("Salary_"))
+    //          {
+    //            salarySheet.SalaryDetails.Add(int.Parse(salaryTypeName.Split('_')[1]), salaryValue);
+    //          }
+    //          else if (salaryTypeName.StartsWith("AdditionalAllowance_"))
+    //          {
+    //            salarySheet.AdditionalAllowances.Add(int.Parse(salaryTypeName.Split('_')[1]), salaryValue);
+    //          }
+    //          else if (salaryTypeName.StartsWith("OverTime_"))
+    //          {
+    //            salarySheet.OvertimeDetails.Add(int.Parse(salaryTypeName.Split('_')[1]), salaryValue);
+    //          }
+    //          else if (salaryTypeName.StartsWith("Deduction_"))
+    //          {
+    //            salarySheet.Deductions.Add(int.Parse(salaryTypeName.Split('_')[1]), salaryValue);
+    //          }
+    //          else if (salaryTypeName.StartsWith("FixedDeduction_"))
+    //          {
+    //            salarySheet.FixedDeductions.Add(int.Parse(salaryTypeName.Split('_')[1]), salaryValue);
+    //          }
+    //        }
+    //      }
+    //    }
+    //  }
+
+    //  return salarySheet;
+    //}
 
     public async Task<IActionResult> PrintCard(int employeeId)
     {

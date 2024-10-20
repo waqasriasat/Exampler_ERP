@@ -1,75 +1,144 @@
 @model IEnumerable<Exampler_ERP.Models.Temp.MonthlySalarySheetViewModel>
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Financial /</span> Monthly Salary Sheet
+</h4>
+<div class="row">
+    <div class="col-md-12">
 
-<table>
-    <thead>
-        <tr>
-            <th>Employee ID</th>
+        <div class="card">
+            <h5 class="card-header">Searhing Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8" style="padding-bottom: 15px;">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search Employee" id="searchEmployeeInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchEmployeeButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Salary Sheet Detail</h5>
+            <div class="row" style="overflow-y: scroll; padding: 15px;">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row" style="display: flex; flex-wrap: nowrap;">
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Employee ID</p>
+                        </div>
+                        @foreach (var model in Model)
+                        {
+                            @foreach (var column in model.SalaryDetails.Keys)
+                            {
+                                <div class="col-12 col-md-1 col-lg-1">
+                                    <p class="text-nowrap" >@column</p>
+                                </div>
+                            }
+                            foreach (var column in model.AdditionalAllowances.Keys)
+                            {
+                                <div class="col-12 col-md-1 col-lg-1">
+                                    <p class="text-nowrap">@column</p>
+                                </div>
+                            }
+                            foreach (var column in model.OvertimeDetails.Keys)
+                            {
+                                <div class="col-12 col-md-1 col-lg-1">
+                                    <p class="text-nowrap">@column</p>
+                                </div>
+                            }
+                            foreach (var column in model.Deductions.Keys)
+                            {
+                                <div class="col-12 col-md-1 col-lg-1">
+                                    <p class="text-nowrap">@column</p>
+                                </div>
+                            }
+                            foreach (var column in model.FixedDeductions.Keys)
+                            {
+                                <div class="col-12 col-md-1 col-lg-1">
+                                    <p class="text-nowrap">@column</p>
+                                </div>
+                            }
+                            break;
+                        }
+                    </div>
+                </div>
+                @foreach (var model in Model)
+                {
+                        <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                            <div class="row" style="display: ruby-text;">
+                                <div class="col-12 col-md-1 col-lg-1">
+                                    <p class="text-nowrap">
+                                        <span class="smallAdd">Employee ID : </span>
+                                        @(model.EmployeeID)
+                                    </p>
+                                </div>
 
-            @* Dynamically generate headers for each type of detail *@
-            @foreach (var model in Model)
-            {
-                foreach (var column in model.SalaryDetails.Keys)
-                {
-                    <th>Salary Detail @column</th>
-                }
-                foreach (var column in model.AdditionalAllowances.Keys)
-                {
-                    <th>Additional Allowance @column</th>
-                }
-                foreach (var column in model.OvertimeDetails.Keys)
-                {
-                    <th>Overtime @column</th>
-                }
-                foreach (var column in model.Deductions.Keys)
-                {
-                    <th>Deduction @column</th>
-                }
-                foreach (var column in model.FixedDeductions.Keys)
-                {
-                    <th>Fixed Deduction @column</th>
-                }
-                break; // Only need to do this once
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var model in Model)
-        {
-            <tr>
-                <td>@(model.EmployeeID)</td>
+                                @* Dynamically generate cells for Salary Details *@
+                                @foreach (var column in Model.First().SalaryDetails.Keys)
+                                {
+                                    <div class="col-12 col-md-1 col-lg-1">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">@column : </span>@(model.SalaryDetails.ContainsKey(column) ? model.SalaryDetails[column]?.ToString() : "N/A")
+                                        </p>
+                                    </div>
+                                }
 
-                @* Generate cells for each employee's salary details *@
-                @foreach (var column in Model.First().SalaryDetails.Keys)
-                {
-                    <td>@(model.SalaryDetails.ContainsKey(column) && model.SalaryDetails[column].HasValue 
-                        ? model.SalaryDetails[column].Value.ToString("C") 
-                        : "N/A")</td>
+
+                                @* Dynamically generate cells for Additional Allowances *@
+                                @foreach (var column in Model.First().AdditionalAllowances.Keys)
+                                {
+                                    <div class="col-12 col-md-1 col-lg-1">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">@column : </span>@(model.AdditionalAllowances.ContainsKey(column) ? model.AdditionalAllowances[column]?.ToString() : "N/A")
+                                        </p>
+                                    </div>
+                                }
+
+
+                                @* Dynamically generate cells for Overtime Details *@
+                                @foreach (var column in Model.First().OvertimeDetails.Keys)
+                                {
+                                    <div class="col-12 col-md-1 col-lg-1">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">@column : </span>@(model.OvertimeDetails.ContainsKey(column) ? model.OvertimeDetails[column]?.ToString() : "N/A")
+                                        </p>
+                                    </div>
+                                }
+
+
+                                @* Dynamically generate cells for Deductions *@
+                                @foreach (var column in Model.First().Deductions.Keys)
+                                {
+                                    <div class="col-12 col-md-1 col-lg-1">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">@column : </span>@(model.Deductions.ContainsKey(column) ? model.Deductions[column]?.ToString() : "N/A")
+                                        </p>
+                                    </div>
+                                }
+
+
+                                @* Dynamically generate cells for Fixed Deductions *@
+                                @foreach (var column in Model.First().FixedDeductions.Keys)
+                                {
+                                    <div class="col-12 col-md-1 col-lg-1">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">@column : </span>@(model.FixedDeductions.ContainsKey(column) ? model.FixedDeductions[column]?.ToString() : "N/A")
+                                        </p>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
                 }
-                @foreach (var column in Model.First().AdditionalAllowances.Keys)
-                {
-                    <td>@(model.AdditionalAllowances.ContainsKey(column) && model.AdditionalAllowances[column].HasValue 
-                        ? model.AdditionalAllowances[column].Value.ToString("C") 
-                        : "N/A")</td>
-                }
-                @foreach (var column in Model.First().OvertimeDetails.Keys)
-                {
-                    <td>@(model.OvertimeDetails.ContainsKey(column) && model.OvertimeDetails[column].HasValue 
-                        ? model.OvertimeDetails[column].Value.ToString("C") 
-                        : "N/A")</td>
-                }
-                @foreach (var column in Model.First().Deductions.Keys)
-                {
-                    <td>@(model.Deductions.ContainsKey(column) && model.Deductions[column].HasValue 
-                        ? model.Deductions[column].Value.ToString("C") 
-                        : "N/A")</td>
-                }
-                @foreach (var column in Model.First().FixedDeductions.Keys)
-                {
-                    <td>@(model.FixedDeductions.ContainsKey(column) && model.FixedDeductions[column].HasValue 
-                        ? model.FixedDeductions[column].Value.ToString("C") 
-                        : "N/A")</td>
-                }
-            </tr>
-        }
-    </tbody>
-</table>
+            </div>
+        </div>
+    </div>
+</div>
