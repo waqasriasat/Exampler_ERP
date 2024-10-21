@@ -26,7 +26,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
     public async Task<IActionResult> Index(int? Branch, int MonthsTypeID = 10, int YearsTypeID = 1998)
     {
       var employeeList = await _appDBContext.HR_Employees
-          .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1)
+          .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID==0)
           .ToListAsync();
 
       var salarySheets = new List<MonthlySalarySheetViewModel>();
@@ -39,10 +39,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
       var salaryDataResults = await Task.WhenAll(tasks);
       salarySheets.AddRange(salaryDataResults);
 
-      ViewBag.MonthsTypeID = MonthsTypeID;
-      ViewBag.YearsTypeID = YearsTypeID;
-      ViewBag.Branch = Branch;
-
+   
       ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
       ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
 
@@ -50,8 +47,25 @@ namespace Exampler_ERP.Controllers.HR.Financial
     }
     public async Task<IActionResult> GeneratePayroll(int Branch, int MonthsTypeID, int YearsTypeID)
     {
+      var FatchExistingPosting = await _appDBContext.HR_MonthlyPayrollPosteds
+        .Where(e => e.BranchTypeID == Branch && e.MonthTypeID == MonthsTypeID && e.Year == YearsTypeID)
+        .FirstOrDefaultAsync();
+
+      if (FatchExistingPosting != null)
+      {
+        ViewBag.Message = "Payroll has already been generated for this period.";
+        ViewBag.MonthsTypeID = MonthsTypeID;
+        ViewBag.YearsTypeID = YearsTypeID;
+        ViewBag.Branch = Branch;
+
+        ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
+        ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
+
+        return View("~/Views/HR/Financial/MonthlySalarySheet/MonthlySalarySheet.cshtml", new List<MonthlySalarySheetViewModel>());
+      }
+
       var employeeList = await _appDBContext.HR_Employees
-          .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID==Branch)
+          .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID == Branch)
           .ToListAsync();
 
       var salarySheets = new List<MonthlySalarySheetViewModel>();
@@ -72,6 +86,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
       return View("~/Views/HR/Financial/MonthlySalarySheet/MonthlySalarySheet.cshtml", salarySheets);
     }
+
     private async Task<MonthlySalarySheetViewModel> GetMonthlySalarySheetAsync(string employeeId, int month, int year)
     {
       var salarySheet = new MonthlySalarySheetViewModel
@@ -185,33 +200,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
         int PayrollPostedID = monthlyPayrollPosted.PayrollPostedID;
 
-        var additionalAllowances = await _appDBContext.HR_AddionalAllowances
-              .Where(a => a.MonthTypeID == MonthID && a.Year == Year)
-              .ToListAsync();
-
-          foreach (var allowance in additionalAllowances)
-          {
-            allowance.PostedID = PayrollPostedID;
-          }
-
-          var overTimes = await _appDBContext.HR_OverTimes
-              .Where(o => o.MonthTypeID == MonthID && o.Year == Year)
-              .ToListAsync();
-
-          foreach (var overtime in overTimes)
-          {
-            overtime.PostedID = PayrollPostedID;
-          }
-
-          var hrDeductions = await _appDBContext.HR_Deductions
-              .Where(d => d.Month == MonthID && d.Year == Year)
-              .ToListAsync();
-
-          foreach (var deduction in hrDeductions)
-          {
-            deduction.PostedID = PayrollPostedID;
-          }
-          await _appDBContext.SaveChangesAsync();
+        
 
         if (PayrollPostedID > 0)
         {
@@ -225,7 +214,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
               ProcessTypeID = 13,
               Notes = "PayRoll Posted",
               Date = DateTime.Now,
-              EmployeeID = 0,
+              EmployeeID = 1,
               UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
               TransactionID = PayrollPostedID
             };
@@ -260,6 +249,132 @@ namespace Exampler_ERP.Controllers.HR.Financial
           }
           else
           {
+            var additionalAllowances = await _appDBContext.HR_AddionalAllowances
+              .Where(a => a.MonthTypeID == MonthID && a.Year == Year)
+              .ToListAsync();
+
+            foreach (var allowance in additionalAllowances)
+            {
+              allowance.PostedID = PayrollPostedID;
+            }
+
+            var overTimes = await _appDBContext.HR_OverTimes
+                .Where(o => o.MonthTypeID == MonthID && o.Year == Year)
+                .ToListAsync();
+
+            foreach (var overtime in overTimes)
+            {
+              overtime.PostedID = PayrollPostedID;
+            }
+
+            var hrDeductions = await _appDBContext.HR_Deductions
+                .Where(d => d.Month == MonthID && d.Year == Year)
+                .ToListAsync();
+
+            foreach (var deduction in hrDeductions)
+            {
+              deduction.PostedID = PayrollPostedID;
+            }
+            await _appDBContext.SaveChangesAsync();
+
+
+            var monthlyPayroll = new HR_MonthlyPayroll
+            {
+              BranchTypeID = BranchID,
+              MonthTypeID = MonthID,
+              Year = Year
+            };
+
+            _appDBContext.HR_MonthlyPayrolls.Add(monthlyPayroll);
+            await _appDBContext.SaveChangesAsync();
+
+
+
+
+            var salaryDetails = await _appDBContext.HR_SalaryDetails
+            .Where(sd => sd.Salary.Employee.BranchTypeID == BranchID)
+            .Include(sd => sd.Salary)
+            .Include(sd => sd.Salary.Employee)
+            .ToListAsync();
+
+            foreach (var salaryGroup in salaryDetails.GroupBy(sd => sd.Salary.EmployeeID))
+            {
+              var firstSalaryDetail = salaryGroup.FirstOrDefault();
+              if (firstSalaryDetail?.Salary != null)
+              {
+                var monthlyPayroll_Salary = new HR_MonthlyPayroll_Salary
+                {
+                  EmployeeID = firstSalaryDetail.Salary.EmployeeID,
+                  MonthTypeID = MonthID,
+                  Year = Year,
+                  PostedID = PayrollPostedID,
+                  PayRollID = monthlyPayroll.PayrollID // Assuming this is available
+                };
+
+                _appDBContext.HR_MonthlyPayroll_Salarys.Add(monthlyPayroll_Salary);
+                await _appDBContext.SaveChangesAsync();
+
+                foreach (var salaryDetail in salaryGroup)
+                {
+                  var monthlyPayroll_SalaryDetail = new HR_MonthlyPayroll_SalaryDetail
+                  {
+                    PayrollSalaryID = monthlyPayroll_Salary.PayrollSalaryID, // Use the same PayrollSalaryID
+                    SalaryTypeID = salaryDetail.SalaryTypeID,
+                    SalaryAmount = salaryDetail.SalaryAmount
+                  };
+
+                  _appDBContext.HR_MonthlyPayroll_SalaryDetails.Add(monthlyPayroll_SalaryDetail);
+                }
+
+                await _appDBContext.SaveChangesAsync();
+              }
+            }
+
+
+
+
+            var FixedDeductionDetails = await _appDBContext.HR_FixedDeductionDetails
+           .Where(sd => sd.FixedDeduction.Employee.BranchTypeID == BranchID)
+           .Include(sd => sd.FixedDeduction)
+           .Include(sd => sd.FixedDeduction.Employee)
+           .ToListAsync();
+
+            foreach (var FixedDeductionGroup in FixedDeductionDetails.GroupBy(sd => sd.FixedDeduction.EmployeeID))
+            {
+              var firstFixedDeductionDetail = FixedDeductionGroup.FirstOrDefault();
+              if (firstFixedDeductionDetail?.FixedDeduction != null)
+              {
+                var monthlyPayroll_FixedDeduction = new HR_MonthlyPayroll_FixedDeduction
+                {
+                  EmployeeID = firstFixedDeductionDetail.FixedDeduction.EmployeeID,
+                  MonthTypeID = MonthID,
+                  Year = Year,
+                  PostedID = PayrollPostedID,
+                  PayRollID = monthlyPayroll.PayrollID // Assuming this is available
+                };
+
+                _appDBContext.HR_MonthlyPayroll_FixedDeductions.Add(monthlyPayroll_FixedDeduction);
+                await _appDBContext.SaveChangesAsync();
+
+                foreach (var FixedDeductionDetail in FixedDeductionGroup)
+                {
+                  var monthlyPayroll_FixedDeductionDetail = new HR_MonthlyPayroll_FixedDeductionDetail
+                  {
+                    PayrollFixedDeductionID = monthlyPayroll_FixedDeduction.PayrollFixedDeductionID, // Use the same PayrollFixedDeductionID
+                    FixedDeductionTypeID = FixedDeductionDetail.FixedDeductionTypeID,
+                    FixedDeductionAmount = FixedDeductionDetail.FixedDeductionAmount
+                  };
+
+                  _appDBContext.HR_MonthlyPayroll_FixedDeductionDetails.Add(monthlyPayroll_FixedDeductionDetail);
+                }
+
+                await _appDBContext.SaveChangesAsync();
+              }
+            }
+
+
+
+
             monthlyPayrollPosted.FinalApprovalID = 1;
             _appDBContext.HR_MonthlyPayrollPosteds.Update(monthlyPayrollPosted);
             await _appDBContext.SaveChangesAsync();
@@ -278,21 +393,22 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
 
 
-    public async Task<IActionResult> PrintCard(int employeeId)
-    {
-      var employee = await _appDBContext.HR_Employees
-          .Include(e => e.DesignationType)
-          .Include(e => e.DepartmentType)
-          .FirstOrDefaultAsync(e => e.EmployeeID == employeeId);
-
-      // If employee is not found, return a 404 Not Found result
-      if (employee == null)
+    public async Task<IActionResult> Print(int Branch, int MonthsTypeID, int YearsTypeID)
       {
-        return NotFound();
-      }
+  
+      var employeeList = await _appDBContext.HR_Employees
+        .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID == Branch)
+        .ToListAsync();
 
-      // Return the custom view for printing the employee card, passing the employee model
-      return View("~/Views/HR/Financial/MonthlySalarySheet/PrintMonthlySalarySheet.cshtml", employee);
+      var salarySheets = new List<MonthlySalarySheetViewModel>();
+      var tasks = employeeList.Select(async employee =>
+      {
+        var salaryData = await GetMonthlySalarySheetAsync(employee.EmployeeID.ToString(), MonthsTypeID, YearsTypeID);
+        return salaryData;
+      });
+      var salaryDataResults = await Task.WhenAll(tasks);
+      salarySheets.AddRange(salaryDataResults);
+      return View("~/Views/HR/Financial/MonthlySalarySheet/PrintMonthlySalarySheet.cshtml", salarySheets);
     }
   }
 }

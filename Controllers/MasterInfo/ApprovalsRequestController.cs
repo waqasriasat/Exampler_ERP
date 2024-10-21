@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Operations;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Exampler_ERP.Controllers.MasterInfo
@@ -427,7 +429,141 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 13)
           {
+            var monthlyPayrollPosted = await _appDBContext.HR_MonthlyPayrollPosteds
+                                                     .Where(u => u.PayrollPostedID == transactionID)
+                                                     .FirstOrDefaultAsync();
 
+
+            if (monthlyPayrollPosted != null)
+            {
+              var additionalAllowances = await _appDBContext.HR_AddionalAllowances
+              .Where(a => a.MonthTypeID == monthlyPayrollPosted.MonthTypeID && a.Year == monthlyPayrollPosted.Year)
+              .ToListAsync();
+
+              foreach (var allowance in additionalAllowances)
+              {
+                allowance.PostedID = monthlyPayrollPosted.PayrollPostedID;
+              }
+
+              var overTimes = await _appDBContext.HR_OverTimes
+                  .Where(o => o.MonthTypeID == monthlyPayrollPosted.MonthTypeID && o.Year == monthlyPayrollPosted.Year)
+                  .ToListAsync();
+
+              foreach (var overtime in overTimes)
+              {
+                overtime.PostedID = monthlyPayrollPosted.PayrollPostedID;
+              }
+
+              var hrDeductions = await _appDBContext.HR_Deductions
+                  .Where(d => d.Month == monthlyPayrollPosted.MonthTypeID && d.Year == monthlyPayrollPosted.Year)
+                  .ToListAsync();
+
+              foreach (var deduction in hrDeductions)
+              {
+                deduction.PostedID = monthlyPayrollPosted.PayrollPostedID;
+              }
+
+              await _appDBContext.SaveChangesAsync();
+
+
+              var monthlyPayroll = new HR_MonthlyPayroll
+              {
+                BranchTypeID = monthlyPayrollPosted.BranchTypeID,
+                MonthTypeID = monthlyPayrollPosted.MonthTypeID,
+                Year = monthlyPayrollPosted.Year
+              };
+
+              _appDBContext.HR_MonthlyPayrolls.Add(monthlyPayroll);
+              await _appDBContext.SaveChangesAsync();
+
+
+
+
+              var salaryDetails = await _appDBContext.HR_SalaryDetails
+              .Where(sd => sd.Salary.Employee.BranchTypeID == monthlyPayrollPosted.BranchTypeID)
+              .Include(sd => sd.Salary)
+              .Include(sd => sd.Salary.Employee)
+              .ToListAsync();
+
+              foreach (var salaryGroup in salaryDetails.GroupBy(sd => sd.Salary.EmployeeID))
+              {
+                var firstSalaryDetail = salaryGroup.FirstOrDefault();
+                if (firstSalaryDetail?.Salary != null)
+                {
+                  var monthlyPayroll_Salary = new HR_MonthlyPayroll_Salary
+                  {
+                    EmployeeID = firstSalaryDetail.Salary.EmployeeID,
+                    MonthTypeID = monthlyPayrollPosted.MonthTypeID,
+                    Year = monthlyPayrollPosted.Year,
+                    PostedID = monthlyPayrollPosted.PayrollPostedID,
+                    PayRollID = monthlyPayroll.PayrollID // Assuming this is available
+                  };
+
+                  _appDBContext.HR_MonthlyPayroll_Salarys.Add(monthlyPayroll_Salary);
+                  await _appDBContext.SaveChangesAsync();
+
+                  foreach (var salaryDetail in salaryGroup)
+                  {
+                    var monthlyPayroll_SalaryDetail = new HR_MonthlyPayroll_SalaryDetail
+                    {
+                      PayrollSalaryID = monthlyPayroll_Salary.PayrollSalaryID, // Use the same PayrollSalaryID
+                      SalaryTypeID = salaryDetail.SalaryTypeID,
+                      SalaryAmount = salaryDetail.SalaryAmount
+                    };
+
+                    _appDBContext.HR_MonthlyPayroll_SalaryDetails.Add(monthlyPayroll_SalaryDetail);
+                  }
+
+                  await _appDBContext.SaveChangesAsync();
+                }
+              }
+
+
+              var FixedDeductionDetails = await _appDBContext.HR_FixedDeductionDetails
+             .Where(sd => sd.FixedDeduction.Employee.BranchTypeID == monthlyPayrollPosted.BranchTypeID)
+             .Include(sd => sd.FixedDeduction)
+             .Include(sd => sd.FixedDeduction.Employee)
+             .ToListAsync();
+
+              foreach (var FixedDeductionGroup in FixedDeductionDetails.GroupBy(sd => sd.FixedDeduction.EmployeeID))
+              {
+                var firstFixedDeductionDetail = FixedDeductionGroup.FirstOrDefault();
+                if (firstFixedDeductionDetail?.FixedDeduction != null)
+                {
+                  var monthlyPayroll_FixedDeduction = new HR_MonthlyPayroll_FixedDeduction
+                  {
+                    EmployeeID = firstFixedDeductionDetail.FixedDeduction.EmployeeID,
+                    MonthTypeID = monthlyPayrollPosted.MonthTypeID,
+                    Year = monthlyPayrollPosted.Year,
+                    PostedID = monthlyPayrollPosted.PayrollPostedID,
+                    PayRollID = monthlyPayroll.PayrollID // Assuming this is available
+                  };
+
+                  _appDBContext.HR_MonthlyPayroll_FixedDeductions.Add(monthlyPayroll_FixedDeduction);
+                  await _appDBContext.SaveChangesAsync();
+
+                  foreach (var FixedDeductionDetail in FixedDeductionGroup)
+                  {
+                    var monthlyPayroll_FixedDeductionDetail = new HR_MonthlyPayroll_FixedDeductionDetail
+                    {
+                      PayrollFixedDeductionID = monthlyPayroll_FixedDeduction.PayrollFixedDeductionID, // Use the same PayrollFixedDeductionID
+                      FixedDeductionTypeID = FixedDeductionDetail.FixedDeductionTypeID,
+                      FixedDeductionAmount = FixedDeductionDetail.FixedDeductionAmount
+                    };
+
+                    _appDBContext.HR_MonthlyPayroll_FixedDeductionDetails.Add(monthlyPayroll_FixedDeductionDetail);
+                  }
+
+                  await _appDBContext.SaveChangesAsync();
+                }
+              }
+
+              monthlyPayrollPosted.FinalApprovalID = 1;
+              monthlyPayrollPosted.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+              _appDBContext.Update(monthlyPayrollPosted);
+              await _appDBContext.SaveChangesAsync();
+            }
           }
           if (ProcessTypeID == 14)
           {
@@ -650,7 +786,20 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 13)
           {
+            var monthlyPayrollPosted = await _appDBContext.HR_MonthlyPayrollPosteds
+                                                     .Where(u => u.PayrollPostedID == transactionID)
+                                                     .FirstOrDefaultAsync();
 
+
+            if (monthlyPayrollPosted != null)
+            {
+          
+              monthlyPayrollPosted.FinalApprovalID = 2;
+              monthlyPayrollPosted.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+              _appDBContext.Update(monthlyPayrollPosted);
+              await _appDBContext.SaveChangesAsync();
+            }
           }
           if (ProcessTypeID == 14)
           {
@@ -876,7 +1025,25 @@ namespace Exampler_ERP.Controllers.MasterInfo
       }
       if (processTypeID == 13)
       {
+        var FatchExistingPosting = await _appDBContext.HR_MonthlyPayrollPosteds
+       .Where(e => e.PayrollPostedID == transactionID)
+       .FirstOrDefaultAsync();
 
+        var employeeList = await _appDBContext.HR_Employees
+          .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID == FatchExistingPosting.BranchTypeID)
+          .ToListAsync();
+
+        var salarySheets = new List<MonthlySalarySheetViewModel>();
+        var tasks = employeeList.Select(async employee =>
+        {
+          var salaryData = await GetMonthlySalarySheetAsync(employee.EmployeeID.ToString(), FatchExistingPosting.MonthTypeID ?? 0, FatchExistingPosting.Year ?? 0);
+          return salaryData;
+        });
+        var salaryDataResults = await Task.WhenAll(tasks);
+        salarySheets.AddRange(salaryDataResults);
+
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", salarySheets);
       }
       if (processTypeID == 14)
       {
@@ -893,6 +1060,102 @@ namespace Exampler_ERP.Controllers.MasterInfo
     }
 
 
+    private async Task<MonthlySalarySheetViewModel> GetMonthlySalarySheetAsync(string employeeId, int month, int year)
+    {
+      var salarySheet = new MonthlySalarySheetViewModel
+      {
+        EmployeeID = int.Parse(employeeId)
+      };
+      decimal sumSalary = 0;
+      decimal sumAdditionalAllowance = 0;
+      decimal sumOverTime = 0;
+      decimal sumDeduction = 0;
+      decimal sumFixedDeduction = 0;
 
+      var connectionString = _configuration.GetConnectionString("AppDb");
+      using (var connection = new SqlConnection(connectionString))
+      {
+        await connection.OpenAsync();
+
+        var commandText = "EXEC GetMonthlySalarySheet @EmployeeID, @Month, @Year;";
+        using (var command = new SqlCommand(commandText, connection))
+        {
+          command.Parameters.AddWithValue("@EmployeeID", employeeId);
+          command.Parameters.AddWithValue("@Month", month);
+          command.Parameters.AddWithValue("@Year", year);
+
+          using (var reader = await command.ExecuteReaderAsync())
+          {
+            while (await reader.ReadAsync())
+            {
+              for (int i = 0; i < reader.FieldCount; i++)
+              {
+                string columnName = reader.GetName(i);
+
+                // Handle nullable or non-nullable values
+                var value = reader.IsDBNull(i) ? "0" : reader.GetValue(i).ToString();
+
+                if (columnName == "EmployeeName")
+                {
+                  salarySheet.EmployeeName = value;
+                }
+                if (columnName == "BranchID")
+                {
+                  salarySheet.BranchID = int.Parse(value);
+                }
+                if (columnName == "MonthID")
+                {
+                  salarySheet.MonthID = int.Parse(value);
+                }
+                if (columnName == "MonthName")
+                {
+                  salarySheet.MonthName = value;
+                }
+                if (columnName == "Year")
+                {
+                  salarySheet.Year = int.Parse(value);
+                }
+
+                // Process each column by category
+                if (columnName.StartsWith("Salary_"))
+                {
+                  salarySheet.SalaryDetails.Add(columnName.Split('_')[1], decimal.Parse(value));
+                  sumSalary += decimal.Parse(value);
+                }
+                else if (columnName.StartsWith("AdditionalAllowance_"))
+                {
+                  salarySheet.AdditionalAllowances.Add(columnName.Split('_')[1], decimal.Parse(value));
+                  sumAdditionalAllowance += decimal.Parse(value);
+                }
+                else if (columnName.StartsWith("OverTime_"))
+                {
+                  salarySheet.OvertimeDetails.Add(columnName.Split('_')[1], decimal.Parse(value));
+                  sumOverTime += decimal.Parse(value);
+                }
+                else if (columnName.StartsWith("Deduction_"))
+                {
+                  salarySheet.Deductions.Add(columnName.Split('_')[1], decimal.Parse(value));
+                  sumDeduction += decimal.Parse(value);
+                }
+                else if (columnName.StartsWith("FixedDeduction_"))
+                {
+                  salarySheet.FixedDeductions.Add(columnName.Split('_')[1], decimal.Parse(value));
+                  sumFixedDeduction += decimal.Parse(value);
+                }
+              }
+            }
+          }
+        }
+      }
+      salarySheet.SumSalary = sumSalary;
+      salarySheet.SumAdditionalAllowance = sumAdditionalAllowance;
+      salarySheet.SumOverTime = sumOverTime;
+      salarySheet.SumDeduction = sumDeduction;
+      salarySheet.SumFixedDeduction = sumFixedDeduction;
+
+      salarySheet.DeservedAmount = (sumSalary + sumAdditionalAllowance + sumOverTime) - (sumDeduction + sumFixedDeduction);
+
+      return salarySheet;
+    }
   }
 }

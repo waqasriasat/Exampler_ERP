@@ -1,5 +1,35 @@
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+@model IEnumerable<Exampler_ERP.Models.Temp.MonthlySalarySheetViewModel>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Monthly Salary Sheet</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Monthly Salary Sheet </h2>
+@Html.Partial("~/Views/HR/Financial/MonthlySalarySheet/_ViewMonthlySalarySheet.cshtml", Model)
+    <script>
+        window.print();
+    </script>
+</body>
+</html>
+
