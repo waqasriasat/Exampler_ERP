@@ -436,36 +436,6 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
             if (monthlyPayrollPosted != null)
             {
-              var additionalAllowances = await _appDBContext.HR_AddionalAllowances
-              .Where(a => a.MonthTypeID == monthlyPayrollPosted.MonthTypeID && a.Year == monthlyPayrollPosted.Year)
-              .ToListAsync();
-
-              foreach (var allowance in additionalAllowances)
-              {
-                allowance.PostedID = monthlyPayrollPosted.PayrollPostedID;
-              }
-
-              var overTimes = await _appDBContext.HR_OverTimes
-                  .Where(o => o.MonthTypeID == monthlyPayrollPosted.MonthTypeID && o.Year == monthlyPayrollPosted.Year)
-                  .ToListAsync();
-
-              foreach (var overtime in overTimes)
-              {
-                overtime.PostedID = monthlyPayrollPosted.PayrollPostedID;
-              }
-
-              var hrDeductions = await _appDBContext.HR_Deductions
-                  .Where(d => d.Month == monthlyPayrollPosted.MonthTypeID && d.Year == monthlyPayrollPosted.Year)
-                  .ToListAsync();
-
-              foreach (var deduction in hrDeductions)
-              {
-                deduction.PostedID = monthlyPayrollPosted.PayrollPostedID;
-              }
-
-              await _appDBContext.SaveChangesAsync();
-
-
               var monthlyPayroll = new HR_MonthlyPayroll
               {
                 BranchTypeID = monthlyPayrollPosted.BranchTypeID,
@@ -475,8 +445,40 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
               _appDBContext.HR_MonthlyPayrolls.Add(monthlyPayroll);
               await _appDBContext.SaveChangesAsync();
+              var additionalAllowances = await _appDBContext.HR_AddionalAllowances
+              .Where(a => a.MonthTypeID == monthlyPayrollPosted.MonthTypeID && a.Year == monthlyPayrollPosted.Year)
+              .ToListAsync();
+
+              foreach (var allowance in additionalAllowances)
+              {
+                allowance.PayRollID = monthlyPayroll.PayrollID;
+                allowance.PostedID = monthlyPayrollPosted.PayrollPostedID;
+              }
+
+              var overTimes = await _appDBContext.HR_OverTimes
+                  .Where(o => o.MonthTypeID == monthlyPayrollPosted.MonthTypeID && o.Year == monthlyPayrollPosted.Year)
+                  .ToListAsync();
+
+              foreach (var overtime in overTimes)
+              {
+                overtime.PayRollID = monthlyPayroll.PayrollID;
+                overtime.PostedID = monthlyPayrollPosted.PayrollPostedID;
+              }
+
+              var hrDeductions = await _appDBContext.HR_Deductions
+                  .Where(d => d.Month == monthlyPayrollPosted.MonthTypeID && d.Year == monthlyPayrollPosted.Year)
+                  .ToListAsync();
+
+              foreach (var deduction in hrDeductions)
+              {
+                deduction.PayRollID = monthlyPayroll.PayrollID;
+                deduction.PostedID = monthlyPayrollPosted.PayrollPostedID;
+              }
+
+              await _appDBContext.SaveChangesAsync();
 
 
+         
 
 
               var salaryDetails = await _appDBContext.HR_SalaryDetails

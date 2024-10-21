@@ -23,7 +23,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
       _utils = utils;
     }
 
-    public async Task<IActionResult> Index(int? Branch, int MonthsTypeID = 10, int YearsTypeID = 1998)
+    public async Task<IActionResult> Index(int Branch, int MonthsTypeID = 10, int YearsTypeID = 1998)
     {
       var employeeList = await _appDBContext.HR_Employees
           .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID==0)
@@ -32,7 +32,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
       var salarySheets = new List<MonthlySalarySheetViewModel>();
       var tasks = employeeList.Select(async employee =>
       {
-        var salaryData = await GetMonthlySalarySheetAsync(employee.EmployeeID.ToString(), MonthsTypeID, YearsTypeID);
+        var salaryData = await GetMonthlySalarySheetAsync(Branch, employee.EmployeeID, MonthsTypeID, YearsTypeID);
         return salaryData;
       });
 
@@ -71,7 +71,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
       var salarySheets = new List<MonthlySalarySheetViewModel>();
       var tasks = employeeList.Select(async employee =>
       {
-        var salaryData = await GetMonthlySalarySheetAsync(employee.EmployeeID.ToString(), MonthsTypeID, YearsTypeID);
+        var salaryData = await GetMonthlySalarySheetAsync(Branch,employee.EmployeeID, MonthsTypeID, YearsTypeID);
         return salaryData;
       });
       var salaryDataResults = await Task.WhenAll(tasks);
@@ -87,11 +87,11 @@ namespace Exampler_ERP.Controllers.HR.Financial
       return View("~/Views/HR/Financial/MonthlySalarySheet/MonthlySalarySheet.cshtml", salarySheets);
     }
 
-    private async Task<MonthlySalarySheetViewModel> GetMonthlySalarySheetAsync(string employeeId, int month, int year)
+    private async Task<MonthlySalarySheetViewModel> GetMonthlySalarySheetAsync(int Branch, int employeeId, int month, int year)
     {
       var salarySheet = new MonthlySalarySheetViewModel
       {
-        EmployeeID = int.Parse(employeeId)
+        EmployeeID = employeeId
       };
       decimal sumSalary = 0;
       decimal sumAdditionalAllowance = 0;
@@ -104,9 +104,10 @@ namespace Exampler_ERP.Controllers.HR.Financial
       {
         await connection.OpenAsync();
 
-        var commandText = "EXEC GetMonthlySalarySheet @EmployeeID, @Month, @Year;";
+        var commandText = "EXEC GetMonthlySalarySheet @BranchID, @EmployeeID, @Month, @Year;";
         using (var command = new SqlCommand(commandText, connection))
         {
+          command.Parameters.AddWithValue("@BranchID", Branch);
           command.Parameters.AddWithValue("@EmployeeID", employeeId);
           command.Parameters.AddWithValue("@Month", month);
           command.Parameters.AddWithValue("@Year", year);
@@ -249,35 +250,6 @@ namespace Exampler_ERP.Controllers.HR.Financial
           }
           else
           {
-            var additionalAllowances = await _appDBContext.HR_AddionalAllowances
-              .Where(a => a.MonthTypeID == MonthID && a.Year == Year)
-              .ToListAsync();
-
-            foreach (var allowance in additionalAllowances)
-            {
-              allowance.PostedID = PayrollPostedID;
-            }
-
-            var overTimes = await _appDBContext.HR_OverTimes
-                .Where(o => o.MonthTypeID == MonthID && o.Year == Year)
-                .ToListAsync();
-
-            foreach (var overtime in overTimes)
-            {
-              overtime.PostedID = PayrollPostedID;
-            }
-
-            var hrDeductions = await _appDBContext.HR_Deductions
-                .Where(d => d.Month == MonthID && d.Year == Year)
-                .ToListAsync();
-
-            foreach (var deduction in hrDeductions)
-            {
-              deduction.PostedID = PayrollPostedID;
-            }
-            await _appDBContext.SaveChangesAsync();
-
-
             var monthlyPayroll = new HR_MonthlyPayroll
             {
               BranchTypeID = BranchID,
@@ -287,6 +259,40 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
             _appDBContext.HR_MonthlyPayrolls.Add(monthlyPayroll);
             await _appDBContext.SaveChangesAsync();
+
+            var additionalAllowances = await _appDBContext.HR_AddionalAllowances
+              .Where(a => a.MonthTypeID == MonthID && a.Year == Year)
+              .ToListAsync();
+
+            foreach (var allowance in additionalAllowances)
+            {
+              allowance.PayRollID = monthlyPayroll.PayrollID;
+              allowance.PostedID = PayrollPostedID;
+            }
+
+            var overTimes = await _appDBContext.HR_OverTimes
+                .Where(o => o.MonthTypeID == MonthID && o.Year == Year)
+                .ToListAsync();
+
+            foreach (var overtime in overTimes)
+            {
+              overtime.PayRollID = monthlyPayroll.PayrollID;
+              overtime.PostedID = PayrollPostedID;
+            }
+
+            var hrDeductions = await _appDBContext.HR_Deductions
+                .Where(d => d.Month == MonthID && d.Year == Year)
+                .ToListAsync();
+
+            foreach (var deduction in hrDeductions)
+            {
+              deduction.PayRollID = monthlyPayroll.PayrollID;
+              deduction.PostedID = PayrollPostedID;
+            }
+            await _appDBContext.SaveChangesAsync();
+
+
+            
 
 
 
@@ -403,7 +409,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
       var salarySheets = new List<MonthlySalarySheetViewModel>();
       var tasks = employeeList.Select(async employee =>
       {
-        var salaryData = await GetMonthlySalarySheetAsync(employee.EmployeeID.ToString(), MonthsTypeID, YearsTypeID);
+        var salaryData = await GetMonthlySalarySheetAsync(Branch, employee.EmployeeID, MonthsTypeID, YearsTypeID);
         return salaryData;
       });
       var salaryDataResults = await Task.WhenAll(tasks);
