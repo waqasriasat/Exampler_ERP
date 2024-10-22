@@ -22,7 +22,6 @@ namespace Exampler_ERP.Controllers.HR.Financial
       _logger = logger;
       _utils = utils;
     }
-
     public async Task<IActionResult> Index(int Branch, int MonthsTypeID = 10, int YearsTypeID = 1998)
     {
       var employeeList = await _appDBContext.HR_Employees
@@ -86,7 +85,6 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
       return View("~/Views/HR/Financial/MonthlySalarySheet/MonthlySalarySheet.cshtml", salarySheets);
     }
-
     private async Task<MonthlySalarySheetViewModel> GetMonthlySalarySheetAsync(int Branch, int employeeId, int month, int year)
     {
       var salarySheet = new MonthlySalarySheetViewModel
@@ -396,9 +394,6 @@ namespace Exampler_ERP.Controllers.HR.Financial
         return Json(new { success = false, message = ex.Message });
       }
     }
-
-
-
     public async Task<IActionResult> Print(int Branch, int MonthsTypeID, int YearsTypeID)
       {
   

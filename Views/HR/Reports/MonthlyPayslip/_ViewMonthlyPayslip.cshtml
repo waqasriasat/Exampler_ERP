@@ -1,0 +1,122 @@
+@* @model IEnumerable<Exampler_ERP.Models.Temp.MonthlyPayslipViewModel>
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Payslip Detail</h5>
+            <div class="row" style="overflow-y: Overlay; padding: 15px;">
+           
+                @foreach (var model in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12">
+                        <div class="row" style="display: ruby-text;">
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap">
+                                    <span >Employee ID : </span>
+                                    @(model.EmployeeID)
+                                </p>
+                            </div>
+                            <div class="col-12 col-md-2 col-lg-2">
+                                <p class="text-nowrap">
+                                    <span >Employee Name : </span>
+                                    @(model.EmployeeName)
+                                </p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1" style="display:none">
+                               
+                                <p class="text-nowrap">
+                                    <span >Branch : </span>
+                                    <input type="hidden" id="BranchID" value="@(model.BranchID)" />
+                                    @(model.BranchID)
+                                </p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1" style="display:none">
+                                
+                                <p class="text-nowrap">
+                                    <span >Month : </span>
+                                    <input type="hidden" id="MonthID" value="@(model.MonthID)" />
+                                    @(model.MonthID)
+                                </p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap">
+                                    <span >Month : </span>
+                                    @(model.MonthName)
+                                </p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap">
+                                    <span >Year : </span>
+                                    <input type="hidden" id="Year" value="@(model.Year)" />
+                                    @(model.Year)
+                                </p>
+                            </div>
+                           
+                            @foreach (var column in Model.First().SalaryDetails.Keys)
+                            {
+                                <div class="col-12 col-md-1 col-lg-1">
+                                    <p class="text-nowrap">
+                                        <span >@column : </span>@(model.SalaryDetails.ContainsKey(column) ? model.SalaryDetails[column]?.ToString() : "N/A")
+                                    </p>
+                                </div>
+                            }
+
+
+                           
+                            @foreach (var column in Model.First().AdditionalAllowances.Keys)
+                            {
+                                <div class="col-12 col-md-1 col-lg-1">
+                                    <p class="text-nowrap">
+                                        <span >@column : </span>@(model.AdditionalAllowances.ContainsKey(column) ? model.AdditionalAllowances[column]?.ToString() : "N/A")
+                                    </p>
+                                </div>
+                            }
+
+
+                           
+                            @foreach (var column in Model.First().OvertimeDetails.Keys)
+                            {
+                                <div class="col-12 col-md-1 col-lg-1">
+                                    <p class="text-nowrap">
+                                        <span >@column : </span>@(model.OvertimeDetails.ContainsKey(column) ? model.OvertimeDetails[column]?.ToString() : "N/A")
+                                    </p>
+                                </div>
+                            }
+
+
+                           
+                            @foreach (var column in Model.First().Deductions.Keys)
+                            {
+                                <div class="col-12 col-md-1 col-lg-1">
+                                    <p class="text-nowrap">
+                                        <span >@column : </span>@(model.Deductions.ContainsKey(column) ? model.Deductions[column]?.ToString() : "N/A")
+                                    </p>
+                                </div>
+                            }
+
+
+                            
+                            @foreach (var column in Model.First().FixedDeductions.Keys)
+                            {
+                                <div class="col-12 col-md-1 col-lg-1">
+                                    <p class="text-nowrap">
+                                        <span >@column : </span>@(model.FixedDeductions.ContainsKey(column) ? model.FixedDeductions[column]?.ToString() : "N/A")
+                                    </p>
+                                </div>
+                            }
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap">
+                                    <span >Deserved Amount : </span>
+                                    @(model.DeservedAmount)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+ *@
