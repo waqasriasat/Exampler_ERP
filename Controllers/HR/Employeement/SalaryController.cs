@@ -139,7 +139,88 @@ namespace Exampler_ERP.Controllers.HR.Employeement
                                         .ToListAsync();
 
             _appDBContext.HR_SalaryDetails.RemoveRange(existingRecords);
-            generatedSalaryID = SalaryId.Value;
+            await _appDBContext.SaveChangesAsync();
+
+
+            var salary = new HR_Salary()
+            {
+              EmployeeID = EmployeeID,
+              FinalApprovalID = 0,
+              ProcessTypeApprovalID = 0
+            };
+            _appDBContext.HR_Salarys.Add(salary);
+            await _appDBContext.SaveChangesAsync();
+
+            generatedSalaryID = salary.SalaryID;
+
+            foreach (var setup in SalaryDetails)
+            {
+              if (setup.SalaryTypeID != 0 && setup.SalaryAmount != 0)
+              {
+                setup.SalaryID = generatedSalaryID;
+                _appDBContext.HR_SalaryDetails.Add(setup);
+              }
+            }
+
+            await _appDBContext.SaveChangesAsync();
+
+
+            if (generatedSalaryID > 0)
+            {
+              var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
+                                  .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 6)
+                                  .CountAsync();
+              var getEmployeeID = await _appDBContext.HR_Salarys
+                                .Where(pta => pta.SalaryID == generatedSalaryID)
+                                .FirstOrDefaultAsync();
+              if (processCount > 0)
+              {
+                var newProcessTypeApproval = new CR_ProcessTypeApproval
+                {
+                  ProcessTypeID = 6,
+                  Notes = "Employee Salary",
+                  Date = DateTime.Now,
+                  EmployeeID = getEmployeeID.EmployeeID,
+                  UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
+                  TransactionID = generatedSalaryID
+                };
+
+                _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
+                await _appDBContext.SaveChangesAsync();
+
+                var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
+                                            .Where(pta => pta.ProcessTypeID == 6 && pta.Rank == 1)
+                                            .FirstOrDefaultAsync();
+
+                if (nextApprovalSetup != null)
+                {
+                  var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
+                  {
+                    ProcessTypeApprovalID = newProcessTypeApproval.ProcessTypeApprovalID,
+                    Date = DateTime.Now,
+                    RoleID = nextApprovalSetup.RoleTypeID,
+                    AppID = 0,
+                    AppUserID = 0,
+                    Notes = null,
+                    Rank = nextApprovalSetup.Rank
+                  };
+
+                  _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
+                  await _appDBContext.SaveChangesAsync();
+                }
+                else
+                {
+                  return Json(new { success = false, message = "Next approval setup not found." });
+                }
+              }
+              else
+              {
+                salary.FinalApprovalID = 1;
+                _appDBContext.HR_Salarys.Update(salary);
+                await _appDBContext.SaveChangesAsync();
+                return Json(new { success = true, message = "No process setup found, User activated." });
+              }
+            }
           }
           else
           {
@@ -224,6 +305,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
               }
             }
           }
+          
+          
           return Json(new { success = true });
         }
         catch (Exception ex)

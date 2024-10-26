@@ -1,122 +1,300 @@
-@* @model IEnumerable<Exampler_ERP.Models.Temp.MonthlyPayslipViewModel>
+@model Exampler_ERP.Models.Temp.MonthlyPayrollPrintViewModel
 
+<style>
+    .text-nowrap {
+        font-weight: 700;
+    }
 
+    .bleft {
+        border-left: solid 1px black;
+    }
+
+    .bright {
+        border-right: solid 1px black;
+    }
+
+    .btop {
+        border-top: solid 1px black;
+    }
+
+    .bbottom {
+        border-bottom: solid 1px black;
+    }
+
+    .txtRight {
+        text-align-last: right;
+    }
+
+    .txtcenter {
+        text-align-last: center;
+    }
+
+    p {
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+
+    .headercolor {
+        background-color: blue;
+        color: white;
+    }
+</style>
 
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <h5 class="card-header">Payslip Detail</h5>
-            <div class="row" style="overflow-y: Overlay; padding: 15px;">
-           
-                @foreach (var model in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12">
-                        <div class="row" style="display: ruby-text;">
-                            <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap">
-                                    <span >Employee ID : </span>
-                                    @(model.EmployeeID)
-                                </p>
+            @foreach (var empPayroll in Model.EmployeePayrolls) // Loop through employee payroll data
+            {
+                decimal totalGrossAmount = 0;
+                <div class="row">
+                    <div class="col-3">
+                        <img src="~/img/favicon/clientlogo.png" style=" width: 200px; padding: 10px 0px 0px 20px; " />
+                    </div>
+                    <div class="col-6">
+                        <h5 style="text-align: center; padding-top: 35px; font-size: x-large;">
+                            Salary Slip
+                        </h5>
+                    </div>
+                    <div class="col-3">
+                        <h5 style="text-align: right; padding-top: 35px; font-size: x-large;padding-right: 25px;">
+                            @empPayroll.PayslipDetails.MonthType.MonthTypeName @empPayroll.PayslipDetails.Year
+                        </h5>
+                    </div>
+                </div>
+
+                <div class="row" style="overflow-y: overlay; padding: 15px;">
+                    <div class="col-12">
+                        <div class="row bleft bright btop bbottom">
+                            <div class="col-3">
+                                <p>Employee Name: @empPayroll.Employee.FirstName @empPayroll.Employee.FatherName @empPayroll.Employee.FamilyName</p>
                             </div>
-                            <div class="col-12 col-md-2 col-lg-2">
-                                <p class="text-nowrap">
-                                    <span >Employee Name : </span>
-                                    @(model.EmployeeName)
-                                </p>
+                            <div class="col-3">
+                                <p>Branch: @empPayroll.Employee.BranchType.BranchTypeName</p>
                             </div>
-                            <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                               
-                                <p class="text-nowrap">
-                                    <span >Branch : </span>
-                                    <input type="hidden" id="BranchID" value="@(model.BranchID)" />
-                                    @(model.BranchID)
-                                </p>
+                            <div class="col-3">
+                                <p>Department: @empPayroll.Employee.DepartmentType.DepartmentTypeName</p>
                             </div>
-                            <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                                
-                                <p class="text-nowrap">
-                                    <span >Month : </span>
-                                    <input type="hidden" id="MonthID" value="@(model.MonthID)" />
-                                    @(model.MonthID)
-                                </p>
+                            <div class="col-3">
+                                <p>Designation: @empPayroll.Employee.DesignationType.DesignationTypeName</p>
                             </div>
-                            <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap">
-                                    <span >Month : </span>
-                                    @(model.MonthName)
-                                </p>
-                            </div>
-                            <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap">
-                                    <span >Year : </span>
-                                    <input type="hidden" id="Year" value="@(model.Year)" />
-                                    @(model.Year)
-                                </p>
-                            </div>
-                           
-                            @foreach (var column in Model.First().SalaryDetails.Keys)
+                            @if (empPayroll.BankDetails != null)
                             {
-                                <div class="col-12 col-md-1 col-lg-1">
-                                    <p class="text-nowrap">
-                                        <span >@column : </span>@(model.SalaryDetails.ContainsKey(column) ? model.SalaryDetails[column]?.ToString() : "N/A")
-                                    </p>
+                                <div class="col-3">
+                                    <p>Bank Name: @empPayroll.BankDetails.BankName</p>
+                                </div>
+                                <div class="col-3">
+                                    <p>Bank Branch: @empPayroll.BankDetails.BranchName</p>
+                                </div>
+                                <div class="col-3">
+                                    <p>Account #: @empPayroll.BankDetails.AccountNumber</p>
+                                </div>
+                                <div class="col-3">
+                                    <p>Account Title: @empPayroll.BankDetails.AccountHolderName</p>
                                 </div>
                             }
 
+                        </div>
+                    </div>
 
-                           
-                            @foreach (var column in Model.First().AdditionalAllowances.Keys)
+                    <!-- Salary Details Section -->
+                    <div class="col-4">
+                        <div class="row bleft bright bbottom" style="height:284px; align-content: flex-start;">
+                            <div class="col-9 bbottom headercolor">
+                                <p class="text-nowrap ">Salary</p>
+                            </div>
+                            <div class="col-3 bbottom headercolor" style="justify-items:center">
+                                <p class="text-nowrap">Amount</p>
+                            </div>
+                            @{
+                                decimal totalSalaryAmount = 0;
+                            }
+                            @foreach (var detail in empPayroll.SalaryDetails) // Loop through salary details for this employee
                             {
-                                <div class="col-12 col-md-1 col-lg-1">
-                                    <p class="text-nowrap">
-                                        <span >@column : </span>@(model.AdditionalAllowances.ContainsKey(column) ? model.AdditionalAllowances[column]?.ToString() : "N/A")
-                                    </p>
+                                <div class="col-9">
+                                    <span>@detail.SalaryType.SalaryTypeName</span>
                                 </div>
+                                <div class="col-3" style="text-align-last: center;">
+                                    <span>@detail.SalaryAmount</span>
+                                </div>
+
+                                totalSalaryAmount += (decimal)detail.SalaryAmount;
+
                             }
 
-
-                           
-                            @foreach (var column in Model.First().OvertimeDetails.Keys)
-                            {
-                                <div class="col-12 col-md-1 col-lg-1">
-                                    <p class="text-nowrap">
-                                        <span >@column : </span>@(model.OvertimeDetails.ContainsKey(column) ? model.OvertimeDetails[column]?.ToString() : "N/A")
-                                    </p>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row" style="top: 0px; position: relative;">
+                                    <div class="col-9 bleft bbottom txtRight">
+                                        <p class="text-nowrap">Total :</p>
+                                    </div>
+                                    <div class="col-3 bright bbottom" style="justify-items:center">
+                                        <p class="text-nowrap">@totalSalaryAmount</p>
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Allowance Section -->
+                    <div class="col-4">
+                        <div class="row bbottom" style="height:125px; align-content: flex-start;">
+                            <div class="col-9 bbottom headercolor">
+                                <p class="text-nowrap">Other Allowance</p>
+                            </div>
+                            <div class="col-3 bbottom headercolor" style="justify-items:center">
+                                <p class="text-nowrap">Amount</p>
+                            </div>
+                            @{
+                                decimal totalAddionalAllowanceAmount = 0;
                             }
-
-
-                           
-                            @foreach (var column in Model.First().Deductions.Keys)
+                            @foreach (var allowance in empPayroll.AdditionalAllowances) // Loop through allowances for this employee
                             {
-                                <div class="col-12 col-md-1 col-lg-1">
-                                    <p class="text-nowrap">
-                                        <span >@column : </span>@(model.Deductions.ContainsKey(column) ? model.Deductions[column]?.ToString() : "N/A")
-                                    </p>
+                                <div class="col-9">
+                                    <span>@allowance.AddionalAllowanceType.AddionalAllowanceTypeName</span>
                                 </div>
+                                <div class="col-3" style="text-align-last: center;">
+                                    <span>@allowance.AddionalAllowanceAmount</span>
+                                </div>
+
+                                totalAddionalAllowanceAmount += (decimal)allowance.AddionalAllowanceAmount;
+
                             }
-
-
-                            
-                            @foreach (var column in Model.First().FixedDeductions.Keys)
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row" style="top: 0px; position: relative;">
+                                    <div class="col-9 bbottom txtRight">
+                                        <p class="text-nowrap">Total :</p>
+                                    </div>
+                                    <div class="col-3 bbottom" style="justify-items:center">
+                                        <p class="text-nowrap">@totalAddionalAllowanceAmount</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Overtime Section -->
+                        <div class="row bbottom" style="height:125px; align-content: flex-start;">
+                            <div class="col-9 bbottom headercolor">
+                                <p class="text-nowrap">Overtime</p>
+                            </div>
+                            <div class="col-3 bbottom headercolor" style="justify-items:center">
+                                <p class="text-nowrap">Amount</p>
+                            </div>
+                            @{
+                                decimal totalovertimeAmount = 0;
+                            }
+                            @foreach (var overtime in empPayroll.OvertimeData) // Loop through overtime data for this employee
                             {
-                                <div class="col-12 col-md-1 col-lg-1">
-                                    <p class="text-nowrap">
-                                        <span >@column : </span>@(model.FixedDeductions.ContainsKey(column) ? model.FixedDeductions[column]?.ToString() : "N/A")
-                                    </p>
+                                <div class="col-9">
+                                    <span>@overtime.OverTimeType.OverTimeTypeName</span>
                                 </div>
+                                <div class="col-3" style="text-align-last: center;">
+                                    <span>@overtime.Amount</span>
+                                </div>
+                                totalovertimeAmount += (decimal)overtime.Amount;
                             }
-                            <div class="col-12 col-md-1 col-lg-1">
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row" style="top: 0px; position: relative;">
+                                    <div class="col-9 bbottom txtRight">
+                                        <p class="text-nowrap">Total :</p>
+                                    </div>
+                                    <div class="col-3 bbottom" style="justify-items:center">
+                                        <p class="text-nowrap">@totalovertimeAmount</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deduction Section -->
+                    <div class="col-4">
+                        <div class="row bleft bright bbottom" style="height:125px; align-content: flex-start;">
+                            <div class="col-9 bbottom headercolor">
+                                <p class="text-nowrap">Deduction</p>
+                            </div>
+                            <div class="col-3 bbottom headercolor" style="justify-items:center">
+                                <p class="text-nowrap">Amount</p>
+                            </div>
+                            @{
+                                decimal totaldeductionDaysamount = 0;
+                            }
+                            @foreach (var deduction in empPayroll.Deductions) // Loop through deductions for this employee
+                            {
+                                <div class="col-9">
+                                    <span>@deduction.DeductionType.DeductionTypeName</span>
+                                </div>
+                                <div class="col-3" style="text-align-last: center;">
+                                    <span>@deduction.Days</span>
+                                </div>
+                                totaldeductionDaysamount += (decimal)deduction.Days;
+                            }
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row" style="top: 0px; position: relative;">
+                                    <div class="col-9 bleft bbottom txtRight">
+                                        <p class="text-nowrap">Total :</p>
+                                    </div>
+                                    <div class="col-3 bright bbottom" style="justify-items:center">
+                                        <p class="text-nowrap">@totaldeductionDaysamount</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fixed Deduction Section -->
+                        <div class="row bleft bright bbottom" style="height:125px; align-content: flex-start;">
+                            <div class="col-9 bbottom headercolor">
+                                <p class="text-nowrap">Fixed Deduction</p>
+                            </div>
+                            <div class="col-3 bbottom headercolor" style="justify-items:center">
+                                <p class="text-nowrap">Amount</p>
+                            </div>
+                            @{
+                                decimal totalFixedDeductionAmount = 0;
+                            }
+                            @foreach (var fixedDeduction in empPayroll.FixedDeductions) // Loop through fixed deductions for this employee
+                            {
+                                <div class="col-9">
+                                    <span>@fixedDeduction.FixedDeductionType.FixedDeductionTypeName</span>
+                                </div>
+                                <div class="col-3" style="text-align-last: center;">
+                                    <span>@fixedDeduction.FixedDeductionAmount</span>
+                                </div>
+                                totalFixedDeductionAmount += (decimal)fixedDeduction.FixedDeductionAmount;
+                            }
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row" style="top: 0px; position: relative;">
+                                    <div class="col-9 bleft bbottom txtRight">
+                                        <p class="text-nowrap">Total :</p>
+                                    </div>
+                                    <div class="col-3 bright bbottom" style="justify-items:center">
+                                        <p class="text-nowrap">@totalFixedDeductionAmount</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row" style="top: 0px; position: relative;">
+                            <div class="col-11 bleft bbottom txtRight">
+                                <p class="text-nowrap">Gross Salary :</p>
+                            </div>
+                            <div class="col-1 bright bbottom" style="justify-items:center">
                                 <p class="text-nowrap">
-                                    <span >Deserved Amount : </span>
-                                    @(model.DeservedAmount)
+                                    @((decimal)(totalSalaryAmount) + (decimal)(totalAddionalAllowanceAmount) + (decimal)(totalovertimeAmount)
+                                        - ((decimal)(totaldeductionDaysamount) + (decimal)(totalFixedDeductionAmount)))
                                 </p>
                             </div>
                         </div>
                     </div>
-                }
-            </div>
+                </div>
+            }
         </div>
     </div>
 </div>
- *@

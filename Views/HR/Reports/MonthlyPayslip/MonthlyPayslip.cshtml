@@ -1,4 +1,4 @@
-@* @model IEnumerable<Exampler_ERP.Models.Temp.MonthlyPayslipViewModel>
+@model Exampler_ERP.Models.Temp.MonthlyPayrollPrintViewModel
 
 <script>
     $(document).ready(function () {
@@ -7,22 +7,30 @@
                         window.print();
                     });
         });
-        function printMonthlyPayslips() {
-            var url = '@Url.Action("Print", "MonthlyPayslip")' +
-                      '?branch=' + $('#BranchID').val() +
-                      '&monthsTypeID=' + $('#MonthID').val() +
-                      '&yearsTypeID=' + $('#Year').val();
+    function printMonthlyPayslips() {
+        var branchID = encodeURIComponent($('#BranchID').val());
+        var monthID = encodeURIComponent($('#MonthID').val());
+        var yearID = encodeURIComponent($('#Year').val());
 
-            var printWindow = window.open(url, '_blank');
+        var url = '@Url.Action("Print", "MonthlyPayslip")' +
+            '?branch=' + branchID +
+            '&monthsTypeID=' + monthID +
+            '&yearsTypeID=' + yearID;
+
+        var printWindow = window.open(url, '_blank');
+        if (printWindow) {
             printWindow.focus();
+        } else {
+            alert("Please allow popups for this site to view the print preview.");
         }
+    }
 
 </script>
 
 <h4 class="py-3 mb-4">
     <span class="text-muted fw-light">Financial /</span> Monthly Payslip
 </h4>
-<form method="get" action="@Url.Action("GeneratePayroll", "MonthlyPayslip")">
+<form method="get" action="@Url.Action("Index", "MonthlyPayslip")">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -32,120 +40,54 @@
                         <!-- From Date Field -->
                         <div class="col-md-4 mb-4">
                             <label class="form-label fw-bold">Month Type</label>
-                            <select name="MonthsTypeID" class="form-control">
+                            <select id="MonthID" name="MonthsTypeID" class="form-control">
                                 @foreach (var item in ViewBag.MonthsTypeList)
-
-
-
                                 {
-
-
-
                                     if (item.Value == ViewBag.MonthsTypeID?.ToString())
-
-
-
                                     {
                                         <option value="@item.Value" selected>@item.Text</option>
                                     }
-
-
-
                                     else
-
-
-
                                     {
                                         <option value="@item.Value">@item.Text</option>
                                     }
-
-
-
                                 }
                             </select>
                         </div>
-
-
                         <!-- To Date Field -->
                         <div class="col-md-4 mb-4">
                             <label for="YearsTypeID" class="form-label fw-bold">Year</label>
-                            <select name="YearsTypeID" class="form-control">
+                            <select id="Year" name="YearsTypeID" class="form-control">
                                 @for (int year = DateTime.Now.Year; year >= 1900; year--)
-
-
-
                                 {
-
-
-
-                                    // Corrected to compare with ViewBag.YearsTypeID
-
-
-
                                     if (year == (ViewBag.YearsTypeID ?? 0))
-
-
-
                                     {
                                         <option value="@year" selected>@year</option>
                                     }
-
-
-
                                     else
-
-
-
                                     {
                                         <option value="@year">@year</option>
                                     }
-
-
-
                                 }
                             </select>
                         </div>
-
-
-
-                        <!-- Branch Dropdown -->
                         <div class="col-md-4 mb-4">
                             <label class="form-label fw-bold">Branch</label>
-                            <select name="Branch" class="form-control">
+                            <select id="BranchID" name="Branch" class="form-control">
                                 @foreach (var item in ViewBag.BranchList)
-
                                 {
-
                                     if (item.Value == ViewBag.BranchID?.ToString())
-
-
-
-
-
-
-
                                     {
                                         <option value="@item.Value" selected>@item.Text</option>
                                     }
-
-
-
                                     else
-
-
-
                                     {
                                         <option value="@item.Value">@item.Text</option>
                                     }
-
-
-
                                 }
                             </select>
                         </div>
-
                     </div>
-
                     <!-- Action Buttons -->
                     <div class="row">
                         <div class="col-md-12 text-end">
@@ -163,126 +105,3 @@
 </form>
 <br />
 @Html.Partial("~/Views/HR/Reports/MonthlyPayslip/_ViewMonthlyPayslip.cshtml", Model)
- *@
-
-@model Exampler_ERP.Models.Temp.MonthlyPayrollPrintViewModel
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Print Payroll</title>
-    <link rel="stylesheet" href="~/css/print.css" /> <!-- Add any styles for printing -->
-</head>
-<body>
-    <h1>Payroll Report</h1>
-
-    <div class="col-12">
-        <h3>Employee Information</h3>
-        <p>Full Name: @Model.Employee.FirstName +' ' + @Model.Employee.FatherName +' ' + @Model.Employee.FamilyName</p>
-        <p>Branch: @Model.Employee.BranchType.BranchTypeName</p>
-        <p>Department: @Model.Employee.DepartmentType.DepartmentTypeName</p>
-        <p>Designation: @Model.Employee.DesignationType.DesignationTypeName</p>
-    </div>
-
-    <h3>Salary Details</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Salary Type</th>
-                <th>Salary Amount</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var detail in Model.SalaryDetails)
-            {
-                <tr>
-                    <td>@detail.SalaryType.SalaryTypeName</td>
-                    <td>@detail.SalaryAmount</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <h3>Additional Allowances</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Allowance Type</th>
-                <th>Allowance Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var allowance in Model.AdditionalAllowances)
-            {
-                <tr>
-                    <td>@allowance.AddionalAllowanceType.AddionalAllowanceTypeName</td>
-                    <td>@allowance.AddionalAllowanceAmount</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <h3>Overtime</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Overtime Type</th>
-                <th>Overtime Amount</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var overtime in Model.OvertimeData)
-            {
-                <tr>
-                    <td>@overtime.OverTimeType.OverTimeTypeName</td>
-                    <td>@overtime.Amount</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <h3>Deductions</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Deduction Type</th>
-                <th>Deduction Amount</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var deduction in Model.Deductions)
-            {
-                <tr>
-                    <td>@deduction.DeductionType.DeductionTypeName</td>
-                    <td>@deduction.Days</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <h3>Fixed Deductions</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Fixed Deduction Type</th>
-                <th>Fixed Deduction Amount</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var fixedDeduction in Model.FixedDeductions)
-            {
-                <tr>
-                    <td>@fixedDeduction.FixedDeductionType.FixedDeductionTypeName</td>
-                    <td>@fixedDeduction.FixedDeductionAmount</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <script>
-        window.onload = function () {
-            window.print();
-            };
-    </script>
-</body>
-</html>

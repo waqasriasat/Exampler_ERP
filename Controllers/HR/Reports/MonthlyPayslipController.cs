@@ -28,201 +28,234 @@ namespace Exampler_ERP.Controllers.HR.Reports
     public async Task<IActionResult> Index(int? Branch, int? MonthsTypeID, int? YearsTypeID)
     {
       var existingPayroll = await _appDBContext.HR_MonthlyPayrolls
-          .Where(e => e.BranchTypeID == 1 && e.MonthTypeID == 12 && e.Year == 2024)
+          .Where(e => e.BranchTypeID == Branch && e.MonthTypeID == MonthsTypeID && e.Year == YearsTypeID)
           .FirstOrDefaultAsync();
 
       if (existingPayroll != null)
       {
         return await PrintPayroll(existingPayroll.PayrollID);
       }
+      if (existingPayroll == null)
+      {
+        return await PrintPayroll(0);
+      }
 
-      return NotFound("No payroll entry found for the specified criteria.");
+      return View("~/Views/HR/Reports/MonthlyPayslip/MonthlyPayslip.cshtml", existingPayroll);
     }
-
     public async Task<IActionResult> PrintPayroll(int payrollID)
     {
+      if (payrollID == 0)
+      {
+        // Initialize an empty list for when payrollID is 0, representing no data scenario
+        var emptyViewModel = new MonthlyPayrollPrintViewModel
+        {
+          EmployeePayrolls = new List<EmployeePayrollData>()
+        };
+        ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
+        ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
+        return View("~/Views/HR/Reports/MonthlyPayslip/MonthlyPayslip.cshtml", emptyViewModel);
+      }
+
       var employeeData = await _appDBContext.HR_MonthlyPayroll_Salarys
+          .Where(s => s.PayRollID == payrollID)
           .Include(s => s.Employee)
           .Include(s => s.Employee.BranchType)
           .Include(s => s.Employee.DepartmentType)
           .Include(s => s.Employee.DesignationType)
-          .FirstOrDefaultAsync(s => s.PayrollSalaryID == payrollID);
+          .ToListAsync();
 
-      if (employeeData == null)
+      if (employeeData == null || !employeeData.Any())
       {
-        return NotFound();
+        // Handle the case when no employee data is found for a valid payrollID
+        var emptyViewModel = new MonthlyPayrollPrintViewModel
+        {
+          EmployeePayrolls = new List<EmployeePayrollData>()
+        };
+        ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
+        ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
+        return View("~/Views/HR/Reports/MonthlyPayslip/MonthlyPayslip.cshtml", emptyViewModel);
       }
 
-      var salaryDetails = await _appDBContext.HR_MonthlyPayroll_SalaryDetails
-          .Where(sd => sd.PayrollSalary.PayRollID == payrollID)
-          .Include(sd => sd.PayrollSalary)
-          .Include(sd => sd.SalaryType)
-          .ToListAsync();
+      var employeePayrolls = new List<EmployeePayrollData>();
 
-      var additionalAllowanceDetails = await _appDBContext.HR_AddionalAllowanceDetails
-          .Where(a => a.AddionalAllowance.PayRollID == payrollID)
-          .Include(a => a.AddionalAllowance)
-          .ToListAsync();
+      foreach (var employeeSalary in employeeData)
+      {
+        // Retrieve salary details, allowances, overtime, deductions, and other payroll data
+        var salaryDetails = await _appDBContext.HR_MonthlyPayroll_SalaryDetails
+            .Where(sd => sd.PayrollSalary.EmployeeID == employeeSalary.EmployeeID && sd.PayrollSalary.PayRollID == payrollID)
+            .Include(sd => sd.PayrollSalary)
+            .Include(sd => sd.SalaryType)
+            .ToListAsync();
 
-      var overtimeData = await _appDBContext.HR_OverTimes
-          .Where(o => o.PayRollID == payrollID)
-          .ToListAsync();
+        var additionalAllowances = await _appDBContext.HR_AddionalAllowanceDetails
+            .Where(a => a.AddionalAllowance.EmployeeID == employeeSalary.EmployeeID && a.AddionalAllowance.PayRollID == payrollID)
+            .Include(a => a.AddionalAllowance)
+            .ToListAsync();
 
-      var deductions = await _appDBContext.HR_Deductions
-          .Where(d => d.PayRollID == payrollID)
-          .ToListAsync();
+        var overtimeData = await _appDBContext.HR_OverTimes
+            .Where(o => o.EmployeeID == employeeSalary.EmployeeID && o.PayRollID == payrollID)
+            .ToListAsync();
 
-      var fixedDeductionDetails = await _appDBContext.HR_MonthlyPayroll_FixedDeductionDetails
-          .Where(fd => fd.PayrollFixedDeduction.PayRollID == payrollID)
-          .Include(fd => fd.PayrollFixedDeduction)
-          .Include(fd => fd.FixedDeductionType)
-          .ToListAsync();
+        var deductions = await _appDBContext.HR_Deductions
+            .Where(d => d.EmployeeID == employeeSalary.EmployeeID && d.PayRollID == payrollID)
+            .ToListAsync();
+
+        var fixedDeductionDetails = await _appDBContext.HR_MonthlyPayroll_FixedDeductionDetails
+            .Where(fd => fd.PayrollFixedDeduction.EmployeeID == employeeSalary.EmployeeID && fd.PayrollFixedDeduction.PayRollID == payrollID)
+            .Include(fd => fd.PayrollFixedDeduction)
+            .Include(fd => fd.FixedDeductionType)
+            .ToListAsync();
+
+        var bankAccountData = await _appDBContext.HR_BankAccounts
+            .Where(s => s.EmployeeID == employeeSalary.EmployeeID)
+            .FirstOrDefaultAsync();
+
+        var employeePayslip = await _appDBContext.HR_MonthlyPayrolls
+            .Where(s => s.PayrollID == payrollID)
+            .Include(s => s.MonthType)
+            .FirstOrDefaultAsync();
+
+        var employeePayrollData = new EmployeePayrollData
+        {
+          Employee = employeeSalary.Employee,
+          BankDetails = bankAccountData,
+          PayslipDetails = employeePayslip,
+          SalaryDetails = salaryDetails,
+          AdditionalAllowances = additionalAllowances,
+          OvertimeData = overtimeData,
+          Deductions = deductions,
+          FixedDeductions = fixedDeductionDetails
+        };
+
+        employeePayrolls.Add(employeePayrollData);
+      }
 
       var payrollViewModel = new MonthlyPayrollPrintViewModel
       {
-        Employee = employeeData.Employee,
-        SalaryDetails = salaryDetails,
-        AdditionalAllowances = additionalAllowanceDetails,
-        OvertimeData = overtimeData,
-        Deductions = deductions,
-        FixedDeductions = fixedDeductionDetails
+        EmployeePayrolls = employeePayrolls
       };
+
+      ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
+      ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
 
       return View("~/Views/HR/Reports/MonthlyPayslip/MonthlyPayslip.cshtml", payrollViewModel);
     }
 
-    //public async Task<IActionResult> PrintPayroll(int Branch, int MonthsTypeID, int YearsTypeID)
-    //{
-    //  var FatchExisting = await _appDBContext.HR_MonthlyPayrolls
-    //      .Where(e => e.BranchTypeID == Branch && e.MonthTypeID == MonthsTypeID && e.Year == YearsTypeID)
-    //      .FirstOrDefaultAsync();
+    public async Task<IActionResult> Print(int? branch, int? monthsTypeID, int? yearsTypeID)
+    {
+      var existingPayroll = await _appDBContext.HR_MonthlyPayrolls
+          .Where(e => e.BranchTypeID == branch && e.MonthTypeID == monthsTypeID && e.Year == yearsTypeID)
+          .FirstOrDefaultAsync();
 
+      if (existingPayroll != null)
+      {
+        return await ForPrintPayroll(existingPayroll.PayrollID);
+      }
+      if (existingPayroll == null)
+      {
+        return await ForPrintPayroll(0);
+      }
 
-    //    var Salary = await _appDBContext.HR_MonthlyPayroll_SalaryDetails
-    //        .Where(e => e.PayrollSalary.PayRollID == FatchExisting.PayrollID)
-    //        .Include(e => e.SalaryType)
-    //        .Include(e => e.PayrollSalary.Employee) 
-    //        .ToListAsync();
+      return View("~/Views/HR/Reports/MonthlyPayslip/MonthlyPayslip.cshtml", existingPayroll);
+    }
+    public async Task<IActionResult> ForPrintPayroll(int payrollID)
+    {
+      if (payrollID == 0)
+      {
+        // Initialize an empty list for when payrollID is 0, representing no data scenario
+        var emptyViewModel = new MonthlyPayrollPrintViewModel
+        {
+          EmployeePayrolls = new List<EmployeePayrollData>()
+        };
+        ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
+        ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
+        return View("~/Views/HR/Reports/MonthlyPayslip/PrintMonthlyPayslip.cshtml", emptyViewModel);
+      }
 
+      var employeeData = await _appDBContext.HR_MonthlyPayroll_Salarys
+          .Where(s => s.PayRollID == payrollID)
+          .Include(s => s.Employee)
+          .Include(s => s.Employee.BranchType)
+          .Include(s => s.Employee.DepartmentType)
+          .Include(s => s.Employee.DesignationType)
+          .ToListAsync();
 
-    //    return View("~/Views/HR/Reports/MonthlyPayslip/MonthlyPayslip.cshtml", Salary);
+      if (employeeData == null || !employeeData.Any())
+      {
+        // Handle the case when no employee data is found for a valid payrollID
+        var emptyViewModel = new MonthlyPayrollPrintViewModel
+        {
+          EmployeePayrolls = new List<EmployeePayrollData>()
+        };
+        ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
+        ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
+        return View("~/Views/HR/Reports/MonthlyPayslip/PrintMonthlyPayslip.cshtml", emptyViewModel);
+      }
 
-    //}
+      var employeePayrolls = new List<EmployeePayrollData>();
 
-    //private async Task<MonthlyPayslipViewModel> GetMonthlyPayslipAsync(int Branch, int employeeId, int month, int year)
-    //{
-    //  var Payslip = new MonthlyPayslipViewModel
-    //  {
-    //    EmployeeID = employeeId
-    //  };
-    //  decimal sumSalary = 0;
-    //  decimal sumAdditionalAllowance = 0;
-    //  decimal sumOverTime = 0;
-    //  decimal sumDeduction = 0;
-    //  decimal sumFixedDeduction = 0;
+      foreach (var employeeSalary in employeeData)
+      {
+        // Retrieve salary details, allowances, overtime, deductions, and other payroll data
+        var salaryDetails = await _appDBContext.HR_MonthlyPayroll_SalaryDetails
+            .Where(sd => sd.PayrollSalary.EmployeeID == employeeSalary.EmployeeID && sd.PayrollSalary.PayRollID == payrollID)
+            .Include(sd => sd.PayrollSalary)
+            .Include(sd => sd.SalaryType)
+            .ToListAsync();
 
-    //  var connectionString = _configuration.GetConnectionString("AppDb");
-    //  using (var connection = new SqlConnection(connectionString))
-    //  {
-    //    await connection.OpenAsync();
+        var additionalAllowances = await _appDBContext.HR_AddionalAllowanceDetails
+            .Where(a => a.AddionalAllowance.EmployeeID == employeeSalary.EmployeeID && a.AddionalAllowance.PayRollID == payrollID)
+            .Include(a => a.AddionalAllowance)
+            .ToListAsync();
 
-    //    var commandText = "EXEC GetMonthlyPayslip @BranchID, @EmployeeID, @Month, @Year;";
-    //    using (var command = new SqlCommand(commandText, connection))
-    //    {
-    //      command.Parameters.AddWithValue("@BranchID", Branch);
-    //      command.Parameters.AddWithValue("@EmployeeID", employeeId);
-    //      command.Parameters.AddWithValue("@Month", month);
-    //      command.Parameters.AddWithValue("@Year", year);
+        var overtimeData = await _appDBContext.HR_OverTimes
+            .Where(o => o.EmployeeID == employeeSalary.EmployeeID && o.PayRollID == payrollID)
+            .ToListAsync();
 
-    //      using (var reader = await command.ExecuteReaderAsync())
-    //      {
-    //        while (await reader.ReadAsync())
-    //        {
-    //          for (int i = 0; i < reader.FieldCount; i++)
-    //          {
-    //            string columnName = reader.GetName(i);
+        var deductions = await _appDBContext.HR_Deductions
+            .Where(d => d.EmployeeID == employeeSalary.EmployeeID && d.PayRollID == payrollID)
+            .ToListAsync();
 
-    //            // Handle nullable or non-nullable values
-    //            var value = reader.IsDBNull(i) ? "0" : reader.GetValue(i).ToString();
+        var fixedDeductionDetails = await _appDBContext.HR_MonthlyPayroll_FixedDeductionDetails
+            .Where(fd => fd.PayrollFixedDeduction.EmployeeID == employeeSalary.EmployeeID && fd.PayrollFixedDeduction.PayRollID == payrollID)
+            .Include(fd => fd.PayrollFixedDeduction)
+            .Include(fd => fd.FixedDeductionType)
+            .ToListAsync();
 
-    //            if (columnName == "EmployeeName")
-    //            {
-    //              Payslip.EmployeeName = value;
-    //            }
-    //            if (columnName == "BranchID")
-    //            {
-    //              Payslip.BranchID = int.Parse(value);
-    //            }
-    //            if (columnName == "MonthID")
-    //            {
-    //              Payslip.MonthID = int.Parse(value);
-    //            }
-    //            if (columnName == "MonthName")
-    //            {
-    //              Payslip.MonthName = value;
-    //            }
-    //            if (columnName == "Year")
-    //            {
-    //              Payslip.Year = int.Parse(value);
-    //            }
+        var bankAccountData = await _appDBContext.HR_BankAccounts
+            .Where(s => s.EmployeeID == employeeSalary.EmployeeID)
+            .FirstOrDefaultAsync();
 
-    //            // Process each column by category
-    //            if (columnName.StartsWith("Salary_"))
-    //            {
-    //              Payslip.SalaryDetails.Add(columnName.Split('_')[1], decimal.Parse(value));
-    //              sumSalary += decimal.Parse(value);
-    //            }
-    //            else if (columnName.StartsWith("AdditionalAllowance_"))
-    //            {
-    //              Payslip.AdditionalAllowances.Add(columnName.Split('_')[1], decimal.Parse(value));
-    //              sumAdditionalAllowance += decimal.Parse(value);
-    //            }
-    //            else if (columnName.StartsWith("OverTime_"))
-    //            {
-    //              Payslip.OvertimeDetails.Add(columnName.Split('_')[1], decimal.Parse(value));
-    //              sumOverTime += decimal.Parse(value);
-    //            }
-    //            else if (columnName.StartsWith("Deduction_"))
-    //            {
-    //              Payslip.Deductions.Add(columnName.Split('_')[1], decimal.Parse(value));
-    //              sumDeduction += decimal.Parse(value);
-    //            }
-    //            else if (columnName.StartsWith("FixedDeduction_"))
-    //            {
-    //              Payslip.FixedDeductions.Add(columnName.Split('_')[1], decimal.Parse(value));
-    //              sumFixedDeduction += decimal.Parse(value);
-    //            }
-    //          }
-    //        }
-    //      }
-    //    }
-    //  }
-    //  Payslip.SumSalary = sumSalary;
-    //  Payslip.SumAdditionalAllowance = sumAdditionalAllowance;
-    //  Payslip.SumOverTime = sumOverTime;
-    //  Payslip.SumDeduction = sumDeduction;
-    //  Payslip.SumFixedDeduction = sumFixedDeduction;
+        var employeePayslip = await _appDBContext.HR_MonthlyPayrolls
+            .Where(s => s.PayrollID == payrollID)
+            .Include(s => s.MonthType)
+            .FirstOrDefaultAsync();
 
-    //  Payslip.DeservedAmount = (sumSalary + sumAdditionalAllowance + sumOverTime) - (sumDeduction + sumFixedDeduction);
+        var employeePayrollData = new EmployeePayrollData
+        {
+          Employee = employeeSalary.Employee,
+          BankDetails = bankAccountData,
+          PayslipDetails = employeePayslip,
+          SalaryDetails = salaryDetails,
+          AdditionalAllowances = additionalAllowances,
+          OvertimeData = overtimeData,
+          Deductions = deductions,
+          FixedDeductions = fixedDeductionDetails
+        };
 
-    //  return Payslip;
-    //}
-    //public async Task<IActionResult> Print(int Branch, int MonthsTypeID, int YearsTypeID)
-    //{
+        employeePayrolls.Add(employeePayrollData);
+      }
 
-    //  var employeeList = await _appDBContext.HR_Employees
-    //    .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID == Branch)
-    //    .ToListAsync();
+      var payrollViewModel = new MonthlyPayrollPrintViewModel
+      {
+        EmployeePayrolls = employeePayrolls
+      };
 
-    //  var Payslips = new List<MonthlyPayslipViewModel>();
-    //  var tasks = employeeList.Select(async employee =>
-    //  {
-    //    var salaryData = await GetMonthlyPayslipAsync(Branch, employee.EmployeeID, MonthsTypeID, YearsTypeID);
-    //    return salaryData;
-    //  });
-    //  var salaryDataResults = await Task.WhenAll(tasks);
-    //  Payslips.AddRange(salaryDataResults);
-    //  return View("~/Views/HR/Reports/MonthlyPayslip/PrintMonthlyPayslip.cshtml", Payslips);
-    //}
+      ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
+      ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
+
+      return View("~/Views/HR/Reports/MonthlyPayslip/PrintMonthlyPayslip.cshtml", payrollViewModel);
+    }
+
   }
 }
