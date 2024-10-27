@@ -60,5 +60,7 @@ namespace Exampler_ERP.Models
     public int? DeleteYNID { get; set; } //didn't use in registration
     public string UserName { get; set; }
     public string Password { get; set; }
+    public int? FromDutyTime { get; set; }
+    public int? ToDutyTime { get; set; }
   }
 }

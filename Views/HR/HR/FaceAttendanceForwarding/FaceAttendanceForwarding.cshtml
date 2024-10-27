@@ -1,26 +1,26 @@
 @model IEnumerable<Exampler_ERP.Models.CR_FaceAttendance>
 
 @{
-    ViewData["Title"] = "HR - Face Attendance Time Adjust";
+    ViewData["Title"] = "HR - Face Attendance Forwarding";
 }
 
 @section PageScripts {
 
     <script>
         $(document).ready(function () {
-            // Edit FaceAttendanceTimeAdjust modal popup
-            $('.editFaceAttendanceTimeAdjustLink').click(function (e) {
+            // Edit FaceAttendanceForwarding modal popup
+            $('.editFaceAttendanceForwardingLink').click(function (e) {
                 e.preventDefault();
-                var FaceAttendanceTimeAdjustId = $(this).data('id');
-                $.get('@Url.Action("Edit", "FaceAttendanceTimeAdjust")', { id: FaceAttendanceTimeAdjustId }, function (data) {
-                    $('#editFaceAttendanceTimeAdjustModalContainer').html(data);
-                    $('#editFaceAttendanceTimeAdjustModal').modal('show');
+                var FaceAttendanceForwardingId = $(this).data('id');
+                $.get('@Url.Action("Edit", "FaceAttendanceForwarding")', { id: FaceAttendanceForwardingId }, function (data) {
+                    $('#editFaceAttendanceForwardingModalContainer').html(data);
+                    $('#editFaceAttendanceForwardingModal').modal('show');
                 });
             });
 
-            $('#editFaceAttendanceTimeAdjustModalContainer').on('click', '#saveChanges', function () {
-                var formData = $('#editFaceAttendanceTimeAdjustForm').serialize();
-                $.post('@Url.Action("Edit", "FaceAttendanceTimeAdjust")', formData, function (response) {
+            $('#editFaceAttendanceForwardingModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editFaceAttendanceForwardingForm').serialize();
+                $.post('@Url.Action("Edit", "FaceAttendanceForwarding")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
                         location.reload();
@@ -30,20 +30,20 @@
                 });
             });
 
-            // Add new FaceAttendanceTimeAdjust modal popup
-            $('.addFaceAttendanceTimeAdjustLink').click(function () {
-                $.get('@Url.Action("Create", "FaceAttendanceTimeAdjust")', function (data) {
-                    $('#addFaceAttendanceTimeAdjustModalContainer').html(data);
-                    $('#addFaceAttendanceTimeAdjustModal').modal('show');
+            // Add new FaceAttendanceForwarding modal popup
+            $('.addFaceAttendanceForwardingLink').click(function () {
+                $.get('@Url.Action("Create", "FaceAttendanceForwarding")', function (data) {
+                    $('#addFaceAttendanceForwardingModalContainer').html(data);
+                    $('#addFaceAttendanceForwardingModal').modal('show');
                 });
             });
 
-            // Save new FaceAttendanceTimeAdjust form
-            $('#addFaceAttendanceTimeAdjustModalContainer').on('click', '#saveNewFaceAttendanceTimeAdjust', function () {
-                var formData = $('#addFaceAttendanceTimeAdjustForm').serialize();
-                $.post('@Url.Action("Create", "FaceAttendanceTimeAdjust")', formData, function (response) {
+            // Save new FaceAttendanceForwarding form
+            $('#addFaceAttendanceForwardingModalContainer').on('click', '#saveNewFaceAttendanceForwarding', function () {
+                var formData = $('#addFaceAttendanceForwardingForm').serialize();
+                $.post('@Url.Action("Create", "FaceAttendanceForwarding")', formData, function (response) {
                     if (response.success) {
-                        $('#addFaceAttendanceTimeAdjustModal').modal('hide');
+                        $('#addFaceAttendanceForwardingModal').modal('hide');
                         location.reload(); // Reload the page to reflect changes
                     } else {
                         // Handle validation errors or other cases
@@ -52,22 +52,22 @@
             });
 
             // Close Modal Add Contrainer
-            $('#addFaceAttendanceTimeAdjustModalContainer').on('click', '#Close', function () {
-                $('#addFaceAttendanceTimeAdjustModal').modal('hide'); // Close the modal directly
+            $('#addFaceAttendanceForwardingModalContainer').on('click', '#Close', function () {
+                $('#addFaceAttendanceForwardingModal').modal('hide'); // Close the modal directly
                 // Additional logic if needed
             });
 
             // Close Modal Edit Contrainer
-            $('#editFaceAttendanceTimeAdjustModalContainer').on('click', '#Close', function () {
-                $('#editFaceAttendanceTimeAdjustModal').modal('hide'); // Close the modal directly
+            $('#editFaceAttendanceForwardingModalContainer').on('click', '#Close', function () {
+                $('#editFaceAttendanceForwardingModal').modal('hide'); // Close the modal directly
                 // Additional logic if needed
             });
 
-            // Delete FaceAttendanceTimeAdjust
-            $('.deleteFaceAttendanceTimeAdjustLink').click(function (e) {
+            // Delete FaceAttendanceForwarding
+            $('.deleteFaceAttendanceForwardingLink').click(function (e) {
                 e.preventDefault();
-                var FaceAttendanceTimeAdjustId = $(this).data('id');
-                $.post('@Url.Action("Delete", "FaceAttendanceTimeAdjust")', { id: FaceAttendanceTimeAdjustId }, function (response) {
+                var FaceAttendanceForwardingId = $(this).data('id');
+                $.post('@Url.Action("Delete", "FaceAttendanceForwarding")', { id: FaceAttendanceForwardingId }, function (response) {
                     if (response.success) {
                         location.reload();
                     } else {
@@ -120,16 +120,16 @@
         });
     </script>
     <script>
-        function printFaceAttendanceTimeAdjusts() {
-            var printWindow = window.open('@Url.Action("Print", "FaceAttendanceTimeAdjust")', '_blank');
+        function printFaceAttendanceForwardings() {
+            var printWindow = window.open('@Url.Action("Print", "FaceAttendanceForwarding")', '_blank');
             printWindow.focus();
         }
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">HR /</span> Face Attendance Time Adjust
+    <span class="text-muted fw-light">HR /</span> Face Attendance Forwarding
 </h4>
-<form method="get" action="@Url.Action("Index", "FaceAttendanceTimeAdjust")">
+<form method="get" action="@Url.Action("Index", "FaceAttendanceForwarding")">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -203,9 +203,9 @@
                     <div class="row">
                         <div class="col-md-12 text-end">
                             <button type="submit" class="btn btn-primary">Search</button>
-                            <button type="button" class="btn btn-primary addFaceAttendanceTimeAdjustLink">Add New</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "FaceAttendanceTimeAdjust")'">Excel</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="printFaceAttendanceTimeAdjusts()">Print</button>
+                            <button type="button" class="btn btn-primary addFaceAttendanceForwardingLink">Add New</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "FaceAttendanceForwarding")'">Excel</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="printFaceAttendanceForwardings()">Print</button>
                         </div>
                     </div>
                 </div>
@@ -218,7 +218,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Face Attendance Time Adjust List</h5>
+            <h5 class="card-header">Face Attendance Forwarding List</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
@@ -287,14 +287,14 @@
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="editFaceAttendanceTimeAdjustLink" data-id="@item.FaceAttendanceID">
+                                            <a href="#" class="editFaceAttendanceForwardingLink" data-id="@item.FaceAttendanceID">
                                                 <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="deleteFaceAttendanceTimeAdjustLink" data-id="@item.FaceAttendanceID">
+                                            <a href="#" class="deleteFaceAttendanceForwardingLink" data-id="@item.FaceAttendanceID">
                                                 <i class="fa fa-trash-o" style="font-size: large; color:maroon; line-height: 2;"></i>
                                             </a>
                                         </div>
@@ -310,5 +310,5 @@
 </div>
 
 <!-- Include the modal partial -->
-<div id="editFaceAttendanceTimeAdjustModalContainer"></div>
-<div id="addFaceAttendanceTimeAdjustModalContainer"></div>
+<div id="editFaceAttendanceForwardingModalContainer"></div>
+<div id="addFaceAttendanceForwardingModalContainer"></div>
