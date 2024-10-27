@@ -79,6 +79,7 @@ namespace Exampler_ERP.Models
     public DbSet<HR_MonthlyPayroll_SalaryDetail> HR_MonthlyPayroll_SalaryDetails { get; set; }
     public DbSet<HR_MonthlyPayroll> HR_MonthlyPayrolls { get; set; }
     public DbSet<HR_MonthlyPayrollPosted> HR_MonthlyPayrollPosteds { get; set; }
+    public DbSet<HR_GlobalSetting> HR_GlobalSettings { get; set; }
 
 
 

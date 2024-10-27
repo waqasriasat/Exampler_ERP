@@ -30,8 +30,8 @@
     }
 
     p {
-        margin-top: 10px;
-        margin-bottom: 5px;
+        margin-top: 3px;
+        margin-bottom: 1px;
     }
 
     .headercolor {
@@ -43,7 +43,6 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Payslip Detail</h5>
             @foreach (var empPayroll in Model.EmployeePayrolls) // Loop through employee payroll data
             {
                 decimal totalGrossAmount = 0;
@@ -99,7 +98,7 @@
 
                     <!-- Salary Details Section -->
                     <div class="col-4">
-                        <div class="row bleft bright bbottom" style="height:284px; align-content: flex-start;">
+                        <div class="row bleft bright bbottom" style="height:189px; align-content: flex-start;">
                             <div class="col-9 bbottom headercolor">
                                 <p class="text-nowrap ">Salary</p>
                             </div>
@@ -139,7 +138,7 @@
 
                     <!-- Additional Allowance Section -->
                     <div class="col-4">
-                        <div class="row bbottom" style="height:125px; align-content: flex-start;">
+                        <div class="row bbottom" style="height:83px; align-content: flex-start;">
                             <div class="col-9 bbottom headercolor">
                                 <p class="text-nowrap">Other Allowance</p>
                             </div>
@@ -175,7 +174,7 @@
                             </div>
                         </div>
                         <!-- Overtime Section -->
-                        <div class="row bbottom" style="height:125px; align-content: flex-start;">
+                        <div class="row bbottom" style="height:83px; align-content: flex-start;">
                             <div class="col-9 bbottom headercolor">
                                 <p class="text-nowrap">Overtime</p>
                             </div>
@@ -212,7 +211,7 @@
 
                     <!-- Deduction Section -->
                     <div class="col-4">
-                        <div class="row bleft bright bbottom" style="height:125px; align-content: flex-start;">
+                        <div class="row bleft bright bbottom" style="height:83px; align-content: flex-start;">
                             <div class="col-9 bbottom headercolor">
                                 <p class="text-nowrap">Deduction</p>
                             </div>
@@ -246,7 +245,7 @@
                             </div>
                         </div>
                         <!-- Fixed Deduction Section -->
-                        <div class="row bleft bright bbottom" style="height:125px; align-content: flex-start;">
+                        <div class="row bleft bright bbottom" style="height:83px; align-content: flex-start;">
                             <div class="col-9 bbottom headercolor">
                                 <p class="text-nowrap">Fixed Deduction</p>
                             </div>

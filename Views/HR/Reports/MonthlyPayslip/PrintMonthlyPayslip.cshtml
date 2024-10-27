@@ -1,4 +1,7 @@
 @model Exampler_ERP.Models.Temp.MonthlyPayrollPrintViewModel
+@{
+    Layout = "_BlankLayout";
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,7 +9,6 @@
    
 </head>
 <body style="background-color:white">
-    <h2>Monthly Payslip </h2>
     @Html.Partial("~/Views/HR/Reports/MonthlyPayslip/_ViewMonthlyPayslip.cshtml", Model)
     <script>
         window.print();
