@@ -1,4 +1,4 @@
-@model IEnumerable<Exampler_ERP.Models.CR_FaceAttendance>
+@model IEnumerable<Exampler_ERP.Models.Temp.FaceAttendanceForwardingViewModel>
 
 @{
     ViewData["Title"] = "HR - Face Attendance Forwarding";
@@ -141,64 +141,53 @@
                             <label class="form-label fw-bold">Month Type</label>
                             <select name="MonthsTypeID" class="form-control">
                                 @foreach (var item in ViewBag.MonthsTypeList)
-
                                 {
-
                                     if (item.Value == ViewBag.MonthsTypeID?.ToString())
-
                                     {
                                         <option value="@item.Value" selected>@item.Text</option>
                                     }
-
                                     else
-
                                     {
                                         <option value="@item.Value">@item.Text</option>
                                     }
-
                                 }
                             </select>
                         </div>
-
-
                         <!-- To Date Field -->
                         <div class="col-md-4 mb-4">
                             <label for="YearsTypeID" class="form-label fw-bold">Year</label>
                             <select name="YearsTypeID" class="form-control">
                                 @for (int year = DateTime.Now.Year; year >= 1900; year--)
-
                                 {
-
                                     // Corrected to compare with ViewBag.YearsTypeID
-
                                     if (year == (ViewBag.YearsTypeID ?? 0))
-
                                     {
                                         <option value="@year" selected>@year</option>
                                     }
-
                                     else
-
                                     {
                                         <option value="@year">@year</option>
                                     }
-
                                 }
                             </select>
                         </div>
-
-
-                        <!-- Employee Name Search Field -->
                         <div class="col-md-4 mb-4">
-                            <label class="form-label fw-bold">Employee Name</label>
-                            <input type="text" class="form-control" id="searchEmployeeInput" placeholder="Search Employee" name="EmployeeName" value="@ViewBag.EmployeeName" />
-                            <input type="hidden" class="form-control" id="EmployeeID" placeholder="Search Employee" name="EmployeeID" value="@ViewBag.EmployeeID" />
+                            <label class="form-label fw-bold">Branch</label>
+                            <select name="Branch" class="form-control">
+                                @foreach (var item in ViewBag.BranchList)
+                                {
+                                    if (item.Value == ViewBag.BranchID?.ToString())
+                                    {
+                                        <option value="@item.Value" selected>@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
                         </div>
-
-
-
                     </div>
-
                     <!-- Action Buttons -->
                     <div class="row">
                         <div class="col-md-12 text-end">
@@ -219,87 +208,116 @@
     <div class="col-md-12">
         <div class="card">
             <h5 class="card-header">Face Attendance Forwarding List</h5>
-            <div class="">
+            <div class="row" style="overflow-y: Overlay; padding: 15px;">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
-                        <div class="col-10 col-md-11 col-lg-10">
-                            <div class="row">
-                                <div class="col-2">
-                                    <p class="text-nowrap">Employee Name</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">Date</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">In Time</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">Out Times</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">D-Hours</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">D-Minute</p>
-                                </div>
-                            </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Employee Name</p>
                         </div>
-                        <div class="col-2 col-md-1 col-lg-2">
-                            <div class="row">
-                                <div class="col-6">
-                                    <p class="text-nowrap">Edit</p>
-                                </div>
-                                <div class="col-6">
-                                    <p class="text-nowrap">Delete</p>
-                                </div>
-                            </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Mark Date</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">In Time</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Out Times</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">D-Hours</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">D-Minute</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">From Duty Time</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">To Duty Time</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Late Coming Grace Time</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Early Going Grace Time</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Per Day Salary</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Late Coming Deduction</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Early Going Deduction</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Early Coming Grace Time</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Late Going Grace Time</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Early Coming Amount</p>
+                        </div>
+                        <div class="col-12 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Late Going Amount  </p>
                         </div>
                     </div>
                 </div>
                 @foreach (var item in Model)
-
                 {
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
                         <div class="row">
-                            <div class="col-10 col-md-11 col-lg-10">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Date : </span>@item.MarkDate.ToString("dd/MMM/yyyy")</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">In Time : </span>@item.InTime.ToString("hh:mm:ss")</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Out Time : </span>@item.OutTime.ToString("hh:mm:ss")</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">D-Hours : </span>@item.DHours</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">D-Minute : </span>@item.DMinutes</p>
-                                    </div>
-                                </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
                             </div>
-                            <div class="col-2 col-md-1 col-lg-2">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="editFaceAttendanceForwardingLink" data-id="@item.FaceAttendanceID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="#" class="deleteFaceAttendanceForwardingLink" data-id="@item.FaceAttendanceID">
-                                                <i class="fa fa-trash-o" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">Date : </span>@item.MarkDate.ToString("dd/MMM/yyyy")</p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">In Time : </span>@item.InTime</p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">Out Time : </span>@item.OutTime</p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">D-Hours : </span>@item.DHours</p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">D-Minute : </span>@item.DMinutes</p>
+                            </div>
+                             <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">From Duty Time : </span>@item.FromDutyTime</p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">To Duty Time : </span>@item.ToDutyTime</p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">Late Coming Grace Time : </span>@item.LateComingGraceTime</p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">Early Going Grace Time : </span>@item.EarlyGoingGraceTime</p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">Per Day Salary : </span>@item.PerDaySalary</p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">Late Coming Deduction : </span>@item.LateComingDeduction</p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">Early Going Deduction : </span>@item.EarlyGoingDeduction</p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">Early Coming Grace Time : </span>@item.EarlyComingGraceTime</p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">Late Going Grace Time : </span>@item.LateGoingGraceTime</p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">Early Coming Amount : </span>@item.EarlyComingAmount</p>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1">
+                                <p class="text-nowrap"><span class="smallAdd">Late Going Amount : </span>@item.LateGoingAmount</p>
                             </div>
                         </div>
                     </div>
