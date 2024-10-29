@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using OfficeOpenXml;
 using System.Data;
 
@@ -45,6 +46,7 @@ namespace Exampler_ERP.Controllers.HR.HR
               {
                 // Wrap each field assignment in try-catch to isolate errors
                 try { record.EmployeeID = reader.GetInt32(0); } catch (Exception ex) { Console.WriteLine("EmployeeID Error: " + ex.Message); }
+                record.Employee = await _appDBContext.HR_Employees.FindAsync(record.EmployeeID);
                 try { record.MarkDate = reader.GetDateTime(1); } catch (Exception ex) { Console.WriteLine("MarkDate Error: " + ex.Message); }
                 try { record.InTime = reader.GetString(2); } catch (Exception ex) { Console.WriteLine("InTime Error: " + ex.Message); }
                 try { record.OutTime = reader.GetString(3); } catch (Exception ex) { Console.WriteLine("OutTime Error: " + ex.Message); }
@@ -80,134 +82,107 @@ namespace Exampler_ERP.Controllers.HR.HR
       ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
       return View("~/Views/HR/HR/FaceAttendanceForwarding/FaceAttendanceForwarding.cshtml", attendanceRecords);
     }
-
-
-    //public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
-    //{
-    //  var query = _appDBContext.CR_FaceAttendances
-    //       .Where(b => b.DeleteYNID != 1)
-    //      .Include(d => d.Employee)
-    //      .AsQueryable();
-
-    //  if (MonthsTypeID.HasValue && MonthsTypeID != 0 && YearsTypeID.HasValue && YearsTypeID != 0)
-    //  {
-    //    var startDate = new DateTime(YearsTypeID.Value, MonthsTypeID.Value, 1);
-    //    var endDate = startDate.AddMonths(1).AddDays(-1);  // Last day of the selected month
-
-    //    query = query.Where(d => d.MarkDate >= startDate && d.MarkDate <= endDate);
-    //  }
-
-    //  if (EmployeeID.HasValue)
-    //  {
-    //    query = query.Where(d => d.EmployeeID == EmployeeID.Value);
-    //  }
-
-    //  if (!string.IsNullOrEmpty(EmployeeName))
-    //  {
-    //    query = query.Where(d =>
-    //        (d.Employee.FirstName + " " + d.Employee.FatherName + " " + d.Employee.FamilyName)
-    //        .Contains(EmployeeName));
-    //  }
-
-
-    //  var faceAttendance = await query.ToListAsync();
-
-    //  ViewBag.MonthsTypeID = MonthsTypeID;
-    //  ViewBag.YearsTypeID = YearsTypeID;
-    //  ViewBag.EmployeeID = EmployeeID;
-    //  ViewBag.EmployeeName = EmployeeName;
-
-    //  ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
-
-    //  return View("~/Views/HR/HR/FaceAttendanceForwarding/FaceAttendanceForwarding.cshtml", faceAttendance);
-    //}
-    [HttpGet]
-    public async Task<IActionResult> Edit(int id)
-    {
-      ViewBag.EmployeesList = await _utils.GetEmployee();
-      ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
-
-      // Find the FaceAttendance by ID
-      var FaceAttendance = await _appDBContext.CR_FaceAttendances
-                                         .Include(d => d.Employee)
-                                         .FirstOrDefaultAsync(d => d.FaceAttendanceID == id && d.DeleteYNID != 1);
-
-      if (FaceAttendance == null)
-      {
-        return NotFound();
-      }
-
-      return PartialView("~/Views/HR/HR/FaceAttendanceForwarding/EditFaceAttendanceForwarding.cshtml", FaceAttendance);
-    }
     [HttpPost]
-    public async Task<IActionResult> Edit(CR_FaceAttendance FaceAttendance)
+    public async Task<JsonResult> UpdatePosted(List<EmployeeData> Employees)
     {
-      if (ModelState.IsValid)
+      try
       {
-        try
+       
+        foreach (var employee in Employees)
         {
-          var duration = FaceAttendance.OutTime - FaceAttendance.InTime;
-          FaceAttendance.DHours = (int)duration.TotalHours;
-          FaceAttendance.DMinutes = duration.Minutes;
+          int monthID = employee.MarkDate.Month;
+          int year = employee.MarkDate.Year;
+          //// Check for Late Coming Deduction
+          //if (employee.LateComingDeduction > 0)
+          //{
+          //  var deduction = new HR_Deduction
+          //  {
+          //    EmployeeID = employee.EmployeeID,
+          //    Days = (int)Math.Round(employee.LateComingDeduction),
+          //    DeductionTypeID = 1, // Update according to your DeductionTypeIDs
+          //    FromDate = DateTime.Now, // Adjust accordingly
+          //    ToDate = DateTime.Now // Adjust accordingly
+          //  };
+          //  _appDBContext.HR_Deductions.Add(deduction);
+          //}
 
-          _appDBContext.CR_FaceAttendances.Update(FaceAttendance);
-          await _appDBContext.SaveChangesAsync();
-          return Json(new { success = true });
+          //// Check for Early Going Deduction
+          //if (employee.EarlyGoingDeduction > 0)
+          //{
+          //  var deduction = new HR_Deduction
+          //  {
+          //    EmployeeID = employee.EmployeeID,
+          //    Days = (int)Math.Round(employee.EarlyGoingDeduction),
+          //    DeductionTypeID = 2, // Update according to your DeductionTypeIDs
+          //    FromDate = DateTime.Now, // Adjust accordingly
+          //    ToDate = DateTime.Now // Adjust accordingly
+          //  };
+          //  _appDBContext.HR_Deductions.Add(deduction);
+          //}
+
+          // Check for Early Coming Amount
+          if (employee.EarlyComingAmount > 0)
+          {
+            var overtime = new HR_OverTime
+            {
+              EmployeeID = employee.EmployeeID,
+              Amount = (int)Math.Round(employee.EarlyComingAmount),
+              OverTimeTypeID = 1, 
+              MonthTypeID = monthID,
+              Year = year,
+              Days = 1,
+              Hours = employee.EarlyComingGraceTime,
+              DeleteYNID = 0,
+              FinalApprovalID = 1
+            };
+            _appDBContext.HR_OverTimes.Add(overtime);
+          }
+
+          // Check for Late Going Amount
+          if (employee.LateGoingAmount > 0)
+          {
+            var overtime = new HR_OverTime
+            {
+              EmployeeID = employee.EmployeeID,
+              Amount = (int)Math.Round(employee.LateGoingAmount),
+              OverTimeTypeID = 1,
+              MonthTypeID = monthID,
+              Year = year,
+              Days = 1,
+              Hours = employee.LateGoingGraceTime,
+              DeleteYNID = 0,
+              FinalApprovalID = 1
+            };
+            _appDBContext.HR_OverTimes.Add(overtime);
+          }
         }
-        catch (Exception ex)
-        {
-          ModelState.AddModelError("", "Unable to save changes: " + ex.Message);
-        }
-      }
 
-      ViewBag.EmployeesList = await _utils.GetEmployee();
-      ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
-
-      return PartialView("~/Views/HR/HR/FaceAttendanceForwarding/EditFaceAttendanceForwarding.cshtml", FaceAttendance);
-    }
-    [HttpGet]
-    public async Task<IActionResult> Create()
-    {
-      ViewBag.EmployeesList = await _utils.GetEmployee();
-      ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
-      return PartialView("~/Views/HR/HR/FaceAttendanceForwarding/AddFaceAttendanceForwarding.cshtml", new CR_FaceAttendance());
-    }
-    [HttpPost]
-    public async Task<IActionResult> Create(CR_FaceAttendance FaceAttendance)
-    {
-      if (ModelState.IsValid)
-      {
-        FaceAttendance.DeleteYNID = 0;
-
-
-        //if(FaceAttendance.InTime != null && FaceAttendance.OutTime != null)
-        {
-          var duration = FaceAttendance.OutTime - FaceAttendance.InTime;
-          FaceAttendance.DHours = (int)duration.TotalHours;
-          FaceAttendance.DMinutes = duration.Minutes;
-        }
-
-        _appDBContext.CR_FaceAttendances.Add(FaceAttendance);
         await _appDBContext.SaveChangesAsync();
+
         return Json(new { success = true });
       }
-      return PartialView("~/Views/HR/HR/FaceAttendanceForwarding/AddFaceAttendanceForwarding.cshtml", FaceAttendance);
-    }
-    public async Task<IActionResult> Delete(int id)
-    {
-      var FaceAttendance = await _appDBContext.CR_FaceAttendances.FindAsync(id);
-      if (FaceAttendance == null)
+      catch (Exception ex)
       {
-        return NotFound();
+        return Json(new { success = false, message = ex.Message });
       }
-
-      FaceAttendance.DeleteYNID = 1;
-
-      _appDBContext.CR_FaceAttendances.Update(FaceAttendance);
-      await _appDBContext.SaveChangesAsync();
-
-      return Json(new { success = true });
     }
+
+    // Model class for employee data
+    public class EmployeeData
+    {
+      public int EmployeeID { get; set; }
+      public DateTime MarkDate { get; set; }
+      public decimal LateComingDeduction { get; set; }
+      public decimal EarlyGoingDeduction { get; set; }
+      public int EarlyComingGraceTime { get; set; }
+      public decimal EarlyComingAmount { get; set; }
+      public int LateGoingGraceTime { get; set; }
+      public decimal LateGoingAmount { get; set; }
+    }
+
+
+
+
     public async Task<IActionResult> ExportToExcel()
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
