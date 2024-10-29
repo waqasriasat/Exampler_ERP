@@ -92,33 +92,43 @@ namespace Exampler_ERP.Controllers.HR.HR
         {
           int monthID = employee.MarkDate.Month;
           int year = employee.MarkDate.Year;
-          //// Check for Late Coming Deduction
-          //if (employee.LateComingDeduction > 0)
-          //{
-          //  var deduction = new HR_Deduction
-          //  {
-          //    EmployeeID = employee.EmployeeID,
-          //    Days = (int)Math.Round(employee.LateComingDeduction),
-          //    DeductionTypeID = 1, // Update according to your DeductionTypeIDs
-          //    FromDate = DateTime.Now, // Adjust accordingly
-          //    ToDate = DateTime.Now // Adjust accordingly
-          //  };
-          //  _appDBContext.HR_Deductions.Add(deduction);
-          //}
+          // Check for Late Coming Deduction
+          if (employee.LateComingDeduction > 0)
+          {
+            var deduction = new HR_Deduction
+            {
+              DeductionTypeID = 1,
+              EmployeeID = employee.EmployeeID,
+              Month = monthID,
+              Year = year,  
+              Days = 1,
+              FromDate = employee.MarkDate, 
+              ToDate = employee.MarkDate,
+              Amount = (int)Math.Round(employee.LateComingDeduction),
+              DeleteYNID = 0,
+              FinalApprovalID = 1
+            };
+            _appDBContext.HR_Deductions.Add(deduction);
+          }
 
-          //// Check for Early Going Deduction
-          //if (employee.EarlyGoingDeduction > 0)
-          //{
-          //  var deduction = new HR_Deduction
-          //  {
-          //    EmployeeID = employee.EmployeeID,
-          //    Days = (int)Math.Round(employee.EarlyGoingDeduction),
-          //    DeductionTypeID = 2, // Update according to your DeductionTypeIDs
-          //    FromDate = DateTime.Now, // Adjust accordingly
-          //    ToDate = DateTime.Now // Adjust accordingly
-          //  };
-          //  _appDBContext.HR_Deductions.Add(deduction);
-          //}
+          // Check for Early Going Deduction
+          if (employee.EarlyGoingDeduction > 0)
+          {
+            var deduction = new HR_Deduction
+            {
+              DeductionTypeID = 2,
+              EmployeeID = employee.EmployeeID,
+              Month = monthID,
+              Year = year,
+              Days = 1,
+              FromDate = employee.MarkDate,
+              ToDate = employee.MarkDate,
+              Amount = (int)Math.Round(employee.EarlyGoingDeduction),
+              DeleteYNID = 0,
+              FinalApprovalID = 1
+            };
+            _appDBContext.HR_Deductions.Add(deduction);
+          }
 
           // Check for Early Coming Amount
           if (employee.EarlyComingAmount > 0)

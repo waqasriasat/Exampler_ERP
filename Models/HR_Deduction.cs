@@ -18,6 +18,7 @@ namespace Exampler_ERP.Models
     public int? Days { get; set; }
     public DateTime FromDate { get; set; }
     public DateTime ToDate { get; set; }
+    public float? Amount { get; set; }
     public int? DeleteYNID { get; set; }
     public int? FinalApprovalID { get; set; }
     public int? ProcessTypeApprovalID { get; set; }

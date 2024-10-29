@@ -558,27 +558,33 @@ namespace Exampler_ERP.Models
  );
 
       modelBuilder.Entity<Settings_DeductionType>().HasData(
-     new Settings_DeductionType() { DeductionTypeID = 1, DeductionTypeName = "Income Tax", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 2, DeductionTypeName = "Social Security Contributions", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 3, DeductionTypeName = "Health Insurance Premiums", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 4, DeductionTypeName = "Pension Contributions", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 5, DeductionTypeName = "Loan Repayments", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 6, DeductionTypeName = "Union Dues", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 7, DeductionTypeName = "Garnishments", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 8, DeductionTypeName = "Absent Days or Leave Without Pay", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 9, DeductionTypeName = "Wage Advances", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_DeductionType() { DeductionTypeID = 10, DeductionTypeName = "Miscellaneous Deductions", ActiveYNID = 1, DeleteYNID = 0 }
- );
+        new Settings_DeductionType() { DeductionTypeID = 1, DeductionTypeName = "Late Coming", ActiveYNID = 1, DeleteYNID = 0 },
+        new Settings_DeductionType() { DeductionTypeID = 2, DeductionTypeName = "Early Going", ActiveYNID = 1, DeleteYNID = 0 },
+         new Settings_DeductionType() { DeductionTypeID = 3, DeductionTypeName = "Income Tax", ActiveYNID = 1, DeleteYNID = 0 },
+         new Settings_DeductionType() { DeductionTypeID = 4, DeductionTypeName = "Social Security Contributions", ActiveYNID = 1, DeleteYNID = 0 },
+         new Settings_DeductionType() { DeductionTypeID = 5, DeductionTypeName = "Health Insurance Premiums", ActiveYNID = 1, DeleteYNID = 0 },
+         new Settings_DeductionType() { DeductionTypeID = 6, DeductionTypeName = "Pension Contributions", ActiveYNID = 1, DeleteYNID = 0 },
+         new Settings_DeductionType() { DeductionTypeID = 7, DeductionTypeName = "Loan Repayments", ActiveYNID = 1, DeleteYNID = 0 },
+         new Settings_DeductionType() { DeductionTypeID = 8, DeductionTypeName = "Union Dues", ActiveYNID = 1, DeleteYNID = 0 },
+         new Settings_DeductionType() { DeductionTypeID = 9, DeductionTypeName = "Garnishments", ActiveYNID = 1, DeleteYNID = 0 },
+         new Settings_DeductionType() { DeductionTypeID = 10, DeductionTypeName = "Absent Days or Leave Without Pay", ActiveYNID = 1, DeleteYNID = 0 },
+         new Settings_DeductionType() { DeductionTypeID = 11, DeductionTypeName = "Wage Advances", ActiveYNID = 1, DeleteYNID = 0 },
+         new Settings_DeductionType() { DeductionTypeID = 12, DeductionTypeName = "Miscellaneous Deductions", ActiveYNID = 1, DeleteYNID = 0 }
+     );
+      modelBuilder.Entity<HR_DeductionSetup>().HasData(
+        new HR_DeductionSetup() { DeductionSetupID = 1, DeductionTypeID = 1, ClassID = 2, SalaryTypeID = 1, DeductionValueID = 4 },
+        new HR_DeductionSetup() { DeductionSetupID = 2, DeductionTypeID = 2, ClassID = 2, SalaryTypeID = 1, DeductionValueID = 4 }
+     );
 
       modelBuilder.Entity<Settings_ActiveYNIDType>().HasData(
-   new Settings_ActiveYNIDType() { ActiveYNID = 1, ActiveName = "Yes" },
-   new Settings_ActiveYNIDType() { ActiveYNID = 2, ActiveName = "No" }
-);
+         new Settings_ActiveYNIDType() { ActiveYNID = 1, ActiveName = "Yes" },
+         new Settings_ActiveYNIDType() { ActiveYNID = 2, ActiveName = "No" }
+      );
 
-      modelBuilder.Entity<Settings_DeleteYNIDType>().HasData(
-   new Settings_DeleteYNIDType() { DeleteYNID = 1, DeleteName = "Yes" },
-   new Settings_DeleteYNIDType() { DeleteYNID = 2, DeleteName = "No" }
-);
+            modelBuilder.Entity<Settings_DeleteYNIDType>().HasData(
+         new Settings_DeleteYNIDType() { DeleteYNID = 1, DeleteName = "Yes" },
+         new Settings_DeleteYNIDType() { DeleteYNID = 2, DeleteName = "No" }
+      );
 
       modelBuilder.Entity<Settings_VacationType>().HasData(
           new Settings_VacationType() { VacationTypeID = 1, VacationTypeName = "Annual Leave", ActiveYNID = 1, DeleteYNID = 0 },
