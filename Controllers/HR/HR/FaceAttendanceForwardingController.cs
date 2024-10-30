@@ -104,7 +104,7 @@ namespace Exampler_ERP.Controllers.HR.HR
               Days = 1,
               FromDate = employee.MarkDate, 
               ToDate = employee.MarkDate,
-              Amount = (int)Math.Round(employee.LateComingDeduction),
+              Amount = employee.LateComingDeduction,
               DeleteYNID = 0,
               FinalApprovalID = 1
             };
@@ -123,7 +123,7 @@ namespace Exampler_ERP.Controllers.HR.HR
               Days = 1,
               FromDate = employee.MarkDate,
               ToDate = employee.MarkDate,
-              Amount = (int)Math.Round(employee.EarlyGoingDeduction),
+              Amount = employee.EarlyGoingDeduction,
               DeleteYNID = 0,
               FinalApprovalID = 1
             };
@@ -136,7 +136,7 @@ namespace Exampler_ERP.Controllers.HR.HR
             var overtime = new HR_OverTime
             {
               EmployeeID = employee.EmployeeID,
-              Amount = (int)Math.Round(employee.EarlyComingAmount),
+              Amount = employee.EarlyComingAmount,
               OverTimeTypeID = 1, 
               MonthTypeID = monthID,
               Year = year,
@@ -154,7 +154,7 @@ namespace Exampler_ERP.Controllers.HR.HR
             var overtime = new HR_OverTime
             {
               EmployeeID = employee.EmployeeID,
-              Amount = (int)Math.Round(employee.LateGoingAmount),
+              Amount = employee.LateGoingAmount,
               OverTimeTypeID = 1,
               MonthTypeID = monthID,
               Year = year,
@@ -182,12 +182,12 @@ namespace Exampler_ERP.Controllers.HR.HR
     {
       public int EmployeeID { get; set; }
       public DateTime MarkDate { get; set; }
-      public decimal LateComingDeduction { get; set; }
-      public decimal EarlyGoingDeduction { get; set; }
+      public float LateComingDeduction { get; set; }
+      public float EarlyGoingDeduction { get; set; }
       public int EarlyComingGraceTime { get; set; }
-      public decimal EarlyComingAmount { get; set; }
+      public float EarlyComingAmount { get; set; }
       public int LateGoingGraceTime { get; set; }
-      public decimal LateGoingAmount { get; set; }
+      public float LateGoingAmount { get; set; }
     }
 
 

@@ -108,20 +108,34 @@
                             @{
                                 decimal totalSalaryAmount = 0;
                             }
-                            @foreach (var detail in empPayroll.SalaryDetails) // Loop through salary details for this employee
+
+                            @if (empPayroll?.SalaryDetails != null)
+
                             {
-                                <div class="col-9">
-                                    <span>@detail.SalaryType.SalaryTypeName</span>
-                                </div>
-                                <div class="col-3" style="text-align-last: center;">
-                                    <span>@detail.SalaryAmount</span>
-                                </div>
+                                @foreach (var detail in empPayroll.SalaryDetails) // Loop through salary details for this employee
 
-                                totalSalaryAmount += (decimal)detail.SalaryAmount;
+                                {
+                                    <div class="col-9">
+                                        <span>@(detail?.SalaryType?.SalaryTypeName ?? "N/A")</span>
+                                    </div>
+                                    <div class="col-3" style="text-align-last: center;">
+                                        <span>@(detail?.SalaryAmount?.ToString("F2") ?? "0.00")</span>
+                                    </div>
 
+                                    totalSalaryAmount += (decimal)(detail?.SalaryAmount ?? 0);
+
+                                }
                             }
 
+                            else
+
+                            {
+                                <div class="col-12">
+                                    <p>No salary details available.</p>
+                                </div>
+                            }
                         </div>
+
                         <div class="row">
                             <div class="col-12">
                                 <div class="row" style="top: 0px; position: relative;">
@@ -129,11 +143,12 @@
                                         <p class="text-nowrap">Total :</p>
                                     </div>
                                     <div class="col-3 bright bbottom" style="justify-items:center">
-                                        <p class="text-nowrap">@totalSalaryAmount</p>
+                                        <p class="text-nowrap">@totalSalaryAmount.ToString("F2")</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
                     <!-- Additional Allowance Section -->
@@ -148,19 +163,34 @@
                             @{
                                 decimal totalAddionalAllowanceAmount = 0;
                             }
-                            @foreach (var allowance in empPayroll.AdditionalAllowances) // Loop through allowances for this employee
+
+                            @if (empPayroll?.AdditionalAllowances != null)
+
                             {
-                                <div class="col-9">
-                                    <span>@allowance.AddionalAllowanceType.AddionalAllowanceTypeName</span>
-                                </div>
-                                <div class="col-3" style="text-align-last: center;">
-                                    <span>@allowance.AddionalAllowanceAmount</span>
-                                </div>
+                                @foreach (var allowance in empPayroll.AdditionalAllowances) // Loop through allowances for this employee
 
-                                totalAddionalAllowanceAmount += (decimal)allowance.AddionalAllowanceAmount;
+                                {
+                                    <div class="col-9">
+                                        <span>@(allowance?.AddionalAllowanceType?.AddionalAllowanceTypeName ?? "N/A")</span>
+                                    </div>
+                                    <div class="col-3" style="text-align-last: center;">
+                                        <span>@(allowance?.AddionalAllowanceAmount?.ToString("F2") ?? "0.00")</span>
+                                    </div>
 
+                                    totalAddionalAllowanceAmount += (decimal)(allowance?.AddionalAllowanceAmount ?? 0);
+
+                                }
+                            }
+
+                            else
+
+                            {
+                                <div class="col-12">
+                                    <p>No additional allowance data available.</p>
+                                </div>
                             }
                         </div>
+
                         <div class="row">
                             <div class="col-12">
                                 <div class="row" style="top: 0px; position: relative;">
@@ -168,11 +198,12 @@
                                         <p class="text-nowrap">Total :</p>
                                     </div>
                                     <div class="col-3 bbottom" style="justify-items:center">
-                                        <p class="text-nowrap">@totalAddionalAllowanceAmount</p>
+                                        <p class="text-nowrap">@totalAddionalAllowanceAmount.ToString("F2")</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <!-- Overtime Section -->
                         <div class="row bbottom" style="height:83px; align-content: flex-start;">
                             <div class="col-9 bbottom headercolor">
@@ -184,17 +215,34 @@
                             @{
                                 decimal totalovertimeAmount = 0;
                             }
-                            @foreach (var overtime in empPayroll.OvertimeData) // Loop through overtime data for this employee
+
+                            @if (empPayroll?.OvertimeData != null)
+
                             {
-                                <div class="col-9">
-                                    <span>@overtime.OverTimeType.OverTimeTypeName</span>
+                                @foreach (var overtime in empPayroll.OvertimeData) // Loop through overtime data for this employee
+
+                                {
+                                    <div class="col-9">
+                                        <span>@(overtime.OverTimeTypeName ?? "N/A")</span>
+                                    </div>
+                                    <div class="col-3" style="text-align-last: center;">
+                                        <span>@(overtime?.Amount?.ToString("F2") ?? "0.00")</span>
+                                    </div>
+
+                                    totalovertimeAmount += (decimal)(overtime?.Amount ?? 0);
+
+                                }
+                            }
+
+                            else
+
+                            {
+                                <div class="col-12">
+                                    <p>No overtime data available.</p>
                                 </div>
-                                <div class="col-3" style="text-align-last: center;">
-                                    <span>@overtime.Amount</span>
-                                </div>
-                                totalovertimeAmount += (decimal)overtime.Amount;
                             }
                         </div>
+
                         <div class="row">
                             <div class="col-12">
                                 <div class="row" style="top: 0px; position: relative;">
@@ -202,11 +250,12 @@
                                         <p class="text-nowrap">Total :</p>
                                     </div>
                                     <div class="col-3 bbottom" style="justify-items:center">
-                                        <p class="text-nowrap">@totalovertimeAmount</p>
+                                        <p class="text-nowrap">@totalovertimeAmount.ToString("F2")</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
                     <!-- Deduction Section -->
@@ -221,17 +270,34 @@
                             @{
                                 decimal totaldeductionDaysamount = 0;
                             }
-                            @foreach (var deduction in empPayroll.Deductions) // Loop through deductions for this employee
+
+                            @if (empPayroll?.Deductions != null)
+
                             {
-                                <div class="col-9">
-                                    <span>@deduction.DeductionType.DeductionTypeName</span>
+                                @foreach (var deduction in empPayroll.Deductions) // Loop through deductions for this employee
+
+                                {
+                                    <div class="col-9">
+                                        <span>@(deduction.DeductionTypeName ?? "N/A")</span>
+                                    </div>
+                                    <div class="col-3" style="text-align-last: center;">
+                                        <span>@(deduction?.Amount?.ToString("F2") ?? "0.00")</span>
+                                    </div>
+
+                                    totaldeductionDaysamount += (decimal)(deduction?.Amount ?? 0);
+
+                                }
+                            }
+
+                            else
+
+                            {
+                                <div class="col-12">
+                                    <p>No deduction data available.</p>
                                 </div>
-                                <div class="col-3" style="text-align-last: center;">
-                                    <span>@deduction.Days</span>
-                                </div>
-                                totaldeductionDaysamount += (decimal)deduction.Days;
                             }
                         </div>
+
                         <div class="row">
                             <div class="col-12">
                                 <div class="row" style="top: 0px; position: relative;">
@@ -239,11 +305,12 @@
                                         <p class="text-nowrap">Total :</p>
                                     </div>
                                     <div class="col-3 bright bbottom" style="justify-items:center">
-                                        <p class="text-nowrap">@totaldeductionDaysamount</p>
+                                        <p class="text-nowrap">@totaldeductionDaysamount.ToString("F2")</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <!-- Fixed Deduction Section -->
                         <div class="row bleft bright bbottom" style="height:83px; align-content: flex-start;">
                             <div class="col-9 bbottom headercolor">
@@ -255,15 +322,30 @@
                             @{
                                 decimal totalFixedDeductionAmount = 0;
                             }
-                            @foreach (var fixedDeduction in empPayroll.FixedDeductions) // Loop through fixed deductions for this employee
+
+                            @if (empPayroll?.FixedDeductions != null)
+
                             {
-                                <div class="col-9">
-                                    <span>@fixedDeduction.FixedDeductionType.FixedDeductionTypeName</span>
+                                @foreach (var fixedDeduction in empPayroll.FixedDeductions) // Loop through fixed deductions for this employee
+
+                                {
+                                    <div class="col-9">
+                                        <span>@(fixedDeduction?.FixedDeductionType?.FixedDeductionTypeName ?? "N/A")</span>
+                                    </div>
+                                    <div class="col-3" style="text-align-last: center;">
+                                        <span>@(fixedDeduction?.FixedDeductionAmount?.ToString("F2") ?? "0.00")</span>
+                                    </div>
+                                    totalFixedDeductionAmount += (decimal)(fixedDeduction?.FixedDeductionAmount ?? 0);
+
+                                }
+                            }
+
+                            else
+
+                            {
+                                <div class="col-12">
+                                    <p>No fixed deduction data available.</p>
                                 </div>
-                                <div class="col-3" style="text-align-last: center;">
-                                    <span>@fixedDeduction.FixedDeductionAmount</span>
-                                </div>
-                                totalFixedDeductionAmount += (decimal)fixedDeduction.FixedDeductionAmount;
                             }
                         </div>
                         <div class="row">
@@ -273,11 +355,12 @@
                                         <p class="text-nowrap">Total :</p>
                                     </div>
                                     <div class="col-3 bright bbottom" style="justify-items:center">
-                                        <p class="text-nowrap">@totalFixedDeductionAmount</p>
+                                        <p class="text-nowrap">@totalFixedDeductionAmount.ToString("F2")</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     <div class="col-12">
                         <div class="row" style="top: 0px; position: relative;">

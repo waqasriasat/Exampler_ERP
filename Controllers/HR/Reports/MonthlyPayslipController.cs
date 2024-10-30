@@ -94,10 +94,35 @@ namespace Exampler_ERP.Controllers.HR.Reports
 
         var overtimeData = await _appDBContext.HR_OverTimes
             .Where(o => o.EmployeeID == employeeSalary.EmployeeID && o.PayRollID == payrollID)
+            .Include(o => o.OverTimeType)
+            .GroupBy(o => new
+            {
+              o.OverTimeTypeID,
+              o.OverTimeType.OverTimeTypeName
+            })
+            .Select(g => new HR_OverTimeTemp // Assuming HR_OverTime has a suitable constructor or properties
+            {
+              OverTimeTypeID = g.Key.OverTimeTypeID,
+              OverTimeTypeName = g.Key.OverTimeTypeName,
+              Amount = g.Sum(o => o.Amount) // Make sure 'Amount' is the right property name
+            })
             .ToListAsync();
+
 
         var deductions = await _appDBContext.HR_Deductions
             .Where(d => d.EmployeeID == employeeSalary.EmployeeID && d.PayRollID == payrollID)
+            .Include(d => d.DeductionType)
+            .GroupBy(o => new
+            {
+              o.DeductionTypeID,
+              o.DeductionType.DeductionTypeName
+            })
+             .Select(g => new HR_DeductionTemp // Assuming HR_OverTime has a suitable constructor or properties
+             {
+               DeductionTypeID = g.Key.DeductionTypeID,
+               DeductionTypeName = g.Key.DeductionTypeName,
+               Amount = g.Sum(o => o.Amount) // Make sure 'Amount' is the right property name
+             })
             .ToListAsync();
 
         var fixedDeductionDetails = await _appDBContext.HR_MonthlyPayroll_FixedDeductionDetails
@@ -209,12 +234,36 @@ namespace Exampler_ERP.Controllers.HR.Reports
             .ToListAsync();
 
         var overtimeData = await _appDBContext.HR_OverTimes
-            .Where(o => o.EmployeeID == employeeSalary.EmployeeID && o.PayRollID == payrollID)
-            .ToListAsync();
+             .Where(o => o.EmployeeID == employeeSalary.EmployeeID && o.PayRollID == payrollID)
+             .Include(o => o.OverTimeType)
+             .GroupBy(o => new
+             {
+               o.OverTimeTypeID,
+               o.OverTimeType.OverTimeTypeName
+             })
+             .Select(g => new HR_OverTimeTemp // Assuming HR_OverTime has a suitable constructor or properties
+             {
+               OverTimeTypeID = g.Key.OverTimeTypeID,
+               OverTimeTypeName = g.Key.OverTimeTypeName,
+               Amount = g.Sum(o => o.Amount) // Make sure 'Amount' is the right property name
+             })
+             .ToListAsync();
 
         var deductions = await _appDBContext.HR_Deductions
-            .Where(d => d.EmployeeID == employeeSalary.EmployeeID && d.PayRollID == payrollID)
-            .ToListAsync();
+             .Where(d => d.EmployeeID == employeeSalary.EmployeeID && d.PayRollID == payrollID)
+             .Include(d => d.DeductionType)
+             .GroupBy(o => new
+             {
+               o.DeductionTypeID,
+               o.DeductionType.DeductionTypeName
+             })
+              .Select(g => new HR_DeductionTemp // Assuming HR_OverTime has a suitable constructor or properties
+              {
+                DeductionTypeID = g.Key.DeductionTypeID,
+                DeductionTypeName = g.Key.DeductionTypeName,
+                Amount = g.Sum(o => o.Amount) // Make sure 'Amount' is the right property name
+              })
+             .ToListAsync();
 
         var fixedDeductionDetails = await _appDBContext.HR_MonthlyPayroll_FixedDeductionDetails
             .Where(fd => fd.PayrollFixedDeduction.EmployeeID == employeeSalary.EmployeeID && fd.PayrollFixedDeduction.PayRollID == payrollID)

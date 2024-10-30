@@ -70,8 +70,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         _appDBContext.Update(branch);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Branch updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error updating branch. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/Branch/EditBranch.cshtml", branch);
     }
     [HttpGet]
@@ -90,8 +92,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         branch.DeleteYNID = 0;
         _appDBContext.Settings_BranchTypes.Add(branch);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Branch created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating branch. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/Branch/AddBranch.cshtml", branch);
     }
     public async Task<IActionResult> Delete(int id)
@@ -107,6 +111,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_BranchTypes.Update(branch);
       await _appDBContext.SaveChangesAsync();
+      TempData["SuccessMessage"] = "Branch deleted successfully.";
 
       return Json(new { success = true });
     }

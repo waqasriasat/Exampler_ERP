@@ -112,7 +112,13 @@
                             {
                                 <div class="col-12 col-md-1 col-lg-1">
                                     <p class="text-nowrap">
-                                        <span class="smallAdd">@column : </span>@(model.SalaryDetails.ContainsKey(column) ? model.SalaryDetails[column]?.ToString() : "N/A")
+                                        <span class="smallAdd">@column : </span>
+                                        @(
+                                            model.SalaryDetails.ContainsKey(column)
+                                            ? Math.Round(Convert.ToDouble(model.SalaryDetails[column] ?? 0), 2).ToString("F2")
+                                            : "N/A"
+                                            )
+
                                     </p>
                                 </div>
                             }
@@ -123,7 +129,12 @@
                             {
                                 <div class="col-12 col-md-1 col-lg-1">
                                     <p class="text-nowrap">
-                                        <span class="smallAdd">@column : </span>@(model.AdditionalAllowances.ContainsKey(column) ? model.AdditionalAllowances[column]?.ToString() : "N/A")
+                                        <span class="smallAdd">@column : </span>
+                                        @(
+                                            model.AdditionalAllowances.ContainsKey(column)
+                                            ? Math.Round(Convert.ToDouble(model.AdditionalAllowances[column] ?? 0), 2).ToString("F2")
+                                            : "N/A"
+                                            )
                                     </p>
                                 </div>
                             }
@@ -134,7 +145,11 @@
                             {
                                 <div class="col-12 col-md-1 col-lg-1">
                                     <p class="text-nowrap">
-                                        <span class="smallAdd">@column : </span>@(model.OvertimeDetails.ContainsKey(column) ? model.OvertimeDetails[column]?.ToString() : "N/A")
+                                        <span class="smallAdd">@column : </span>@(
+                                model.OvertimeDetails.ContainsKey(column)
+                                ? Math.Round(Convert.ToDouble(model.OvertimeDetails[column] ?? 0), 2).ToString("F2")
+                                : "N/A"
+                                )
                                     </p>
                                 </div>
                             }
@@ -145,7 +160,11 @@
                             {
                                 <div class="col-12 col-md-1 col-lg-1">
                                     <p class="text-nowrap">
-                                        <span class="smallAdd">@column : </span>@(model.Deductions.ContainsKey(column) ? model.Deductions[column]?.ToString() : "N/A")
+                                        <span class="smallAdd">@column : </span>@(
+                                model.Deductions.ContainsKey(column)
+                                ? Math.Round(Convert.ToDouble(model.Deductions[column] ?? 0), 2).ToString("F2")
+                                : "N/A"
+                                )
                                     </p>
                                 </div>
                             }
@@ -156,7 +175,13 @@
                             {
                                 <div class="col-12 col-md-1 col-lg-1">
                                     <p class="text-nowrap">
-                                        <span class="smallAdd">@column : </span>@(model.FixedDeductions.ContainsKey(column) ? model.FixedDeductions[column]?.ToString() : "N/A")
+                                        <span class="smallAdd">@column : </span>
+                                        @(
+                                            model.FixedDeductions.ContainsKey(column)
+                                            ? Math.Round(Convert.ToDouble(model.FixedDeductions[column] ?? 0), 2).ToString("F2")
+                                            : "N/A"
+                                            )
+
                                     </p>
                                 </div>
                             }

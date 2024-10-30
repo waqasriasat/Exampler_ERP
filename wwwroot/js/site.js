@@ -2,3 +2,22 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+
+
+$(document).ready(function () {
+  // Show success message with slide-in effect
+  if ($('#successMessage').length) {
+    $('#successMessage').addClass('show').delay(5000).slideUp('slow', function () {
+      $(this).remove();
+    });
+  }
+
+  // Show error message with slide-in effect
+  if ($('#errorMessage').length) {
+    $('#errorMessage').addClass('show').delay(5000).slideUp('slow', function () {
+      $(this).remove();
+    });
+  }
+});
+

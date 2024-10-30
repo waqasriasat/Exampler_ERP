@@ -5,7 +5,7 @@
 }
 
 @section PageScripts {
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-KyZXEAg3QhqLMpG8r+Knujsl5+5hb5z2N7O6eHg4d5e2jtV5Wz4w69F+QYw1Fz4yD61DdE8kOkWJLvHh7vDkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script>
         $(document).ready(function () {
             // Edit branch modal popup
@@ -92,7 +92,12 @@
             window.location.href = '@Url.Action("Index", "Branch")?searchBranchName=' + searchValue;
         });
     </script>
+   
+  
 }
+
+
+
 <h4 class="py-3 mb-4">
     <span class="text-muted fw-light">Master Information /</span> Branch
 </h4>

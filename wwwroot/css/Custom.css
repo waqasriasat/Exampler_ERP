@@ -1146,3 +1146,17 @@ a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:h
   padding: 8px;
   font-family: Arial, sans-serif;
 }
+
+.alert {
+  position: fixed;
+  top: -100px; /* Off-screen initially */
+  z-index: 9999;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  transition: top 0.5s ease-in-out; /* Smooth slide effect */
+}
+
+  .alert.show {
+    top: 0px; /* Slides to this position */
+  }

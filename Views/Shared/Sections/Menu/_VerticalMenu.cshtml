@@ -80,6 +80,7 @@
                     currentPage.StartsWith("/OverTime/Index")||
                     currentPage.StartsWith("/VacationSettle/Index")||
                     currentPage.StartsWith("/FaceAttendanceTimeAdjust/Index")||
+                    currentPage.StartsWith("/FaceAttendanceForwarding/Index")||
 
                     currentPage.StartsWith("/FixedDeduction/Index")||
                     currentPage.StartsWith("/WorkDay/Index")||
@@ -133,7 +134,7 @@
                 <li class='menu-item@(currentPage == "/HR_Dashboard/Index" || currentPage == "/AddionalAllowance/Index" ||
                                       currentPage == "/Deduction/Index" || currentPage == "/EndOfService/Index" ||
                                       currentPage == "/OverTime/Index" || currentPage == "/VacationSettle/Index"||
-                                      currentPage == "/FaceAttendanceTimeAdjust/Index"? " active" : "")'>
+                                      currentPage == "/FaceAttendanceTimeAdjust/Index" || currentPage == "/FaceAttendanceForwarding/Index"? " active" : "")'>
                     <a asp-controller="HR_Dashboard" asp-action="Index" class="menu-link">
                         <div>HR</div>
                     </a>

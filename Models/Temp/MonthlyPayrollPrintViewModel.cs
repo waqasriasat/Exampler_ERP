@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Exampler_ERP.Models.Temp
 {
 
@@ -13,10 +15,21 @@ namespace Exampler_ERP.Models.Temp
     public HR_MonthlyPayroll? PayslipDetails { get; set; }
     public List<HR_MonthlyPayroll_SalaryDetail> SalaryDetails { get; set; }
     public List<HR_AddionalAllowanceDetail> AdditionalAllowances { get; set; }
-    public List<HR_OverTime> OvertimeData { get; set; }
-    public List<HR_Deduction> Deductions { get; set; }
+    public List<HR_OverTimeTemp> OvertimeData { get; set; }
+    public List<HR_DeductionTemp> Deductions { get; set; }
     public List<HR_MonthlyPayroll_FixedDeductionDetail> FixedDeductions { get; set; }
   }
+  public class HR_OverTimeTemp
+  {
+    public int OverTimeTypeID { get; set; }
+    public string? OverTimeTypeName { get; set; }
+    public float? Amount { get; set; }
+  }
+  public class HR_DeductionTemp
+  {
+    public int DeductionTypeID { get; set; }
+    public string? DeductionTypeName { get; set; }
+    public float? Amount { get; set; }
+  }
 
- 
 }
