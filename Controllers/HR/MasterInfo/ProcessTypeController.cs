@@ -58,8 +58,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         _appDBContext.Update(ProcessType);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Process Type Updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error Updating Process Type. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/ProcessType/EditProcessType.cshtml", ProcessType);
     }
     [HttpGet]
@@ -77,8 +79,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         ProcessType.DeleteYNID = 0;
         _appDBContext.Settings_ProcessTypes.Add(ProcessType);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Process Type Created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating Process Type. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/ProcessType/AddProcessType.cshtml", ProcessType);
     }
     public async Task<IActionResult> Delete(int id)
@@ -94,7 +98,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_ProcessTypes.Update(ProcessType);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Process Type Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

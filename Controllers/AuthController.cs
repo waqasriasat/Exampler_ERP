@@ -55,7 +55,7 @@ namespace Exampler_ERP.Controllers
 
       if (user == null)
       {
-        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+        TempData["ErrorMessage"] = "Wrong username or password";
         return View();
       }
 
@@ -67,7 +67,7 @@ namespace Exampler_ERP.Controllers
       HttpContext.Session.SetString("UserRoleName", Username);
 
 
-
+      TempData["SuccessMessage"] = "Successfully Login. Wellcome to " + Username;
       return RedirectToAction("Index", "Dashboards");
     }
 

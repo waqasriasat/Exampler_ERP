@@ -57,8 +57,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         _appDBContext.Update(AddionalAllowanceType);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Addional Allowance Type Updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error Updating Addional Allowance Type. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/AddionalAllowanceType/EditAddionalAllowanceType.cshtml", AddionalAllowanceType);
     }
     [HttpGet]
@@ -76,8 +78,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         AddionalAllowanceType.DeleteYNID = 0;
         _appDBContext.Settings_AddionalAllowanceTypes.Add(AddionalAllowanceType);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Addional Allowance Type Created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating Addional Allowance Type. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/AddionalAllowanceType/AddAddionalAllowanceType.cshtml", AddionalAllowanceType);
     }
     public async Task<IActionResult> Delete(int id)
@@ -93,7 +97,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_AddionalAllowanceTypes.Update(AddionalAllowanceType);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Addional Allowance Type Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

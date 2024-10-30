@@ -60,8 +60,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         _appDBContext.Update(SubQualification);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "SubQualification Updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error Updating SubQualification. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/SubQualification/EditSubQualification.cshtml", SubQualification);
     }
     [HttpGet]
@@ -80,8 +82,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         SubQualification.DeleteYNID = 0;
         _appDBContext.Settings_SubQualificationTypes.Add(SubQualification);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "SubQualification Created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating SubQualification. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/SubQualification/AddSubQualification.cshtml", SubQualification);
     }
     public async Task<IActionResult> Delete(int id)
@@ -97,7 +101,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_SubQualificationTypes.Update(SubQualification);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "SubQualification Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

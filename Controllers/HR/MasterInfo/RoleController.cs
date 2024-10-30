@@ -53,8 +53,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         _appDBContext.Update(Role);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Role Updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error Updating Role. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/Role/EditRole.cshtml", Role);
     }
     [HttpGet]
@@ -72,8 +74,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         Role.DeleteYNID = 0;
         _appDBContext.Settings_RoleTypes.Add(Role);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Role Created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating Role. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/Role/AddRole.cshtml", Role);
     }
     public async Task<IActionResult> Delete(int id)
@@ -89,7 +93,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_RoleTypes.Update(Role);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Role Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

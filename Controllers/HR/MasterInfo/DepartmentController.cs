@@ -67,8 +67,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         _appDBContext.Update(Department);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Department Updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error Updating Department. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/Department/EditDepartment.cshtml", Department);
     }
     [HttpGet]
@@ -87,8 +89,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         Department.DeleteYNID = 0;
         _appDBContext.Settings_DepartmentTypes.Add(Department);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Department Created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating Department. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/Department/AddDepartment.cshtml", Department);
     }
     public async Task<IActionResult> Delete(int id)
@@ -104,6 +108,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_DepartmentTypes.Update(Department);
       await _appDBContext.SaveChangesAsync();
+      TempData["SuccessMessage"] = "Department Deleted successfully.";
 
       return Json(new { success = true });
     }

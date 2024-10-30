@@ -58,8 +58,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         _appDBContext.Update(Designation);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Designation Updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error Updating Designation. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/Designation/EditDesignation.cshtml", Designation);
     }
     [HttpGet]
@@ -77,8 +79,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         Designation.DeleteYNID = 0;
         _appDBContext.Settings_DesignationTypes.Add(Designation);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Designation Created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating Designation. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/Designation/AddDesignation.cshtml", Designation);
     }
     public async Task<IActionResult> Delete(int id)
@@ -94,7 +98,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_DesignationTypes.Update(Designation);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Designation Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

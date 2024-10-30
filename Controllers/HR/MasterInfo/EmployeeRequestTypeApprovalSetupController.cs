@@ -106,8 +106,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       if (EmployeeRequestTypeApprovalSetups == null || EmployeeRequestTypeApprovalSetups.Count == 0)
       {
+        TempData["ErrorMessage"] = "No data received.";
         _logger.LogWarning("No data received for edit.");
-        return Json(new { success = false, message = "No data received." });
+        return Json(new { success = false});
       }
 
       if (ModelState.IsValid)
@@ -117,6 +118,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           var EmployeeRequestTypeId = EmployeeRequestTypeApprovalSetups.FirstOrDefault()?.EmployeeRequestTypeID;
           if (EmployeeRequestTypeId == null)
           {
+            TempData["ErrorMessage"] = "Invalid EmployeeRequestTypeID.";
             return BadRequest("Invalid EmployeeRequestTypeID.");
           }
 
@@ -135,12 +137,14 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           }
 
           await _appDBContext.SaveChangesAsync();
+          TempData["SuccessMessage"] = "Employee Request Type Approval Setup Update successfully.";
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
+          TempData["ErrorMessage"] = "An error occurred while updating the data.";
           _logger.LogError(ex, "Error updating EmployeeRequestTypeApprovalSetups");
-          return Json(new { success = false, message = "An error occurred while updating the data." });
+          return Json(new { success = false});
         }
       }
 
@@ -161,7 +165,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.HR_EmployeeRequestTypeApprovalSetups.Remove(setup);
       _appDBContext.SaveChanges();
-
+      TempData["SuccessMessage"] = "Employee Request Type Approval Setups deleted successfully.";
       return Json(new { success = true });
     }
 

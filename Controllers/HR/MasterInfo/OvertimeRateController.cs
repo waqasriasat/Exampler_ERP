@@ -58,8 +58,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         _appDBContext.Update(OvertimeRate);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Overtime Rate Updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error Updating Overtime Rate. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/OvertimeRate/EditOvertimeRate.cshtml", OvertimeRate);
     }
     [HttpGet]
@@ -77,8 +79,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         OvertimeRate.DeleteYNID = 0;
         _appDBContext.Settings_OverTimeRates.Add(OvertimeRate);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Overtime Rate Created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating Overtime Rate. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/OvertimeRate/AddOvertimeRate.cshtml", OvertimeRate);
     }
     public async Task<IActionResult> Delete(int id)
@@ -94,7 +98,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_OverTimeRates.Update(OvertimeRate);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Overtime Rate Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

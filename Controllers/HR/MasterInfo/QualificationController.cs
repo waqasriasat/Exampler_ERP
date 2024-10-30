@@ -58,8 +58,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         _appDBContext.Update(Qualification);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Qualification Updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error Updating Qualification. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/Qualification/EditQualification.cshtml", Qualification);
     }
     [HttpGet]
@@ -77,8 +79,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         Qualification.DeleteYNID = 0;
         _appDBContext.Settings_QualificationTypes.Add(Qualification);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Qualification Created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating Qualification. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/Qualification/AddQualification.cshtml", Qualification);
     }
     public async Task<IActionResult> Delete(int id)
@@ -94,7 +98,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_QualificationTypes.Update(Qualification);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Qualification Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

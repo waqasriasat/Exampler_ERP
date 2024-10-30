@@ -49,29 +49,6 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       return View("~/Views/HR/MasterInfo/DeductionSetup/DeductionSetup.cshtml", viewModel);
     }
 
-    //public async Task<IActionResult> Index()
-    //{
-    //  var classIDList = await _utils.GetClassIDList();
-    //  var deductionTypes = await _appDBContext.Settings_DeductionTypes.ToListAsync();
-    //  var deductionSetups = await _appDBContext.HR_DeductionSetups.ToListAsync();
-
-    //  var viewModel = new DeductionSetupListViewModel
-    //  {
-    //    DeductionTypeWithRowCount = deductionTypes.Select(dt => new DeductionTypeWithRowCountViewModel
-    //    {
-    //      DeductionTypeID = dt.DeductionTypeID,
-    //      DeductionTypeName = dt.DeductionTypeName,
-    //      Class = deductionSetups.Where(ds => ds.DeductionTypeID == dt.DeductionTypeID)
-    //                               .Select(ds => ds.ClassID)
-    //                               .Distinct()
-    //                               .FirstOrDefault(),
-    //      RowCount = deductionSetups.Count(ds => ds.DeductionTypeID == dt.DeductionTypeID)
-    //    }).ToList()
-    //  };
-
-    //  return View("~/Views/HR/MasterInfo/DeductionSetup/DeductionSetup.cshtml", viewModel);
-    //}
-
     public async Task<IActionResult> DeductionSetup()
     {
       var DeductionSetups = await _appDBContext.HR_DeductionSetups.ToListAsync();
@@ -134,7 +111,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         ViewBag.DeductionValueList = deductionValueList;
         ViewBag.SalaryTypes = await _appDBContext.Settings_SalaryTypes.ToListAsync();
         ViewBag.salaryTypeList = _utils.GetSalaryTypeList();
-
+        TempData["ErrorMessage"] = "Error creating Deduction setups. Please check the inputs.";
         return PartialView("~/Views/HR/MasterInfo/DeductionSetup/EditDeductionSetup.cshtml", viewModel);
       }
 
@@ -156,8 +133,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.HR_DeductionSetups.AddRange(newSetups);
       await _appDBContext.SaveChangesAsync();
-
-      return Json(new { success = true, message = "Deduction setup updated successfully." });
+      TempData["SuccessMessage"] = "Deduction setup updated successfully.";
+      return Json(new { success = true});
     }
 
     public async Task<IActionResult> Delete(int id)
@@ -170,18 +147,19 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
         if (!deductionSetups.Any())
         {
-          return Json(new { success = false, message = "Deduction setups not found." });
+          TempData["ErrorMessage"] = "Deduction setups not found.";
+          return Json(new { success = false});
         }
 
         _appDBContext.HR_DeductionSetups.RemoveRange(deductionSetups);
         await _appDBContext.SaveChangesAsync();
-
-        return Json(new { success = true, message = "Deduction setups deleted successfully." });
+        TempData["SuccessMessage"] = "Deduction setups deleted successfully.";
+        return Json(new { success = true});
       }
       catch (Exception ex)
       {
-        // Optionally log the exception here
-        return Json(new { success = false, message = "An error occurred while deleting the deduction setups." });
+        TempData["ErrorMessage"] = "Error Updating Deduction setups. Please check the inputs.";
+        return Json(new { success = false});
       }
     }
 

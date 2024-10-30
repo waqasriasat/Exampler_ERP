@@ -57,8 +57,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         _appDBContext.Update(VacationType);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Vacation Type Updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error Updating Vacation Type. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/VacationType/EditVacationType.cshtml", VacationType);
     }
     [HttpGet]
@@ -76,8 +78,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         VacationType.DeleteYNID = 0;
         _appDBContext.Settings_VacationTypes.Add(VacationType);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Vacation Type Created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating Vacation Type. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/VacationType/AddVacationType.cshtml", VacationType);
     }
     public async Task<IActionResult> Delete(int id)
@@ -93,7 +97,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_VacationTypes.Update(VacationType);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Vacation Type Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

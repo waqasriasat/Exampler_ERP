@@ -58,8 +58,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         _appDBContext.Update(DeductionType);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Deduction Type Updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error Updating Deduction Type. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/DeductionType/EditDeductionType.cshtml", DeductionType);
     }
     [HttpGet]
@@ -77,8 +79,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         DeductionType.DeleteYNID = 0;
         _appDBContext.Settings_DeductionTypes.Add(DeductionType);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Deduction Type Created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating Deduction Type. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/DeductionType/AddDeductionType.cshtml", DeductionType);
     }
     public async Task<IActionResult> Delete(int id)
@@ -94,7 +98,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_DeductionTypes.Update(DeductionType);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Deduction Type Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

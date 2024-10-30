@@ -109,6 +109,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       if (ProcessTypeApprovalSetups == null || ProcessTypeApprovalSetups.Count == 0)
       {
+        TempData["ErrorMessage"] = "No data received.";
         _logger.LogWarning("No data received for edit.");
         return Json(new { success = false, message = "No data received." });
       }
@@ -120,6 +121,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           var processTypeId = ProcessTypeApprovalSetups.FirstOrDefault()?.ProcessTypeID;
           if (processTypeId == null)
           {
+            TempData["ErrorMessage"] = "Invalid ProcessTypeID.";
             return BadRequest("Invalid ProcessTypeID.");
           }
 
@@ -138,10 +140,12 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           }
 
           await _appDBContext.SaveChangesAsync();
+          TempData["SuccessMessage"] = "Process Type Approval Setup Update successfully.";
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
+          TempData["ErrorMessage"] = "An error occurred while updating the data.";
           _logger.LogError(ex, "Error updating ProcessTypeApprovalSetups");
           return Json(new { success = false, message = "An error occurred while updating the data." });
         }
@@ -164,7 +168,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.CR_ProcessTypeApprovalSetups.Remove(setup);
       _appDBContext.SaveChanges();
-
+      TempData["SuccessMessage"] = "Process Type Approval Setups deleted successfully.";
       return Json(new { success = true });
     }
 

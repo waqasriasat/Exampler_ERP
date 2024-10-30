@@ -63,8 +63,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         _appDBContext.Update(Section);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Section Updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error Updating Section. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/Section/EditSection.cshtml", Section);
     }
     [HttpGet]
@@ -83,8 +85,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         Section.DeleteYNID = 0;
         _appDBContext.Settings_SectionTypes.Add(Section);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Section Created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating Section. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/Section/AddSection.cshtml", Section);
     }
     public async Task<IActionResult> Delete(int id)
@@ -100,7 +104,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_SectionTypes.Update(Section);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Section Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

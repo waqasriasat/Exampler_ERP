@@ -83,8 +83,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         userInDb.ActiveYNID = user.ActiveYNID;
 
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "User Updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error Updating User. Please check the inputs.";
       ViewBag.RoleList = await _utils.GetRoles();
       ViewBag.EmployeeList = await _utils.GetEmployee();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
@@ -166,13 +168,14 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
             User.ActiveYNID = 1;
             _appDBContext.CR_Users.Update(User);
             await _appDBContext.SaveChangesAsync();
-            return Json(new { success = true, message = "No process setup found, User activated." });
+            TempData["SuccessMessage"] = "User Created successfully. No process setup found, User activated.";
+            return Json(new { success = true});
           }
         }
-
+        TempData["SuccessMessage"] = "User Created successfully. Continue to the Approval Process Setup for User Activation.";
         return Json(new { success = true });
       }
-
+      TempData["ErrorMessage"] = "Error creating User. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/User/AddUser.cshtml", User);
     }
 
@@ -189,7 +192,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.CR_Users.Update(User);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "User Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

@@ -93,7 +93,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_SalaryTypes.Update(SalaryType);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Designation Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

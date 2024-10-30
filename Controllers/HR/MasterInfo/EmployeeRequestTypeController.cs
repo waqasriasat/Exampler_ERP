@@ -58,8 +58,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         _appDBContext.Update(EmployeeRequestType);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Employee Request Type Updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error Updating Employee Request Type. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/EmployeeRequestType/EditEmployeeRequestType.cshtml", EmployeeRequestType);
     }
     [HttpGet]
@@ -77,8 +79,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         EmployeeRequestType.DeleteYNID = 0;
         _appDBContext.Settings_EmployeeRequestTypes.Add(EmployeeRequestType);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Employee Request Type Created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating Employee Request Type. Please check the inputs.";
       return PartialView("~/Views/HR/MasterInfo/EmployeeRequestType/AddEmployeeRequestType.cshtml", EmployeeRequestType);
     }
     public async Task<IActionResult> Delete(int id)
@@ -94,7 +98,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_EmployeeRequestTypes.Update(EmployeeRequestType);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Employee Request Type Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()
