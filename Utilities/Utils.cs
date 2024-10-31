@@ -104,7 +104,9 @@ namespace Exampler_ERP.Utilities
     }
     public async Task<List<SelectListItem>> GetBranchs()
     {
-      var branchs = await _appDBContext.Settings_BranchTypes.ToListAsync();
+      var branchs = await _appDBContext.Settings_BranchTypes
+        .Where(e => e.ActiveYNID == 1 && e.DeleteYNID != 1)
+        .ToListAsync();
 
       var selectList = branchs.Select(r => new SelectListItem { Value = r.BranchTypeID.ToString(), Text = r.BranchTypeName }).ToList();
       selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });

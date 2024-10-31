@@ -112,8 +112,10 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         }
         _appDBContext.Update(Applicant);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Applicant updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error updating Applicant. Please check the inputs.";
       return PartialView("~/Views/HR/Employeement/Applicant/EditApplicant.cshtml", Applicant);
     }
     [HttpGet]
@@ -144,8 +146,10 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
         _appDBContext.HR_Applicants.Add(Applicant);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Applicant created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating Applicant. Please check the inputs.";
 
       return PartialView("~/Views/HR/Employeement/Applicant/AddApplicant.cshtml", Applicant);
     }
@@ -160,7 +164,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     
       _appDBContext.HR_Applicants.Update(Applicant);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Applicant deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> Print()

@@ -99,11 +99,12 @@ namespace Exampler_ERP.Controllers.HR.HR
         {
           _appDBContext.HR_Deductions.Update(deduction);
           await _appDBContext.SaveChangesAsync();
+          TempData["SuccessMessage"] = "Deduction updated successfully.";
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
-          ModelState.AddModelError("", "Unable to save changes: " + ex.Message);
+          TempData["ErrorMessage"] = "Unable to save changes: " + ex.Message;
         }
       }
 
@@ -112,6 +113,7 @@ namespace Exampler_ERP.Controllers.HR.HR
       ViewBag.DeductionTypesList = await _utils.GetDeductionTypes();
 
       // Return the partial view with validation errors
+      TempData["ErrorMessage"] = "Error updating Deduction. Please check the inputs.";
       return PartialView("~/Views/HR/HR/Deduction/EditDeduction.cshtml", deduction);
     }
 
@@ -131,8 +133,10 @@ namespace Exampler_ERP.Controllers.HR.HR
         Deduction.DeleteYNID = 0;
         _appDBContext.HR_Deductions.Add(Deduction);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Deduction created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating Deduction. Please check the inputs.";
       return PartialView("~/Views/HR/HR/Deduction/AddDeduction.cshtml", Deduction);
     }
     public async Task<IActionResult> Delete(int id)
@@ -147,7 +151,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       _appDBContext.HR_Deductions.Update(Deduction);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Deduction deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

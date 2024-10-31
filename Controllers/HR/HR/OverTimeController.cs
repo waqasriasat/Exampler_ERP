@@ -100,11 +100,12 @@ namespace Exampler_ERP.Controllers.HR.HR
         {
           _appDBContext.HR_OverTimes.Update(OverTime);
           await _appDBContext.SaveChangesAsync();
+          TempData["SuccessMessage"] = "OverTime updated successfully.";
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
-          ModelState.AddModelError("", "Unable to save changes: " + ex.Message);
+          TempData["ErrorMessage"] = "Unable to save changes: " + ex.Message;
         }
       }
 
@@ -115,6 +116,7 @@ namespace Exampler_ERP.Controllers.HR.HR
       ViewBag.MonthsList = await _utils.GetMonthsTypes();
 
       // Return the partial view with validation errors
+      TempData["ErrorMessage"] = "Error updating OverTime. Please check the inputs.";
       return PartialView("~/Views/HR/HR/OverTime/EditOverTime.cshtml", OverTime);
     }
     [HttpGet]
@@ -134,8 +136,10 @@ namespace Exampler_ERP.Controllers.HR.HR
         OverTime.DeleteYNID = 0;
         _appDBContext.HR_OverTimes.Add(OverTime);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "OverTime created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating OverTime. Please check the inputs.";
       return PartialView("~/Views/HR/HR/OverTime/AddOverTime.cshtml", OverTime);
     }
     public async Task<IActionResult> Delete(int id)
@@ -150,7 +154,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       _appDBContext.HR_OverTimes.Update(OverTime);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "OverTime deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

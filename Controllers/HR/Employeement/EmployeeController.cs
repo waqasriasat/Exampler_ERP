@@ -86,8 +86,10 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         employee.Password = CR_CipherKey.Encrypt(employee.Password);
         _appDBContext.Update(employee);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Employee Updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error Updating Role. Please check the inputs.";
       return PartialView("~/Views/HR/Employeement/Employee/EditEmployee.cshtml", employee);
     }
     [HttpGet]
@@ -174,13 +176,14 @@ namespace Exampler_ERP.Controllers.HR.Employeement
             employee.ActiveYNID = 1;
             _appDBContext.HR_Employees.Update(employee);
             await _appDBContext.SaveChangesAsync();
-            return Json(new { success = true, message = "No process setup found, User activated." });
+            TempData["SuccessMessage"] = "Employee Created successfully. No process setup found, Employee activated.";
+            return Json(new { success = true, message = "No process setup found, Employee activated." });
           }
         }
-
+        TempData["SuccessMessage"] = "Employee Created successfully. Continue to the Approval Process Setup for Employee Activation.";
         return Json(new { success = true });
       }
-
+      TempData["ErrorMessage"] = "Error creating Employee. Please check the inputs.";
       return PartialView("~/Views/HR/Employeement/Employee/AddEmployee.cshtml", employee);
     }
     public async Task<IActionResult> Delete(int id)
@@ -196,7 +199,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       _appDBContext.HR_Employees.Update(employee);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Employee Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> Print()

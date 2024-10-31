@@ -109,10 +109,8 @@ namespace Exampler_ERP.Controllers.HR.HR
     [HttpPost]
     public async Task<IActionResult> Edit(VacationSettleViewModel model)
     {
-      // Check if the model state is valid
       if (ModelState.IsValid)
       {
-        // Find the existing record by ID
         var vacationSettle = await _appDBContext.HR_VacationSettles
             .FirstOrDefaultAsync(vs => vs.VacationID == model.VacationID);
 
@@ -121,19 +119,15 @@ namespace Exampler_ERP.Controllers.HR.HR
           return NotFound();
         }
 
-        // Update the properties of the VacationSettle object
         vacationSettle.SettleDays = model.SettleDays;
         vacationSettle.SettleAmount = model.SettleAmount;
 
-        // Save changes to the database
         _appDBContext.HR_VacationSettles.Update(vacationSettle);
         await _appDBContext.SaveChangesAsync();
-
-        // Return success response
+        TempData["SuccessMessage"] = "Vacation Settle updated successfully.";
         return Json(new { success = true });
       }
-
-      // If the model state is invalid, return a failure response with validation errors
+      TempData["ErrorMessage"] = "Error updating Vacation Settle. Please check the inputs.";
       return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
     }
 
@@ -203,6 +197,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
               _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
               await _appDBContext.SaveChangesAsync();
+              TempData["SuccessMessage"] = "Vacation Settle Created successfully. Continue to the Approval Process Setup for Vacation Settle Activation.";
               return Json(new { success = true });
             }
             else
@@ -216,14 +211,16 @@ namespace Exampler_ERP.Controllers.HR.HR
             vacationSettle.ProcessTypeApprovalID = 0;
             _appDBContext.HR_VacationSettles.Update(vacationSettle);
             await _appDBContext.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Vacation Settle Created successfully. No process setup found, Vacation Settle activated.";
             return Json(new { success = true });
           }
         }
 
+        TempData["SuccessMessage"] = "Vacation Settle Created successfully. Continue to the Approval Process Setup for Vacation Settle Activation.";
         return Json(new { success = true });
       }
 
-      // If the model state is invalid, return a failure response with validation errors
+      TempData["ErrorMessage"] = "Error creating Vacation Settle. Please check the inputs.";
       return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
     }
     [HttpGet]
@@ -318,7 +315,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       _appDBContext.HR_Vacations.Update(vacations);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Vacation Settle deleted successfully.";
       return Json(new { success = true });
     }
 

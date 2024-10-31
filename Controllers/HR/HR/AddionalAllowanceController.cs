@@ -134,7 +134,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
         // Save changes to the database
         await _appDBContext.SaveChangesAsync();
-
+        TempData["SuccessMessage"] = "Addional Allowance updated successfully.";
         return Json(new { success = true });
       }
 
@@ -145,7 +145,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.MonthsList = await _utils.GetMonthsTypes();
-
+      TempData["ErrorMessage"] = "Error updating Addional Allowance. Please check the inputs.";
       return PartialView("~/Views/HR/HR/AddionalAllowance/EditAddionalAllowance.cshtml", model);
     }
 
@@ -227,10 +227,10 @@ namespace Exampler_ERP.Controllers.HR.HR
             model.FinalApprovalID = 1;
             _appDBContext.HR_AddionalAllowances.Update(model);
             await _appDBContext.SaveChangesAsync();
-            return Json(new { success = true, message = "No process setup found, User activated." });
+            TempData["SuccessMessage"] = "Addional Allowance Created successfully. No process setup found, Addional Allowance activated.";
           }
         }
-
+        TempData["SuccessMessage"] = "Addional Allowance Created successfully. Continue to the Approval Process Setup for Addional Allowance Activation.";
         return Json(new { success = true });
         }
      
@@ -239,7 +239,7 @@ namespace Exampler_ERP.Controllers.HR.HR
           .ToListAsync();
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.MonthsList = await _utils.GetMonthsTypes();
-
+      TempData["ErrorMessage"] = "Error creating Addional Allowance. Please check the inputs.";
       return PartialView("~/Views/HR/HR/AddionalAllowance/AddAddionalAllowance.cshtml", model);
     }
 

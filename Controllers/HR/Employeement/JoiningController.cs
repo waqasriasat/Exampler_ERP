@@ -150,16 +150,18 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
           // Save all changes to the database
           await _appDBContext.SaveChangesAsync();
-
+          TempData["SuccessMessage"] = "Joining Created successfully.";
           return Json(new { success = true });
 
         }
         catch (Exception ex)
         {
+          TempData["ErrorMessage"] = "Error creating Joining. Please check the inputs.";
           _logger.LogError(ex, "Error saving joining changes");
           return Json(new { success = false, message = "An error occurred while saving changes." });
         }
       }
+      TempData["ErrorMessage"] = "Error creating Joining. Please check the inputs.";
       return Json(new { success = false, message = "Invalid model state." });
     }
 

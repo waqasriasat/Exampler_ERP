@@ -69,8 +69,10 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         }
         _appDBContext.Update(contract);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Contract Updated successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error Updating Contract. Please check the inputs.";
       return PartialView("~/Views/HR/Employeement/Contract/EditContract.cshtml", contract);
     }
 
@@ -150,13 +152,14 @@ namespace Exampler_ERP.Controllers.HR.Employeement
             contract.ActiveYNID = 1;
             _appDBContext.HR_Contracts.Update(contract);
             await _appDBContext.SaveChangesAsync();
-            return Json(new { success = true, message = "No process setup found, User activated." });
+            TempData["SuccessMessage"] = "Contract Created successfully. No process setup found, Contract activated.";
+            return Json(new { success = true, message = "No process setup found, Contract activated." });
           }
         }
-
+        TempData["SuccessMessage"] = "Contract Created successfully. Continue to the Approval Process Setup for Contract Activation.";
         return Json(new { success = true });
       }
-
+      TempData["ErrorMessage"] = "Error creating Contract. Please check the inputs.";
       return PartialView("~/Views/HR/Employeement/Contract/AddContract.cshtml", contract);
     }
 
@@ -173,7 +176,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       _appDBContext.HR_Contracts.Update(contract);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Contract Deleted successfully.";
       return Json(new { success = true });
     }
 

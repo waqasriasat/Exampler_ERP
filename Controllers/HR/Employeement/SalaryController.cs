@@ -120,6 +120,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       if (SalaryDetails == null || SalaryDetails.Count == 0)
       {
+        TempData["ErrorMessage"] = "No data received.";
         _logger.LogWarning("No data received for edit.");
         return Json(new { success = false, message = "No data received." });
       }
@@ -218,7 +219,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
                 salary.FinalApprovalID = 1;
                 _appDBContext.HR_Salarys.Update(salary);
                 await _appDBContext.SaveChangesAsync();
-                return Json(new { success = true, message = "No process setup found, User activated." });
+                TempData["SuccessMessage"] = "Salary Created successfully. No process setup found, Salary activated.";
+                return Json(new { success = true});
               }
             }
           }
@@ -301,21 +303,23 @@ namespace Exampler_ERP.Controllers.HR.Employeement
                 salary.FinalApprovalID = 1;
                 _appDBContext.HR_Salarys.Update(salary);
                 await _appDBContext.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Salary Created successfully. No process setup found, Salary activated.";
                 return Json(new { success = true, message = "No process setup found, User activated." });
               }
             }
           }
-          
-          
+
+          TempData["SuccessMessage"] = "Salary Created successfully. Continue to the Approval Process Setup for Salary Activation.";
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
+          TempData["ErrorMessage"] = "Error creating Salary. Please check the inputs.";
           _logger.LogError(ex, "Error updating SalaryDetails");
           return Json(new { success = false, message = "An error occurred while updating the data." });
         }
       }
-
+      TempData["ErrorMessage"] = "Error creating Salary. Please check the inputs.";
       var errors = ModelState.Values.SelectMany(v => v.Errors);
       return PartialView("~/Views/HR/Employeement/Salary/EditSalary.cshtml", SalaryDetails);
     }

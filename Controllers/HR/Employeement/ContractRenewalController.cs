@@ -39,7 +39,6 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           .Include(c => c.Employee)
           .ToListAsync();
 
-
       return View("~/Views/HR/Employeement/ContractRenewal/ContractRenewal.cshtml", contracts);
     }
     public async Task<IActionResult> Edit(int id)
@@ -138,13 +137,14 @@ namespace Exampler_ERP.Controllers.HR.Employeement
               _appDBContext.SaveChanges();
             }
             await _appDBContext.SaveChangesAsync();
-            return Json(new { success = true, message = "No process setup found, User activated." });
+            TempData["SuccessMessage"] = "Contract Renewal Created successfully. No process setup found, Contract activated.";
+            return Json(new { success = true});
           }
         }
-
+        TempData["SuccessMessage"] = "Contract Renewal Created successfully. Continue to the Approval Process Setup for Contract Activation.";
         return Json(new { success = true });
       }
-
+      TempData["ErrorMessage"] = "Error creating Contract Renewal. Please check the inputs.";
       return PartialView("~/Views/HR/Employeement/ContractRenewal/EditContractRenewal.cshtml", model);
     }
 
