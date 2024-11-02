@@ -43,19 +43,32 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     }
     public async Task<IActionResult> Edit(int id)
     {
-      var contract = await _appDBContext.HR_Contracts.FindAsync(id);
-      if (contract == null)
+      var contractRenewal = await _appDBContext.HR_ContractRenewals
+        .Where(c => c.ContractID == id)
+        .FirstOrDefaultAsync();
+      
+
+      var contract = await _appDBContext.HR_Contracts
+       .Where(c => c.ContractID == id)
+       .Select(c => new { c.StartDate, c.EndDate })
+       .FirstOrDefaultAsync();
+
+      // Pass the contract data to the view using ViewBag
+      ViewBag.ContractID = id;
+      ViewBag.PStartDate = contract?.StartDate;
+      ViewBag.PEndDate = contract?.EndDate;
+      ViewBag.EmployeesList = await _utils.GetEmployee();
+      if (contractRenewal == null)
       {
-        return NotFound();
+        return PartialView("~/Views/HR/Employeement/ContractRenewal/EditContractRenewal.cshtml", new HR_ContractRenewal());
       }
 
-      ViewBag.EmployeesList = await _utils.GetEmployee();
- 
-      return PartialView("~/Views/HR/Employeement/ContractRenewal/EditContractRenewal.cshtml",contract);
+      return PartialView("~/Views/HR/Employeement/ContractRenewal/EditContractRenewal.cshtml", contract);
     }
 
+
     [HttpPost]
-    public async Task<IActionResult> Edit(DateTime NewStartDate, DateTime NewEndDate, Models.HR_Contract model)
+    public async Task<IActionResult> Edit(DateTime NStartDate, DateTime NEndDate, DateTime PStartDate, DateTime PEndDate, Models.HR_ContractRenewal model)
     {
       if (ModelState.IsValid)
       {
@@ -63,10 +76,10 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         var contractRenewal = new HR_ContractRenewal
         {
           ContractID = model.ContractID,
-          PStartDate = model.StartDate,
-          PEndDate = model.EndDate,
-          NStartDate = NewStartDate,
-          NEndDate = NewEndDate,
+          PStartDate = PStartDate,
+          PEndDate = PEndDate,
+          NStartDate = model.NStartDate,
+          NEndDate = model.NEndDate,
           FinalApprovalID = 0,
           ProcessTypeApprovalID = 0
         };

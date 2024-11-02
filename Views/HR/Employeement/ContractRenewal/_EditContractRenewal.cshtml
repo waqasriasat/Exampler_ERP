@@ -1,6 +1,6 @@
 @model Exampler_ERP.Models.HR_ContractRenewal
 
-<input type="hidden" asp-for="ContractID" class="form-control form-control-lg" />
+<input type="hidden" asp-for="ContractID" class="form-control form-control-lg" value="@ViewBag.ContractID" />
 <input type="hidden" asp-for="ContractRenewalID" class="form-control form-control-lg" />
 
 <hr />
@@ -8,12 +8,12 @@
 <div class="row">
     <div class="col-6">
         <label asp-for="PStartDate" class="form-label fw-bold">Previous Start Date</label>
-        <input asp-for="PStartDate" class="form-control form-control-lg" type="date" readonly style="background-color:#eceef1" />
+        <input type="date" class="form-control form-control-lg" id="PStartDate" name="PStartDate" value="@ViewBag.PStartDate?.ToString("yyyy-MM-dd")" readonly style="background-color:#eceef1" />
         <span asp-validation-for="PStartDate" class="text-danger"></span>
     </div>
     <div class="col-6">
         <label asp-for="PEndDate" class="form-label fw-bold">Previous End Date</label>
-        <input asp-for="PEndDate" class="form-control form-control-lg" type="date" readonly style="background-color:#eceef1" />
+        <input type="date" class="form-control form-control-lg" id="PEndDate" name="PEndDate" value="@ViewBag.PEndDate?.ToString("yyyy-MM-dd")" readonly style="background-color:#eceef1" />
         <span asp-validation-for="PEndDate" class="text-danger"></span>
     </div>
 </div>
@@ -21,7 +21,7 @@
 <!-- Additional Fields -->
 <div class="row">
     <div class="col-6">
-        <label for="Month">Month</label>
+        <label for="Month" class="form-label fw-bold">Month</label>
         <select id="Month" class="form-control form-control-lg">
             @for (int i = 0; i <= 12; i++)
             {
@@ -30,7 +30,7 @@
         </select>
     </div>
     <div class="col-6">
-        <label for="Year">Year</label>
+        <label for="Year" class="form-label fw-bold">Year</label>
         <select id="Year" class="form-control form-control-lg">
             @for (int i = 0; i <= 9; i++)
             {
@@ -43,50 +43,58 @@
 <div class="row">
     <div class="col-6">
         <label asp-for="NStartDate" class="form-label fw-bold">New Start Date</label>
-        <input asp-for="NStartDate" class="form-control form-control-lg" type="date" readonly style="background-color:#eceef1" />
+        <input asp-for="NStartDate" nameNStartDate class="form-control form-control-lg" type="date" readonly style="background-color:#eceef1" />
         <span asp-validation-for="NStartDate" class="text-danger"></span>
     </div>
     <div class="col-6">
         <label asp-for="NEndDate" class="form-label fw-bold">New End Date</label>
-        <input asp-for="NEndDate" class="form-control form-control-lg" type="date" readonly style="background-color:#eceef1" />
+        <input asp-for="NEndDate" name="NEndDate" class="form-control form-control-lg" type="date" readonly style="background-color:#eceef1" />
         <span asp-validation-for="NEndDate" class="text-danger"></span>
     </div>
 </div>
 
 <script type="text/javascript">
     function updateDates() {
-        var previousEndDate = new Date($('#PEndDate').val());
-        var newEndDate = new Date($('#NEndDate').val());
+        // Get the value of PEndDate
+        var previousEndDateValue = $('#PEndDate').val();
 
-        var previousYear = previousEndDate.getFullYear();
-        var previousMonth = previousEndDate.getMonth(); // 0-based month
-
-        var newYear = newEndDate.getFullYear();
-        var newMonth = newEndDate.getMonth(); // 0-based month
-
-        // Calculate year difference
-        var yearDifference = newYear - previousYear;
-
-        // Calculate month difference
-        var monthDifference = newMonth - previousMonth;
-
-        // If month difference is negative, adjust the year
-        if (monthDifference < 0) {
-            monthDifference += 12; // Add 12 months
-            yearDifference -= 1;   // Subtract 1 year
+        // Check if PEndDate has a valid value
+        if (!previousEndDateValue) {
+            console.error("PEndDate is not set or is invalid.");
+            return; // Exit the function if PEndDate is invalid
         }
 
-        // Output the month and year differences
-        $('#Month').val(monthDifference); // Set the calculated month difference
-        $('#Year').val(yearDifference);   // Set the calculated year difference
+        // Convert PEndDate value to a Date object
+        var previousEndDate = new Date(previousEndDateValue);
+        if (isNaN(previousEndDate.getTime())) {
+            console.error("PEndDate is invalid.");
+            return; // Exit the function if PEndDate conversion fails
+        }
+
+        // Get selected Month and Year values
+        var monthDifference = parseInt($('#Month').val()) || 0;
+        var yearDifference = parseInt($('#Year').val()) || 0;
+
+        // Create a new date object based on Previous End Date
+        var newStartDate = new Date(previousEndDate);
+        var newEndDate = new Date(previousEndDate);
+
+        // Add the selected years and months to the new date
+        newEndDate.setFullYear(newEndDate.getFullYear() + yearDifference);
+        newEndDate.setMonth(newEndDate.getMonth() + monthDifference);
+
+        // Set NEndDate input with the calculated date in "yyyy-MM-dd" format
+        $('#NStartDate').val(newStartDate.toISOString().slice(0, 10));
+        $('#NEndDate').val(newEndDate.toISOString().slice(0, 10));
     }
 
-    // Call the updateDates function when needed, like on date input changes or on page load
     $(document).ready(function () {
+        // Initialize dates on page load
         updateDates();
-        $('#NEndDate').change(function () {
+
+        // Update NEndDate when Month or Year dropdown changes
+        $('#Month, #Year').change(function () {
             updateDates();
         });
     });
-
 </script>
