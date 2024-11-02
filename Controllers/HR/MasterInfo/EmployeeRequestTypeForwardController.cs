@@ -45,6 +45,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         }).ToList()
       };
 
+      if (!string.IsNullOrEmpty(searchEmployeeRequestTypeName) && viewModel.EmployeeRequestTypesWithRoleCount.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Employee Request Type found with the name '" + searchEmployeeRequestTypeName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/EmployeeRequestTypeForward/EmployeeRequestTypeForward.cshtml", viewModel);
     }
     public async Task<IActionResult> Edit(int id)
@@ -150,13 +155,15 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     [HttpPost]
     public IActionResult Delete(int id)
     {
-      var setup = _appDBContext.HR_EmployeeRequestTypeForwards.FirstOrDefault(x => x.EmployeeRequestTypeID == id);
-      if (setup == null)
+      var setups = _appDBContext.HR_EmployeeRequestTypeForwards
+        .Where(x => x.EmployeeRequestTypeID == id)
+        .ToList(); 
+      if (setups == null)
       {
         return Json(new { success = false, message = "Setup not found" });
       }
 
-      _appDBContext.HR_EmployeeRequestTypeForwards.Remove(setup);
+      _appDBContext.HR_EmployeeRequestTypeForwards.RemoveRange(setups);
       _appDBContext.SaveChanges();
       TempData["SuccessMessage"] = "Employee Request Type Forward deleted successfully.";
       return Json(new { success = true });

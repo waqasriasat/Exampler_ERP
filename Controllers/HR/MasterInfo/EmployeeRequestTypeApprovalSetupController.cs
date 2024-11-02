@@ -45,6 +45,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         }).ToList()
       };
 
+      if (!string.IsNullOrEmpty(searchEmployeeRequestTypeName) && viewModel.EmployeeRequestTypesWithRankCount.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Employee Request Type found with the name '" + searchEmployeeRequestTypeName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/EmployeeRequestTypeApprovalSetup/EmployeeRequestTypeApprovalSetup.cshtml", viewModel);
     }
 
@@ -157,17 +162,21 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     [HttpPost]
     public IActionResult Delete(int id)
     {
-      var setup = _appDBContext.HR_EmployeeRequestTypeApprovalSetups.FirstOrDefault(x => x.EmployeeRequestTypeID == id);
-      if (setup == null)
+      var setups = _appDBContext.HR_EmployeeRequestTypeApprovalSetups
+          .Where(x => x.EmployeeRequestTypeID == id)
+          .ToList();
+
+      if (setups == null || setups.Count == 0)
       {
         return Json(new { success = false, message = "Setup not found" });
       }
 
-      _appDBContext.HR_EmployeeRequestTypeApprovalSetups.Remove(setup);
+      _appDBContext.HR_EmployeeRequestTypeApprovalSetups.RemoveRange(setups);
       _appDBContext.SaveChanges();
       TempData["SuccessMessage"] = "Employee Request Type Approval Setups deleted successfully.";
       return Json(new { success = true });
     }
+
 
 
     public async Task<IActionResult> ExportToExcel()

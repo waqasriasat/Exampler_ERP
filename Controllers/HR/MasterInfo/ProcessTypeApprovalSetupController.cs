@@ -48,6 +48,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         }).ToList()
       };
 
+      if (!string.IsNullOrEmpty(searchProcessTypeName) && viewModel.ProcessTypesWithRankCount.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Process Type found with the name '" + searchProcessTypeName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/ProcessTypeApprovalSetup/ProcessTypeApprovalSetup.cshtml", viewModel);
     }
 
@@ -160,13 +165,15 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     [HttpPost]
     public IActionResult Delete(int id)
     {
-      var setup = _appDBContext.CR_ProcessTypeApprovalSetups.FirstOrDefault(x => x.ProcessTypeID == id);
-      if (setup == null)
+      var setups = _appDBContext.CR_ProcessTypeApprovalSetups
+        .Where(x => x.ProcessTypeID == id)
+        .ToList();
+      if (setups == null)
       {
         return Json(new { success = false, message = "Setup not found" });
       }
 
-      _appDBContext.CR_ProcessTypeApprovalSetups.Remove(setup);
+      _appDBContext.CR_ProcessTypeApprovalSetups.RemoveRange(setups);
       _appDBContext.SaveChanges();
       TempData["SuccessMessage"] = "Process Type Approval Setups deleted successfully.";
       return Json(new { success = true });

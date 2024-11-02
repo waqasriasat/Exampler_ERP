@@ -58,6 +58,11 @@
             var printWindow = window.open('@Url.Action("Print", "FaceAttendanceReport")', '_blank');
             printWindow.focus();
         }
+
+        $('#searchEmployeeButton').click(function () {
+            var searchValue = $('#searchEmployeeInput').val();
+            window.location.href = '@Url.Action("Index", "FaceAttendanceReport")?id=' + searchValue;
+        });
     </script>
 }
 <h4 class="py-3 mb-4">

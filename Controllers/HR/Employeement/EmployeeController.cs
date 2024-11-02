@@ -33,18 +33,28 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       var employees = await employeesQuery.ToListAsync();
 
+      if (id.HasValue && id == 0)
+      {
+        TempData["ErrorMessage"] = "No User found. Please check the name and try again.";
+      }
       return View("~/Views/HR/Employeement/Employee/Employee.cshtml", employees);
     }
 
 
     public async Task<IActionResult> GetEmployeeSuggestions(string term)
     {
-      return Json(await _utils.GetSearchingEmployee(term));
+      var result = await _utils.GetSearchingEmployee(term);
+      if (!string.IsNullOrEmpty(term) && result.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Employee found with the name '" + term + "'. Please check the name and try again.";
+      }
+      return Json(result);
     }
 
     public async Task<IActionResult> Employee()
     {
       var employees = await _appDBContext.HR_Employees.ToListAsync();
+
       return Ok(employees);
     }// Add the Edit action
     public async Task<IActionResult> Edit(int id)

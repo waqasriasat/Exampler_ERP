@@ -46,6 +46,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         }).ToList()
       };
 
+      if (!string.IsNullOrEmpty(searchProcessTypeName) && viewModel.ProcessTypesWithRoleCount.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Process Type found with the name '" + searchProcessTypeName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/ProcessTypeForward/ProcessTypeForward.cshtml", viewModel);
     }
     public async Task<IActionResult> Edit(int id)
@@ -151,13 +156,15 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     [HttpPost]
     public IActionResult Delete(int id)
     {
-      var setup = _appDBContext.CR_ProcessTypeForwards.FirstOrDefault(x => x.ProcessTypeID == id);
-      if (setup == null)
+      var setups = _appDBContext.CR_ProcessTypeForwards
+        .Where(x => x.ProcessTypeID == id)
+        .ToList();
+      if (setups == null)
       {
         return Json(new { success = false, message = "Setup not found" });
       }
 
-      _appDBContext.CR_ProcessTypeForwards.Remove(setup);
+      _appDBContext.CR_ProcessTypeForwards.RemoveRange(setups);
       _appDBContext.SaveChanges();
       TempData["SuccessMessage"] = "Process Type Forward deleted successfully.";
       return Json(new { success = true });

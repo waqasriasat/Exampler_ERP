@@ -29,6 +29,12 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       var Applicants = await ApplicantsQuery.ToListAsync();
 
+
+      if (id.HasValue && id == 0)
+      {
+        TempData["ErrorMessage"] = "No Applicant Found.";
+      }
+
       return View("~/Views/HR/Employeement/Applicant/Applicant.cshtml", Applicants);
     }
 
@@ -69,6 +75,11 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           })
           .ToListAsync();
 
+
+      if (!string.IsNullOrEmpty(term) && applicants.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Applicant found with the name '" + term + "'. Please check the name and try again.";
+      }
       // Return the result as JSON for autocomplete
       return Json(applicants);
     }

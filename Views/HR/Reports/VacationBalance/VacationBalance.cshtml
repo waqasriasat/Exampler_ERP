@@ -50,7 +50,10 @@
             var printWindow = window.open('@Url.Action("Print", "VacationBalance")', '_blank');
             printWindow.focus();
         }
-
+        $('#searchEmployeeButton').click(function () {
+            var searchValue = $('#searchEmployeeInput').val();
+            window.location.href = '@Url.Action("Index", "VacationBalance")?id=' + searchValue;
+        });
     </script>
 }
 

@@ -1158,5 +1158,5 @@ a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:h
 }
 
   .alert.show {
-    top: 0px; /* Slides to this position */
+    top: 0px; /* Adjust this position as needed */
   }

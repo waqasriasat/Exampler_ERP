@@ -69,6 +69,10 @@
 
 
         });
+        $('#searchEmployeeButton').click(function () {
+            var searchValue = $('#searchEmployeeInput').val();
+            window.location.href = '@Url.Action("Index", "EducationDocument")?id=' + searchValue;
+        });
     </script>
 }
 

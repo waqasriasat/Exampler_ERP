@@ -64,6 +64,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         EmployeeCount = employeeCounts
       };
 
+
       return View("~/Views/HR/Employeement/Salary/Salary.cshtml", viewModel);
     }
 

@@ -5,19 +5,46 @@
 
 
 
+//$(document).ready(function () {
+//  // Show success message with slide-in effect
+//  if ($('#successMessage').length) {
+//    $('#successMessage').css('display', 'block').addClass('show').delay(5000).slideUp('slow', function () {
+//      console.log($('#successMessage'), "abc");
+//      $(this).remove();
+//    });
+//  }
+
+//  // Show error message with slide-in effect
+//  if ($('#errorMessage').length) {
+//    $('#errorMessage').css('display', 'block').addClass('show').delay(5000).slideUp('slow', function () {
+//      console.log($('#successMessage'), "abc2");
+//      $(this).remove();
+//    });
+//  }
+//});
+
 $(document).ready(function () {
   // Show success message with slide-in effect
   if ($('#successMessage').length) {
-    $('#successMessage').css('display', 'block').addClass('show').delay(5000).slideUp('slow', function () {
+    $('#successMessage').css('display', 'block'); // Make it visible first
+    setTimeout(function () {
+      $('#successMessage').addClass('show'); // Add class to trigger the slide effect
+    }, 10); // Small delay to allow CSS transition to work
+
+    $('#successMessage').delay(5000).slideUp('slow', function () {
       $(this).remove();
     });
   }
 
   // Show error message with slide-in effect
   if ($('#errorMessage').length) {
-    $('#errorMessage').css('display', 'block').addClass('show').delay(5000).slideUp('slow', function () {
+    $('#errorMessage').css('display', 'block'); // Make it visible first
+    setTimeout(function () {
+      $('#errorMessage').addClass('show'); // Add class to trigger the slide effect
+    }, 10); // Small delay to allow CSS transition to work
+
+    $('#errorMessage').delay(5000).slideUp('slow', function () {
       $(this).remove();
     });
   }
 });
-

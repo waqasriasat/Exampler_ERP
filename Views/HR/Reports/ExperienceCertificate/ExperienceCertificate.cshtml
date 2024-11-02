@@ -70,6 +70,10 @@
             });
 
         });
+        $('#searchEmployeeButton').click(function () {
+            var searchValue = $('#searchEmployeeInput').val();
+            window.location.href = '@Url.Action("Index", "ExperienceCertificate")?id=' + searchValue;
+        });
     </script>
 }
 

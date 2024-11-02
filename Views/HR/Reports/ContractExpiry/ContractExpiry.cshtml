@@ -50,7 +50,10 @@
             var printWindow = window.open('@Url.Action("Print", "ContractExpiry")', '_blank');
             printWindow.focus();
         }
-
+        $('#searchEmployeeButton').click(function () {
+            var searchValue = $('#searchEmployeeInput').val();
+            window.location.href = '@Url.Action("Index", "ContractExpiry")?id=' + searchValue;
+        });
     </script>
 }
 

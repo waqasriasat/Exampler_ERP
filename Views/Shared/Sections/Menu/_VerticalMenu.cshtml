@@ -94,6 +94,7 @@
                     currentPage.StartsWith("/EducationDocument/Index")||
                     currentPage.StartsWith("/ProcessApprovalDetail/Index")||
                     currentPage.StartsWith("/EmployeeRequestApprovalDetail/Index")||
+                    currentPage.StartsWith("/ApprovedMonthlySalarySheet/Index")||
                     currentPage.StartsWith("/MonthlyPayslip/Index")||
                     currentPage.StartsWith("/FaceAttendanceReport/Index") ? " active open" : "")'>
             <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -154,7 +155,7 @@
                                       currentPage == "/VacationReport/Index"|| currentPage == "/ExperienceCertificate/Index" ||
                                       currentPage == "/EducationDocument/Index"|| currentPage == "/ProcessApprovalDetail/Index" ||
                                       currentPage == "/EmployeeRequestApprovalDetail/Index"|| currentPage == "/FaceAttendanceReport/Index"||
-                                      currentPage == "/MonthlyPayslip/Index"  ? " active" : "")'>
+                                      currentPage == "/MonthlyPayslip/Index"|| currentPage == "/ApprovedMonthlySalarySheet/Index"  ? " active" : "")'>
                     <a asp-controller="Report_Dashboard" asp-action="Index" class="menu-link">
                         <div>Report</div>
                     </a>

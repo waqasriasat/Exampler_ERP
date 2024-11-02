@@ -34,6 +34,12 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           .Include(c => c.Employee).
           ToListAsync();
 
+
+      if (id.HasValue && id == 0)
+      {
+        TempData["ErrorMessage"] = "No Contract Found.";
+      }
+
       return View("~/Views/HR/Employeement/Contract/Contract.cshtml", contracts);
     }
   

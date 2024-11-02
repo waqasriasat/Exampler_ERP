@@ -46,6 +46,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         }).ToList()
       };
 
+      if (!string.IsNullOrEmpty(searchDeductionTypeName) && viewModel.DeductionTypeWithRowCount.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Deduction Type found with the name '" + searchDeductionTypeName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/DeductionSetup/DeductionSetup.cshtml", viewModel);
     }
 

@@ -93,6 +93,10 @@
             var printWindow = window.open('@Url.Action("Print", "FixedDeduction")', '_blank');
             printWindow.focus();
         }
+        $('#searchEmployeeButton').click(function () {
+            var searchValue = $('#searchEmployeeInput').val();
+            window.location.href = '@Url.Action("Index", "FixedDeduction")?id=' + searchValue;
+        });
     </script>
 }
 <h4 class="py-3 mb-4">
