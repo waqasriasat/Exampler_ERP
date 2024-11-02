@@ -52,14 +52,13 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
       if (FatchExistingPosting != null)
       {
-        ViewBag.Message = "Payroll has already been generated for this period.";
         ViewBag.MonthsTypeID = MonthsTypeID;
         ViewBag.YearsTypeID = YearsTypeID;
         ViewBag.Branch = Branch;
 
         ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
         ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
-
+        TempData["ErrorMessage"] = "Already posting found for the specified branch, month, and year.";
         return View("~/Views/HR/Financial/MonthlySalarySheet/MonthlySalarySheet.cshtml", new List<MonthlySalarySheetViewModel>());
       }
 
@@ -243,7 +242,8 @@ namespace Exampler_ERP.Controllers.HR.Financial
             }
             else
             {
-              return Json(new { success = false, message = "Next approval setup not found." });
+              TempData["ErrorMessage"] = "Next approval setup not found.";
+              return Json(new { success = false});
             }
           }
           else
@@ -382,14 +382,16 @@ namespace Exampler_ERP.Controllers.HR.Financial
             monthlyPayrollPosted.FinalApprovalID = 1;
             _appDBContext.HR_MonthlyPayrollPosteds.Update(monthlyPayrollPosted);
             await _appDBContext.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Salary created successfully. No process setup found, Salary activated.";
             return Json(new { success = true, message = "No process setup found." });
           }
         }
-
+        TempData["SuccessMessage"] = "Salary Created successfully. Continue to the Approval Process Setup for Salary Final Approved.";
         return Json(new { success = true });
       }
       catch (Exception ex)
       {
+        TempData["ErrorMessage"] = "Error updating Salary. " + ex;
         // Handle the error and return failure response
         return Json(new { success = false, message = ex.Message });
       }

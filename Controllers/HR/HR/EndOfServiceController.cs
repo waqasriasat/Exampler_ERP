@@ -197,14 +197,15 @@ namespace Exampler_ERP.Controllers.HR.HR
               employee.ActiveYNID = 2; // Deactivate employee
             }
             await _appDBContext.SaveChangesAsync();
+            TempData["SuccessMessage"] = "EndOfService Created successfully. No process setup found, Employee deactivated.";
             return Json(new { success = true, message = "No process setup found, Employee deactivated." });
           }
         }
 
+        TempData["SuccessMessage"] = "EndOfService Created successfully. Continue to the Approval Process Setup for Employee deactivated.";
         return Json(new { success = true });
       }
-
-      // If the model state is invalid, return the view with validation errors
+      TempData["ErrorMessage"] = "Error creating EndOfService. Please check the inputs.";
       return PartialView("~/Views/HR/HR/EndOfService/AddEndOfService.cshtml", endofservice);
     }
 
@@ -232,11 +233,13 @@ namespace Exampler_ERP.Controllers.HR.HR
       {
         _appDBContext.Update(endofservice);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "EndOfService Updated successfully.";
         return Json(new { success = true });
      }
 
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.EndOfServiceReasonTypesList = await _utils.GetEndOfServiceReasonTypes();
+      TempData["ErrorMessage"] = "Error Updating EndOfService. Please check the inputs.";
       return PartialView("~/Views/HR/HR/EndOfService/EditEndOfService.cshtml", endofservice);
     }
     public async Task<IActionResult> Delete(int id)
@@ -251,7 +254,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       _appDBContext.HR_EndOfServices.Update(endofservice);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Employee Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> Print()

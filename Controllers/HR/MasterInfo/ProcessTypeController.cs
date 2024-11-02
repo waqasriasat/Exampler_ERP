@@ -32,6 +32,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       var ProcessTypes = await ProcessTypesQuery.ToListAsync();
 
+      if (!string.IsNullOrEmpty(searchProcessTypeName) && ProcessTypes.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Process Type found with the name '" + searchProcessTypeName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/ProcessType/ProcessType.cshtml", ProcessTypes);
     }
    

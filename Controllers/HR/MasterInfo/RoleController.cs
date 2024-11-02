@@ -32,6 +32,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       var RoleTypes = await RoleTypesQuery.ToListAsync();
 
+      if (!string.IsNullOrEmpty(searchRoleTypeName) && RoleTypes.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Role found with the name '" + searchRoleTypeName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/Role/Role.cshtml", RoleTypes);
     }
    

@@ -8,14 +8,14 @@
 $(document).ready(function () {
   // Show success message with slide-in effect
   if ($('#successMessage').length) {
-    $('#successMessage').addClass('show').delay(5000).slideUp('slow', function () {
+    $('#successMessage').css('display', 'block').addClass('show').delay(5000).slideUp('slow', function () {
       $(this).remove();
     });
   }
 
   // Show error message with slide-in effect
   if ($('#errorMessage').length) {
-    $('#errorMessage').addClass('show').delay(5000).slideUp('slow', function () {
+    $('#errorMessage').css('display', 'block').addClass('show').delay(5000).slideUp('slow', function () {
       $(this).remove();
     });
   }

@@ -30,19 +30,20 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       string encryptedText1 = CR_CipherKey.Encrypt(plainText1);
       Console.WriteLine($"Encrypted: {encryptedText1}");
 
-      // Query to fetch all non-deleted branch types
       var branchesQuery = _appDBContext.Settings_BranchTypes
           .Where(b => b.DeleteYNID != 1);
 
-      // Apply search filter if provided
       if (!string.IsNullOrEmpty(searchBranchName))
       {
         branchesQuery = branchesQuery.Where(b => b.BranchTypeName.Contains(searchBranchName));
       }
 
-      // Execute the query and convert the result to a list
       var branches = await branchesQuery.ToListAsync();
 
+      if (!string.IsNullOrEmpty(searchBranchName) && branches.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No branch found with the name '"+ searchBranchName + "'. Please check the name and try again.";
+      }
       return View("~/Views/HR/MasterInfo/Branch/Branch.cshtml", branches);
     }
 

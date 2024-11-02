@@ -25,6 +25,26 @@ namespace Exampler_ERP.Controllers.HR.HR
     }
     public async Task<IActionResult> Index(int? Branch, int? MonthsTypeID, int? YearsTypeID)
     {
+      var FatchExistingOverTimePosting = await _appDBContext.HR_OverTimes
+        .Where(e => e.PostedID == 1 && e.MonthTypeID == MonthsTypeID && e.Year == YearsTypeID)
+        .FirstOrDefaultAsync();
+
+      var FatchExistingDeductionPosting = await _appDBContext.HR_Deductions
+        .Where(e => e.PostedID == 1 && e.Month == MonthsTypeID && e.Year == YearsTypeID)
+        .FirstOrDefaultAsync();
+
+      if (FatchExistingOverTimePosting != null || FatchExistingDeductionPosting != null)
+      {
+        TempData["ErrorMessage"] = "Already posting found for the specified branch, month, and year.";
+        ViewBag.MonthsTypeID = MonthsTypeID;
+        ViewBag.YearsTypeID = YearsTypeID;
+        ViewBag.Branch = Branch;
+
+        ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
+        ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
+        return View("~/Views/HR/HR/FaceAttendanceForwarding/FaceAttendanceForwarding.cshtml");
+      }
+
       var attendanceRecords = new List<FaceAttendanceForwardingViewModel>();
       var connectionString = _configuration.GetConnectionString("AppDb");
       using (SqlConnection connection = new SqlConnection(connectionString))
@@ -32,7 +52,7 @@ namespace Exampler_ERP.Controllers.HR.HR
         using (SqlCommand command = new SqlCommand("GetFaceAttendanceForwarding", connection))
         {
           command.CommandType = CommandType.StoredProcedure;
-          command.Parameters.AddWithValue("@MonthID", MonthsTypeID ?? 10); // Default to October if null
+          command.Parameters.AddWithValue("@MonthID", MonthsTypeID ?? 1); // Default to October if null
           command.Parameters.AddWithValue("@YearID", YearsTypeID ?? 2024); // Default to 2024 if null
           command.Parameters.AddWithValue("@BranchID", Branch ?? 1); // Set your branch ID accordingly
 
@@ -68,7 +88,7 @@ namespace Exampler_ERP.Controllers.HR.HR
               }
               catch (InvalidCastException ex)
               {
-                Console.WriteLine("InvalidCastException occurred: " + ex.Message);
+                TempData["ErrorMessage"] = "InvalidCastException occurred: " + ex.Message;
               }
             }
           }
@@ -168,11 +188,12 @@ namespace Exampler_ERP.Controllers.HR.HR
         }
 
         await _appDBContext.SaveChangesAsync();
-
+        TempData["SuccessMessage"] = "Successfully Posted.";
         return Json(new { success = true });
       }
       catch (Exception ex)
       {
+        TempData["ErrorMessage"] = "InvalidCastException occurred: " + ex.Message;
         return Json(new { success = false, message = ex.Message });
       }
     }

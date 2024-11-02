@@ -32,6 +32,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       var OverTimeRates = await OverTimeRatesQuery.ToListAsync();
 
+      if (OverTimeRates.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Over Time Rate found.";
+      }
+
       return View("~/Views/HR/MasterInfo/OverTimeRate/OverTimeRate.cshtml", OverTimeRates);
     }
   

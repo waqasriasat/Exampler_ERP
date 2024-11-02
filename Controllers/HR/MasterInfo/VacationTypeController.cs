@@ -32,6 +32,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       var VacationTypes = await VacationTypesQuery.ToListAsync();
 
+      if (!string.IsNullOrEmpty(searchVacationTypeName) && VacationTypes.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Vacation Type found with the name '" + searchVacationTypeName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/VacationType/VacationType.cshtml", VacationTypes);
     }
     public async Task<IActionResult> VacationType()

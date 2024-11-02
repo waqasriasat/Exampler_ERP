@@ -21,21 +21,22 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Index(string searchSectionName)
     {
-      // Query to fetch all non-deleted Section types and include BranchType details
       var SectionsQuery = _appDBContext.Settings_SectionTypes
           .Where(d => d.DeleteYNID != 1);
 
-      // Apply search filter if provided
       if (!string.IsNullOrEmpty(searchSectionName))
       {
         SectionsQuery = SectionsQuery.Where(d => d.SectionTypeName.Contains(searchSectionName));
       }
 
-      // Execute the query and convert the result to a list
       var Sections = await SectionsQuery
           .Include(d => d.DepartmentType).ToListAsync();
 
-      // Return the filtered list to the view
+      if (!string.IsNullOrEmpty(searchSectionName) && Sections.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Section found with the name '" + searchSectionName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/Section/Section.cshtml", Sections);
     }
   

@@ -32,6 +32,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       var EmployeeRequestTypes = await EmployeeRequestTypesQuery.ToListAsync();
 
+      if (!string.IsNullOrEmpty(searchEmployeeRequestTypeName) && EmployeeRequestTypes.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Employee Request Type found with the name '" + searchEmployeeRequestTypeName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/EmployeeRequestType/EmployeeRequestType.cshtml", EmployeeRequestTypes);
     }
 

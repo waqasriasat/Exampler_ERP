@@ -16,8 +16,6 @@
                    
                     var employeeID = $(this).find('.employeeID').val();
                     var markDate = $(this).find('.markDate').val();
-                    console.log("markDate value:", markDate);
-                    debugger;
                     var lateComingDeduction = $(this).find('.lateComingDeduction').val();
                     var earlyGoingDeduction = $(this).find('.earlyGoingDeduction').val(); 
                     var earlyComingGraceTime = $(this).find('.earlyComingGraceTime').val(); 
@@ -47,10 +45,11 @@
                     },
                     success: function (response) {
                         if (response.success) {
-                            alert("Posted ID updated successfully!");
-                            // Clear the search results or do any additional UI handling
+                           
+                            location.reload();
                         } else {
-                            alert("Error: " + response.message);
+                           
+                            location.reload();
                         }
                     },
                     error: function () {

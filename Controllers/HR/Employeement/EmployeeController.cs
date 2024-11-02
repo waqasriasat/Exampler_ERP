@@ -89,7 +89,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         TempData["SuccessMessage"] = "Employee Updated successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error Updating Role. Please check the inputs.";
+      TempData["ErrorMessage"] = "Error Updating Employee. Please check the inputs.";
       return PartialView("~/Views/HR/Employeement/Employee/EditEmployee.cshtml", employee);
     }
     [HttpGet]

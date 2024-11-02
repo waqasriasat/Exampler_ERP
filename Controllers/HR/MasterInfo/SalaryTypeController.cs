@@ -32,6 +32,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       var SalaryTypes = await SalaryTypesQuery.ToListAsync();
 
+      if (!string.IsNullOrEmpty(searchSalaryTypeName) && SalaryTypes.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Salary Type found with the name '" + searchSalaryTypeName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/SalaryType/SalaryType.cshtml", SalaryTypes);
     }
     public async Task<IActionResult> SalaryType()

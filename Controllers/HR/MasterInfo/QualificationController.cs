@@ -32,6 +32,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       var Qualificationes = await QualificationesQuery.ToListAsync();
 
+      if (!string.IsNullOrEmpty(searchQualificationName) && Qualificationes.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Qualification found with the name '" + searchQualificationName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/Qualification/Qualification.cshtml", Qualificationes);
     }
     

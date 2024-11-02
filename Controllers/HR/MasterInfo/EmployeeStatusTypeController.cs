@@ -32,6 +32,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       var EmployeeStatusTypes = await EmployeeStatusTypesQuery.ToListAsync();
 
+      if (!string.IsNullOrEmpty(searchEmployeeStatusTypeName) && EmployeeStatusTypes.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Employee Status Type found with the name '" + searchEmployeeStatusTypeName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/EmployeeStatusType/EmployeeStatusType.cshtml", EmployeeStatusTypes);
     }
  

@@ -32,6 +32,12 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       var Designations = await DesignationsQuery.ToListAsync();
 
+
+      if (!string.IsNullOrEmpty(searchDesignationName) && Designations.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Designation found with the name '" + searchDesignationName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/Designation/Designation.cshtml", Designations);
     }
    

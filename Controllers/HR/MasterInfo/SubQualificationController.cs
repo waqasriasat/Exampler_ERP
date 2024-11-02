@@ -32,6 +32,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       var SubQualifications = await SubQualificationsQuery.Include(d => d.QualificationType).ToListAsync();
 
+      if (!string.IsNullOrEmpty(searchSubQualificationName) && SubQualifications.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No SubQualification found with the name '" + searchSubQualificationName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/SubQualification/SubQualification.cshtml", SubQualifications);
     }
 

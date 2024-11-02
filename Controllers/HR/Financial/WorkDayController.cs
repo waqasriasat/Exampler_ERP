@@ -89,18 +89,17 @@ namespace Exampler_ERP.Controllers.HR.Financial
         {
           _appDBContext.HR_WorkDays.Update(WorkDay);
           await _appDBContext.SaveChangesAsync();
+          TempData["SuccessMessage"] = "WorkDay updated successfully.";
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
-          ModelState.AddModelError("", "Unable to save changes: " + ex.Message);
+          TempData["ErrorMessage"] = "Unable to save changes: " + ex.Message;
         }
       }
 
-      // If model state is invalid, reload dropdowns or lists
       ViewBag.EmployeeList = await _utils.GetEmployee();
-  
-      // Return the partial view with validation errors
+      TempData["ErrorMessage"] = "Error updating WorkDay. Please check the inputs.";
       return PartialView("~/Views/HR/financial/WorkDay/EditWorkDay.cshtml", WorkDay);
     }
 
@@ -119,8 +118,10 @@ namespace Exampler_ERP.Controllers.HR.Financial
         WorkDay.DeleteYNID = 0;
         _appDBContext.HR_WorkDays.Add(WorkDay);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "WorkDay created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating WorkDay. Please check the inputs.";
       return PartialView("~/Views/HR/financial/WorkDay/AddWorkDay.cshtml", WorkDay);
     }
     public async Task<IActionResult> Delete(int id)
@@ -135,7 +136,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
       _appDBContext.HR_WorkDays.Update(WorkDay);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "WorkDay deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

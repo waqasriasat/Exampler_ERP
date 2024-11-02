@@ -94,7 +94,8 @@ namespace Exampler_ERP.Controllers.HR.Financial
         }
         else
         {
-          return NotFound(); // Handle accordingly if the Employee is not found
+          TempData["ErrorMessage"] = "Employees Not Found.";
+          return NotFound(); 
         }
       }
 
@@ -117,6 +118,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
       if (FixedDeductionDetails == null || FixedDeductionDetails.Count == 0)
       {
+        TempData["ErrorMessage"] = "No data received for edit.";
         _logger.LogWarning("No data received for edit.");
         return Json(new { success = false, message = "No data received." });
       }
@@ -210,7 +212,8 @@ namespace Exampler_ERP.Controllers.HR.Financial
                 }
                 else
                 {
-                  return Json(new { success = false, message = "Next approval setup not found." });
+                  TempData["ErrorMessage"] = "Next approval setup not found.";
+                  return Json(new { success = false });
                 }
               }
               else
@@ -218,21 +221,24 @@ namespace Exampler_ERP.Controllers.HR.Financial
                 FixedDeduction.FinalApprovalID = 1;
                 _appDBContext.HR_FixedDeductions.Update(FixedDeduction);
                 await _appDBContext.SaveChangesAsync();
-                return Json(new { success = true, message = "No process setup found, User activated." });
+                TempData["SuccessMessage"] = "Fixed Deduction created successfully. No process setup found, Fixed Deduction activated.";
+                return Json(new { success = true});
               }
             }
           }
-
+          TempData["SuccessMessage"] = "Fixed Deduction Created successfully. Continue to the Approval Process Setup for Fixed Deduction Final Approved.";
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
+          TempData["ErrorMessage"] = "Error updating FixedDeductionDetails. " + ex;
           _logger.LogError(ex, "Error updating FixedDeductionDetails");
-          return Json(new { success = false, message = "An error occurred while updating the data." });
+          return Json(new { success = false});
         }
       }
 
       var errors = ModelState.Values.SelectMany(v => v.Errors);
+      TempData["ErrorMessage"] = "Error updating FixedDeductionDetails. " + errors;
       return PartialView("~/Views/HR/Financial/FixedDeduction/EditFixedDeduction.cshtml", FixedDeductionDetails);
     }
 

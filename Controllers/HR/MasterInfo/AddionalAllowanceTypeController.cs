@@ -31,6 +31,12 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       var AddionalAllowanceTypes = await AddionalAllowanceTypesQuery.ToListAsync();
 
+
+      if (!string.IsNullOrEmpty(searchAddionalAllowanceTypeName) && AddionalAllowanceTypes.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No AllowanceType found with the name '" + searchAddionalAllowanceTypeName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/AddionalAllowanceType/AddionalAllowanceType.cshtml", AddionalAllowanceTypes);
     }
   

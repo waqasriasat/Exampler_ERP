@@ -88,17 +88,19 @@ namespace Exampler_ERP.Controllers.HR.HR
 
           _appDBContext.CR_FaceAttendances.Update(FaceAttendance);
           await _appDBContext.SaveChangesAsync();
+          TempData["SuccessMessage"] = "Attendance updated successfully.";
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
+          TempData["ErrorMessage"] = "Error updating Attendance. Please check the inputs.";
           ModelState.AddModelError("", "Unable to save changes: " + ex.Message);
         }
       }
 
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
-
+      TempData["ErrorMessage"] = "Error updating Attendance. Please check the inputs.";
       return PartialView("~/Views/HR/HR/FaceAttendanceTimeAdjust/EditFaceAttendanceTimeAdjust.cshtml", FaceAttendance);
     }
     [HttpGet]
@@ -125,8 +127,10 @@ namespace Exampler_ERP.Controllers.HR.HR
 
         _appDBContext.CR_FaceAttendances.Add(FaceAttendance);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Attendance created successfully.";
         return Json(new { success = true });
       }
+      TempData["ErrorMessage"] = "Error creating Attendance. Please check the inputs.";
       return PartialView("~/Views/HR/HR/FaceAttendanceTimeAdjust/AddFaceAttendanceTimeAdjust.cshtml", FaceAttendance);
     }
     public async Task<IActionResult> Delete(int id)
@@ -141,7 +145,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       _appDBContext.CR_FaceAttendances.Update(FaceAttendance);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Attendance Deleted successfully.";
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

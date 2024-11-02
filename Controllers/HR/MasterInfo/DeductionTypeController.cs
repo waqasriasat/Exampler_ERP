@@ -32,6 +32,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       var DeductionTypes = await DeductionTypesQuery.ToListAsync();
 
+      if (!string.IsNullOrEmpty(searchDeductionTypeName) && DeductionTypes.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No DeductionType found with the name '" + searchDeductionTypeName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/DeductionType/DeductionType.cshtml", DeductionTypes);
     }
   

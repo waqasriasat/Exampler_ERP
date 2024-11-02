@@ -24,21 +24,23 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Index(string searchDepartmentName)
     {
-      // Query to fetch all non-deleted Department types and include BranchType details
       var departmentsQuery = _appDBContext.Settings_DepartmentTypes
           .Where(d => d.DeleteYNID != 1);
 
-      // Apply search filter if provided
       if (!string.IsNullOrEmpty(searchDepartmentName))
       {
         departmentsQuery = departmentsQuery.Where(d => d.DepartmentTypeName.Contains(searchDepartmentName));
       }
 
-      // Execute the query and convert the result to a list
       var departments = await departmentsQuery
           .Include(d => d.BranchType).ToListAsync();
 
-      // Return the filtered list to the view
+
+      if (!string.IsNullOrEmpty(searchDepartmentName) && departments.Count == 0)
+      {
+        TempData["ErrorMessage"] = "No Department found with the name '" + searchDepartmentName + "'. Please check the name and try again.";
+      }
+
       return View("~/Views/HR/MasterInfo/Department/Department.cshtml", departments);
     }
 
