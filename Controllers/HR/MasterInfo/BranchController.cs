@@ -3,6 +3,7 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using OfficeOpenXml;
 using System.Drawing.Printing;
 
@@ -69,13 +70,18 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(branch.BranchTypeName))
+        {
+          return Json(new { success = false, message = "Branch Name field is required. Please enter a valid text value." });
+        }
+
+       
         _appDBContext.Update(branch);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Branch updated successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error updating branch. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/Branch/EditBranch.cshtml", branch);
+      return Json(new { success = false, message = "Error creating branch. Please check the inputs." });
     }
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -89,16 +95,33 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(branch.BranchTypeName))
+        {
+          return Json(new { success = false, message = "Branch Name field is required. Please enter a valid text value." });
+        }
+
+        var existingBranchName = await _appDBContext.Settings_BranchTypes
+            .Where(pta => pta.BranchTypeName == branch.BranchTypeName && pta.DeleteYNID==0)
+            .FirstOrDefaultAsync();
+
+        if (existingBranchName != null)
+        {
+          return Json(new { success = false, message = "The Branch Name you entered already exists. Please choose a different name." });
+        }
+
         branch.Date = DateTime.Now;
         branch.DeleteYNID = 0;
+
         _appDBContext.Settings_BranchTypes.Add(branch);
         await _appDBContext.SaveChangesAsync();
+
         TempData["SuccessMessage"] = "Branch created successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating branch. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/Branch/AddBranch.cshtml", branch);
+
+      return Json(new { success = false, message = "Error creating branch. Please check the inputs." });
     }
+
     public async Task<IActionResult> Delete(int id)
     {
       var branch = await _appDBContext.Settings_BranchTypes.FindAsync(id);

@@ -25,6 +25,7 @@
                         // Reload the page or update the part of the page with the updated data
                         location.reload();
                     } else {
+                        showAlert(response.message);
                         // Show validation errors
                     }
                 });
@@ -46,6 +47,7 @@
                         $('#addBranchModal').modal('hide');
                         location.reload(); // Reload the page to reflect changes
                     } else {
+                        showAlert(response.message);
                         // Handle validation errors or other cases
                     }
                 });

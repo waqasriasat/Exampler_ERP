@@ -181,416 +181,442 @@ namespace Exampler_ERP.Controllers.MasterInfo
     }
 
     [HttpPost]
-    public async Task<IActionResult> Approved(CR_ProcessTypeApprovalDetail processTypeApprovalDetail, IFormFile FileUpload, int ProcessTypeID, int TransactionID)
+    public async Task<IActionResult> Approved(CR_ProcessTypeApprovalDetail processTypeApprovalDetail, IFormFile FileUpload, int ProcessTypeID, int TransactionID, string Password)
     {
       if (ModelState.IsValid)
       {
-        processTypeApprovalDetail.AppID = 1;
-        processTypeApprovalDetail.AppUserID = HttpContext.Session.GetInt32("UserID") ?? default(int);
-        processTypeApprovalDetail.Date = DateTime.Now;
-
-        if (FileUpload != null && FileUpload.Length > 0)
+        if (Password == null)
         {
-          using (var memoryStream = new MemoryStream())
-          {
-            await FileUpload.CopyToAsync(memoryStream);
-
-            var processTypeApprovalDetailDoc = new CR_ProcessTypeApprovalDetailDoc
-            {
-              ProcessTypeApprovalDetailID = processTypeApprovalDetail.ProcessTypeApprovalDetailID,
-              Doc = memoryStream.ToArray(),
-              DocName = FileUpload.FileName,
-              DocExt = Path.GetExtension(FileUpload.FileName)
-            };
-
-            processTypeApprovalDetail.ProcessTypeApprovalDetailDoc.Add(processTypeApprovalDetailDoc);
-          }
-        }
-
-        _appDBContext.Update(processTypeApprovalDetail);
-        await _appDBContext.SaveChangesAsync();
-
-        var processTypeId = ProcessTypeID;
-        var transactionID = TransactionID;
-        var currentRank = processTypeApprovalDetail.Rank;
-
-        var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
-            .Where(pta => pta.ProcessTypeID == processTypeId && pta.Rank == currentRank + 1)
-            .FirstOrDefaultAsync();
-
-        if (nextApprovalSetup != null)
-        {
-          var newApprovalSetup = new CR_ProcessTypeApprovalDetail
-          {
-            ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID,
-            Date = processTypeApprovalDetail.Date,
-            RoleID = nextApprovalSetup.RoleTypeID,
-            AppID = 0,
-            AppUserID = 0,
-            Notes = null,
-            Rank = nextApprovalSetup.Rank
-          };
-
-          _appDBContext.CR_ProcessTypeApprovalDetails.Add(newApprovalSetup);
-          await _appDBContext.SaveChangesAsync();
+          return Json(new { success = false, message = "Password is required. Please enter your password to continue." });
         }
         else
         {
-          if (ProcessTypeID == 1)
+          var userId = HttpContext.Session.GetInt32("UserID");
+
+          if (userId != null)
           {
-            var user = await _appDBContext.CR_Users
-            .Where(u => u.UserID == transactionID)
-            .FirstOrDefaultAsync();
+            var currentUser = await _appDBContext.CR_Users
+                .Where(pta => pta.UserID == userId)
+                .FirstOrDefaultAsync();
 
-            if (user != null)
+            if(CR_CipherKey.Encrypt(Password) == currentUser.Password)
             {
-              user.ActiveYNID = 1;
-              user.FinalApprovalID = 1;
-              user.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+              processTypeApprovalDetail.AppID = 1;
+              processTypeApprovalDetail.AppUserID = HttpContext.Session.GetInt32("UserID") ?? default(int);
+              processTypeApprovalDetail.Date = DateTime.Now;
 
-              _appDBContext.Update(user);
-              await _appDBContext.SaveChangesAsync();
-            }
-          }
-          if (ProcessTypeID == 2)
-          {
-            var employee = await _appDBContext.HR_Employees
-            .Where(u => u.EmployeeID == transactionID)
-            .FirstOrDefaultAsync();
-
-            if (employee != null)
-            {
-              employee.ActiveYNID = 1;
-              employee.FinalApprovalID = 1;
-              employee.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
-
-              _appDBContext.Update(employee);
-              await _appDBContext.SaveChangesAsync();
-            }
-          }
-          if (ProcessTypeID == 3)
-          {
-            var contract = await _appDBContext.HR_Contracts
-            .Where(u => u.ContractID == transactionID)
-            .FirstOrDefaultAsync();
-
-            if (contract != null)
-            {
-              contract.ActiveYNID = 1;
-              contract.FinalApprovalID = 1;
-              contract.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
-
-              _appDBContext.Update(contract);
-              await _appDBContext.SaveChangesAsync();
-            }
-          }
-          if (ProcessTypeID == 4)
-          {
-            var contractRenewal = await _appDBContext.HR_ContractRenewals
-                                                     .Where(u => u.ContractRenewalID == transactionID)
-                                                     .FirstOrDefaultAsync();
-
-            if (contractRenewal != null)
-            {
-              contractRenewal.FinalApprovalID = 1;
-              contractRenewal.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
-              await _appDBContext.SaveChangesAsync();
-            }
-
-            var contract = await _appDBContext.HR_Contracts
-                                              .Where(u => u.ContractID == contractRenewal.ContractID)
-                                              .FirstOrDefaultAsync();
-
-            if (contract != null)
-            {
-              contract.EndDate = contractRenewal.NEndDate;
-              await _appDBContext.SaveChangesAsync();
-            }
-          }
-          if (ProcessTypeID == 5)
-          {
-            var endOfService = await _appDBContext.HR_EndOfServices
-                                                     .Where(u => u.EndOfServiceID == transactionID)
-                                                     .FirstOrDefaultAsync();
-
-            if (endOfService != null)
-            {
-              endOfService.FinalApprovalID = 1;
-              endOfService.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
-              await _appDBContext.SaveChangesAsync();
-            }
-
-            var contractToUpdate = _appDBContext.HR_Contracts
-                                               .FirstOrDefault(c => c.EmployeeID == endOfService.EmployeeID);
-
-            if (contractToUpdate != null)
-            {
-              contractToUpdate.ActiveYNID = 2;
-              _appDBContext.SaveChanges();
-            }
-
-            var employee = await _appDBContext.HR_Employees
-                                              .FirstOrDefaultAsync(e => e.EmployeeID == endOfService.EmployeeID);
-
-            if (employee != null)
-            {
-              employee.EmployeeStatusTypeID = 5; // End of Service status
-              employee.ActiveYNID = 2; // Deactivate employee
-            }
-            await _appDBContext.SaveChangesAsync();
-          }
-          if (ProcessTypeID == 6)
-          {
-            var salary = await _appDBContext.HR_Salarys
-                                                     .Where(u => u.SalaryID == transactionID)
-                                                     .FirstOrDefaultAsync();
-           
-
-            if (salary != null)
-            {
-              salary.FinalApprovalID = 1;
-              salary.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
-
-              _appDBContext.Update(salary);
-              await _appDBContext.SaveChangesAsync();
-            }
-          }
-          if (ProcessTypeID == 7)
-          {
-            var addionalAllowance = await _appDBContext.HR_AddionalAllowances
-                                                     .Where(u => u.AddionalAllowanceID == transactionID)
-                                                     .FirstOrDefaultAsync();
-
-
-            if (addionalAllowance != null)
-            {
-              addionalAllowance.FinalApprovalID = 1;
-              addionalAllowance.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
-
-              _appDBContext.Update(addionalAllowance);
-              await _appDBContext.SaveChangesAsync();
-            }
-          }
-          if (ProcessTypeID == 8)
-          {
-
-          }
-          if (ProcessTypeID == 9)
-          {
-
-          }
-          if (ProcessTypeID == 10)
-          {
-            var fixedDeduction = await _appDBContext.HR_FixedDeductions
-                                                     .Where(u => u.FixedDeductionID == transactionID)
-                                                     .FirstOrDefaultAsync();
-
-
-            if (fixedDeduction != null)
-            {
-              fixedDeduction.FinalApprovalID = 1;
-              fixedDeduction.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
-
-              _appDBContext.Update(fixedDeduction);
-              await _appDBContext.SaveChangesAsync();
-            }
-          }
-          if (ProcessTypeID == 11)
-          {
-            var vacation = await _appDBContext.HR_Vacations
-                                                     .Where(u => u.VacationID == transactionID)
-                                                     .FirstOrDefaultAsync();
-
-
-            if (vacation != null)
-            {
-              vacation.FinalApprovalID = 1;
-              vacation.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
-
-              _appDBContext.Update(vacation);
-              await _appDBContext.SaveChangesAsync();
-            }
-          }
-          if (ProcessTypeID == 12)
-          {
-            var vacationSettle = await _appDBContext.HR_VacationSettles
-                                                     .Where(u => u.VacationSettleID == transactionID)
-                                                     .FirstOrDefaultAsync();
-
-
-            if (vacationSettle != null)
-            {
-              vacationSettle.FinalApprovalID = 1;
-              vacationSettle.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
-
-              _appDBContext.Update(vacationSettle);
-              await _appDBContext.SaveChangesAsync();
-            }
-          }
-          if (ProcessTypeID == 13)
-          {
-            var monthlyPayrollPosted = await _appDBContext.HR_MonthlyPayrollPosteds
-                                                     .Where(u => u.PayrollPostedID == transactionID)
-                                                     .FirstOrDefaultAsync();
-
-
-            if (monthlyPayrollPosted != null)
-            {
-              var monthlyPayroll = new HR_MonthlyPayroll
+              if (FileUpload != null && FileUpload.Length > 0)
               {
-                BranchTypeID = monthlyPayrollPosted.BranchTypeID,
-                MonthTypeID = monthlyPayrollPosted.MonthTypeID,
-                Year = monthlyPayrollPosted.Year
-              };
-
-              _appDBContext.HR_MonthlyPayrolls.Add(monthlyPayroll);
-              await _appDBContext.SaveChangesAsync();
-              var additionalAllowances = await _appDBContext.HR_AddionalAllowances
-              .Where(a => a.MonthTypeID == monthlyPayrollPosted.MonthTypeID && a.Year == monthlyPayrollPosted.Year)
-              .ToListAsync();
-
-              foreach (var allowance in additionalAllowances)
-              {
-                allowance.PayRollID = monthlyPayroll.PayrollID;
-                allowance.PostedID = monthlyPayrollPosted.PayrollPostedID;
-              }
-
-              var overTimes = await _appDBContext.HR_OverTimes
-                  .Where(o => o.MonthTypeID == monthlyPayrollPosted.MonthTypeID && o.Year == monthlyPayrollPosted.Year)
-                  .ToListAsync();
-
-              foreach (var overtime in overTimes)
-              {
-                overtime.PayRollID = monthlyPayroll.PayrollID;
-                overtime.PostedID = monthlyPayrollPosted.PayrollPostedID;
-              }
-
-              var hrDeductions = await _appDBContext.HR_Deductions
-                  .Where(d => d.Month == monthlyPayrollPosted.MonthTypeID && d.Year == monthlyPayrollPosted.Year)
-                  .ToListAsync();
-
-              foreach (var deduction in hrDeductions)
-              {
-                deduction.PayRollID = monthlyPayroll.PayrollID;
-                deduction.PostedID = monthlyPayrollPosted.PayrollPostedID;
-              }
-
-              await _appDBContext.SaveChangesAsync();
-
-
-         
-
-
-              var salaryDetails = await _appDBContext.HR_SalaryDetails
-              .Where(sd => sd.Salary.Employee.BranchTypeID == monthlyPayrollPosted.BranchTypeID)
-              .Include(sd => sd.Salary)
-              .Include(sd => sd.Salary.Employee)
-              .ToListAsync();
-
-              foreach (var salaryGroup in salaryDetails.GroupBy(sd => sd.Salary.EmployeeID))
-              {
-                var firstSalaryDetail = salaryGroup.FirstOrDefault();
-                if (firstSalaryDetail?.Salary != null)
+                using (var memoryStream = new MemoryStream())
                 {
-                  var monthlyPayroll_Salary = new HR_MonthlyPayroll_Salary
+                  await FileUpload.CopyToAsync(memoryStream);
+
+                  var processTypeApprovalDetailDoc = new CR_ProcessTypeApprovalDetailDoc
                   {
-                    EmployeeID = firstSalaryDetail.Salary.EmployeeID,
-                    MonthTypeID = monthlyPayrollPosted.MonthTypeID,
-                    Year = monthlyPayrollPosted.Year,
-                    PostedID = monthlyPayrollPosted.PayrollPostedID,
-                    PayRollID = monthlyPayroll.PayrollID // Assuming this is available
+                    ProcessTypeApprovalDetailID = processTypeApprovalDetail.ProcessTypeApprovalDetailID,
+                    Doc = memoryStream.ToArray(),
+                    DocName = FileUpload.FileName,
+                    DocExt = Path.GetExtension(FileUpload.FileName)
                   };
 
-                  _appDBContext.HR_MonthlyPayroll_Salarys.Add(monthlyPayroll_Salary);
-                  await _appDBContext.SaveChangesAsync();
-
-                  foreach (var salaryDetail in salaryGroup)
-                  {
-                    var monthlyPayroll_SalaryDetail = new HR_MonthlyPayroll_SalaryDetail
-                    {
-                      PayrollSalaryID = monthlyPayroll_Salary.PayrollSalaryID, // Use the same PayrollSalaryID
-                      SalaryTypeID = salaryDetail.SalaryTypeID,
-                      SalaryAmount = salaryDetail.SalaryAmount
-                    };
-
-                    _appDBContext.HR_MonthlyPayroll_SalaryDetails.Add(monthlyPayroll_SalaryDetail);
-                  }
-
-                  await _appDBContext.SaveChangesAsync();
+                  processTypeApprovalDetail.ProcessTypeApprovalDetailDoc.Add(processTypeApprovalDetailDoc);
                 }
               }
 
+              _appDBContext.Update(processTypeApprovalDetail);
+              await _appDBContext.SaveChangesAsync();
 
-              var FixedDeductionDetails = await _appDBContext.HR_FixedDeductionDetails
-             .Where(sd => sd.FixedDeduction.Employee.BranchTypeID == monthlyPayrollPosted.BranchTypeID)
-             .Include(sd => sd.FixedDeduction)
-             .Include(sd => sd.FixedDeduction.Employee)
-             .ToListAsync();
+              var processTypeId = ProcessTypeID;
+              var transactionID = TransactionID;
+              var currentRank = processTypeApprovalDetail.Rank;
 
-              foreach (var FixedDeductionGroup in FixedDeductionDetails.GroupBy(sd => sd.FixedDeduction.EmployeeID))
+              var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
+                  .Where(pta => pta.ProcessTypeID == processTypeId && pta.Rank == currentRank + 1)
+                  .FirstOrDefaultAsync();
+
+              if (nextApprovalSetup != null)
               {
-                var firstFixedDeductionDetail = FixedDeductionGroup.FirstOrDefault();
-                if (firstFixedDeductionDetail?.FixedDeduction != null)
+                var newApprovalSetup = new CR_ProcessTypeApprovalDetail
                 {
-                  var monthlyPayroll_FixedDeduction = new HR_MonthlyPayroll_FixedDeduction
+                  ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID,
+                  Date = processTypeApprovalDetail.Date,
+                  RoleID = nextApprovalSetup.RoleTypeID,
+                  AppID = 0,
+                  AppUserID = 0,
+                  Notes = null,
+                  Rank = nextApprovalSetup.Rank
+                };
+
+                _appDBContext.CR_ProcessTypeApprovalDetails.Add(newApprovalSetup);
+                await _appDBContext.SaveChangesAsync();
+              }
+              else
+              {
+                if (ProcessTypeID == 1)
+                {
+                  var user = await _appDBContext.CR_Users
+                  .Where(u => u.UserID == transactionID)
+                  .FirstOrDefaultAsync();
+
+                  if (user != null)
                   {
-                    EmployeeID = firstFixedDeductionDetail.FixedDeduction.EmployeeID,
-                    MonthTypeID = monthlyPayrollPosted.MonthTypeID,
-                    Year = monthlyPayrollPosted.Year,
-                    PostedID = monthlyPayrollPosted.PayrollPostedID,
-                    PayRollID = monthlyPayroll.PayrollID // Assuming this is available
-                  };
+                    user.ActiveYNID = 1;
+                    user.FinalApprovalID = 1;
+                    user.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
-                  _appDBContext.HR_MonthlyPayroll_FixedDeductions.Add(monthlyPayroll_FixedDeduction);
-                  await _appDBContext.SaveChangesAsync();
+                    _appDBContext.Update(user);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 2)
+                {
+                  var employee = await _appDBContext.HR_Employees
+                  .Where(u => u.EmployeeID == transactionID)
+                  .FirstOrDefaultAsync();
 
-                  foreach (var FixedDeductionDetail in FixedDeductionGroup)
+                  if (employee != null)
                   {
-                    var monthlyPayroll_FixedDeductionDetail = new HR_MonthlyPayroll_FixedDeductionDetail
-                    {
-                      PayrollFixedDeductionID = monthlyPayroll_FixedDeduction.PayrollFixedDeductionID, // Use the same PayrollFixedDeductionID
-                      FixedDeductionTypeID = FixedDeductionDetail.FixedDeductionTypeID,
-                      FixedDeductionAmount = FixedDeductionDetail.FixedDeductionAmount
-                    };
+                    employee.ActiveYNID = 1;
+                    employee.FinalApprovalID = 1;
+                    employee.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
-                    _appDBContext.HR_MonthlyPayroll_FixedDeductionDetails.Add(monthlyPayroll_FixedDeductionDetail);
+                    _appDBContext.Update(employee);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 3)
+                {
+                  var contract = await _appDBContext.HR_Contracts
+                  .Where(u => u.ContractID == transactionID)
+                  .FirstOrDefaultAsync();
+
+                  if (contract != null)
+                  {
+                    contract.ActiveYNID = 1;
+                    contract.FinalApprovalID = 1;
+                    contract.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(contract);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 4)
+                {
+                  var contractRenewal = await _appDBContext.HR_ContractRenewals
+                                                           .Where(u => u.ContractRenewalID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+                  if (contractRenewal != null)
+                  {
+                    contractRenewal.FinalApprovalID = 1;
+                    contractRenewal.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+                    await _appDBContext.SaveChangesAsync();
                   }
 
+                  var contract = await _appDBContext.HR_Contracts
+                                                    .Where(u => u.ContractID == contractRenewal.ContractID)
+                                                    .FirstOrDefaultAsync();
+
+                  if (contract != null)
+                  {
+                    contract.EndDate = contractRenewal.NEndDate;
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 5)
+                {
+                  var endOfService = await _appDBContext.HR_EndOfServices
+                                                           .Where(u => u.EndOfServiceID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+                  if (endOfService != null)
+                  {
+                    endOfService.FinalApprovalID = 1;
+                    endOfService.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+                    await _appDBContext.SaveChangesAsync();
+                  }
+
+                  var contractToUpdate = _appDBContext.HR_Contracts
+                                                     .FirstOrDefault(c => c.EmployeeID == endOfService.EmployeeID);
+
+                  if (contractToUpdate != null)
+                  {
+                    contractToUpdate.ActiveYNID = 2;
+                    _appDBContext.SaveChanges();
+                  }
+
+                  var employee = await _appDBContext.HR_Employees
+                                                    .FirstOrDefaultAsync(e => e.EmployeeID == endOfService.EmployeeID);
+
+                  if (employee != null)
+                  {
+                    employee.EmployeeStatusTypeID = 5; // End of Service status
+                    employee.ActiveYNID = 2; // Deactivate employee
+                  }
                   await _appDBContext.SaveChangesAsync();
                 }
+                if (ProcessTypeID == 6)
+                {
+                  var salary = await _appDBContext.HR_Salarys
+                                                           .Where(u => u.SalaryID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+                  if (salary != null)
+                  {
+                    salary.FinalApprovalID = 1;
+                    salary.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(salary);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 7)
+                {
+                  var addionalAllowance = await _appDBContext.HR_AddionalAllowances
+                                                           .Where(u => u.AddionalAllowanceID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+                  if (addionalAllowance != null)
+                  {
+                    addionalAllowance.FinalApprovalID = 1;
+                    addionalAllowance.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(addionalAllowance);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 8)
+                {
+
+                }
+                if (ProcessTypeID == 9)
+                {
+
+                }
+                if (ProcessTypeID == 10)
+                {
+                  var fixedDeduction = await _appDBContext.HR_FixedDeductions
+                                                           .Where(u => u.FixedDeductionID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+                  if (fixedDeduction != null)
+                  {
+                    fixedDeduction.FinalApprovalID = 1;
+                    fixedDeduction.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(fixedDeduction);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 11)
+                {
+                  var vacation = await _appDBContext.HR_Vacations
+                                                           .Where(u => u.VacationID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+                  if (vacation != null)
+                  {
+                    vacation.FinalApprovalID = 1;
+                    vacation.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(vacation);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 12)
+                {
+                  var vacationSettle = await _appDBContext.HR_VacationSettles
+                                                           .Where(u => u.VacationSettleID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+                  if (vacationSettle != null)
+                  {
+                    vacationSettle.FinalApprovalID = 1;
+                    vacationSettle.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(vacationSettle);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 13)
+                {
+                  var monthlyPayrollPosted = await _appDBContext.HR_MonthlyPayrollPosteds
+                                                           .Where(u => u.PayrollPostedID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+                  if (monthlyPayrollPosted != null)
+                  {
+                    var monthlyPayroll = new HR_MonthlyPayroll
+                    {
+                      BranchTypeID = monthlyPayrollPosted.BranchTypeID,
+                      MonthTypeID = monthlyPayrollPosted.MonthTypeID,
+                      Year = monthlyPayrollPosted.Year
+                    };
+
+                    _appDBContext.HR_MonthlyPayrolls.Add(monthlyPayroll);
+                    await _appDBContext.SaveChangesAsync();
+                    var additionalAllowances = await _appDBContext.HR_AddionalAllowances
+                    .Where(a => a.MonthTypeID == monthlyPayrollPosted.MonthTypeID && a.Year == monthlyPayrollPosted.Year)
+                    .ToListAsync();
+
+                    foreach (var allowance in additionalAllowances)
+                    {
+                      allowance.PayRollID = monthlyPayroll.PayrollID;
+                      allowance.PostedID = monthlyPayrollPosted.PayrollPostedID;
+                    }
+
+                    var overTimes = await _appDBContext.HR_OverTimes
+                        .Where(o => o.MonthTypeID == monthlyPayrollPosted.MonthTypeID && o.Year == monthlyPayrollPosted.Year)
+                        .ToListAsync();
+
+                    foreach (var overtime in overTimes)
+                    {
+                      overtime.PayRollID = monthlyPayroll.PayrollID;
+                      overtime.PostedID = monthlyPayrollPosted.PayrollPostedID;
+                    }
+
+                    var hrDeductions = await _appDBContext.HR_Deductions
+                        .Where(d => d.Month == monthlyPayrollPosted.MonthTypeID && d.Year == monthlyPayrollPosted.Year)
+                        .ToListAsync();
+
+                    foreach (var deduction in hrDeductions)
+                    {
+                      deduction.PayRollID = monthlyPayroll.PayrollID;
+                      deduction.PostedID = monthlyPayrollPosted.PayrollPostedID;
+                    }
+
+                    await _appDBContext.SaveChangesAsync();
+
+
+
+
+
+                    var salaryDetails = await _appDBContext.HR_SalaryDetails
+                    .Where(sd => sd.Salary.Employee.BranchTypeID == monthlyPayrollPosted.BranchTypeID)
+                    .Include(sd => sd.Salary)
+                    .Include(sd => sd.Salary.Employee)
+                    .ToListAsync();
+
+                    foreach (var salaryGroup in salaryDetails.GroupBy(sd => sd.Salary.EmployeeID))
+                    {
+                      var firstSalaryDetail = salaryGroup.FirstOrDefault();
+                      if (firstSalaryDetail?.Salary != null)
+                      {
+                        var monthlyPayroll_Salary = new HR_MonthlyPayroll_Salary
+                        {
+                          EmployeeID = firstSalaryDetail.Salary.EmployeeID,
+                          MonthTypeID = monthlyPayrollPosted.MonthTypeID,
+                          Year = monthlyPayrollPosted.Year,
+                          PostedID = monthlyPayrollPosted.PayrollPostedID,
+                          PayRollID = monthlyPayroll.PayrollID // Assuming this is available
+                        };
+
+                        _appDBContext.HR_MonthlyPayroll_Salarys.Add(monthlyPayroll_Salary);
+                        await _appDBContext.SaveChangesAsync();
+
+                        foreach (var salaryDetail in salaryGroup)
+                        {
+                          var monthlyPayroll_SalaryDetail = new HR_MonthlyPayroll_SalaryDetail
+                          {
+                            PayrollSalaryID = monthlyPayroll_Salary.PayrollSalaryID, // Use the same PayrollSalaryID
+                            SalaryTypeID = salaryDetail.SalaryTypeID,
+                            SalaryAmount = salaryDetail.SalaryAmount
+                          };
+
+                          _appDBContext.HR_MonthlyPayroll_SalaryDetails.Add(monthlyPayroll_SalaryDetail);
+                        }
+
+                        await _appDBContext.SaveChangesAsync();
+                      }
+                    }
+
+
+                    var FixedDeductionDetails = await _appDBContext.HR_FixedDeductionDetails
+                   .Where(sd => sd.FixedDeduction.Employee.BranchTypeID == monthlyPayrollPosted.BranchTypeID)
+                   .Include(sd => sd.FixedDeduction)
+                   .Include(sd => sd.FixedDeduction.Employee)
+                   .ToListAsync();
+
+                    foreach (var FixedDeductionGroup in FixedDeductionDetails.GroupBy(sd => sd.FixedDeduction.EmployeeID))
+                    {
+                      var firstFixedDeductionDetail = FixedDeductionGroup.FirstOrDefault();
+                      if (firstFixedDeductionDetail?.FixedDeduction != null)
+                      {
+                        var monthlyPayroll_FixedDeduction = new HR_MonthlyPayroll_FixedDeduction
+                        {
+                          EmployeeID = firstFixedDeductionDetail.FixedDeduction.EmployeeID,
+                          MonthTypeID = monthlyPayrollPosted.MonthTypeID,
+                          Year = monthlyPayrollPosted.Year,
+                          PostedID = monthlyPayrollPosted.PayrollPostedID,
+                          PayRollID = monthlyPayroll.PayrollID // Assuming this is available
+                        };
+
+                        _appDBContext.HR_MonthlyPayroll_FixedDeductions.Add(monthlyPayroll_FixedDeduction);
+                        await _appDBContext.SaveChangesAsync();
+
+                        foreach (var FixedDeductionDetail in FixedDeductionGroup)
+                        {
+                          var monthlyPayroll_FixedDeductionDetail = new HR_MonthlyPayroll_FixedDeductionDetail
+                          {
+                            PayrollFixedDeductionID = monthlyPayroll_FixedDeduction.PayrollFixedDeductionID, // Use the same PayrollFixedDeductionID
+                            FixedDeductionTypeID = FixedDeductionDetail.FixedDeductionTypeID,
+                            FixedDeductionAmount = FixedDeductionDetail.FixedDeductionAmount
+                          };
+
+                          _appDBContext.HR_MonthlyPayroll_FixedDeductionDetails.Add(monthlyPayroll_FixedDeductionDetail);
+                        }
+
+                        await _appDBContext.SaveChangesAsync();
+                      }
+                    }
+
+                    monthlyPayrollPosted.FinalApprovalID = 1;
+                    monthlyPayrollPosted.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(monthlyPayrollPosted);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 14)
+                {
+                  //var EmployeeRequest = await _appDBContext.HR_EmployeeRequests
+                  //                                         .Where(u => u.EmployeeRequestID == transactionID)
+                  //                                         .FirstOrDefaultAsync();
+
+
+                  //if (EmployeeRequest != null)
+                  //{
+                  //  EmployeeRequest.FinalApprovalID = 1;
+                  //  EmployeeRequest.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                  //  _appDBContext.Update(EmployeeRequest);
+                  //  await _appDBContext.SaveChangesAsync();
+                  //}
+                }
               }
-
-              monthlyPayrollPosted.FinalApprovalID = 1;
-              monthlyPayrollPosted.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
-
-              _appDBContext.Update(monthlyPayrollPosted);
-              await _appDBContext.SaveChangesAsync();
+              TempData["SuccessMessage"] = "Successfully Approved.";
+              return Json(new { success = true });
+            }
+            else
+            {
+              return Json(new { success = false, message = "The password you entered is incorrect. Please try again." });
             }
           }
-          if (ProcessTypeID == 14)
-          {
-            //var EmployeeRequest = await _appDBContext.HR_EmployeeRequests
-            //                                         .Where(u => u.EmployeeRequestID == transactionID)
-            //                                         .FirstOrDefaultAsync();
-
-
-            //if (EmployeeRequest != null)
-            //{
-            //  EmployeeRequest.FinalApprovalID = 1;
-            //  EmployeeRequest.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
-
-            //  _appDBContext.Update(EmployeeRequest);
-            //  await _appDBContext.SaveChangesAsync();
-            //}
-          }
+          
         }
-        return Json(new { success = true });
-      }
 
-      return PartialView("~/Views/MasterInfo/ApprovalsRequest/ActionsProcessTypeApproval.cshtml", processTypeApprovalDetail);
+       
+      }
+      return Json(new { success = false, message = "Error updating Approval. Please check the inputs." });
     }
     [HttpPost]
-    public async Task<IActionResult> Reject(CR_ProcessTypeApprovalDetail processTypeApprovalDetail, IFormFile FileUpload, int ProcessTypeID, int TransactionID)
+    public async Task<IActionResult> Reject(CR_ProcessTypeApprovalDetail processTypeApprovalDetail, IFormFile FileUpload, int ProcessTypeID, int TransactionID, string Password, string Motes)
     {
       if (ModelState.IsValid)
       {

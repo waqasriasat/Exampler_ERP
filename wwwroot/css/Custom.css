@@ -1150,6 +1150,8 @@ a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:h
 .alert {
   position: fixed;
   top: -100px; /* Off-screen initially */
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 9999;
   border-radius: 0.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -1160,3 +1162,4 @@ a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:h
   .alert.show {
     top: 0px; /* Adjust this position as needed */
   }
+

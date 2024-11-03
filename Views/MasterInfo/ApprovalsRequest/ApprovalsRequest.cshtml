@@ -47,30 +47,31 @@
                     $('#actionsProcessTypeApprovalModal').modal('show');
                 });
             });
-            $('#actionsProcessTypeApprovalModalContainer').on('click', '#Approved', function () {
-                var formData = new FormData($('#actionsProcessTypeApprovalForm')[0]); // Create FormData object from the form
+                       $('#actionsProcessTypeApprovalModalContainer').on('click', '#Approved', function () {
+                    var formData = new FormData($('#actionsProcessTypeApprovalForm')[0]); // Create FormData object from the form
 
-                $.ajax({
-                    url: '@Url.Action("Approved", "ApprovalsRequest")',
-                    type: 'POST',
-                    data: formData,
-                    contentType: false, // Important for file upload
-                    processData: false, // Prevent jQuery from automatically transforming the data into a query string
-                    success: function (response) {
-                        if (response.success) {
-                            // Reload the page or update the part of the page with the updated data
-                            location.reload();
-                        } else {
-                            // Show validation errors
-                            // You can display errors here
+                    $.ajax({
+                        url: '@Url.Action("Approved", "ApprovalsRequest")',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false, // Important for file upload
+                        processData: false, // Prevent jQuery from automatically transforming the data into a query string
+                        success: function (response) {
+                            if (response.success) {
+                                $('#responseMessage').hide();
+                                // Optionally close the modal here
+                                $('#actionsProcessTypeApprovalModalContainer').modal('hide'); // Assuming you're using Bootstrap modals
+                                location.reload(); // Reload the page after successful approval
+                            } else {
+                                 showAlert(response.message); // Display the error message
+                                // Optionally handle UI changes for failed approval
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            showAlert("An error occurred while processing your request."); // Handle error
                         }
-                    },
-                    error: function (xhr, status, error) {
-                        // Handle error
-                        console.log("Error occurred while uploading file:", error);
-                    }
+                    });
                 });
-            });
             $('#actionsProcessTypeApprovalModalContainer').on('click', '#Reject', function () {
                 var formData = $('#actionsProcessTypeApprovalForm').serialize();
                 $.post('@Url.Action("Reject", "ApprovalsRequest")', formData, function (response) {
@@ -146,6 +147,7 @@
             var printWindow = window.open('@Url.Action("Index", "ApprovalsRequest")', '_blank');
             printWindow.focus();
         }
+       
     </script>
 }
 <h4 class="py-3 mb-4">
