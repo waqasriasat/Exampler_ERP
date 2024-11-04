@@ -56,13 +56,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(Role.RoleTypeName))
+        {
+          return Json(new { success = false, message = "Role Name field is required. Please enter a valid text value." });
+        }
         _appDBContext.Update(Role);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Role Updated successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error Updating Role. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/Role/EditRole.cshtml", Role);
+      return Json(new { success = false, message = "Error creating Role. Please check the inputs." });
     }
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -76,14 +79,17 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(Role.RoleTypeName))
+        {
+          return Json(new { success = false, message = "Role Name field is required. Please enter a valid text value." });
+        }
         Role.DeleteYNID = 0;
         _appDBContext.Settings_RoleTypes.Add(Role);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Role Created successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating Role. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/Role/AddRole.cshtml", Role);
+      return Json(new { success = false, message = "Error creating Role. Please check the inputs." });
     }
     public async Task<IActionResult> Delete(int id)
     {

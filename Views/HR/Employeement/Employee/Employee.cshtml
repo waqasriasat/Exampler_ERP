@@ -33,9 +33,11 @@
                             $('#editEmployeeModal').modal('hide');
                             location.reload(); 
                         } else {
+                            showErrorAlert(response.message);
                         }
                     },
                     error: function () {
+                        showErrorAlert(response.message);
                     }
                 });
             });
@@ -63,9 +65,11 @@
                             $('#addEmployeeModal').modal('hide');
                             location.reload();
                         } else {
+                            showErrorAlert(response.message);
                         }
                     },
                     error: function () {
+                        showErrorAlert(response.message);
                     }
                 });
             });
@@ -85,7 +89,7 @@
                         $('#directManagerEmployeeModal').modal('hide');
                         location.reload();
                     } else {
-                        $('#errorContainer').html(response.message);
+                        showErrorAlert(response.message);
                     }
                 });
             });
@@ -115,8 +119,8 @@
                         if (response.success) {
                             location.reload(); 
                         } else {
-                           
-                            alert('There was an error processing your request.');
+
+                            showErrorAlert(response.message);
                         }
                     },
                     error: function (xhr, status, error) {
@@ -152,12 +156,11 @@
                         if (response.success) {
                             location.reload(); 
                         } else {
-                            alert('There was an error processing your request.');
+                            showErrorAlert(response.message);
                         }
                     },
                     error: function (xhr, status, error) {
-                        console.error('AJAX Error: ' + error);
-                        alert('An unexpected error occurred. Please try again later.');
+                        showErrorAlert(response.message);
                     }
                 });
             });
@@ -181,9 +184,11 @@
                         if (response.success) {
                             location.reload();
                         } else {
+                            showErrorAlert(response.message);
                         }
                     });
                 } else {
+                    showErrorAlert(response.message);
                 }
             });
 

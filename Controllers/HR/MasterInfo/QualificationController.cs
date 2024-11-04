@@ -61,13 +61,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(Qualification.QualificationTypeName))
+        {
+          return Json(new { success = false, message = "Qualification Name field is required. Please enter a valid text value." });
+        }
         _appDBContext.Update(Qualification);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Qualification Updated successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error Updating Qualification. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/Qualification/EditQualification.cshtml", Qualification);
+      return Json(new { success = false, message = "Error creating Qualification. Please check the inputs." });
     }
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -81,14 +84,17 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(Qualification.QualificationTypeName))
+        {
+          return Json(new { success = false, message = "Qualification Name field is required. Please enter a valid text value." });
+        }
         Qualification.DeleteYNID = 0;
         _appDBContext.Settings_QualificationTypes.Add(Qualification);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Qualification Created successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating Qualification. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/Qualification/AddQualification.cshtml", Qualification);
+      return Json(new { success = false, message = "Error creating Qualification. Please check the inputs." });
     }
     public async Task<IActionResult> Delete(int id)
     {

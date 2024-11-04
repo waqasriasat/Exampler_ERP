@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
@@ -63,13 +64,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(SubQualification.SubQualificationTypeName))
+        {
+          return Json(new { success = false, message = "SubQualification Name field is required. Please enter a valid text value." });
+        }
         _appDBContext.Update(SubQualification);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "SubQualification Updated successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error Updating SubQualification. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/SubQualification/EditSubQualification.cshtml", SubQualification);
+      return Json(new { success = false, message = "Error creating SubQualification. Please check the inputs." });
     }
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -84,14 +88,17 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(SubQualification.SubQualificationTypeName))
+        {
+          return Json(new { success = false, message = "SubQualification Name field is required. Please enter a valid text value." });
+        }
         SubQualification.DeleteYNID = 0;
         _appDBContext.Settings_SubQualificationTypes.Add(SubQualification);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "SubQualification Created successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating SubQualification. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/SubQualification/AddSubQualification.cshtml", SubQualification);
+      return Json(new { success = false, message = "Error creating SubQualification. Please check the inputs." });
     }
     public async Task<IActionResult> Delete(int id)
     {

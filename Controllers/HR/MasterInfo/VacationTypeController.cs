@@ -60,13 +60,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(VacationType.VacationTypeName))
+        {
+          return Json(new { success = false, message = "VacationType Name field is required. Please enter a valid text value." });
+        }
         _appDBContext.Update(VacationType);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Vacation Type Updated successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error Updating Vacation Type. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/VacationType/EditVacationType.cshtml", VacationType);
+      return Json(new { success = false, message = "Error creating VacationType. Please check the inputs." });
     }
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -80,14 +83,17 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(VacationType.VacationTypeName))
+        {
+          return Json(new { success = false, message = "VacationType Name field is required. Please enter a valid text value." });
+        }
         VacationType.DeleteYNID = 0;
         _appDBContext.Settings_VacationTypes.Add(VacationType);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Vacation Type Created successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating Vacation Type. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/VacationType/AddVacationType.cshtml", VacationType);
+      return Json(new { success = false, message = "Error creating VacationType. Please check the inputs." });
     }
     public async Task<IActionResult> Delete(int id)
     {

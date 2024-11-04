@@ -60,11 +60,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(SalaryType.SalaryTypeName))
+        {
+          return Json(new { success = false, message = "SalaryType Name field is required. Please enter a valid text value." });
+        }
         _appDBContext.Update(SalaryType);
         await _appDBContext.SaveChangesAsync();
+        TempData["SuccessMessage"] = "SalaryType Updated successfully.";
         return Json(new { success = true });
       }
-      return PartialView("~/Views/HR/MasterInfo/SalaryType/EditSalaryType.cshtml", SalaryType);
+      return Json(new { success = false, message = "Error creating SalaryType. Please check the inputs." });
     }
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -78,12 +83,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(SalaryType.SalaryTypeName))
+        {
+          return Json(new { success = false, message = "SalaryType Name field is required. Please enter a valid text value." });
+        }
         SalaryType.DeleteYNID = 0;
         _appDBContext.Settings_SalaryTypes.Add(SalaryType);
         await _appDBContext.SaveChangesAsync();
         return Json(new { success = true });
       }
-      return PartialView("~/Views/HR/MasterInfo/SalaryType/AddSalaryType.cshtml", SalaryType);
+      return Json(new { success = false, message = "Error creating SalaryType. Please check the inputs." });
     }
     public async Task<IActionResult> Delete(int id)
     {

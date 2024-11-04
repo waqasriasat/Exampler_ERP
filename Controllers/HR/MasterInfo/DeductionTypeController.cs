@@ -61,13 +61,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(DeductionType.DeductionTypeName))
+        {
+          return Json(new { success = false, message = "DeductionType Name field is required. Please enter a valid text value." });
+        }
         _appDBContext.Update(DeductionType);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Deduction Type Updated successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error Updating Deduction Type. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/DeductionType/EditDeductionType.cshtml", DeductionType);
+      return Json(new { success = false, message = "Error creating DeductionType. Please check the inputs." });
     }
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -81,14 +84,17 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(DeductionType.DeductionTypeName))
+        {
+          return Json(new { success = false, message = "DeductionType Name field is required. Please enter a valid text value." });
+        }
         DeductionType.DeleteYNID = 0;
         _appDBContext.Settings_DeductionTypes.Add(DeductionType);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Deduction Type Created successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating Deduction Type. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/DeductionType/AddDeductionType.cshtml", DeductionType);
+      return Json(new { success = false, message = "Error creating DeductionType. Please check the inputs." });
     }
     public async Task<IActionResult> Delete(int id)
     {

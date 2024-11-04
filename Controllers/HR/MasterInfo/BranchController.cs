@@ -100,15 +100,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           return Json(new { success = false, message = "Branch Name field is required. Please enter a valid text value." });
         }
 
-        var existingBranchName = await _appDBContext.Settings_BranchTypes
-            .Where(pta => pta.BranchTypeName == branch.BranchTypeName && pta.DeleteYNID==0)
-            .FirstOrDefaultAsync();
-
-        if (existingBranchName != null)
-        {
-          return Json(new { success = false, message = "The Branch Name you entered already exists. Please choose a different name." });
-        }
-
+ 
         branch.Date = DateTime.Now;
         branch.DeleteYNID = 0;
 

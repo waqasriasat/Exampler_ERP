@@ -70,6 +70,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(user.UserName) && string.IsNullOrEmpty(user.Password) && user.RoleTypeID.ToString().Length>0)
+        {
+          return Json(new { success = false, message = "user Name, Password and Role Name field is required. Please enter a valid text value." });
+        }
         var userInDb = await _appDBContext.CR_Users.FindAsync(user.UserID);
         if (userInDb == null)
         {
@@ -86,11 +90,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         TempData["SuccessMessage"] = "User Updated successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error Updating User. Please check the inputs.";
+     
       ViewBag.RoleList = await _utils.GetRoles();
       ViewBag.EmployeeList = await _utils.GetEmployee();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      return PartialView("~/Views/HR/MasterInfo/User/EditUser.cshtml", user);
+      return Json(new { success = false, message = "Error creating user. Please check the inputs." });
     }
 
     [HttpGet]
@@ -107,6 +111,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(User.UserName) && string.IsNullOrEmpty(User.Password) && User.RoleTypeID.ToString().Length > 0)
+        {
+          return Json(new { success = false, message = "user Name, Password and Role Name field is required. Please enter a valid text value." });
+        }
         User.UserName = CR_CipherKey.Encrypt(User.UserName);
         User.Password = CR_CipherKey.Encrypt(User.Password);
 
@@ -175,8 +183,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         TempData["SuccessMessage"] = "User Created successfully. Continue to the Approval Process Setup for User Activation.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating User. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/User/AddUser.cshtml", User);
+      return Json(new { success = false, message = "Error creating user. Please check the inputs." });
     }
 
     public async Task<IActionResult> Delete(int id)

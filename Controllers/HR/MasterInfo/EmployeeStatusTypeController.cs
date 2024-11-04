@@ -61,13 +61,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(EmployeeStatusType.EmployeeStatusTypeName))
+        {
+          return Json(new { success = false, message = "EmployeeStatusType Name field is required. Please enter a valid text value." });
+        }
         _appDBContext.Update(EmployeeStatusType);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Employee Status Type Updated successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error Updating Employee Status Type. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/EmployeeStatusType/EditEmployeeStatusType.cshtml", EmployeeStatusType);
+      return Json(new { success = false, message = "Error creating EmployeeStatusType. Please check the inputs." });
     }
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -81,14 +84,17 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(EmployeeStatusType.EmployeeStatusTypeName))
+        {
+          return Json(new { success = false, message = "EmployeeStatusType Name field is required. Please enter a valid text value." });
+        }
         EmployeeStatusType.DeleteYNID = 0;
         _appDBContext.Settings_EmployeeStatusTypes.Add(EmployeeStatusType);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Employee Status Type Created successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating Employee Status Type. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/EmployeeStatusType/AddEmployeeStatusType.cshtml", EmployeeStatusType);
+      return Json(new { success = false, message = "Error creating EmployeeStatusType. Please check the inputs." });
     }
     public async Task<IActionResult> Delete(int id)
     {

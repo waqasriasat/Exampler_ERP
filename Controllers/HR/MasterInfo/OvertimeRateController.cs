@@ -61,13 +61,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (OvertimeRate.OverTimeRateValue == null && OvertimeRate.OverTimeRateValue == 0)
+        {
+          return Json(new { success = false, message = "OvertimeRate Value field is required. Please enter a valid text value." });
+        }
         _appDBContext.Update(OvertimeRate);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Overtime Rate Updated successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error Updating Overtime Rate. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/OvertimeRate/EditOvertimeRate.cshtml", OvertimeRate);
+      return Json(new { success = false, message = "Error creating OvertimeRate Value. Please check the inputs." });
     }
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -81,14 +84,17 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (OvertimeRate.OverTimeRateValue == null && OvertimeRate.OverTimeRateValue == 0)
+        {
+          return Json(new { success = false, message = "OvertimeRate Value field is required. Please enter a valid text value." });
+        }
         OvertimeRate.DeleteYNID = 0;
         _appDBContext.Settings_OverTimeRates.Add(OvertimeRate);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Overtime Rate Created successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating Overtime Rate. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/OvertimeRate/AddOvertimeRate.cshtml", OvertimeRate);
+      return Json(new { success = false, message = "Error creating OvertimeRate Value. Please check the inputs." });
     }
     public async Task<IActionResult> Delete(int id)
     {

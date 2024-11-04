@@ -76,10 +76,15 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       return PartialView("~/Views/HR/Employeement/Employee/EditEmployee.cshtml", employee);
     }
     [HttpPost]
-    public async Task<IActionResult> Edit(HR_Employee employee, IFormFile profilePicture, string ExistingPicture)
+    public async Task<IActionResult> Edit(HR_Employee employee, IFormFile profilePicture, string? ExistingPicture)
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(employee.FirstName))
+        {
+          return Json(new { success = false, message = "First Name field is required. Please enter a valid text value." });
+        }
+
         if (profilePicture != null && profilePicture.Length > 0)
         {
           using (var memoryStream = new MemoryStream())
@@ -99,8 +104,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         TempData["SuccessMessage"] = "Employee Updated successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error Updating Employee. Please check the inputs.";
-      return PartialView("~/Views/HR/Employeement/Employee/EditEmployee.cshtml", employee);
+      return Json(new { success = false, message = "Error creating Employee. Please check the inputs." });
     }
     [HttpGet]
     public async Task<IActionResult> Create()

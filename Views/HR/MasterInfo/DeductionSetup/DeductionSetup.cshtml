@@ -25,7 +25,7 @@
                         // Reload the page or update the part of the page with the updated data
                         location.reload();
                     } else {
-                        // Show validation errors
+                        showErrorAlert(response.message);
                     }
                 });
             });
@@ -44,7 +44,7 @@
                     if (response.success) {
                         location.reload();
                     } else {
-                        // Handle errors
+                        showErrorAlert(response.message);
                     }
                 });
             });

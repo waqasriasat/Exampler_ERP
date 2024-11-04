@@ -61,13 +61,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(AddionalAllowanceType.AddionalAllowanceTypeName))
+        {
+          return Json(new { success = false, message = "AddionalAllowanceType Name field is required. Please enter a valid text value." });
+        }
         _appDBContext.Update(AddionalAllowanceType);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Addional Allowance Type Updated successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error Updating Addional Allowance Type. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/AddionalAllowanceType/EditAddionalAllowanceType.cshtml", AddionalAllowanceType);
+      return Json(new { success = false, message = "Error creating AddionalAllowanceType. Please check the inputs." });
     }
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -81,14 +84,17 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(AddionalAllowanceType.AddionalAllowanceTypeName))
+        {
+          return Json(new { success = false, message = "AddionalAllowanceType Name field is required. Please enter a valid text value." });
+        }
         AddionalAllowanceType.DeleteYNID = 0;
         _appDBContext.Settings_AddionalAllowanceTypes.Add(AddionalAllowanceType);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Addional Allowance Type Created successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating Addional Allowance Type. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/AddionalAllowanceType/AddAddionalAllowanceType.cshtml", AddionalAllowanceType);
+      return Json(new { success = false, message = "Error creating AddionalAllowanceType. Please check the inputs." });
     }
     public async Task<IActionResult> Delete(int id)
     {

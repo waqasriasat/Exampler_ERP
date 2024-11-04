@@ -61,13 +61,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(EmployeeRequestType.EmployeeRequestTypeName))
+        {
+          return Json(new { success = false, message = "EmployeeRequestType Name field is required. Please enter a valid text value." });
+        }
         _appDBContext.Update(EmployeeRequestType);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Employee Request Type Updated successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error Updating Employee Request Type. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/EmployeeRequestType/EditEmployeeRequestType.cshtml", EmployeeRequestType);
+      return Json(new { success = false, message = "Error creating EmployeeRequestType. Please check the inputs." });
     }
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -81,14 +84,17 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(EmployeeRequestType.EmployeeRequestTypeName))
+        {
+          return Json(new { success = false, message = "EmployeeRequestType Name field is required. Please enter a valid text value." });
+        }
         EmployeeRequestType.DeleteYNID = 0;
         _appDBContext.Settings_EmployeeRequestTypes.Add(EmployeeRequestType);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Employee Request Type Created successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating Employee Request Type. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/EmployeeRequestType/AddEmployeeRequestType.cshtml", EmployeeRequestType);
+      return Json(new { success = false, message = "Error creating EmployeeRequestType. Please check the inputs." });
     }
     public async Task<IActionResult> Delete(int id)
     {

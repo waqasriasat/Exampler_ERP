@@ -31,9 +31,12 @@
         TempData.Remove("ErrorMessage");
 
     }
-
-    <div id="customAlert" class="alert alert-danger" role="alert" style="display: none;">
-        <i class="fas fa-exclamation-triangle"></i> <span id="customAlertText"></span>
+    <div id="customSuccessAlert" class="alert alert-success" role="alert" style="display: none;">
+        <i class="fas fa-exclamation-triangle"></i> <span id="customSuccessAlertText"></span>
+        <button type="button" class="btn-close" onclick="hideAlert()" aria-label="Close"></button>
+    </div>
+    <div id="customErrorAlert" class="alert alert-danger" role="alert" style="display: none;">
+        <i class="fas fa-exclamation-triangle"></i> <span id="customErrorAlertText"></span>
         <button type="button" class="btn-close" onclick="hideAlert()" aria-label="Close"></button>
     </div>
   @{

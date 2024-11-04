@@ -62,13 +62,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(Section.SectionTypeName))
+        {
+          return Json(new { success = false, message = "Section Name field is required. Please enter a valid text value." });
+        }
         _appDBContext.Update(Section);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Section Updated successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error Updating Section. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/Section/EditSection.cshtml", Section);
+      return Json(new { success = false, message = "Error creating Section. Please check the inputs." });
     }
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -83,14 +86,17 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(Section.SectionTypeName))
+        {
+          return Json(new { success = false, message = "Section Name field is required. Please enter a valid text value." });
+        }
         Section.DeleteYNID = 0;
         _appDBContext.Settings_SectionTypes.Add(Section);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Section Created successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating Section. Please check the inputs.";
-      return PartialView("~/Views/HR/MasterInfo/Section/AddSection.cshtml", Section);
+      return Json(new { success = false, message = "Error creating Section. Please check the inputs." });
     }
     public async Task<IActionResult> Delete(int id)
     {

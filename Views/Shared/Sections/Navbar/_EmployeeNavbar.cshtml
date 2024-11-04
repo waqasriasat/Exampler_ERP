@@ -108,12 +108,12 @@ else
                         $('#successMessagePicture').text(response.message).show();
                         location.reload(); // Reload the page to reflect changes
                     } else {
-                        // Handle validation errors or other cases
+                        showErrorAlert(response.message);
                         // You might want to display validation errors here
                     }
                 },
                 error: function () {
-                    // Handle errors
+                    showErrorAlert(response.message);
                 }
             });
         });

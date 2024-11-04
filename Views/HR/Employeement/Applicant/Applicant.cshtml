@@ -34,12 +34,12 @@
                             $('#editApplicantModal').modal('hide');
                             location.reload(); // Reload the page to reflect changes
                         } else {
-                            // Handle validation errors or other cases
+                            showErrorAlert(response.message);
                             // You might want to display validation errors here
                         }
                     },
                     error: function () {
-                        // Handle errors
+                        showErrorAlert(response.message);
                     }
                 });
             });
@@ -70,12 +70,12 @@
                             $('#addApplicantModal').modal('hide');
                             location.reload(); // Reload the page to reflect changes
                         } else {
-                            // Handle validation errors or other cases
+                            showErrorAlert(response.message);
                             // You might want to display validation errors here
                         }
                     },
                     error: function () {
-                        // Handle errors
+                        showErrorAlert(response.message);
                     }
                 });
             });
@@ -104,7 +104,7 @@
                         if (response.success) {
                             location.reload();
                         } else {
-                            // Handle errors
+                            showErrorAlert(response.message);
                         }
                     });
                 } else {
