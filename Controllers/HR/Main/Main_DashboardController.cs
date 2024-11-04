@@ -41,7 +41,7 @@ namespace Exampler_ERP.Controllers.HR.Main
       ViewBag.EmployeeRequestTypeCount = await _appDBContext.Settings_EmployeeRequestTypes.CountAsync();
       ViewBag.EmployeeRequestSetupCount = await _appDBContext.HR_EmployeeRequestTypeApprovalSetups.CountAsync();
       ViewBag.EmployeeRequestForwordCount = await _appDBContext.HR_EmployeeRequestTypeForwards.CountAsync();
-      //ViewBag.EvaluationQuestionsCount = await _appDBContext.Branchs.CountAsync();
+      ViewBag.HolidayTypeCount = await _appDBContext.Settings_HolidayTypes.CountAsync();
       //ViewBag.EvaluationTemplateCount = await _appDBContext.Branchs.CountAsync();
       return View("~/Views/HR/Main/Dashboard/Main_Dashboard.cshtml");
     }

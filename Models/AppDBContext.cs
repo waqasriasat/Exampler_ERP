@@ -37,6 +37,7 @@ namespace Exampler_ERP.Models
     public DbSet<Settings_MonthType> Settings_MonthTypes { get; set; }
     public DbSet<Settings_AddionalAllowanceType> Settings_AddionalAllowanceTypes { get; set; }
     public DbSet<Settings_FixedDeductionType> Settings_FixedDeductionTypes { get; set; }
+    public DbSet<Settings_HolidayType> Settings_HolidayTypes { get; set; }
     public DbSet<CR_ProcessTypeApproval> CR_ProcessTypeApprovals { get; set; }
     public DbSet<CR_ProcessTypeApprovalDetail> CR_ProcessTypeApprovalDetails { get; set; }
     public DbSet<CR_ProcessTypeApprovalDetailDoc> CR_ProcessTypeApprovalDetailDocs { get; set; }
@@ -79,6 +80,7 @@ namespace Exampler_ERP.Models
     public DbSet<HR_MonthlyPayroll_SalaryDetail> HR_MonthlyPayroll_SalaryDetails { get; set; }
     public DbSet<HR_MonthlyPayroll> HR_MonthlyPayrolls { get; set; }
     public DbSet<HR_MonthlyPayrollPosted> HR_MonthlyPayrollPosteds { get; set; }
+    public DbSet<HR_Holiday> HR_Holidays { get; set; }
     public DbSet<HR_GlobalSetting> HR_GlobalSettings { get; set; }
 
 
@@ -87,6 +89,51 @@ namespace Exampler_ERP.Models
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      modelBuilder.Entity<HR_GlobalSetting>().HasData(
+
+     new HR_GlobalSetting()
+     {
+       HR_GlobalSettingID= 1,
+       LateAppID=1,
+       LateTypeID=1,
+       LateGraceMinute=15,
+       LateValueofHours=12,
+       EarlyGoingAppID=1,
+       EarlyGoingTypeID=2,
+       EarlyGoingGraceMinute=15,
+       EarlyGoingValueofHours=12,
+       EarlyComingAppID=1,
+       EarlyComingGraceMinute=15,
+       EarlyComingValueofHours=12,
+       LateSeatingAppID=1,
+       LateSeatingGraceMinute=15,
+       LateSeatingValueofHours=12,
+       AbsentAppID=1,
+       AbsentTypeID=3,
+       FlexibleDutyHourID=0,
+       WorkingDayInWeek=5
+     });
+
+      modelBuilder.Entity<Settings_HolidayType>().HasData(
+   new Settings_HolidayType() { HolidayTypeID = 1, HolidayTypeName = "New Year’s Day", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 2, HolidayTypeName = "Kashmir Day", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 3, HolidayTypeName = "Pakistan Day", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 4, HolidayTypeName = "Labour Day", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 5, HolidayTypeName = "Independence Day", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 6, HolidayTypeName = "Iqbal Day", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 7, HolidayTypeName = "Quaid-e-Azam Day / Christmas", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 8, HolidayTypeName = "Day After Christmas", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 9, HolidayTypeName = "Eid-ul-Fitr", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 10, HolidayTypeName = "Eid-ul-Adha", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 11, HolidayTypeName = "Ashura", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 12, HolidayTypeName = "Eid Milad-un-Nabi", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 13, HolidayTypeName = "Shab-e-Miraj", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 14, HolidayTypeName = "Shab-e-Barat", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 15, HolidayTypeName = "Basant", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 16, HolidayTypeName = "Sindhi Culture Day", ActiveYNID = 1, DeleteYNID = 0 },
+   new Settings_HolidayType() { HolidayTypeID = 17, HolidayTypeName = "Baloch Culture Day", ActiveYNID = 1, DeleteYNID = 0 }
+);
+
       modelBuilder.Entity<Settings_FixedDeductionType>().HasData(
    new Settings_FixedDeductionType() { FixedDeductionTypeID = 1, FixedDeductionTypeName = "Social Insurance", ActiveYNID = 1, DeleteYNID = 0 },
    new Settings_FixedDeductionType() { FixedDeductionTypeID = 2, FixedDeductionTypeName = "Income Tax", ActiveYNID = 1, DeleteYNID = 0 }
@@ -560,7 +607,7 @@ namespace Exampler_ERP.Models
       modelBuilder.Entity<Settings_DeductionType>().HasData(
         new Settings_DeductionType() { DeductionTypeID = 1, DeductionTypeName = "Late Coming", ActiveYNID = 1, DeleteYNID = 0 },
         new Settings_DeductionType() { DeductionTypeID = 2, DeductionTypeName = "Early Going", ActiveYNID = 1, DeleteYNID = 0 },
-         new Settings_DeductionType() { DeductionTypeID = 3, DeductionTypeName = "Income Tax", ActiveYNID = 1, DeleteYNID = 0 },
+         new Settings_DeductionType() { DeductionTypeID = 3, DeductionTypeName = "Absent", ActiveYNID = 1, DeleteYNID = 0 },
          new Settings_DeductionType() { DeductionTypeID = 4, DeductionTypeName = "Social Security Contributions", ActiveYNID = 1, DeleteYNID = 0 },
          new Settings_DeductionType() { DeductionTypeID = 5, DeductionTypeName = "Health Insurance Premiums", ActiveYNID = 1, DeleteYNID = 0 },
          new Settings_DeductionType() { DeductionTypeID = 6, DeductionTypeName = "Pension Contributions", ActiveYNID = 1, DeleteYNID = 0 },

@@ -64,6 +64,7 @@
                     currentPage.StartsWith("/SubQualification/Index")||
                     currentPage.StartsWith("/User/Index")||
                     currentPage.StartsWith("/VacationType/Index")||
+                    currentPage.StartsWith("/HolidayType/Index")||
 
                     currentPage.StartsWith("/Applicant/Index")||
                     currentPage.StartsWith("/BankAccount/Index")||
@@ -114,7 +115,8 @@
                                       currentPage == "/Role/Index" || currentPage == "/SalaryType/Index" ||
                                       currentPage == "/Section/Index" || currentPage == "/SubQualification/Index" ||
                                       currentPage == "/User/Index" || currentPage == "/VacationType/Index" ||
-                                      currentPage == "/EmployeeRequestTypeApprovalSetup/Index" || currentPage == "/EmployeeRequestTypeForward/Index" ? " active" : "")'>
+                                      currentPage == "/EmployeeRequestTypeApprovalSetup/Index" || currentPage == "/EmployeeRequestTypeForward/Index" ||
+                                      currentPage == "/Holiday/Index" ? " active" : "")'>
                     <a asp-controller="Main_Dashboard" asp-action="Index" class="menu-link">
                         <div>Master Information</div>
                     </a>

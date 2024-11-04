@@ -69,6 +69,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     {
       if (ModelState.IsValid)
       {
+       
         if (contract.ContractID == 2)
         {
           contract.EndDate = null;
@@ -78,8 +79,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         TempData["SuccessMessage"] = "Contract Updated successfully.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error Updating Contract. Please check the inputs.";
-      return PartialView("~/Views/HR/Employeement/Contract/EditContract.cshtml", contract);
+      return Json(new { success = false, message = "Error creating Employee. Please check the inputs." });
     }
 
     [HttpGet]
@@ -97,6 +97,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     {
       if (ModelState.IsValid)
       {
+       
         contract.DeleteYNID = 0;
         contract.ActiveYNID = 2;
         if(contract.ContractID == 2)
@@ -165,8 +166,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         TempData["SuccessMessage"] = "Contract Created successfully. Continue to the Approval Process Setup for Contract Activation.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating Contract. Please check the inputs.";
-      return PartialView("~/Views/HR/Employeement/Contract/AddContract.cshtml", contract);
+      return Json(new { success = false, message = "Error creating Employee. Please check the inputs." });
     }
 
     public async Task<IActionResult> Delete(int id)

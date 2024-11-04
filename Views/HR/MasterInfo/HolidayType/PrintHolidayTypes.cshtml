@@ -1,0 +1,53 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_HolidayType>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Holiday Type</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Holiday Type List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Holiday Type ID</th>
+                <th>Holiday Type Name</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var HolidayType in Model)
+            {
+                <tr>
+                    <td>@HolidayType.HolidayTypeID</td>
+                    <td>@HolidayType.HolidayTypeName</td>
+                    <td>@(HolidayType.ActiveYNID == 1 ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

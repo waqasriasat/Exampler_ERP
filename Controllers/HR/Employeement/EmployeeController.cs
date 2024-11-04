@@ -84,6 +84,18 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         {
           return Json(new { success = false, message = "First Name field is required. Please enter a valid text value." });
         }
+        if (string.IsNullOrEmpty(employee.FatherName))
+        {
+          return Json(new { success = false, message = "Father Name field is required. Please enter a valid text value." });
+        }
+        if (string.IsNullOrEmpty(employee.UserName))
+        {
+          return Json(new { success = false, message = "User Name field is required. Please enter a valid text value." });
+        }
+        if (string.IsNullOrEmpty(employee.Password))
+        {
+          return Json(new { success = false, message = "Password field is required. Please enter a valid text value." });
+        }
 
         if (profilePicture != null && profilePicture.Length > 0)
         {
@@ -123,6 +135,23 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     {
       if (ModelState.IsValid)
       {
+        if (string.IsNullOrEmpty(employee.FirstName))
+        {
+          return Json(new { success = false, message = "First Name field is required. Please enter a valid text value." });
+        }
+        if (string.IsNullOrEmpty(employee.FatherName))
+        {
+          return Json(new { success = false, message = "Father Name field is required. Please enter a valid text value." });
+        }
+        if (string.IsNullOrEmpty(employee.UserName))
+        {
+          return Json(new { success = false, message = "User Name field is required. Please enter a valid text value." });
+        }
+        if (string.IsNullOrEmpty(employee.Password))
+        {
+          return Json(new { success = false, message = "Password field is required. Please enter a valid text value." });
+        }
+       
         if (profilePicture != null && profilePicture.Length > 0)
         {
           using (var memoryStream = new MemoryStream())
@@ -197,8 +226,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         TempData["SuccessMessage"] = "Employee Created successfully. Continue to the Approval Process Setup for Employee Activation.";
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating Employee. Please check the inputs.";
-      return PartialView("~/Views/HR/Employeement/Employee/AddEmployee.cshtml", employee);
+      return Json(new { success = false, message = "Error creating Employee. Please check the inputs." });
     }
     public async Task<IActionResult> Delete(int id)
     {

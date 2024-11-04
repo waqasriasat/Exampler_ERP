@@ -35,6 +35,21 @@
         </div>
         <div class="row">
             <div class="col-4">
+                <label asp-for="FromDutyTime" class="form-label fw-bold">From Duty Slot</label>
+                <input asp-for="FromDutyTime" class="form-control form-control-lg"
+                       type="number" min="1" max="24" value="8" />
+                <span asp-validation-for="FromDutyTime" class="text-danger"></span>
+            </div>
+            <div class="col-4">
+                <label asp-for="ToDutyTime" class="form-label fw-bold">To Duty Slot</label>
+                <input asp-for="ToDutyTime" class="form-control form-control-lg"
+                       type="number" min="1" max="24" value="17" />
+                <span asp-validation-for="ToDutyTime" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-4">
                 <label asp-for="BranchTypeID" class="form-label fw-bold">Branch</label>
                 <select asp-for="BranchTypeID" asp-items="@(new SelectList(ViewBag.BranchsList, "Value", "Text", Model.BranchTypeID))" class="form-control form-control-lg">
                 </select>
