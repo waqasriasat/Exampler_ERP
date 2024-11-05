@@ -214,6 +214,21 @@ namespace Exampler_ERP.Utilities
 
       return SalaryTypeList;
     }
+    public async Task<List<SelectListItem>> GetHolidayTypes()
+    {
+      var HolidayTypes = await _appDBContext.Settings_HolidayTypes.ToListAsync();
+
+      var HolidayTypeList = HolidayTypes.Select(r => new SelectListItem
+      {
+        Value = r.HolidayTypeID.ToString(),
+        Text = r.HolidayTypeName
+      }).ToList();
+
+      HolidayTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+
+      return HolidayTypeList;
+    }
+
     public async Task<List<SelectListItem>> GetContractTypes()
     {
       var contractTypes = await _appDBContext.Settings_ContractTypes.ToListAsync();
