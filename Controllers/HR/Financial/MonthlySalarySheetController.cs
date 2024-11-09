@@ -5,6 +5,7 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 namespace Exampler_ERP.Controllers.HR.Financial
 {
@@ -46,21 +47,21 @@ namespace Exampler_ERP.Controllers.HR.Financial
     }
     public async Task<IActionResult> GeneratePayroll(int Branch, int MonthsTypeID, int YearsTypeID)
     {
-      var FatchExistingPosting = await _appDBContext.HR_MonthlyPayrollPosteds
-        .Where(e => e.BranchTypeID == Branch && e.MonthTypeID == MonthsTypeID && e.Year == YearsTypeID)
-        .FirstOrDefaultAsync();
+      //var FatchExistingPosting = await _appDBContext.HR_MonthlyPayrollPosteds
+      //  .Where(e => e.BranchTypeID == Branch && e.MonthTypeID == MonthsTypeID && e.Year == YearsTypeID)
+      //  .FirstOrDefaultAsync();
 
-      if (FatchExistingPosting != null)
-      {
-        ViewBag.MonthsTypeID = MonthsTypeID;
-        ViewBag.YearsTypeID = YearsTypeID;
-        ViewBag.Branch = Branch;
+      //if (FatchExistingPosting != null)
+      //{
+      //  ViewBag.MonthsTypeID = MonthsTypeID;
+      //  ViewBag.YearsTypeID = YearsTypeID;
+      //  ViewBag.Branch = Branch;
 
-        ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
-        ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
-        TempData["ErrorMessage"] = "Already posting found for the specified branch, month, and year.";
-        return View("~/Views/HR/Financial/MonthlySalarySheet/MonthlySalarySheet.cshtml", new List<MonthlySalarySheetViewModel>());
-      }
+      //  ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
+      //  ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
+      //  TempData["ErrorMessage"] = "Already posting found for the specified branch, month, and year.";
+      //  return View("~/Views/HR/Financial/MonthlySalarySheet/MonthlySalarySheet.cshtml", new List<MonthlySalarySheetViewModel>());
+      //}
 
       var employeeList = await _appDBContext.HR_Employees
           .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID == Branch)
@@ -86,6 +87,8 @@ namespace Exampler_ERP.Controllers.HR.Financial
     }
     private async Task<MonthlySalarySheetViewModel> GetMonthlySalarySheetAsync(int Branch, int employeeId, int month, int year)
     {
+     
+      
       var salarySheet = new MonthlySalarySheetViewModel
       {
         EmployeeID = employeeId
@@ -187,6 +190,14 @@ namespace Exampler_ERP.Controllers.HR.Financial
     {
       try
       {
+        var FatchExistingPosting = await _appDBContext.HR_MonthlyPayrollPosteds
+        .Where(e => e.BranchTypeID == BranchID && e.MonthTypeID == MonthID && e.Year == Year)
+        .FirstOrDefaultAsync();
+
+        if (FatchExistingPosting != null)
+        {
+          return Json(new { success = false, message = "Already posting found for the specified branch, month, and year." });
+        }
         var monthlyPayrollPosted = new HR_MonthlyPayrollPosted
         {
           BranchTypeID = BranchID,
@@ -242,8 +253,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
             }
             else
             {
-              TempData["ErrorMessage"] = "Next approval setup not found.";
-              return Json(new { success = false});
+              return Json(new { success = false, Message = "Next approval setup not found." });
             }
           }
           else
@@ -382,12 +392,10 @@ namespace Exampler_ERP.Controllers.HR.Financial
             monthlyPayrollPosted.FinalApprovalID = 1;
             _appDBContext.HR_MonthlyPayrollPosteds.Update(monthlyPayrollPosted);
             await _appDBContext.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Salary created successfully. No process setup found, Salary activated.";
-            return Json(new { success = true, message = "No process setup found." });
+            return Json(new { success = true, message = "Salary created successfully. No process setup found, Salary activated." });
           }
         }
-        TempData["SuccessMessage"] = "Salary Created successfully. Continue to the Approval Process Setup for Salary Final Approved.";
-        return Json(new { success = true });
+        return Json(new { success = true, message = "Salary Created successfully. Continue to the Approval Process Setup for Salary Final Approved." });
       }
       catch (Exception ex)
       {

@@ -369,9 +369,13 @@
                             </div>
                             <div class="col-1 bright bbottom" style="justify-items:center">
                                 <p class="text-nowrap">
-                                    @((decimal)(totalSalaryAmount) + (decimal)(totalAddionalAllowanceAmount) + (decimal)(totalovertimeAmount)
-                                        - ((decimal)(totaldeductionDaysamount) + (decimal)(totalFixedDeductionAmount)))
+                                    @(Math.Round((decimal)(totalSalaryAmount) +
+                                        (decimal)(totalAddionalAllowanceAmount) +
+                                        (decimal)(totalovertimeAmount) -
+                                        ((decimal)(totaldeductionDaysamount) +
+                                        (decimal)(totalFixedDeductionAmount)), 2))
                                 </p>
+
                             </div>
                         </div>
                     </div>

@@ -79,13 +79,17 @@ namespace Exampler_ERP.Controllers.HR.HR
       var deduction = await _appDBContext.HR_Deductions
                                          .Include(d => d.Employee)
                                          .Include(d => d.DeductionType)
-                                         .FirstOrDefaultAsync(d => d.DeductionID == id && d.DeleteYNID != 1 && (d.PostedID == 0 || d.PostedID == null));
+                                         .FirstOrDefaultAsync(d => d.DeductionID == id && d.DeleteYNID != 1);
 
       if (deduction == null)
       {
         return NotFound();
       }
-
+      if (deduction.PostedID != null && deduction.PostedID != 0)
+      {
+        //TempData["ErrorMessage"] = "This deduction has already been posted to the Payroll Department and cannot be edited..";
+        return NotFound();
+      }
       // Return the partial view with the deduction model
       return PartialView("~/Views/HR/HR/Deduction/EditDeduction.cshtml", deduction);
     }
@@ -133,7 +137,66 @@ namespace Exampler_ERP.Controllers.HR.HR
         Deduction.DeleteYNID = 0;
         _appDBContext.HR_Deductions.Add(Deduction);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Deduction created successfully.";
+
+        int generatedDeductionID = Deduction.DeductionID;
+        if (generatedDeductionID > 0)
+        {
+          var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
+                              .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 9)
+                              .CountAsync();
+          var getEmployeeID = await _appDBContext.HR_Deductions
+                            .Where(pta => pta.DeductionID == generatedDeductionID)
+                            .FirstOrDefaultAsync();
+          if (processCount > 0)
+          {
+            var newProcessTypeApproval = new CR_ProcessTypeApproval
+            {
+              ProcessTypeID = 9,
+              Notes = "Deduction",
+              Date = DateTime.Now,
+              EmployeeID = getEmployeeID.EmployeeID,
+              UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
+              TransactionID = generatedDeductionID
+            };
+
+            _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
+            await _appDBContext.SaveChangesAsync();
+
+            var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
+                                        .Where(pta => pta.ProcessTypeID == 9 && pta.Rank == 1)
+                                        .FirstOrDefaultAsync();
+
+            if (nextApprovalSetup != null)
+            {
+              var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
+              {
+                ProcessTypeApprovalID = newProcessTypeApproval.ProcessTypeApprovalID,
+                Date = DateTime.Now,
+                RoleID = nextApprovalSetup.RoleTypeID,
+                AppID = 0,
+                AppUserID = 0,
+                Notes = null,
+                Rank = nextApprovalSetup.Rank
+              };
+
+              _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
+              await _appDBContext.SaveChangesAsync();
+            }
+            else
+            {
+              return Json(new { success = false, message = "Next approval setup not found." });
+            }
+          }
+          else
+          {
+            Deduction.FinalApprovalID = 1;
+            _appDBContext.HR_Deductions.Update(Deduction);
+            await _appDBContext.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Deduction Created successfully. No process setup found, Deduction activated.";
+          }
+        }
+        TempData["SuccessMessage"] = "Deduction Created successfully. Continue to the Approval Process Setup for Deduction Activation.";
+
         return Json(new { success = true });
       }
       TempData["ErrorMessage"] = "Error creating Deduction. Please check the inputs.";

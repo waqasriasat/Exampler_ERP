@@ -45,6 +45,7 @@ namespace Exampler_ERP.Models
     public DbSet<CR_ProcessTypeForward> CR_ProcessTypeForwards { get; set; }
     public DbSet<CR_FaceAttendance> CR_FaceAttendances { get; set; }
     public DbSet<CR_ThumbAttendance> CR_ThumbAttendances { get; set; }
+    public DbSet<CR_FaceAttendancePosted> CR_FaceAttendancePosteds { get; set; }
     public DbSet<HR_ThumbEnrollment> HR_ThumbEnrollments { get; set; }
     public DbSet<CR_User> CR_Users { get; set; }
     public DbSet<HR_DeductionSetup> HR_DeductionSetups { get; set; }
@@ -141,7 +142,8 @@ namespace Exampler_ERP.Models
 
       modelBuilder.Entity<Settings_AddionalAllowanceType>().HasData(
     new Settings_AddionalAllowanceType() { AddionalAllowanceTypeID = 1, AddionalAllowanceTypeName = "Bonus", ActiveYNID = 1, DeleteYNID = 0 },
-    new Settings_AddionalAllowanceType() { AddionalAllowanceTypeID = 2, AddionalAllowanceTypeName = "Month Perfection Bonus", ActiveYNID = 1, DeleteYNID = 0 }
+    new Settings_AddionalAllowanceType() { AddionalAllowanceTypeID = 2, AddionalAllowanceTypeName = "Month Perfection Bonus", ActiveYNID = 1, DeleteYNID = 0 },
+    new Settings_AddionalAllowanceType() { AddionalAllowanceTypeID = 3, AddionalAllowanceTypeName = "Extra Duty", ActiveYNID = 1, DeleteYNID = 0 }
 );
 
       modelBuilder.Entity<Settings_MonthType>().HasData(

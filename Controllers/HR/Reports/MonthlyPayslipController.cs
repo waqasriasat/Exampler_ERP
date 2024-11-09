@@ -37,6 +37,12 @@ namespace Exampler_ERP.Controllers.HR.Reports
       }
       if (existingPayroll == null)
       {
+        ViewBag.MonthsTypeID = MonthsTypeID;
+        ViewBag.YearsTypeID = YearsTypeID;
+        ViewBag.Branch = Branch;
+
+        ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
+        ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
         return await PrintPayroll(0);
       }
 
@@ -62,6 +68,7 @@ namespace Exampler_ERP.Controllers.HR.Reports
           .Include(s => s.Employee.BranchType)
           .Include(s => s.Employee.DepartmentType)
           .Include(s => s.Employee.DesignationType)
+          .OrderBy(s => s.EmployeeID)
           .ToListAsync();
 
       if (employeeData == null || !employeeData.Any())
@@ -90,6 +97,7 @@ namespace Exampler_ERP.Controllers.HR.Reports
         var additionalAllowances = await _appDBContext.HR_AddionalAllowanceDetails
             .Where(a => a.AddionalAllowance.EmployeeID == employeeSalary.EmployeeID && a.AddionalAllowance.PayRollID == payrollID)
             .Include(a => a.AddionalAllowance)
+            .Include(a => a.AddionalAllowanceType)
             .ToListAsync();
 
         var overtimeData = await _appDBContext.HR_OverTimes
@@ -160,6 +168,8 @@ namespace Exampler_ERP.Controllers.HR.Reports
         EmployeePayrolls = employeePayrolls
       };
 
+      
+
       ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
       ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
 
@@ -203,6 +213,7 @@ namespace Exampler_ERP.Controllers.HR.Reports
           .Include(s => s.Employee.BranchType)
           .Include(s => s.Employee.DepartmentType)
           .Include(s => s.Employee.DesignationType)
+          .OrderBy(s => s.EmployeeID)
           .ToListAsync();
 
       if (employeeData == null || !employeeData.Any())
@@ -231,6 +242,7 @@ namespace Exampler_ERP.Controllers.HR.Reports
         var additionalAllowances = await _appDBContext.HR_AddionalAllowanceDetails
             .Where(a => a.AddionalAllowance.EmployeeID == employeeSalary.EmployeeID && a.AddionalAllowance.PayRollID == payrollID)
             .Include(a => a.AddionalAllowance)
+             .Include(a => a.AddionalAllowanceType)
             .ToListAsync();
 
         var overtimeData = await _appDBContext.HR_OverTimes

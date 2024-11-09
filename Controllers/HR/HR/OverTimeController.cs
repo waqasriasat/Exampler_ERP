@@ -81,10 +81,15 @@ namespace Exampler_ERP.Controllers.HR.HR
       var OverTime = await _appDBContext.HR_OverTimes
                                          .Include(d => d.Employee)
                                          .Include(d => d.OverTimeType)
-                                         .FirstOrDefaultAsync(d => d.OverTimeID == id && d.DeleteYNID != 1 && (d.PostedID == 0 || d.PostedID == null));
+                                         .FirstOrDefaultAsync(d => d.OverTimeID == id && d.DeleteYNID != 1);
 
       if (OverTime == null)
       {
+        return NotFound();
+      }
+      if (OverTime.PostedID != null && OverTime.PostedID != 0)
+      {
+        //TempData["ErrorMessage"] = "This deduction has already been posted to the Payroll Department and cannot be edited..";
         return NotFound();
       }
 
@@ -136,7 +141,66 @@ namespace Exampler_ERP.Controllers.HR.HR
         OverTime.DeleteYNID = 0;
         _appDBContext.HR_OverTimes.Add(OverTime);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "OverTime created successfully.";
+
+        int generatedOverTimeID = OverTime.OverTimeID;
+        if (generatedOverTimeID > 0)
+        {
+          var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
+                              .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 7)
+                              .CountAsync();
+          var getEmployeeID = await _appDBContext.HR_OverTimes
+                            .Where(pta => pta.OverTimeID == generatedOverTimeID)
+                            .FirstOrDefaultAsync();
+          if (processCount > 0)
+          {
+            var newProcessTypeApproval = new CR_ProcessTypeApproval
+            {
+              ProcessTypeID = 7,
+              Notes = "OverTime",
+              Date = DateTime.Now,
+              EmployeeID = getEmployeeID.EmployeeID,
+              UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
+              TransactionID = generatedOverTimeID
+            };
+
+            _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
+            await _appDBContext.SaveChangesAsync();
+
+            var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
+                                        .Where(pta => pta.ProcessTypeID == 7 && pta.Rank == 1)
+                                        .FirstOrDefaultAsync();
+
+            if (nextApprovalSetup != null)
+            {
+              var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
+              {
+                ProcessTypeApprovalID = newProcessTypeApproval.ProcessTypeApprovalID,
+                Date = DateTime.Now,
+                RoleID = nextApprovalSetup.RoleTypeID,
+                AppID = 0,
+                AppUserID = 0,
+                Notes = null,
+                Rank = nextApprovalSetup.Rank
+              };
+
+              _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
+              await _appDBContext.SaveChangesAsync();
+            }
+            else
+            {
+              return Json(new { success = false, message = "Next approval setup not found." });
+            }
+          }
+          else
+          {
+            OverTime.FinalApprovalID = 1;
+            _appDBContext.HR_OverTimes.Update(OverTime);
+            await _appDBContext.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Addional Allowance Created successfully. No process setup found, Addional Allowance activated.";
+          }
+        }
+        TempData["SuccessMessage"] = "Addional Allowance Created successfully. Continue to the Approval Process Setup for Addional Allowance Activation.";
+
         return Json(new { success = true });
       }
       TempData["ErrorMessage"] = "Error creating OverTime. Please check the inputs.";

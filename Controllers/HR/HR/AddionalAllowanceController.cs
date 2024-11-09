@@ -62,18 +62,20 @@ namespace Exampler_ERP.Controllers.HR.HR
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
-      // Fetch the allowance record with the specified id
       var allowance = await _appDBContext.HR_AddionalAllowances
-          .Include(a => a.AddionalAllowanceDetails) // Include the details for editing
-          .FirstOrDefaultAsync(a => a.AddionalAllowanceID == id && (a.PostedID == 0 || a.PostedID == null));
+          .Include(a => a.AddionalAllowanceDetails)
+          .FirstOrDefaultAsync(a => a.AddionalAllowanceID == id );
 
       if (allowance == null)
       {
-        return NotFound(); // Handle not found case
+        return NotFound();
       }
-
-      // Prepare necessary ViewBag data for the edit view
-      ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
+      if (allowance.PostedID != null && allowance.PostedID != 0)
+      {
+        //TempData["ErrorMessage"] = "This deduction has already been posted to the Payroll Department and cannot be edited..";
+        return NotFound();
+      }
+       ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
           .Select(r => new { Value = r.AddionalAllowanceTypeID, Text = r.AddionalAllowanceTypeName })
           .ToListAsync();
 
@@ -87,58 +89,48 @@ namespace Exampler_ERP.Controllers.HR.HR
     {
       if (ModelState.IsValid)
       {
-        // Get the existing allowance record including its details
         var existingAllowance = await _appDBContext.HR_AddionalAllowances
             .Include(a => a.AddionalAllowanceDetails)
             .FirstOrDefaultAsync(a => a.AddionalAllowanceID == model.AddionalAllowanceID);
 
         if (existingAllowance == null)
         {
-          return NotFound(); // Handle the case where the allowance is not found
+          return NotFound();
         }
 
-        // Update the main allowance properties
         existingAllowance.EmployeeID = model.EmployeeID;
         existingAllowance.MonthTypeID = model.MonthTypeID;
         existingAllowance.Year = model.Year;
-        // Add any other fields that need to be updated...
 
-        // Compare and update detail entries
         foreach (var existingDetail in existingAllowance.AddionalAllowanceDetails.ToList())
         {
-          // Check if the detail is in the incoming model
           var updatedDetail = model.AddionalAllowanceDetails
-              .FirstOrDefault(d => d.AddionalAllowanceDetailID == existingDetail.AddionalAllowanceDetailID);
+               .FirstOrDefault(d => d.AddionalAllowanceDetailID == existingDetail.AddionalAllowanceDetailID);
 
           if (updatedDetail == null)
           {
-            // If the detail is not in the incoming model, remove it from the database
             _appDBContext.HR_AddionalAllowanceDetails.Remove(existingDetail);
           }
           else
           {
-            // If it exists, update its properties
             existingDetail.AddionalAllowanceTypeID = updatedDetail.AddionalAllowanceTypeID;
             existingDetail.AddionalAllowanceAmount = updatedDetail.AddionalAllowanceAmount;
           }
         }
 
-        // Add new details that are in the incoming model but not in the existing model
         foreach (var newDetail in model.AddionalAllowanceDetails)
         {
-          if (newDetail.AddionalAllowanceDetailID == 0) // Assuming 0 means it's a new entry
+          if (newDetail.AddionalAllowanceDetailID == 0)
           {
             existingAllowance.AddionalAllowanceDetails.Add(newDetail);
           }
         }
 
-        // Save changes to the database
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Addional Allowance updated successfully.";
         return Json(new { success = true });
       }
 
-      // If validation fails, return the view with errors
       ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
           .Select(r => new { Value = r.AddionalAllowanceTypeID, Text = r.AddionalAllowanceTypeName })
           .ToListAsync();
@@ -149,7 +141,7 @@ namespace Exampler_ERP.Controllers.HR.HR
       return PartialView("~/Views/HR/HR/AddionalAllowance/EditAddionalAllowance.cshtml", model);
     }
 
- 
+
 
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -158,8 +150,8 @@ namespace Exampler_ERP.Controllers.HR.HR
           .Select(r => new { Value = r.AddionalAllowanceTypeID, Text = r.AddionalAllowanceTypeName })
           .ToListAsync();
 
-      ViewBag.EmployeesList = await _utils.GetEmployee(); // Assuming this method fetches employee data
-      ViewBag.MonthsList = await _utils.GetMonthsTypes(); // Assuming this method fetches month data
+      ViewBag.EmployeesList = await _utils.GetEmployee();
+      ViewBag.MonthsList = await _utils.GetMonthsTypes();
 
       return PartialView("~/Views/HR/HR/AddionalAllowance/AddAddionalAllowance.cshtml", new HR_AddionalAllowance());
     }
@@ -167,11 +159,11 @@ namespace Exampler_ERP.Controllers.HR.HR
     [HttpPost]
     public async Task<IActionResult> Create(HR_AddionalAllowance model)
     {
-     
-        if (ModelState.IsValid)
-        {
-          _appDBContext.HR_AddionalAllowances.Add(model);
-          await _appDBContext.SaveChangesAsync();
+
+      if (ModelState.IsValid)
+      {
+        _appDBContext.HR_AddionalAllowances.Add(model);
+        await _appDBContext.SaveChangesAsync();
 
         int generatedAddionalAllowanceID = model.AddionalAllowanceID;
         if (generatedAddionalAllowanceID > 0)
@@ -232,8 +224,8 @@ namespace Exampler_ERP.Controllers.HR.HR
         }
         TempData["SuccessMessage"] = "Addional Allowance Created successfully. Continue to the Approval Process Setup for Addional Allowance Activation.";
         return Json(new { success = true });
-        }
-     
+      }
+
       ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
           .Select(r => new { Value = r.AddionalAllowanceTypeID, Text = r.AddionalAllowanceTypeName })
           .ToListAsync();

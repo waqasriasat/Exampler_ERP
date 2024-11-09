@@ -373,6 +373,22 @@ namespace Exampler_ERP.Controllers.MasterInfo
                 }
                 if (ProcessTypeID == 7)
                 {
+                  var overTime = await _appDBContext.HR_OverTimes
+                                                           .Where(u => u.OverTimeID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+                  if (overTime != null)
+                  {
+                    overTime.FinalApprovalID = 1;
+                    overTime.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(overTime);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 8)
+                {
                   var addionalAllowance = await _appDBContext.HR_AddionalAllowances
                                                            .Where(u => u.AddionalAllowanceID == transactionID)
                                                            .FirstOrDefaultAsync();
@@ -387,13 +403,21 @@ namespace Exampler_ERP.Controllers.MasterInfo
                     await _appDBContext.SaveChangesAsync();
                   }
                 }
-                if (ProcessTypeID == 8)
-                {
-
-                }
                 if (ProcessTypeID == 9)
                 {
+                  var deduction = await _appDBContext.HR_Deductions
+                                                          .Where(u => u.DeductionID == transactionID)
+                                                          .FirstOrDefaultAsync();
 
+
+                  if (deduction != null)
+                  {
+                    deduction.FinalApprovalID = 1;
+                    deduction.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(deduction);
+                    await _appDBContext.SaveChangesAsync();
+                  }
                 }
                 if (ProcessTypeID == 10)
                 {
@@ -741,7 +765,19 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 7)
           {
+            var overTime = await _appDBContext.HR_OverTimes
+                                                     .Where(u => u.OverTimeID == transactionID)
+                                                     .FirstOrDefaultAsync();
 
+
+            if (overTime != null)
+            {
+              overTime.FinalApprovalID = 2;
+              overTime.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+              _appDBContext.Update(overTime);
+              await _appDBContext.SaveChangesAsync();
+            }
           }
           if (ProcessTypeID == 8)
           {
@@ -761,7 +797,19 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 9)
           {
+            var deduction = await _appDBContext.HR_Deductions
+                                                    .Where(u => u.DeductionID == transactionID)
+                                                    .FirstOrDefaultAsync();
 
+
+            if (deduction != null)
+            {
+              deduction.FinalApprovalID = 2;
+              deduction.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+              _appDBContext.Update(deduction);
+              await _appDBContext.SaveChangesAsync();
+            }
           }
           if (ProcessTypeID == 10)
           {
@@ -969,7 +1017,21 @@ namespace Exampler_ERP.Controllers.MasterInfo
       }
       if (processTypeID == 7)
       {
+        var OverTime = await _appDBContext.HR_OverTimes
+                                         .Include(d => d.Employee)
+                                         .Include(d => d.OverTimeType)
+                                         .FirstOrDefaultAsync(d => d.OverTimeID == transactionID && d.DeleteYNID != 1 );
+        if (OverTime == null)
+        {
+          return NotFound(); // Handle not found case
+        }
 
+        ViewBag.EmployeesList = await _utils.GetEmployee();
+        ViewBag.OverTimeTypesList = await _utils.GetOverTimeTypes();
+        ViewBag.OvertimeRatesList = await _utils.GetOverTimeRates();
+        ViewBag.MonthsList = await _utils.GetMonthsTypes();
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", OverTime);
       }
       if (processTypeID == 8)
       {
@@ -995,7 +1057,21 @@ namespace Exampler_ERP.Controllers.MasterInfo
       }
       if (processTypeID == 9)
       {
+        var deduction = await _appDBContext.HR_Deductions
+                                         .Include(d => d.Employee)
+                                         .Include(d => d.DeductionType)
+                                         .FirstOrDefaultAsync(d => d.DeductionID == transactionID && d.DeleteYNID != 1);
 
+        if (deduction == null)
+        {
+          return NotFound();
+        }
+
+
+        ViewBag.EmployeesList = await _utils.GetEmployee();
+        ViewBag.DeductionTypesList = await _utils.GetDeductionTypes();
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", deduction);
       }
       if (processTypeID == 10)
       {
