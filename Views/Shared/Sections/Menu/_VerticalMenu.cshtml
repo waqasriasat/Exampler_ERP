@@ -258,23 +258,30 @@
             </ul>
         </li>
 
-        <!-- Components -->
-        <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
-        <!-- Setup -->
-        <li class='menu-item@(currentPage.StartsWith("/Pages/Misc") ? " active open" : "")'>
+        <li class='menu-item@(currentPage.StartsWith("/Pages/Account") ? " active open" : "")'>
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-wrench"></i>
+                <i class="menu-icon tf-icons bx bx-dollar"></i>
                 <div>Setup</div>
             </a>
             <ul class="menu-sub">
-                <li class='menu-item@(currentPage == "/Pages/MiscError" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="MiscError" class="menu-link" target="_blank">
-                        <div>Error</div>
+                <li class='menu-item@(currentPage == "/Pages/AccountSettings" ? " active" : "")'>
+                    <a asp-controller="HRGlobalSetting" asp-action="Index" class="menu-link">
+                        <div>Human Resources</div>
                     </a>
                 </li>
-                <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
-                        <div>Under Maintenance</div>
+                <li class='menu-item@(currentPage == "/Pages/AccountSettingsNotifications" ? " active" : "")'>
+                    <a asp-controller="Pages" asp-action="AccountSettingsNotifications" class="menu-link">
+                        <div>Vouchars</div>
+                    </a>
+                </li>
+                <li class='menu-item@(currentPage == "/Pages/AccountSettingsConnections" ? " active" : "")'>
+                    <a asp-controller="Pages" asp-action="AccountSettingsConnections" class="menu-link">
+                        <div>Setup</div>
+                    </a>
+                </li>
+                <li class='menu-item@(currentPage == "/Pages/AccountSettingsConnections" ? " active" : "")'>
+                    <a asp-controller="Pages" asp-action="AccountSettingsConnections" class="menu-link">
+                        <div>Reports</div>
                     </a>
                 </li>
             </ul>

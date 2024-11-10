@@ -138,8 +138,8 @@ namespace Exampler_ERP.Controllers.HR.HR
               .Count();
 
           int workingDaysInWeek = _appDBContext.HR_GlobalSettings
-              .Select(gs => gs.WorkingDayInWeek)
-              .FirstOrDefault();
+          .Select(gs => (int?)gs.WorkingDayInWeek) // Cast to nullable int
+          .FirstOrDefault() ?? 5;
 
           int totalWorkingDays = daysInMonth - weekends - holidays;
 

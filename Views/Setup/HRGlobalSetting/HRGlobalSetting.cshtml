@@ -1,0 +1,90 @@
+@model Exampler_ERP.Models.HR_GlobalSetting
+
+@{
+    ViewData["Title"] = "Setup - Human Resources";
+}
+
+@section PageScripts {
+    <script src="~/js/pages-account-settings-account.js"></script>
+}
+
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Setup /</span> Human Resources
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-pills flex-column flex-md-row mb-3">
+            <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Human Resources</a></li>
+            <li class="nav-item"><a class="nav-link" href="AccountSettingsNotifications"><i class="bx bx-bell me-1"></i> Finance</a></li>
+            <li class="nav-item"><a class="nav-link" href="AccountSettingsConnections"><i class="bx bx-link-alt me-1"></i> Store Management</a></li>
+            <li class="nav-item"><a class="nav-link" href="AccountSettingsConnections"><i class="bx bx-link-alt me-1"></i> Purchase</a></li>
+        </ul>
+        <div class="card mb-4">
+            <h5 class="card-header">Detail</h5>
+            <div class="card-body">
+                <form id="formAccountSettings" method="POST">
+                    <div class="row">
+                        <h4 class="mb-4 mb-3">
+                            <h6 class="mb-3" style="color: blue;">Late Coming Management</h6>
+                        </h4>
+                        <div class="mb-3 col-md-6">
+                            <label for="LateAppID" class="form-label">Automatically Deduct for Late Arrivals</label>
+                            <select asp-for="LateAppID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-select">
+                                <option>Please select</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="LateTypeID" class="form-label">Deduction Type</label>
+                            <select asp-for="LateTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypesList, "Value", "Text"))" class="form-control form-control-lg" id="LateTypeID">
+                            </select>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="LateGraceMinute" class="form-label">Allowed Grace Period (Minutes)</label>
+                            <input type="number" class="form-control form-control-lg"
+                                   id="LateGraceMinute" name="LateGraceMinute"
+                                   value="@Model.LateGraceMinute" min="1" max="60" />
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="LateValueofHours" class="form-label">Deduction Percentage of Daily Pay</label>
+                            <input type="number" class="form-control form-control-lg"
+                                   id="LateValueofHours" name="LateValueofHours"
+                                   value="@Model.LateValueofHours" min="1" max="100" />
+                        </div>
+                        <hr class="my-0">
+                        <h4 class="mb-4 mb-3">
+                            <h6 class="mb-3" style="color: blue;">Early Going Management</h6>
+                        </h4>
+                        <div class="mb-3 col-md-6">
+                            <label for="EarlyGoingAppID" class="form-label">Automatically Deduct for Early Going Arrivals</label>
+                            <select asp-for="EarlyGoingAppID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-select">
+                                <option>Please select</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="EarlyGoingTypeID" class="form-label">Deduction Type</label>
+                            <select asp-for="EarlyGoingTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypesList, "Value", "Text"))" class="form-control form-control-lg" id="EarlyGoingTypeID">
+                            </select>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="EarlyGoingGraceMinute" class="form-label">Allowed Grace Period (Minutes)</label>
+                            <input type="number" class="form-control form-control-lg"
+                                   id="EarlyGoingGraceMinute" name="EarlyGoingGraceMinute"
+                                   value="@Model.EarlyGoingGraceMinute" min="1" max="60" />
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="EarlyGoingValueofHours" class="form-label">Deduction Percentage of Daily Pay</label>
+                            <input type="number" class="form-control form-control-lg"
+                                   id="EarlyGoingValueofHours" name="EarlyGoingValueofHours"
+                                   value="@Model.EarlyGoingValueofHours" min="1" max="100" />
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit" class="btn btn-primary me-2">Save Changes</button>
+                        <button type="reset" class="btn btn-outline-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
