@@ -23,12 +23,13 @@ namespace Exampler_ERP.Controllers.Setup
     }
     public async Task<IActionResult> Index()
     {
-    
-        var globalSettings = await _appDBContext.HR_GlobalSettings.FirstOrDefaultAsync();
-        ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
+
+      var globalSettings = await _appDBContext.HR_GlobalSettings.FirstOrDefaultAsync();
+      ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
       ViewBag.DeductionTypesList = await _utils.GetDeductionTypes();
+      ViewBag.OvertimeTypeList = await _utils.GetOverTimeTypes();
       return View("~/Views/Setup/HRGlobalSetting/HRGlobalSetting.cshtml", globalSettings);
-     
+
     }
 
   }

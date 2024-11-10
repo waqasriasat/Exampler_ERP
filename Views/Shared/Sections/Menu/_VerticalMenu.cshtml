@@ -257,31 +257,32 @@
 
             </ul>
         </li>
-
-        <li class='menu-item@(currentPage.StartsWith("/Pages/Account") ? " active open" : "")'>
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
+        <li class='menu-item@(currentPage == "/HRGlobalSetting/Index" || currentPage == "/FinanceGlobalSetting/Index" ||
+                              currentPage == "/StoreManagementGlobalSetting/Index" || currentPage == "/PurchaseGlobalSetting/Index" ? " active open" : "")'>
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-dollar"></i>
+                <i class="menu-icon fas fa-toolbox"></i>
                 <div>Setup</div>
             </a>
             <ul class="menu-sub">
-                <li class='menu-item@(currentPage == "/Pages/AccountSettings" ? " active" : "")'>
+                <li class='menu-item@(currentPage == "/HRGlobalSetting/Index" ? " active" : "")'>
                     <a asp-controller="HRGlobalSetting" asp-action="Index" class="menu-link">
                         <div>Human Resources</div>
                     </a>
                 </li>
-                <li class='menu-item@(currentPage == "/Pages/AccountSettingsNotifications" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="AccountSettingsNotifications" class="menu-link">
-                        <div>Vouchars</div>
+                <li class='menu-item@(currentPage == "/FinanceGlobalSetting/Index" ? " active" : "")'>
+                    <a asp-controller="FinanceGlobalSetting" asp-action="Index" class="menu-link">
+                        <div>Finance</div>
                     </a>
                 </li>
-                <li class='menu-item@(currentPage == "/Pages/AccountSettingsConnections" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="AccountSettingsConnections" class="menu-link">
-                        <div>Setup</div>
+                <li class='menu-item@(currentPage == "/StoreManagementGlobalSetting/Index" ? " active" : "")'>
+                    <a asp-controller="StoreManagementGlobalSetting" asp-action="Index" class="menu-link">
+                        <div>Store Management</div>
                     </a>
                 </li>
-                <li class='menu-item@(currentPage == "/Pages/AccountSettingsConnections" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="AccountSettingsConnections" class="menu-link">
-                        <div>Reports</div>
+                <li class='menu-item@(currentPage == "/PurchaseGlobalSetting/Index" ? " active" : "")'>
+                    <a asp-controller="PurchaseGlobalSetting" asp-action="Index" class="menu-link">
+                        <div>Purchase</div>
                     </a>
                 </li>
             </ul>

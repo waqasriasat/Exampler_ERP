@@ -1,0 +1,37 @@
+
+@{
+    ViewData["Title"] = "Setup - Finance";
+}
+
+@section PageScripts {
+    <script src="~/js/pages-account-settings-account.js"></script>
+}
+
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Setup /</span> Finance
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-pills flex-column flex-md-row mb-3">
+            <li class="nav-item"><a class="nav-link " href="~/HRGlobalSetting/Index"><i class="menu-icon tf-icons bx bx-group"></i> Human Resources</a></li>
+            <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="menu-icon tf-icons bx bx-dollar"></i> Finance</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/StoreManagementGlobalSetting/Index"><i class="menu-icon tf-icons bx bx-store"></i> Store Management</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/PurchaseGlobalSetting/Index"><i class="menu-icon tf-icons bx bx-cart"></i> Purchase</a></li>
+        </ul>
+        <div class="card mb-4">
+            <h5 class="card-header">Detail</h5>
+            <div class="card-body">
+                <form id="formAccountSettings" method="POST">
+                    <div class="row">
+                      
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit" class="btn btn-primary me-2">Save Changes</button>
+                        <button type="reset" class="btn btn-outline-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
