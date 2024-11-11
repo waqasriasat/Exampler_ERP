@@ -1,61 +1,236 @@
 @{
     Layout = "_BlankLayout";
+
     ViewData["Title"] = "Login - Pages";
 }
 @section PageStyles {
     <link rel="stylesheet" href="~/vendor/css/pages/page-auth.css">
-}
+    <style>
+        /*  .btn-outline-primary, .btn-outline-secondary, .btn-outline-success {
+                    width: 180px;
+                    font-weight: 500;
+                    transition: all 0.3s ease;
+                }
 
+                    .btn-outline-primary:hover,
+                    .btn-outline-secondary:hover,
+                    .btn-outline-success:hover {
+                        color: #fff;
+                        transform: scale(1.05);
+                    }
+
+                .d-flex.justify-content-center.gap-2 {
+                    flex-wrap: wrap;
+                    gap: 20px;
+                } */
+        .card {
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .card:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            .card i {
+                font-size: 2.5rem;
+            }
+    </style>
+}
 <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
-        <div class="authentication-inner">
-            <div class="card">
-                <div class="card-body">
-                    <div class="app-brand">
-                        <a href="/" class="app-brand-link gap-2 justify-content-center">
-                           <img src="~/img/favicon/Logo.png" width="50%"/>
-                            @* <span class="app-brand-text demo text-body fw-bold">@TempData.Peek("appName")</span> *@
-                        </a>
-                    </div>
-                    <h4 class="mb-2">Welcome to @TempData.Peek("appName")! 👋</h4>
-                    <p class="mb-4">Please sign-in to your User account.</p>
-
-                    <form id="formAuthentication" class="mb-3" asp-action="Login" asp-controller="Auth" method="post">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control form-control-lg" id="username" name="Username" placeholder="Enter your username" value="ibs" autofocus>
+        <div class="row">
+            <!-- Login Options Section on Top for Tablet and Large Screens, Bottom for Mobile Screens -->
+            <div class="col-12 col-md-6 order-last order-md-first">
+                <div class="container">
+                    <div class="row justify-content-center text-center">
+                        <div class="col-12 col-md-4 col-lg-12 mb-3">
+                            <div class="card shadow-lg border-primary">
+                                <div class="card-body">
+                                    <i class="fas fa-user-tie fa-3x text-primary mb-3"></i>
+                                    <h5 class="card-title">Employee Login</h5>
+                                    <p class="card-text">Sign in to access your employee portal.</p>
+                                    <a href="/Auth/EmployeeLogin" class="btn btn-primary w-100">Go to Employee Login</a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="mb-3 form-password-toggle">
-                            <div class="d-flex justify-content-between">
-                                <label class="form-label" for="password">Password</label>
-                                <a href="/Auth/ForgotPassword">
-                                    <small>Forgot Password?</small>
+                        <div class="col-12 col-md-4 col-lg-12 mb-3">
+                            <div class="card shadow-lg border-secondary">
+                                <div class="card-body">
+                                    <i class="fas fa-user-shield fa-3x text-secondary mb-3"></i>
+                                    <h5 class="card-title">Supplier Login</h5>
+                                    <p class="card-text">Sign in to manage your supplier account.</p>
+                                    <a href="/Auth/SupplierLogin" class="btn btn-secondary w-100">Go to Supplier Login</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4 col-lg-12">
+                            <div class="card shadow-lg border-success">
+                                <div class="card-body">
+                                    <i class="fas fa-calendar-check fa-3x text-success mb-3"></i>
+                                    <h5 class="card-title">Attendance</h5>
+                                    <p class="card-text">Check your attendance records here.</p>
+                                    <a href="/FaceAttendance/FaceAttendanceMarks" class="btn btn-success w-100">Go to Attendance</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Login Form Section on Bottom for Tablet and Large Screens, Top for Mobile Screens -->
+            <div class="col-12 col-md-6 order-first order-md-last">
+                <div class="authentication-inner" style="place-self: center;">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="app-brand">
+                                <a href="/" class="app-brand-link gap-2 justify-content-center">
+                                    <img src="~/img/favicon/Logo.png" width="50%" />
                                 </a>
                             </div>
-                            <div class="input-group input-group-merge">
-                                <input type="password" id="password" class="form-control form-control-lg" name="Password" value="A@123456" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
-                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="remember-me">
-                                <label class="form-check-label" for="remember-me">
-                                    Remember Me
-                                </label>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <button class="btn btn-primary d-grid w-100" type="submit">Login</button>
-                        </div>
-                    </form>
+                            <h4 class="mb-2">Welcome to @TempData.Peek("appName")! 👋</h4>
+                            <p class="mb-4">Please sign-in to your User account.</p>
 
-                    <p class="text-center">
-                        <span>Not a User?</span>
-                        <a href="/Auth/EmployeeLogin">Employee Login</a> | <a href="/Auth/SupplierLogin">Supplier Login</a> | <a href="/FaceAttendance/FaceAttendanceMarks">Attendance</a>
-                    </p>
+                            <form id="formAuthentication" class="mb-3" asp-action="Login" asp-controller="Auth" method="post">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control form-control-lg" id="username" name="Username" placeholder="Enter your username" value="ibs" autofocus>
+                                </div>
+                                <div class="mb-3 form-password-toggle">
+                                    <div class="d-flex justify-content-between">
+                                        <label class="form-label" for="password">Password</label>
+                                        <a href="/Auth/ForgotPassword">
+                                            <small>Forgot Password?</small>
+                                        </a>
+                                    </div>
+                                    <div class="input-group input-group-merge">
+                                        <input type="password" id="password" class="form-control form-control-lg" name="Password" value="A@123456" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                                        <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="remember-me">
+                                        <label class="form-check-label" for="remember-me">
+                                            Remember Me
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <button class="btn btn-primary d-grid w-100" type="submit">Login</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@* <div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="row">
+            <div class="col-12 col-md-12 col-lg-6">
+                <div class="container">
+                    <div class="row justify-content-center text-center">
+                        <div class="row">
+                            <div class="col-12 col-md-4 col-lg-12">
+                                <div class="card shadow-lg border-primary">
+                                    <div class="card-body">
+                                        <i class="fas fa-user-tie fa-3x text-primary mb-3"></i>
+                                        <h5 class="card-title">Employee Login</h5>
+                                        <p class="card-text">Sign in to access your employee portal.</p>
+                                        <a href="/Auth/EmployeeLogin" class="btn btn-primary w-100">Go to Employee Login</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4 col-lg-12">
+                                <div class="card shadow-lg border-secondary">
+                                    <div class="card-body">
+                                        <i class="fas fa-user-shield fa-3x text-secondary mb-3"></i>
+                                        <h5 class="card-title">Supplier Login</h5>
+                                        <p class="card-text">Sign in to manage your supplier account.</p>
+                                        <a href="/Auth/SupplierLogin" class="btn btn-secondary w-100">Go to Supplier Login</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4 col-lg-12">
+                                <div class="card shadow-lg border-success">
+                                    <div class="card-body">
+                                        <i class="fas fa-calendar-check fa-3x text-success mb-3"></i>
+                                        <h5 class="card-title">Attendance</h5>
+                                        <p class="card-text">Check your attendance records here.</p>
+                                        <a href="/FaceAttendance/FaceAttendanceMarks" class="btn btn-success w-100">Go to Attendance</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-12 col-lg-6" style="padding-top: 37px;">
+                <div class="authentication-inner" style="place-self: center;">
+                    <div class="card">
+
+                        <div class="card-body">
+                            <div class="app-brand">
+                                <a href="/" class="app-brand-link gap-2 justify-content-center">
+                                    <img src="~/img/favicon/Logo.png" width="50%" />
+                                    @* <span class="app-brand-text demo text-body fw-bold">@TempData.Peek("appName")</span> 
+                                </a>
+                            </div>
+                            <h4 class="mb-2">Welcome to @TempData.Peek("appName")! 👋</h4>
+                            <p class="mb-4">Please sign-in to your User account.</p>
+
+                            <form id="formAuthentication" class="mb-3" asp-action="Login" asp-controller="Auth" method="post">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control form-control-lg" id="username" name="Username" placeholder="Enter your username" value="ibs" autofocus>
+                                </div>
+                                <div class="mb-3 form-password-toggle">
+                                    <div class="d-flex justify-content-between">
+                                        <label class="form-label" for="password">Password</label>
+                                        <a href="/Auth/ForgotPassword">
+                                            <small>Forgot Password?</small>
+                                        </a>
+                                    </div>
+                                    <div class="input-group input-group-merge">
+                                        <input type="password" id="password" class="form-control form-control-lg" name="Password" value="A@123456" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                                        <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="remember-me">
+                                        <label class="form-check-label" for="remember-me">
+                                            Remember Me
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <button class="btn btn-primary d-grid w-100" type="submit">Login</button>
+                                </div>
+                            </form>
+
+                            <p class="text-center">
+                            <span>Not a User?</span>
+                            <a href="/Auth/EmployeeLogin">Employee Login</a> | <a href="/Auth/SupplierLogin">Supplier Login</a> | <a href="/FaceAttendance/FaceAttendanceMarks">Attendance</a>
+                            </p> 
+                           <p class="text-center mt-4">
+                            <span>Choose your login type:</span>
+                            </p>
+                            <div class="d-flex justify-content-center gap-2 mt-3">
+                            <a href="/Auth/EmployeeLogin" class="btn btn-outline-primary btn-lg">Employee Login</a>
+                            <a href="/Auth/SupplierLogin" class="btn btn-outline-secondary btn-lg">Supplier Login</a>
+                            <a href="/FaceAttendance/FaceAttendanceMarks" class="btn btn-outline-success btn-lg">Attendance</a>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> *@
