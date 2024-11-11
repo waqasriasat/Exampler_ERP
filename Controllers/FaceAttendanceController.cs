@@ -98,6 +98,7 @@ namespace Exampler_ERP.Controllers
           existingAttendance.DMinutes = duration.Minutes;
 
           await _appDBContext.SaveChangesAsync();
+          TempData["SuccessMessage"] = "Attendance marked (out).";
           return Json(new { success = true, message = "Attendance updated (out)." });
         }
       }
@@ -114,7 +115,7 @@ namespace Exampler_ERP.Controllers
 
       _appDBContext.CR_FaceAttendances.Add(attendance);
       await _appDBContext.SaveChangesAsync();
-
+      TempData["SuccessMessage"] = "Attendance marked (in).";
       return Json(new { success = true, message = "Attendance marked (in)." });
     }
   }
