@@ -4,6 +4,7 @@ using Exampler_ERP.Models;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using System.Text.Json;
 
 namespace Exampler_ERP.Controllers
 {
@@ -65,6 +66,23 @@ namespace Exampler_ERP.Controllers
       HttpContext.Session.SetString("UserName", Username);
       HttpContext.Session.SetInt32("UserRoleID", user.RoleTypeID);
       HttpContext.Session.SetString("UserRoleName", Username);
+
+
+      var roleTypeProperty = $"_{user.RoleTypeID}";
+
+      // Fetch the access rights based on the role type
+      var accessRightbyRole = await _appDBContext.CR_AccessRightsByRoles
+          .Where(u => EF.Property<int>(u, roleTypeProperty) == 1)
+          .Select(u => u.ActionSOR)
+          .ToListAsync();
+
+      // Serialize the List<int> into a JSON string
+      var accessRightsJson = JsonSerializer.Serialize(accessRightbyRole);
+
+      // Store the JSON string in the session
+      HttpContext.Session.SetString("AccessRightsActionSORs", accessRightsJson);
+
+
 
 
       TempData["SuccessMessage"] = "Successfully Login. Wellcome to " + Username;

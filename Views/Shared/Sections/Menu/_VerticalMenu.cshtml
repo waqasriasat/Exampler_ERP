@@ -1,10 +1,17 @@
 @{
-   
-    string? currentPage = Context.Request.Path;
-   
-    TempData.Keep();
-}
 
+    string? currentPage = Context.Request.Path;
+    TempData.Keep();
+
+
+    var accessRightsJson = Context.Session.GetString("AccessRightsActionSORs");
+
+    var accessRightList = string.IsNullOrEmpty(accessRightsJson)
+        ? new List<int>()
+        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsJson);
+
+
+}
 <!-- Menu -->
 @* ! Do this simple *@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
@@ -37,8 +44,10 @@
             </a>
         </li>
 
-        <!-- Human Resources -->
-        <li class='menu-item@(currentPage.StartsWith("/Main_Dashboard/Index") ||
+        @if (accessRightList.Contains(1))
+        {
+            <!-- Human Resources -->
+            <li class='menu-item@(currentPage.StartsWith("/Main_Dashboard/Index") ||
                     currentPage.StartsWith("/Employeement_Dashboard/Index") ||
                     currentPage.StartsWith("/HR_Dashboard/Index") ||
                     currentPage.StartsWith("/Finance_Dashboard/Index") ||
@@ -99,14 +108,14 @@
                     currentPage.StartsWith("/ApprovedMonthlySalarySheet/Index")||
                     currentPage.StartsWith("/MonthlyPayslip/Index")||
                     currentPage.StartsWith("/FaceAttendanceReport/Index") ? " active open" : "")'>
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-group"></i>
-                <div>Human Resources</div>
-            </a>
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-group"></i>
+                    <div>Human Resources</div>
+                </a>
 
-            <ul class="menu-sub">
-                <!-- Master Information -->
-                <li class='menu-item@(currentPage == "/Main_Dashboard/Index" || currentPage == "/AddionalAllowanceType/Index" ||
+                <ul class="menu-sub">
+                    <!-- Master Information -->
+                    <li class='menu-item@(currentPage == "/Main_Dashboard/Index" || currentPage == "/AddionalAllowanceType/Index" ||
                                       currentPage == "/DeductionSetup/Index" || currentPage == "/Branch/Index" ||
                                       currentPage == "/DeductionType/Index" || currentPage == "/Department/Index" ||
                                       currentPage == "/Designation/Index" || currentPage == "/EmployeeRequestType/Index" ||
@@ -118,195 +127,207 @@
                                       currentPage == "/User/Index" || currentPage == "/VacationType/Index" ||
                                       currentPage == "/EmployeeRequestTypeApprovalSetup/Index" || currentPage == "/EmployeeRequestTypeForward/Index" ||
                                       currentPage == "/Holiday/Index" ? " active" : "")'>
-                    <a asp-controller="Main_Dashboard" asp-action="Index" class="menu-link">
-                        <div>Master Information</div>
-                    </a>
-                </li>
+                        <a asp-controller="Main_Dashboard" asp-action="Index" class="menu-link">
+                            <div>Master Information</div>
+                        </a>
+                    </li>
 
-                <!-- Employeement -->
-                <li class='menu-item@(currentPage == "/Employeement_Dashboard/Index" || currentPage == "/Applicant/Index" ||
+                    <!-- Employeement -->
+                    <li class='menu-item@(currentPage == "/Employeement_Dashboard/Index" || currentPage == "/Applicant/Index" ||
                                       currentPage == "/BankAccount/Index" || currentPage == "/CardPrint/Index" ||
                                       currentPage == "/Contract/Index" || currentPage == "/ContractRenewal/Index" ||
                                       currentPage == "/Employee/Index" || currentPage == "/Joining/Index" ||
                                       currentPage == "/Salary/Index"  ? " active" : "")'>
-                    <a asp-controller="Employeement_Dashboard" asp-action="Index" class="menu-link">
-                        <div>Employeement</div>
-                    </a>
-                </li>
+                        <a asp-controller="Employeement_Dashboard" asp-action="Index" class="menu-link">
+                            <div>Employeement</div>
+                        </a>
+                    </li>
 
-                <!-- HR -->
-                <li class='menu-item@(currentPage == "/HR_Dashboard/Index" || currentPage == "/AddionalAllowance/Index" ||
+                    <!-- HR -->
+                    <li class='menu-item@(currentPage == "/HR_Dashboard/Index" || currentPage == "/AddionalAllowance/Index" ||
                                       currentPage == "/Deduction/Index" || currentPage == "/EndOfService/Index" ||
                                       currentPage == "/OverTime/Index" || currentPage == "/VacationSettle/Index"||
                                       currentPage == "/FaceAttendanceTimeAdjust/Index" || currentPage == "/FaceAttendanceForwarding/Index"||
                                       currentPage == "/Holiday/Index"? " active" : "")'>
-                    <a asp-controller="HR_Dashboard" asp-action="Index" class="menu-link">
-                        <div>HR</div>
-                    </a>
-                </li>
+                        <a asp-controller="HR_Dashboard" asp-action="Index" class="menu-link">
+                            <div>HR</div>
+                        </a>
+                    </li>
 
-                <!-- Finance -->
-                <li class='menu-item@(currentPage == "/Finance_Dashboard/Index" || currentPage == "/FixedDeduction/Index" ||
+                    <!-- Finance -->
+                    <li class='menu-item@(currentPage == "/Finance_Dashboard/Index" || currentPage == "/FixedDeduction/Index" ||
                                       currentPage == "/WorkDay/Index" || currentPage == "/MonthlySalarySheet/Index"  ? " active" : "")'>
-                    <a asp-controller="Finance_Dashboard" asp-action="Index" class="menu-link">
-                        <div>Finance</div>
-                    </a>
-                </li>
+                        <a asp-controller="Finance_Dashboard" asp-action="Index" class="menu-link">
+                            <div>Finance</div>
+                        </a>
+                    </li>
 
-                <!-- Report -->
-                <li class='menu-item@(currentPage == "/Report_Dashboard/Index"|| currentPage == "/ContractExpiry/Index" ||
+                    <!-- Report -->
+                    <li class='menu-item@(currentPage == "/Report_Dashboard/Index"|| currentPage == "/ContractExpiry/Index" ||
                                       currentPage == "/EmployeeBioData/Index" || currentPage == "/VacationBalance/Index" ||
                                       currentPage == "/VacationReport/Index"|| currentPage == "/ExperienceCertificate/Index" ||
                                       currentPage == "/EducationDocument/Index"|| currentPage == "/ProcessApprovalDetail/Index" ||
                                       currentPage == "/EmployeeRequestApprovalDetail/Index"|| currentPage == "/FaceAttendanceReport/Index"||
                                       currentPage == "/MonthlyPayslip/Index"|| currentPage == "/ApprovedMonthlySalarySheet/Index"  ? " active" : "")'>
-                    <a asp-controller="Report_Dashboard" asp-action="Index" class="menu-link">
-                        <div>Report</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
+                        <a asp-controller="Report_Dashboard" asp-action="Index" class="menu-link">
+                            <div>Report</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        }
+        @if (accessRightList.Contains(2))
+        {
+            <!-- Finance -->
+            <li class='menu-item@(currentPage.StartsWith("/Pages/Account") ? " active open" : "")'>
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-dollar"></i>
+                    <div>Finance</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class='menu-item@(currentPage == "/Pages/AccountSettings" ? " active" : "")'>
+                        <a asp-controller="Pages" asp-action="AccountSettings" class="menu-link">
+                            <div>Master Information</div>
+                        </a>
+                    </li>
+                    <li class='menu-item@(currentPage == "/Pages/AccountSettingsNotifications" ? " active" : "")'>
+                        <a asp-controller="Pages" asp-action="AccountSettingsNotifications" class="menu-link">
+                            <div>Vouchars</div>
+                        </a>
+                    </li>
+                    <li class='menu-item@(currentPage == "/Pages/AccountSettingsConnections" ? " active" : "")'>
+                        <a asp-controller="Pages" asp-action="AccountSettingsConnections" class="menu-link">
+                            <div>Setup</div>
+                        </a>
+                    </li>
+                    <li class='menu-item@(currentPage == "/Pages/AccountSettingsConnections" ? " active" : "")'>
+                        <a asp-controller="Pages" asp-action="AccountSettingsConnections" class="menu-link">
+                            <div>Reports</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        }
+        @if (accessRightList.Contains(3))
+        {
+            <!-- Store Management -->
+            <li class='menu-item@(currentPage.StartsWith("/Auth") ? " active open" : "")'>
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-store"></i>
+                    <div>Store Management</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class='menu-item@(currentPage == "/Auth/LoginBasic" ? " active" : "")'>
+                        <a asp-controller="Auth" asp-action="LoginBasic" class="menu-link" target="_blank">
+                            <div>Master Information</div>
+                        </a>
+                    </li>
+                    <li class='menu-item@(currentPage == "/Auth/RegisterBasic" ? " active" : "")'>
+                        <a asp-controller="Auth" asp-action="RegisterBasic" class="menu-link" target="_blank">
+                            <div>Store Management</div>
+                        </a>
+                    </li>
+                    <li class='menu-item@(currentPage == "/Auth/ForgotPasswordBasic" ? " active" : "")'>
+                        <a asp-controller="Auth" asp-action="ForgotPasswordBasic" class="menu-link" target="_blank">
+                            <div>Reports</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        }
+        @if (accessRightList.Contains(4))
+        {
+            <!-- Purchase -->
+            <li class='menu-item@(currentPage.StartsWith("/Pages/Misc") ? " active open" : "")'>
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-cart"></i>
+                    <div>Purchase</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class='menu-item@(currentPage == "/Pages/MiscError" ? " active" : "")'>
+                        <a asp-controller="Pages" asp-action="MiscError" class="menu-link" target="_blank">
+                            <div>Master Information</div>
+                        </a>
+                    </li>
+                    <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
+                        <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
+                            <div>Direct Purchase</div>
+                        </a>
+                    </li>
+                    <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
+                        <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
+                            <div>InDirect Purchase</div>
+                        </a>
+                    </li>
+                    <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
+                        <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
+                            <div>Store Management</div>
+                        </a>
+                    </li>
+                    <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
+                        <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
+                            <div>Reports</div>
+                        </a>
+                    </li>
 
-        <!-- Finance -->
-        <li class='menu-item@(currentPage.StartsWith("/Pages/Account") ? " active open" : "")'>
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-dollar"></i>
-                <div>Finance</div>
-            </a>
-            <ul class="menu-sub">
-                <li class='menu-item@(currentPage == "/Pages/AccountSettings" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="AccountSettings" class="menu-link">
-                        <div>Master Information</div>
-                    </a>
-                </li>
-                <li class='menu-item@(currentPage == "/Pages/AccountSettingsNotifications" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="AccountSettingsNotifications" class="menu-link">
-                        <div>Vouchars</div>
-                    </a>
-                </li>
-                <li class='menu-item@(currentPage == "/Pages/AccountSettingsConnections" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="AccountSettingsConnections" class="menu-link">
-                        <div>Setup</div>
-                    </a>
-                </li>
-                <li class='menu-item@(currentPage == "/Pages/AccountSettingsConnections" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="AccountSettingsConnections" class="menu-link">
-                        <div>Reports</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <!-- Store Management -->
-        <li class='menu-item@(currentPage.StartsWith("/Auth") ? " active open" : "")'>
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-store"></i>
-                <div>Store Management</div>
-            </a>
-            <ul class="menu-sub">
-                <li class='menu-item@(currentPage == "/Auth/LoginBasic" ? " active" : "")'>
-                    <a asp-controller="Auth" asp-action="LoginBasic" class="menu-link" target="_blank">
-                        <div>Master Information</div>
-                    </a>
-                </li>
-                <li class='menu-item@(currentPage == "/Auth/RegisterBasic" ? " active" : "")'>
-                    <a asp-controller="Auth" asp-action="RegisterBasic" class="menu-link" target="_blank">
-                        <div>Store Management</div>
-                    </a>
-                </li>
-                <li class='menu-item@(currentPage == "/Auth/ForgotPasswordBasic" ? " active" : "")'>
-                    <a asp-controller="Auth" asp-action="ForgotPasswordBasic" class="menu-link" target="_blank">
-                        <div>Reports</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <!-- Purchase -->
-        <li class='menu-item@(currentPage.StartsWith("/Pages/Misc") ? " active open" : "")'>
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-cart"></i>
-                <div>Purchase</div>
-            </a>
-            <ul class="menu-sub">
-                <li class='menu-item@(currentPage == "/Pages/MiscError" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="MiscError" class="menu-link" target="_blank">
-                        <div>Master Information</div>
-                    </a>
-                </li>
-                <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
-                        <div>Direct Purchase</div>
-                    </a>
-                </li>
-                <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
-                        <div>InDirect Purchase</div>
-                    </a>
-                </li>
-                <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
-                        <div>Store Management</div>
-                    </a>
-                </li>
-                <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
-                        <div>Reports</div>
-                    </a>
-                </li>
-
-            </ul>
-        </li>
-        <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
-        <li class='menu-item@(currentPage == "/HRGlobalSetting/Index" || currentPage == "/FinanceGlobalSetting/Index" ||
+                </ul>
+            </li>
+        }
+        @if (accessRightList.Contains(5))
+        {
+            <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
+            <li class='menu-item@(currentPage == "/HRGlobalSetting/Index" || currentPage == "/FinanceGlobalSetting/Index" ||
                               currentPage == "/StoreManagementGlobalSetting/Index" || currentPage == "/PurchaseGlobalSetting/Index" ? " active open" : "")'>
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon fas fa-toolbox"></i>
-                <div>Setup</div>
-            </a>
-            <ul class="menu-sub">
-                <li class='menu-item@(currentPage == "/HRGlobalSetting/Index" ? " active" : "")'>
-                    <a asp-controller="HRGlobalSetting" asp-action="Index" class="menu-link">
-                        <div>Human Resources</div>
-                    </a>
-                </li>
-                <li class='menu-item@(currentPage == "/FinanceGlobalSetting/Index" ? " active" : "")'>
-                    <a asp-controller="FinanceGlobalSetting" asp-action="Index" class="menu-link">
-                        <div>Finance</div>
-                    </a>
-                </li>
-                <li class='menu-item@(currentPage == "/StoreManagementGlobalSetting/Index" ? " active" : "")'>
-                    <a asp-controller="StoreManagementGlobalSetting" asp-action="Index" class="menu-link">
-                        <div>Store Management</div>
-                    </a>
-                </li>
-                <li class='menu-item@(currentPage == "/PurchaseGlobalSetting/Index" ? " active" : "")'>
-                    <a asp-controller="PurchaseGlobalSetting" asp-action="Index" class="menu-link">
-                        <div>Purchase</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <!-- Setting -->
-        <li class='menu-item@(currentPage.StartsWith("/Pages/Misc") ? " active open" : "")'>
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-cog"></i>
-                <div>Setting</div>
-            </a>
-            <ul class="menu-sub">
-                <li class='menu-item@(currentPage == "/Pages/MiscError" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="MiscError" class="menu-link" target="_blank">
-                        <div>User Registation</div>
-                    </a>
-                </li>
-                <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
-                    <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
-                        <div>Change Password</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon fas fa-toolbox"></i>
+                    <div>Setup</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class='menu-item@(currentPage == "/HRGlobalSetting/Index" ? " active" : "")'>
+                        <a asp-controller="HRGlobalSetting" asp-action="Index" class="menu-link">
+                            <div>Human Resources</div>
+                        </a>
+                    </li>
+                    <li class='menu-item@(currentPage == "/FinanceGlobalSetting/Index" ? " active" : "")'>
+                        <a asp-controller="FinanceGlobalSetting" asp-action="Index" class="menu-link">
+                            <div>Finance</div>
+                        </a>
+                    </li>
+                    <li class='menu-item@(currentPage == "/StoreManagementGlobalSetting/Index" ? " active" : "")'>
+                        <a asp-controller="StoreManagementGlobalSetting" asp-action="Index" class="menu-link">
+                            <div>Store Management</div>
+                        </a>
+                    </li>
+                    <li class='menu-item@(currentPage == "/PurchaseGlobalSetting/Index" ? " active" : "")'>
+                        <a asp-controller="PurchaseGlobalSetting" asp-action="Index" class="menu-link">
+                            <div>Purchase</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        }
+        @if (accessRightList.Contains(6))
+        {
+            <!-- Setting -->
+            <li class='menu-item@(currentPage.StartsWith("/Pages/Misc") ? " active open" : "")'>
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-cog"></i>
+                    <div>Setting</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class='menu-item@(currentPage == "/Pages/MiscError" ? " active" : "")'>
+                        <a asp-controller="Pages" asp-action="MiscError" class="menu-link" target="_blank">
+                            <div>User Registation</div>
+                        </a>
+                    </li>
+                    <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
+                        <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
+                            <div>Change Password</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        }
     </ul>
 
 </aside>
