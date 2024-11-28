@@ -277,12 +277,15 @@
         {
             <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
             <li class='menu-item@(currentPage == "/HRGlobalSetting/Index" || currentPage == "/FinanceGlobalSetting/Index" ||
-                              currentPage == "/StoreManagementGlobalSetting/Index" || currentPage == "/PurchaseGlobalSetting/Index" ? " active open" : "")'>
+                              currentPage == "/StoreManagementGlobalSetting/Index" || currentPage == "/PurchaseGlobalSetting/Index" ||
+                              currentPage == "/AccessRightByRole/Index"? " active open" : "")'>
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon fas fa-toolbox"></i>
                     <div>Setup</div>
                 </a>
+            
                 <ul class="menu-sub">
+                    <li class="menu-header small text-uppercase"><span class="menu-header-text">Global Settings</span></li>
                     <li class='menu-item@(currentPage == "/HRGlobalSetting/Index" ? " active" : "")'>
                         <a asp-controller="HRGlobalSetting" asp-action="Index" class="menu-link">
                             <div>Human Resources</div>
@@ -303,8 +306,15 @@
                             <div>Purchase</div>
                         </a>
                     </li>
+                    <li class="menu-header small text-uppercase"><span class="menu-header-text">General Settings</span></li>
+                    <li class='menu-item@(currentPage == "/AccessRightByRole/Index" ? " active" : "")'>
+                        <a asp-controller="AccessRightByRole" asp-action="Index" class="menu-link">
+                            <div>Access Right By Role</div>
+                        </a>
+                    </li>
                 </ul>
             </li>
+           
         }
         @if (accessRightList.Contains(6))
         {

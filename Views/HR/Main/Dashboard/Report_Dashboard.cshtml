@@ -1,5 +1,12 @@
 @{
     ViewData["Title"] = "Human Resources - Reports";
+
+    var accessRightsJson = Context.Session.GetString("AccessRightsActionSORs");
+
+    var accessRightList = string.IsNullOrEmpty(accessRightsJson)
+        ? new List<int>()
+        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsJson);
+
 }
 
 @section PageScripts {
@@ -24,265 +31,295 @@
         <div class="card mb-4">
             <h5 class="card-header">Details</h5>
             <div class="row" style="padding: 30px 30px 0px 30px;">
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="EmployeeBioData" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Employee BioData</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
+                @if (accessRightList.Contains(251))
+                {
+                    @*EmployeeBioData*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="EmployeeBioData" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Employee BioData</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-id-card-alt Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-id-card-alt Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="VacationReport" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Vacation Report</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-plane Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="VacationBalance" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Vacation Balance</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(252))
+                {
+                    @*VacationReport*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="VacationReport" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Vacation Report</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-plane Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-balance-scale Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="ContractExpiry" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Contract Expiry</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-hourglass-end Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a href="#">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">User Monitor</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(253))
+                {
+                    @*VacationBalance*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="VacationBalance" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Vacation Balance</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-balance-scale Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-user-shield Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="ExperienceCertificate" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Experience Certificate</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-certificate Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="EducationDocument" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Education Document</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(254))
+                {
+                    @*ContractExpiry*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="ContractExpiry" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Contract Expiry</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-hourglass-end Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-file-pdf Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a href="#">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Evaluation</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-star Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="ProcessApprovalDetail" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Process Approval Detail</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(255))
+                {
+                    @*UserMonitor*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a href="#">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">User Monitor</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-user-shield Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-clipboard-list Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="EmployeeRequestApprovalDetail" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Employee Request Approval Detail</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-address-card Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="ApprovedMonthlySalarySheet" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Approved Monthly Salary Sheet</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(256))
+                {
+                    @*ExperienceCertificate*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="ExperienceCertificate" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Experience Certificate</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-certificate Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-file-signature Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="MonthlyPayslip" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Monthly Payslip</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-file-signature Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="FaceAttendanceReport" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Face Attendance Report</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(257))
+                {
+                    @*EducationDocument*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="EducationDocument" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Education Document</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-file-pdf Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-fingerprint  Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(258))
+                {
+                    @*Evaluation*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a href="#">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Evaluation</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-star Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(259))
+                {
+                    @*ProcessApprovalDetail*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="ProcessApprovalDetail" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Process Approval Detail</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-clipboard-list Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(260))
+                {
+                    @*EmployeeRequestApprovalDetail*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="EmployeeRequestApprovalDetail" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Employee Request Approval Detail</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-address-card Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(261))
+                {
+                    @*ApprovedMonthlySalarySheet*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="ApprovedMonthlySalarySheet" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Approved Monthly Salary Sheet</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-file-signature Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(262))
+                {
+                    @*MonthlyPayslip*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="MonthlyPayslip" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Monthly Payslip</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-file-signature Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(263))
+                {
+                    @*FaceAttendanceReport*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="FaceAttendanceReport" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Face Attendance Report</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-fingerprint  Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
             </div>
 
         </div>
     </div>
 </div>
-@* Employee BioData
-Vacation Report
-Vacation Balance
-Contract Expiry
-User Monitor
-Experience Certificate
-Education Document
-Evaluation
-Process Request Detail
-Employee Request Detail
-Approve Salary Sheet
-Attendance *@
+

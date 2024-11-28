@@ -1,5 +1,12 @@
 @{
     ViewData["Title"] = "Human Resources - Master Infomation";
+
+    var accessRightsJson = Context.Session.GetString("AccessRightsActionSORs");
+
+    var accessRightList = string.IsNullOrEmpty(accessRightsJson)
+        ? new List<int>()
+        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsJson);
+
 }
 
 @section PageScripts {
@@ -8,7 +15,7 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
     <style>
-        
+
     </style>
 }
 
@@ -28,543 +35,626 @@
         </ul>
         <div class="card mb-4">
             <h5 class="card-header">Details</h5>
+
             <div class="row" style="padding: 30px 30px 0px 30px;">
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="Branch" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Branch</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.BranchCount
-                                    </h4>
+                @if (accessRightList.Contains(51))
+                {
+                    @*Branch*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="Branch" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Branch</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.BranchCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white ">
+                                        <i class="fa fa-code-branch Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white ">
-                                    <i class="fa fa-code-branch Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="Department" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Department</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.DepartmentCount
-                                    </h4>
-                                </div>
-                                <div class="icon bg-primary text-white ">
-                                    <i class="fa fa-building Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="Section" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Section</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.SectionCount
-                                    </h4>
-                                </div>
-                                <div class="icon bg-primary text-white ">
-                                    <i class="fa fa-layer-group Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="Qualification" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Qualification</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.QualificationCount
-                                    </h4>
-                                </div>
-                                <div class="icon bg-primary text-white ">
-                                    <i class="fa fa-user-graduate Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="SubQualification" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Sub Qualification</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.SubQualificationCount
-                                    </h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-certificate Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="Designation" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Designation</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.DesignationCount
-                                    </h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-user-tag Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="SalaryType" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Salary Type</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.SalaryTypeCount
-                                    </h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-money-bill-wave Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="AddionalAllowanceType" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Additional Allowance Type</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.AddionalAllowanceTypeCount
-                                    </h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-plus-circle Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="DeductionType" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Deduction Type</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.DeductionTypeCount
-                                    </h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-minus-circle Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="DeductionSetup" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Deduction Setup</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.DeductionSetupCount
-                                    </h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-calculator Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="EmployeeStatusType" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Employee Status Type</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.EmployeeStatusTypeCount
-                                    </h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-user-check Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-        <a asp-controller="OvertimeRate" asp-action="Index">
-            <div class="modern-card shadow mb-4">
-                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                    <div class="card-details">
-                        <strong class="text-primary">Overtime Rate</strong>
-                        <h4 class="font-weight-bold text-dark">
-                            @ViewBag.OvertimeRateCount
-                        </h4>
+                        </a>
                     </div>
-                    <div class="icon bg-primary text-white">
-                                    <i class="fa fa-clock Card1I" aria-hidden="true"></i>
+                }
+                @if (accessRightList.Contains(52))
+                {
+                    @*Department*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="Department" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Department</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.DepartmentCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white ">
+                                        <i class="fa fa-building Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </div>
-                <div class="card-footer bg-white text-muted text-center">
-                    View Details <i class="fa fa-arrow-right"></i>
-                </div>
-            </div>
-        </a>
-    </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="HolidayType" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Holiday Type</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.HolidayTypeCount
-                                    </h4>
+                }
+                @if (accessRightList.Contains(53))
+                {
+                    @*Section*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="Section" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Section</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.SectionCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white ">
+                                        <i class="fa fa-layer-group Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-clock Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="VacationType" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Vacation Type</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.VacationTypeCount
-                                    </h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-plane-departure Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="EmployeeRequestType" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Employee Request Type</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.EmployeeRequestTypeCount
-                                    </h4>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(54))
+                {
+                    @*Qualification*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="Qualification" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Qualification</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.QualificationCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white ">
+                                        <i class="fa fa-user-graduate Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-envelope-open-text Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="EmployeeRequestTypeApprovalSetup" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Employee Request Approval Setup</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.EmployeeRequestSetupCount
-                                    </h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-envelope-open-text Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="EmployeeRequestTypeForward" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Employee Request Forword</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.EmployeeRequestForwordCount
-                                    </h4>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(55))
+                {
+                    @*SubQualification*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="SubQualification" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Sub Qualification</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.SubQualificationCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-certificate Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-envelope-open-text Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="ProcessType" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Process Type</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.ProcessTypeCount
-                                    </h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="ProcessTypeApprovalSetup" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Process Type Approval Setup</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.ProcessTypeApprovalSetupCount
-                                    </h4>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(56))
+                {
+                    @*Designation*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="Designation" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Designation</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.DesignationCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-user-tag Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-check-square Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="ProcessTypeForward" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Process Type Forward</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.ProcessTypeForwardCount
-                                    </h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-share-square Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="Role" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Roles</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.RolesCount
-                                    </h4>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(57))
+                {
+                    @*SalaryType*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="SalaryType" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Salary Type</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.SalaryTypeCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-money-bill-wave Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-users-cog Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="User" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Users</strong>
-                                    <h4 class="font-weight-bold text-dark">
-                                        @ViewBag.UsersCount
-                                    </h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-users Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a href="#">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Access Rights</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(58))
+                {
+                    @*AddionalAllowanceType*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="AddionalAllowanceType" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Additional Allowance Type</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.AddionalAllowanceTypeCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-plus-circle Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-lock Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a href="#">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Copy Access Rights</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-copy Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a href="#">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Evaluation Questions</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(59))
+                {
+                    @*DeductionType*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="DeductionType" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Deduction Type</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.DeductionTypeCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-minus-circle Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-question-circle Card1I" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a href="#">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Evaluation Template</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
-                                </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-file-alt Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(60))
+                {
+                    @*DeductionSetup*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="DeductionSetup" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Deduction Setup</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.DeductionSetupCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-calculator Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(61))
+                {
+                    @*EmployeeStatusType*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="EmployeeStatusType" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Employee Status Type</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.EmployeeStatusTypeCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-user-check Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(62))
+                {
+                    @*OvertimeRate*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="OvertimeRate" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Overtime Rate</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.OvertimeRateCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-clock Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(63))
+                {
+                    @*HolidayType*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="HolidayType" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Holiday Type</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.HolidayTypeCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-clock Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(64))
+                {
+                    @*VacationType*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="VacationType" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Vacation Type</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.VacationTypeCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-plane-departure Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(65))
+                {
+                    @*EmployeeRequestType*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="EmployeeRequestType" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Employee Request Type</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.EmployeeRequestTypeCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-envelope-open-text Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(66))
+                {
+                    @*EmployeeRequestTypeApprovalSetup*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="EmployeeRequestTypeApprovalSetup" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Employee Request Approval Setup</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.EmployeeRequestSetupCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-envelope-open-text Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(67))
+                {
+                    @*EmployeeRequestTypeForward*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="EmployeeRequestTypeForward" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Employee Request Forword</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.EmployeeRequestForwordCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-envelope-open-text Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(68))
+                {
+                    @*ProcessType*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="ProcessType" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Process Type</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.ProcessTypeCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(69))
+                {
+                    @*ProcessTypeApprovalSetup*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="ProcessTypeApprovalSetup" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Process Type Approval Setup</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.ProcessTypeApprovalSetupCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-check-square Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(70))
+                {
+                    @*ProcessTypeForward*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="ProcessTypeForward" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Process Type Forward</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.ProcessTypeForwardCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-share-square Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(71))
+                {
+                    @*Role*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="Role" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Roles</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.RolesCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-users-cog Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(72))
+                {
+                    @*User*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="User" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Users</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.UsersCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-users Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(73))
+                {
+                    @*AccessRights*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a href="#">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Access Rights</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-lock Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(74))
+                {
+                    @*CopyAccessRights*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a href="#">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Copy Access Rights</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-copy Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(75))
+                {
+                    @*EvaluationQuestions*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a href="#">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Evaluation Questions</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-question-circle Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(76))
+                {
+                    @* EvaluationTemplate *@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a href="#">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Evaluation Template</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-file-alt Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
             </div>
         </div>
     </div>
 </div>
-@* Branch
-Department
-Section
-Qualification
-Sub Qualification
-Designation
-Salary Type
-Additional Allowance Type
-Deduction Type
-Deduction Setup
-Employee Status Type
-Overtime Rate
-Vacation Type
-Employee Request Type
-Process Type
-Process Type Approval
-Process Type Forward
-Roles
-Users
-Access Rights
-Copy Access Rights
-Evaluation Questions
-Evaluation Template *@
+

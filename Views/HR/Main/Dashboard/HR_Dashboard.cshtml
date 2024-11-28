@@ -1,5 +1,12 @@
 @{
     ViewData["Title"] = "Human Resources - HR";
+
+    var accessRightsJson = Context.Session.GetString("AccessRightsActionSORs");
+
+    var accessRightList = string.IsNullOrEmpty(accessRightsJson)
+        ? new List<int>()
+        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsJson);
+
 }
 
 @section PageScripts {
@@ -24,6 +31,10 @@
         <div class="card mb-4">
             <h5 class="card-header">Details</h5>
             <div class="row" style="padding: 30px 30px 0px 30px;">
+
+                @if (accessRightList.Contains(151))
+                {
+                    @*Deduction*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         <a asp-controller="Deduction" asp-action="Index">
                             <div class="modern-card shadow mb-4">
@@ -42,7 +53,10 @@
                             </div>
                         </a>
                     </div>
-
+                }
+                @if (accessRightList.Contains(152))
+                {
+                    @*OverTime*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         <a asp-controller="OverTime" asp-action="Index">
                             <div class="modern-card shadow mb-4">
@@ -61,7 +75,10 @@
                             </div>
                         </a>
                     </div>
-
+                }
+                @if (accessRightList.Contains(153))
+                {
+                    @*AddionalAllowance*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         <a asp-controller="AddionalAllowance" asp-action="Index">
                             <div class="modern-card shadow mb-4">
@@ -80,25 +97,32 @@
                             </div>
                         </a>
                     </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="Holiday" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Holidays</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
+                }
+                @if (accessRightList.Contains(154))
+                {
+                    @*Holiday*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="Holiday" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Holidays</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-plus-circle Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-plus-circle Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
+                        </a>
+                    </div>
+                }
+                @if (accessRightList.Contains(155))
+                {
+                    @*VacationSettle*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         <a asp-controller="VacationSettle" asp-action="Index">
                             <div class="modern-card shadow mb-4">
@@ -117,7 +141,10 @@
                             </div>
                         </a>
                     </div>
-
+                }
+                @if (accessRightList.Contains(156))
+                {
+                    @*EndOfService*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         <a asp-controller="EndOfService" asp-action="Index">
                             <div class="modern-card shadow mb-4">
@@ -136,7 +163,10 @@
                             </div>
                         </a>
                     </div>
-
+                }
+                @if (accessRightList.Contains(157))
+                {
+                    @*EvaluationAssign*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         <a href="#">
                             <div class="modern-card shadow mb-4">
@@ -155,7 +185,10 @@
                             </div>
                         </a>
                     </div>
-
+                }
+                @if (accessRightList.Contains(158))
+                {
+                    @*EvaluationApproval*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         <a href="#">
                             <div class="modern-card shadow mb-4">
@@ -174,7 +207,10 @@
                             </div>
                         </a>
                     </div>
-
+                }
+                @if (accessRightList.Contains(159))
+                {
+                    @*EvaluationList*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         <a href="#">
                             <div class="modern-card shadow mb-4">
@@ -193,9 +229,12 @@
                             </div>
                         </a>
                     </div>
-
+                }
+                @if (accessRightList.Contains(160))
+                {
+                    @*FaceAttendanceTimeAdjust*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="FaceAttendanceTimeAdjust" asp-action="Index">
+                        <a asp-controller="FaceAttendanceTimeAdjust" asp-action="Index">
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
@@ -212,35 +251,30 @@
                             </div>
                         </a>
                     </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <a asp-controller="FaceAttendanceForwarding" asp-action="Index">
-                        <div class="modern-card shadow mb-4">
-                            <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                <div class="card-details">
-                                    <strong class="text-primary">Face Attendance Forwarding</strong>
-                                    <h4 class="font-weight-bold text-dark">0</h4>
+                }
+                @if (accessRightList.Contains(161))
+                {
+                    @*FaceAttendanceForwarding*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="FaceAttendanceForwarding" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Face Attendance Forwarding</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-calendar-check Card1I" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                                <div class="icon bg-primary text-white">
-                                    <i class="fa fa-calendar-check Card1I" aria-hidden="true"></i>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white text-muted text-center">
-                                View Details <i class="fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </div>
-</div>
- @*    Deduction
-    Over Time
-    Addional Allowance
-    Vacation Settle
-    End Of Service
-    Evaluation Assign
-    Evaluation Approval
-    Evaluation List
-    Attendance Time Adjust *@
