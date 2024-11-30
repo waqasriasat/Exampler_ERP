@@ -5,72 +5,102 @@
     $(document).ready(function () {
         console.log('Document is ready.');
 
-        // Function to update hidden fields based on checkboxes and ranks
         function updateHiddenFields() {
             $('#hiddenFieldsContainer').empty(); // Clear existing hidden fields
 
-            var RoleID = $('#RoleID').val(); // Get the RoleID value
-            var checkedRoles = $('.role-checkbox:checked');
-            checkedRoles.each(function (index) {
-                var AccessRightID = $(this).val();
-                var rankInput = $('#rank_' + AccessRightID);
-                var rank = rankInput.val();
+            var roleid = $('#RoleTypeProperty').val();
+            roleid = roleid.match(/\d+/); // Matches only numeric parts
+            roleid = roleid ? parseInt(roleid[0], 10) : 0; // Converts to an integer, defaults to 0 if no match
+            var checkedRoles = $('.access-checkbox:checked');
+            var index = 0; // Start the index counter here
 
-                $('#hiddenFieldsContainer').append(
-                    `<div class="row">
-                                <input type="hidden" name="AccessRightsByRoles[${index}].RoleID" value="${RoleID}" id="hidden_RoleID_${AccessRightID}" />
-                                            <input type="hidden" name="AccessRightsByRoles[${index}].AccessRightID" value="${AccessRightID}" id="hidden_AccessRightID_${AccessRightID}" />
-                        </div>`
-                );
-            });
-        }
+            checkedRoles.each(function () {
+                var actionsoR = $(this).val();
 
-        // Event handler for role checkbox change
-        $(document).on('change', '.role-checkbox', function () {
-            // debugger;
-            var AccessRightID = $(this).val();
-            var rankInput = $('#rank_' + AccessRightID);
+                $.ajax({
+                    url: '/AccessRightsByRole/GetRoleRow', // URL to the GetRoleRow action
+                    method: 'GET',
+                    data: { actionSOR: actionsoR }, // Send actionSOR value as data
+                    success: function (response) {
+                        if (response) {
+                            // Declare the variables based on the response
+                            var accessrightiD = response.accessRightID;
+                            var actiontypE = response.actionType;
+                            var moduleiD = response.moduleID;
+                            var menuiD = response.menuID;
+                            var actionnamE = response.actionName;
 
-            if ($(this).is(':checked')) {
-                var maxRank = 0;
-                $('.rank').each(function () {
-                    var val = parseInt($(this).val());
-                    if (val > maxRank) {
-                        maxRank = val;
+                            // Handle response and append hidden fields
+                            console.log(response);
+
+                            // Append the hidden fields with dynamic values
+                            appendHiddenFields(
+                                accessrightiD,
+                                actiontypE,
+                                moduleiD,
+                                menuiD,
+                                actionnamE,
+                                roleid,
+                                actionsoR
+                            );
+                        } else {
+                            alert('No data found.');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
                     }
                 });
-                rankInput.val(maxRank + 1).removeAttr('readonly');
-                reorderRanks();
-            } else {
-                rankInput.val('').attr('readonly', true);
-                reorderRanks();
-            }
-
-            // Update hidden fields after checkbox change
-            updateHiddenFields();
-        });
-
-        function reorderRanks() {
-            // debugger;
-            var checkedRoles = [];
-            $('.role-checkbox:checked').each(function () {
-                checkedRoles.push($(this).val());
             });
 
-            checkedRoles.sort(function (a, b) {
-                return $('#rank_' + a).val() - $('#rank_' + b).val();
-            });
+            // Function to append hidden fields with dynamic values
+            function appendHiddenFields(accessrightID, actiontypE, moduleiD, menuiD, actionnamE, roleid, actionsoR) {
+                // Assuming you're incrementing the index for each field
+                var index = $('#hiddenFieldsContainer .row').length; // Get the current number of rows
 
-            for (var i = 0; i < checkedRoles.length; i++) {
-                $('#rank_' + checkedRoles[i]).val(i + 1);
+                // Append hidden fields dynamically
+                $('#hiddenFieldsContainer').append(
+                    `<div class="row">
+                    <div class="col-2">
+                        <input type="text" name="AccessRightsByRoles[${index}].RoleTypeProperty" value="${roleid}" id="hidden_RoleTypeProperty_${roleid}" />
+                    </div>
+                    <div class="col-2">
+                            <input type="text" name="AccessRightsByRoles[${index}].ActionSOR" value="${actionsoR}" id="hidden_ActionSOR_${actionsoR}" />
+                    </div>
+                    <div class="col-8">
+                        <div class="row">
+                            <div class="col-2">
+                                    <input type="text" name="AccessRightsByRoles[${index}].AccessRightID" value="${accessrightID}" id="hidden_AccessRightID_${accessrightID}" />
+                            </div>
+                            <div class="col-2">
+                                    <input type="text" name="AccessRightsByRoles[${index}].ActionType" value="${actiontypE}" id="hidden_ActionType_${actiontypE}" />
+                            </div>
+                            <div class="col-2">
+                                    <input type="text" name="AccessRightsByRoles[${index}].ModuleID" value="${moduleiD}" id="hidden_ModuleID_${moduleiD}" />
+                            </div>
+                            <div class="col-2">
+                                    <input type="text" name="AccessRightsByRoles[${index}].MenuID" value="${menuiD}" id="hidden_MenuID_${menuiD}" />
+                            </div>
+                            <div class="col-2">
+                                    <input type="text" name="AccessRightsByRoles[${index}].ActionName" value="${actionnamE}" id="hidden_ActionName_${actionnamE}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+                );
             }
         }
 
-        // Initial call to update hidden fields on page load
-        updateHiddenFields();
-    });
 
+        // Event handler for role checkbox change
+        $(document).on('change', '.access-checkbox', function () {
+            updateHiddenFields();  // Update the hidden fields whenever a checkbox is changed
+        });
+
+        updateHiddenFields(); // Initialize hidden fields on page load
+    });
 </script>
+
 
 <div class="modal fade" id="editAccessRightsByRoleModal" tabindex="-1" role="dialog" aria-labelledby="editAccessRightsByRoleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -89,19 +119,19 @@
                         <div class="col-12 mb-2">
                             <div class="form-group">
                                 <label for="RoleName" class="form-label fw-bold">Role Name</label>
-                                @* <input type="text" class="form-control form-control-lg" id="RoleName" value="@Model.FirstOrDefault()?.role?.RoleName" disabled />
-                                <input type="hidden" id="RoleID" value="@Model.FirstOrDefault()?." /> *@
+                                <input type="text" class="form-control form-control-lg" id="RoleName" value="@ViewBag.RoleName" disabled />
+                                <input type="hidden" id="RoleTypeProperty" name="RoleTypeProperty" value="@ViewBag.RoleTypeProperty" />
                             </div>
                         </div>
                     </div>
 
                     <div class="row role-container">
-                        <div class="col-9">
-                            @foreach (var role in (IEnumerable<dynamic>)ViewBag.RoleList)
+                        <div class="col-12">
+                            @foreach (var accessrole in (IEnumerable<dynamic>)ViewBag.AccessRoleList)
                             {
                                 <div class="form-check">
-                                    <input class="form-check-input role-checkbox" type="checkbox" name="AccessRightIDs" value="@role.Value" id="role_@role.Value" @(Model.Any(m => m.AccessRightID == role.Value) ? "checked" : "") />
-                                    <label class="form-control form-check-label" for="role_@role.Value">@role.Text</label>
+                                    <input class="form-check-input access-checkbox" type="checkbox" name="ActionSOR" value="@accessrole.Value" id="accessrole_@accessrole.Value" @(Model != null && accessrole.Value != null && @Model.Any(m => m.ActionSOR == int.Parse(accessrole.Value.ToString())) ? "checked" : "") />
+                                    <label class="form-control form-check-label" for="accessrole_@accessrole.Value">@accessrole.Text</label>
                                 </div>
                             }
                         </div>
@@ -111,8 +141,18 @@
                         @for (var i = 0; i < Model.Count; i++)
                         {
                             <div class="row">
-                                 @* <input style="width:100px" type="text" name="AccessRightsByRoles[@i].RoleID" value="@Model[i]." id="hidden_RoleID_@Model[i].RoleID" />
-                                 <input style="width:100px" type="text" name="AccessRightsByRoles[@i].AccessRightID" value="@Model[i].AccessRightID" id="hidden_AccessRightID_@Model[i].AccessRightID" /> *@
+                                <div class="col-6">
+                                    <input style="width:50px" type="text" name="AccessRightsByRoles[@i].RoleTypeProperty" value="@ViewBag.RoleTypeProperty" id="hidden_RoleTypeProperty_@ViewBag.RoleTypeProperty" />
+                                </div>
+                                <div class="col-6">
+                                    <input style="width:50px" type="text" name="AccessRightsByRoles[@i].ActionSOR" value="@Model[i].ActionSOR" id="hidden_ActionSOR_@Model[i].ActionSOR" />
+                                    <input style="width:50px" type="text" name="AccessRightsByRoles[@i].AccessRightID" value="@Model[i].AccessRightID" id="hidden_AccessRightID_@Model[i].AccessRightID" />
+                                    <input style="width:50px" type="text" name="AccessRightsByRoles[@i].ActionType" value="@Model[i].ActionType" id="hidden_ActionType_@Model[i].ActionType" />
+                                    <input style="width:50px" type="text" name="AccessRightsByRoles[@i].ModuleID" value="@Model[i].ModuleID" id="hidden_ModuleID_@Model[i].ModuleID" />
+                                    <input style="width:50px" type="text" name="AccessRightsByRoles[@i].MenuID" value="@Model[i].MenuID" id="hidden_MenuID_@Model[i].MenuID" />
+                                    <input style="width:50px" type="text" name="AccessRightsByRoles[@i].ActionName" value="@Model[i].ActionName" id="hidden_ActionName_@Model[i].ActionName" />
+
+                                </div>
                             </div>
                         }
                     </div>

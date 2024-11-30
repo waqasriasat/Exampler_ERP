@@ -4,6 +4,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 namespace Exampler_ERP.Controllers.Setup
 {
@@ -68,62 +70,106 @@ namespace Exampler_ERP.Controllers.Setup
       return View("~/Views/Setup/AccessRightsByRole/AccessRightsByRole.cshtml", viewModel);
     }
 
-
-    public async Task<IActionResult> ProcessTypeApprovalSetup()
-    {
-      var ProcessTypeApprovalSetups = await _appDBContext.CR_ProcessTypeApprovalSetups.ToListAsync();
-      return Ok(ProcessTypeApprovalSetups);
-    }
     public async Task<IActionResult> Edit(int id)
     {
-      var processTypeApprovalSetups = await _appDBContext.CR_ProcessTypeApprovalSetups
-       .Where(pt => pt.ProcessTypeID == id)
-       .Include(pt => pt.ProcessType)
-       .Include(pt => pt.RoleType)
+      var roleTypeProperty = $"_{id}";
+
+      ViewBag.RoleTypeProperty = roleTypeProperty;
+
+      var accessRightsByRoles = await _appDBContext.CR_AccessRightsByRoles
+       .Where(u => EF.Property<int>(u, roleTypeProperty) == 1)
        .ToListAsync();
 
-      if (processTypeApprovalSetups == null || !processTypeApprovalSetups.Any())
-      {
-        var processType = await _appDBContext.Settings_ProcessTypes
-            .Where(p => p.ProcessTypeID == id)
-            .FirstOrDefaultAsync();
+      var role = await _appDBContext.Settings_RoleTypes
+      .FirstOrDefaultAsync(u => u.RoleTypeID == id);
 
-        if (processType != null)
+      if (role != null && !string.IsNullOrEmpty(role.RoleTypeName))
+      {
+        ViewBag.RoleName = role.RoleTypeName;
+      }
+
+
+      if (accessRightsByRoles == null || !accessRightsByRoles.Any())
+      {
+        var accessRightByRole_All = await _appDBContext.CR_AccessRightsByRoles.FirstOrDefaultAsync();
+
+        if (accessRightByRole_All != null)
         {
-          processTypeApprovalSetups = new List<CR_ProcessTypeApprovalSetup>
+          accessRightsByRoles = new List<CR_AccessRightsByRole>
             {
-                new CR_ProcessTypeApprovalSetup
+                new CR_AccessRightsByRole
                 {
-                    ProcessTypeID = processType.ProcessTypeID,
-                    ProcessType = processType
+                    ActionSOR = accessRightByRole_All.ActionSOR,
+                    ActionName = accessRightByRole_All.ActionName,
+                    ActionType = accessRightByRole_All.ActionType,
+                    AccessRightID = accessRightByRole_All.AccessRightID,
+                    MenuID = accessRightByRole_All.MenuID,
+                    ModuleID = accessRightByRole_All.ModuleID
                 }
             };
         }
         else
         {
-          return NotFound(); // Or handle accordingly if ProcessType is not found
+          return NotFound();
         }
       }
 
-      ViewBag.RoleList = await _appDBContext.Settings_RoleTypes
-          .Select(r => new { Value = r.RoleTypeID, Text = r.RoleTypeName })
-          .ToListAsync();
+      ViewBag.AccessRoleList = await _appDBContext.CR_AccessRightsByRoles
+         .Select(r => new SelectListItem
+         {
+           Value = r.ActionSOR.ToString(),
+           Text = r.ActionName
+         })
+         .ToListAsync();
 
-      ViewBag.ProcessTypes = await _appDBContext.Settings_ProcessTypes.ToListAsync();
-      return PartialView("~/Views/Setup/AccessRightsByRole/EditAccessRightsByRole.cshtml", processTypeApprovalSetups);
+      return PartialView("~/Views/Setup/AccessRightsByRole/EditAccessRightsByRole.cshtml", accessRightsByRoles);
+    }
+    public async Task<IActionResult> GetRoleRow(string actionSOR)
+    {
+      // Fetch the first matching record based on actionSOR value
+      var data = await _appDBContext.CR_AccessRightsByRoles
+          .Where(u => u.ActionSOR.ToString() == actionSOR) // Ensure comparison works correctly
+          .FirstOrDefaultAsync();
+
+      // Check if data exists, if not return an error or an empty object
+      if (data == null)
+      {
+        return Json(new { success = false, message = "No data found" });
+      }
+
+      // Return data as JSON
+      return Json(new
+      {
+        success = true,
+        accessRightID = data.AccessRightID,
+        actionType = data.ActionType,
+        moduleID = data.ModuleID,
+        menuID = data.MenuID,
+        actionName = data.ActionName
+      });
     }
 
 
 
     [HttpPost]
-    public async Task<IActionResult> Edit(List<CR_ProcessTypeApprovalSetup> ProcessTypeApprovalSetups)
+    public async Task<IActionResult> Edit(List<CR_AccessRightsByRole> AccessRightsByRoles, string RoleTypeProperty)
     {
-      foreach (var setup in ProcessTypeApprovalSetups)
+      // Assume ViewBag contains the column name
+      string roleTypeColumnName = RoleTypeProperty;
+      if (string.IsNullOrEmpty(roleTypeColumnName))
       {
-        _logger.LogInformation("Received Setup: ID={ID}, Rank={Rank}, RoleID={RoleID}", setup.ProcessTypeApprovalSetupID, setup.Rank, setup.RoleTypeID);
+        TempData["ErrorMessage"] = "Invalid RoleTypeProperty column name.";
+        return BadRequest("RoleTypeProperty is missing.");
       }
 
-      if (ProcessTypeApprovalSetups == null || ProcessTypeApprovalSetups.Count == 0)
+      int numericRoleType = ExtractNumericValue(roleTypeColumnName);
+
+      foreach (var setup in AccessRightsByRoles)
+      {
+        _logger.LogInformation("Received Setup: RoleTypeColumn={RoleTypeColumn}, ActionSOR={ActionSOR}", numericRoleType, setup.ActionSOR);
+      }
+
+      if (AccessRightsByRoles == null || AccessRightsByRoles.Count == 0)
       {
         TempData["ErrorMessage"] = "No data received.";
         _logger.LogWarning("No data received for edit.");
@@ -134,43 +180,47 @@ namespace Exampler_ERP.Controllers.Setup
       {
         try
         {
-          var processTypeId = ProcessTypeApprovalSetups.FirstOrDefault()?.ProcessTypeID;
-          if (processTypeId == null)
+          foreach (var setup in AccessRightsByRoles)
           {
-            TempData["ErrorMessage"] = "Invalid ProcessTypeID.";
-            return BadRequest("Invalid ProcessTypeID.");
-          }
-
-          var existingRecords = await _appDBContext.CR_ProcessTypeApprovalSetups
-                                        .Where(p => p.ProcessTypeID == processTypeId)
-                                        .ToListAsync();
-
-          _appDBContext.CR_ProcessTypeApprovalSetups.RemoveRange(existingRecords);
-
-          foreach (var setup in ProcessTypeApprovalSetups)
-          {
-            if (setup.RoleTypeID != 0 && setup.Rank != 0)
+            if (setup.ActionSOR != 0)
             {
-              _appDBContext.CR_ProcessTypeApprovalSetups.Add(setup);
+
+              var propertyInfo = setup.GetType().GetProperty(roleTypeColumnName);
+              if (propertyInfo != null && propertyInfo.CanWrite)
+              {
+                propertyInfo.SetValue(setup, 1);  // Set the value dynamically
+              }
+              _appDBContext.CR_AccessRightsByRoles.Update(setup);
             }
           }
 
           await _appDBContext.SaveChangesAsync();
-          TempData["SuccessMessage"] = "Process Type Approval Setup Update successfully.";
+          TempData["SuccessMessage"] = "Access Rights By Role Setup updated successfully.";
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
           TempData["ErrorMessage"] = "An error occurred while updating the data.";
-          _logger.LogError(ex, "Error updating ProcessTypeApprovalSetups");
+          _logger.LogError(ex, "Error updating Access Rights By Role Setups");
           return Json(new { success = false, message = "An error occurred while updating the data." });
         }
       }
 
       var errors = ModelState.Values.SelectMany(v => v.Errors);
-      return PartialView("~/Views/HR/MasterInfo/ProcessTypeApprovalSetup/EditProcessTypeApprovalSetup.cshtml", ProcessTypeApprovalSetups);
+
+      return PartialView("~/Views/Setup/AccessRightsByRole/EditAccessRightsByRole.cshtml", AccessRightsByRoles);
     }
 
+    // Helper function to extract numeric value
+    private int ExtractNumericValue(string input)
+    {
+      if (string.IsNullOrEmpty(input))
+        return 0;
+
+      // Extract numeric part using regex
+      var match = System.Text.RegularExpressions.Regex.Match(input, @"\d+");
+      return match.Success ? int.Parse(match.Value) : 0;
+    }
 
 
     [HttpPost]
