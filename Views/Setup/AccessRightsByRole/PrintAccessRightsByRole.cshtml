@@ -1,0 +1,55 @@
+@model IEnumerable<Exampler_ERP.Models.CR_AccessRightsByRole>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Access Rights By Role Setup</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Access Rights By Role Setup List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Role ID</th>
+                <th>Role Name</th>
+                <th>Rank Name</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var AccessRightsByRole in Model)
+            {
+                <tr>
+                    @* <td>@AccessRightsByRole.AccessRightsByRoleID</td>
+                    <td>@(AccessRightsByRole.ProcessType?.ProcessTypeName ?? "N/A")</td>
+                    <td>@AccessRightsByRole.Rank</td>
+                    <td>@AccessRightsByRole.RoleTypeID</td> *@
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

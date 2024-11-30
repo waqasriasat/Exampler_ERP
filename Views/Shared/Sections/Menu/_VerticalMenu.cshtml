@@ -278,7 +278,7 @@
             <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
             <li class='menu-item@(currentPage == "/HRGlobalSetting/Index" || currentPage == "/FinanceGlobalSetting/Index" ||
                               currentPage == "/StoreManagementGlobalSetting/Index" || currentPage == "/PurchaseGlobalSetting/Index" ||
-                              currentPage == "/AccessRightByRole/Index"? " active open" : "")'>
+                              currentPage == "/AccessRightsByRole/Index"? " active open" : "")'>
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon fas fa-toolbox"></i>
                     <div>Setup</div>
@@ -307,8 +307,8 @@
                         </a>
                     </li>
                     <li class="menu-header small text-uppercase"><span class="menu-header-text">General Settings</span></li>
-                    <li class='menu-item@(currentPage == "/AccessRightByRole/Index" ? " active" : "")'>
-                        <a asp-controller="AccessRightByRole" asp-action="Index" class="menu-link">
+                    <li class='menu-item@(currentPage == "/AccessRightsByRole/Index" ? " active" : "")'>
+                        <a asp-controller="AccessRightsByRole" asp-action="Index" class="menu-link">
                             <div>Access Right By Role</div>
                         </a>
                     </li>
