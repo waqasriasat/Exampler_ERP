@@ -1,7 +1,7 @@
 @model Exampler_ERP.Models.Temp.AccessRightsByRoleListViewModel
 
 @{
-    ViewData["Title"] = "Master Information - Process Type Approval Setup";
+    ViewData["Title"] = "Setup - Access Rights By Role Setup";
 }
 
 @section PageScripts {
@@ -10,16 +10,18 @@
         $(document).ready(function () {
             $('.editAccessRightsByRoleLink').click(function (e) {
                 e.preventDefault();
-                var processTypeId = $(this).data('id');
-                $.get('@Url.Action("Edit", "AccessRightsByRole")', { id: processTypeId }, function (data) {
+                var roleId = $(this).data('id');
+                $.get('@Url.Action("Edit", "AccessRightsByRole")', { id: roleId }, function (data) {
                     $('#editAccessRightsByRoleModalContainer').html(data);
                     $('#editAccessRightsByRoleModal').modal('show');
                 });
             });
 
             $('#editAccessRightsByRoleModalContainer').on('click', '#saveChanges', function () {
+
                 var formData = $('#editAccessRightsByRoleForm').serialize();
                 console.log("Serialized form data:", formData); // Log serialized data for debugging
+
                 $.post('@Url.Action("Edit", "AccessRightsByRole")', formData, function (response) {
                     if (response.success) {
                         $('#editAccessRightsByRoleModal').modal('hide');

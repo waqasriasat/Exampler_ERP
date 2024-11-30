@@ -88,32 +88,6 @@ namespace Exampler_ERP.Controllers.Setup
         ViewBag.RoleName = role.RoleTypeName;
       }
 
-
-      if (accessRightsByRoles == null || !accessRightsByRoles.Any())
-      {
-        var accessRightByRole_All = await _appDBContext.CR_AccessRightsByRoles.FirstOrDefaultAsync();
-
-        if (accessRightByRole_All != null)
-        {
-          accessRightsByRoles = new List<CR_AccessRightsByRole>
-            {
-                new CR_AccessRightsByRole
-                {
-                    ActionSOR = accessRightByRole_All.ActionSOR,
-                    ActionName = accessRightByRole_All.ActionName,
-                    ActionType = accessRightByRole_All.ActionType,
-                    AccessRightID = accessRightByRole_All.AccessRightID,
-                    MenuID = accessRightByRole_All.MenuID,
-                    ModuleID = accessRightByRole_All.ModuleID
-                }
-            };
-        }
-        else
-        {
-          return NotFound();
-        }
-      }
-
       ViewBag.AccessRoleList = await _appDBContext.CR_AccessRightsByRoles
          .Select(r => new SelectListItem
          {
@@ -121,23 +95,21 @@ namespace Exampler_ERP.Controllers.Setup
            Text = r.ActionName
          })
          .ToListAsync();
+     
 
       return PartialView("~/Views/Setup/AccessRightsByRole/EditAccessRightsByRole.cshtml", accessRightsByRoles);
     }
     public async Task<IActionResult> GetRoleRow(string actionSOR)
     {
-      // Fetch the first matching record based on actionSOR value
-      var data = await _appDBContext.CR_AccessRightsByRoles
-          .Where(u => u.ActionSOR.ToString() == actionSOR) // Ensure comparison works correctly
+     var data = await _appDBContext.CR_AccessRightsByRoles
+          .Where(u => u.ActionSOR.ToString() == actionSOR)
           .FirstOrDefaultAsync();
 
-      // Check if data exists, if not return an error or an empty object
-      if (data == null)
+     if (data == null)
       {
         return Json(new { success = false, message = "No data found" });
       }
 
-      // Return data as JSON
       return Json(new
       {
         success = true,
@@ -152,9 +124,8 @@ namespace Exampler_ERP.Controllers.Setup
 
 
     [HttpPost]
-    public async Task<IActionResult> Edit(List<CR_AccessRightsByRole> AccessRightsByRoles, string RoleTypeProperty)
+    public async Task<IActionResult> Edit(List<CR_AccessRightsByRole> accessRightsByRoles, string RoleTypeProperty)
     {
-      // Assume ViewBag contains the column name
       string roleTypeColumnName = RoleTypeProperty;
       if (string.IsNullOrEmpty(roleTypeColumnName))
       {
@@ -164,12 +135,12 @@ namespace Exampler_ERP.Controllers.Setup
 
       int numericRoleType = ExtractNumericValue(roleTypeColumnName);
 
-      foreach (var setup in AccessRightsByRoles)
+      foreach (var setup in accessRightsByRoles)
       {
         _logger.LogInformation("Received Setup: RoleTypeColumn={RoleTypeColumn}, ActionSOR={ActionSOR}", numericRoleType, setup.ActionSOR);
       }
 
-      if (AccessRightsByRoles == null || AccessRightsByRoles.Count == 0)
+      if (accessRightsByRoles == null || accessRightsByRoles.Count == 0)
       {
         TempData["ErrorMessage"] = "No data received.";
         _logger.LogWarning("No data received for edit.");
@@ -180,17 +151,20 @@ namespace Exampler_ERP.Controllers.Setup
       {
         try
         {
-          foreach (var setup in AccessRightsByRoles)
+          foreach (var setup in accessRightsByRoles)
           {
             if (setup.ActionSOR != 0)
             {
-
               var propertyInfo = setup.GetType().GetProperty(roleTypeColumnName);
               if (propertyInfo != null && propertyInfo.CanWrite)
               {
-                propertyInfo.SetValue(setup, 1);  // Set the value dynamically
+                if (propertyInfo.PropertyType == typeof(int?))
+                {
+                  propertyInfo.SetValue(setup, 1); 
+                }
+
+                _appDBContext.Entry(setup).Property(roleTypeColumnName).IsModified = true;
               }
-              _appDBContext.CR_AccessRightsByRoles.Update(setup);
             }
           }
 
@@ -208,37 +182,49 @@ namespace Exampler_ERP.Controllers.Setup
 
       var errors = ModelState.Values.SelectMany(v => v.Errors);
 
-      return PartialView("~/Views/Setup/AccessRightsByRole/EditAccessRightsByRole.cshtml", AccessRightsByRoles);
+      return PartialView("~/Views/Setup/AccessRightsByRole/EditAccessRightsByRole.cshtml", accessRightsByRoles);
     }
 
-    // Helper function to extract numeric value
     private int ExtractNumericValue(string input)
     {
       if (string.IsNullOrEmpty(input))
         return 0;
 
-      // Extract numeric part using regex
       var match = System.Text.RegularExpressions.Regex.Match(input, @"\d+");
       return match.Success ? int.Parse(match.Value) : 0;
     }
-
-
     [HttpPost]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-      var setups = _appDBContext.CR_ProcessTypeApprovalSetups
-        .Where(x => x.ProcessTypeID == id)
-        .ToList();
-      if (setups == null)
+      var roleTypeProperty = $"_{id}";
+
+      var accessRightsByRoles = await _appDBContext.CR_AccessRightsByRoles
+          .Where(u => EF.Property<int?>(u, roleTypeProperty) == 1)
+          .ToListAsync();
+
+      if (accessRightsByRoles.Any())
       {
-        return Json(new { success = false, message = "Setup not found" });
+        foreach (var setup in accessRightsByRoles)
+        {
+          var propertyInfo = setup.GetType().GetProperty(roleTypeProperty);
+          if (propertyInfo != null && propertyInfo.CanWrite)
+          {
+            propertyInfo.SetValue(setup, 0); 
+          }
+
+          _appDBContext.Entry(setup).Property(roleTypeProperty).IsModified = true;
+        }
+
+        await _appDBContext.SaveChangesAsync();
+
+        TempData["SuccessMessage"] = "Access Rights By Role Setups deleted successfully.";
+        return Json(new { success = true });
       }
 
-      _appDBContext.CR_ProcessTypeApprovalSetups.RemoveRange(setups);
-      _appDBContext.SaveChanges();
-      TempData["SuccessMessage"] = "Process Type Approval Setups deleted successfully.";
-      return Json(new { success = true });
+      TempData["ErrorMessage"] = "No matching records found for deletion.";
+      return Json(new { success = false, message = "No matching records found." });
     }
+
 
 
     public async Task<IActionResult> ExportToExcel()
@@ -247,7 +233,7 @@ namespace Exampler_ERP.Controllers.Setup
 
       var ProcessTypeApprovalSetups = await _appDBContext.CR_ProcessTypeApprovalSetups
       .Distinct()
-      .Include(d => d.ProcessType) // Eagerly load the related Branch data
+      .Include(d => d.ProcessType) 
       .ToListAsync();
 
 
@@ -283,7 +269,7 @@ namespace Exampler_ERP.Controllers.Setup
     {
       var ProcessTypeApprovalSetups = await _appDBContext.CR_ProcessTypeApprovalSetups
       .Distinct()
-      .Include(d => d.ProcessType) // Eagerly load the related Branch data
+      .Include(d => d.ProcessType)
       .ToListAsync();
       return View("~/Views/HR/MasterInfo/ProcessTypeApprovalSetup/PrintProcessTypeApprovalSetups.cshtml", ProcessTypeApprovalSetups);
     }

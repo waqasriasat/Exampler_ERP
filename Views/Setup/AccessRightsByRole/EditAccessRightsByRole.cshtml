@@ -12,9 +12,9 @@
             roleid = roleid.match(/\d+/); // Matches only numeric parts
             roleid = roleid ? parseInt(roleid[0], 10) : 0; // Converts to an integer, defaults to 0 if no match
             var checkedRoles = $('.access-checkbox:checked');
-            var index = 0; // Start the index counter here
+           
 
-            checkedRoles.each(function () {
+            checkedRoles.each(function (index) {
                 var actionsoR = $(this).val();
 
                 $.ajax({
@@ -30,18 +30,34 @@
                             var menuiD = response.menuID;
                             var actionnamE = response.actionName;
 
-                            // Handle response and append hidden fields
-                            console.log(response);
-
-                            // Append the hidden fields with dynamic values
-                            appendHiddenFields(
-                                accessrightiD,
-                                actiontypE,
-                                moduleiD,
-                                menuiD,
-                                actionnamE,
-                                roleid,
-                                actionsoR
+                            $('#hiddenFieldsContainer').append(
+                                `<div class="row">
+                            <div class="col-2">
+                                    <input type="hidden" name="AccessRightsByRoles[${index}].RoleTypeProperty" value="${roleid}" id="hidden_RoleTypeProperty_${roleid}" />
+                            </div>
+                            <div class="col-2">
+                                        <input type="hidden" name="AccessRightsByRoles[${index}].ActionSOR" value="${actionsoR}" id="hidden_ActionSOR_${actionsoR}" />
+                            </div>
+                            <div class="col-8">
+                                <div class="row">
+                                    <div class="col-2">
+                                                        <input type="hidden" name="AccessRightsByRoles[${index}].AccessRightID" value="${accessrightiD}" id="hidden_AccessRightID_${accessrightiD}" />
+                                    </div>
+                                    <div class="col-2">
+                                                <input type="hidden" name="AccessRightsByRoles[${index}].ActionType" value="${actiontypE}" id="hidden_ActionType_${actiontypE}" />
+                                    </div>
+                                    <div class="col-2">
+                                                <input type="hidden" name="AccessRightsByRoles[${index}].ModuleID" value="${moduleiD}" id="hidden_ModuleID_${moduleiD}" />
+                                    </div>
+                                    <div class="col-2">
+                                                <input type="hidden" name="AccessRightsByRoles[${index}].MenuID" value="${menuiD}" id="hidden_MenuID_${menuiD}" />
+                                    </div>
+                                    <div class="col-2">
+                                                <input type="hidden" name="AccessRightsByRoles[${index}].ActionName" value="${actionnamE}" id="hidden_ActionName_${actionnamE}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`
                             );
                         } else {
                             alert('No data found.');
@@ -53,47 +69,12 @@
                 });
             });
 
-            // Function to append hidden fields with dynamic values
-            function appendHiddenFields(accessrightID, actiontypE, moduleiD, menuiD, actionnamE, roleid, actionsoR) {
-                // Assuming you're incrementing the index for each field
-                var index = $('#hiddenFieldsContainer .row').length; // Get the current number of rows
-
-                // Append hidden fields dynamically
-                $('#hiddenFieldsContainer').append(
-                    `<div class="row">
-                    <div class="col-2">
-                        <input type="text" name="AccessRightsByRoles[${index}].RoleTypeProperty" value="${roleid}" id="hidden_RoleTypeProperty_${roleid}" />
-                    </div>
-                    <div class="col-2">
-                            <input type="text" name="AccessRightsByRoles[${index}].ActionSOR" value="${actionsoR}" id="hidden_ActionSOR_${actionsoR}" />
-                    </div>
-                    <div class="col-8">
-                        <div class="row">
-                            <div class="col-2">
-                                    <input type="text" name="AccessRightsByRoles[${index}].AccessRightID" value="${accessrightID}" id="hidden_AccessRightID_${accessrightID}" />
-                            </div>
-                            <div class="col-2">
-                                    <input type="text" name="AccessRightsByRoles[${index}].ActionType" value="${actiontypE}" id="hidden_ActionType_${actiontypE}" />
-                            </div>
-                            <div class="col-2">
-                                    <input type="text" name="AccessRightsByRoles[${index}].ModuleID" value="${moduleiD}" id="hidden_ModuleID_${moduleiD}" />
-                            </div>
-                            <div class="col-2">
-                                    <input type="text" name="AccessRightsByRoles[${index}].MenuID" value="${menuiD}" id="hidden_MenuID_${menuiD}" />
-                            </div>
-                            <div class="col-2">
-                                    <input type="text" name="AccessRightsByRoles[${index}].ActionName" value="${actionnamE}" id="hidden_ActionName_${actionnamE}" />
-                            </div>
-                        </div>
-                    </div>
-                </div>`
-                );
-            }
         }
 
 
         // Event handler for role checkbox change
         $(document).on('change', '.access-checkbox', function () {
+            var actionsoR = $(this).val();
             updateHiddenFields();  // Update the hidden fields whenever a checkbox is changed
         });
 
@@ -130,7 +111,7 @@
                             @foreach (var accessrole in (IEnumerable<dynamic>)ViewBag.AccessRoleList)
                             {
                                 <div class="form-check">
-                                    <input class="form-check-input access-checkbox" type="checkbox" name="ActionSOR" value="@accessrole.Value" id="accessrole_@accessrole.Value" @(Model != null && accessrole.Value != null && @Model.Any(m => m.ActionSOR == int.Parse(accessrole.Value.ToString())) ? "checked" : "") />
+                                    <input class="form-check-input access-checkbox" type="checkbox" name="ActionSOR" value="@accessrole.Value" id="accessrole_@accessrole.Value" @(Model != null && accessrole.Value != null && Model.Any(m => m.ActionSOR == int.Parse(accessrole.Value.ToString())) ? "checked" : "") />
                                     <label class="form-control form-check-label" for="accessrole_@accessrole.Value">@accessrole.Text</label>
                                 </div>
                             }
