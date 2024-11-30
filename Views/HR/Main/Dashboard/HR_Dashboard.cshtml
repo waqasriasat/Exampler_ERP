@@ -1,11 +1,18 @@
 @{
     ViewData["Title"] = "Human Resources - HR";
 
-    var accessRightsJson = Context.Session.GetString("AccessRightsActionSORs");
 
-    var accessRightList = string.IsNullOrEmpty(accessRightsJson)
+    var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
+    var accessRightByUsertList = string.IsNullOrEmpty(accessRightsByUserJson)
         ? new List<int>()
-        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsJson);
+        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsByUserJson);
+
+
+
+    var accessRightsByRoleJson = Context.Session.GetString("AccessRightsByRoleActionSORs");
+    var accessRightByRoleList = string.IsNullOrEmpty(accessRightsByRoleJson)
+        ? new List<int>()
+        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsByRoleJson);
 
 }
 
@@ -32,7 +39,7 @@
             <h5 class="card-header">Details</h5>
             <div class="row" style="padding: 30px 30px 0px 30px;">
 
-                @if (accessRightList.Contains(151))
+                @if (accessRightByRoleList.Contains(151) || accessRightByUsertList.Contains(151))
                 {
                     @*Deduction*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -54,7 +61,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(152))
+                @if (accessRightByRoleList.Contains(152) || accessRightByUsertList.Contains(152))
                 {
                     @*OverTime*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -76,7 +83,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(153))
+                @if (accessRightByRoleList.Contains(153) || accessRightByUsertList.Contains(153))
                 {
                     @*AddionalAllowance*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -98,7 +105,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(154))
+                @if (accessRightByRoleList.Contains(154) || accessRightByUsertList.Contains(154))
                 {
                     @*Holiday*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -120,7 +127,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(155))
+                @if (accessRightByRoleList.Contains(155) || accessRightByUsertList.Contains(155))
                 {
                     @*VacationSettle*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -142,7 +149,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(156))
+                @if (accessRightByRoleList.Contains(156) || accessRightByUsertList.Contains(156))
                 {
                     @*EndOfService*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -164,7 +171,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(157))
+                @if (accessRightByRoleList.Contains(157) || accessRightByUsertList.Contains(157))
                 {
                     @*EvaluationAssign*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -186,7 +193,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(158))
+                @if (accessRightByRoleList.Contains(158) || accessRightByUsertList.Contains(158))
                 {
                     @*EvaluationApproval*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -208,7 +215,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(159))
+                @if (accessRightByRoleList.Contains(159) || accessRightByUsertList.Contains(159))
                 {
                     @*EvaluationList*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -230,7 +237,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(160))
+                @if (accessRightByRoleList.Contains(160) || accessRightByUsertList.Contains(160))
                 {
                     @*FaceAttendanceTimeAdjust*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -252,7 +259,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(161))
+                @if (accessRightByRoleList.Contains(161) || accessRightByUsertList.Contains(161))
                 {
                     @*FaceAttendanceForwarding*@
                     <div class="col-lg-3 col-md-6 col-sm-12">

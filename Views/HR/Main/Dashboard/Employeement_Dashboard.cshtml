@@ -1,11 +1,18 @@
 @{
     ViewData["Title"] = "Human Resources - Employeement";
 
-    var accessRightsJson = Context.Session.GetString("AccessRightsActionSORs");
 
-    var accessRightList = string.IsNullOrEmpty(accessRightsJson)
+    var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
+    var accessRightByUsertList = string.IsNullOrEmpty(accessRightsByUserJson)
         ? new List<int>()
-        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsJson);
+        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsByUserJson);
+
+
+
+    var accessRightsByRoleJson = Context.Session.GetString("AccessRightsByRoleActionSORs");
+    var accessRightByRoleList = string.IsNullOrEmpty(accessRightsByRoleJson)
+        ? new List<int>()
+        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsByRoleJson);
 
 }
 
@@ -32,7 +39,7 @@
             <h5 class="card-header">Details</h5>
 
             <div class="row" style="padding: 30px 30px 0px 30px;">
-                @if (accessRightList.Contains(101))
+                @if (accessRightByRoleList.Contains(101) || accessRightByUsertList.Contains(101))
                 {
                     @*Applicant*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -57,7 +64,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(102))
+                @if (accessRightByRoleList.Contains(102) || accessRightByUsertList.Contains(102))
                 {
                     @*Employee*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -81,7 +88,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(103))
+                @if (accessRightByRoleList.Contains(103) || accessRightByUsertList.Contains(103))
                 {
                     @*Contract*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -105,7 +112,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(104))
+                @if (accessRightByRoleList.Contains(104) || accessRightByUsertList.Contains(104))
                 {
                     @*Salary*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -129,7 +136,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(105))
+                @if (accessRightByRoleList.Contains(105) || accessRightByUsertList.Contains(105))
                 {
                     @*Joining*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -153,7 +160,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(106))
+                @if (accessRightByRoleList.Contains(106) || accessRightByUsertList.Contains(106))
                 {
                     @*BankAccount*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -177,7 +184,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(107))
+                @if (accessRightByRoleList.Contains(107) || accessRightByUsertList.Contains(107))
                 {
                     @*ContractRenewal*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -201,7 +208,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(108))
+                @if (accessRightByRoleList.Contains(108) || accessRightByUsertList.Contains(108))
                 {
                     @*CardPrint*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -225,7 +232,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(109))
+                @if (accessRightByRoleList.Contains(109) || accessRightByUsertList.Contains(109))
                 {
                     @*ThumbEnrollment*@
                     <div class="col-lg-3 col-md-6 col-sm-12">

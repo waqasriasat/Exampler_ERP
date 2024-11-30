@@ -1,0 +1,98 @@
+@model List<Exampler_ERP.Models.CR_AccessRightsByUser>
+
+
+<script>
+    $(document).ready(function () {
+        console.log('Document is ready.');
+
+        function updateHiddenFields() {
+            $('#hiddenFieldsContainer').empty(); // Clear existing hidden fields
+
+            var userid = $('#UserID').val(); // Get the userid value
+            var checkedRoles = $('.access-checkbox:checked');
+            checkedRoles.each(function (index) {
+                var actionsoR = $(this).val();
+           
+                $('#hiddenFieldsContainer').append(
+                    `<div class="row">
+                        <div class="col-6">
+                                <input type = "hidden" name = "AccessRightsByUsers[${index}].UserID" value = "${userid}" id = "hidden_UserID_${actionsoR}" />
+                        </div>
+                        <div class="col-6">
+                                <input type = "hidden" name = "AccessRightsByUsers[${index}].ActionSOR" value = "${actionsoR}" id = "hidden_ActionSOR_${actionsoR}" />
+                        </div>
+                    </div>`
+                );
+            });
+        }
+
+        // Event handler for role checkbox change
+        $(document).on('change', '.access-checkbox', function () {
+            // debugger;
+            var actionsoR = $(this).val();
+            updateHiddenFields();
+        });
+
+      
+        updateHiddenFields();
+    });
+
+</script>
+
+<div class="modal fade" id="editAccessRightsByUserModal" tabindex="-1" role="dialog" aria-labelledby="editAccessRightsByUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editAccessRightsByUserModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit Access Rights By User
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <form id="editAccessRightsByUserForm">
+                    <div class="row">
+                        <div class="col-12 mb-2">
+                            <div class="form-group">
+                                <label for="UserName" class="form-label fw-bold">User Name</label>
+                                <input type="text" class="form-control form-control-lg" id="UserName" value="@ViewBag.UserName" disabled />
+                                <input type="hidden" id="UserID" value="@Model.FirstOrDefault()?.UserID" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row role-container">
+                        <div class="col-12">
+                            @foreach (var accessrole in (IEnumerable<dynamic>)ViewBag.AccessRoleList)
+                            {
+                                <div class="form-check">
+                                    <input class="form-check-input access-checkbox" type="checkbox" name="ActionSOR" value="@accessrole.Value" id="accessrole_@accessrole.Value" @(Model != null && accessrole.Value != null && @Model.Any(m => m.ActionSOR == int.Parse(accessrole.Value.ToString())) ? "checked" : "") /> 
+                                    <label class="form-control form-check-label" for="accessrole_@accessrole.Value">@accessrole.Text</label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div id="hiddenFieldsContainer">
+                        @for (var i = 0; i < Model.Count; i++)
+                        {
+                            <div class="row">
+                                <div class="col-6">
+                                <input style="width:50px" type="text" name="AccessRightsByUsers[@i].UserID" value="@Model[i].UserID" id="hidden_UserID_@Model[i].UserID" />
+                                </div>
+                                <div class="col-6">
+                                <input style="width:50px" type="text" name="AccessRightsByUsers[@i].ActionSOR" value="@Model[i].ActionSOR" id="hidden_ActionSOR_@Model[i].ActionSOR" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="submit" class="btn btn-success" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

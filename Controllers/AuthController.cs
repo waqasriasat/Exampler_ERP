@@ -68,19 +68,26 @@ namespace Exampler_ERP.Controllers
       HttpContext.Session.SetString("UserRoleName", Username);
 
 
+      var accessRightbyUser = await _appDBContext.CR_AccessRightsByUsers
+          .Where(u => u.UserID == user.UserID)
+          .Select(u => u.ActionSOR)
+          .ToListAsync();
+
+      var usersJson = JsonSerializer.Serialize(accessRightbyUser);
+
+      HttpContext.Session.SetString("AccessRightsByUserActionSORs", usersJson);
+
+
       var roleTypeProperty = $"_{user.RoleTypeID}";
 
-      // Fetch the access rights based on the role type
       var accessRightbyRole = await _appDBContext.CR_AccessRightsByRoles
           .Where(u => EF.Property<int>(u, roleTypeProperty) == 1)
           .Select(u => u.ActionSOR)
           .ToListAsync();
 
-      // Serialize the List<int> into a JSON string
-      var accessRightsJson = JsonSerializer.Serialize(accessRightbyRole);
+      var accessRightsByRoleJson = JsonSerializer.Serialize(accessRightbyRole);
 
-      // Store the JSON string in the session
-      HttpContext.Session.SetString("AccessRightsActionSORs", accessRightsJson);
+      HttpContext.Session.SetString("AccessRightsByRoleActionSORs", accessRightsByRoleJson);
 
 
 

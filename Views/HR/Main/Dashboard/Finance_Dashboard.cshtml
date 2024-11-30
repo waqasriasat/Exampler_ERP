@@ -1,11 +1,18 @@
 @{
     ViewData["Title"] = "Human Resources - Finance";
 
-    var accessRightsJson = Context.Session.GetString("AccessRightsActionSORs");
 
-    var accessRightList = string.IsNullOrEmpty(accessRightsJson)
+    var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
+    var accessRightByUsertList = string.IsNullOrEmpty(accessRightsByUserJson)
         ? new List<int>()
-        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsJson);
+        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsByUserJson);
+
+
+
+    var accessRightsByRoleJson = Context.Session.GetString("AccessRightsByRoleActionSORs");
+    var accessRightByRoleList = string.IsNullOrEmpty(accessRightsByRoleJson)
+        ? new List<int>()
+        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsByRoleJson);
 
 }
 
@@ -31,7 +38,7 @@
         <div class="card mb-4">
             <h5 class="card-header">Details</h5>
             <div class="row" style="padding: 30px 30px 0px 30px;">
-                @if (accessRightList.Contains(201))
+                @if (accessRightByRoleList.Contains(201) || accessRightByUsertList.Contains(201))
                 {
                     @*WorkDay*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -53,7 +60,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(202))
+                @if (accessRightByRoleList.Contains(202) || accessRightByUsertList.Contains(202))
                 {
                     @*FixedDeduction*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -75,7 +82,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(203))
+                @if (accessRightByRoleList.Contains(203) || accessRightByUsertList.Contains(203))
                 {
                     @*HourlySalarySheet*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -97,7 +104,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightList.Contains(204))
+                @if (accessRightByRoleList.Contains(204) || accessRightByUsertList.Contains(204))
                 {
                     @*MonthlySalarySheet*@
                     <div class="col-lg-3 col-md-6 col-sm-12">

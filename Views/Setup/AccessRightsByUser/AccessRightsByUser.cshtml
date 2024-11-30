@@ -1,0 +1,173 @@
+@model Exampler_ERP.Models.Temp.AccessRightsByUserListViewModel
+
+@{
+    ViewData["Title"] = "Setup - Access Rights By User Setup";
+}
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            $('.editAccessRightsByUserLink').click(function (e) {
+                e.preventDefault();
+                var userid = $(this).data('id');
+                $.get('@Url.Action("Edit", "AccessRightsByUser")', { id: userid }, function (data) {
+                    $('#editAccessRightsByUserModalContainer').html(data);
+                    $('#editAccessRightsByUserModal').modal('show');
+                });
+            });
+
+            $('#editAccessRightsByUserModalContainer').on('click', '#saveChanges', function () {
+                
+                var formData = $('#editAccessRightsByUserForm').serialize();
+                console.log("Serialized form data:", formData); // Log serialized data for debugging
+                
+                $.post('@Url.Action("Edit", "AccessRightsByUser")', formData, function (response) {
+                    if (response.success) {
+                        $('#editAccessRightsByUserModal').modal('hide');
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editAccessRightsByUserModalContainer').on('click', '#Close', function () {
+                $('#editAccessRightsByUserModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+
+            // Delete AccessRightsByUser
+            $('.deleteAccessRightsByUserLink').click(function (e) {
+                e.preventDefault();
+                var AccessRightsByUserId = $(this).data('id');
+                $.post('@Url.Action("Delete", "AccessRightsByUser")', { id: AccessRightsByUserId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+    </script>
+    <script>
+        function printAccessRightsByUsers() {
+            var printWindow = window.open('@Url.Action("Print", "AccessRightsByUser")', '_blank');
+            printWindow.focus();
+        }
+        $('#searchUserNameButton').click(function () {
+            var searchValue = $('#searchUserNameInput').val();
+            window.location.href = '@Url.Action("Index", "AccessRightsByUser")?searchUserName=' + searchValue;
+        });
+    </script>
+}
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Setup /</span> Access Rights By User Setup
+</h4>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <h5 class="card-header">Searhing Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8" style="padding-bottom: 15px;">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search User Name" id="searchUserNameInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchUserNameButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <!-- Action Buttons -->
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "AccessRightsByUser")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printAccessRightsByUsers()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Access Rights By User List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-10 col-lg-10">
+                            <div class="row">
+                                <div class="col-8">
+                                    <p class="text-nowrap">User Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Total Access Count</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-nowrap">Edit</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">Delete</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model.AccessRightsWithUserCount)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-10 col-md-10 col-lg-10">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-8">
+                                        <p class="text-nowrap"><span class="smallAdd">User Name : </span>@Html.DisplayFor(modelItem => item.UserName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Total Access Count : </span>@Html.DisplayFor(modelItem => item.TotalAccessCount)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2 col-md-2 col-lg-2">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editAccessRightsByUserLink" data-id="@item.UserID">
+                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="deleteAccessRightsByUserLink" data-id="@item.UserID">
+                                                <i class="fa fa-trash-o" style="font-size: large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Include the modal partial -->
+<div id="editAccessRightsByUserModalContainer"></div>

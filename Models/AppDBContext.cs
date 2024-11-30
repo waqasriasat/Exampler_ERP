@@ -47,6 +47,7 @@ namespace Exampler_ERP.Models
     public DbSet<CR_ThumbAttendance> CR_ThumbAttendances { get; set; }
     public DbSet<CR_FaceAttendancePosted> CR_FaceAttendancePosteds { get; set; }
     public DbSet<CR_AccessRightsByRole> CR_AccessRightsByRoles { get; set; }
+    public DbSet<CR_AccessRightsByUser> CR_AccessRightsByUsers { get; set; }
     public DbSet<HR_ThumbEnrollment> HR_ThumbEnrollments { get; set; }
     public DbSet<CR_User> CR_Users { get; set; }
     public DbSet<HR_DeductionSetup> HR_DeductionSetups { get; set; }
