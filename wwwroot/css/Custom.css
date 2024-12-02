@@ -295,19 +295,6 @@
     }
 }
 
-@media (max-width:767.98px) {
-    .small-box {
-        text-align: center
-    }
-
-        .small-box .icon {
-            display: none
-        }
-
-        .small-box p {
-            font-size: 12px
-        }
-}
 
 .bg-success {
     background-color: #1cc88a !important

@@ -30,7 +30,7 @@ namespace Exampler_ERP.Controllers.Setup
         usersQuery = usersQuery
             .Where(pt => pt.UserName.Contains(CR_CipherKey.Encrypt(searchUserName)));
 
-       
+
       }
 
       var users = await usersQuery.ToListAsync();
@@ -101,13 +101,47 @@ namespace Exampler_ERP.Controllers.Setup
         }
       }
 
+      var moduleNames = new Dictionary<int, string>
+{
+    { 0, "Module" },
+    { 1, "HR" },
+    { 2, "Finance" },
+    { 3, "Store" },
+    { 4, "Purchase" },
+    { 5, "Setup" },
+    { 6, "Setting" }
+};
+      var menuNames = new Dictionary<int, string>
+{
+    { 0, "Main Menu" },
+    { 1, "Master Information" },
+    { 2, "Employeement" },
+    { 3, "HR" },
+    { 4, "Finance" },
+    { 5, "Report" }
+};
+      var actiontypeNames = new Dictionary<int, string>
+{
+    { 0, "Menu" },
+    { 1, "Page" },
+    { 2, "Button" }
+};
+
       ViewBag.AccessRoleList = await _appDBContext.CR_AccessRightsByRoles
-          .Select(r => new SelectListItem
-          {
-            Value = r.ActionSOR.ToString(),
-            Text = r.ActionName
-          })
-          .ToListAsync();
+         .Select(r => new
+         {
+           r.ActionSOR,
+           r.ActionName,
+           r.ModuleID,
+           ModuleName = moduleNames.ContainsKey(r.ModuleID) ? moduleNames[r.ModuleID] : "Unknown",
+           r.MenuID,
+           MenuName = menuNames.ContainsKey(r.MenuID) ? menuNames[r.MenuID] : "Unknown",
+           r.ActionType,
+           ActionTypeName = actiontypeNames.ContainsKey(r.ActionType) ? actiontypeNames[r.ActionType] : "Unknown"
+
+
+         })
+         .ToListAsync();
 
       return PartialView("~/Views/Setup/AccessRightsByUser/EditAccessRightsByUser.cshtml", accessRightsByUsers);
     }

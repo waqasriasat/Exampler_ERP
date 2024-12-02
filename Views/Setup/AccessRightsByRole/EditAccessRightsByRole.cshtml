@@ -106,17 +106,47 @@
                         </div>
                     </div>
 
-                    <div class="row role-container">
-                        <div class="col-12">
-                            @foreach (var accessrole in (IEnumerable<dynamic>)ViewBag.AccessRoleList)
-                            {
-                                <div class="form-check">
-                                    <input class="form-check-input access-checkbox" type="checkbox" name="ActionSOR" value="@accessrole.Value" id="accessrole_@accessrole.Value" @(Model != null && accessrole.Value != null && Model.Any(m => m.ActionSOR == int.Parse(accessrole.Value.ToString())) ? "checked" : "") />
-                                    <label class="form-control form-check-label" for="accessrole_@accessrole.Value">@accessrole.Text</label>
+                   <div class="row role-container">
+                      <div class="col-12">
+                          @foreach (var accessrole in (IEnumerable<dynamic>)ViewBag.AccessRoleList)
+                          {
+                              <div class="form-check">
+                                <div class="row">
+                                <div class="col-3">
+                                  <input class="form-check-input access-checkbox" 
+                                         type="checkbox" 
+                                         name="ActionSOR" 
+                                         value="@accessrole.ActionSOR" 
+                                         id="accessrole_@accessrole.ActionSOR"
+                                            @(Model != null && accessrole.ActionSOR != null && Model.Any(m => m.ActionSOR == int.Parse(accessrole.ActionSOR.ToString())) ? "checked" : "")/>
+                                      
+                                  <input type="text" 
+                                         class="form-control form-check-label" 
+                                         id="accessrole_@accessrole.ModuleID" 
+                                         value="@accessrole.ModuleName" readonly />
                                 </div>
-                            }
-                        </div>
-                    </div>
+                                <div class="col-3">
+                                   <input type="text" 
+                                         class="form-control form-check-label" 
+                                         id="accessrole_@accessrole.MenuID" 
+                                         value="@accessrole.MenuName" readonly />
+                                </div>
+                                <div class="col-2">
+                                   <input type="text" 
+                                         class="form-control form-check-label" 
+                                         id="accessrole_@accessrole.ActionType" 
+                                         value="@accessrole.ActionTypeName" readonly />
+                                </div>
+                                <div class="col-4">
+                                  <label class="form-control form-check-label" 
+                                         for="accessrole_@accessrole.ActionSOR">@accessrole.ActionName</label>
+                                </div>
+                              </div>
+                                  </div>
+                          }
+                      </div>
+                  </div>
+
 
                     <div id="hiddenFieldsContainer">
                         @for (var i = 0; i < Model.Count; i++)
