@@ -4,14 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Exampler_ERP.Controllers.EmployeePortal.Main
 {
-  public class EmployeeReport_DashboardController : Controller
+  public class EmployeeHR_Report_DashboardController : Controller
   {
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
 
 
-    public EmployeeReport_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+    public EmployeeHR_Report_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
@@ -29,7 +29,7 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Main
       //ViewBag.LeaveBalanceCount = await _appDBContext.leave.CountAsync();
       //ViewBag.CardPrintCount = await _appDBContext.Card.CountAsync();
 
-      return View("~/Views/EmployeePortal/Main/Dashboard/EmployeeReport_Dashboard.cshtml");
+      return View("~/Views/EmployeePortal/Main/Dashboard/EmployeeHR_Report_Dashboard.cshtml");
     }
   }
 }

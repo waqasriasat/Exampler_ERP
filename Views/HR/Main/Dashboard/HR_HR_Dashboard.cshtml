@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Human Resources - Employeement";
+    ViewData["Title"] = "Human Resources - HR";
 
 
     var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
@@ -23,62 +23,35 @@
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Human Resources /</span> Employeement
+    <span class="text-muted fw-light">Human Resources /</span> HR
 </h4>
 
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-pills flex-column flex-md-row mb-3">
-            <li class="nav-item"><a class="nav-link" href="~/Main_Dashboard/Index"><i class="bx bx-home me-1"></i> Main</a></li>
-            <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-briefcase me-1"></i> Employeement</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/HR_Dashboard/Index"><i class="bx bx-group me-1"></i> HR</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/Finance_Dashboard/Index"><i class="bx bx-dollar me-1"></i> Finance</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/Report_Dashboard/Index"><i class="bx bx-bar-chart-alt me-1"></i> Report</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/HR_Main_Dashboard/Index"><i class="bx bx-home me-1"></i> Main</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/HR_Employeement_Dashboard/Index"><i class="bx bx-briefcase me-1"></i> Employeement</a></li>
+            <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-group me-1"></i> HR</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/HR_Finance_Dashboard/Index"><i class="bx bx-dollar me-1"></i> Finance</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/HR_Report_Dashboard/Index"><i class="bx bx-bar-chart-alt me-1"></i> Report</a></li>
         </ul>
         <div class="card mb-4">
             <h5 class="card-header">Details</h5>
-
             <div class="row" style="padding: 30px 30px 0px 30px;">
-                @if (accessRightByRoleList.Contains(101) || accessRightByUsertList.Contains(101))
-                {
-                    @*Applicant*@
-                    <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="Applicant" asp-action="Index">
-                            <div class="modern-card shadow mb-4">
-                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                    <div class="card-details">
-                                        <strong class="text-primary">Applicant</strong>
-                                        <h4 class="font-weight-bold text-dark">
-                                            @ViewBag.ApplicantCount
-                                        </h4>
-                                    </div>
-                                    <div class="icon bg-primary text-white">
-                                        <i class="fa fa-user-plus Card1I" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                                <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
-                                </div>
 
-                            </div>
-                        </a>
-                    </div>
-                }
-                @if (accessRightByRoleList.Contains(102) || accessRightByUsertList.Contains(102))
+                @if (accessRightByRoleList.Contains(151) || accessRightByUsertList.Contains(151))
                 {
-                    @*Employee*@
+                    @*Deduction*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="Employee" asp-action="Index">
+                        <a asp-controller="Deduction" asp-action="Index">
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Employee</strong>
-                                        <h4 class="font-weight-bold text-dark">
-                                            @ViewBag.EmployeeCount
-                                        </h4>
+                                        <strong class="text-primary">Deduction</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
-                                        <i class="fa fa-user-tie Card1I" aria-hidden="true"></i>
+                                        <i class="fa fa-minus-circle Card1I" aria-hidden="true"></i>
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
@@ -88,21 +61,19 @@
                         </a>
                     </div>
                 }
-                @if (accessRightByRoleList.Contains(103) || accessRightByUsertList.Contains(103))
+                @if (accessRightByRoleList.Contains(152) || accessRightByUsertList.Contains(152))
                 {
-                    @*Contract*@
+                    @*OverTime*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="Contract" asp-action="Index">
+                        <a asp-controller="OverTime" asp-action="Index">
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Contract</strong>
-                                        <h4 class="font-weight-bold text-dark">
-                                            @ViewBag.ContractCount
-                                        </h4>
+                                        <strong class="text-primary">Over Time</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
-                                        <i class="fa fa-file-contract Card1I" aria-hidden="true"></i>
+                                        <i class="fa fa-clock Card1I" aria-hidden="true"></i>
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
@@ -112,21 +83,19 @@
                         </a>
                     </div>
                 }
-                @if (accessRightByRoleList.Contains(104) || accessRightByUsertList.Contains(104))
+                @if (accessRightByRoleList.Contains(153) || accessRightByUsertList.Contains(153))
                 {
-                    @*Salary*@
+                    @*AddionalAllowance*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="Salary" asp-action="Index">
+                        <a asp-controller="AddionalAllowance" asp-action="Index">
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Salary</strong>
-                                        <h4 class="font-weight-bold text-dark">
-                                            @ViewBag.SalaryCount
-                                        </h4>
+                                        <strong class="text-primary">Addional Allowance</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
-                                        <i class="fa fa-money-bill-wave Card1I" aria-hidden="true"></i>
+                                        <i class="fa fa-plus-circle Card1I" aria-hidden="true"></i>
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
@@ -136,21 +105,19 @@
                         </a>
                     </div>
                 }
-                @if (accessRightByRoleList.Contains(105) || accessRightByUsertList.Contains(105))
+                @if (accessRightByRoleList.Contains(154) || accessRightByUsertList.Contains(154))
                 {
-                    @*Joining*@
+                    @*Holiday*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="Joining" asp-action="Index">
+                        <a asp-controller="Holiday" asp-action="Index">
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Joining</strong>
-                                        <h4 class="font-weight-bold text-dark">
-                                            @ViewBag.JoiningCount
-                                        </h4>
+                                        <strong class="text-primary">Holidays</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
-                                        <i class="fa fa-handshake Card1I" aria-hidden="true"></i>
+                                        <i class="fa fa-plus-circle Card1I" aria-hidden="true"></i>
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
@@ -160,21 +127,19 @@
                         </a>
                     </div>
                 }
-                @if (accessRightByRoleList.Contains(106) || accessRightByUsertList.Contains(106))
+                @if (accessRightByRoleList.Contains(155) || accessRightByUsertList.Contains(155))
                 {
-                    @*BankAccount*@
+                    @*VacationSettle*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="BankAccount" asp-action="Index">
+                        <a asp-controller="VacationSettle" asp-action="Index">
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Bank Account</strong>
-                                        <h4 class="font-weight-bold text-dark">
-                                            @ViewBag.BankAccountCount
-                                        </h4>
+                                        <strong class="text-primary">Vacation Settle</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
-                                        <i class="fa fa-building Card1I" aria-hidden="true"></i>
+                                        <i class="fa fa-plane-departure Card1I" aria-hidden="true"></i>
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
@@ -184,21 +149,19 @@
                         </a>
                     </div>
                 }
-                @if (accessRightByRoleList.Contains(107) || accessRightByUsertList.Contains(107))
+                @if (accessRightByRoleList.Contains(156) || accessRightByUsertList.Contains(156))
                 {
-                    @*ContractRenewal*@
+                    @*EndOfService*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="ContractRenewal" asp-action="Index">
+                        <a asp-controller="EndOfService" asp-action="Index">
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Contract Renewal</strong>
-                                        <h4 class="font-weight-bold text-dark">
-                                            @ViewBag.ContractRenewwalCount
-                                        </h4>
+                                        <strong class="text-primary">End Of Service</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
-                                        <i class="fa fa-sync-alt Card1I" aria-hidden="true"></i>
+                                        <i class="fa fa-hand-holding-usd Card1I" aria-hidden="true"></i>
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
@@ -208,21 +171,19 @@
                         </a>
                     </div>
                 }
-                @if (accessRightByRoleList.Contains(108) || accessRightByUsertList.Contains(108))
+                @if (accessRightByRoleList.Contains(157) || accessRightByUsertList.Contains(157))
                 {
-                    @*CardPrint*@
+                    @*EvaluationAssign*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="CardPrint" asp-action="Index">
+                        <a href="#">
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Card Print</strong>
-                                        <h4 class="font-weight-bold text-dark">
-                                            0
-                                        </h4>
+                                        <strong class="text-primary">Evaluation Assign</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
-                                        <i class="fa fa-id-card Card1I" aria-hidden="true"></i>
+                                        <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
@@ -232,21 +193,85 @@
                         </a>
                     </div>
                 }
-                @if (accessRightByRoleList.Contains(109) || accessRightByUsertList.Contains(109))
+                @if (accessRightByRoleList.Contains(158) || accessRightByUsertList.Contains(158))
                 {
-                    @*ThumbEnrollment*@
+                    @*EvaluationApproval*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="ThumbEnrollment" asp-action="Index">
+                        <a href="#">
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Thumb Enrollment</strong>
-                                        <h4 class="font-weight-bold text-dark">
-                                            0
-                                        </h4>
+                                        <strong class="text-primary">Evaluation Approval</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
-                                        <i class="fa fa-thumb-tack Card1I" aria-hidden="true"></i>
+                                        <i class="fa fa-check-circle Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightByRoleList.Contains(159) || accessRightByUsertList.Contains(159))
+                {
+                    @*EvaluationList*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a href="#">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Evaluation List</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-list-alt Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightByRoleList.Contains(160) || accessRightByUsertList.Contains(160))
+                {
+                    @*FaceAttendanceTimeAdjust*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="FaceAttendanceTimeAdjust" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Face Attendance Time Adjust</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-calendar-check Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightByRoleList.Contains(161) || accessRightByUsertList.Contains(161))
+                {
+                    @*FaceAttendanceForwarding*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="FaceAttendanceForwarding" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Face Attendance Forwarding</strong>
+                                        <h4 class="font-weight-bold text-dark">0</h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white">
+                                        <i class="fa fa-calendar-check Card1I" aria-hidden="true"></i>
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">

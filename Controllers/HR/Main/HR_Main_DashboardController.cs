@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Exampler_ERP.Controllers.HR.Main
 {
-  public class Main_DashboardController : Controller
+  public class HR_Main_DashboardController : Controller
   {
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
 
 
-    public Main_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+    public HR_Main_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
@@ -43,7 +43,7 @@ namespace Exampler_ERP.Controllers.HR.Main
       ViewBag.EmployeeRequestForwordCount = await _appDBContext.HR_EmployeeRequestTypeForwards.CountAsync();
       ViewBag.HolidayTypeCount = await _appDBContext.Settings_HolidayTypes.CountAsync();
       //ViewBag.EvaluationTemplateCount = await _appDBContext.Branchs.CountAsync();
-      return View("~/Views/HR/Main/Dashboard/Main_Dashboard.cshtml");
+      return View("~/Views/HR/Main/Dashboard/HR_Main_Dashboard.cshtml");
     }
   }
 }

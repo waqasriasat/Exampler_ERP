@@ -38,11 +38,11 @@
         </li>
 
         <!-- Human Resources -->
-        <li class='menu-item@(currentPage.StartsWith("/Main_Dashboard/Index") ||
-                    currentPage.StartsWith("/Employeement_Dashboard/Index") ||
-                    currentPage.StartsWith("/HR_Dashboard/Index") ||
-                    currentPage.StartsWith("/Finance_Dashboard/Index") ||
-                    currentPage.StartsWith("/Report_Dashboard/Index") ? " active open" : "")'>
+        <li class='menu-item@(currentPage.StartsWith("/HR_Main_Dashboard/Index") ||
+                    currentPage.StartsWith("/HR_Employeement_Dashboard/Index") ||
+                    currentPage.StartsWith("/HR_HR_Dashboard/Index") ||
+                    currentPage.StartsWith("/HR_Finance_Dashboard/Index") ||
+                    currentPage.StartsWith("/HR_Report_Dashboard/Index") ? " active open" : "")'>
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div>Human Resources</div>
@@ -50,36 +50,36 @@
 
             <ul class="menu-sub">
                 <!-- Master Information -->
-                <li class='menu-item@(currentPage ==  "/Main_Dashboard/Index" ? " active" : "")'>
-                    <a asp-controller="Main_Dashboard" asp-action="Index" class="menu-link">
+                <li class='menu-item@(currentPage ==  "/HR_Main_Dashboard/Index" ? " active" : "")'>
+                    <a asp-controller="HR_Main_Dashboard" asp-action="Index" class="menu-link">
                         <div>Master Information</div>
                     </a>
                 </li>
 
                 <!-- Employeement -->
-                <li class='menu-item@(currentPage == "/Employeement_Dashboard/Index" ? " active" : "")'>
-                    <a asp-controller="Employeement_Dashboard" asp-action="Index" class="menu-link">
+                <li class='menu-item@(currentPage == "/HR_Employeement_Dashboard/Index" ? " active" : "")'>
+                    <a asp-controller="HR_Employeement_Dashboard" asp-action="Index" class="menu-link">
                         <div>Employeement</div>
                     </a>
                 </li>
 
                 <!-- HR -->
-                <li class='menu-item@(currentPage == "/HR_Dashboard/Index" ? " active" : "")'>
-                    <a asp-controller="HR_Dashboard" asp-action="Index" class="menu-link">
+                <li class='menu-item@(currentPage == "/HR_HR_Dashboard/Index" ? " active" : "")'>
+                    <a asp-controller="HR_HR_Dashboard" asp-action="Index" class="menu-link">
                         <div>HR</div>
                     </a>
                 </li>
 
                 <!-- Finance -->
-                <li class='menu-item@(currentPage == "/Finance_Dashboard/Index" ? " active" : "")'>
-                    <a asp-controller="Finance_Dashboard" asp-action="Index" class="menu-link">
+                <li class='menu-item@(currentPage == "/HR_Finance_Dashboard/Index" ? " active" : "")'>
+                    <a asp-controller="HR_Finance_Dashboard" asp-action="Index" class="menu-link">
                         <div>Finance</div>
                     </a>
                 </li>
 
                 <!-- Report -->
-                <li class='menu-item@(currentPage == "/Report_Dashboard/Index" ? " active" : "")'>
-                    <a asp-controller="Report_Dashboard" asp-action="Index" class="menu-link">
+                <li class='menu-item@(currentPage == "/HR_Report_Dashboard/Index" ? " active" : "")'>
+                    <a asp-controller="HR_Report_Dashboard" asp-action="Index" class="menu-link">
                         <div>Report</div>
                     </a>
                 </li>

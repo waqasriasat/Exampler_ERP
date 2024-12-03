@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Human Resources - Master Infomation";
+    ViewData["Title"] = "Finance - Master Infomation";
 
 
     var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
@@ -28,17 +28,17 @@
 
 @* ************** Content ************** *@
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Human Resources /</span> Master Infomation
+    <span class="text-muted fw-light">Finance /</span> Master Infomation
 </h4>
 
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-pills flex-column flex-md-row mb-3">
             <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-home me-1"></i> Main</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/Employeement_Dashboard/Index"><i class="bx bx-briefcase me-1"></i> Employeement</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/HR_Dashboard/Index"><i class="bx bx-group me-1"></i> HR</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/Finance_Dashboard/Index"><i class="bx bx-dollar me-1"></i> Finance</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/Report_Dashboard/Index"><i class="bx bx-bar-chart-alt me-1"></i> Report</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/HR_Employeement_Dashboard/Index"><i class="bx bx-briefcase me-1"></i> Employeement</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/HR_HR_Dashboard/Index"><i class="bx bx-group me-1"></i> HR</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/HR_Finance_Dashboard/Index"><i class="bx bx-dollar me-1"></i> Finance</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/HR_Report_Dashboard/Index"><i class="bx bx-bar-chart-alt me-1"></i> Report</a></li>
         </ul>
         <div class="card mb-4">
             <h5 class="card-header">Details</h5>

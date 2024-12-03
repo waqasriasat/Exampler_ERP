@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Exampler_ERP.Controllers.HR.Main
 {
-  public class Employeement_DashboardController : Controller
+  public class HR_Employeement_DashboardController : Controller
   {
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
 
 
-    public Employeement_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+    public HR_Employeement_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
@@ -30,7 +30,7 @@ namespace Exampler_ERP.Controllers.HR.Main
       //ViewBag.LeaveBalanceCount = await _appDBContext.leave.CountAsync();
       //ViewBag.CardPrintCount = await _appDBContext.Card.CountAsync();
     
-      return View("~/Views/HR/Main/Dashboard/Employeement_Dashboard.cshtml");
+      return View("~/Views/HR/Main/Dashboard/HR_Employeement_Dashboard.cshtml");
     }
   }
 }
