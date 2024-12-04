@@ -13,6 +13,6 @@ namespace Exampler_ERP.Models
     public virtual Settings_HeadofAccount_Four? HeadofAccount_Four { get; set; }
     public int CategoryTypeID { get; set; }
     [ForeignKey("CategoryTypeID")]
-    public virtual Settings_HOA_CategoryType? HOA_CategoryType { get; set; }
+    public virtual Settings_HeadofAccount_CategoryType? HOA_CategoryType { get; set; }
   }
 }

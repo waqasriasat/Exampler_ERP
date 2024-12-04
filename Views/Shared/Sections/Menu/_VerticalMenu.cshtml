@@ -199,29 +199,30 @@
 
         {
             <!-- Finance -->
-            <li class='menu-item@(currentPage.StartsWith("/FI_Main_Dashboard/Index") ? " active open" : "")'>
+            <li class='menu-item@(currentPage.StartsWith("/FI_Main_Dashboard/Index") || currentPage.StartsWith("/FI_Management_Dashboard/Index") ||
+                                   currentPage.StartsWith("/FI_Transaction_Dashboard/Index") || currentPage.StartsWith("/FI_Report_Dashboard/Index") ? " active open" : "")'>
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-dollar"></i>
                     <div>Finance</div>
                 </a>
                 <ul class="menu-sub">
                     <li class='menu-item@(currentPage == "/FI_Main_Dashboard/Index" ? " active" : "")'>
-                        <a asp-controller="FI_Main_Dashboard" asp-action="Index" class="menu-link">
+                        <a asp-action="Index" asp-controller="FI_Main_Dashboard" class="menu-link">
                             <div>Master Information</div>
                         </a>
                     </li>
-                    <li class='menu-item@(currentPage == "/Pages/AccountSettingsNotifications" ? " active" : "")'>
-                        <a asp-controller="Pages" asp-action="AccountSettingsNotifications" class="menu-link">
+                    <li class='menu-item@(currentPage == "/FI_Management_Dashboard/Index" ? " active" : "")'>
+                        <a asp-controller="Index" asp-action="FI_Management_Dashboard" class="menu-link">
                             <div>Management</div>
                         </a>
                     </li>
-                    <li class='menu-item@(currentPage == "/Pages/AccountSettingsConnections" ? " active" : "")'>
-                        <a asp-controller="Pages" asp-action="AccountSettingsConnections" class="menu-link">
+                    <li class='menu-item@(currentPage == "/FI_Transaction_Dashboard/Index" ? " active" : "")'>
+                        <a asp-controller="Index" asp-action="FI_Transaction_Dashboard" class="menu-link">
                             <div>Transaction</div>
                         </a>
                     </li>
-                    <li class='menu-item@(currentPage == "/Pages/AccountSettingsConnections" ? " active" : "")'>
-                        <a asp-controller="Pages" asp-action="AccountSettingsConnections" class="menu-link">
+                    <li class='menu-item@(currentPage == "/FI_Report_Dashboard/Index" ? " active" : "")'>
+                        <a asp-controller="Index" asp-action="FI_Report_Dashboard" class="menu-link">
                             <div>Reports</div>
                         </a>
                     </li>

@@ -38,6 +38,19 @@ namespace Exampler_ERP.Models
     public DbSet<Settings_AddionalAllowanceType> Settings_AddionalAllowanceTypes { get; set; }
     public DbSet<Settings_FixedDeductionType> Settings_FixedDeductionTypes { get; set; }
     public DbSet<Settings_HolidayType> Settings_HolidayTypes { get; set; }
+
+
+    public DbSet<Settings_CashAgainstSale> Settings_CashAgainstSales { get; set; }
+    public DbSet<Settings_HeadofAccount_CategoryType> Settings_HeadofAccount_CategoryTypes { get; set; }
+    public DbSet<Settings_HeadofAccount_First> Settings_HeadofAccount_Firsts { get; set; }
+    public DbSet<Settings_HeadofAccount_Second> Settings_HeadofAccount_Seconds { get; set; }
+    public DbSet<Settings_HeadofAccount_Third> Settings_HeadofAccount_Thirds { get; set; }
+    public DbSet<Settings_HeadofAccount_Four> Settings_HeadofAccount_Fours { get; set; }
+    public DbSet<Settings_HeadofAccount_Five> Settings_HeadofAccount_Fives { get; set; }
+    public DbSet<Settings_VoucharType> Settings_VoucharTypes { get; set; }
+
+
+
     public DbSet<CR_ProcessTypeApproval> CR_ProcessTypeApprovals { get; set; }
     public DbSet<CR_ProcessTypeApprovalDetail> CR_ProcessTypeApprovalDetails { get; set; }
     public DbSet<CR_ProcessTypeApprovalDetailDoc> CR_ProcessTypeApprovalDetailDocs { get; set; }
@@ -87,11 +100,124 @@ namespace Exampler_ERP.Models
     public DbSet<HR_GlobalSetting> HR_GlobalSettings { get; set; }
 
 
+    public DbSet<FI_BankAccount> FI_BankAccounts { get; set; }
+    public DbSet<FI_ChequeBook> FI_ChequeBooks { get; set; }
+    public DbSet<FI_ChequeBookDetail> FI_ChequeBookDetails { get; set; }
+    public DbSet<FI_Vendor> FI_Vendors { get; set; }
+    public DbSet<FI_Vouchar> FI_Vouchars { get; set; }
+
+
 
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      modelBuilder.Entity<Settings_HeadofAccount_Four>().HasData(
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 1, HeadofAccount_FourName = "Banks", HeadofAccount_ThirdID = 1 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 2, HeadofAccount_FourName = "Employee Advance Salaries", HeadofAccount_ThirdID = 2 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 3, HeadofAccount_FourName = "ICT EQUIPMENTS", HeadofAccount_ThirdID = 29 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 4, HeadofAccount_FourName = "Income Tax Payable", HeadofAccount_ThirdID = 24 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 5, HeadofAccount_FourName = "Sales Tax Payable", HeadofAccount_ThirdID = 24 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 6, HeadofAccount_FourName = "EMPLOYEE LOAN", HeadofAccount_ThirdID = 5 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 7, HeadofAccount_FourName = "ACCRUED SALARIES", HeadofAccount_ThirdID = 22 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 8, HeadofAccount_FourName = "OTHER LIABILITIES", HeadofAccount_ThirdID = 19 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 9, HeadofAccount_FourName = "General and Administrative", HeadofAccount_ThirdID = 14 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 10, HeadofAccount_FourName = "Utilities", HeadofAccount_ThirdID = 14 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 11, HeadofAccount_FourName = "Fuel Expense", HeadofAccount_ThirdID = 14 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 12, HeadofAccount_FourName = "Trade Creditor Local", HeadofAccount_ThirdID = 23 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 13, HeadofAccount_FourName = "Payroll Expense", HeadofAccount_ThirdID = 14 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 14, HeadofAccount_FourName = "Merchandise Inventory", HeadofAccount_ThirdID = 4 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 15, HeadofAccount_FourName = "Sales Tax", HeadofAccount_ThirdID = 12 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 16, HeadofAccount_FourName = "Purchase Discount", HeadofAccount_ThirdID = 12 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 17, HeadofAccount_FourName = "Sales Discount", HeadofAccount_ThirdID = 12 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 18, HeadofAccount_FourName = "WHT Income Tax Receivable", HeadofAccount_ThirdID = 6 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 19, HeadofAccount_FourName = "Sales", HeadofAccount_ThirdID = 28 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 20, HeadofAccount_FourName = "Trade Debtors", HeadofAccount_ThirdID = 9 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 21, HeadofAccount_FourName = "Cash", HeadofAccount_ThirdID = 3 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 22, HeadofAccount_FourName = "Incentive Payable", HeadofAccount_ThirdID = 17 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 23, HeadofAccount_FourName = "Incentive on Sales", HeadofAccount_ThirdID = 12 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 24, HeadofAccount_FourName = "Merchant", HeadofAccount_ThirdID = 3 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 25, HeadofAccount_FourName = "Devices Plant & Machinery", HeadofAccount_ThirdID = 10 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 26, HeadofAccount_FourName = "Sales Commissions", HeadofAccount_ThirdID = 28 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 27, HeadofAccount_FourName = "Sales Income", HeadofAccount_ThirdID = 28 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 28, HeadofAccount_FourName = "Property / Plant and Equipment", HeadofAccount_ThirdID = 29 }
+ );
+
+
+      modelBuilder.Entity<Settings_HeadofAccount_Third>().HasData(
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 1, HeadofAccount_ThirdName = "Advance Income Tax", HeadofAccount_SecondID = 1 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 2, HeadofAccount_ThirdName = "Advances", HeadofAccount_SecondID = 1 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 3, HeadofAccount_ThirdName = "Cash & Banks", HeadofAccount_SecondID = 1 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 4, HeadofAccount_ThirdName = "Inventory & Stock", HeadofAccount_SecondID = 1 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 5, HeadofAccount_ThirdName = "Loan", HeadofAccount_SecondID = 1 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 6, HeadofAccount_ThirdName = "Other Receivable", HeadofAccount_SecondID = 1 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 7, HeadofAccount_ThirdName = "Prepaid Expenses", HeadofAccount_SecondID = 1 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 8, HeadofAccount_ThirdName = "Sales Tax - Input", HeadofAccount_SecondID = 1 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 9, HeadofAccount_ThirdName = "Trade Debtors", HeadofAccount_SecondID = 1 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 10, HeadofAccount_ThirdName = "Devices, Plant & Machinery", HeadofAccount_SecondID = 2 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 11, HeadofAccount_ThirdName = "Capital", HeadofAccount_SecondID = 3 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 12, HeadofAccount_ThirdName = "Cost of Sales", HeadofAccount_SecondID = 4 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 13, HeadofAccount_ThirdName = "Financial Charges", HeadofAccount_SecondID = 5 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 14, HeadofAccount_ThirdName = "General and Administrative", HeadofAccount_SecondID = 6 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 15, HeadofAccount_ThirdName = "Sales and Marketing", HeadofAccount_SecondID = 6 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 16, HeadofAccount_ThirdName = "Other Long Term Liabilities", HeadofAccount_SecondID = 7 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 17, HeadofAccount_ThirdName = "Accrued Expenses/Liabilities", HeadofAccount_SecondID = 7 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 18, HeadofAccount_ThirdName = "Excise Payable", HeadofAccount_SecondID = 7 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 19, HeadofAccount_ThirdName = "Other Liabilities", HeadofAccount_SecondID = 7 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 20, HeadofAccount_ThirdName = "Other Long Term Liabilities", HeadofAccount_SecondID = 7 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 21, HeadofAccount_ThirdName = "Provision for Taxation", HeadofAccount_SecondID = 7 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 22, HeadofAccount_ThirdName = "Salaries", HeadofAccount_SecondID = 7 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 23, HeadofAccount_ThirdName = "Trade Creditors", HeadofAccount_SecondID = 7 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 24, HeadofAccount_ThirdName = "WHT Payable", HeadofAccount_SecondID = 7 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 25, HeadofAccount_ThirdName = "Other Income", HeadofAccount_SecondID = 8 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 26, HeadofAccount_ThirdName = "Sales Adjustment", HeadofAccount_SecondID = 9 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 27, HeadofAccount_ThirdName = "Sales Commissions", HeadofAccount_SecondID = 9 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 28, HeadofAccount_ThirdName = "Sales Income", HeadofAccount_SecondID = 9 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 29, HeadofAccount_ThirdName = "Property / Plant and Equipment", HeadofAccount_SecondID = 10 }
+ );
+
+
+      modelBuilder.Entity<Settings_HeadofAccount_Second>().HasData(
+   new Settings_HeadofAccount_Second() { HeadofAccount_SecondID = 1, HeadofAccount_SecondName = "Current Assets", HeadofAccount_FirstID = 1 },
+   new Settings_HeadofAccount_Second() { HeadofAccount_SecondID = 2, HeadofAccount_SecondName = "Fixed Assets / Non-Current Assets", HeadofAccount_FirstID = 1 },
+   new Settings_HeadofAccount_Second() { HeadofAccount_SecondID = 3, HeadofAccount_SecondName = "Capital", HeadofAccount_FirstID = 2 },
+   new Settings_HeadofAccount_Second() { HeadofAccount_SecondID = 4, HeadofAccount_SecondName = "Cost of Sales", HeadofAccount_FirstID = 3 },
+   new Settings_HeadofAccount_Second() { HeadofAccount_SecondID = 5, HeadofAccount_SecondName = "Financial Expenses", HeadofAccount_FirstID = 3 },
+   new Settings_HeadofAccount_Second() { HeadofAccount_SecondID = 6, HeadofAccount_SecondName = "Operating Expenses", HeadofAccount_FirstID = 3 },
+   new Settings_HeadofAccount_Second() { HeadofAccount_SecondID = 7, HeadofAccount_SecondName = "Long Term Liabilities", HeadofAccount_FirstID = 4 },
+   new Settings_HeadofAccount_Second() { HeadofAccount_SecondID = 8, HeadofAccount_SecondName = "Short Term Liabilities", HeadofAccount_FirstID = 4 },
+   new Settings_HeadofAccount_Second() { HeadofAccount_SecondID = 9, HeadofAccount_SecondName = "Other Income", HeadofAccount_FirstID = 5 },
+   new Settings_HeadofAccount_Second() { HeadofAccount_SecondID = 10, HeadofAccount_SecondName = "Sales Income", HeadofAccount_FirstID = 5 }
+
+);
+
+      modelBuilder.Entity<Settings_HeadofAccount_First>().HasData(
+   new Settings_HeadofAccount_First() { HeadofAccount_FirstID = 1, HeadofAccount_FirstName = "Assets" },
+   new Settings_HeadofAccount_First() { HeadofAccount_FirstID = 2, HeadofAccount_FirstName = "Equity" },
+   new Settings_HeadofAccount_First() { HeadofAccount_FirstID = 3, HeadofAccount_FirstName = "Expenses" },
+   new Settings_HeadofAccount_First() { HeadofAccount_FirstID = 4, HeadofAccount_FirstName = "Liabilities" },
+   new Settings_HeadofAccount_First() { HeadofAccount_FirstID = 5, HeadofAccount_FirstName = "Revenue" }
+);
+
+      modelBuilder.Entity<Settings_VoucharType>().HasData(
+   new Settings_VoucharType() { VoucharTypeID = 1, VoucharNature = "Bill Receipt Voucher", VoucharTypeName= "Receipt", VoucharPrefix= "BRV" },
+   new Settings_VoucharType() { VoucharTypeID = 2, VoucharNature = "Bank Payment Voucher", VoucharTypeName = "v", VoucharPrefix = "BPV" },
+   new Settings_VoucharType() { VoucharTypeID = 3, VoucharNature = "Sales Invoice", VoucharTypeName = "Journal", VoucharPrefix = "SIV" },
+   new Settings_VoucharType() { VoucharTypeID = 4, VoucharNature = "Cash Payment Voucher", VoucharTypeName = "Payment", VoucharPrefix = "CPV" },
+   new Settings_VoucharType() { VoucharTypeID = 5, VoucharNature = "Good Receiving Voucher", VoucharTypeName = "Payment", VoucharPrefix = "GRV" },
+   new Settings_VoucharType() { VoucharTypeID = 6, VoucharNature = "Purchase Invoice", VoucharTypeName = "Journal", VoucharPrefix = "PIV" },
+   new Settings_VoucharType() { VoucharTypeID = 7, VoucharNature = "Transfer", VoucharTypeName = "Transfer", VoucharPrefix = "TRF" },
+   new Settings_VoucharType() { VoucharTypeID = 8, VoucharNature = "Payroll Vouchor", VoucharTypeName = "Payment", VoucharPrefix = "PAY" }
+);
+
+      modelBuilder.Entity<Settings_HeadofAccount_CategoryType>().HasData(
+   new Settings_HeadofAccount_CategoryType() { CategoryTypeID = 1, CategoryTypeName = "Receivable"},
+   new Settings_HeadofAccount_CategoryType() { CategoryTypeID = 2, CategoryTypeName = "Payable"},
+   new Settings_HeadofAccount_CategoryType() { CategoryTypeID = 3, CategoryTypeName = "Cash and Bank"},
+   new Settings_HeadofAccount_CategoryType() { CategoryTypeID = 4, CategoryTypeName = "Expenses"},
+   new Settings_HeadofAccount_CategoryType() { CategoryTypeID = 5, CategoryTypeName = "Fixed Assets"}
+);
+
       modelBuilder.Entity<CR_AccessRightsByRole>().HasData(
         new CR_AccessRightsByRole() { AccessRightID = 1, ActionSOR = 1, ActionType = 0, ModuleID = 0, MenuID = 0, ActionName = "Humain Resources", _1 = 1, _2 = 0, _3 = 0, _4 = 0, _5 = 0, _6 = 0, _7 = 0, _8 = 0, _9 = 0, _10 = 0, _11 = 0, _12 = 0, _13 = 0, _14 = 0, _15 = 0, _16 = 0, _17 = 0, _18 = 0, _19 = 0, _20 = 0, _21 = 0, _22 = 0, _23 = 0, _24 = 0, _25 = 0, _26 = 0, _27 = 0, _28 = 0, _29 = 0, _30 = 0, _31 = 0, _32 = 0, _33 = 0, _34 = 0, _35 = 0, _36 = 0, _37 = 0, _38 = 0, _39 = 0, _40 = 0, _41 = 0, _42 = 0, _43 = 0, _44 = 0, _45 = 0, _46 = 0, _47 = 0, _48 = 0, _49 = 0, _50 = 0 },
         new CR_AccessRightsByRole() { AccessRightID = 2, ActionSOR = 2, ActionType = 0, ModuleID = 0, MenuID = 0, ActionName = "Finance", _1 = 1, _2 = 0, _3 = 0, _4 = 0, _5 = 0, _6 = 0, _7 = 0, _8 = 0, _9 = 0, _10 = 0, _11 = 0, _12 = 0, _13 = 0, _14 = 0, _15 = 0, _16 = 0, _17 = 0, _18 = 0, _19 = 0, _20 = 0, _21 = 0, _22 = 0, _23 = 0, _24 = 0, _25 = 0, _26 = 0, _27 = 0, _28 = 0, _29 = 0, _30 = 0, _31 = 0, _32 = 0, _33 = 0, _34 = 0, _35 = 0, _36 = 0, _37 = 0, _38 = 0, _39 = 0, _40 = 0, _41 = 0, _42 = 0, _43 = 0, _44 = 0, _45 = 0, _46 = 0, _47 = 0, _48 = 0, _49 = 0, _50 = 0 },

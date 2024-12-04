@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Exampler_ERP.Controllers.Finance.Main
 {
@@ -6,7 +6,7 @@ namespace Exampler_ERP.Controllers.Finance.Main
   {
     public IActionResult Index()
     {
-      return View();
+      return View("~/Views/Finance/Main/Dashboard/FI_Transaction_Dashboard.cshtml");
     }
   }
 }
