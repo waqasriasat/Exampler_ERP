@@ -112,15 +112,63 @@ namespace Exampler_ERP.Models
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      modelBuilder.Entity<Settings_HeadofAccount_Five>().HasData(
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 1, HeadofAccount_FiveName = "Bank Account (Bank AlHabib xxxxxxxxxxxxxxxx)", HeadofAccount_FourID = 1, CategoryTypeID = 3, GroupTypeID = 1 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 2, HeadofAccount_FiveName = "Vehicle Fuel", HeadofAccount_FourID = 1, CategoryTypeID = 4, GroupTypeID = 2 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 3, HeadofAccount_FiveName = "Generator Fuel", HeadofAccount_FourID = 1, CategoryTypeID = 4, GroupTypeID = 2 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 4, HeadofAccount_FiveName = "Bike Fuel", HeadofAccount_FourID = 1, CategoryTypeID = 4, GroupTypeID = 2 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 5, HeadofAccount_FiveName = "ICT EQUIPMENT ORIGINAL COST", HeadofAccount_FourID = 3, CategoryTypeID = 5, GroupTypeID = 1 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 6, HeadofAccount_FiveName = "INCOME TAX US 149 - SALARY", HeadofAccount_FourID = 4, CategoryTypeID = 2, GroupTypeID = 1 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 7, HeadofAccount_FiveName = "INCOME TAX US 153-1(A) - GOODS", HeadofAccount_FourID = 4, CategoryTypeID = 2, GroupTypeID = 1 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 8, HeadofAccount_FiveName = "INCOME TAX US 153-1(B) - SERVICES", HeadofAccount_FourID = 4, CategoryTypeID = 2, GroupTypeID = 1 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 9, HeadofAccount_FiveName = "INCOME TAX US 155 - RENT", HeadofAccount_FourID = 4, CategoryTypeID = 2, GroupTypeID = 1 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 10, HeadofAccount_FiveName = "Sale Tax WHT", HeadofAccount_FourID = 5, CategoryTypeID = 2, GroupTypeID = 1 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 11, HeadofAccount_FiveName = "ACCRUED SALARIES", HeadofAccount_FourID = 7, CategoryTypeID = 2, GroupTypeID = 1 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 12, HeadofAccount_FiveName = "KWSB Expense", HeadofAccount_FourID = 10, CategoryTypeID = 4, GroupTypeID = 1 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 13, HeadofAccount_FiveName = "PTCL Expense", HeadofAccount_FourID = 10, CategoryTypeID = 4, GroupTypeID = 2 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 14, HeadofAccount_FiveName = "Internet Charges", HeadofAccount_FourID = 10, CategoryTypeID = 4, GroupTypeID = 2 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 15, HeadofAccount_FiveName = "SSGC Expense", HeadofAccount_FourID = 10, CategoryTypeID = 4, GroupTypeID = 2 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 16, HeadofAccount_FiveName = "Electricity Expense", HeadofAccount_FourID = 10, CategoryTypeID = 4, GroupTypeID = 2 },
+     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 17, HeadofAccount_FiveName = "GLOBAL MARKETING SERVICES", HeadofAccount_FourID = 12, CategoryTypeID = 2, GroupTypeID = 1 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 18, HeadofAccount_FiveName = "Postage and Telegram", HeadofAccount_FourID = 13, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 19, HeadofAccount_FiveName = "Advertising Expense", HeadofAccount_FourID = 13, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 20, HeadofAccount_FiveName = "Meals and Entertainment", HeadofAccount_FourID = 13, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 21, HeadofAccount_FiveName = "Stationery and Printing", HeadofAccount_FourID = 13, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 22, HeadofAccount_FiveName = "Insurance - Medical", HeadofAccount_FourID = 13, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 23, HeadofAccount_FiveName = "Insurance - Vehicle", HeadofAccount_FourID = 13, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 24, HeadofAccount_FiveName = "Insurance - General", HeadofAccount_FourID = 13, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 25, HeadofAccount_FiveName = "FEES AND SUBSCRIPTION", HeadofAccount_FourID = 13, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 26, HeadofAccount_FiveName = "LEGAL AND PROFESSIONAL", HeadofAccount_FourID = 13, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 27, HeadofAccount_FiveName = "RENT EXPENSE", HeadofAccount_FourID = 13, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 28, HeadofAccount_FiveName = "PAYROLL EXPENSE - INDIRECT", HeadofAccount_FourID = 13, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 29, HeadofAccount_FiveName = "PAYROLL EXPENSE - DIRECT", HeadofAccount_FourID = 13, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 30, HeadofAccount_FiveName = "PROMOTIONAL ITEMS INVENTORY", HeadofAccount_FourID = 14, CategoryTypeID = 6, GroupTypeID = 1 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 31, HeadofAccount_FiveName = "MEDICAL SUPPLIES", HeadofAccount_FourID = 14, CategoryTypeID = 6, GroupTypeID = 1 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 32, HeadofAccount_FiveName = "COMMON GOODS", HeadofAccount_FourID = 14, CategoryTypeID = 6, GroupTypeID = 1 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 33, HeadofAccount_FiveName = "AESTHETICS INVENTORY", HeadofAccount_FourID = 14, CategoryTypeID = 6, GroupTypeID = 1 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 34, HeadofAccount_FiveName = "ENGINEERING", HeadofAccount_FourID = 14, CategoryTypeID = 6, GroupTypeID = 1 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 35, HeadofAccount_FiveName = "MARKETING INVENTORY", HeadofAccount_FourID = 14, CategoryTypeID = 8, GroupTypeID = 1 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 36, HeadofAccount_FiveName = "Sales Tax on Purchases", HeadofAccount_FourID = 15, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 37, HeadofAccount_FiveName = "Purchases Discount", HeadofAccount_FourID = 16, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 38, HeadofAccount_FiveName = "Sales Discount", HeadofAccount_FourID = 17, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 39, HeadofAccount_FiveName = "Sales Income", HeadofAccount_FourID = 19, CategoryTypeID = 7, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 40, HeadofAccount_FiveName = "Sale Income Account", HeadofAccount_FourID = 20, CategoryTypeID = 1, GroupTypeID = 1 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 41, HeadofAccount_FiveName = "Cash Against Sale Account", HeadofAccount_FourID = 21, CategoryTypeID = 3, GroupTypeID = 1 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 42, HeadofAccount_FiveName = "Incentive Payable", HeadofAccount_FourID = 22, CategoryTypeID = 2, GroupTypeID = 1 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 43, HeadofAccount_FiveName = "Incentive Expense", HeadofAccount_FourID = 23, CategoryTypeID = 4, GroupTypeID = 2 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 44, HeadofAccount_FiveName = "HBL Merchant (Credit Card Service)", HeadofAccount_FourID = 24, CategoryTypeID = 3, GroupTypeID = 1 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 45, HeadofAccount_FiveName = "Original Cost", HeadofAccount_FourID = 25, CategoryTypeID = 5, GroupTypeID = 1 }
+ );
+
       modelBuilder.Entity<Settings_HeadofAccount_Four>().HasData(
-     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 1, HeadofAccount_FourName = "Banks", HeadofAccount_ThirdID = 1 },
-     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 2, HeadofAccount_FourName = "Employee Advance Salaries", HeadofAccount_ThirdID = 2 },
-     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 3, HeadofAccount_FourName = "ICT EQUIPMENTS", HeadofAccount_ThirdID = 29 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 1, HeadofAccount_FourName = "Banks", HeadofAccount_ThirdID = 3 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 2, HeadofAccount_FourName = "Employee Advance Salaries", HeadofAccount_ThirdID = 1 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 3, HeadofAccount_FourName = "ICT Equipments", HeadofAccount_ThirdID = 29 },
      new Settings_HeadofAccount_Four { HeadofAccount_FourID = 4, HeadofAccount_FourName = "Income Tax Payable", HeadofAccount_ThirdID = 24 },
      new Settings_HeadofAccount_Four { HeadofAccount_FourID = 5, HeadofAccount_FourName = "Sales Tax Payable", HeadofAccount_ThirdID = 24 },
-     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 6, HeadofAccount_FourName = "EMPLOYEE LOAN", HeadofAccount_ThirdID = 5 },
-     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 7, HeadofAccount_FourName = "ACCRUED SALARIES", HeadofAccount_ThirdID = 22 },
-     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 8, HeadofAccount_FourName = "OTHER LIABILITIES", HeadofAccount_ThirdID = 19 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 6, HeadofAccount_FourName = "Employee Loan", HeadofAccount_ThirdID = 5 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 7, HeadofAccount_FourName = "Accrued Salaries", HeadofAccount_ThirdID = 22 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 8, HeadofAccount_FourName = "Other Liabilities", HeadofAccount_ThirdID = 19 },
      new Settings_HeadofAccount_Four { HeadofAccount_FourID = 9, HeadofAccount_FourName = "General and Administrative", HeadofAccount_ThirdID = 14 },
      new Settings_HeadofAccount_Four { HeadofAccount_FourID = 10, HeadofAccount_FourName = "Utilities", HeadofAccount_ThirdID = 14 },
      new Settings_HeadofAccount_Four { HeadofAccount_FourID = 11, HeadofAccount_FourName = "Fuel Expense", HeadofAccount_ThirdID = 14 },
@@ -138,7 +186,7 @@ namespace Exampler_ERP.Models
      new Settings_HeadofAccount_Four { HeadofAccount_FourID = 23, HeadofAccount_FourName = "Incentive on Sales", HeadofAccount_ThirdID = 12 },
      new Settings_HeadofAccount_Four { HeadofAccount_FourID = 24, HeadofAccount_FourName = "Merchant", HeadofAccount_ThirdID = 3 },
      new Settings_HeadofAccount_Four { HeadofAccount_FourID = 25, HeadofAccount_FourName = "Devices Plant & Machinery", HeadofAccount_ThirdID = 10 },
-     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 26, HeadofAccount_FourName = "Sales Commissions", HeadofAccount_ThirdID = 28 },
+     new Settings_HeadofAccount_Four { HeadofAccount_FourID = 26, HeadofAccount_FourName = "Sales Commissions", HeadofAccount_ThirdID = 27 },
      new Settings_HeadofAccount_Four { HeadofAccount_FourID = 27, HeadofAccount_FourName = "Sales Income", HeadofAccount_ThirdID = 28 },
      new Settings_HeadofAccount_Four { HeadofAccount_FourID = 28, HeadofAccount_FourName = "Property / Plant and Equipment", HeadofAccount_ThirdID = 29 }
  );
@@ -201,7 +249,7 @@ namespace Exampler_ERP.Models
 
       modelBuilder.Entity<Settings_VoucharType>().HasData(
    new Settings_VoucharType() { VoucharTypeID = 1, VoucharNature = "Bill Receipt Voucher", VoucharTypeName= "Receipt", VoucharPrefix= "BRV" },
-   new Settings_VoucharType() { VoucharTypeID = 2, VoucharNature = "Bank Payment Voucher", VoucharTypeName = "v", VoucharPrefix = "BPV" },
+   new Settings_VoucharType() { VoucharTypeID = 2, VoucharNature = "Bank Payment Voucher", VoucharTypeName = "Payment", VoucharPrefix = "BPV" },
    new Settings_VoucharType() { VoucharTypeID = 3, VoucharNature = "Sales Invoice", VoucharTypeName = "Journal", VoucharPrefix = "SIV" },
    new Settings_VoucharType() { VoucharTypeID = 4, VoucharNature = "Cash Payment Voucher", VoucharTypeName = "Payment", VoucharPrefix = "CPV" },
    new Settings_VoucharType() { VoucharTypeID = 5, VoucharNature = "Good Receiving Voucher", VoucharTypeName = "Payment", VoucharPrefix = "GRV" },
@@ -215,7 +263,10 @@ namespace Exampler_ERP.Models
    new Settings_HeadofAccount_CategoryType() { CategoryTypeID = 2, CategoryTypeName = "Payable"},
    new Settings_HeadofAccount_CategoryType() { CategoryTypeID = 3, CategoryTypeName = "Cash and Bank"},
    new Settings_HeadofAccount_CategoryType() { CategoryTypeID = 4, CategoryTypeName = "Expenses"},
-   new Settings_HeadofAccount_CategoryType() { CategoryTypeID = 5, CategoryTypeName = "Fixed Assets"}
+   new Settings_HeadofAccount_CategoryType() { CategoryTypeID = 5, CategoryTypeName = "Fixed Assets"},
+   new Settings_HeadofAccount_CategoryType() { CategoryTypeID = 6, CategoryTypeName = "Inventory" },
+   new Settings_HeadofAccount_CategoryType() { CategoryTypeID = 7, CategoryTypeName = "Revenue" },
+   new Settings_HeadofAccount_CategoryType() { CategoryTypeID = 8, CategoryTypeName = "Stock" }
 );
 
       modelBuilder.Entity<CR_AccessRightsByRole>().HasData(
