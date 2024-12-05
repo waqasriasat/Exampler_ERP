@@ -1,0 +1,231 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_VoucharType>
+
+@{
+    ViewData["Title"] = "Master Information - Vouchar Type";
+}
+
+@section PageScripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-KyZXEAg3QhqLMpG8r+Knujsl5+5hb5z2N7O6eHg4d5e2jtV5Wz4w69F+QYw1Fz4yD61DdE8kOkWJLvHh7vDkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script>
+        $(document).ready(function () {
+            // Edit VoucharType modal popup
+            $('.editVoucharTypeLink').click(function (e) {
+                e.preventDefault();
+                var VoucharTypeId = $(this).data('id');
+                $.get('@Url.Action("Edit", "VoucharType")', { id: VoucharTypeId }, function (data) {
+                    $('#editVoucharTypeModalContainer').html(data);
+                    $('#editVoucharTypeModal').modal('show');
+                });
+            });
+
+            $('#editVoucharTypeModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editVoucharTypeForm').serialize();
+                $.post('@Url.Action("Edit", "VoucharType")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Add new VoucharType modal popup
+            $('.addVoucharTypeLink').click(function () {
+                $.get('@Url.Action("Create", "VoucharType")', function (data) {
+                    $('#addVoucharTypeModalContainer').html(data);
+                    $('#addVoucharTypeModal').modal('show');
+                });
+            });
+
+            // Save new VoucharType form
+            $('#addVoucharTypeModalContainer').on('click', '#saveNewVoucharType', function () {
+                var formData = $('#addVoucharTypeForm').serialize();
+                $.post('@Url.Action("Create", "VoucharType")', formData, function (response) {
+                    if (response.success) {
+                        $('#addVoucharTypeModal').modal('hide');
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Close Modal Add Contrainer
+            $('#addVoucharTypeModalContainer').on('click', '#Close', function () {
+                $('#addVoucharTypeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editVoucharTypeModalContainer').on('click', '#Close', function () {
+                $('#editVoucharTypeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Delete VoucharType
+            $('.deleteVoucharTypeLink').click(function (e) {
+                e.preventDefault();
+                var VoucharTypeId = $(this).data('id');
+                $.post('@Url.Action("Delete", "VoucharType")', { id: VoucharTypeId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+    </script>
+    <script>
+        function printVoucharTypees() {
+            var printWindow = window.open('@Url.Action("Print", "VoucharType")', '_blank');
+            printWindow.focus();
+        }
+        $('#searchVoucharTypeButton').click(function () {
+            var searchValue = $('#searchVoucharTypeInput').val();
+            window.location.href = '@Url.Action("Index", "VoucharType")?searchVoucharTypeName=' + searchValue;
+        });
+    </script>
+
+
+}
+
+
+
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Master Information /</span> Vouchar Type
+</h4>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <h5 class="card-header">Searhing Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8" style="padding-bottom: 15px;">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search Vouchar Type name" id="searchVoucharTypeInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchVoucharTypeButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <!-- Action Buttons -->
+                        <button type="button" class="btn btn-primary addVoucharTypeLink">Add New</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "VoucharType")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printVoucharTypees()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">VoucharType List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-10 col-lg-10">
+                            <div class="row">
+                                <div class="col-4">
+                                    <p class="text-nowrap">Vouchar Type Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Active</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Nature</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Prefix</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-nowrap">Edit</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">Delete</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-10 col-md-10 col-lg-10">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <p class="text-nowrap"><span class="smallAdd">VoucharType Name : </span>@Html.DisplayFor(modelItem => item.VoucharTypeName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Active : </span>
+                                            @if (item.ActiveYNID == 1)
+                                            {
+                                                <span>Yes</span>
+                                            }
+                                            else if (item.ActiveYNID == 2)
+                                            {
+                                                <span>No</span>
+                                            }
+                                        </p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Nature : </span>@Html.DisplayFor(modelItem => item.VoucharNature)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Prefix : </span>@Html.DisplayFor(modelItem => item.VoucharPrefix)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2 col-md-2 col-lg-2">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editVoucharTypeLink" data-id="@item.VoucharTypeID">
+                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="deleteVoucharTypeLink" data-id="@item.VoucharTypeID">
+                                                <i class="fa fa-trash-o" style="font-size: large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editVoucharTypeModalContainer"></div>
+<div id="addVoucharTypeModalContainer"></div>
+
+<script>
+
+
+</script>

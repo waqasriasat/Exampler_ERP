@@ -17,8 +17,8 @@ namespace Exampler_ERP.Models
     public virtual Settings_HeadofAccount_Five? HeadofAccount_Five { get; set; }
     public string? PayeeName { get; set; }
     public string? DRCR { get; set; } // Debit/Credit
-    public decimal DrAmt { get; set; }
-    public decimal CrAmt { get; set; }
+    public double? DrAmt { get; set; }
+    public double? CrAmt { get; set; }
     public string? InstruType { get; set; } // Cash/Caheque
     public string? InstruAccount { get; set; }
     public DateTime? InstruDate { get; set; }

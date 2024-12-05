@@ -1,0 +1,53 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_HeadofAccount_CategoryType>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Category Types</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Category Type List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Category Type ID</th>
+                <th>Category Type Name</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var HeadofAccount_CategoryType in Model)
+            {
+                <tr>
+                    <td>@HeadofAccount_CategoryType.CategoryTypeID</td>
+                    <td>@HeadofAccount_CategoryType.CategoryTypeName</td>
+                    <td>@(HeadofAccount_CategoryType.ActiveYNID == 1 ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

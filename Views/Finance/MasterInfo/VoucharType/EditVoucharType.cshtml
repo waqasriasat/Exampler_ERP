@@ -1,0 +1,44 @@
+@model Exampler_ERP.Models.Settings_VoucharType
+
+<div class="modal fade" id="editVoucharTypeModal" tabindex="-1" role="dialog" aria-labelledby="editVoucharTypeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editVoucharTypeModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit Vouchar Type
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editVoucharTypeForm">
+                    <div class="row">
+                        <div class="col-12 col-md-12 col-lg-12">
+                            <label for="VoucharTypeName" class="form-label fw-bold">Vouchar Type Name</label>
+                            <input type="text" class="form-control form-control-lg" id="VoucharTypeName" name="VoucharTypeName" value="@Model.VoucharTypeName" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
+                            <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text", Model.ActiveYNID))" class="form-control form-control-lg">
+                            </select>
+                            <span asp-validation-for="ActiveYNID" class="text-danger"></span>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="VoucharNature" class="form-label fw-bold">Nature</label>
+                            <input type="text" class="form-control form-control-lg" id="VoucharNature" name="VoucharNature" value="@Model.VoucharNature" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="VoucharPrefix" class="form-label fw-bold">Prefix</label>
+                            <input type="text" class="form-control form-control-lg" id="VoucharPrefix" name="VoucharPrefix" value="@Model.VoucharPrefix" />
+                        </div>
+                    </div>
+                    <input type="hidden" id="VoucharTypeID" name="VoucharTypeID" value="@Model.VoucharTypeID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="button" class="btn btn-success" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

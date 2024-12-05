@@ -7,5 +7,7 @@ namespace Exampler_ERP.Models
     [Key]
     public int CategoryTypeID { get; set; }
     public string? CategoryTypeName { get; set; }
+    public int? DeleteYNID { get; set; }
+    public int? ActiveYNID { get; set; }
   }
 }

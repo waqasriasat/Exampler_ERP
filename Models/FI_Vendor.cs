@@ -14,9 +14,9 @@ namespace Exampler_ERP.Models
     public string? Fax { get; set; }
     public bool Filer { get; set; }
     public string? STN { get; set; }
-    public decimal STNRate { get; set; }
+    public double? STNRate { get; set; }
     public string? NTN { get; set; }
-    public decimal NTNRate { get; set; }
+    public double? NTNRate { get; set; }
     public int ICOA_ID { get; set; }
     public int SCOA_ID { get; set; }
     public string? Province { get; set; }

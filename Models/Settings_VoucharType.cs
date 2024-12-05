@@ -9,5 +9,7 @@ namespace Exampler_ERP.Models
     public string? VoucharTypeName { get; set; }
     public string? VoucharNature { get; set; }
     public string? VoucharPrefix { get; set; }
+    public int? DeleteYNID { get; set; }
+    public int? ActiveYNID { get; set; }
   }
 }
