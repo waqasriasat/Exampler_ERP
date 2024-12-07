@@ -100,7 +100,7 @@ namespace Exampler_ERP.Models
     public DbSet<HR_GlobalSetting> HR_GlobalSettings { get; set; }
 
 
-    public DbSet<FI_BankAccount> FI_BankAccounts { get; set; }
+    public DbSet<FI_Bank> FI_Banks { get; set; }
     public DbSet<FI_ChequeBook> FI_ChequeBooks { get; set; }
     public DbSet<FI_ChequeBookDetail> FI_ChequeBookDetails { get; set; }
     public DbSet<FI_Vendor> FI_Vendors { get; set; }

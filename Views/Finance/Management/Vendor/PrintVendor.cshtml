@@ -1,0 +1,86 @@
+@model IEnumerable<Exampler_ERP.Models.FI_Vendor>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Vendors</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Vendor List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Vendor ID</th>
+                <th>Vendor Name</th>
+                <th>Payee Name</th>
+                <th>Cell</th>
+                <th>Phone</th>
+                <th>Person Name</th>
+                <th>Fax</th>
+                <th>Filer</th>
+                <th>STN</th>
+                <th>STN Rate</th>
+                <th>NTN</th>
+                <th>NTN Rate</th>
+                <th>Income Tax Withholding ID</th>
+                <th>Sale Tax ID</th>
+                <th>Province</th>
+                <th>Federal</th>
+                <th>Payment Section</th>
+                <th>Address</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Vendor in Model)
+            {
+                <tr>
+                    <td>@Vendor.VendorID</td>
+                    <td>@Vendor.VendorName</td>
+                    <td>@Vendor.PayeeName</td>
+                    <td>@Vendor.Cell</td>
+                    <td>@Vendor.Phone</td>
+                    <td>@Vendor.PersonName</td>
+                    <td>@Vendor.Fax</td>
+                    <td>@Vendor.Filer</td>
+                    <td>@Vendor.STN</td>
+                    <td>@Vendor.STNRate</td>
+                    <td>@Vendor.NTN</td>
+                    <td>@Vendor.NTNRate</td>
+                    <td>@Vendor.IncomTaxWithHoding_ID</td>
+                    <td>@Vendor.SaleTax_ID</td>
+                    <td>@Vendor.Province</td>
+                    <td>@Vendor.Federal</td>
+                    <td>@Vendor.PaymentSec</td>
+                    <td>@Vendor.Address</td>
+                    <td>@(Vendor.ActiveYNID == 1 ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

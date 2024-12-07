@@ -11,7 +11,7 @@ namespace Exampler_ERP.Models
     [ForeignKey("ChequeBookID")]
     public virtual FI_ChequeBook? ChequeBook { get; set; }
     public int ChequeNo { get; set; }
-    public int GLID { get; set; }
-    public string Status { get; set; } = "Unbind"; // Default value
+    public int? GLID { get; set; }
+    public string? Status { get; set; } = "Unbind"; // Default value
   }
 }

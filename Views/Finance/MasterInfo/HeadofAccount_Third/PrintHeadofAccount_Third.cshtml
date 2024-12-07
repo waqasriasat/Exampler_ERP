@@ -1,0 +1,53 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_HeadofAccount_Third>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print HeadofAccount_Thirds</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>HeadofAccount_Third List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>HeadofAccount_Third ID</th>
+                <th>HeadofAccount_Third Name</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var HeadofAccount_Third in Model)
+            {
+                <tr>
+                    <td>@HeadofAccount_Third.HeadofAccount_ThirdID</td>
+                    <td>@HeadofAccount_Third.HeadofAccount_ThirdName</td>
+                    <td>@(HeadofAccount_Third.ActiveYNID == 1 ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

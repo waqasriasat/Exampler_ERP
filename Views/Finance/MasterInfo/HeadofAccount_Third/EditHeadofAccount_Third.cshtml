@@ -1,0 +1,43 @@
+@model Exampler_ERP.Models.Settings_HeadofAccount_Third
+
+<div class="modal fade" id="editHeadofAccount_ThirdModal" tabindex="-1" role="dialog" aria-labelledby="editHeadofAccount_ThirdModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editHeadofAccount_ThirdModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit HeadofAccount_Third
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editHeadofAccount_ThirdForm">
+                    <div class="row">
+                        <div class="col-6">
+                            <label asp-for="HeadofAccount_SecondID" class="form-label fw-bold">Select Head Account</label>
+                            <select asp-for="HeadofAccount_SecondID" asp-items="@(new SelectList(ViewBag.SecondList, "Value", "Text", Model.HeadofAccount_SecondID))" class="form-control form-control-lg">
+                            </select>
+                            <span asp-validation-for="HeadofAccount_SecondID" class="text-danger"></span>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
+                            <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text", Model.ActiveYNID))" class="form-control form-control-lg">
+                            </select>
+                            <span asp-validation-for="ActiveYNID" class="text-danger"></span>
+                        </div>
+                        <div class="col-12 col-md-12 col-lg-12">
+                            <label for="HeadofAccount_ThirdName" class="form-label fw-bold">HeadofAccount_Third Name</label>
+                            <input type="text" class="form-control form-control-lg" id="HeadofAccount_ThirdName" name="HeadofAccount_ThirdName" value="@Model.HeadofAccount_ThirdName" />
+                        </div>
+
+                    </div>
+                    <input type="hidden" id="HeadofAccount_ThirdID" name="HeadofAccount_ThirdID" value="@Model.HeadofAccount_ThirdID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="button" class="btn btn-success" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

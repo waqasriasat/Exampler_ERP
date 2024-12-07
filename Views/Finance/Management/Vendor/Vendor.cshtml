@@ -1,0 +1,231 @@
+@model IEnumerable<Exampler_ERP.Models.FI_Vendor>
+
+@{
+    ViewData["Title"] = "Management - Vendor";
+}
+
+@section PageScripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-KyZXEAg3QhqLMpG8r+Knujsl5+5hb5z2N7O6eHg4d5e2jtV5Wz4w69F+QYw1Fz4yD61DdE8kOkWJLvHh7vDkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script>
+        $(document).ready(function () {
+            // Edit Vendor modal popup
+            $('.editVendorLink').click(function (e) {
+                e.preventDefault();
+                var VendorId = $(this).data('id');
+                $.get('@Url.Action("Edit", "Vendor")', { id: VendorId }, function (data) {
+                    $('#editVendorModalContainer').html(data);
+                    $('#editVendorModal').modal('show');
+                });
+            });
+
+            $('#editVendorModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editVendorForm').serialize();
+                $.post('@Url.Action("Edit", "Vendor")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Add new Vendor modal popup
+            $('.addVendorLink').click(function () {
+                $.get('@Url.Action("Create", "Vendor")', function (data) {
+                    $('#addVendorModalContainer').html(data);
+                    $('#addVendorModal').modal('show');
+                });
+            });
+
+            // Save new Vendor form
+            $('#addVendorModalContainer').on('click', '#saveNewVendor', function () {
+                var formData = $('#addVendorForm').serialize();
+                $.post('@Url.Action("Create", "Vendor")', formData, function (response) {
+                    if (response.success) {
+                        $('#addVendorModal').modal('hide');
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Close Modal Add Contrainer
+            $('#addVendorModalContainer').on('click', '#Close', function () {
+                $('#addVendorModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editVendorModalContainer').on('click', '#Close', function () {
+                $('#editVendorModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Delete Vendor
+            $('.deleteVendorLink').click(function (e) {
+                e.preventDefault();
+                var VendorId = $(this).data('id');
+                $.post('@Url.Action("Delete", "Vendor")', { id: VendorId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+    </script>
+    <script>
+        function printVendores() {
+            var printWindow = window.open('@Url.Action("Print", "Vendor")', '_blank');
+            printWindow.focus();
+        }
+        $('#searchVendorButton').click(function () {
+            var searchValue = $('#searchVendorInput').val();
+            window.location.href = '@Url.Action("Index", "Vendor")?searchVendorName=' + searchValue;
+        });
+    </script>
+
+
+}
+
+
+
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Management /</span> Vendor
+</h4>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <h5 class="card-header">Searhing Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8" style="padding-bottom: 15px;">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search Vendor name" id="searchVendorInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchVendorButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <!-- Action Buttons -->
+                        <button type="button" class="btn btn-primary addVendorLink">Add New</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Vendor")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printVendores()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Vendor List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-10 col-lg-10">
+                            <div class="row">
+                                <div class="col-4">
+                                    <p class="text-nowrap">Vendor Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Active</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Payee Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Phone</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-nowrap">Edit</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">Delete</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-10 col-md-10 col-lg-10">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <p class="text-nowrap"><span class="smallAdd">Vendor Name : </span>@Html.DisplayFor(modelItem => item.VendorName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Active : </span>
+                                            @if (item.ActiveYNID == 1)
+                                            {
+                                                <span>Yes</span>
+                                            }
+                                            else if (item.ActiveYNID == 2)
+                                            {
+                                                <span>No</span>
+                                            }
+                                        </p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Payee Name : </span>@Html.DisplayFor(modelItem => item.PayeeName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Phone : </span>@Html.DisplayFor(modelItem => item.Phone)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2 col-md-2 col-lg-2">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editVendorLink" data-id="@item.VendorID">
+                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="deleteVendorLink" data-id="@item.VendorID">
+                                                <i class="fa fa-trash-o" style="font-size: large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editVendorModalContainer"></div>
+<div id="addVendorModalContainer"></div>
+
+<script>
+
+
+</script>

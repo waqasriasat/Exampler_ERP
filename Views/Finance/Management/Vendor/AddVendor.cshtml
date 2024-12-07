@@ -1,0 +1,101 @@
+@model Exampler_ERP.Models.FI_Vendor
+
+<div class="modal fade" id="addVendorModal" tabindex="-1" role="dialog" aria-labelledby="addVendorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="addVendorModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Add New Vendor
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <form id="addVendorForm">
+                    <div class="row">
+                        <div class="col-12 col-md-12 col-lg-12">
+                            <label for="VendorName" class="form-label fw-bold">Vendor Name</label>
+                            <input type="text" class="form-control form-control-lg" id="VendorName" name="VendorName" value="@Model.VendorName" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
+                            <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text", Model.ActiveYNID))" class="form-control form-control-lg">
+                            </select>
+                            <span asp-validation-for="ActiveYNID" class="text-danger"></span>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="PayeeName" class="form-label fw-bold">Payee Name</label>
+                            <input type="text" class="form-control form-control-lg" id="PayeeName" name="PayeeName" value="@Model.PayeeName" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="Cell" class="form-label fw-bold">Cell</label>
+                            <input type="text" class="form-control form-control-lg" id="Cell" name="Cell" value="@Model.Cell" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="Phone" class="form-label fw-bold">Phone</label>
+                            <input type="text" class="form-control form-control-lg" id="Phone" name="Phone" value="@Model.Phone" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="PersonName" class="form-label fw-bold">Person Name</label>
+                            <input type="text" class="form-control form-control-lg" id="PersonName" name="PersonName" value="@Model.PersonName" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="Fax" class="form-label fw-bold">Fax</label>
+                            <input type="text" class="form-control form-control-lg" id="Fax" name="Fax" value="@Model.Fax" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="Filer" class="form-label fw-bold">Filer</label>
+                            <input type="number" class="form-control form-control-lg" id="Filer" name="Filer" value="@Model.Filer" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="STN" class="form-label fw-bold">STN</label>
+                            <input type="text" class="form-control form-control-lg" id="STN" name="STN" value="@Model.STN" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="STNRate" class="form-label fw-bold">STN Rate</label>
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="STNRate" name="STNRate" value="@Model.STNRate" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="NTN" class="form-label fw-bold">NTN</label>
+                            <input type="text" class="form-control form-control-lg" id="NTN" name="NTN" value="@Model.NTN" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="NTNRate" class="form-label fw-bold">NTN Rate</label>
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="NTNRate" name="NTNRate" value="@Model.NTNRate" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="IncomTaxWithHoding_ID" class="form-label fw-bold">Income Tax Withholding ID</label>
+                            <input type="number" class="form-control form-control-lg" id="IncomTaxWithHoding_ID" name="IncomTaxWithHoding_ID" value="@Model.IncomTaxWithHoding_ID" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="SaleTax_ID" class="form-label fw-bold">Sale Tax ID</label>
+                            <input type="number" class="form-control form-control-lg" id="SaleTax_ID" name="SaleTax_ID" value="@Model.SaleTax_ID" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="Province" class="form-label fw-bold">Province</label>
+                            <input type="text" class="form-control form-control-lg" id="Province" name="Province" value="@Model.Province" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="Federal" class="form-label fw-bold">Federal</label>
+                            <input type="text" class="form-control form-control-lg" id="Federal" name="Federal" value="@Model.Federal" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="PaymentSec" class="form-label fw-bold">Payment Section</label>
+                            <input type="text" class="form-control form-control-lg" id="PaymentSec" name="PaymentSec" value="@Model.PaymentSec" />
+                        </div>
+                        <div class="col-12 col-md-12 col-lg-12">
+                            <label for="Address" class="form-label fw-bold">Address</label>
+                            <textarea class="form-control form-control-lg" id="Address" name="Address">@Model.Address</textarea>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="button" class="btn btn-success" id="saveNewVendor">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

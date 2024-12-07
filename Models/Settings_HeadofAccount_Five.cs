@@ -15,5 +15,7 @@ namespace Exampler_ERP.Models
     [ForeignKey("CategoryTypeID")]
     public virtual Settings_HeadofAccount_CategoryType? HOA_CategoryType { get; set; }
     public int GroupTypeID { get; set; }//1=Balance Sheet, 2=Income sheet
+    public int? DeleteYNID { get; set; }
+    public int? ActiveYNID { get; set; }
   }
 }

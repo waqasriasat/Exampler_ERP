@@ -11,5 +11,7 @@ namespace Exampler_ERP.Models
     public int HeadofAccount_FirstID { get; set; }
     [ForeignKey("HeadofAccount_FirstID")]
     public virtual Settings_HeadofAccount_First? HeadofAccount_First { get; set; }
+    public int? DeleteYNID { get; set; }
+    public int? ActiveYNID { get; set; }
   }
 }

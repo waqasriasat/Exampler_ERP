@@ -1,0 +1,219 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_HeadofAccount_First>
+
+@{
+    ViewData["Title"] = "Master Information - HeadofAccount_First";
+}
+
+@section PageScripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-KyZXEAg3QhqLMpG8r+Knujsl5+5hb5z2N7O6eHg4d5e2jtV5Wz4w69F+QYw1Fz4yD61DdE8kOkWJLvHh7vDkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script>
+        $(document).ready(function () {
+            // Edit HeadofAccount_First modal popup
+            $('.editHeadofAccount_FirstLink').click(function (e) {
+                e.preventDefault();
+                var HeadofAccount_FirstId = $(this).data('id');
+                $.get('@Url.Action("Edit", "HeadofAccount_First")', { id: HeadofAccount_FirstId }, function (data) {
+                    $('#editHeadofAccount_FirstModalContainer').html(data);
+                    $('#editHeadofAccount_FirstModal').modal('show');
+                });
+            });
+
+            $('#editHeadofAccount_FirstModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editHeadofAccount_FirstForm').serialize();
+                $.post('@Url.Action("Edit", "HeadofAccount_First")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Add new HeadofAccount_First modal popup
+            $('.addHeadofAccount_FirstLink').click(function () {
+                $.get('@Url.Action("Create", "HeadofAccount_First")', function (data) {
+                    $('#addHeadofAccount_FirstModalContainer').html(data);
+                    $('#addHeadofAccount_FirstModal').modal('show');
+                });
+            });
+
+            // Save new HeadofAccount_First form
+            $('#addHeadofAccount_FirstModalContainer').on('click', '#saveNewHeadofAccount_First', function () {
+                var formData = $('#addHeadofAccount_FirstForm').serialize();
+                $.post('@Url.Action("Create", "HeadofAccount_First")', formData, function (response) {
+                    if (response.success) {
+                        $('#addHeadofAccount_FirstModal').modal('hide');
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Close Modal Add Contrainer
+            $('#addHeadofAccount_FirstModalContainer').on('click', '#Close', function () {
+                $('#addHeadofAccount_FirstModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editHeadofAccount_FirstModalContainer').on('click', '#Close', function () {
+                $('#editHeadofAccount_FirstModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Delete HeadofAccount_First
+            $('.deleteHeadofAccount_FirstLink').click(function (e) {
+                e.preventDefault();
+                var HeadofAccount_FirstId = $(this).data('id');
+                $.post('@Url.Action("Delete", "HeadofAccount_First")', { id: HeadofAccount_FirstId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+    </script>
+    <script>
+        function printHeadofAccount_Firstes() {
+            var printWindow = window.open('@Url.Action("Print", "HeadofAccount_First")', '_blank');
+            printWindow.focus();
+        }
+        $('#searchHeadofAccount_FirstButton').click(function () {
+            var searchValue = $('#searchHeadofAccount_FirstInput').val();
+            window.location.href = '@Url.Action("Index", "HeadofAccount_First")?searchFirstName=' + searchValue;
+        });
+    </script>
+
+
+}
+
+
+
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Master Information /</span> HeadofAccount_First
+</h4>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <h5 class="card-header">Searhing Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8" style="padding-bottom: 15px;">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search HeadofAccount_First name" id="searchHeadofAccount_FirstInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchHeadofAccount_FirstButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <!-- Action Buttons -->
+                        <button type="button" class="btn btn-primary addHeadofAccount_FirstLink">Add New</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "HeadofAccount_First")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printHeadofAccount_Firstes()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">HeadofAccount_First List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-10 col-lg-10">
+                            <div class="row">
+                                <div class="col-8">
+                                    <p class="text-nowrap">HeadofAccount_First Name</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">Active</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-nowrap">Edit</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">Delete</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-10 col-md-10 col-lg-10">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-8">
+                                        <p class="text-nowrap"><span class="smallAdd">HeadofAccount_First Name : </span>@Html.DisplayFor(modelItem => item.HeadofAccount_FirstName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Active : </span>
+                                            @if (item.ActiveYNID == 1)
+                                            {
+                                                <span>Yes</span>
+                                            }
+                                            else if (item.ActiveYNID == 2)
+                                            {
+                                                <span>No</span>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2 col-md-2 col-lg-2">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editHeadofAccount_FirstLink" data-id="@item.HeadofAccount_FirstID">
+                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="deleteHeadofAccount_FirstLink" data-id="@item.HeadofAccount_FirstID">
+                                                <i class="fa fa-trash-o" style="font-size: large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editHeadofAccount_FirstModalContainer"></div>
+<div id="addHeadofAccount_FirstModalContainer"></div>
+
+<script>
+
+
+</script>

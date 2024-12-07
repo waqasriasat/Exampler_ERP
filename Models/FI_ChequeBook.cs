@@ -10,9 +10,12 @@ namespace Exampler_ERP.Models
     public DateTime RegDate { get; set; }
     public int BankAccountID { get; set; }
     [ForeignKey("BankAccountID")]
-    public virtual FI_BankAccount? BankAccount { get; set; }
+    public virtual FI_Bank? BankAccount { get; set; }
     public int ChequeFrom { get; set; }
     public int ChequeTo { get; set; }
     public int TotalPages { get; set; }
+
+    public int? ActiveYNID { get; set; }
+    public int? DeleteYNID { get; set; }
   }
 }

@@ -504,7 +504,171 @@ namespace Exampler_ERP.Utilities
 
       return directManagerList;
     }
+    public async Task<List<SelectListItem>> GetVoucharType()
+    {
+      try
+      {
+        var voucharTypeList = await _appDBContext.Settings_VoucharTypes
+            .Select(d => new SelectListItem
+            {
+              Value = d.VoucharTypeID.ToString(),
+              Text = d.VoucharTypeName
+            })
+            .ToListAsync();
 
 
+        return voucharTypeList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    public async Task<List<SelectListItem>> GetHeadofAccount_GroupType()
+    {
+      try
+      {
+        var GroupList = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "1", Text = "Balance Sheet" },
+            new SelectListItem { Value = "2", Text = "Income Sheet" }
+        };
+
+        return await Task.FromResult(GroupList);
+      }
+      catch (Exception ex)
+      {
+        throw; // Rethrow the exception to handle it at a higher level
+      }
+    }
+
+    public async Task<List<SelectListItem>> GetHeadofAccount_CategoryType()
+    {
+      try
+      {
+        var categoryTypeList = await _appDBContext.Settings_HeadofAccount_CategoryTypes
+            .Select(d => new SelectListItem
+            {
+              Value = d.CategoryTypeID.ToString(),
+              Text = d.CategoryTypeName
+            })
+            .ToListAsync();
+
+
+        return categoryTypeList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    public async Task<List<SelectListItem>> GetHeadofAccount_First()
+    {
+      try
+      {
+        var firstList = await _appDBContext.Settings_HeadofAccount_Firsts
+            .Select(d => new SelectListItem
+            {
+              Value = d.HeadofAccount_FirstID.ToString(),
+              Text = d.HeadofAccount_FirstName
+            })
+            .ToListAsync();
+
+
+        return firstList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    public async Task<List<SelectListItem>> GetHeadofAccount_Second()
+    {
+      try
+      {
+        var secondList = await _appDBContext.Settings_HeadofAccount_Seconds
+            .Select(d => new SelectListItem
+            {
+              Value = d.HeadofAccount_SecondID.ToString(),
+              Text = d.HeadofAccount_SecondName
+            })
+            .ToListAsync();
+
+
+        return secondList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    public async Task<List<SelectListItem>> GetHeadofAccount_Third()
+    {
+      try
+      {
+        var thirdList = await _appDBContext.Settings_HeadofAccount_Thirds
+            .Select(d => new SelectListItem
+            {
+              Value = d.HeadofAccount_ThirdID.ToString(),
+              Text = d.HeadofAccount_ThirdName
+            })
+            .ToListAsync();
+
+
+        return thirdList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    public async Task<List<SelectListItem>> GetHeadofAccount_Four()
+    {
+      try
+      {
+        var fourList = await _appDBContext.Settings_HeadofAccount_Fours
+            .Select(d => new SelectListItem
+            {
+              Value = d.HeadofAccount_FourID.ToString(),
+              Text = d.HeadofAccount_FourName
+            })
+            .ToListAsync();
+
+
+        return fourList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    public async Task<List<SelectListItem>> GetHeadofAccount_Five()
+    {
+      try
+      {
+        var fiveList = await _appDBContext.Settings_HeadofAccount_Fives
+            .Select(d => new SelectListItem
+            {
+              Value = d.HeadofAccount_FiveID.ToString(),
+              Text = d.HeadofAccount_FiveName
+            })
+            .ToListAsync();
+
+
+        return fiveList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    
   }
 }

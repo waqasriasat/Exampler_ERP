@@ -2,13 +2,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Exampler_ERP.Models
 {
-  public class FI_BankAccount
+  public class FI_Bank
   {
     [Key]
-    public int BankAccountID { get; set; }
-    public string? BankAccountName { get; set; }
+    public int BankID { get; set; }
+    public string? BankName { get; set; }
     public string? AccountNo { get; set; }
     public string? Address { get; set; }
     public string? Phone { get; set; }
+    public int? ActiveYNID { get; set; }
+    public int? DeleteYNID { get; set; }
   }
 }
