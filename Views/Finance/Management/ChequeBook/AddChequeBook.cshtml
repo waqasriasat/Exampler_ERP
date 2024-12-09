@@ -1,22 +1,24 @@
-@model Exampler_ERP.Models.FI_Bank
+@model Exampler_ERP.Models.FI_ChequeBook
 
-<div class="modal fade" id="addBankModal" tabindex="-1" role="dialog" aria-labelledby="addBankModalLabel" aria-hidden="true">
+<div class="modal fade" id="addChequeBookModal" tabindex="-1" role="dialog" aria-labelledby="addChequeBookModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="addBankModalLabel">
+                <h5 class="modal-title" id="addChequeBookModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add New Bank
+                    Add New Cheque Book
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
             </div>
             <div class="modal-body">
-                <form id="addBankForm">
+                <form id="addChequeBookForm">
                     <div class="row">
                         <div class="col-12 col-md-12 col-lg-12">
-                            <label for="BankName" class="form-label fw-bold">Bank Name</label>
-                            <input type="text" class="form-control form-control-lg" id="BankName" name="BankName" value="@Model.BankName" />
+                            <label asp-for="BankAccountID" class="form-label fw-bold">Bank Name</label>
+                            <select asp-for="BankAccountID" asp-items="@(new SelectList(ViewBag.bankList, "Value", "Text", Model.BankAccountID))" class="form-control form-control-lg">
+                            </select>
+                            <span asp-validation-for="BankAccountID" class="text-danger"></span>
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
                             <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
@@ -25,23 +27,23 @@
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label for="AccountNo" class="form-label fw-bold">Account No</label>
-                            <input type="text" class="form-control form-control-lg" id="AccountNo" name="AccountNo" value="@Model.AccountNo" />
+                            <label for="TotalPages" class="form-label fw-bold">TotalPages</label>
+                            <input type="text" class="form-control form-control-lg" id="TotalPages" name="TotalPages" value="@Model.TotalPages" disabled />
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label for="Phone" class="form-label fw-bold">Phone</label>
-                            <input type="text" class="form-control form-control-lg" id="Phone" name="Phone" value="@Model.Phone" />
+                            <label for="ChequeFrom" class="form-label fw-bold">ChequeFrom</label>
+                            <input type="text" class="form-control form-control-lg" id="ChequeFrom" name="ChequeFrom" value="@Model.ChequeFrom" />
                         </div>
-                        <div class="col-12 col-md-12 col-lg-12">
-                            <label for="Address" class="form-label fw-bold">Address</label>
-                            <input type="text" class="form-control form-control-lg" id="Address" name="Address" value="@Model.Address" />
+                        <div class="col-12 col-md-12 col-lg-6">
+                            <label for="ChequeTo" class="form-label fw-bold">ChequeTo</label>
+                            <input type="text" class="form-control form-control-lg" id="ChequeTo" name="ChequeTo" value="@Model.ChequeTo" />
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-success" id="saveNewBank">Save</button>
+                <button type="button" class="btn btn-success" id="saveNewChequeBook">Save</button>
             </div>
         </div>
     </div>

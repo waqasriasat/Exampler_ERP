@@ -1,9 +1,9 @@
-@model IEnumerable<Exampler_ERP.Models.FI_Bank>
+@model IEnumerable<Exampler_ERP.Models.FI_ChequeBook>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Print Banks</title>
+    <title>Print Cheque Books</title>
     <style>
         table {
             width: 100%;
@@ -26,26 +26,28 @@
     </style>
 </head>
 <body style="background-color:white">
-    <h2>Bank List</h2>
+    <h2>Cheque Book List</h2>
     <table>
         <thead>
             <tr>
-                <th>Bank ID</th>
+                <th>ChequeBook ID</th>
                 <th>Bank Name</th>
                 <th>Active</th>
+                <th>Total Pages</th>
                 <th>Account No</th>
                 <th>Phone</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var Bank in Model)
+            @foreach (var ChequeBook in Model)
             {
                 <tr>
-                    <td>@Bank.BankID</td>
-                    <td>@Bank.BankName</td>
-                    <td>@(Bank.ActiveYNID == 1 ? "Yes" : "No")</td>
-                    <td>@Bank.AccountNo</td>
-                    <td>@Bank.Phone</td>
+                    <td>@ChequeBook.ChequeBookID</td>
+                    <td>@ChequeBook.BankAccount.BankName</td>
+                    <td>@(ChequeBook.ActiveYNID == 1 ? "Yes" : "No")</td>
+                    <td>@ChequeBook.TotalPages</td>
+                    <td>@ChequeBook.ChequeFrom</td>
+                    <td>@ChequeBook.ChequeTo</td>
                 </tr>
             }
         </tbody>

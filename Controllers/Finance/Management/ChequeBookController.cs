@@ -21,6 +21,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
     public async Task<IActionResult> Index(string searchBankName)
     {
       var ChequeBooksQuery = _appDBContext.FI_ChequeBooks
+        .Include(b => b.BankAccount)
           .Where(b => b.DeleteYNID != 1);
 
       if (!string.IsNullOrEmpty(searchBankName))
@@ -45,8 +46,13 @@ namespace Exampler_ERP.Controllers.Finance.Management
     }// Add the Edit action
     public async Task<IActionResult> Edit(int id)
     {
+      ViewBag.bankList = await _utils.Get_FI_BankList();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      var ChequeBook = await _appDBContext.FI_ChequeBooks.FindAsync(id);
+        var ChequeBook = await _appDBContext.FI_ChequeBooks
+        .Where(b => b.ChequeBookID == id)
+        .Include(b => b.ChequeDetails)
+        .FirstOrDefaultAsync();
+
       if (ChequeBook == null)
       {
         return NotFound();
@@ -59,12 +65,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
     {
       if (ModelState.IsValid)
       {
-        if (string.IsNullOrEmpty(ChequeBook.BankAccount.BankName))
-        {
-          return Json(new { success = false, message = "ChequeBook Name field is required. Please enter a valid text value." });
-        }
-
-
+       
         _appDBContext.Update(ChequeBook);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "ChequeBook updated successfully.";
@@ -75,6 +76,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
     [HttpGet]
     public async Task<IActionResult> Create()
     {
+      ViewBag.bankList = await _utils.Get_FI_BankList();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
       return PartialView("~/Views/Finance/Management/ChequeBook/AddChequeBook.cshtml", new FI_ChequeBook());
     }
@@ -84,15 +86,27 @@ namespace Exampler_ERP.Controllers.Finance.Management
     {
       if (ModelState.IsValid)
       {
-        if (string.IsNullOrEmpty(ChequeBook.BankAccount.BankName))
-        {
-          return Json(new { success = false, message = "ChequeBook Name field is required. Please enter a valid text value." });
-        }
+        ChequeBook.TotalPages = (ChequeBook.ChequeTo - ChequeBook.ChequeFrom) + 1;
 
-
+        ChequeBook.RegDate = DateTime.Now;
         ChequeBook.DeleteYNID = 0;
 
         _appDBContext.FI_ChequeBooks.Add(ChequeBook);
+        await _appDBContext.SaveChangesAsync();
+
+        var chequeDetails = new List<FI_ChequeBookDetail>();
+        for (int i = ChequeBook.ChequeFrom; i <= ChequeBook.ChequeTo; i++)
+        {
+          chequeDetails.Add(new FI_ChequeBookDetail
+          {
+            ChequeBookID = ChequeBook.ChequeBookID,
+            ChequeNo = i,
+            GLID = 0,
+            Status = "Unbind" // Default status
+          });
+        }
+
+        _appDBContext.FI_ChequeBookDetails.AddRange(chequeDetails);
         await _appDBContext.SaveChangesAsync();
 
         TempData["SuccessMessage"] = "ChequeBook created successfully.";

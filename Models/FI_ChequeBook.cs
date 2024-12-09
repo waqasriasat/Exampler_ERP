@@ -17,5 +17,6 @@ namespace Exampler_ERP.Models
 
     public int? ActiveYNID { get; set; }
     public int? DeleteYNID { get; set; }
+    public virtual ICollection<FI_ChequeBookDetail> ChequeDetails { get; set; } = new List<FI_ChequeBookDetail>();
   }
 }

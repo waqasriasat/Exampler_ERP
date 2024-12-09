@@ -669,6 +669,26 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
-    
+    public async Task<List<SelectListItem>> Get_FI_BankList()
+    {
+      try
+      {
+        var bankList = await _appDBContext.FI_Banks
+            .Select(d => new SelectListItem
+            {
+              Value = d.BankID.ToString(),
+              Text = d.BankName
+            })
+            .ToListAsync();
+
+
+        return bankList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
   }
 }
