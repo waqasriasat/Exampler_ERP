@@ -157,8 +157,9 @@ namespace Exampler_ERP.Models
     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 42, HeadofAccount_FiveName = "Incentive Payable", HeadofAccount_FourID = 22, CategoryTypeID = 2, GroupTypeID = 1 },
     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 43, HeadofAccount_FiveName = "Incentive Expense", HeadofAccount_FourID = 23, CategoryTypeID = 4, GroupTypeID = 2 },
     new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 44, HeadofAccount_FiveName = "HBL Merchant (Credit Card Service)", HeadofAccount_FourID = 24, CategoryTypeID = 3, GroupTypeID = 1 },
-    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 45, HeadofAccount_FiveName = "Original Cost", HeadofAccount_FourID = 25, CategoryTypeID = 5, GroupTypeID = 1 }
- );
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 45, HeadofAccount_FiveName = "Original Cost", HeadofAccount_FourID = 25, CategoryTypeID = 5, GroupTypeID = 1 },
+    new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 46, HeadofAccount_FiveName = "GR-IR", HeadofAccount_FourID = 12, CategoryTypeID = 2, GroupTypeID = 1 }
+     );
 
       modelBuilder.Entity<Settings_HeadofAccount_Four>().HasData(
      new Settings_HeadofAccount_Four { HeadofAccount_FourID = 1, HeadofAccount_FourName = "Banks", HeadofAccount_ThirdID = 3 },
@@ -215,7 +216,7 @@ namespace Exampler_ERP.Models
      new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 20, HeadofAccount_ThirdName = "Other Long Term Liabilities", HeadofAccount_SecondID = 7 },
      new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 21, HeadofAccount_ThirdName = "Provision for Taxation", HeadofAccount_SecondID = 7 },
      new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 22, HeadofAccount_ThirdName = "Salaries", HeadofAccount_SecondID = 7 },
-     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 23, HeadofAccount_ThirdName = "Trade Creditors", HeadofAccount_SecondID = 7 },
+     new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 23, HeadofAccount_ThirdName = "Trade Creditors", HeadofAccount_SecondID = 8 },
      new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 24, HeadofAccount_ThirdName = "WHT Payable", HeadofAccount_SecondID = 7 },
      new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 25, HeadofAccount_ThirdName = "Other Income", HeadofAccount_SecondID = 8 },
      new Settings_HeadofAccount_Third { HeadofAccount_ThirdID = 26, HeadofAccount_ThirdName = "Sales Adjustment", HeadofAccount_SecondID = 9 },
