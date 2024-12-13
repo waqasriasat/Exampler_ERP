@@ -504,27 +504,7 @@ namespace Exampler_ERP.Utilities
 
       return directManagerList;
     }
-    public async Task<List<SelectListItem>> GetVoucharType()
-    {
-      try
-      {
-        var voucharTypeList = await _appDBContext.Settings_VoucharTypes
-            .Select(d => new SelectListItem
-            {
-              Value = d.VoucharTypeID.ToString(),
-              Text = d.VoucharTypeName
-            })
-            .ToListAsync();
-
-
-        return voucharTypeList;
-      }
-      catch (Exception ex)
-      {
-        // Log the exception (ex.Message or ex.StackTrace)
-        throw; // or handle it accordingly
-      }
-    }
+    
     public async Task<List<SelectListItem>> GetHeadofAccount_GroupType()
     {
       try
@@ -542,7 +522,23 @@ namespace Exampler_ERP.Utilities
         throw; // Rethrow the exception to handle it at a higher level
       }
     }
+    public async Task<List<SelectListItem>> GetTransactionType()
+    {
+      try
+      {
+        var TransactionTypeList = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "1", Text = "Debit" },
+            new SelectListItem { Value = "2", Text = "Credit" }
+        };
 
+        return await Task.FromResult(TransactionTypeList);
+      }
+      catch (Exception ex)
+      {
+        throw; // Rethrow the exception to handle it at a higher level
+      }
+    }
     public async Task<List<SelectListItem>> GetHeadofAccount_CategoryType()
     {
       try
@@ -683,6 +679,49 @@ namespace Exampler_ERP.Utilities
 
 
         return bankList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    public async Task<List<SelectListItem>> GetVoucharType()
+    {
+      try
+      {
+        var voucharTypeList = await _appDBContext.Settings_VoucharTypes
+            .Select(d => new SelectListItem
+            {
+              Value = d.VoucharTypeID.ToString(),
+              Text = d.VoucharTypeName
+            })
+            .ToListAsync();
+
+
+        return voucharTypeList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    public async Task<List<SelectListItem>> GetVoucharType_Journal()
+    {
+      try
+      {
+        var voucharTypeList = await _appDBContext.Settings_VoucharTypes
+          .Where(d => d.VoucharNature == "Journal")
+            .Select(d => new SelectListItem
+            {
+              Value = d.VoucharTypeID.ToString(),
+              Text = d.VoucharTypeName
+            })
+            .ToListAsync();
+
+
+        return voucharTypeList;
       }
       catch (Exception ex)
       {
