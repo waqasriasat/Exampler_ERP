@@ -8,7 +8,8 @@
      <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
-      
+    <!-- Include Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
    
 </environment>
 <environment exclude="Development">
@@ -19,5 +20,9 @@
   <script src="~/vendor/js/menu.js" asp-append-version="true"></script>
 
   <script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- Ensure jQuery is loaded before Select2 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     
 </environment>

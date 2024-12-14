@@ -19,8 +19,9 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
     }
     public async Task<IActionResult> Index(string searchHeadofAccount_FiveName)
     {
-      var VoucharsQuery = _appDBContext.FI_Vouchars
-          .Where(b => b.VoucharTypeID == 1 || b.VoucharTypeID == 6);
+      var VoucharsQuery = _appDBContext.FI_VoucharDetails
+        .Include(b => b.Vouchar)
+          .Where(b => b.Vouchar.VoucharTypeID == 1 || b.Vouchar.VoucharTypeID == 6);
 
       if (!string.IsNullOrEmpty(searchHeadofAccount_FiveName))
       {

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.WebPages;
 
 namespace Exampler_ERP.Models
 {
@@ -12,17 +13,7 @@ namespace Exampler_ERP.Models
     [ForeignKey("VoucharTypeID")]
     public virtual Settings_VoucharType? VoucharType { get; set; }
     public string? VoucharNo { get; set; }
-    public int HeadofAccount_FiveID { get; set; }
-    [ForeignKey("HeadofAccount_FiveID")]
-    public virtual Settings_HeadofAccount_Five? HeadofAccount_Five { get; set; }
     public string? PayeeName { get; set; }
-    public string? DRCR { get; set; } // Debit/Credit
-    public double? DrAmt { get; set; }
-    public double? CrAmt { get; set; }
-    public string? InstruType { get; set; } // Cash/Caheque
-    public string? InstruAccount { get; set; }
-    public DateTime? InstruDate { get; set; }
-    public string? InstruNumber { get; set; } // ChequeNo
     public string? Description { get; set; }
     public string? PONo { get; set; }
     public string? GRNNo { get; set; }
@@ -30,5 +21,6 @@ namespace Exampler_ERP.Models
     public string? InvoiceNo { get; set; }
     public string? PVNo { get; set; }
     public string? VStatus { get; set; }
+    public ICollection<FI_VoucharDetail> VoucharDetails { get; set; }
   }
 }

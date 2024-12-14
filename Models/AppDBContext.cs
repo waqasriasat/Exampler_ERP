@@ -105,6 +105,7 @@ namespace Exampler_ERP.Models
     public DbSet<FI_ChequeBookDetail> FI_ChequeBookDetails { get; set; }
     public DbSet<FI_Vendor> FI_Vendors { get; set; }
     public DbSet<FI_Vouchar> FI_Vouchars { get; set; }
+    public DbSet<FI_VoucharDetail> FI_VoucharDetails { get; set; }
 
 
 

@@ -1,14 +1,10 @@
-@model IEnumerable<Exampler_ERP.Models.FI_Vouchar>
+@model IEnumerable<Exampler_ERP.Models.FI_VoucharDetail>
 
 @{
     ViewData["Title"] = "Transaction - Journal Vouchar";
 }
 
 @section PageScripts {
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-KyZXEAg3QhqLMpG8r+Knujsl5+5hb5z2N7O6eHg4d5e2jtV5Wz4w69F+QYw1Fz4yD61DdE8kOkWJLvHh7vDkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-
-
     <script>
         $(document).ready(function () {
             // Edit Vouchar modal popup
@@ -180,10 +176,10 @@
                             <div class="col-10 col-md-10 col-lg-10">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Vouchar # : </span>@Html.DisplayFor(modelItem => item.VoucharNo)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Vouchar # : </span>@Html.DisplayFor(modelItem => item.Vouchar.VoucharNo)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Date # : </span>@Html.DisplayFor(modelItem => item.VoucharDate)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Date # : </span>@Html.DisplayFor(modelItem => item.Vouchar.VoucharDate)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <p class="text-nowrap"><span class="smallAdd">Head of Account : </span>@Html.DisplayFor(modelItem => item.HeadofAccount_Five.HeadofAccount_FiveName)</p>

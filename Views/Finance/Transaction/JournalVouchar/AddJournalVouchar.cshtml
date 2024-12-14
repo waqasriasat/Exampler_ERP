@@ -1,310 +1,205 @@
 @model Exampler_ERP.Models.FI_Vouchar
 
-
-<!-- Include Select2 CSS -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet" />
-<!-- Include Select2 JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
-
-<script>
-
-    $(document).ready(function () {
-      
-
-        $('#HeadofAccount_FiveID').select2({
-            placeholder: "Select an account",
-            allowClear: true
-        });
-
-        console.log($('#HeadofAccount_FiveID').data('select2'));
-
-        $('#HeadofAccount_FiveID').select2({
-            placeholder: "Select an account",
-            allowClear: true,
-            ajax: {
-                url: '/JournalVouchar/GetHeadofAccounts', // Your endpoint
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        term: params.term // search term
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: $.map(data, function (item) {
-                            return {
-                                id: item.Value, // Adjust based on your API response
-                                text: item.Text
-                            };
-                        })
-                    };
-                },
-                cache: true
-            }
-        });
-
-
-        $('#AddRecord').on('click', function () {
-            debugger;
-            let DRCR = $('#DRCR').val();
-            let DRCRName = $('#DRCR  option:selected').text();
-            let HeadID = $('#HeadofAccount_FiveID').val();
-            let HeadName = $('#HeadofAccount_FiveID  option:selected').text();
-            let DrAmt = parseFloat($('#DrAmt').val()) || 0;
-            let CrAmt = parseFloat($('#CrAmt').val()) || 0;
-
-            if (!DRCR) {
-                alert('Please select a transaction type.');
-                return;
-            }
-
-            if (!HeadID) {
-                alert('Please select a transaction account.');
-                return;
-            }
-
-            if (DrAmt <= 0 && CrAmt <= 0) {
-                alert('Please enter a valid debit or credit amount.');
-                return;
-            }
-
-            if (DrAmt > 0 && CrAmt > 0) {
-                alert('Only one of Debit or Credit can have a value.');
-                return;
-            }
-
-            let newRow = `
-            <tr>
-                <td style="display:none">${DRCR}</td>
-                <td>${DRCRName}</td>
-                <td style="display:none">${HeadID}</td>
-                <td>${HeadName}</td>
-                <td>${DrAmt.toFixed(2)}</td>
-                <td>${CrAmt.toFixed(2)}</td>
-                <td><button type="button" class="remove-row btn btn-danger">Remove</button></td>
-            </tr>
-        `;
-            $('#JournalVoucherTable tbody').append(newRow);
-
-            // Reset fields
-            $('#DRCR').val('');
-            $('#HeadofAccount_FiveID').val(null).trigger('change');
-            $('#DrAmt').val('');
-            $('#CrAmt').val('');
-
-            calculateTotals();
-        });
-
-
-        $('#JournalVoucherTable').on('click', '.remove-row', function () {
-            $(this).closest('tr').remove();
-            calculateTotals();
-        });
-
-        function calculateTotals() {
-            let totalDr = 0;
-            let totalCr = 0;
-
-            $('#JournalVoucherTable tbody tr').each(function () {
-                totalDr += parseFloat($(this).find('td:nth-child(5)').text()) || 0;
-                totalCr += parseFloat($(this).find('td:nth-child(6)').text()) || 0;
-            });
-
-            $('#TotalDrAmt').val(totalDr.toFixed(2));
-            $('#TotalCrAmt').val(totalCr.toFixed(2));
-        }
-
-        // $('#saveNewVouchar').on('click', function () {
-        //     let voucherData = {
-        //         VoucharTypeID: $('#VoucharTypeID').val(),
-        //         PONo: $('#PONo').val(),
-        //         GRNNo: $('#GRNNo').val(),
-        //         DCNo: $('#DCNo').val(),
-        //         InvoiceNo: $('#InvoiceNo').val(),
-        //         Description: $('#Description').val(),
-        //         Records: []
-        //     };
-
-        //     $('#JournalVoucherTable tbody tr').each(function () {
-        //         let record = {
-        //             DRCR: $(this).find('td:nth-child(1)').text(),
-        //             HeadofAccount: $(this).find('td:nth-child(2)').text(),
-        //             DrAmt: parseFloat($(this).find('td:nth-child(3)').text()) || 0,
-        //             CrAmt: parseFloat($(this).find('td:nth-child(4)').text()) || 0
-        //         };
-        //         voucherData.Records.push(record);
-        //     });
-
-        //     $.ajax({
-        //         url: '@Url.Action("SaveVouchar", "JournalVouchar")',
-        //         method: 'POST',
-        //         contentType: 'application/json',
-        //         data: JSON.stringify(voucherData),
-        //         success: function (response) {
-        //             if (response.success) {
-        //                 alert('Voucher saved successfully.');
-        //                 $('#addVoucharModal').modal('hide');
-        //                 location.reload(); // Refresh or redirect as needed
-        //             } else {
-        //                 alert('Error saving voucher.');
-        //             }
-        //         },
-        //         error: function () {
-        //             alert('An error occurred.');
-        //         }
-        //     });
-        // });
-
-        // $('#addVoucharModal').on('hidden.bs.modal', function () {
-        //     $('#addVoucharForm')[0].reset();
-        //     $('#JournalVoucherTable tbody').empty();
-        //     $('#TotalDrAmt').val('');
-        //     $('#TotalCrAmt').val('');
-        //     $('#HeadofAccount_FiveID').val(null).trigger('change');
-        // });
-    });
-
-</script>
-<style>
-    /* Modern header styling */
-    #JournalVoucherTable thead th {
-        font-family: 'Arial', sans-serif;
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #ffffff;
-        background-color: #007bff; /* Bootstrap's primary blue */
-        text-transform: uppercase;
-        padding: 15px;
-        border: 1px solid #dee2e6;
-    }
-
-    /* Hover effect for rows */
-    #JournalVoucherTable tbody tr:hover {
-        background-color: #f8f9fa; /* Light grey on hover */
-        transition: background-color 0.3s ease-in-out;
-    }
-
-    /* General table cell styling */
-    #JournalVoucherTable tbody td {
-        font-size: 1rem;
-        padding: 10px;
-        vertical-align: middle;
-    }
-</style>
-
-<div class="modal fade" id="addVoucharModal" tabindex="-1" role="dialog" aria-labelledby="addVoucharModalLabel" aria-hidden="true" >
+<div class="modal fade" id="addVoucharModal" tabindex="-1" role="dialog" aria-labelledby="addVoucharModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="addVoucharModalLabel">
-                    <i class="fas fa-key me-2"></i>
-                    Add New Vouchar
-                </h5>
+                <h5 class="modal-title" id="addVoucharModalLabel"><i class="fas fa-key me-2"></i>Add Journal Voucher</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
             </div>
             <div class="modal-body">
-                <form id="addVoucharForm">
-                    <div class="row">
-                        <div class="col-12 col-md-6 col-lg-6">
-                            <label asp-for="VoucharTypeID" class="form-label fw-bold">Vouchar Type</label>
-                            <select asp-for="VoucharTypeID" asp-items="@(new SelectList(ViewBag.VoucharTypeList, "Value", "Text", Model.VoucharTypeID))" class="form-control form-control-lg">
+                <form id="addVoucherForm" method="post">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="VoucharTypeID" class="form-label fw-bold">Voucher Type</label>
+                            <select asp-for="VoucharTypeID" class="form-select form-select-lg">
+                                <option value="">Select Voucher Type</option>
+                                @foreach (var type in ViewBag.VoucharTypeList)
+
+                                {
+                                    <option value="@type.Value">@type.Text</option>
+                                }
                             </select>
-                            <span asp-validation-for="VoucharTypeID" class="text-danger"></span>
                         </div>
+                        
                     </div>
-                    <div class="row">
-                        <div class="col-6 col-md-3 col-lg-3">
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
                             <label for="PONo" class="form-label fw-bold">PO No</label>
                             <input type="text" class="form-control form-control-lg" id="PONo" name="PONo" value="@Model.PONo" />
                         </div>
-                        <div class="col-6 col-md-3 col-lg-3">
+                        <div class="col-md-3">
                             <label for="GRNNo" class="form-label fw-bold">GRN No</label>
                             <input type="text" class="form-control form-control-lg" id="GRNNo" name="GRNNo" value="@Model.GRNNo" />
                         </div>
-                        <div class="col-6 col-md-3 col-lg-3">
+                        <div class="col-md-3">
                             <label for="DCNo" class="form-label fw-bold">DC No</label>
                             <input type="text" class="form-control form-control-lg" id="DCNo" name="DCNo" value="@Model.DCNo" />
                         </div>
-                        <div class="col-6 col-md-3 col-lg-3">
+                        <div class="col-md-3">
                             <label for="InvoiceNo" class="form-label fw-bold">Invoice No</label>
                             <input type="text" class="form-control form-control-lg" id="InvoiceNo" name="InvoiceNo" value="@Model.InvoiceNo" />
                         </div>
-                        
-                        <div class="col-12 col-md-12 col-lg-12">
-                            <label for="Description" class="form-label fw-bold">Description</label>
-                            <input type="text" class="form-control form-control-lg" id="Description" name="Description" value="@Model.Description" />
+                        <div class="col-md-12">
+                            <label asp-for="Description" class="form-label fw-bold">Description</label>
+                            <textarea asp-for="Description" class="form-control form-control-lg" rows="3"></textarea>
                         </div>
                     </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-12 col-md-2 col-lg-2">
-                            <label asp-for="DRCR" class="form-label fw-bold">Transaction Type</label>
-                            <select asp-for="DRCR" asp-items="@(new SelectList(ViewBag.TransactionTypeList, "Value", "Text", Model.DRCR))" class="form-control form-control-lg">
-                            </select>
-                            <span asp-validation-for="DRCR" class="text-danger"></span>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-6">
-                            <label asp-for="HeadofAccount_FiveID" class="form-label fw-bold">Transaction Account</label>
-                            <select asp-for="HeadofAccount_FiveID" asp-items="@(new SelectList(ViewBag.HeadofAccount_FiveList, "Value", "Text", Model.HeadofAccount_FiveID))" id="HeadofAccount_FiveID" name="HeadofAccount_FiveID" class="form-control form-control-lg">
-                                <!-- Dynamic Options via Ajax -->
-                            </select>
-                            <span asp-validation-for="HeadofAccount_FiveID" class="text-danger"></span>
-                        </div>
 
-                        <div class="col-6 col-md-2 col-lg-2">
-                            <label for="DrAmt" class="form-label fw-bold">Debit</label>
-                            <input type="text" class="form-control form-control-lg" id="DrAmt" name="DrAmt" value="@Model.DrAmt" />
-                        </div>
-                        <div class="col-6 col-md-2 col-lg-2">
-                            <label for="CrAmt" class="form-label fw-bold">Credit</label>
-                            <input type="text" class="form-control form-control-lg" id="CrAmt" name="CrAmt" value="@Model.CrAmt" />
-                        </div>
-                        <div class="modal-footer">
-                        <button type="button" id="AddRecord" class="btn btn-success">Add</button>
-                        </div>
-                    </div>
-                    <hr />
                     <div class="table-responsive">
-                        <table id="JournalVoucherTable" class="table table-bordered table-hover">
-                            <thead class="table-primary">
+                        <table class="table table-bordered" id="JournalVoucherTable">
+                            <thead class="table-light">
                                 <tr>
-                                    <th class="text-center">Transaction Type</th>
-                                    <th class="text-center">Transaction Account</th>
-                                    <th class="text-center">Debit</th>
-                                    <th class="text-center">Credit</th>
-                                    <th class="text-center">Action</th>
+                                    <th>Transaction Type</th>
+                                    <th>Transaction Account</th>
+                                    <th>Debit Amount</th>
+                                    <th>Credit Amount</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Rows added dynamically -->
+                                <tr>
+                                    <td>
+                                        <select class="form-select transaction-account">
+                                            <option value="">Select Type</option>
+                                            @foreach (var type in ViewBag.TransactionTypeList)
+
+                                            {
+                                                <option value="@type.Value">@type.Text</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-select transaction-account select-account" style="width: 100%;">
+                                            <option value="">Select Account</option>
+                                            @foreach (var account in ViewBag.HeadofAccount_FiveList)
+                                            {
+                                                <option value="@account.Value">@account.Text</option>
+                                            }
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <input class="form-control debit" type="number" step="0.01" />
+                                    </td>
+                                    <td>
+                                        <input class="form-control credit" type="number" step="0.01" />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
+                        <button type="button" id="addRow" class="btn btn-primary mt-2">Add Row</button>
                     </div>
 
-                    <hr />
-                    <div class="row">
-                        <div class="col-12 col-md-2 col-lg-2">
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Total Debit Amount</label>
+                            <input id="TotalDrAmt" class="form-control form-control-lg" readonly />
                         </div>
-                        <div class="col-12 col-md-6 col-lg-6">
-                        </div>
-                        <div class="col-6 col-md-2 col-lg-2">
-                            <label for="TotalDrAmt" class="form-label fw-bold">Total Debit</label>
-                            <input type="text" class="form-control form-control-lg" id="TotalDrAmt" name="TotalDrAmt" />
-                        </div>
-                        <div class="col-6 col-md-2 col-lg-2">
-                            <label for="TotalCrAmt" class="form-label fw-bold">Total Credit</label>
-                            <input type="text" class="form-control form-control-lg" id="TotalCrAmt" name="TotalCrAmt" />
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Total Credit Amount</label>
+                            <input id="TotalCrAmt" class="form-control form-control-lg" readonly />
                         </div>
                     </div>
-                    <hr />
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-success" id="saveNewVouchar">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="saveNewVoucher" class="btn btn-success">Save Voucher</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+   $(document).ready(function () {
+
+    // Initialize Select2 for existing elements
+    $('.select-account').select2({
+        placeholder: "Search Account...",
+        allowClear: true,
+        width: '100%'
+    });
+
+    // Add new row functionality
+    $('#addRow').on('click', function () {
+        let newRow = `<tr>
+                    <td>
+                        <select class="form-select transaction-account">
+                            <option value="">Select Transaction Type</option>
+                            @foreach (var type in ViewBag.TransactionTypeList)
+                            {
+                                <option value="@type.Value">@type.Text</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-select select-account" style="width: 100%;">
+                            <option value="">Select Account</option>
+                            @foreach (var account in ViewBag.HeadofAccount_FiveList)
+                            {
+                                <option value="@account.Value">@account.Text</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <input class="form-control debit" type="number" step="0.01" />
+                    </td>
+                    <td>
+                        <input class="form-control credit" type="number" step="0.01" />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
+                    </td>
+                </tr>`;
+
+        $('#JournalVoucherTable tbody').append(newRow);
+
+        // Reinitialize Select2 for the new select elements after the row is added
+        $('.select-account').last().select2({
+            placeholder: "Search Account...",
+            allowClear: true,
+            width: '100%'
+        });
+    });
+
+    // Remove row functionality
+    window.removeRow = function (button) {
+        $(button).closest('tr').remove();
+        calculateTotals();
+    };
+
+    // Calculate totals dynamically
+    $(document).on('input', '.debit, .credit', function () {
+        calculateTotals();
+    });
+
+    function calculateTotals() {
+        let totalDebit = 0;
+        let totalCredit = 0;
+
+        $('#JournalVoucherTable tbody tr').each(function () {
+            const debit = parseFloat($(this).find('.debit').val()) || 0;
+            const credit = parseFloat($(this).find('.credit').val()) || 0;
+
+            totalDebit += debit;
+            totalCredit += credit;
+        });
+
+        $('#TotalDrAmt').val(totalDebit.toFixed(2));
+        $('#TotalCrAmt').val(totalCredit.toFixed(2));
+    }
+  
+});
+
+</script>
+<style>
+  .select2-container {
+    width: 100% !important;
+    Z-INDEX: 9999;
+}
+</style>
