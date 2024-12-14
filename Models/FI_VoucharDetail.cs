@@ -5,11 +5,14 @@ namespace Exampler_ERP.Models
 {
   public class FI_VoucharDetail
   {
+    public FI_VoucharDetail()
+    {
+    }
     [Key]
     public int VoucharDetailID { get; set; } // Identity column
     public int VoucharID { get; set; } // Foreign key property
     [ForeignKey("VoucharID")]
-    public virtual FI_Vouchar Vouchar { get; set; } // Navigation property
+    public virtual FI_Vouchar Vouchar { get; private set; } // Navigation property
     public int HeadofAccount_FiveID { get; set; }
     [ForeignKey("HeadofAccount_FiveID")]
     public virtual Settings_HeadofAccount_Five? HeadofAccount_Five { get; set; }

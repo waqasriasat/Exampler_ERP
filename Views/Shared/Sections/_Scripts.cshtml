@@ -1,28 +1,34 @@
 <environment include="Development">
-  <script src="~/vendor/libs/jquery/jquery.js"></script>
-  <script src="~/vendor/libs/popper/popper.js"></script>
-  <script src="~/vendor/js/bootstrap.js"></script>
-  <!-- `perfect-scrollbar` library required by SideNav plugin -->
-  <script src="~/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-  <script src="~/vendor/js/menu.js"></script>
-     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/vendor/libs/jquery/jquery.js"></script>
+    <script src="~/vendor/libs/popper/popper.js"></script>
+    <script src="~/vendor/js/bootstrap.js"></script>
+    <!-- `perfect-scrollbar` library required by SideNav plugin -->
+    <script src="~/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="~/vendor/js/menu.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Include jQuery and jQuery UI -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
-    <!-- Include Select2 JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-   
-</environment>
-<environment exclude="Development">
-  <script src="~/vendor/libs/jquery/jquery.js" asp-append-version="true"></script>
-  <script src="~/vendor/libs/popper/popper.js" asp-append-version="true"></script>
-  <script src="~/vendor/js/bootstrap.js" asp-append-version="true"></script>
-  <script src="~/vendor/libs/perfect-scrollbar/perfect-scrollbar.js" asp-append-version="true"></script>
-  <script src="~/vendor/js/menu.js" asp-append-version="true"></script>
 
-  <script src="~/js/site.js" asp-append-version="true"></script>
-    <!-- Ensure jQuery is loaded before Select2 -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Include Select2 JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    
+    <!-- Validation -->
+    <script src="https://cdn.jsdelivr.net/jquery.validation.unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
 </environment>
+
+<environment include="Development">
+    <script src="~/vendor/libs/jquery/jquery.js"></script>
+    <script src="~/vendor/libs/popper/popper.js"></script>
+    <script src="~/vendor/js/bootstrap.js"></script>
+    <!-- `perfect-scrollbar` library required by SideNav plugin -->
+    <script src="~/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="~/vendor/js/menu.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Include jQuery and jQuery UI -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+
+    <!-- Validation -->
+    <script src="https://cdn.jsdelivr.net/jquery.validation.unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+</environment>
+

@@ -6,6 +6,9 @@ namespace Exampler_ERP.Models
 {
   public class FI_Vouchar
   {
+    public FI_Vouchar()
+    {
+    }
     [Key]
     public int VoucharID { get; set; } // Identity column
     public DateTime VoucharDate { get; set; }
@@ -21,6 +24,7 @@ namespace Exampler_ERP.Models
     public string? InvoiceNo { get; set; }
     public string? PVNo { get; set; }
     public string? VStatus { get; set; }
-    public ICollection<FI_VoucharDetail> VoucharDetails { get; set; }
+    public virtual List<FI_VoucharDetail> VoucharDetails { get; set; } = new List<FI_VoucharDetail>();
+   
   }
 }

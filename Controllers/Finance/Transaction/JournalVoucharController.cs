@@ -42,18 +42,38 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
       ViewBag.VoucharTypeList = await _utils.GetVoucharType_Journal();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
-      return PartialView("~/Views/Finance/Transaction/JournalVouchar/AddJournalVouchar.cshtml", new FI_Vouchar());
+
+      // Initialize model with one row
+      var model = new FI_Vouchar
+      {
+        VoucharDetails = new List<FI_VoucharDetail>
+        {
+            new FI_VoucharDetail() // Default empty row
+        }
+      };
+
+      return PartialView("~/Views/Finance/Transaction/JournalVouchar/AddJournalVouchar.cshtml", model);
     }
     [HttpGet]
-    public async Task<JsonResult> GetHeadofAccounts(string query)
+    public async Task<IActionResult> GetHeadofAccounts(string searchTerm)
     {
+      if (string.IsNullOrEmpty(searchTerm))
+      {
+        return Json(new List<object>()); // Return empty result
+      }
+
       var accounts = await _appDBContext.Settings_HeadofAccount_Fives
-          .Where(a => a.HeadofAccount_FiveName.Contains(query))
-          .Select(a => new { id = a.HeadofAccount_FiveID, text = a.HeadofAccount_FiveName })
+          .Where(a => a.HeadofAccount_FiveName.Contains(searchTerm)) // Filter by search term
+          .Select(a => new
+          {
+            id = a.HeadofAccount_FiveID,
+            text = a.HeadofAccount_FiveName
+          })
           .ToListAsync();
 
-      return Json(accounts);
+      return Json(accounts); // Return as JSON
     }
+
 
   }
 }

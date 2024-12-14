@@ -1,5 +1,10 @@
 @model Exampler_ERP.Models.FI_Vouchar
 
+<style>
+    .ui-autocomplete {
+        z-index: 1000 !important;
+    }
+</style>
 <div class="modal fade" id="addVoucharModal" tabindex="-1" role="dialog" aria-labelledby="addVoucharModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
         <div class="modal-content">
@@ -21,7 +26,7 @@
                                 }
                             </select>
                         </div>
-                        
+
                     </div>
 
                     <div class="row mb-3">
@@ -59,40 +64,46 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <select class="form-select transaction-account">
-                                            <option value="">Select Type</option>
-                                            @foreach (var type in ViewBag.TransactionTypeList)
+                                @for (int i = 0; i < Model.VoucharDetails.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            <select class="form-select transaction-account">
+                                                <option value="">Select Type</option>
+                                                @foreach (var type in ViewBag.TransactionTypeList)
 
-                                            {
-                                                <option value="@type.Value">@type.Text</option>
-                                            }
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select class="form-select transaction-account select-account" style="width: 100%;">
-                                            <option value="">Select Account</option>
-                                            @foreach (var account in ViewBag.HeadofAccount_FiveList)
-                                            {
-                                                <option value="@account.Value">@account.Text</option>
-                                            }
-                                        </select>
-                                    </td>
+                                                {
+                                                    <option value="@type.Value">@type.Text</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input asp-for="@Model.VoucharDetails[i].HeadofAccount_FiveID" id="HeadofAccount_FiveID" class="form-control form-control-lg" />
+                                            <input asp-for="@Model.VoucharDetails[i].HeadofAccount_FiveID" id="HeadofAccount_FiveName" class="form-control form-control-lg" type="text" />
+                                        </td>
 
-                                    <td>
-                                        <input class="form-control debit" type="number" step="0.01" />
-                                    </td>
-                                    <td>
-                                        <input class="form-control credit" type="number" step="0.01" />
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
-                                    </td>
-                                </tr>
+                                        <td>
+                                            <input asp-for="@Model.VoucharDetails[i].DrAmt" id="DrAmt" class="form-control debit" />
+                                        </td>
+                                        <td>
+                                            <input asp-for="@Model.VoucharDetails[i].CrAmt" id="CrAmt" class="form-control credit" />
+                                        </td>
+                                        <td>
+                                            <button id="btndummy-@i" type="button" class="btn btn-sm invisible">Dummy</button>
+                                            <button id="btnadd-@i" type="button" class="btn btn-sm btn-secondary visible"
+                                                    onclick="AddItem(this)">
+                                                Add
+                                            </button>
+                                        
+                                            <button id="btnremove-@i" type="button" class="btn btn-sm btn-danger visible"
+                                                    onclick="DeleteItem(this)">
+                                                Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
-                        <button type="button" id="addRow" class="btn btn-primary mt-2">Add Row</button>
                     </div>
 
                     <div class="row mt-4">
@@ -110,72 +121,107 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" id="saveNewVoucher" class="btn btn-success">Save Voucher</button>
+                <input type="hidden" id="hdnLastIndex" value="0" />
             </div>
         </div>
     </div>
 </div>
 
+
 <script>
-   $(document).ready(function () {
+    function DeleteItem(btn) {
+        $(btn).closest('tr').remove();
+    }
+    function AddItem(btn) {
+        // Get the table and existing rows
+        var table = document.getElementById('JournalVoucherTable').getElementsByTagName('tbody')[0];
+        var rows = table.getElementsByTagName('tr');
 
-    // Initialize Select2 for existing elements
-    $('.select-account').select2({
-        placeholder: "Search Account...",
-        allowClear: true,
-        width: '100%'
-    });
+        // Determine the last row index
+        var lastIndex = rows.length ? rows.length - 1 : 0;
+        var nextIndex = lastIndex + 1;
 
-    // Add new row functionality
-    $('#addRow').on('click', function () {
-        let newRow = `<tr>
-                    <td>
-                        <select class="form-select transaction-account">
-                            <option value="">Select Transaction Type</option>
-                            @foreach (var type in ViewBag.TransactionTypeList)
-                            {
-                                <option value="@type.Value">@type.Text</option>
-                            }
-                        </select>
-                    </td>
-                    <td>
-                        <select class="form-select select-account" style="width: 100%;">
-                            <option value="">Select Account</option>
-                            @foreach (var account in ViewBag.HeadofAccount_FiveList)
-                            {
-                                <option value="@account.Value">@account.Text</option>
-                            }
-                        </select>
-                    </td>
-                    <td>
-                        <input class="form-control debit" type="number" step="0.01" />
-                    </td>
-                    <td>
-                        <input class="form-control credit" type="number" step="0.01" />
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
-                    </td>
-                </tr>`;
+        // Clone the last row (template row)
+        var newRow = rows[0].cloneNode(true);
 
-        $('#JournalVoucherTable tbody').append(newRow);
+        // Update IDs and names for the new row
+        newRow.innerHTML = newRow.innerHTML.replace(/\[(\d+)\]/g, '[' + nextIndex + ']'); // Update array indices
+        newRow.innerHTML = newRow.innerHTML.replace(/_(\d+)/g, '_' + nextIndex); // Update underscore IDs
 
-        // Reinitialize Select2 for the new select elements after the row is added
-        $('.select-account').last().select2({
-            placeholder: "Search Account...",
-            allowClear: true,
-            width: '100%'
+        // Clear the input values in the cloned row
+        newRow.querySelectorAll('input, select').forEach(function (element) {
+            if (element.type === 'text' || element.tagName === 'SELECT') {
+                element.value = '';
+            }
+        });
+
+        // Append the new row to the table
+        table.appendChild(newRow);
+    }
+    
+    $(function () {
+        $(document).on('focus', '[id^="HeadofAccount_FiveName_"]', function () {
+            $(this).autocomplete({
+                source: function (request, response) {
+                    debugger;
+                    $.ajax({
+                        url: '/JournalVouchar/GetHeadofAccounts',
+                        method: 'GET',
+                        data: { searchTerm: request.term },
+                        success: function (data) {
+                            response(data.map(function (item) {
+                                return {
+                                    label: item.clientName,
+                                    value: item.clientName,
+                                    clientID: item.clientID,
+                                    location: item.location,
+                                    perA: item.perA
+                                };
+                            }));
+                        },
+                        error: function (error) {
+                            console.error(error);
+                        }
+                    });
+                },
+                minLength: 3,
+                select: function (event, ui) {
+                    console.log(ui.item);
+                    $(this).siblings('[id^="HeadofAccount_FiveID_"]').val(ui.item.clientID);
+                    $(this).siblings('[id^="DrAmt_"]').val(ui.item.clientID);
+                }
+            });
         });
     });
-
-    // Remove row functionality
-    window.removeRow = function (button) {
-        $(button).closest('tr').remove();
-        calculateTotals();
-    };
-
-    // Calculate totals dynamically
-    $(document).on('input', '.debit, .credit', function () {
-        calculateTotals();
+    $(function () {
+        $('#HeadofAccount_FiveName').autocomplete({
+            source: function (request, response) {
+                console.log('Search term:', request.term); // Debugging
+                $.ajax({
+                    url: '/JournalVouchar/GetHeadofAccounts',
+                    method: 'GET',
+                    data: { searchTerm: request.term },
+                    success: function (data) {
+                        console.log('Server response:', data); // Debugging
+                        response(data.map(function (item) {
+                            return {
+                                label: item.text, // Use `text` from server
+                                value: item.id
+                            };
+                        }));
+                    },
+                    error: function (error) {
+                        console.error('AJAX error:', error);
+                    }
+                });
+            },
+            minLength: 3,
+            select: function (event, ui) {
+                console.log('Selected item:', ui.item); // Debugging
+                $('#HeadofAccount_FiveID').val(ui.item.id); // Set hidden field
+                $('#HeadofAccount_FiveName').val(ui.item.text); // Set hidden field
+            }
+        });
     });
 
     function calculateTotals() {
@@ -193,13 +239,7 @@
         $('#TotalDrAmt').val(totalDebit.toFixed(2));
         $('#TotalCrAmt').val(totalCredit.toFixed(2));
     }
-  
-});
-
+    $(document).on('input', '.debit, .credit', calculateTotals);
 </script>
-<style>
-  .select2-container {
-    width: 100% !important;
-    Z-INDEX: 9999;
-}
-</style>
+
+
