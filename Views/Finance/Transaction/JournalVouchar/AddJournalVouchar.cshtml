@@ -68,34 +68,38 @@
                                 {
                                     <tr>
                                         <td>
-                                            <select class="form-select transaction-account">
+                                            <select class="form-select transaction-account" id="TransactionType_@i">
                                                 <option value="">Select Type</option>
                                                 @foreach (var type in ViewBag.TransactionTypeList)
-
                                                 {
                                                     <option value="@type.Value">@type.Text</option>
                                                 }
                                             </select>
                                         </td>
                                         <td>
-                                            <input asp-for="@Model.VoucharDetails[i].HeadofAccount_FiveID" id="HeadofAccount_FiveID" class="form-control form-control-lg" />
-                                            <input asp-for="@Model.VoucharDetails[i].HeadofAccount_FiveID" id="HeadofAccount_FiveName" class="form-control form-control-lg" type="text" />
+                                            <select class="form-select transaction-account" id="HeadofAccount_FiveID_@i">
+                                                <option value="">Select Account</option>
+                                                @foreach (var type in ViewBag.HeadofAccount_FiveList)
+                                                {
+                                                    <option value="@type.Value">@type.Text</option>
+                                                }
+                                            </select>
                                         </td>
-
+                                      
                                         <td>
-                                            <input asp-for="@Model.VoucharDetails[i].DrAmt" id="DrAmt" class="form-control debit" />
+                                            <input asp-for="@Model.VoucharDetails[i].DrAmt" id="DrAmt_@i" class="form-control debit" />
                                         </td>
                                         <td>
-                                            <input asp-for="@Model.VoucharDetails[i].CrAmt" id="CrAmt" class="form-control credit" />
+                                            <input asp-for="@Model.VoucharDetails[i].CrAmt" id="CrAmt_@i" class="form-control credit" />
                                         </td>
-                                        <td>
-                                            <button id="btndummy-@i" type="button" class="btn btn-sm invisible">Dummy</button>
-                                            <button id="btnadd-@i" type="button" class="btn btn-sm btn-secondary visible"
+                                        <td style="text-align: center;">
+                                            <button id="btndummy_@i" type="button" class="btn btn-sm" style="display:none">Dummy</button>
+                                            <button id="btnadd_@i" type="button" class="btn btn-sm btn-secondary" style="width: 100%;"
                                                     onclick="AddItem(this)">
                                                 Add
                                             </button>
-                                        
-                                            <button id="btnremove-@i" type="button" class="btn btn-sm btn-danger visible"
+
+                                            <button id="btnremove_@i" type="button" class="btn btn-sm btn-danger" style="display:none; width: 100%;"
                                                     onclick="DeleteItem(this)">
                                                 Remove
                                             </button>
@@ -132,97 +136,68 @@
     function DeleteItem(btn) {
         $(btn).closest('tr').remove();
     }
-    function AddItem(btn) {
-        // Get the table and existing rows
-        var table = document.getElementById('JournalVoucherTable').getElementsByTagName('tbody')[0];
-        var rows = table.getElementsByTagName('tr');
+   function AddItem(btn) {
+    debugger;
 
-        // Determine the last row index
-        var lastIndex = rows.length ? rows.length - 1 : 0;
-        var nextIndex = lastIndex + 1;
+    // Get the table and existing rows
+    var table = document.getElementById('JournalVoucherTable').getElementsByTagName('tbody')[0];
+    var rows = table.getElementsByTagName('tr');
 
-        // Clone the last row (template row)
-        var newRow = rows[0].cloneNode(true);
+    // Determine the last row index
+    var lastIndex = rows.length ? rows.length - 1 : 0;
+    var nextIndex = lastIndex + 1;
 
-        // Update IDs and names for the new row
-        newRow.innerHTML = newRow.innerHTML.replace(/\[(\d+)\]/g, '[' + nextIndex + ']'); // Update array indices
-        newRow.innerHTML = newRow.innerHTML.replace(/_(\d+)/g, '_' + nextIndex); // Update underscore IDs
+    // Clone the first row as a template for the new row
+    var newRow = rows[0].cloneNode(true);
 
-        // Clear the input values in the cloned row
-        newRow.querySelectorAll('input, select').forEach(function (element) {
-            if (element.type === 'text' || element.tagName === 'SELECT') {
-                element.value = '';
-            }
-        });
+    // Update array indices and IDs in the cloned row
+    newRow.innerHTML = newRow.innerHTML.replace(/\[(\d+)\]/g, '[' + nextIndex + ']');
+    newRow.innerHTML = newRow.innerHTML.replace(/_(\d+)/g, '_' + nextIndex);
 
-        // Append the new row to the table
-        table.appendChild(newRow);
-    }
+    // Clear input and select values in the cloned row
+    newRow.querySelectorAll('input, select').forEach(function (element) {
+        if (element.type === 'text' || element.tagName === 'SELECT') {
+            element.value = '';
+        }
+    });
+    table.appendChild(newRow);
+
+    // Get the last and next row indices from the hidden input
+    var lastRow = document.getElementById('hdnLastIndex').value;
+    var nextRow = parseInt(lastRow) + 1;
+
+    // Disable the last row inputs and buttons
+    $('#TransactionType_' + lastRow).prop('disabled', true);
+    $('#HeadofAccount_FiveID_' + lastRow).prop('disabled', true);
+    $('#DrAmt_' + lastRow).prop('disabled', true);
+    $('#CrAmt_' + lastRow).prop('disabled', true);
+        $('#btnremove_' + lastRow).css('display', 'block');
+        $('#btnadd_' + lastRow).css('display', 'none');
+       
+    $('#TransactionType_' + nextRow).prop('disabled', false);
+    $('#HeadofAccount_FiveID_' + nextRow).prop('disabled', false);
+    $('#DrAmt_' + nextRow).prop('disabled', false);
+    $('#CrAmt_' + nextRow).prop('disabled', false);
+        $('#btnremove_' + nextRow).css('display', 'none');
+        $('#btnadd_' + nextRow).css('display', 'block');
+
+
+    // Append the new row to the table
     
-    $(function () {
-        $(document).on('focus', '[id^="HeadofAccount_FiveName_"]', function () {
-            $(this).autocomplete({
-                source: function (request, response) {
-                    debugger;
-                    $.ajax({
-                        url: '/JournalVouchar/GetHeadofAccounts',
-                        method: 'GET',
-                        data: { searchTerm: request.term },
-                        success: function (data) {
-                            response(data.map(function (item) {
-                                return {
-                                    label: item.clientName,
-                                    value: item.clientName,
-                                    clientID: item.clientID,
-                                    location: item.location,
-                                    perA: item.perA
-                                };
-                            }));
-                        },
-                        error: function (error) {
-                            console.error(error);
-                        }
-                    });
-                },
-                minLength: 3,
-                select: function (event, ui) {
-                    console.log(ui.item);
-                    $(this).siblings('[id^="HeadofAccount_FiveID_"]').val(ui.item.clientID);
-                    $(this).siblings('[id^="DrAmt_"]').val(ui.item.clientID);
-                }
-            });
-        });
-    });
-    $(function () {
-        $('#HeadofAccount_FiveName').autocomplete({
-            source: function (request, response) {
-                console.log('Search term:', request.term); // Debugging
-                $.ajax({
-                    url: '/JournalVouchar/GetHeadofAccounts',
-                    method: 'GET',
-                    data: { searchTerm: request.term },
-                    success: function (data) {
-                        console.log('Server response:', data); // Debugging
-                        response(data.map(function (item) {
-                            return {
-                                label: item.text, // Use `text` from server
-                                value: item.id
-                            };
-                        }));
-                    },
-                    error: function (error) {
-                        console.error('AJAX error:', error);
-                    }
-                });
-            },
-            minLength: 3,
-            select: function (event, ui) {
-                console.log('Selected item:', ui.item); // Debugging
-                $('#HeadofAccount_FiveID').val(ui.item.id); // Set hidden field
-                $('#HeadofAccount_FiveName').val(ui.item.text); // Set hidden field
-            }
-        });
-    });
+
+    // Enable the new row inputs and buttons
+    
+
+    // Update the hidden input value with the new last index
+    document.getElementById('hdnLastIndex').value = nextRow;
+
+    debugger;
+}
+
+
+
+
+
 
     function calculateTotals() {
         let totalDebit = 0;

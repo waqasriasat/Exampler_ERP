@@ -250,14 +250,14 @@ namespace Exampler_ERP.Models
 );
 
       modelBuilder.Entity<Settings_VoucharType>().HasData(
-   new Settings_VoucharType() { VoucharTypeID = 1, VoucharTypeName = "Bill Receipt Voucher", VoucharNature = "Receipt", VoucharPrefix= "BRV" },
-   new Settings_VoucharType() { VoucharTypeID = 2, VoucharTypeName = "Bank Payment Voucher", VoucharNature = "Payment", VoucharPrefix = "BPV" },
-   new Settings_VoucharType() { VoucharTypeID = 3, VoucharTypeName = "Sales Invoice", VoucharNature = "Journal", VoucharPrefix = "SIV" },
-   new Settings_VoucharType() { VoucharTypeID = 4, VoucharTypeName = "Cash Payment Voucher", VoucharNature = "Payment", VoucharPrefix = "CPV" },
-   new Settings_VoucharType() { VoucharTypeID = 5, VoucharTypeName = "Good Receiving Voucher", VoucharNature = "Payment", VoucharPrefix = "GRV" },
-   new Settings_VoucharType() { VoucharTypeID = 6, VoucharTypeName = "Purchase Invoice", VoucharNature = "Journal", VoucharPrefix = "PIV" },
-   new Settings_VoucharType() { VoucharTypeID = 7, VoucharTypeName = "Transfer", VoucharNature = "Transfer", VoucharPrefix = "TRF" },
-   new Settings_VoucharType() { VoucharTypeID = 8, VoucharTypeName = "Payroll Vouchor", VoucharNature = "Payment", VoucharPrefix = "PAY" }
+   new Settings_VoucharType() { VoucharTypeID = 1, VoucharTypeName = "Bill Receipt Voucher", VoucharNature = "Receipt", VoucharPrefix= "BRV", VoucharNumber=0 },
+   new Settings_VoucharType() { VoucharTypeID = 2, VoucharTypeName = "Bank Payment Voucher", VoucharNature = "Payment", VoucharPrefix = "BPV", VoucharNumber = 0 },
+   new Settings_VoucharType() { VoucharTypeID = 3, VoucharTypeName = "Sales Invoice", VoucharNature = "Journal", VoucharPrefix = "SIV", VoucharNumber = 0 },
+   new Settings_VoucharType() { VoucharTypeID = 4, VoucharTypeName = "Cash Payment Voucher", VoucharNature = "Payment", VoucharPrefix = "CPV", VoucharNumber = 0 },
+   new Settings_VoucharType() { VoucharTypeID = 5, VoucharTypeName = "Good Receiving Voucher", VoucharNature = "Payment", VoucharPrefix = "GRV", VoucharNumber = 0 },
+   new Settings_VoucharType() { VoucharTypeID = 6, VoucharTypeName = "Purchase Invoice", VoucharNature = "Journal", VoucharPrefix = "PIV", VoucharNumber = 0 },
+   new Settings_VoucharType() { VoucharTypeID = 7, VoucharTypeName = "Transfer", VoucharNature = "Transfer", VoucharPrefix = "TRF", VoucharNumber = 0 },
+   new Settings_VoucharType() { VoucharTypeID = 8, VoucharTypeName = "Payroll Vouchor", VoucharNature = "Payment", VoucharPrefix = "PAY", VoucharNumber = 0 }
 );
 
       modelBuilder.Entity<Settings_HeadofAccount_CategoryType>().HasData(

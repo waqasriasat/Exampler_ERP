@@ -11,5 +11,6 @@ namespace Exampler_ERP.Models
     public string? VoucharPrefix { get; set; }
     public int? DeleteYNID { get; set; }
     public int? ActiveYNID { get; set; }
+    public int? VoucharNumber { get; set; }
   }
 }
