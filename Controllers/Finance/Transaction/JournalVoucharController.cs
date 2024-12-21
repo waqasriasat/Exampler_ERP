@@ -1,4 +1,5 @@
 using Exampler_ERP.Models;
+using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -54,6 +55,49 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       return PartialView("~/Views/Finance/Transaction/JournalVouchar/AddJournalVouchar.cshtml", model);
     }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(FI_Vouchar model)
+    {
+      if (!ModelState.IsValid)
+      {
+        ViewBag.VoucharTypeList = await _utils.GetVoucharType_Journal();
+        ViewBag.TransactionTypeList = await _utils.GetTransactionType();
+        ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
+
+        if (model.VoucharDetails == null || !model.VoucharDetails.Any())
+        {
+          model.VoucharDetails = new List<FI_VoucharDetail> { new FI_VoucharDetail() };
+        }
+
+        if (model == null)
+        {
+          model = new FI_Vouchar();  // Assuming this is the correct type
+        }
+
+        return PartialView("~/Views/Finance/Transaction/JournalVouchar/AddJournalVouchar.cshtml", model);
+      }
+
+      try
+      {
+        model.VoucharDate = DateTime.Now;
+        _appDBContext.FI_Vouchars.Add(model);
+
+        foreach (var detail in model.VoucharDetails)
+        {
+          detail.VoucharID = model.VoucharID;
+          _appDBContext.FI_VoucharDetails.Add(detail);
+        }
+
+        await _appDBContext.SaveChangesAsync();
+        return Json(new { success = true, message = "Journal Vouchar added successfully!" });
+      }
+      catch (Exception ex)
+      {
+        return Json(new { success = false, message = "Error: " + ex.Message });
+      }
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetHeadofAccounts(string searchTerm)
     {

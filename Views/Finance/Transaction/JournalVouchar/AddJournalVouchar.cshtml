@@ -9,16 +9,16 @@
     <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="addVoucharModalLabel"><i class="fas fa-key me-2"></i>Add Journal Voucher</h5>
+                <h5 class="modal-title" id="addVoucharModalLabel"><i class="fas fa-key me-2"></i>Add Journal Vouchar</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addVoucherForm" method="post">
+                <form id="addVoucharForm" method="post" asp-action="Create" asp-controller="JournalVouchar" enctype="multipart/form-data">
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label asp-for="VoucharTypeID" class="form-label fw-bold">Voucher Type</label>
+                            <label asp-for="VoucharTypeID" class="form-label fw-bold">Vouchar Type</label>
                             <select asp-for="VoucharTypeID" class="form-select form-select-lg">
-                                <option value="">Select Voucher Type</option>
+                                <option value="">Select Vouchar Type</option>
                                 @foreach (var type in ViewBag.VoucharTypeList)
 
                                 {
@@ -53,7 +53,7 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="JournalVoucherTable">
+                        <table class="table table-bordered" id="JournalVoucharTable">
                             <thead class="table-light">
                                 <tr>
                                     <th>Transaction Type</th>
@@ -124,7 +124,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="saveNewVoucher" class="btn btn-success">Save Voucher</button>
+                <button type="button" id="saveNewVouchar" class="btn btn-success">Save Vouchar</button>
                 <input type="hidden" id="hdnLastIndex" value="0" />
             </div>
         </div>
@@ -137,10 +137,10 @@
         $(btn).closest('tr').remove();
     }
    function AddItem(btn) {
-    debugger;
+ 
 
     // Get the table and existing rows
-    var table = document.getElementById('JournalVoucherTable').getElementsByTagName('tbody')[0];
+    var table = document.getElementById('JournalVoucharTable').getElementsByTagName('tbody')[0];
     var rows = table.getElementsByTagName('tr');
 
     // Determine the last row index
@@ -191,7 +191,7 @@
     // Update the hidden input value with the new last index
     document.getElementById('hdnLastIndex').value = nextRow;
 
-    debugger;
+   
 }
 
 
@@ -203,7 +203,7 @@
         let totalDebit = 0;
         let totalCredit = 0;
 
-        $('#JournalVoucherTable tbody tr').each(function () {
+        $('#JournalVoucharTable tbody tr').each(function () {
             const debit = parseFloat($(this).find('.debit').val()) || 0;
             const credit = parseFloat($(this).find('.credit').val()) || 0;
 
@@ -213,6 +213,12 @@
 
         $('#TotalDrAmt').val(totalDebit.toFixed(2));
         $('#TotalCrAmt').val(totalCredit.toFixed(2));
+
+        if (totalDebit !== totalCredit) {
+            $('#saveNewVouchar').prop('disabled', true); // Disable save button if amounts don't match
+        } else {
+            $('#saveNewVouchar').prop('disabled', false); // Enable save button if amounts match
+        }
     }
     $(document).on('input', '.debit, .credit', calculateTotals);
 </script>
