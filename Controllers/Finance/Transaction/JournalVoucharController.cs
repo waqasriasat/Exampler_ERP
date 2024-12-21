@@ -44,20 +44,18 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
 
+      FI_Vouchar Vouchars = new FI_Vouchar();
+      Vouchars.VoucharDetails.Add(new FI_VoucharDetail() { VoucharID = 1 });
       // Initialize model with one row
-      var model = new FI_Vouchar
+      var model = new JournalVoucharIndexViewModel
       {
-        VoucharDetails = new List<FI_VoucharDetail>
-        {
-            new FI_VoucharDetail() // Default empty row
-        }
+        Vouchars = Vouchars
       };
 
       return PartialView("~/Views/Finance/Transaction/JournalVouchar/AddJournalVouchar.cshtml", model);
     }
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(FI_Vouchar model)
+    public async Task<IActionResult> Create(JournalVoucharIndexViewModel model)
     {
       if (!ModelState.IsValid)
       {
@@ -65,14 +63,14 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
         ViewBag.TransactionTypeList = await _utils.GetTransactionType();
         ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
 
-        if (model.VoucharDetails == null || !model.VoucharDetails.Any())
+        if (model.Vouchars.VoucharDetails == null || !model.Vouchars.VoucharDetails.Any())
         {
-          model.VoucharDetails = new List<FI_VoucharDetail> { new FI_VoucharDetail() };
+          model.Vouchars.VoucharDetails = new List<FI_VoucharDetail> { new FI_VoucharDetail() };
         }
 
-        if (model == null)
+        if (model.Vouchars == null)
         {
-          model = new FI_Vouchar();  // Assuming this is the correct type
+          model.Vouchars = new FI_Vouchar();  // Assuming this is the correct type
         }
 
         return PartialView("~/Views/Finance/Transaction/JournalVouchar/AddJournalVouchar.cshtml", model);
@@ -80,12 +78,12 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       try
       {
-        model.VoucharDate = DateTime.Now;
-        _appDBContext.FI_Vouchars.Add(model);
+        model.Vouchars.VoucharDate = DateTime.Now;
+        _appDBContext.FI_Vouchars.Add(model.Vouchars);
 
-        foreach (var detail in model.VoucharDetails)
+        foreach (var detail in model.Vouchars.VoucharDetails)
         {
-          detail.VoucharID = model.VoucharID;
+          detail.VoucharID = model.Vouchars.VoucharID;
           _appDBContext.FI_VoucharDetails.Add(detail);
         }
 
