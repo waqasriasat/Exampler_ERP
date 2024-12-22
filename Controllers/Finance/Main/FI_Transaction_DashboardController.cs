@@ -22,7 +22,7 @@ namespace Exampler_ERP.Controllers.Finance.Main
     public async Task<IActionResult> Index()
     {
       ViewBag.CashAgainstSaleCount = await _appDBContext.Settings_CashAgainstSales.CountAsync();
-      ViewBag.VoucharTypeCount = await _appDBContext.Settings_VoucharTypes.CountAsync();
+      ViewBag.VoucherTypeCount = await _appDBContext.Settings_VoucherTypes.CountAsync();
       ViewBag.CategoryTypeCount = await _appDBContext.Settings_HeadofAccount_CategoryTypes.CountAsync();
       ViewBag.HeadofAccount_FirstCount = await _appDBContext.Settings_HeadofAccount_Firsts.CountAsync();
       ViewBag.HeadofAccount_SecondCount = await _appDBContext.Settings_HeadofAccount_Seconds.CountAsync();

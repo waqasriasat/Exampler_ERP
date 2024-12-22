@@ -1,9 +1,9 @@
-@model IEnumerable<Exampler_ERP.Models.Settings_VoucharType>
+@model IEnumerable<Exampler_ERP.Models.Settings_VoucherType>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Print Vouchar Types</title>
+    <title>Print Voucher Types</title>
     <style>
         table {
             width: 100%;
@@ -26,26 +26,26 @@
     </style>
 </head>
 <body style="background-color:white">
-    <h2>Vouchar Type List</h2>
+    <h2>Voucher Type List</h2>
     <table>
         <thead>
             <tr>
-                <th>VoucharType ID</th>
-                <th>Vouchar Type Name</th>
+                <th>VoucherType ID</th>
+                <th>Voucher Type Name</th>
                 <th>Active</th>
-                <th>Vouchar Nature</th>
-                <th>Vouchar Prefix</th>
+                <th>Voucher Nature</th>
+                <th>Voucher Prefix</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var VoucharType in Model)
+            @foreach (var VoucherType in Model)
             {
                 <tr>
-                    <td>@VoucharType.VoucharTypeID</td>
-                    <td>@VoucharType.VoucharTypeName</td>
-                    <td>@(VoucharType.ActiveYNID == 1 ? "Yes" : "No")</td>
-                    <td>@VoucharType.VoucharNature</td>
-                    <td>@VoucharType.VoucharPrefix</td>
+                    <td>@VoucherType.VoucherTypeID</td>
+                    <td>@VoucherType.VoucherTypeName</td>
+                    <td>@(VoucherType.ActiveYNID == 1 ? "Yes" : "No")</td>
+                    <td>@VoucherType.VoucherNature</td>
+                    <td>@VoucherType.VoucherPrefix</td>
                 </tr>
             }
         </tbody>

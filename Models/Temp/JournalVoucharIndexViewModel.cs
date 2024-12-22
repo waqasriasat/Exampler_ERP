@@ -1,8 +1,8 @@
 namespace Exampler_ERP.Models.Temp
 {
-  public class JournalVoucharIndexViewModel
+  public class JournalVoucherIndexViewModel
   {
-    public FI_Vouchar Vouchars { get; set; }
+    public FI_Voucher Vouchers { get; set; }
    
   }
 }

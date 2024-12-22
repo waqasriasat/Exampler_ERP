@@ -686,20 +686,20 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
-    public async Task<List<SelectListItem>> GetVoucharType()
+    public async Task<List<SelectListItem>> GetVoucherType()
     {
       try
       {
-        var voucharTypeList = await _appDBContext.Settings_VoucharTypes
+        var VoucherTypeList = await _appDBContext.Settings_VoucherTypes
             .Select(d => new SelectListItem
             {
-              Value = d.VoucharTypeID.ToString(),
-              Text = d.VoucharTypeName
+              Value = d.VoucherTypeID.ToString(),
+              Text = d.VoucherTypeName
             })
             .ToListAsync();
 
 
-        return voucharTypeList;
+        return VoucherTypeList;
       }
       catch (Exception ex)
       {
@@ -707,21 +707,21 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
-    public async Task<List<SelectListItem>> GetVoucharType_Journal()
+    public async Task<List<SelectListItem>> GetVoucherType_Journal()
     {
       try
       {
-        var voucharTypeList = await _appDBContext.Settings_VoucharTypes
-          .Where(d => d.VoucharNature == "Journal")
+        var VoucherTypeList = await _appDBContext.Settings_VoucherTypes
+          .Where(d => d.VoucherNature == "Journal")
             .Select(d => new SelectListItem
             {
-              Value = d.VoucharTypeID.ToString(),
-              Text = d.VoucharTypeName
+              Value = d.VoucherTypeID.ToString(),
+              Text = d.VoucherTypeName
             })
             .ToListAsync();
 
 
-        return voucharTypeList;
+        return VoucherTypeList;
       }
       catch (Exception ex)
       {
