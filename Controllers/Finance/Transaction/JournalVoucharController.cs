@@ -22,8 +22,9 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
     {
       var VouchersQuery = _appDBContext.FI_Vouchers
           .Include(v => v.VoucherDetails)
-          .ThenInclude(d => d.HeadofAccount_Five) // Include the nested HeadofAccount_Five
-          .Where(v => v.VoucherTypeID == 3 || v.VoucherTypeID == 6);
+          .ThenInclude(d => d.HeadofAccount_Five)
+          .Include(v => v.VoucherType)
+          .Where(v => v.VoucherType.VoucherNature == "Journal");
 
       if (!string.IsNullOrEmpty(searchHeadofAccount_FiveName))
       {
@@ -176,6 +177,8 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
 
           model.Vouchers.VoucherDetails.RemoveAll(e => e.HeadofAccount_FiveID == 0);
+          model.Vouchers.VoucherDetails.RemoveAll(e => e.HeadofAccount_FiveID == null || e.HeadofAccount_FiveID == 0);
+
           foreach (var detail in model.Vouchers.VoucherDetails)
           {
             detail.VoucherID = model.Vouchers.VoucherID;

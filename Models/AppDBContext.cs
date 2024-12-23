@@ -528,7 +528,12 @@ namespace Exampler_ERP.Models
      new Settings_ProcessType() { ProcessTypeID = 12, ProcessTypeName = "Vacation Settle", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_ProcessType() { ProcessTypeID = 13, ProcessTypeName = "PayRoll", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_ProcessType() { ProcessTypeID = 14, ProcessTypeName = "Employee Request", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_ProcessType() { ProcessTypeID = 15, ProcessTypeName = "Holiday Approval", ActiveYNID = 1, DeleteYNID = 0 }
+     new Settings_ProcessType() { ProcessTypeID = 15, ProcessTypeName = "Holiday Approval", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 16, ProcessTypeName = "Journal Voucher", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 17, ProcessTypeName = "Transfer Voucher", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 18, ProcessTypeName = "Payment Voucher", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 19, ProcessTypeName = "Received Voucher", ActiveYNID = 1, DeleteYNID = 0 }
+
      );
 
       modelBuilder.Entity<Settings_RoleType>().HasData(

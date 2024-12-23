@@ -71,7 +71,7 @@
                                     {
                                         <tr>
                                             <td>
-                                                <select class="form-select transaction-account" name="Vouchers.VoucherDetails[@i].DRCR">
+                                                <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[@i].DRCR">
                                                     <option value="">Select Type</option>
                                                     @foreach (var type in ViewBag.TransactionTypeList)
                                                     {
@@ -111,7 +111,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[0].TransactionTypeID">
+                                            <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[0].TransactionTypeID">
                                                 <option value="">Select Type</option>
                                                 @foreach (var type in ViewBag.TransactionTypeList)
                                                 {
@@ -249,6 +249,26 @@
             updateRowButtons();
             calculateTotals();
         });
+
+        //  $(document).on('change', '.transaction-Type', function () {
+        //     const tableBody = $('#JournalVoucherTable tbody');
+        //     const rowCount = tableBody.find('tr').length;
+        //     const row = Eval(rowCount)-1; 
+        //     const transactionType = $(this).val();
+        //     const debitField = row.find('.debit');
+        //     const creditField = row.find('.credit');
+
+        //     if (transactionType == "2") { // Credit
+        //         creditField.prop('disabled', false).val(''); // Enable Credit and reset value
+        //         debitField.prop('disabled', true).val('0'); // Disable Debit and set 0
+        //     } else if (transactionType == "1") { // Debit
+        //         debitField.prop('disabled', false).val(''); // Enable Debit and reset value
+        //         creditField.prop('disabled', true).val('0'); // Disable Credit and set 0
+        //     } else {
+        //         debitField.prop('disabled', false).val('');
+        //         creditField.prop('disabled', false).val('');
+        //     }
+        // });
 
         // Initial button setup
         updateRowButtons();
