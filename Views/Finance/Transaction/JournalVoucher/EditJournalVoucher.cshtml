@@ -73,13 +73,18 @@
                                     {
                                         <tr>
                                             <td>
-                                                <select class="form-select transaction-account" name="Vouchers.VoucherDetails[@i].DRCR" value="Vouchers.VoucherDetails[@i].DRCR">
+                                                <select  class="form-select transaction-account" name="Vouchers.VoucherDetails[@i].DRCR" value="Vouchers.VoucherDetails[@i].DRCR">
                                                     <option value="">Select Type</option>
                                                     @foreach (var type in ViewBag.TransactionTypeList)
                                                     {
-                                                        <option value="@type.Value">@type.Text</option>
-                                                     
-                                                  
+                                                        @if (type.Value == Model.Vouchers.VoucherDetails[i].DRCR.ToString())
+                                                        {
+                                                            <option value="@type.Value" selected>@type.Text</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@type.Value">@type.Text</option>
+                                                        }
                                                     }
                                                 </select>
                                             </td>
@@ -88,7 +93,14 @@
                                                     <option value="">Select Account</option>
                                                     @foreach (var type in ViewBag.HeadofAccount_FiveList)
                                                     {
-                                                        <option value="@type.Value">@type.Text</option>
+                                                      @if (type.Value == Model.Vouchers.VoucherDetails[i].HeadofAccount_FiveID.ToString())
+                                                        {
+                                                            <option value="@type.Value" selected>@type.Text</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@type.Value">@type.Text</option>
+                                                        }
                                                     }
                                                 </select>
                                             </td>
@@ -169,8 +181,10 @@
 </div>
 
 <script>
+    
     $(document).ready(function () {
         function calculateTotals() {
+
             let totalDebit = 0;
             let totalCredit = 0;
 
@@ -253,9 +267,11 @@
             updateRowButtons();
             calculateTotals();
         });
+        
 
         // Initial button setup
         updateRowButtons();
+        calculateTotals();
     });
 
 </script>

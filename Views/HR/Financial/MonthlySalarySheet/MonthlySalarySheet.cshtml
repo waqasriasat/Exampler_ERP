@@ -60,33 +60,15 @@
                             <label class="form-label fw-bold">Month Type</label>
                             <select name="MonthsTypeID" class="form-control">
                                 @foreach (var item in ViewBag.MonthsTypeList)
-
-
-
                                 {
-
-
-
                                     if (item.Value == ViewBag.MonthsTypeID?.ToString())
-
-
-
                                     {
                                         <option value="@item.Value" selected>@item.Text</option>
                                     }
-
-
-
                                     else
-
-
-
                                     {
                                         <option value="@item.Value">@item.Text</option>
                                     }
-
-
-
                                 }
                             </select>
                         </div>

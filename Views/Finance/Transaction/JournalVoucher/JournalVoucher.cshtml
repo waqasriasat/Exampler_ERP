@@ -17,9 +17,11 @@
                 $.get('@Url.Action("Edit", "JournalVoucher")', { id: VoucherId }, function (data) {
                     $('#editVoucherModalContainer').html(data);
                     $('#editVoucherModal').modal('show');
+                    // Trigger the calculation after modal is shown
+                    
                 });
             });
-
+            
             $('#editVoucherModalContainer').on('click', '#saveChanges', function () {
                 var formData = $('#editVoucherForm').serialize();
                 $.post('@Url.Action("Edit", "JournalVoucher")', formData, function (response) {
@@ -125,7 +127,7 @@
                     <div class="col-md-4 text-end">
                         <!-- Action Buttons -->
                         <button type="button" class="btn btn-primary addVoucherLink">Add New</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Voucher")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "JournalVoucher")'">Excel</button>
                         <button type="button" class="btn btn-outline-secondary" onclick="printVoucheres()">Print</button>
                     </div>
                 </div>

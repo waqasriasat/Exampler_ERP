@@ -3,6 +3,8 @@ using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
+using System.Diagnostics.Contracts;
 
 namespace Exampler_ERP.Controllers.Finance.Transaction
 {
@@ -171,7 +173,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
           VoucherType.VoucherNumber = newVoucherNumber;
           _appDBContext.Settings_VoucherTypes.Update(VoucherType);
 
-
+          model.Vouchers.FinalApprovalID = 0;
           model.Vouchers.VoucherDate = DateTime.Now;
           _appDBContext.FI_Vouchers.Add(model.Vouchers);
 
@@ -186,7 +188,66 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
           }
 
           await _appDBContext.SaveChangesAsync();
-          return Json(new { success = true, message = "Journal Voucher added successfully!" });
+
+          var voucherId = model.Vouchers.VoucherID;
+          if (voucherId > 0)
+          {
+            var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
+                                .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 16)
+                                .CountAsync();
+
+            if (processCount > 0)
+            {
+              var newProcessTypeApproval = new CR_ProcessTypeApproval
+              {
+                ProcessTypeID = 16,
+                Notes = "Create New Journal Voucher",
+                Date = DateTime.Now,
+                EmployeeID = HttpContext.Session.GetInt32("UserID") ?? default(int),
+                UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
+                TransactionID = voucherId
+              };
+
+              _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
+              await _appDBContext.SaveChangesAsync();
+
+              var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
+                                          .Where(pta => pta.ProcessTypeID == 16 && pta.Rank == 1)
+                                          .FirstOrDefaultAsync();
+
+              if (nextApprovalSetup != null)
+              {
+                var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
+                {
+                  ProcessTypeApprovalID = newProcessTypeApproval.ProcessTypeApprovalID,
+                  Date = DateTime.Now,
+                  RoleID = nextApprovalSetup.RoleTypeID,
+                  AppID = 0,
+                  AppUserID = 0,
+                  Notes = null,
+                  Rank = nextApprovalSetup.Rank
+                };
+
+                _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
+                await _appDBContext.SaveChangesAsync();
+              }
+              else
+              {
+                return Json(new { success = false, message = "Next approval setup not found." });
+              }
+            }
+            else
+            {
+              model.Vouchers.FinalApprovalID = 1;
+              _appDBContext.FI_Vouchers.Update(model.Vouchers);
+              await _appDBContext.SaveChangesAsync();
+              TempData["SuccessMessage"] = "Journal Voucher successfully. No process setup found, Journal Voucher Approved.";
+              return Json(new { success = true, message = "No process setup found, Journal Voucher Approved." });
+            }
+          }
+          TempData["SuccessMessage"] = "Journal Voucher Created successfully. Continue to the Approval Process Setup for Journal Voucher Approved.";
+
+          return Json(new { success = true});
         }
         catch (Exception ex)
         {
@@ -231,7 +292,80 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       return Json(accounts); 
     }
+    public async Task<IActionResult> ExportToExcel()
+    {
+      ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
+      // Fetching data with related entities
+      var Vouchers = await _appDBContext.FI_Vouchers
+          .Include(v => v.VoucherDetails)
+          .ThenInclude(d => d.HeadofAccount_Five)
+          .Include(v => v.VoucherType)
+          .Where(v => v.VoucherType.VoucherNature == "Journal")
+          .ToListAsync();
+
+      using (var package = new ExcelPackage())
+      {
+        var worksheet = package.Workbook.Worksheets.Add("JournalVoucher");
+
+        // Adding header row
+        worksheet.Cells["A1"].Value = "Voucher #";
+        worksheet.Cells["B1"].Value = "Date";
+        worksheet.Cells["C1"].Value = "Head of Account";
+        worksheet.Cells["D1"].Value = "Credit Amount";
+
+        worksheet.Cells["A1:D1"].Style.Font.Bold = true; // Bold header
+
+        int row = 2; // Starting row for data
+
+        foreach (var voucher in Vouchers)
+        {
+          var drDetails = voucher.VoucherDetails.FirstOrDefault(d => d.DRCR == 1);
+          var crDetails = voucher.VoucherDetails.FirstOrDefault(d => d.DRCR == 2);
+
+          worksheet.Cells[row, 1].Value = voucher.VoucherNo; // Voucher #
+          worksheet.Cells[row, 2].Value = voucher.VoucherDate; // Date
+
+          if (drDetails != null || crDetails != null)
+          {
+            string drHead = drDetails?.HeadofAccount_Five?.HeadofAccount_FiveName ?? "N/A";
+            string crHead = crDetails?.HeadofAccount_Five?.HeadofAccount_FiveName ?? "N/A";
+
+            worksheet.Cells[row, 3].Value = $"{drHead} -> {crHead}"; // Combined DR and CR Head of Account
+          }
+
+          if (crDetails != null)
+          {
+            worksheet.Cells[row, 4].Value = crDetails.CrAmt.HasValue
+                ? crDetails.CrAmt.Value.ToString("N2") // Credit Amount
+                : "0.00";
+          }
+
+          row++; // Move to the next row
+        }
+
+        worksheet.Cells.AutoFitColumns();
+
+        var stream = new MemoryStream();
+        package.SaveAs(stream);
+        stream.Position = 0;
+
+        string excelName = $"JournalVouchers-{DateTime.Now:yyyyMMddHHmmssfff}.xlsx";
+        return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+      }
+    }
+
+    public async Task<IActionResult> Print()
+    {
+      var VouchersQuery = _appDBContext.FI_Vouchers
+        .Include(v => v.VoucherDetails)
+        .ThenInclude(d => d.HeadofAccount_Five)
+        .Include(v => v.VoucherType)
+        .Where(v => v.VoucherType.VoucherNature == "Journal");
+
+      var Vouchers = await VouchersQuery.ToListAsync();
+      return View("~/Views/Finance/Transaction/JournalVoucher/PrintJournalVoucher.cshtml", Vouchers);
+    }
 
   }
 }
