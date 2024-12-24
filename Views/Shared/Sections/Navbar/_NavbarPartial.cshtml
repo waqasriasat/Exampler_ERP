@@ -94,7 +94,12 @@
                 'Vacation',   // 11
                 'VacationSettle', // 12
                 'PayRoll',    // 13
-                'EmployeeRequest' // 14
+                'EmployeeRequest', // 14
+                'ABEmployeeRequest', // 15
+                'JournalVoucher', // 16
+                'TransferVoucher', // 17
+                'PaymentVoucher', // 18
+                'ReceivedVoucher' // 19
             ];
             return names[processTypeID] || '';
         }
@@ -388,6 +393,51 @@
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Employee Request Approval</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countEmployeeRequest"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liEmployeeRequest" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="15">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Employee Request Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countEmployeeRequest"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liJournalVoucher" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="16">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Journal Voucher Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countJournalVoucher"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liTransferVoucher" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="17">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Transfer Voucher Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countTransferVoucher"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liPaymentVoucher" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="18">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Payment Voucher Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countPaymentVoucher"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liReceivedVoucher" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="19">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Received Voucher Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countReceivedVoucher"></label></span>
                         </span>
                     </a>
                 </li>

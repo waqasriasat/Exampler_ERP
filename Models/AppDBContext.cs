@@ -250,15 +250,16 @@ namespace Exampler_ERP.Models
 );
 
       modelBuilder.Entity<Settings_VoucherType>().HasData(
-   new Settings_VoucherType() { VoucherTypeID = 1, VoucherTypeName = "Bill Receipt Voucher", VoucherNature = "Receipt", VoucherPrefix= "BRV", VoucherNumber=0 },
+   new Settings_VoucherType() { VoucherTypeID = 1, VoucherTypeName = "Bank Receipt Voucher", VoucherNature = "Received", VoucherPrefix= "BRV", VoucherNumber=0 },
    new Settings_VoucherType() { VoucherTypeID = 2, VoucherTypeName = "Bank Payment Voucher", VoucherNature = "Payment", VoucherPrefix = "BPV", VoucherNumber = 0 },
    new Settings_VoucherType() { VoucherTypeID = 3, VoucherTypeName = "Sales Invoice", VoucherNature = "Journal", VoucherPrefix = "SIV", VoucherNumber = 0 },
    new Settings_VoucherType() { VoucherTypeID = 4, VoucherTypeName = "Cash Payment Voucher", VoucherNature = "Payment", VoucherPrefix = "CPV", VoucherNumber = 0 },
    new Settings_VoucherType() { VoucherTypeID = 5, VoucherTypeName = "Good Receiving Voucher", VoucherNature = "Payment", VoucherPrefix = "GRV", VoucherNumber = 0 },
    new Settings_VoucherType() { VoucherTypeID = 6, VoucherTypeName = "Purchase Invoice", VoucherNature = "Journal", VoucherPrefix = "PIV", VoucherNumber = 0 },
    new Settings_VoucherType() { VoucherTypeID = 7, VoucherTypeName = "Transfer", VoucherNature = "Transfer", VoucherPrefix = "TRF", VoucherNumber = 0 },
-   new Settings_VoucherType() { VoucherTypeID = 8, VoucherTypeName = "Payroll Vouchor", VoucherNature = "Payment", VoucherPrefix = "PAY", VoucherNumber = 0 },
-   new Settings_VoucherType() { VoucherTypeID = 9, VoucherTypeName = "Journal Voucher", VoucherNature = "Journal", VoucherPrefix = "JV", VoucherNumber = 0 }
+   new Settings_VoucherType() { VoucherTypeID = 8, VoucherTypeName = "Payroll Voucher", VoucherNature = "Payment", VoucherPrefix = "PAY", VoucherNumber = 0 },
+   new Settings_VoucherType() { VoucherTypeID = 9, VoucherTypeName = "Journal Voucher", VoucherNature = "Journal", VoucherPrefix = "JV", VoucherNumber = 0 },
+   new Settings_VoucherType() { VoucherTypeID = 10, VoucherTypeName = "Cash Receipt Voucher", VoucherNature = "Received", VoucherPrefix = "CRV", VoucherNumber = 0 }
 );
 
       modelBuilder.Entity<Settings_HeadofAccount_CategoryType>().HasData(

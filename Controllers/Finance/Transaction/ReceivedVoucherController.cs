@@ -4,17 +4,16 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
-using System.Diagnostics.Contracts;
 
 namespace Exampler_ERP.Controllers.Finance.Transaction
 {
-  public class JournalVoucherController : Controller
+  public class ReceivedVoucherController : Controller
   {
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
 
-    public JournalVoucherController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+    public ReceivedVoucherController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
@@ -26,7 +25,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
           .Include(v => v.VoucherDetails)
           .ThenInclude(d => d.HeadofAccount_Five)
           .Include(v => v.VoucherType)
-          .Where(v => v.VoucherType.VoucherNature == "Journal");
+          .Where(v => v.VoucherType.VoucherNature == "Received");
 
       if (!string.IsNullOrEmpty(searchHeadofAccount_FiveName))
       {
@@ -43,7 +42,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
         TempData["ErrorMessage"] = "No Voucher found with the name '" + searchHeadofAccount_FiveName + "'. Please check the name and try again.";
       }
 
-      return View("~/Views/Finance/Transaction/JournalVoucher/JournalVoucher.cshtml", Vouchers);
+      return View("~/Views/Finance/Transaction/ReceivedVoucher/ReceivedVoucher.cshtml", Vouchers);
     }
 
     [HttpGet]
@@ -60,21 +59,21 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       Vouchers.VoucherDetails.Add(new FI_VoucherDetail() { VoucherID = Vouchers.VoucherID });
 
-      var model = new TransferVoucherIndexViewModel
+      var model = new ReceivedVoucherIndexViewModel
       {
         Vouchers = Vouchers
       };
 
-      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Transfer();
+      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
-      ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
+      ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
 
-      return PartialView("~/Views/Finance/Transaction/JournalVoucher/EditJournalVoucher.cshtml", model);
+      return PartialView("~/Views/Finance/Transaction/ReceivedVoucher/EditReceivedVoucher.cshtml", model);
     }
 
 
     [HttpPost]
-    public async Task<IActionResult> Edit(JournalVoucherIndexViewModel Voucher)
+    public async Task<IActionResult> Edit(ReceivedVoucherIndexViewModel Voucher)
     {
       if (ModelState.IsValid)
       {
@@ -85,11 +84,11 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
         {
           ModelState.AddModelError("TotalMismatch", "Total Debit and Credit amounts must be equal.");
 
-          ViewBag.VoucherTypeList = await _utils.GetVoucherType_Journal();
+          ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
           ViewBag.TransactionTypeList = await _utils.GetTransactionType();
           ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
 
-          return PartialView("~/Views/Finance/Transaction/JournalVoucher/EditJournalVoucher.cshtml", Voucher);
+          return PartialView("~/Views/Finance/Transaction/ReceivedVoucher/EditReceivedVoucher.cshtml", Voucher);
         }
 
         var existingVoucher = await _appDBContext.FI_Vouchers
@@ -124,7 +123,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
           await _appDBContext.SaveChangesAsync();
 
-          return Json(new { success = true, message = "Journal Voucher Edited successfully!" });
+          return Json(new { success = true, message = "Received Voucher Edited successfully!" });
         }
         else
         {
@@ -132,11 +131,11 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
         }
       }
 
-      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Journal();
+      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
 
-      return PartialView("~/Views/Finance/Transaction/JournalVoucher/EditJournalVoucher.cshtml", Voucher);
+      return PartialView("~/Views/Finance/Transaction/ReceivedVoucher/EditReceivedVoucher.cshtml", Voucher);
     }
 
 
@@ -144,21 +143,21 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
     [HttpGet]
     public async Task<IActionResult> Create()
     {
-      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Journal();
+      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
 
       FI_Voucher Vouchers = new FI_Voucher();
       Vouchers.VoucherDetails.Add(new FI_VoucherDetail() { VoucherID = 1 });
-      var model = new JournalVoucherIndexViewModel
+      var model = new ReceivedVoucherIndexViewModel
       {
         Vouchers = Vouchers
       };
 
-      return PartialView("~/Views/Finance/Transaction/JournalVoucher/AddJournalVoucher.cshtml", model);
+      return PartialView("~/Views/Finance/Transaction/ReceivedVoucher/AddReceivedVoucher.cshtml", model);
     }
     [HttpPost]
-    public async Task<IActionResult> Create(JournalVoucherIndexViewModel model)
+    public async Task<IActionResult> Create(ReceivedVoucherIndexViewModel model)
     {
       if (ModelState.IsValid)
       {
@@ -193,15 +192,15 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
           if (voucherId > 0)
           {
             var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
-                                .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 16)
+                                .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 19)
                                 .CountAsync();
 
             if (processCount > 0)
             {
               var newProcessTypeApproval = new CR_ProcessTypeApproval
               {
-                ProcessTypeID = 16,
-                Notes = "Create New Journal Voucher",
+                ProcessTypeID = 19,
+                Notes = "Create New Received Voucher",
                 Date = DateTime.Now,
                 EmployeeID = HttpContext.Session.GetInt32("UserID") ?? default(int),
                 UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
@@ -212,7 +211,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
               await _appDBContext.SaveChangesAsync();
 
               var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
-                                          .Where(pta => pta.ProcessTypeID == 16 && pta.Rank == 1)
+                                          .Where(pta => pta.ProcessTypeID == 19 && pta.Rank == 1)
                                           .FirstOrDefaultAsync();
 
               if (nextApprovalSetup != null)
@@ -241,22 +240,22 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
               model.Vouchers.FinalApprovalID = 1;
               _appDBContext.FI_Vouchers.Update(model.Vouchers);
               await _appDBContext.SaveChangesAsync();
-              TempData["SuccessMessage"] = "Journal Voucher successfully. No process setup found, Journal Voucher Approved.";
-              return Json(new { success = true, message = "No process setup found, Journal Voucher Approved." });
+              TempData["SuccessMessage"] = "Received Voucher successfully. No process setup found, Received Voucher Approved.";
+              return Json(new { success = true, message = "No process setup found, Received Voucher Approved." });
             }
           }
-          TempData["SuccessMessage"] = "Journal Voucher Created successfully. Continue to the Approval Process Setup for Journal Voucher Approved.";
+          TempData["SuccessMessage"] = "Received Voucher Created successfully. Continue to the Approval Process Setup for Received Voucher Approved.";
 
-          return Json(new { success = true});
+          return Json(new { success = true });
         }
         catch (Exception ex)
         {
           return Json(new { success = false, message = "Error: " + ex.Message });
         }
-        
+
       }
 
-      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Journal();
+      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
 
@@ -267,10 +266,10 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       if (model.Vouchers == null)
       {
-        model.Vouchers = new FI_Voucher(); 
+        model.Vouchers = new FI_Voucher();
       }
 
-      return PartialView("~/Views/Finance/Transaction/JournalVoucher/AddJournalVoucher.cshtml", model);
+      return PartialView("~/Views/Finance/Transaction/ReceivedVoucher/AddReceivedVoucher.cshtml", model);
     }
 
     [HttpGet]
@@ -282,7 +281,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
       }
 
       var accounts = await _appDBContext.Settings_HeadofAccount_Fives
-          .Where(a => a.HeadofAccount_FiveName.Contains(searchTerm)) 
+          .Where(a => a.HeadofAccount_FiveName.Contains(searchTerm))
           .Select(a => new
           {
             id = a.HeadofAccount_FiveID,
@@ -290,7 +289,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
           })
           .ToListAsync();
 
-      return Json(accounts); 
+      return Json(accounts);
     }
     public async Task<IActionResult> ExportToExcel()
     {
@@ -301,12 +300,12 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
           .Include(v => v.VoucherDetails)
           .ThenInclude(d => d.HeadofAccount_Five)
           .Include(v => v.VoucherType)
-          .Where(v => v.VoucherType.VoucherNature == "Journal")
+          .Where(v => v.VoucherType.VoucherNature == "Received")
           .ToListAsync();
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("JournalVoucher");
+        var worksheet = package.Workbook.Worksheets.Add("ReceivedVoucher");
 
         // Adding header row
         worksheet.Cells["A1"].Value = "Voucher #";
@@ -350,7 +349,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
         package.SaveAs(stream);
         stream.Position = 0;
 
-        string excelName = $"JournalVouchers-{DateTime.Now:yyyyMMddHHmmssfff}.xlsx";
+        string excelName = $"ReceivedVouchers-{DateTime.Now:yyyyMMddHHmmssfff}.xlsx";
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }
     }
@@ -361,10 +360,10 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
         .Include(v => v.VoucherDetails)
         .ThenInclude(d => d.HeadofAccount_Five)
         .Include(v => v.VoucherType)
-        .Where(v => v.VoucherType.VoucherNature == "Journal");
+        .Where(v => v.VoucherType.VoucherNature == "Received");
 
       var Vouchers = await VouchersQuery.ToListAsync();
-      return View("~/Views/Finance/Transaction/JournalVoucher/PrintJournalVoucher.cshtml", Vouchers);
+      return View("~/Views/Finance/Transaction/ReceivedVoucher/PrintReceivedVoucher.cshtml", Vouchers);
     }
 
   }

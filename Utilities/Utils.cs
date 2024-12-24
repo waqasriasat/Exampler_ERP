@@ -665,6 +665,31 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
+    public async Task<List<SelectListItem>> GetHeadofAccount_FiveOnlyCashandBank()
+    {
+      try
+      {
+        var fiveList = await _appDBContext.Settings_HeadofAccount_Fives
+             .AsNoTracking()
+             .Include(d => d.HeadofAccount_Four)
+             .ThenInclude(f => f.HeadofAccount_Third) // Ensures nested inclusion
+             .Where(d => d.HeadofAccount_Four.HeadofAccount_ThirdID == 3)
+             .Select(d => new SelectListItem
+             {
+               Value = d.HeadofAccount_FiveID.ToString(),
+               Text = d.HeadofAccount_FiveName
+             })
+             .ToListAsync();
+
+
+        return fiveList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
     public async Task<List<SelectListItem>> Get_FI_BankList()
     {
       try
@@ -713,6 +738,72 @@ namespace Exampler_ERP.Utilities
       {
         var VoucherTypeList = await _appDBContext.Settings_VoucherTypes
           .Where(d => d.VoucherNature == "Journal")
+            .Select(d => new SelectListItem
+            {
+              Value = d.VoucherTypeID.ToString(),
+              Text = d.VoucherTypeName
+            })
+            .ToListAsync();
+
+
+        return VoucherTypeList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    public async Task<List<SelectListItem>> GetVoucherType_Transfer()
+    {
+      try
+      {
+        var VoucherTypeList = await _appDBContext.Settings_VoucherTypes
+          .Where(d => d.VoucherNature == "Transfer")
+            .Select(d => new SelectListItem
+            {
+              Value = d.VoucherTypeID.ToString(),
+              Text = d.VoucherTypeName
+            })
+            .ToListAsync();
+
+
+        return VoucherTypeList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    public async Task<List<SelectListItem>> GetVoucherType_Payment()
+    {
+      try
+      {
+        var VoucherTypeList = await _appDBContext.Settings_VoucherTypes
+          .Where(d => d.VoucherNature == "Payment")
+            .Select(d => new SelectListItem
+            {
+              Value = d.VoucherTypeID.ToString(),
+              Text = d.VoucherTypeName
+            })
+            .ToListAsync();
+
+
+        return VoucherTypeList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    public async Task<List<SelectListItem>> GetVoucherType_Received()
+    {
+      try
+      {
+        var VoucherTypeList = await _appDBContext.Settings_VoucherTypes
+          .Where(d => d.VoucherNature == "Received")
             .Select(d => new SelectListItem
             {
               Value = d.VoucherTypeID.ToString(),

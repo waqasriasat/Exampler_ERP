@@ -1,4 +1,4 @@
-@model Exampler_ERP.Models.Temp.JournalVoucherIndexViewModel
+@model Exampler_ERP.Models.Temp.TransferVoucherIndexViewModel
 
 <style>
     .ui-autocomplete {
@@ -10,12 +10,12 @@
     <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="editVoucherModalLabel"><i class="fas fa-key me-2"></i>Edit Journal Voucher</h5>
+                <h5 class="modal-title" id="editVoucherModalLabel"><i class="fas fa-key me-2"></i>Edit Transfer Voucher</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="editVoucherForm" enctype="multipart/form-data" asp-action="Edit" method="post">
-                    @Html.Partial("~/Views/Finance/Transaction/JournalVoucher/_EditJournalVoucher.cshtml", Model)
+                    @Html.Partial("~/Views/Finance/Transaction/TransferVoucher/_EditTransferVoucher.cshtml", Model)
                 </form>
             </div>
             <div class="modal-footer">
@@ -27,14 +27,14 @@
 </div>
 
 <script>
-    
+
     $(document).ready(function () {
         function calculateTotals() {
 
             let totalDebit = 0;
             let totalCredit = 0;
 
-            $('#JournalVoucherTable tbody tr').each(function () {
+            $('#TransferVoucherTable tbody tr').each(function () {
                 const debit = parseFloat($(this).find('.debit').val()) || 0;
                 const credit = parseFloat($(this).find('.credit').val()) || 0;
 
@@ -53,7 +53,7 @@
         }
 
         function updateRowButtons() {
-            const rows = $('#JournalVoucherTable tbody tr');
+            const rows = $('#TransferVoucherTable tbody tr');
             rows.find('.add-row').remove();
             rows.find('.remove-row').remove();
 
@@ -71,7 +71,7 @@
         $(document).on('input', '.debit, .credit', calculateTotals);
 
         $(document).on('click', '.add-row', function () {
-            const tableBody = $('#JournalVoucherTable tbody');
+            const tableBody = $('#TransferVoucherTable tbody');
             const rowCount = tableBody.find('tr').length;
 
             const newRow = `<tr>
@@ -80,7 +80,7 @@
                             <option value="">Select Type</option>
     @foreach (var type in ViewBag.TransactionTypeList)
     {
-                                        <option value="@type.Value">@type.Text</option>
+                                            <option value="@type.Value">@type.Text</option>
     }
                         </select>
                     </td>
@@ -89,7 +89,7 @@
                             <option value="">Select Account</option>
     @foreach (var type in ViewBag.HeadofAccount_FiveList)
     {
-                                        <option value="@type.Value">@type.Text</option>
+                                            <option value="@type.Value">@type.Text</option>
     }
                         </select>
                     </td>
@@ -113,7 +113,7 @@
             updateRowButtons();
             calculateTotals();
         });
-        
+
 
         // Initial button setup
         updateRowButtons();

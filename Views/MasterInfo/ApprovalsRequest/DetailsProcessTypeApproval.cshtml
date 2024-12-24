@@ -98,23 +98,23 @@
                     else if (ProcessTypeID == 16)
                     {
                         <h5><i class="fas fa-file-contract"></i> Journal Voucher</h5>
-                        @Html.Partial("~/Views/Finance/Transaction/JournalVoucher/_EditJournalVoucher.cshtml", (Exampler_ERP.Models.HR_EmployeeRequestTypeApproval)Model)
+                        @Html.Partial("~/Views/Finance/Transaction/JournalVoucher/_EditJournalVoucher.cshtml", (Exampler_ERP.Models.Temp.JournalVoucherIndexViewModel)Model)
                     }
                     else if (ProcessTypeID == 17)
                     {
                         <h5><i class="fas fa-file-contract"></i> Transfer Voucher</h5>
-                        @Html.Partial("~/Views/Finance/Transaction/TransferVoucher/_EditJournalVoucher.cshtml", (Exampler_ERP.Models.HR_EmployeeRequestTypeApproval)Model)
+                        @Html.Partial("~/Views/Finance/Transaction/TransferVoucher/_EditTransferVoucher.cshtml", (Exampler_ERP.Models.Temp.TransferVoucherIndexViewModel)Model)
                     }
                     else if (ProcessTypeID == 18)
                     {
                         <h5><i class="fas fa-file-contract"></i> Payment Voucher</h5>
-                        @Html.Partial("~/Views/Finance/Transaction/PaymentVoucher/_EditJournalVoucher.cshtml", (Exampler_ERP.Models.HR_EmployeeRequestTypeApproval)Model)
+                        @Html.Partial("~/Views/Finance/Transaction/PaymentVoucher/_EditPaymentVoucher.cshtml", (Exampler_ERP.Models.Temp.PaymentVoucherIndexViewModel)Model)
                     }
                     else if (ProcessTypeID == 19)
 
                     {
                         <h5><i class="fas fa-file-contract"></i> Received Voucher</h5>
-                        @Html.Partial("~/Views/Finance/Transaction/ReceivedVoucher/_EditJournalVoucher.cshtml", (Exampler_ERP.Models.HR_EmployeeRequestTypeApproval)Model)
+                        @Html.Partial("~/Views/Finance/Transaction/ReceivedVoucher/_EditReceivedVoucher.cshtml", (Exampler_ERP.Models.Temp.ReceivedVoucherIndexViewModel)Model)
                     }
                 </form>
             </div>

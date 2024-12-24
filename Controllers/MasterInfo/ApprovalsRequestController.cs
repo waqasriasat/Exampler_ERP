@@ -623,6 +623,73 @@ namespace Exampler_ERP.Controllers.MasterInfo
                   //  await _appDBContext.SaveChangesAsync();
                   //}
                 }
+                if (ProcessTypeID == 15)
+                {
+                }
+                if (ProcessTypeID == 16)
+                {
+                  var vouchers = await _appDBContext.FI_Vouchers
+                                                           .Where(u => u.VoucherID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+                  if (vouchers != null)
+                  {
+                    vouchers.FinalApprovalID = 1;
+                    vouchers.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(vouchers);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 17)
+                {
+                  var vouchers = await _appDBContext.FI_Vouchers
+                                                           .Where(u => u.VoucherID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+                  if (vouchers != null)
+                  {
+                    vouchers.FinalApprovalID = 1;
+                    vouchers.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(vouchers);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 18)
+                {
+                  var vouchers = await _appDBContext.FI_Vouchers
+                                                           .Where(u => u.VoucherID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+                  if (vouchers != null)
+                  {
+                    vouchers.FinalApprovalID = 1;
+                    vouchers.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(vouchers);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 19)
+                {
+                  var vouchers = await _appDBContext.FI_Vouchers
+                                                           .Where(u => u.VoucherID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+                  if (vouchers != null)
+                  {
+                    vouchers.FinalApprovalID = 1;
+                    vouchers.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(vouchers);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
               }
               TempData["SuccessMessage"] = "Successfully Approved.";
               return Json(new { success = true });
@@ -893,6 +960,73 @@ namespace Exampler_ERP.Controllers.MasterInfo
             //  await _appDBContext.SaveChangesAsync();
             //}
           }
+          if (ProcessTypeID == 15)
+          {
+          }
+          if (ProcessTypeID == 16)
+          {
+            var vouchers = await _appDBContext.FI_Vouchers
+                                                           .Where(u => u.VoucherID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+            if (vouchers != null)
+            {
+              vouchers.FinalApprovalID = 2;
+              vouchers.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+              _appDBContext.Update(vouchers);
+              await _appDBContext.SaveChangesAsync();
+            }
+          }
+          if (ProcessTypeID == 17)
+          {
+            var vouchers = await _appDBContext.FI_Vouchers
+                                                           .Where(u => u.VoucherID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+            if (vouchers != null)
+            {
+              vouchers.FinalApprovalID = 2;
+              vouchers.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+              _appDBContext.Update(vouchers);
+              await _appDBContext.SaveChangesAsync();
+            }
+          }
+          if (ProcessTypeID == 18)
+          {
+            var vouchers = await _appDBContext.FI_Vouchers
+                                                           .Where(u => u.VoucherID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+            if (vouchers != null)
+            {
+              vouchers.FinalApprovalID = 2;
+              vouchers.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+              _appDBContext.Update(vouchers);
+              await _appDBContext.SaveChangesAsync();
+            }
+          }
+          if (ProcessTypeID == 19)
+          {
+            var vouchers = await _appDBContext.FI_Vouchers
+                                                           .Where(u => u.VoucherID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+            if (vouchers != null)
+            {
+              vouchers.FinalApprovalID = 2;
+              vouchers.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+              _appDBContext.Update(vouchers);
+              await _appDBContext.SaveChangesAsync();
+            }
+          }
         }
         return Json(new { success = true });
       }
@@ -1158,6 +1292,105 @@ namespace Exampler_ERP.Controllers.MasterInfo
         //                              .Include(c => c.Settings_EmployeeRequestType)
         //                             .FirstOrDefaultAsync();
         //return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", EmployeeRequests);
+      }
+      if (processTypeID == 15)
+      {
+      }
+      if (processTypeID == 16)
+      {
+        var Vouchers = await _appDBContext.FI_Vouchers
+                  .Include(v => v.VoucherDetails)
+                  .FirstOrDefaultAsync(v => v.VoucherID == transactionID);
+
+        if (Vouchers == null)
+        {
+          return NotFound();
+        }
+
+        Vouchers.VoucherDetails.Add(new FI_VoucherDetail() { VoucherID = Vouchers.VoucherID });
+
+        var model = new JournalVoucherIndexViewModel
+        {
+          Vouchers = Vouchers
+        };
+
+        ViewBag.VoucherTypeList = await _utils.GetVoucherType_Journal();
+        ViewBag.TransactionTypeList = await _utils.GetTransactionType();
+        ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", model);
+      }
+      if (processTypeID == 17)
+      {
+        var Vouchers = await _appDBContext.FI_Vouchers
+                  .Include(v => v.VoucherDetails)
+                  .FirstOrDefaultAsync(v => v.VoucherID == transactionID);
+
+        if (Vouchers == null)
+        {
+          return NotFound();
+        }
+
+        Vouchers.VoucherDetails.Add(new FI_VoucherDetail() { VoucherID = Vouchers.VoucherID });
+
+        var model = new TransferVoucherIndexViewModel
+        {
+          Vouchers = Vouchers
+        };
+
+        ViewBag.VoucherTypeList = await _utils.GetVoucherType_Transfer();
+        ViewBag.TransactionTypeList = await _utils.GetTransactionType();
+        ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", model);
+      }
+      if (processTypeID == 18)
+      {
+        var Vouchers = await _appDBContext.FI_Vouchers
+                  .Include(v => v.VoucherDetails)
+                  .FirstOrDefaultAsync(v => v.VoucherID == transactionID);
+
+        if (Vouchers == null)
+        {
+          return NotFound();
+        }
+
+        Vouchers.VoucherDetails.Add(new FI_VoucherDetail() { VoucherID = Vouchers.VoucherID });
+
+        var model = new PaymentVoucherIndexViewModel
+        {
+          Vouchers = Vouchers
+        };
+
+        ViewBag.VoucherTypeList = await _utils.GetVoucherType_Journal();
+        ViewBag.TransactionTypeList = await _utils.GetTransactionType();
+        ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", model);
+      }
+      if (processTypeID == 19)
+      {
+        var Vouchers = await _appDBContext.FI_Vouchers
+                  .Include(v => v.VoucherDetails)
+                  .FirstOrDefaultAsync(v => v.VoucherID == transactionID);
+
+        if (Vouchers == null)
+        {
+          return NotFound();
+        }
+
+        Vouchers.VoucherDetails.Add(new FI_VoucherDetail() { VoucherID = Vouchers.VoucherID });
+
+        var model = new ReceivedVoucherIndexViewModel
+        {
+          Vouchers = Vouchers
+        };
+
+        ViewBag.VoucherTypeList = await _utils.GetVoucherType_Journal();
+        ViewBag.TransactionTypeList = await _utils.GetTransactionType();
+        ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", model);
       }
       // Fallback view if no ProcessTypeID matches
       return View("~/Views/MasterInfo/ApprovalsRequest/ApprovalsRequest.cshtml", result);

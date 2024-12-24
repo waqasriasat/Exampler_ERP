@@ -1,0 +1,68 @@
+@model IEnumerable<Exampler_ERP.Models.FI_Voucher>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Payment Voucher</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Payment Voucher List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Voucher #</th>
+                <th>Date</th>
+                <th>Head of Account</th>
+                <th>Credit Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var voucher in Model)
+            {
+                <tr>
+                    <td>@voucher.VoucherNo</td>
+                    <td>@voucher.VoucherDate</td>
+                    <td>
+                        @* Extract DR and CR details *@
+                        @{
+                            var drDetails = voucher.VoucherDetails.FirstOrDefault(d => d.DRCR == 1);
+                            var crDetails = voucher.VoucherDetails.FirstOrDefault(d => d.DRCR == 2);
+                            var drHead = drDetails?.HeadofAccount_Five?.HeadofAccount_FiveName ?? "N/A";
+                            var crHead = crDetails?.HeadofAccount_Five?.HeadofAccount_FiveName ?? "N/A";
+                        }
+                        <span>@drHead -> @crHead</span>
+                    </td>
+                    <td>
+                        @(crDetails?.CrAmt.HasValue == true
+                            ? crDetails.CrAmt.Value.ToString("N2")
+                            : "0.00")
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>
