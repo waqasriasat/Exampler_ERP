@@ -204,7 +204,11 @@
                                    currentPage.StartsWith("/CashAgainstSale/Index") || currentPage.StartsWith("/HeadofAccount_CategoryType/Index") ||
                                    currentPage.StartsWith("/HeadofAccount_First/Index") || currentPage.StartsWith("/HeadofAccount_Second/Index") ||
                                    currentPage.StartsWith("/HeadofAccount_Third/Index") || currentPage.StartsWith("/HeadofAccount_Four/Index") ||
-                                   currentPage.StartsWith("/HeadofAccount_Five/Index") || currentPage.StartsWith("/VoucherType/Index") ? " active open" : "")'>
+                                   currentPage.StartsWith("/HeadofAccount_Five/Index") || currentPage.StartsWith("/VoucherType/Index")  ||
+                                   currentPage.StartsWith("/Bank/Index") || currentPage.StartsWith("/ChequeBook/Index") ||
+                                   currentPage.StartsWith("/Vendor/Index") || currentPage.StartsWith("/JournalVoucher/Index") ||
+                                   currentPage.StartsWith("/TransferVoucher/Index") || currentPage.StartsWith("/PaymentVoucher/Index") ||
+                                   currentPage.StartsWith("/ReceivedVoucher/Index")? " active open" : "")'>
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-dollar"></i>
                     <div>Finance</div>
@@ -219,12 +223,15 @@
                             <div>Master Information</div>
                         </a>
                     </li>
-                    <li class='menu-item@(currentPage == "/FI_Management_Dashboard/Index" ? " active" : "")'>
+                    <li class='menu-item@(currentPage == "/FI_Management_Dashboard/Index"|| currentPage == "/Bank/Index" ||
+                                      currentPage == "/ChequeBook/Index" || currentPage == "/Vendor/Index" ? " active" : "")'>
                         <a asp-controller="FI_Management_Dashboard" asp-action="Index" class="menu-link">
                             <div>Management</div>
                         </a>
                     </li>
-                    <li class='menu-item@(currentPage == "/FI_Transaction_Dashboard/Index" ? " active" : "")'>
+                    <li class='menu-item@(currentPage == "/FI_Transaction_Dashboard/Index"|| currentPage == "/JournalVoucher/Index" ||
+                                      currentPage == "/TransferVoucher/Index" || currentPage == "/PaymentVoucher/Index"||
+                                      currentPage == "/ReceivedVoucher/Index" ? " active" : "")'>
                         <a asp-controller="FI_Transaction_Dashboard" asp-action="Index" class="menu-link">
                             <div>Transaction</div>
                         </a>

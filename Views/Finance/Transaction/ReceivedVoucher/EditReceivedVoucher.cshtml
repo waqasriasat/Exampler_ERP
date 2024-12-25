@@ -118,57 +118,65 @@
 
             calculateTotals();
         });
-        // $(document).on('click', '.populate-fields', function () {
-        //     const firstRow = $('#ReceivedVoucherTable tbody tr').eq(0);
-        //     const secondRow = $('#ReceivedVoucherTable tbody tr').eq(1);
-        //     debugger;
-        //     const debitHead = firstRow.find('.transaction-account').val();
-        //     const creditHead = secondRow.find('.transaction-account').val();
-        //     const debitAmount = parseFloat(firstRow.find('.debit').val()) || 0;
-
-        //     $('#HeadofAccountid_Debit').val(debitHead).change();
-        //     $('#HeadofAccountid_Credit').val(creditHead).change();
-        //     $('#InstrumentAmount').val(debitAmount.toFixed(2));
-        //     calculateTotals();
-        // });
-        $(document).on('click', '.populate-fields', function () {
-            debugger;
-                const firstRow = $('#ReceivedVoucherTable tbody tr').eq(0);
-                const secondRow = $('#ReceivedVoucherTable tbody tr').eq(1);
-
-            const rows = $('#ReceivedVoucherTable tbody .transaction-account');
-            const debitHeadValue = $('#ReceivedVoucherTable tbody .transaction-account')
-                .eq(1)
-                .find('option:selected')
-                .val();
-            const debitHeadText = $('#ReceivedVoucherTable tbody .transaction-account')
-                .eq(1)
-                .find('option:selected')
-                .text();
-
-            const creditHeadValue = $('#ReceivedVoucherTable tbody .transaction-account')
-                .eq(1)
-                .find('option:selected')
-                .val();
-            const creditHeadText = $('#ReceivedVoucherTable tbody .transaction-account')
-                .eq(1)
-                .find('option:selected')
-                .text();
-            const instrumentAmount = parseFloat(
-                $('#ReceivedVoucherTable tbody .debit').eq(0).val()
-            ) || 0;
-
-            // Set the form values
-            $('#HeadofAccountid_Debit').val(debitHeadValue).change();
-            $('#HeadofAccountid_Debit option:selected').text(debitHeadText);
-
-            $('#HeadofAccountid_Credit').val(creditHeadValue).change();
-            $('#HeadofAccountid_Credit option:selected').text(creditHeadText);
-
-            $('#InstrumentAmount').val(instrumentAmount.toFixed(2));
-        });
+      
 
 
     });
+    $(document).ready(function () {
+        const firstRow = $('#ReceivedVoucherTable tbody tr').eq(0);
+        const secondRow = $('#ReceivedVoucherTable tbody tr').eq(1);
 
+        const rows = $('#ReceivedVoucherTable tbody .transaction-account');
+        const debitHeadValue = $('#ReceivedVoucherTable tbody .transaction-account')
+            .eq(1)
+            .find('option:selected')
+            .val();
+        const debitHeadText = $('#ReceivedVoucherTable tbody .transaction-account')
+            .eq(1)
+            .find('option:selected')
+            .text();
+
+        const creditHeadValue = $('#ReceivedVoucherTable tbody .transaction-account')
+            .eq(3)
+            .find('option:selected')
+            .val();
+        const creditHeadText = $('#ReceivedVoucherTable tbody .transaction-account')
+            .eq(3)
+            .find('option:selected')
+            .text();
+        const instrumentAmount = parseFloat(
+            $('#ReceivedVoucherTable tbody .debit').eq(0).val()
+        ) || 0;
+
+        // Set the form values
+        $('#HeadofAccountid_Debit').val(debitHeadValue).change();
+        $('#HeadofAccountid_Debit option:selected').text(debitHeadText);
+
+        $('#HeadofAccountid_Credit').val(creditHeadValue).change();
+        $('#HeadofAccountid_Credit option:selected').text(creditHeadText);
+
+        $('#InstrumentAmount').val(instrumentAmount.toFixed(2));
+        calculateTotals();
+        function calculateTotals() {
+            let totalDebit = 0;
+            let totalCredit = 0;
+
+            $('#ReceivedVoucherTable tbody tr').each(function () {
+                const debit = parseFloat($(this).find('.debit').val()) || 0;
+                const credit = parseFloat($(this).find('.credit').val()) || 0;
+
+                totalDebit += debit;
+                totalCredit += credit;
+            });
+
+            $('#TotalDrAmt').val(totalDebit.toFixed(2));
+            $('#TotalCrAmt').val(totalCredit.toFixed(2));
+
+            if (totalDebit !== totalCredit) {
+                $('#saveNewVoucher').prop('disabled', true);
+            } else {
+                $('#saveNewVoucher').prop('disabled', false);
+            }
+        }
+    });
 </script>
