@@ -539,6 +539,23 @@ namespace Exampler_ERP.Utilities
         throw; // Rethrow the exception to handle it at a higher level
       }
     }
+    public async Task<List<SelectListItem>> GetIntrumentType()
+    {
+      try
+      {
+        var TransactionTypeList = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "1", Text = "Cash" },
+            new SelectListItem { Value = "2", Text = "Chaque" }
+        };
+
+        return await Task.FromResult(TransactionTypeList);
+      }
+      catch (Exception ex)
+      {
+        throw; // Rethrow the exception to handle it at a higher level
+      }
+    }
     public async Task<List<SelectListItem>> GetHeadofAccount_CategoryType()
     {
       try
@@ -674,6 +691,29 @@ namespace Exampler_ERP.Utilities
              .Include(d => d.HeadofAccount_Four)
              .ThenInclude(f => f.HeadofAccount_Third) // Ensures nested inclusion
              .Where(d => d.HeadofAccount_Four.HeadofAccount_ThirdID == 3)
+             .Select(d => new SelectListItem
+             {
+               Value = d.HeadofAccount_FiveID.ToString(),
+               Text = d.HeadofAccount_FiveName
+             })
+             .ToListAsync();
+
+
+        return fiveList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+      
+    }
+    public async Task<List<SelectListItem>> GetHeadofAccount_FiveOnlyReceivable()
+    {
+      try
+      {
+        var fiveList = await _appDBContext.Settings_HeadofAccount_Fives
+             .Where(d => d.CategoryTypeID == 1)
              .Select(d => new SelectListItem
              {
                Value = d.HeadofAccount_FiveID.ToString(),

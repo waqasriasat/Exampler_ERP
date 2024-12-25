@@ -24,6 +24,10 @@ namespace Exampler_ERP.Models
     public string? InvoiceNo { get; set; }
     public string? PVNo { get; set; }
     public string? VStatus { get; set; }
+    public int? InstruType { get; set; }
+    public string? InstruNumber { get; set; }
+    public string? InstruDetail { get; set; }
+    public DateTime? InstruDate { get; set; }
     public int? FinalApprovalID { get; set; } //didn't use in registration
     public int? ProcessTypeApprovalID { get; set; } //didn't use in registration
     public virtual List<FI_VoucherDetail> VoucherDetails { get; set; } = new List<FI_VoucherDetail>();

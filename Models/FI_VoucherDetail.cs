@@ -19,7 +19,6 @@ namespace Exampler_ERP.Models
     public int? DRCR { get; set; } // 1=Debit/2=Credit
     public double? DrAmt { get; set; }
     public double? CrAmt { get; set; }
-    public string? InstruAccount { get; set; }
-    public DateTime? InstruDate { get; set; }
+    
   }
 }

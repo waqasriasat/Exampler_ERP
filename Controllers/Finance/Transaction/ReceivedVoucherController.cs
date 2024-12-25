@@ -66,6 +66,9 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
+      ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
+      ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyReceivable();
+      ViewBag.IntrumentTypeList = await _utils.GetIntrumentType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
 
       return PartialView("~/Views/Finance/Transaction/ReceivedVoucher/EditReceivedVoucher.cshtml", model);
@@ -133,6 +136,9 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
+      ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
+      ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyReceivable();
+      ViewBag.IntrumentTypeList = await _utils.GetIntrumentType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
 
       return PartialView("~/Views/Finance/Transaction/ReceivedVoucher/EditReceivedVoucher.cshtml", Voucher);
@@ -145,10 +151,13 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
     {
       ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
+      ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
+      ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyReceivable();
+      ViewBag.IntrumentTypeList = await _utils.GetIntrumentType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
 
       FI_Voucher Vouchers = new FI_Voucher();
-      Vouchers.VoucherDetails.Add(new FI_VoucherDetail() { VoucherID = 1 });
+      Vouchers.VoucherDetails.Add(new FI_VoucherDetail() { VoucherID = 0 });
       var model = new ReceivedVoucherIndexViewModel
       {
         Vouchers = Vouchers
@@ -257,6 +266,9 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
+      ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
+      ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyReceivable();
+      ViewBag.IntrumentTypeList = await _utils.GetIntrumentType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
 
       if (model.Vouchers.VoucherDetails == null || !model.Vouchers.VoucherDetails.Any())
