@@ -18,26 +18,66 @@
 </div>
 
 <div class="row mb-3">
-    <div class="col-md-3">
-        <label asp-for="Vouchers.PONo" class="form-label fw-bold">PO No</label>
-        <input asp-for="Vouchers.PONo" type="text" class="form-control form-control-lg" />
+    <div class="col-md-6">
+        <label for="HeadofAccountid_Debit" class="form-label fw-bold">Head of Account (Debit)</label>
+        <select id="HeadofAccountid_Debit" name="HeadofAccountid_Debit" class="form-select form-select-lg">
+            <option value="" selected>Select Head of Account</option>
+            @foreach (var type in ViewBag.HeadofAccount_DebitList)
+            {
+                <option value="@type.Value">@type.Text</option>
+            }
+        </select>
     </div>
-    <div class="col-md-3">
-        <label asp-for="Vouchers.GRNNo" class="form-label fw-bold">GRN No</label>
-        <input asp-for="Vouchers.GRNNo" type="text" class="form-control form-control-lg" />
+
+    <div class="col-md-6">
+        <label for="HeadofAccountid_Credit" class="form-label fw-bold">Head of Account (Credit)</label>
+        <select id="HeadofAccountid_Credit" name="HeadofAccountid_Credit" class="form-select form-select-lg">
+            <option value="" selected>Select Head of Account</option>
+            @foreach (var type in ViewBag.HeadofAccount_CreditList)
+            {
+                <option value="@type.Value">@type.Text</option>
+            }
+        </select>
     </div>
-    <div class="col-md-3">
-        <label asp-for="Vouchers.DCNo" class="form-label fw-bold">DC No</label>
-        <input asp-for="Vouchers.DCNo" type="text" class="form-control form-control-lg" />
+</div>
+<div class="row mb-3">
+    <div class="col-md-12">
+        <label asp-for="Vouchers.PayeeName" class="form-label fw-bold">Payment From</label>
+        <input asp-for="Vouchers.PayeeName" type="text" class="form-control form-control-lg" />
     </div>
-    <div class="col-md-3">
-        <label asp-for="Vouchers.InvoiceNo" class="form-label fw-bold">Invoice No</label>
-        <input asp-for="Vouchers.InvoiceNo" type="text" class="form-control form-control-lg" />
+    <div class="col-md-2">
+        <label asp-for="Vouchers.InstruType" class="form-label fw-bold">Instrument Type</label>
+        <select asp-for="Vouchers.InstruType" class="form-select form-select-lg">
+            <option value="">Select Type</option>
+            @foreach (var type in ViewBag.IntrumentTypeList)
+            {
+                <option value="@type.Value">@type.Text</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label asp-for="Vouchers.InstruNumber" class="form-label fw-bold">Instrument Number</label>
+        <input asp-for="Vouchers.InstruNumber" type="text" class="form-control form-control-lg" />
+    </div>
+    <div class="col-md-2">
+        <label asp-for="Vouchers.InstruDate" class="form-label fw-bold">Instrument Date</label>
+        <input asp-for="Vouchers.InstruDate" type="date" class="form-control form-control-lg" />
+    </div>
+    <div class="col-md-4">
+        <label asp-for="Vouchers.InstruDetail" class="form-label fw-bold">Instrument Detail</label>
+        <input asp-for="Vouchers.InstruDetail" type="text" class="form-control form-control-lg" />
+    </div>
+    <div class="col-md-2">
+        <label class="form-label fw-bold">Instrument Amount</label>
+        <input id="InstrumentAmount" class="form-control form-control-lg" />
     </div>
     <div class="col-md-12">
         <label asp-for="Vouchers.Description" class="form-label fw-bold">Description</label>
         <textarea asp-for="Vouchers.Description" class="form-control form-control-lg" rows="3"></textarea>
     </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-info update-row">Update</button>
 </div>
 
 <div class="table-responsive">
@@ -48,7 +88,6 @@
                 <th>Transaction Account</th>
                 <th>Debit Amount</th>
                 <th>Credit Amount</th>
-                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -95,50 +134,8 @@
                         <td>
                             <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[@i].CrAmt" value="@Model.Vouchers.VoucherDetails[i].CrAmt" />
                         </td>
-                        <td style="text-align: center;">
-                            @if (i == 0)
-                            {
-                                <button type="button" class="btn btn-sm btn-secondary add-row">Add</button>
-                            }
-                            else
-                            {
-                                <button type="button" class="btn btn-sm btn-danger remove-row">Remove</button>
-                            }
-                        </td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td>
-                        <select class="form-select transaction-account" name="Vouchers.VoucherDetails[0].TransactionTypeID">
-                            <option value="">Select Type</option>
-                            @foreach (var type in ViewBag.TransactionTypeList)
-                            {
-                                <option value="@type.Value">@type.Text</option>
-                            }
-                        </select>
-                    </td>
-                    <td>
-                        <select class="form-select transaction-account" name="Vouchers.VoucherDetails[0].HeadofAccount_FiveID">
-                            <option value="">Select Account</option>
-                            @foreach (var type in ViewBag.HeadofAccount_FiveList)
-                            {
-                                <option value="@type.Value">@type.Text</option>
-                            }
-                        </select>
-                    </td>
-                    <td>
-                        <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[0].DrAmt" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[0].CrAmt" />
-                    </td>
-                    <td style="text-align: center;">
-                        <button type="button" class="btn btn-sm btn-secondary add-row">Add</button>
-                    </td>
-                </tr>
             }
         </tbody>
 

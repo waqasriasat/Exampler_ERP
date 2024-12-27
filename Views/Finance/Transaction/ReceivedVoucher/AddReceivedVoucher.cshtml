@@ -88,9 +88,9 @@
                             <textarea asp-for="Vouchers.Description" class="form-control form-control-lg" rows="3"></textarea>
                         </div>
                     </div>
-                    
-                    <button type="button" class="btn btn-sm btn-secondary add-row">Add</button>
-
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-info add-row">Add</button>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-bordered" id="ReceivedVoucherTable">
                             <thead class="table-light">
@@ -108,7 +108,7 @@
                                     {
                                         <tr>
                                             <td>
-                                                <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[@i].DRCR">
+                                                <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[@i].DRCR" >
                                                     <option value="">Select Type</option>
                                                     @foreach (var type in ViewBag.TransactionTypeList)
                                                     {
@@ -226,7 +226,7 @@
             // Add Credit row
             const creditRow = `<tr>
                 <td>
-                    <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount + 1}].DRCR">
+                    <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount + 1}].DRCR" >
                         <option value="2" selected>Credit</option>
                     </select>
                 </td>
@@ -248,7 +248,19 @@
 
             // Hide the add button
             $('.add-row').hide();
+            if ($('#ReceivedVoucherTable tbody tr').eq(2).length > 0) {
+                $('#ReceivedVoucherTable tbody tr').eq(2).remove();
+            }
+            // $('#ReceivedVoucherTable tbody')
+            //     .find('input, select')
+            //     .prop('readonly', true);
 
+            // Disable select fields by adding a class
+            $('#ReceivedVoucherTable tbody')
+                .find('input, select')
+                .addClass('disabled-select')
+                .css('pointer-events', 'none')
+                .css('background-color', '#e9ecef');
             calculateTotals();
         });
     });

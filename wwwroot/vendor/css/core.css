@@ -2259,6 +2259,7 @@ textarea.form-control-lg {
   padding-left: 1.25rem;
   font-size: 1rem;
   border-radius: var(--bs-border-radius-lg);
+  min-height: calc(1.53em + 1.5rem + calc(var(--bs-border-width)* 2));
 }
 
 .form-check {

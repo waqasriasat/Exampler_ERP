@@ -730,6 +730,94 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
+    public async Task<List<SelectListItem>> GetHeadofAccount_FiveOnlyPayable()
+    {
+      try
+      {
+        var fiveList = await _appDBContext.Settings_HeadofAccount_Fives
+             .Where(d => d.CategoryTypeID == 2)
+             .Select(d => new SelectListItem
+             {
+               Value = d.HeadofAccount_FiveID.ToString(),
+               Text = d.HeadofAccount_FiveName
+             })
+             .ToListAsync();
+
+
+        return fiveList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    public async Task<List<SelectListItem>> GetHeadofAccount_FiveOnlyVendor()
+    {
+      try
+      {
+        var fiveList = await _appDBContext.Settings_HeadofAccount_Fives
+             .Where(d => d.HeadofAccount_FourID == 12)
+             .Select(d => new SelectListItem
+             {
+               Value = d.HeadofAccount_FiveID.ToString(),
+               Text = d.HeadofAccount_FiveName
+             })
+             .ToListAsync();
+
+
+        return fiveList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    public async Task<List<SelectListItem>> GetHeadofAccount_FiveIncomeTaxPayable()
+    {
+      try
+      {
+        var fiveList = await _appDBContext.Settings_HeadofAccount_Fives
+             .Where(d => d.HeadofAccount_FourID == 4)
+             .Select(d => new SelectListItem
+             {
+               Value = d.HeadofAccount_FiveID.ToString(),
+               Text = d.HeadofAccount_FiveName
+             })
+             .ToListAsync();
+
+
+        return fiveList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    public async Task<List<SelectListItem>> GetHeadofAccount_FiveSaleTaxPayable()
+    {
+      try
+      {
+        var fiveList = await _appDBContext.Settings_HeadofAccount_Fives
+             .Where(d => d.HeadofAccount_FourID == 5)
+             .Select(d => new SelectListItem
+             {
+               Value = d.HeadofAccount_FiveID.ToString(),
+               Text = d.HeadofAccount_FiveName
+             })
+             .ToListAsync();
+
+
+        return fiveList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
     public async Task<List<SelectListItem>> Get_FI_BankList()
     {
       try

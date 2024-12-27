@@ -21,11 +21,12 @@ namespace Exampler_ERP.Controllers.Finance.Management
     public async Task<IActionResult> Index(string searchVendorName)
     {
       var VendorsQuery = _appDBContext.FI_Vendors
+        .Include(b => b.HeadofAccount_Five)
           .Where(b => b.DeleteYNID != 1);
 
       if (!string.IsNullOrEmpty(searchVendorName))
       {
-        VendorsQuery = VendorsQuery.Where(b => b.VendorName.Contains(searchVendorName));
+        VendorsQuery = VendorsQuery.Where(b => b.HeadofAccount_Five.HeadofAccount_FiveName.Contains(searchVendorName));
       }
 
       var Vendors = await VendorsQuery.ToListAsync();
@@ -46,6 +47,9 @@ namespace Exampler_ERP.Controllers.Finance.Management
     public async Task<IActionResult> Edit(int id)
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
+      ViewBag.VendorList = await _utils.GetHeadofAccount_FiveOnlyVendor();
+      ViewBag.SaleTaxList = await _utils.GetHeadofAccount_FiveSaleTaxPayable();
+      ViewBag.IncomeTaxList = await _utils.GetHeadofAccount_FiveIncomeTaxPayable();
       var Vendor = await _appDBContext.FI_Vendors.FindAsync(id);
       if (Vendor == null)
       {
@@ -59,10 +63,10 @@ namespace Exampler_ERP.Controllers.Finance.Management
     {
       if (ModelState.IsValid)
       {
-        if (string.IsNullOrEmpty(Vendor.VendorName))
-        {
-          return Json(new { success = false, message = "Vendor Name field is required. Please enter a valid text value." });
-        }
+        //if (string.IsNullOrEmpty(Vendor.HeadofAccount_Five.HeadofAccount_FiveName))
+        //{
+        //  return Json(new { success = false, message = "Vendor Name field is required. Please enter a valid text value." });
+        //}
 
 
         _appDBContext.Update(Vendor);
@@ -76,6 +80,10 @@ namespace Exampler_ERP.Controllers.Finance.Management
     public async Task<IActionResult> Create()
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
+      ViewBag.VendorList = await _utils.GetHeadofAccount_FiveOnlyVendor();
+      ViewBag.SaleTaxList = await _utils.GetHeadofAccount_FiveSaleTaxPayable();
+      ViewBag.IncomeTaxList = await _utils.GetHeadofAccount_FiveIncomeTaxPayable();
+
       return PartialView("~/Views/Finance/Management/Vendor/AddVendor.cshtml", new FI_Vendor());
     }
 
@@ -84,10 +92,10 @@ namespace Exampler_ERP.Controllers.Finance.Management
     {
       if (ModelState.IsValid)
       {
-        if (string.IsNullOrEmpty(Vendor.VendorName))
-        {
-          return Json(new { success = false, message = "Vendor Name field is required. Please enter a valid text value." });
-        }
+        //if (string.IsNullOrEmpty(Vendor.HeadofAccount_Five.HeadofAccount_FiveName))
+        //{
+        //  return Json(new { success = false, message = "Vendor Name field is required. Please enter a valid text value." });
+        //}
 
 
         Vendor.DeleteYNID = 0;
@@ -124,6 +132,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
       var Vendors = await _appDBContext.FI_Vendors
+        .Include(b => b.HeadofAccount_Five)
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
 
@@ -155,7 +164,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
         for (int i = 0; i < Vendors.Count; i++)
         {
           worksheet.Cells[i + 2, 1].Value = Vendors[i].VendorID;
-          worksheet.Cells[i + 2, 2].Value = Vendors[i].VendorName;
+          worksheet.Cells[i + 2, 2].Value = Vendors[i].HeadofAccount_Five.HeadofAccount_FiveName;
           worksheet.Cells[i + 2, 3].Value = Vendors[i].PayeeName;
           worksheet.Cells[i + 2, 4].Value = Vendors[i].Cell;
           worksheet.Cells[i + 2, 5].Value = Vendors[i].Phone;
@@ -190,6 +199,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
     public async Task<IActionResult> Print()
     {
       var Vendors = await _appDBContext.FI_Vendors
+        .Include(b => b.HeadofAccount_Five)
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
       return View("~/Views/Finance/Management/Vendor/PrintVendor.cshtml", Vendors);

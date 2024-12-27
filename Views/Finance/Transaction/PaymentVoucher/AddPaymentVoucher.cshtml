@@ -29,30 +29,110 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="row mb-3">
-                        <div class="col-md-3">
-                            <label asp-for="Vouchers.PONo" class="form-label fw-bold">PO No</label>
-                            <input asp-for="Vouchers.PONo" type="text" class="form-control form-control-lg" />
+                        <div class="col-md-6">
+                            <label for="HeadofAccountid_Credit" class="form-label fw-bold">Head of Account (Credit)</label>
+                            <select id="HeadofAccountid_Credit" name="HeadofAccountid_Credit" class="form-select form-select-lg">
+                                <option value="">Select Head of Account</option>
+                                @foreach (var type in ViewBag.HeadofAccount_CreditList)
+                                {
+                                    <option value="@type.Value">@type.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Vouchers.PayeeName" class="form-label fw-bold">Payment Name</label>
+                            <input asp-for="Vouchers.PayeeName" type="text" class="form-control form-control-lg" />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="HeadofAccountid_IncomeTaxID" class="form-label fw-bold">Income Tax (WithHolding)</label>
+                            <select id="HeadofAccountid_IncomeTaxID" name="HeadofAccountid_IncomeTaxID" class="form-select form-select-lg">
+                                <option value="">Select Head of Account</option>
+                                @foreach (var type in ViewBag.HeadofAccount_IncomeTaxPayableList)
+                                {
+                                    <option value="@type.Value">@type.Text</option>
+                                }
+                            </select>
                         </div>
                         <div class="col-md-3">
-                            <label asp-for="Vouchers.GRNNo" class="form-label fw-bold">GRN No</label>
-                            <input asp-for="Vouchers.GRNNo" type="text" class="form-control form-control-lg" />
+                            <label class="form-label fw-bold">Value of Tax</label>
+                            <input id="IncomeTaxValue" class="form-control form-control-lg" />
                         </div>
                         <div class="col-md-3">
-                            <label asp-for="Vouchers.DCNo" class="form-label fw-bold">DC No</label>
-                            <input asp-for="Vouchers.DCNo" type="text" class="form-control form-control-lg" />
+                            <label class="form-label fw-bold">Total Amount</label>
+                            <input id="IncomeTaxAmount" class="form-control form-control-lg" />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="HeadofAccountid_SaleTaxID" class="form-label fw-bold">Sale Tax</label>
+                            <select id="HeadofAccountid_SaleTaxID" name="HeadofAccountid_SaleTaxID" class="form-select form-select-lg">
+                                <option value="">Select Head of Account</option>
+                                @foreach (var type in ViewBag.HeadofAccount_SaleTaxPayableList)
+                                {
+                                    <option value="@type.Value">@type.Text</option>
+                                }
+                            </select>
                         </div>
                         <div class="col-md-3">
-                            <label asp-for="Vouchers.InvoiceNo" class="form-label fw-bold">Invoice No</label>
-                            <input asp-for="Vouchers.InvoiceNo" type="text" class="form-control form-control-lg" />
+                            <label class="form-label fw-bold">Value of Tax</label>
+                            <input id="SaleTaxValue" class="form-control form-control-lg" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Total Amount</label>
+                            <input id="SaleTaxAmount" class="form-control form-control-lg" />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="HeadofAccountid_Debit" class="form-label fw-bold">Head of Account (Debit)</label>
+                            <select id="HeadofAccountid_Debit" name="HeadofAccountid_Debit" class="form-select form-select-lg">
+                                <option value="">Select Head of Account</option>
+                                @foreach (var type in ViewBag.HeadofAccount_DebitList)
+                                {
+                                    <option value="@type.Value">@type.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="Vouchers.InstruType" class="form-label fw-bold">Instrument Type</label>
+                            <select asp-for="Vouchers.InstruType" class="form-select form-select-lg">
+                                <option value="">Select Type</option>
+                                @foreach (var type in ViewBag.IntrumentTypeList)
+                                {
+                                    <option value="@type.Value">@type.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="Vouchers.InstruNumber" class="form-label fw-bold">Instrument Number</label>
+                            <input asp-for="Vouchers.InstruNumber" type="text" class="form-control form-control-lg" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Vouchers.InstruDetail" class="form-label fw-bold">Instrument Detail</label>
+                            <input asp-for="Vouchers.InstruDetail" type="text" class="form-control form-control-lg" />
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="Vouchers.InstruDate" class="form-label fw-bold">Instrument Date</label>
+                            <input asp-for="Vouchers.InstruDate" type="date" class="form-control form-control-lg" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Instrument Amount</label>
+                            <input id="InstrumentAmount" class="form-control form-control-lg" />
                         </div>
                         <div class="col-md-12">
                             <label asp-for="Vouchers.Description" class="form-label fw-bold">Description</label>
                             <textarea asp-for="Vouchers.Description" class="form-control form-control-lg" rows="3"></textarea>
                         </div>
                     </div>
-
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info add-row">Add</button>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-bordered" id="PaymentVoucherTable">
                             <thead class="table-light">
@@ -61,7 +141,6 @@
                                     <th>Transaction Account</th>
                                     <th>Debit Amount</th>
                                     <th>Credit Amount</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -94,51 +173,10 @@
                                             <td>
                                                 <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[@i].CrAmt" value="@Model.Vouchers.VoucherDetails[i].CrAmt" />
                                             </td>
-                                            <td style="text-align: center;">
-                                                @if (i == 0)
-                                                {
-                                                    <button type="button" class="btn btn-sm btn-secondary add-row">Add</button>
-                                                }
-                                                else
-                                                {
-                                                    <button type="button" class="btn btn-sm btn-danger remove-row">Remove</button>
-                                                }
-                                            </td>
                                         </tr>
                                     }
                                 }
-                                else
-                                {
-                                    <tr>
-                                        <td>
-                                            <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[0].TransactionTypeID">
-                                                <option value="">Select Type</option>
-                                                @foreach (var type in ViewBag.TransactionTypeList)
-                                                {
-                                                    <option value="@type.Value">@type.Text</option>
-                                                }
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[0].HeadofAccount_FiveID">
-                                                <option value="">Select Account</option>
-                                                @foreach (var type in ViewBag.HeadofAccount_FiveList)
-                                                {
-                                                    <option value="@type.Value">@type.Text</option>
-                                                }
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[0].DrAmt" />
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[0].CrAmt" />
-                                        </td>
-                                        <td style="text-align: center;">
-                                            <button type="button" class="btn btn-sm btn-secondary add-row">Add</button>
-                                        </td>
-                                    </tr>
-                                }
+
                             </tbody>
 
                         </table>
@@ -166,6 +204,36 @@
 
 <script>
     $(document).ready(function () {
+        $(document).on("change", "#HeadofAccountid_Credit", function () {
+            var headofAccount = $("#HeadofAccountid_Credit").val();
+
+            $.ajax({
+                url: "/PaymentVoucher/GetTaxation",
+                method: "POST",
+                data: { headofAccount: headofAccount },
+                success: function (response) {
+                    if (response.length > 0) {
+                        var data = response[0]; // Access the first object in the response array
+
+                        // Set values for the fields
+                        $("#HeadofAccountid_IncomeTaxID").val(data.incometaxid || '');
+                        $("#IncomeTaxValue").val(data.incometaxvalue || '');
+                        $("#HeadofAccountid_SaleTaxID").val(data.saletaxid || '');
+                        $("#SaleTaxValue").val(data.saletaxvalue || '');
+                        $("#Vouchers_PayeeName").val(data.payeename || '');
+                    } else {
+                        console.log("Empty response or no matching data");
+                    }
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                }
+            });
+        });
+    });
+
+
+    $(document).ready(function () {
         function calculateTotals() {
             let totalDebit = 0;
             let totalCredit = 0;
@@ -188,90 +256,152 @@
             }
         }
 
-        function updateRowButtons() {
-            const rows = $('#PaymentVoucherTable tbody tr');
-            rows.find('.add-row').remove();
-            rows.find('.remove-row').remove();
-
-            rows.each(function (index) {
-                const isLastRow = index === rows.length - 1;
-                const actionCell = $(this).find('td:last-child');
-                if (isLastRow) {
-                    actionCell.append('<button type="button" class="btn btn-sm btn-secondary add-row">Add</button>');
-                } else {
-                    actionCell.append('<button type="button" class="btn btn-sm btn-danger remove-row">Remove</button>');
-                }
-            });
-        }
-
         $(document).on('input', '.debit, .credit', calculateTotals);
 
+        // Add rows based on Debit, Credit, and Amount fields
         $(document).on('click', '.add-row', function () {
+            
+            const debitHead = $('#HeadofAccountid_Debit').val();
+            const creditHead = $('#HeadofAccountid_Credit').val();
+            const incometaxHead = $('#HeadofAccountid_IncomeTaxID').val();
+            const saletaxHead = $('#HeadofAccountid_saleTaxID').val();
+            const amount = parseFloat($('#InstrumentAmount').val()) || 0;
+
+            if (!debitHead || !creditHead || amount === 0) {
+                alert('Please fill out all required fields: Debit Account, Credit Account, and Instrument Amount.');
+                return;
+            }
+
+            const incomeTaxValue = parseFloat($('#IncomeTaxValue').val()) || 0;
+            const saleTaxValue = parseFloat($('#SaleTaxValue').val()) || 0;
+
+            // Initialize the tax amounts
+            let incomeTaxAmount = 0;
+            let saleTaxAmount = 0;
+
+            // Calculate Income Tax Amount
+            if (incomeTaxValue && creditHead && amount !== 0) {
+                incomeTaxAmount = (amount * incomeTaxValue) / 100;
+                $('#IncomeTaxAmount').val(incomeTaxAmount.toFixed(2));
+            }
+
+            // Calculate Sale Tax Amount
+            if (saleTaxValue && creditHead && amount !== 0) {
+                saleTaxAmount = (amount * saleTaxValue) / 100;
+                $('#SaleTaxAmount').val(saleTaxAmount.toFixed(2));
+            }
+
+            // Calculate Remaining Amount
+            const remainingAmount = amount - incomeTaxAmount - saleTaxAmount;
+            $('#RemainingAmount').val(remainingAmount.toFixed(2));
+
+
             const tableBody = $('#PaymentVoucherTable tbody');
+
+            tableBody.empty();
+
             const rowCount = tableBody.find('tr').length;
 
-            const newRow = `<tr>
-                <td>
-                        <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount}].DRCR">
-                        <option value="">Select Type</option>
-    @foreach (var type in ViewBag.TransactionTypeList)
-    {
-                                    <option value="@type.Value">@type.Text</option>
-    }
-                    </select>
-                </td>
-                <td>
-                    <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount}].HeadofAccount_FiveID">
-                        <option value="">Select Account</option>
-    @foreach (var type in ViewBag.HeadofAccount_FiveList)
-    {
-                                    <option value="@type.Value">@type.Text</option>
-    }
-                    </select>
-                </td>
-                <td>
-                    <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount}].DrAmt" />
-                </td>
-                <td>
-                    <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount}].CrAmt" />
-                </td>
-                <td style="text-align: center;"></td>
-            </tr>`;
+            // Add Debit row
+            const debitRow = `<tr>
+        <td>
+            <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount}].DRCR">
+                <option value="1" selected>Debit</option>
+            </select>
+        </td>
+        <td>
+            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount}].HeadofAccount_FiveID">
+                <option value="${debitHead}" selected>${$('#HeadofAccountid_Debit option:selected').text()}</option>
+            </select>
+        </td>
+        <td>
+            <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount}].DrAmt" value="${amount.toFixed(2)}" />
+        </td>
+        <td>
+            <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount}].CrAmt" value="0" readonly />
+        </td>
+    </tr>`;
 
-            tableBody.append(newRow);
+            // Add Credit row
+            const creditRow = `<tr>
+        <td>
+            <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount + 1}].DRCR" >
+                <option value="2" selected>Credit</option>
+            </select>
+        </td>
+        <td>
+            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount + 1}].HeadofAccount_FiveID">
+                <option value="${creditHead}" selected>${$('#HeadofAccountid_Credit option:selected').text()}</option>
+            </select>
+        </td>
+        <td>
+            <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount + 1}].DrAmt" value="0" readonly />
+        </td>
+        <td>
+            <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount + 1}].CrAmt" value="${remainingAmount.toFixed(2)}" />
+        </td>
+    </tr>`;
 
-            updateRowButtons();
+            // Add Income Tax row
+            const incometaxRow = `<tr>
+        <td>
+            <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount + 2}].DRCR" >
+                <option value="2" selected>Credit</option>
+            </select>
+        </td>
+        <td>
+            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount + 2}].HeadofAccount_FiveID">
+                <option value="${incometaxHead}" selected>${$('#HeadofAccountid_IncomeTaxID option:selected').text()}</option>
+            </select>
+        </td>
+        <td>
+            <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount + 2}].DrAmt" value="0" readonly />
+        </td>
+        <td>
+            <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount + 2}].CrAmt" value="${incomeTaxAmount.toFixed(2)}" />
+        </td>
+    </tr>`;
+
+            // Add Sale Tax row
+            const saletaxRow = `<tr>
+        <td>
+            <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount + 3}].DRCR" >
+                <option value="2" selected>Credit</option>
+            </select>
+        </td>
+        <td>
+            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount + 3}].HeadofAccount_FiveID">
+                <option value="${saletaxHead}" selected>${$('#HeadofAccountid_SaleTaxID option:selected').text()}</option>
+            </select>
+        </td>
+        <td>
+            <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount + 3}].DrAmt" value="0" readonly />
+        </td>
+        <td>
+            <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount + 3}].CrAmt" value="${saleTaxAmount.toFixed(2)}" />
+        </td>
+    </tr>`;
+
+            // Append rows to the table
+            tableBody.append(debitRow + creditRow + incometaxRow + saletaxRow);
+
+            // Hide the add button
+            // $('.add-row').hide();
+            // if ($('#PaymentVoucherTable tbody tr').eq(2).length > 0) {
+            //     $('#PaymentVoucherTable tbody tr').eq(2).remove();
+            // }
+            // $('#PaymentVoucherTable tbody')
+            //     .find('input, select')
+            //     .prop('readonly', true);
+
+            // Disable select fields by adding a class
+            $('#PaymentVoucherTable tbody')
+                .find('input, select')
+                .addClass('disabled-select')
+                .css('pointer-events', 'none')
+                .css('background-color', '#e9ecef');
             calculateTotals();
         });
-
-        $(document).on('click', '.remove-row', function () {
-            $(this).closest('tr').remove();
-            updateRowButtons();
-            calculateTotals();
-        });
-
-        //  $(document).on('change', '.transaction-Type', function () {
-        //     const tableBody = $('#PaymentVoucherTable tbody');
-        //     const rowCount = tableBody.find('tr').length;
-        //     const row = Eval(rowCount)-1;
-        //     const transactionType = $(this).val();
-        //     const debitField = row.find('.debit');
-        //     const creditField = row.find('.credit');
-
-        //     if (transactionType == "2") { // Credit
-        //         creditField.prop('disabled', false).val(''); // Enable Credit and reset value
-        //         debitField.prop('disabled', true).val('0'); // Disable Debit and set 0
-        //     } else if (transactionType == "1") { // Debit
-        //         debitField.prop('disabled', false).val(''); // Enable Debit and reset value
-        //         creditField.prop('disabled', true).val('0'); // Disable Credit and set 0
-        //     } else {
-        //         debitField.prop('disabled', false).val('');
-        //         creditField.prop('disabled', false).val('');
-        //     }
-        // });
-
-        // Initial button setup
-        updateRowButtons();
     });
 
 </script>

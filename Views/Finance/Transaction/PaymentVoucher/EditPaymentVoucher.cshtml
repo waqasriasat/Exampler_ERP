@@ -30,7 +30,6 @@
 
     $(document).ready(function () {
         function calculateTotals() {
-
             let totalDebit = 0;
             let totalCredit = 0;
 
@@ -52,72 +51,154 @@
             }
         }
 
-        function updateRowButtons() {
-            const rows = $('#PaymentVoucherTable tbody tr');
-            rows.find('.add-row').remove();
-            rows.find('.remove-row').remove();
-
-            rows.each(function (index) {
-                const isLastRow = index === rows.length - 1;
-                const actionCell = $(this).find('td:last-child');
-                if (isLastRow) {
-                    actionCell.append('<button type="button" class="btn btn-sm btn-secondary add-row">Add</button>');
-                } else {
-                    actionCell.append('<button type="button" class="btn btn-sm btn-danger remove-row">Remove</button>');
-                }
-            });
-        }
-
         $(document).on('input', '.debit, .credit', calculateTotals);
 
-        $(document).on('click', '.add-row', function () {
+        // Add rows based on Debit, Credit, and Amount fields
+        $(document).on('click', '.update-row', function () {
+            const debitHead = $('#HeadofAccountid_Debit').val();
+            const creditHead = $('#HeadofAccountid_Credit').val();
+            const amount = parseFloat($('#InstrumentAmount').val()) || 0;
+
+            if (!debitHead || !creditHead || amount === 0) {
+                alert('Please fill out all required fields: Debit Account, Credit Account, and Instrument Amount.');
+                return;
+            }
+
             const tableBody = $('#PaymentVoucherTable tbody');
+
+            tableBody.empty();
+
             const rowCount = tableBody.find('tr').length;
 
-            const newRow = `<tr>
-                    <td>
-                            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount}].DRCR">
-                            <option value="">Select Type</option>
-    @foreach (var type in ViewBag.TransactionTypeList)
-    {
-                                            <option value="@type.Value">@type.Text</option>
-    }
-                        </select>
-                    </td>
-                    <td>
-                        <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount}].HeadofAccount_FiveID">
-                            <option value="">Select Account</option>
-    @foreach (var type in ViewBag.HeadofAccount_FiveList)
-    {
-                                            <option value="@type.Value">@type.Text</option>
-    }
-                        </select>
-                    </td>
-                    <td>
-                        <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount}].DrAmt" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount}].CrAmt" />
-                    </td>
-                    <td style="text-align: center;"></td>
-                </tr>`;
+            // Add Debit row
+            const debitRow = `<tr>
+                        <td>
+                            <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount}].DRCR">
+                                <option value="1" selected>Debit</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount}].HeadofAccount_FiveID">
+                                <option value="${debitHead}" selected>${$('#HeadofAccountid_Debit option:selected').text()}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount}].DrAmt" value="${amount.toFixed(2)}" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount}].CrAmt" value="0" readonly />
+                        </td>
+                    </tr>`;
 
-            tableBody.append(newRow);
+            // Add Credit row
+            const creditRow = `<tr>
+                        <td>
+                            <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount + 1}].DRCR">
+                                <option value="2" selected>Credit</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount + 1}].HeadofAccount_FiveID">
+                                <option value="${creditHead}" selected>${$('#HeadofAccountid_Credit option:selected').text()}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount + 1}].DrAmt" value="0" readonly />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount + 1}].CrAmt" value="${amount.toFixed(2)}" />
+                        </td>
+                    </tr>`;
 
-            updateRowButtons();
+            // Append rows to the table
+            tableBody.append(debitRow + creditRow);
+
+            // Hide the add button
+            $('.update-row').hide();
+            // $('#PaymentVoucherTable tbody')
+            //     .find('input, select')
+            //     .prop('readonly', true);
+
+            // Disable select fields by adding a class
+            $('#PaymentVoucherTable tbody')
+                .find('input, select')
+                .addClass('disabled-select')
+                .css('pointer-events', 'none')
+                .css('background-color', '#e9ecef');
             calculateTotals();
         });
 
-        $(document).on('click', '.remove-row', function () {
-            $(this).closest('tr').remove();
-            updateRowButtons();
-            calculateTotals();
-        });
 
 
-        // Initial button setup
-        updateRowButtons();
-        calculateTotals();
     });
+    $(document).ready(function () {
+        const firstRow = $('#PaymentVoucherTable tbody tr').eq(0);
+        const secondRow = $('#PaymentVoucherTable tbody tr').eq(1);
 
+        const rows = $('#PaymentVoucherTable tbody .transaction-account');
+        const debitHeadValue = $('#PaymentVoucherTable tbody .transaction-account')
+            .eq(1)
+            .find('option:selected')
+            .val();
+        const debitHeadText = $('#PaymentVoucherTable tbody .transaction-account')
+            .eq(1)
+            .find('option:selected')
+            .text();
+
+        const creditHeadValue = $('#PaymentVoucherTable tbody .transaction-account')
+            .eq(3)
+            .find('option:selected')
+            .val();
+        const creditHeadText = $('#PaymentVoucherTable tbody .transaction-account')
+            .eq(3)
+            .find('option:selected')
+            .text();
+        const instrumentAmount = parseFloat(
+            $('#PaymentVoucherTable tbody .debit').eq(0).val()
+        ) || 0;
+
+        // Set the form values
+        $('#HeadofAccountid_Debit').val(debitHeadValue).change();
+        $('#HeadofAccountid_Debit option:selected').text(debitHeadText);
+
+        $('#HeadofAccountid_Credit').val(creditHeadValue).change();
+        $('#HeadofAccountid_Credit option:selected').text(creditHeadText);
+
+        $('#InstrumentAmount').val(instrumentAmount.toFixed(2));
+        if ($('#PaymentVoucherTable tbody tr').eq(2).length > 0) {
+            $('#PaymentVoucherTable tbody tr').eq(2).remove();
+        }
+        // $('#PaymentVoucherTable tbody')
+        //     .find('input, select')
+        //     .prop('readonly', true);
+
+        // Disable select fields by adding a class
+        $('#PaymentVoucherTable tbody')
+            .find('input, select')
+            .addClass('disabled-select')
+            .css('pointer-events', 'none')
+            .css('background-color', '#e9ecef');
+        calculateTotals();
+        function calculateTotals() {
+            let totalDebit = 0;
+            let totalCredit = 0;
+
+            $('#PaymentVoucherTable tbody tr').each(function () {
+                const debit = parseFloat($(this).find('.debit').val()) || 0;
+                const credit = parseFloat($(this).find('.credit').val()) || 0;
+
+                totalDebit += debit;
+                totalCredit += credit;
+            });
+
+            $('#TotalDrAmt').val(totalDebit.toFixed(2));
+            $('#TotalCrAmt').val(totalCredit.toFixed(2));
+
+            if (totalDebit !== totalCredit) {
+                $('#saveNewVoucher').prop('disabled', true);
+            } else {
+                $('#saveNewVoucher').prop('disabled', false);
+            }
+        }
+    });
 </script>

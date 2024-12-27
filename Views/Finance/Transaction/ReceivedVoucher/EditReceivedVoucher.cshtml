@@ -115,7 +115,16 @@
 
             // Hide the add button
             $('.update-row').hide();
+            // $('#ReceivedVoucherTable tbody')
+            //     .find('input, select')
+            //     .prop('readonly', true);
 
+            // Disable select fields by adding a class
+            $('#ReceivedVoucherTable tbody')
+                .find('input, select')
+                .addClass('disabled-select')
+                .css('pointer-events', 'none')
+                .css('background-color', '#e9ecef');
             calculateTotals();
         });
       
@@ -156,6 +165,19 @@
         $('#HeadofAccountid_Credit option:selected').text(creditHeadText);
 
         $('#InstrumentAmount').val(instrumentAmount.toFixed(2));
+        if ($('#ReceivedVoucherTable tbody tr').eq(2).length > 0) {
+            $('#ReceivedVoucherTable tbody tr').eq(2).remove();
+        }
+        // $('#ReceivedVoucherTable tbody')
+        //     .find('input, select')
+        //     .prop('readonly', true);
+
+        // Disable select fields by adding a class
+        $('#ReceivedVoucherTable tbody')
+            .find('input, select')
+            .addClass('disabled-select')
+            .css('pointer-events', 'none')
+            .css('background-color', '#e9ecef');
         calculateTotals();
         function calculateTotals() {
             let totalDebit = 0;

@@ -64,9 +64,14 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
         Vouchers = Vouchers
       };
 
-      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Payment();
+      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
+      ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
+      ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyPayable();
+      ViewBag.IntrumentTypeList = await _utils.GetIntrumentType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
+      ViewBag.HeadofAccount_IncomeTaxPayableList = await _utils.GetHeadofAccount_FiveIncomeTaxPayable();
+      ViewBag.HeadofAccount_SaleTaxPayableList = await _utils.GetHeadofAccount_FiveSaleTaxPayable();
 
       return PartialView("~/Views/Finance/Transaction/PaymentVoucher/EditPaymentVoucher.cshtml", model);
     }
@@ -84,9 +89,14 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
         {
           ModelState.AddModelError("TotalMismatch", "Total Debit and Credit amounts must be equal.");
 
-          ViewBag.VoucherTypeList = await _utils.GetVoucherType_Payment();
+          ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
           ViewBag.TransactionTypeList = await _utils.GetTransactionType();
+          ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
+          ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyPayable();
+          ViewBag.IntrumentTypeList = await _utils.GetIntrumentType();
           ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
+          ViewBag.HeadofAccount_IncomeTaxPayableList = await _utils.GetHeadofAccount_FiveIncomeTaxPayable();
+          ViewBag.HeadofAccount_SaleTaxPayableList = await _utils.GetHeadofAccount_FiveSaleTaxPayable();
 
           return PartialView("~/Views/Finance/Transaction/PaymentVoucher/EditPaymentVoucher.cshtml", Voucher);
         }
@@ -131,9 +141,14 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
         }
       }
 
-      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Payment();
+      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
+      ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
+      ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyPayable();
+      ViewBag.IntrumentTypeList = await _utils.GetIntrumentType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
+      ViewBag.HeadofAccount_IncomeTaxPayableList = await _utils.GetHeadofAccount_FiveIncomeTaxPayable();
+      ViewBag.HeadofAccount_SaleTaxPayableList = await _utils.GetHeadofAccount_FiveSaleTaxPayable();
 
       return PartialView("~/Views/Finance/Transaction/PaymentVoucher/EditPaymentVoucher.cshtml", Voucher);
     }
@@ -143,9 +158,14 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
     [HttpGet]
     public async Task<IActionResult> Create()
     {
-      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Payment();
+      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
+      ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
+      ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyPayable();
+      ViewBag.IntrumentTypeList = await _utils.GetIntrumentType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
+      ViewBag.HeadofAccount_IncomeTaxPayableList = await _utils.GetHeadofAccount_FiveIncomeTaxPayable();
+      ViewBag.HeadofAccount_SaleTaxPayableList = await _utils.GetHeadofAccount_FiveSaleTaxPayable();
 
       FI_Voucher Vouchers = new FI_Voucher();
       Vouchers.VoucherDetails.Add(new FI_VoucherDetail() { VoucherID = 1 });
@@ -291,6 +311,29 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       return Json(accounts);
     }
+    [HttpPost]
+    public async Task<IActionResult> GetTaxation(int? headofAccount)
+    {
+      if (headofAccount == null || headofAccount == 0)
+      {
+        return Json(new List<object>());
+      }
+
+      var accounts = await _appDBContext.FI_Vendors
+          .Where(a => a.HeadofAccount_FiveID == headofAccount)
+          .Select(a => new
+          {
+            saletaxid = a.SaleTax_ID,
+            saletaxvalue = a.STNRate,
+            incometaxid = a.IncomTaxWithHoding_ID,
+            incometaxvalue = a.NTNRate,
+            payeename = a.PayeeName
+          })
+          .ToListAsync();
+
+      return Json(accounts);
+    }
+
     public async Task<IActionResult> ExportToExcel()
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
