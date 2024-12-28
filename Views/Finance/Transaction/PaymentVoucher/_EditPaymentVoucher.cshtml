@@ -16,36 +16,77 @@
         </select>
     </div>
 </div>
-
 <div class="row mb-3">
-    <div class="col-md-6">
-        <label for="HeadofAccountid_Debit" class="form-label fw-bold">Head of Account (Debit)</label>
-        <select id="HeadofAccountid_Debit" name="HeadofAccountid_Debit" class="form-select form-select-lg">
-            <option value="" selected>Select Head of Account</option>
-            @foreach (var type in ViewBag.HeadofAccount_DebitList)
-            {
-                <option value="@type.Value">@type.Text</option>
-            }
-        </select>
-    </div>
-
     <div class="col-md-6">
         <label for="HeadofAccountid_Credit" class="form-label fw-bold">Head of Account (Credit)</label>
         <select id="HeadofAccountid_Credit" name="HeadofAccountid_Credit" class="form-select form-select-lg">
-            <option value="" selected>Select Head of Account</option>
+            <option value="">Select Head of Account</option>
             @foreach (var type in ViewBag.HeadofAccount_CreditList)
             {
                 <option value="@type.Value">@type.Text</option>
             }
         </select>
     </div>
-</div>
-<div class="row mb-3">
-    <div class="col-md-12">
-        <label asp-for="Vouchers.PayeeName" class="form-label fw-bold">Payment From</label>
+    <div class="col-md-6">
+        <label asp-for="Vouchers.PayeeName" class="form-label fw-bold">Payment Name</label>
         <input asp-for="Vouchers.PayeeName" type="text" class="form-control form-control-lg" />
     </div>
-    <div class="col-md-2">
+</div>
+<hr />
+<div class="row mb-3">
+    <div class="col-md-6">
+        <label for="HeadofAccountid_IncomeTaxID" class="form-label fw-bold">Income Tax (WithHolding)</label>
+        <select id="HeadofAccountid_IncomeTaxID" name="HeadofAccountid_IncomeTaxID" class="form-select form-select-lg">
+            <option value="">Select Head of Account</option>
+            @foreach (var type in ViewBag.HeadofAccount_IncomeTaxPayableList)
+            {
+                <option value="@type.Value">@type.Text</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label fw-bold">Value of Tax</label>
+        <input id="IncomeTaxValue" class="form-control form-control-lg" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label fw-bold">Total Amount</label>
+        <input id="IncomeTaxAmount" class="form-control form-control-lg" />
+    </div>
+</div>
+<hr />
+<div class="row mb-3">
+    <div class="col-md-6">
+        <label for="HeadofAccountid_SaleTaxID" class="form-label fw-bold">Sale Tax</label>
+        <select id="HeadofAccountid_SaleTaxID" name="HeadofAccountid_SaleTaxID" class="form-select form-select-lg">
+            <option value="">Select Head of Account</option>
+            @foreach (var type in ViewBag.HeadofAccount_SaleTaxPayableList)
+            {
+                <option value="@type.Value">@type.Text</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label fw-bold">Value of Tax</label>
+        <input id="SaleTaxValue" class="form-control form-control-lg" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label fw-bold">Total Amount</label>
+        <input id="SaleTaxAmount" class="form-control form-control-lg" />
+    </div>
+</div>
+<hr />
+<div class="row mb-3">
+    <div class="col-md-6">
+        <label for="HeadofAccountid_Debit" class="form-label fw-bold">Head of Account (Debit)</label>
+        <select id="HeadofAccountid_Debit" name="HeadofAccountid_Debit" class="form-select form-select-lg">
+            <option value="">Select Head of Account</option>
+            @foreach (var type in ViewBag.HeadofAccount_DebitList)
+            {
+                <option value="@type.Value">@type.Text</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
         <label asp-for="Vouchers.InstruType" class="form-label fw-bold">Instrument Type</label>
         <select asp-for="Vouchers.InstruType" class="form-select form-select-lg">
             <option value="">Select Type</option>
@@ -55,19 +96,19 @@
             }
         </select>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-3">
         <label asp-for="Vouchers.InstruNumber" class="form-label fw-bold">Instrument Number</label>
         <input asp-for="Vouchers.InstruNumber" type="text" class="form-control form-control-lg" />
     </div>
-    <div class="col-md-2">
-        <label asp-for="Vouchers.InstruDate" class="form-label fw-bold">Instrument Date</label>
-        <input asp-for="Vouchers.InstruDate" type="date" class="form-control form-control-lg" />
-    </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         <label asp-for="Vouchers.InstruDetail" class="form-label fw-bold">Instrument Detail</label>
         <input asp-for="Vouchers.InstruDetail" type="text" class="form-control form-control-lg" />
     </div>
-    <div class="col-md-2">
+    <div class="col-md-3">
+        <label asp-for="Vouchers.InstruDate" class="form-label fw-bold">Instrument Date</label>
+        <input asp-for="Vouchers.InstruDate" type="date" class="form-control form-control-lg" />
+    </div>
+    <div class="col-md-3">
         <label class="form-label fw-bold">Instrument Amount</label>
         <input id="InstrumentAmount" class="form-control form-control-lg" />
     </div>
@@ -79,7 +120,6 @@
 <div class="modal-footer">
     <button type="button" class="btn btn-info update-row">Update</button>
 </div>
-
 <div class="table-responsive">
     <table class="table table-bordered" id="PaymentVoucherTable">
         <thead class="table-light">
@@ -97,7 +137,7 @@
                 {
                     <tr>
                         <td>
-                            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[@i].DRCR" value="Vouchers.VoucherDetails[@i].DRCR">
+                            <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[@i].DRCR">
                                 <option value="">Select Type</option>
                                 @foreach (var type in ViewBag.TransactionTypeList)
                                 {
@@ -113,7 +153,7 @@
                             </select>
                         </td>
                         <td>
-                            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[@i].HeadofAccount_FiveID" value="Vouchers.VoucherDetails[@i].HeadofAccount_FiveID">
+                            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[@i].HeadofAccount_FiveID">
                                 <option value="">Select Account</option>
                                 @foreach (var type in ViewBag.HeadofAccount_FiveList)
                                 {
@@ -137,6 +177,7 @@
                     </tr>
                 }
             }
+
         </tbody>
 
     </table>

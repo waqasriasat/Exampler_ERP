@@ -1150,3 +1150,20 @@ a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:h
     top: 0px; /* Adjust this position as needed */
   }
 
+.collapsible {
+  background-color: #f6c23e !important;
+  color: white;
+  cursor: pointer;
+  padding: 10px;
+  /*width: 100%;*/
+  border: none;
+  text-align: left;
+  outline: none;
+  font-family: 'Segoe UI';
+  font-weight: 500;
+  font-size: medium;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+  

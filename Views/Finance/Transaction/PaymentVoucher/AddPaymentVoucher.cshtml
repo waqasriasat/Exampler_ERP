@@ -45,8 +45,10 @@
                             <input asp-for="Vouchers.PayeeName" type="text" class="form-control form-control-lg" />
                         </div>
                     </div>
-                    <hr />
-                    <div class="row mb-3">
+                
+                    <button type="button" class="collapsible" style="position: absolute;top: 53px;right: 27px;">Income Tax Detail</button>
+                    <div class="content" style="display: none;">
+                        <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="HeadofAccountid_IncomeTaxID" class="form-label fw-bold">Income Tax (WithHolding)</label>
                             <select id="HeadofAccountid_IncomeTaxID" name="HeadofAccountid_IncomeTaxID" class="form-select form-select-lg">
@@ -65,8 +67,10 @@
                             <label class="form-label fw-bold">Total Amount</label>
                             <input id="IncomeTaxAmount" class="form-control form-control-lg" />
                         </div>
+                        </div>
                     </div>
-                    <hr />
+                    <button type="button" class="collapsible" style="position: absolute;top: 53px;right: 180px;">Sale Tax Detail</button>
+                    <div class="content" style="display: none;">
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="HeadofAccountid_SaleTaxID" class="form-label fw-bold">Sale Tax</label>
@@ -87,7 +91,7 @@
                             <input id="SaleTaxAmount" class="form-control form-control-lg" />
                         </div>
                     </div>
-                    <hr />
+                    </div>  
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="HeadofAccountid_Debit" class="form-label fw-bold">Head of Account (Debit)</label>
@@ -230,6 +234,20 @@
                 }
             });
         });
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
     });
 
 
@@ -260,11 +278,11 @@
 
         // Add rows based on Debit, Credit, and Amount fields
         $(document).on('click', '.add-row', function () {
-            
+
             const debitHead = $('#HeadofAccountid_Debit').val();
             const creditHead = $('#HeadofAccountid_Credit').val();
             const incometaxHead = $('#HeadofAccountid_IncomeTaxID').val();
-            const saletaxHead = $('#HeadofAccountid_saleTaxID').val();
+            const saletaxHead = $('#HeadofAccountid_SaleTaxID').val();
             const amount = parseFloat($('#InstrumentAmount').val()) || 0;
 
             if (!debitHead || !creditHead || amount === 0) {
@@ -280,13 +298,13 @@
             let saleTaxAmount = 0;
 
             // Calculate Income Tax Amount
-            if (incomeTaxValue && creditHead && amount !== 0) {
+            if (incomeTaxValue && incometaxHead && amount !== 0) {
                 incomeTaxAmount = (amount * incomeTaxValue) / 100;
                 $('#IncomeTaxAmount').val(incomeTaxAmount.toFixed(2));
             }
 
             // Calculate Sale Tax Amount
-            if (saleTaxValue && creditHead && amount !== 0) {
+            if (saleTaxValue && saletaxHead && amount !== 0) {
                 saleTaxAmount = (amount * saleTaxValue) / 100;
                 $('#SaleTaxAmount').val(saleTaxAmount.toFixed(2));
             }
@@ -304,86 +322,96 @@
 
             // Add Debit row
             const debitRow = `<tr>
-        <td>
-            <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount}].DRCR">
-                <option value="1" selected>Debit</option>
-            </select>
-        </td>
-        <td>
-            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount}].HeadofAccount_FiveID">
-                <option value="${debitHead}" selected>${$('#HeadofAccountid_Debit option:selected').text()}</option>
-            </select>
-        </td>
-        <td>
-            <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount}].DrAmt" value="${amount.toFixed(2)}" />
-        </td>
-        <td>
-            <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount}].CrAmt" value="0" readonly />
-        </td>
-    </tr>`;
+            <td>
+                <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount}].DRCR">
+                    <option value="1" selected>Debit</option>
+                </select>
+            </td>
+            <td>
+                <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount}].HeadofAccount_FiveID">
+                    <option value="${debitHead}" selected>${$('#HeadofAccountid_Debit option:selected').text()}</option>
+                </select>
+            </td>
+            <td>
+                <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount}].DrAmt" value="${amount.toFixed(2)}" />
+            </td>
+            <td>
+                <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount}].CrAmt" value="0" readonly />
+            </td>
+        </tr>`;
 
             // Add Credit row
             const creditRow = `<tr>
-        <td>
-            <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount + 1}].DRCR" >
-                <option value="2" selected>Credit</option>
-            </select>
-        </td>
-        <td>
-            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount + 1}].HeadofAccount_FiveID">
-                <option value="${creditHead}" selected>${$('#HeadofAccountid_Credit option:selected').text()}</option>
-            </select>
-        </td>
-        <td>
-            <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount + 1}].DrAmt" value="0" readonly />
-        </td>
-        <td>
-            <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount + 1}].CrAmt" value="${remainingAmount.toFixed(2)}" />
-        </td>
-    </tr>`;
-
+            <td>
+                <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount + 1}].DRCR" >
+                    <option value="2" selected>Credit</option>
+                </select>
+            </td>
+            <td>
+                <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount + 1}].HeadofAccount_FiveID">
+                    <option value="${creditHead}" selected>${$('#HeadofAccountid_Credit option:selected').text()}</option>
+                </select>
+            </td>
+            <td>
+                <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount + 1}].DrAmt" value="0" readonly />
+            </td>
+            <td>
+                <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount + 1}].CrAmt" value="${remainingAmount.toFixed(2)}" />
+            </td>
+        </tr>`;
             // Add Income Tax row
             const incometaxRow = `<tr>
-        <td>
-            <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount + 2}].DRCR" >
-                <option value="2" selected>Credit</option>
-            </select>
-        </td>
-        <td>
-            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount + 2}].HeadofAccount_FiveID">
-                <option value="${incometaxHead}" selected>${$('#HeadofAccountid_IncomeTaxID option:selected').text()}</option>
-            </select>
-        </td>
-        <td>
-            <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount + 2}].DrAmt" value="0" readonly />
-        </td>
-        <td>
-            <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount + 2}].CrAmt" value="${incomeTaxAmount.toFixed(2)}" />
-        </td>
-    </tr>`;
-
+                    <td>
+                        <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount + 2}].DRCR" >
+                            <option value="2" selected>Credit</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount + 2}].HeadofAccount_FiveID">
+                            <option value="${incometaxHead}" selected>${$('#HeadofAccountid_IncomeTaxID option:selected').text()}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount + 2}].DrAmt" value="0" readonly />
+                    </td>
+                    <td>
+                        <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount + 2}].CrAmt" value="${incomeTaxAmount.toFixed(2)}" />
+                    </td>
+                </tr>`;
             // Add Sale Tax row
             const saletaxRow = `<tr>
-        <td>
-            <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount + 3}].DRCR" >
-                <option value="2" selected>Credit</option>
-            </select>
-        </td>
-        <td>
-            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount + 3}].HeadofAccount_FiveID">
-                <option value="${saletaxHead}" selected>${$('#HeadofAccountid_SaleTaxID option:selected').text()}</option>
-            </select>
-        </td>
-        <td>
-            <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount + 3}].DrAmt" value="0" readonly />
-        </td>
-        <td>
-            <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount + 3}].CrAmt" value="${saleTaxAmount.toFixed(2)}" />
-        </td>
-    </tr>`;
-
+            <td>
+                <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount + 3}].DRCR" >
+                    <option value="2" selected>Credit</option>
+                </select>
+            </td>
+            <td>
+                <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount + 3}].HeadofAccount_FiveID">
+                    <option value="${saletaxHead}" selected>${$('#HeadofAccountid_SaleTaxID option:selected').text()}</option>
+                </select>
+            </td>
+            <td>
+                <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount + 3}].DrAmt" value="0" readonly />
+            </td>
+            <td>
+                <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount + 3}].CrAmt" value="${saleTaxAmount.toFixed(2)}" />
+            </td>
+        </tr>`;
             // Append rows to the table
-            tableBody.append(debitRow + creditRow + incometaxRow + saletaxRow);
+            debugger;
+            if (incomeTaxValue && incometaxHead && saleTaxValue && saletaxHead && amount !== 0) {
+                tableBody.append(debitRow + creditRow + incometaxRow + saletaxRow);
+
+            } else if (incomeTaxValue && incometaxHead && amount !== 0) {
+                tableBody.append(debitRow + creditRow + incometaxRow);
+
+            } else if (saleTaxValue && saletaxHead && amount !== 0) {
+                tableBody.append(debitRow + creditRow + saletaxRow);
+
+            } else {
+                tableBody.append(debitRow + creditRow);
+            }
+
 
             // Hide the add button
             // $('.add-row').hide();

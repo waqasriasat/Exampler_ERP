@@ -64,7 +64,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
         Vouchers = Vouchers
       };
 
-      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
+      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Payment();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
       ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
       ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyPayable();
@@ -89,7 +89,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
         {
           ModelState.AddModelError("TotalMismatch", "Total Debit and Credit amounts must be equal.");
 
-          ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
+          ViewBag.VoucherTypeList = await _utils.GetVoucherType_Payment();
           ViewBag.TransactionTypeList = await _utils.GetTransactionType();
           ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
           ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyPayable();
@@ -112,6 +112,11 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
           existingVoucher.InvoiceNo = Voucher.Vouchers.InvoiceNo;
           existingVoucher.DCNo = Voucher.Vouchers.DCNo;
           existingVoucher.Description = Voucher.Vouchers.Description;
+          existingVoucher.InstruDate = Voucher.Vouchers.InstruDate;
+          existingVoucher.InstruDetail = Voucher.Vouchers.InstruDetail;
+          existingVoucher.InstruNumber = Voucher.Vouchers.InstruNumber;
+          existingVoucher.InstruType = Voucher.Vouchers.InstruType;
+          existingVoucher.PayeeName = Voucher.Vouchers.PayeeName;
 
           _appDBContext.Update(existingVoucher);
           await _appDBContext.SaveChangesAsync();
@@ -141,7 +146,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
         }
       }
 
-      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
+      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Payment();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
       ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
       ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyPayable();
@@ -158,7 +163,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
     [HttpGet]
     public async Task<IActionResult> Create()
     {
-      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
+      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Payment();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
       ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
       ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyPayable();
@@ -277,7 +282,13 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       ViewBag.VoucherTypeList = await _utils.GetVoucherType_Payment();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
+      ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
+      ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyPayable();
+      ViewBag.IntrumentTypeList = await _utils.GetIntrumentType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
+      ViewBag.HeadofAccount_IncomeTaxPayableList = await _utils.GetHeadofAccount_FiveIncomeTaxPayable();
+      ViewBag.HeadofAccount_SaleTaxPayableList = await _utils.GetHeadofAccount_FiveSaleTaxPayable();
+
 
       if (model.Vouchers.VoucherDetails == null || !model.Vouchers.VoucherDetails.Any())
       {

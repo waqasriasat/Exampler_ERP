@@ -185,24 +185,27 @@
                                             <span class="smallAdd">Head of Accounts:</span>
                                             @{
                                                 var drDetails = item.VoucherDetails.Where(d => d.DRCR == 1).FirstOrDefault();
-                                                var crDetails = item.VoucherDetails.Where(d => d.DRCR == 2).FirstOrDefault();
+                                                var crDetails = item.VoucherDetails.Where(d => d.DRCR == 2).ToList();
                                             }
                                             @if (drDetails != null)
                                             {
                                                 <span> @drDetails.HeadofAccount_Five.HeadofAccount_FiveName</span>
                                             }
-                                            @if (crDetails != null)
+                                            @if (crDetails != null && crDetails.Any())
                                             {
-                                                <span> -> @crDetails.HeadofAccount_Five.HeadofAccount_FiveName</span>
+                                                foreach (var crDetail in crDetails)
+                                                {
+                                                    <span> -> @crDetail.HeadofAccount_Five.HeadofAccount_FiveName</span>
+                                                }
                                             }
                                         </p>
                                     </div>
                                     <div class="col-2">
                                         <p class="text-nowrap">
-                                            <span class="smallAdd">Credit Amount:</span>
+                                            <span class="smallAdd">Debit Amount:</span>
                                             <span>
-                                                @(crDetails != null && crDetails.CrAmt.HasValue
-                                                    ? crDetails.CrAmt.Value.ToString("N2")
+                                                @(crDetails != null && drDetails.DrAmt.HasValue
+                                                    ? drDetails.DrAmt.Value.ToString("N2")
                                                     : "0.00")
                                             </span>
 
