@@ -38,6 +38,10 @@
                             </select>
                             <span asp-validation-for="GroupTypeID" class="text-danger"></span>
                         </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="OpeningBalance" class="form-label fw-bold">Type Opening Balance</label>
+                            <input type="text" class="form-control form-control-lg" id="OpeningBalance" name="OpeningBalance" value="@Model.OpeningBalance" />
+                        </div>
                         <div class="col-12 col-md-12 col-lg-12">
                             <label for="HeadofAccount_FiveName" class="form-label fw-bold">HeadofAccount_Five Name</label>
                             <input type="text" class="form-control form-control-lg" id="HeadofAccount_FiveName" name="HeadofAccount_FiveName" value="@Model.HeadofAccount_FiveName" />

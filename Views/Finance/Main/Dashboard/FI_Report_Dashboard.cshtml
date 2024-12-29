@@ -59,15 +59,15 @@
                 @if (accessRightByRoleList.Contains(51) || accessRightByUsertList.Contains(51))
 
                 {
-                    @*Branch*@
+                    @*Lodgement*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="Branch" asp-action="Index">
+                        <a asp-controller="Lodgement" asp-action="Index">
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Branch</strong>
+                                        <strong class="text-primary">Lodgement</strong>
                                         <h4 class="font-weight-bold text-dark">
-                                            @ViewBag.BranchCount
+                                            @ViewBag.Lodgement
                                         </h4>
                                     </div>
                                     <div class="icon bg-primary text-white ">
@@ -81,131 +81,7 @@
                         </a>
                     </div>
                 }
-                @if (accessRightByRoleList.Contains(52) || accessRightByUsertList.Contains(52))
-
-                {
-                    @*Department*@
-                    <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="Department" asp-action="Index">
-                            <div class="modern-card shadow mb-4">
-                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                    <div class="card-details">
-                                        <strong class="text-primary">Department</strong>
-                                        <h4 class="font-weight-bold text-dark">
-                                            @ViewBag.DepartmentCount
-                                        </h4>
-                                    </div>
-                                    <div class="icon bg-primary text-white ">
-                                        <i class="fa fa-building Card1I" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                                <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                }
-                @if (accessRightByRoleList.Contains(53) || accessRightByUsertList.Contains(53))
-
-                {
-                    @*Section*@
-                    <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="Section" asp-action="Index">
-                            <div class="modern-card shadow mb-4">
-                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                    <div class="card-details">
-                                        <strong class="text-primary">Section</strong>
-                                        <h4 class="font-weight-bold text-dark">
-                                            @ViewBag.SectionCount
-                                        </h4>
-                                    </div>
-                                    <div class="icon bg-primary text-white ">
-                                        <i class="fa fa-layer-group Card1I" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                                <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                }
-                @if (accessRightByRoleList.Contains(54) || accessRightByUsertList.Contains(54))
-
-                {
-                    @*Qualification*@
-                    <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="Qualification" asp-action="Index">
-                            <div class="modern-card shadow mb-4">
-                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                    <div class="card-details">
-                                        <strong class="text-primary">Qualification</strong>
-                                        <h4 class="font-weight-bold text-dark">
-                                            @ViewBag.QualificationCount
-                                        </h4>
-                                    </div>
-                                    <div class="icon bg-primary text-white ">
-                                        <i class="fa fa-user-graduate Card1I" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                                <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                }
-                @if (accessRightByRoleList.Contains(55) || accessRightByUsertList.Contains(55))
-
-                {
-                    @*SubQualification*@
-                    <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="SubQualification" asp-action="Index">
-                            <div class="modern-card shadow mb-4">
-                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                    <div class="card-details">
-                                        <strong class="text-primary">Sub Qualification</strong>
-                                        <h4 class="font-weight-bold text-dark">
-                                            @ViewBag.SubQualificationCount
-                                        </h4>
-                                    </div>
-                                    <div class="icon bg-primary text-white">
-                                        <i class="fa fa-certificate Card1I" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                                <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                }
-                @if (accessRightByRoleList.Contains(56) || accessRightByUsertList.Contains(56))
-
-                {
-                    @*Designation*@
-                    <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="Designation" asp-action="Index">
-                            <div class="modern-card shadow mb-4">
-                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                    <div class="card-details">
-                                        <strong class="text-primary">Designation</strong>
-                                        <h4 class="font-weight-bold text-dark">
-                                            @ViewBag.DesignationCount
-                                        </h4>
-                                    </div>
-                                    <div class="icon bg-primary text-white">
-                                        <i class="fa fa-user-tag Card1I" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                                <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                }
+                
             </div>
         </div>
     </div>

@@ -60,12 +60,12 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       Vouchers.VoucherDetails.Add(new FI_VoucherDetail() { VoucherID = Vouchers.VoucherID });
 
-      var model = new TransferVoucherIndexViewModel
+      var model = new JournalVoucherIndexViewModel
       {
         Vouchers = Vouchers
       };
 
-      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Transfer();
+      ViewBag.VoucherTypeList = await _utils.GetVoucherType_Journal();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
 
