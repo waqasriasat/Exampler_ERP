@@ -1,172 +1,71 @@
-@model Exampler_ERP.Models.HR_GlobalSetting
-
 @{
-    ViewData["Title"] = "Setup - Human Resources";
+    ViewData["Title"] = "Report - Lodgement";
 }
 
 @section PageScripts {
-    <script src="~/js/pages-account-settings-account.js"></script>
+    <script>
+        function printLodgement() {
+            // Opens a new window for printing the lodgement
+            var printWindow = window.open('@Url.Action("Print", "Lodgement")', '_blank');
+            if (printWindow) printWindow.focus();
+        }
+    </script>
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Setup /</span> Human Resources
+    <span class="text-muted fw-light">Report /</span> Lodgement
 </h4>
-
 <div class="row">
     <div class="col-md-12">
-        <ul class="nav nav-pills flex-column flex-md-row mb-3">
-            <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="menu-icon tf-icons bx bx-group"></i> Human Resources</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/FinanceGlobalSetting/Index"><i class="menu-icon tf-icons bx bx-dollar"></i> Finance</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/StoreManagementGlobalSetting/Index"><i class="menu-icon tf-icons bx bx-store"></i> Store Management</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/PurchaseGlobalSetting/Index"><i class="menu-icon tf-icons bx bx-cart"></i> Purchase</a></li>
-        </ul>
-        <div class="card mb-4">
-            <h5 class="card-header">Configuration Details</h5>
-            <div class="card-body">
-                <form id="formAccountSettings" method="POST">
-                    <div class="row">
-                        <h4 class="mb-4 mb-3">
-                            <h6 class="mb-3 text-primary">Late Arrival Management</h6>
-                        </h4>
-                        <div class="mb-3 col-md-6">
-                            <label for="LateAppID" class="form-label">Automatic Deduction for Late Arrivals</label>
-                            <select asp-for="LateAppID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
-                                <option>Please select</option>
-                            </select>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="LateTypeID" class="form-label">Deduction Type</label>
-                            <select asp-for="LateTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypesList, "Value", "Text"))" class="form-control form-control-lg" id="LateTypeID">
-                            </select>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="LateGraceMinute" class="form-label">Allowed Grace Period (Minutes)</label>
-                            <input type="number" class="form-control form-control-lg"
-                                   id="LateGraceMinute" name="LateGraceMinute"
-                                   value="@Model.LateGraceMinute" min="1" max="60" />
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="LateValueofHours" class="form-label">Deduction Percentage of Daily Pay</label>
-                            <input type="number" class="form-control form-control-lg"
-                                   id="LateValueofHours" name="LateValueofHours"
-                                   value="@Model.LateValueofHours" min="1" max="100" />
+        <div class="card">
+            <h5 class="card-header">Lodgement Print</h5>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="p-4">
+                      <br />
+                        <!-- Date Selection Section -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">From Date</label>
+                                <input id="FromDate" class="form-control form-control-lg" type="date" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">To Date</label>
+                                <input id="ToDate" class="form-control form-control-lg" type="date" />
+                            </div>
                         </div>
 
-                        <hr class="my-0">
-                        <h4 class="mb-4 mb-3">
-                            <h6 class="mb-3 text-primary">Early Departure Management</h6>
-                        </h4>
-                        <div class="mb-3 col-md-6">
-                            <label for="EarlyGoingAppID" class="form-label">Automatic Deduction for Early Departures</label>
-                            <select asp-for="EarlyGoingAppID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
-                                <option>Please select</option>
-                            </select>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="EarlyGoingTypeID" class="form-label">Deduction Type</label>
-                            <select asp-for="EarlyGoingTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypesList, "Value", "Text"))" class="form-control form-control-lg" id="EarlyGoingTypeID">
-                            </select>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="EarlyGoingGraceMinute" class="form-label">Allowed Grace Period (Minutes)</label>
-                            <input type="number" class="form-control form-control-lg"
-                                   id="EarlyGoingGraceMinute" name="EarlyGoingGraceMinute"
-                                   value="@Model.EarlyGoingGraceMinute" min="1" max="60" />
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="EarlyGoingValueofHours" class="form-label">Deduction Percentage of Daily Pay</label>
-                            <input type="number" class="form-control form-control-lg"
-                                   id="EarlyGoingValueofHours" name="EarlyGoingValueofHours"
-                                   value="@Model.EarlyGoingValueofHours" min="1" max="100" />
-                        </div>
+                        <!-- Head of Account Section -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="HeadofAccount_ID" class="form-label fw-bold">Head Of Account</label>
+                                <select id="HeadofAccount_ID" class="form-select form-select-lg">
+                                    <option value="">Select Head Of Account</option>
+                                    @if (ViewBag.HeadofAccount_FiveList != null)
 
-                        <hr class="my-0">
-                        <h4 class="mb-4 mb-3">
-                            <h6 class="mb-3 text-primary">Early Arrival Overtime Management</h6>
-                        </h4>
-                        <div class="mb-3 col-md-6">
-                            <label for="EarlyComingAppID" class="form-label">Automatic Overtime for Early Arrivals</label>
-                            <select asp-for="EarlyComingAppID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
-                                <option>Please select</option>
-                            </select>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="EarlyComingGraceMinute" class="form-label">Overtime Type</label>
-                            <select asp-for="EarlyComingGraceMinute" asp-items="@(new SelectList(ViewBag.OvertimeTypeList, "Value", "Text"))" class="form-control form-control-lg" id="EarlyComingGraceMinute">
-                            </select>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="EarlyComingValueofHours" class="form-label">Overtime Percentage of Daily Pay</label>
-                            <input type="number" class="form-control form-control-lg"
-                                   id="EarlyComingValueofHours" name="EarlyComingValueofHours"
-                                   value="@Model.EarlyComingValueofHours" min="1" max="100" />
-                        </div>
 
-                        <hr class="my-0">
-                        <h4 class="mb-4 mb-3">
-                            <h6 class="mb-3 text-primary">Late Stay Overtime Management</h6>
-                        </h4>
-                        <div class="mb-3 col-md-6">
-                            <label for="LateSeatingAppID" class="form-label">Automatic Overtime for Late Stays</label>
-                            <select asp-for="LateSeatingAppID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
-                                <option>Please select</option>
-                            </select>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="LateSeatingGraceMinute" class="form-label">Overtime Type</label>
-                            <select asp-for="LateSeatingGraceMinute" asp-items="@(new SelectList(ViewBag.OvertimeTypeList, "Value", "Text"))" class="form-control form-control-lg" id="LateSeatingGraceMinute">
-                            </select>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="LateSeatingValueofHours" class="form-label">Overtime Percentage of Daily Pay</label>
-                            <input type="number" class="form-control form-control-lg"
-                                   id="LateSeatingValueofHours" name="LateSeatingValueofHours"
-                                   value="@Model.LateSeatingValueofHours" min="1" max="100" />
-                        </div>
 
-                        <hr class="my-0">
-                        <h4 class="mb-4 mb-3">
-                            <h6 class="mb-3 text-primary">Absence Management</h6>
-                        </h4>
-                        <div class="mb-3 col-md-6">
-                            <label for="AbsentAppID" class="form-label">Automatic Deduction for Absences</label>
-                            <select asp-for="AbsentAppID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
-                                <option>Please select</option>
-                            </select>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="AbsentTypeID" class="form-label">Deduction Type</label>
-                            <select asp-for="AbsentTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypesList, "Value", "Text"))" class="form-control form-control-lg" id="AbsentTypeID">
-                            </select>
-                        </div>
+                                    {
 
-                        <hr class="my-0">
-                        <h4 class="mb-4 mb-3">
-                            <h6 class="mb-3 text-primary">Flexible Duty Management</h6>
-                        </h4>
-                        <div class="mb-3 col-md-6">
-                            <label for="FlexibleDutyHourID" class="form-label">Flexible Duty Hours Allowed</label>
-                            <select asp-for="FlexibleDutyHourID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
-                                <option>Please select</option>
-                            </select>
-                        </div>
-                        <hr class="my-0">
-                        <h4 class="mb-4 mb-3">
-                            <h6 class="mb-3 text-primary">Working Day Management</h6>
-                        </h4>
-                        <div class="mb-3 col-md-6">
-                            <label for="WorkingDayInWeek" class="form-label">Number of Working Days in a Week</label>
-                            <input type="number" class="form-control form-control-lg"
-                                   id="WorkingDayInWeek" name="WorkingDayInWeek"
-                                   value="@Model.WorkingDayInWeek" min="5" max="6" />
-                        </div>
 
+
+                                        foreach (var type in ViewBag.HeadofAccount_FiveList)
+
+
+
+                                        {
+                                            <option value="@type.Value">@type.Text</option>
+                                        }
+
+
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mt-2">
-                        <button type="submit" class="btn btn-primary me-2">Save Changes</button>
-                        <button type="reset" class="btn btn-outline-secondary">Cancel</button>
-                    </div>
-                </form>
+                    <br />
+                </div>
             </div>
         </div>
     </div>
