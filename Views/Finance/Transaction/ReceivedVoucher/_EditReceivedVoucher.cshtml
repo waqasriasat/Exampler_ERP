@@ -19,10 +19,10 @@
 
 <div class="row mb-3">
     <div class="col-md-6">
-        <label for="HeadofAccountid_Debit" class="form-label fw-bold">Head of Account (Debit)</label>
-        <select id="HeadofAccountid_Debit" name="HeadofAccountid_Debit" class="form-select form-select-lg">
+        <label for="HeadofAccountid_credit" class="form-label fw-bold">Head of Account (Credit)</label>
+        <select id="HeadofAccountid_credit" name="HeadofAccountid_credit" class="form-select form-select-lg">
             <option value="" selected>Select Head of Account</option>
-            @foreach (var type in ViewBag.HeadofAccount_DebitList)
+            @foreach (var type in ViewBag.HeadofAccount_creditList)
             {
                 <option value="@type.Value">@type.Text</option>
             }
@@ -30,10 +30,10 @@
     </div>
 
     <div class="col-md-6">
-        <label for="HeadofAccountid_Credit" class="form-label fw-bold">Head of Account (Credit)</label>
-        <select id="HeadofAccountid_Credit" name="HeadofAccountid_Credit" class="form-select form-select-lg">
+        <label for="HeadofAccountid_debit" class="form-label fw-bold">Head of Account (Debit)</label>
+        <select id="HeadofAccountid_debit" name="HeadofAccountid_debit" class="form-select form-select-lg">
             <option value="" selected>Select Head of Account</option>
-            @foreach (var type in ViewBag.HeadofAccount_CreditList)
+            @foreach (var type in ViewBag.HeadofAccount_debitList)
             {
                 <option value="@type.Value">@type.Text</option>
             }
@@ -128,6 +128,7 @@
                                 }
                             </select>
                         </td>
+                        
                         <td>
                             <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[@i].DrAmt" value="@Model.Vouchers.VoucherDetails[i].DrAmt" />
                         </td>
@@ -143,12 +144,13 @@
 </div>
 
 <div class="row mt-4">
+    
     <div class="col-md-6">
-        <label class="form-label fw-bold">Total Debit Amount</label>
-        <input id="TotalDrAmt" class="form-control form-control-lg" readonly />
+        <label class="form-label fw-bold">Total debit Amount</label>
+        <input id="TotalCrAmt" class="form-control form-control-lg" readonly />
     </div>
     <div class="col-md-6">
-        <label class="form-label fw-bold">Total Credit Amount</label>
-        <input id="TotalCrAmt" class="form-control form-control-lg" readonly />
+        <label class="form-label fw-bold">Total credit Amount</label>
+        <input id="TotalDrAmt" class="form-control form-control-lg" readonly />
     </div>
 </div>

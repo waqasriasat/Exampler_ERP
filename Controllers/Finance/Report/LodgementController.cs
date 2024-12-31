@@ -50,7 +50,28 @@ namespace Exampler_ERP.Controllers.Finance.Report
 
         var Vouchers = await VouchersQuery.ToListAsync();
 
-        ViewBag.OpeningBalance = model.OpeningBalance ?? 0;
+        var openingBalance = await _appDBContext.Settings_HeadofAccount_Fives
+          .Where(h => h.HeadofAccount_FiveID == model.HeadofAccount_ID)
+          .Select(h => h.OpeningBalance)
+          .FirstOrDefaultAsync();
+
+        var staticDate = new DateTime(2024, 12, 15);
+
+        var GetPreviousSum = await _appDBContext.FI_VoucherDetails
+            .Include(h => h.Voucher)
+            .Where(h => h.HeadofAccount_FiveID == model.HeadofAccount_ID
+                && h.Voucher.VoucherDate > staticDate
+                && h.Voucher.VoucherDate < model.FromDate)
+            .Select(h => new { h.CrAmt, h.DrAmt })
+            .ToListAsync();
+
+        decimal totalCrAmtSum = GetPreviousSum.Sum(x => (decimal)(x.CrAmt ?? 0));
+        decimal totalDrAmtSum = GetPreviousSum.Sum(x => (decimal)(x.DrAmt ?? 0));
+        decimal GrandTotal = totalDrAmtSum - totalCrAmtSum;
+        decimal CurrentOpeningbalance = (decimal)openingBalance - GrandTotal;
+
+        ViewBag.OpeningBalance = CurrentOpeningbalance;
+        ViewBag.HeadofAccountID = model.HeadofAccount_ID;
 
         return View("~/Views/Finance/Report/Lodgement/PrintLodgement.cshtml", Vouchers);
       }

@@ -23,12 +23,24 @@
         th {
             background-color: white;
         }
+        .labeltxtTop{
+            float: right;
+            height: 30px;
+            margin-right: 32px;
+        }
+
+        .labeltxtbottom {
+            float: right;
+            height: 30px;
+            margin-right: 32px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body style="background-color:white">
     <h2>Lodgement Report</h2>
-
-    <div>
+    <div><strong></strong></div>
+    <div class="labeltxtTop">
         <strong>Opening Balance:</strong>
         <span>
             @{
@@ -38,11 +50,6 @@
             }
         </span>
     </div>
-
-    @* @{
-        decimal openingBalance = ViewBag.OpeningBalance;
-        decimal currentBalance = openingBalance; // Initialize current balance with the opening balance
-    } *@
 
     <table>
         <thead>
@@ -59,18 +66,11 @@
         <tbody>
             @foreach (var voucher in Model)
             {
-                // Calculate total debit and credit for the voucher
-                var totalDebit = voucher.VoucherDetails
-                .Where(d => d.DRCR == 1 && d.HeadofAccount_FiveID == voucher.VoucherDetails
-                .FirstOrDefault()?.HeadofAccount_FiveID) // Ensures we compare with the HeadofAccount_FiveID of the first entry
-                .Sum(d => d.DrAmt ?? 0);
+                var selectedDetail = voucher.VoucherDetails
+                .FirstOrDefault(d => d.HeadofAccount_FiveID == ViewBag.HeadofAccountID);
 
-
-                var totalCredit = voucher.VoucherDetails
-                .Where(d => d.DRCR == 2 && d.HeadofAccount_FiveID == voucher.VoucherDetails
-                .FirstOrDefault()?.HeadofAccount_FiveID) // Ensures we compare with the HeadofAccount_FiveID of the first entry
-                .Sum(d => d.CrAmt ?? 0);
-
+                var totalDebit = selectedDetail?.DRCR == 1 ? (selectedDetail.DrAmt ?? 0) : 0;
+                var totalCredit = selectedDetail?.DRCR == 2 ? (selectedDetail.CrAmt ?? 0) : 0;
 
                 // Update current balance based on debit and credit
                 currentBalance += (decimal)totalCredit - (decimal)totalDebit;
@@ -79,7 +79,7 @@
                     <td>@voucher.VoucherNo</td>
                     <td>@voucher.VoucherDate?.ToString("dd-MM-yyyy")</td>
                     <td>@voucher.PayeeName</td>
-                    <td>@voucher.InstruNumber ?? "N/A"</td>
+                    <td>@voucher.InstruNumber</td>
                     <td>@totalDebit.ToString("N2")</td>
                     <td>@totalCredit.ToString("N2")</td>
                     <td>@currentBalance.ToString("N2")</td>
@@ -87,20 +87,14 @@
             }
         </tbody>
     </table>
-
-    <div style="margin-top: 10px;">
+    <div class="labeltxtTop">
         <strong>Closing Balance:</strong>
         <span>@currentBalance.ToString("N2")</span>
     </div>
 
 
-    <div style="margin-top: 10px;">
-        <strong>Closing Balance:</strong>
-        <span>@currentBalance.ToString("N2")</span>
-    </div>
-
-    <script>
+    @* <script>
         window.print();
-    </script>
+    </script> *@
 </body>
 </html>

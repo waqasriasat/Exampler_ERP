@@ -66,8 +66,8 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
-      ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
-      ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyReceivable();
+      ViewBag.HeadofAccount_creditList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
+      ViewBag.HeadofAccount_debitList = await _utils.GetHeadofAccount_FiveOnlyReceivable();
       ViewBag.IntrumentTypeList = await _utils.GetIntrumentType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
 
@@ -80,12 +80,12 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
     {
       if (ModelState.IsValid)
       {
-        var totalDebit = Voucher.Vouchers.VoucherDetails.Sum(v => v.DrAmt ?? 0);
-        var totalCredit = Voucher.Vouchers.VoucherDetails.Sum(v => v.CrAmt ?? 0);
+        var totalcredit = Voucher.Vouchers.VoucherDetails.Sum(v => v.DrAmt ?? 0);
+        var totaldebit = Voucher.Vouchers.VoucherDetails.Sum(v => v.CrAmt ?? 0);
 
-        if (totalDebit != totalCredit)
+        if (totalcredit != totaldebit)
         {
-          ModelState.AddModelError("TotalMismatch", "Total Debit and Credit amounts must be equal.");
+          ModelState.AddModelError("TotalMismatch", "Total credit and debit amounts must be equal.");
 
           ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
           ViewBag.TransactionTypeList = await _utils.GetTransactionType();
@@ -136,8 +136,8 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
-      ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
-      ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyReceivable();
+      ViewBag.HeadofAccount_creditList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
+      ViewBag.HeadofAccount_debitList = await _utils.GetHeadofAccount_FiveOnlyReceivable();
       ViewBag.IntrumentTypeList = await _utils.GetIntrumentType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
 
@@ -151,8 +151,8 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
     {
       ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
-      ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
-      ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyReceivable();
+      ViewBag.HeadofAccount_creditList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
+      ViewBag.HeadofAccount_debitList = await _utils.GetHeadofAccount_FiveOnlyReceivable();
       ViewBag.IntrumentTypeList = await _utils.GetIntrumentType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
 
@@ -266,8 +266,8 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       ViewBag.VoucherTypeList = await _utils.GetVoucherType_Received();
       ViewBag.TransactionTypeList = await _utils.GetTransactionType();
-      ViewBag.HeadofAccount_DebitList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
-      ViewBag.HeadofAccount_CreditList = await _utils.GetHeadofAccount_FiveOnlyReceivable();
+      ViewBag.HeadofAccount_creditList = await _utils.GetHeadofAccount_FiveOnlyCashandBank();
+      ViewBag.HeadofAccount_debitList = await _utils.GetHeadofAccount_FiveOnlyReceivable();
       ViewBag.IntrumentTypeList = await _utils.GetIntrumentType();
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
 
@@ -323,7 +323,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
         worksheet.Cells["A1"].Value = "Voucher #";
         worksheet.Cells["B1"].Value = "Date";
         worksheet.Cells["C1"].Value = "Head of Account";
-        worksheet.Cells["D1"].Value = "Credit Amount";
+        worksheet.Cells["D1"].Value = "debit Amount";
 
         worksheet.Cells["A1:D1"].Style.Font.Bold = true; // Bold header
 
@@ -348,7 +348,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
           if (crDetails != null)
           {
             worksheet.Cells[row, 4].Value = crDetails.CrAmt.HasValue
-                ? crDetails.CrAmt.Value.ToString("N2") // Credit Amount
+                ? crDetails.CrAmt.Value.ToString("N2") // debit Amount
                 : "0.00";
           }
 
