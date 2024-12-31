@@ -4,12 +4,63 @@
 
 @section PageScripts {
     <script>
-        function printLodgement() {
-            // Opens a new window for printing the lodgement
-            var printWindow = window.open('@Url.Action("Print", "Lodgement")', '_blank');
-            if (printWindow) printWindow.focus();
-        }
+        $(document).ready(function () {
+            $('#showReportBtn').click(function () {
+                // Collect form data
+                var formData = {
+                    FromDate: $('#FromDate').val(),
+                    ToDate: $('#ToDate').val(),
+                    HeadofAccount_ID: $('#HeadofAccount_ID').val(),
+                    OpeningBalance: $('#OpeningBalance').val()
+                };
+
+                $.ajax({
+                    url: '@Url.Action("Print", "Lodgement")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        var printWindow = window.open();
+                        printWindow.document.write(response); // Show the report content in a new window
+                        printWindow.focus();
+                        printWindow.print();
+                    },
+                    error: function () {
+                        alert('Error generating the report.');
+                    }
+                });
+            });
+        });
     </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#HeadofAccount_ID').change(function () {
+                var headofAccountId = $(this).val();
+
+                if (headofAccountId) {
+                    $.ajax({
+                        url: '@Url.Action("GetOpeningBalance", "Lodgement")', // Adjust controller name if necessary
+                        type: 'GET',
+                        data: { headofAccountId: headofAccountId },
+                        success: function (response) {
+                            if (response.success) {
+                                $('#OpeningBalance').val(response.balance.toFixed(2)); // Display balance in two decimal format
+                            } else {
+                                $('#OpeningBalance').val('0.00'); // Default value if no balance found
+                            }
+                        },
+                        error: function () {
+                            alert('Error fetching opening balance.');
+                        }
+                    });
+                } else {
+                    $('#OpeningBalance').val('0.00'); // Clear the field if no option is selected
+                }
+            });
+        });
+    </script>
+
 }
 
 <h4 class="py-3 mb-4">
@@ -22,49 +73,43 @@
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="p-4">
-                      <br />
+                        <br />
                         <!-- Date Selection Section -->
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">From Date</label>
-                                <input id="FromDate" class="form-control form-control-lg" type="date" />
+                        <form id="lodgementForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">From Date</label>
+                                    <input id="FromDate" name="FromDate" class="form-control form-control-lg" type="date" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">To Date</label>
+                                    <input id="ToDate" name="ToDate" class="form-control form-control-lg" type="date" />
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">To Date</label>
-                                <input id="ToDate" class="form-control form-control-lg" type="date" />
-                            </div>
-                        </div>
-
-                        <!-- Head of Account Section -->
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label for="HeadofAccount_ID" class="form-label fw-bold">Head Of Account</label>
-                                <select id="HeadofAccount_ID" class="form-select form-select-lg">
-                                    <option value="">Select Head Of Account</option>
-                                    @if (ViewBag.HeadofAccount_FiveList != null)
-
-
-
-                                    {
-
-
-
-                                        foreach (var type in ViewBag.HeadofAccount_FiveList)
-
-
-
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="HeadofAccount_ID" class="form-label fw-bold">Head Of Account</label>
+                                    <select id="HeadofAccount_ID" name="HeadofAccount_ID" class="form-select form-select-lg">
+                                        <option value="">Select Head Of Account</option>
+                                        @if (ViewBag.HeadofAccount_FiveList != null)
                                         {
-                                            <option value="@type.Value">@type.Text</option>
+                                            foreach (var type in ViewBag.HeadofAccount_FiveList)
+                                            {
+                                                <option value="@type.Value">@type.Text</option>
+                                            }
                                         }
-
-
-
-                                    }
-                                </select>
+                                    </select>
+                                    <input id="OpeningBalance" name="OpeningBalance" class="form-control form-control-lg" type="number" readonly />
+                                </div>
                             </div>
-                        </div>
+                            <div class="row justify-content-center mt-3">
+                                <div class="mt-2 text-center">
+                                    <button type="button" id="showReportBtn" class="btn btn-primary me-2">Show Report</button>
+                                </div>
+                            </div>
+                        </form>
+
                     </div>
-                    <br />
                 </div>
             </div>
         </div>

@@ -23,4 +23,12 @@ namespace Exampler_ERP.Models.Temp
     public FI_Voucher Vouchers { get; set; }
 
   }
+  public class LodgementReportModel
+  {
+    public DateTime FromDate { get; set; }
+    public DateTime ToDate { get; set; }
+    public int? HeadofAccount_ID { get; set; }
+    public decimal? OpeningBalance { get; set; }
+  }
+
 }

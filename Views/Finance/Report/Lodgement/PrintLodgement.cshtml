@@ -1,5 +1,106 @@
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+@model IEnumerable<Exampler_ERP.Models.FI_Voucher>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Lodgement</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Lodgement Report</h2>
+
+    <div>
+        <strong>Opening Balance:</strong>
+        <span>
+            @{
+                decimal openingBalance = ViewBag.OpeningBalance;
+                decimal currentBalance = openingBalance;
+                <text>@openingBalance.ToString("N2")</text>
+            }
+        </span>
+    </div>
+
+    @* @{
+        decimal openingBalance = ViewBag.OpeningBalance;
+        decimal currentBalance = openingBalance; // Initialize current balance with the opening balance
+    } *@
+
+    <table>
+        <thead>
+            <tr>
+                <th>Voucher #</th>
+                <th>Date</th>
+                <th>Payee Name</th>
+                <th>Instrument Number</th>
+                <th>Debit Amount</th>
+                <th>Credit Amount</th>
+                <th>Current Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var voucher in Model)
+            {
+                // Calculate total debit and credit for the voucher
+                var totalDebit = voucher.VoucherDetails
+                .Where(d => d.DRCR == 1 && d.HeadofAccount_FiveID == voucher.VoucherDetails
+                .FirstOrDefault()?.HeadofAccount_FiveID) // Ensures we compare with the HeadofAccount_FiveID of the first entry
+                .Sum(d => d.DrAmt ?? 0);
+
+
+                var totalCredit = voucher.VoucherDetails
+                .Where(d => d.DRCR == 2 && d.HeadofAccount_FiveID == voucher.VoucherDetails
+                .FirstOrDefault()?.HeadofAccount_FiveID) // Ensures we compare with the HeadofAccount_FiveID of the first entry
+                .Sum(d => d.CrAmt ?? 0);
+
+
+                // Update current balance based on debit and credit
+                currentBalance += (decimal)totalCredit - (decimal)totalDebit;
+
+                <tr>
+                    <td>@voucher.VoucherNo</td>
+                    <td>@voucher.VoucherDate?.ToString("dd-MM-yyyy")</td>
+                    <td>@voucher.PayeeName</td>
+                    <td>@voucher.InstruNumber ?? "N/A"</td>
+                    <td>@totalDebit.ToString("N2")</td>
+                    <td>@totalCredit.ToString("N2")</td>
+                    <td>@currentBalance.ToString("N2")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div style="margin-top: 10px;">
+        <strong>Closing Balance:</strong>
+        <span>@currentBalance.ToString("N2")</span>
+    </div>
+
+
+    <div style="margin-top: 10px;">
+        <strong>Closing Balance:</strong>
+        <span>@currentBalance.ToString("N2")</span>
+    </div>
+
+    <script>
+        window.print();
+    </script>
+</body>
+</html>
