@@ -1,10 +1,57 @@
 @model List<Exampler_ERP.Models.Temp.TrialBalanceTreeNode>
 
 @{
+    Layout = "_BlankLayout";
     ViewData["Title"] = "Trial Balance (Grouped Tree)";
 }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Trial Balance</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
 
-<h1>Trial Balance</h1>
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+        .labeltxtTop{
+            float: right;
+            height: 30px;
+            margin-right: 32px;
+        }
+
+        .labeltxtbottom {
+            float: right;
+            height: 30px;
+            margin-right: 32px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <div class="row">
+        <div class="col-3">
+            <img src="~/img/favicon/clientlogo.png" style=" width: 200px; padding: 10px 0px 0px 20px; " />
+        </div>
+        <div class="col-6">
+            <h5 style="text-align: center; padding-top: 35px; font-size: x-large;">
+                Trial Balance
+            </h5>
+        </div>
+    </div>
 
 <ul>
     @foreach (var node in Model)
@@ -14,3 +61,8 @@
 
     }
 </ul>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

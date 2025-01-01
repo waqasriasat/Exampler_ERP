@@ -1,18 +1,30 @@
 @model Exampler_ERP.Models.Temp.TrialBalanceTreeNode
 
 <li>
-    <strong>@Model.Name</strong>
-    @if (Model.DebitTotal.HasValue || Model.CreditTotal.HasValue)
-    {
-        <div>
-            Debit: @Model.DebitTotal?.ToString("N2") |
-            Credit: @Model.CreditTotal?.ToString("N2")
-        </div>
-    }
+    
+    <div>
+        <strong>@Model.Name</strong>
+        @* Opening Balance: @Model.OpeningBalance?.ToString("N2") |
+        Debit: @Model.DebitTotal?.ToString("N2") |
+        Credit: @Model.CreditTotal?.ToString("N2") |
+        Current Balance: @Model.CurrentBalance?.ToString("N2") *@
+        @if (Model.DebitTotal.HasValue || Model.CreditTotal.HasValue)
+
+        {
+            <div>
+                Opening Balance: @Model.OpeningBalance?.ToString("N2") |
+                Debit: @Model.DebitTotal?.ToString("N2") |
+                Credit: @Model.CreditTotal?.ToString("N2") |
+                Current Balance: @Model.CurrentBalance?.ToString("N2")
+            </div>
+        }
+    </div>
     @if (Model.Children != null && Model.Children.Any())
+
     {
         <ul>
             @foreach (var child in Model.Children)
+
             {
                 @Html.Partial("~/Views/Finance/Report/TrialBalance/_TreeNode.cshtml", child)
             }

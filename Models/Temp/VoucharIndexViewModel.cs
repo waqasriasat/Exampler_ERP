@@ -35,6 +35,8 @@ namespace Exampler_ERP.Models.Temp
     public string? Name { get; set; }
     public double? DebitTotal { get; set; }
     public double? CreditTotal { get; set; }
+    public double? OpeningBalance { get; set; }
+    public double? CurrentBalance { get; set; }
     public List<TrialBalanceTreeNode>? Children { get; set; } = new List<TrialBalanceTreeNode>();
   }
 }
