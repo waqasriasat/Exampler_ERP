@@ -81,7 +81,31 @@
                         </a>
                     </div>
                 }
-                
+                @if (accessRightByRoleList.Contains(51) || accessRightByUsertList.Contains(51))
+
+                {
+                    @*TrialBalance*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="TrialBalance" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">TrialBalance</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.TrialBalance
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white ">
+                                        <i class="fa fa-code-branch Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
             </div>
         </div>
     </div>

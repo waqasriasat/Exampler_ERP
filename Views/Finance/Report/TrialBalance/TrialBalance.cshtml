@@ -1,0 +1,16 @@
+@model List<Exampler_ERP.Models.Temp.TrialBalanceTreeNode>
+
+@{
+    ViewData["Title"] = "Trial Balance (Grouped Tree)";
+}
+
+<h1>Trial Balance</h1>
+
+<ul>
+    @foreach (var node in Model)
+    {
+      
+        @Html.Partial("~/Views/Finance/Report/TrialBalance/_TreeNode.cshtml", node)
+
+    }
+</ul>

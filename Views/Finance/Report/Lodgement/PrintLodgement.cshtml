@@ -1,5 +1,7 @@
 @model IEnumerable<Exampler_ERP.Models.FI_Voucher>
-
+@{
+    Layout = "_BlankLayout";
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,8 +40,18 @@
     </style>
 </head>
 <body style="background-color:white">
-    <h2>Lodgement Report</h2>
-    <div><strong></strong></div>
+    <div class="row">
+        <div class="col-3">
+            <img src="~/img/favicon/clientlogo.png" style=" width: 200px; padding: 10px 0px 0px 20px; " />
+        </div>
+        <div class="col-6">
+            <h5 style="text-align: center; padding-top: 35px; font-size: x-large;">
+                Lodgement Report
+            </h5>
+        </div>
+    </div>
+    <p><h6><span class="field-label">Head of Account : @ViewBag.HeadofAccountName</span></h6></p>
+    <p><h6><span class="field-label">From Date : @ViewBag.FromDate To : @ViewBag.ToDate</span></h6></p>
     <div class="labeltxtTop">
         <strong>Opening Balance:</strong>
         <span>
@@ -92,9 +104,5 @@
         <span>@currentBalance.ToString("N2")</span>
     </div>
 
-
-    @* <script>
-        window.print();
-    </script> *@
 </body>
 </html>

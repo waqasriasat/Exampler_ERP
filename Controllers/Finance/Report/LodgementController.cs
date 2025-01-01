@@ -38,6 +38,9 @@ namespace Exampler_ERP.Controllers.Finance.Report
           return BadRequest("Invalid data received.");
         }
 
+        model.FromDate = model.FromDate.Date; // Start of the day, 12:00:01 AM
+        model.ToDate = model.ToDate.Date.AddDays(1).AddSeconds(-1); // End of the day, 11:59:59 PM
+
         // Fetch vouchers based on the filter criteria
         var VouchersQuery = _appDBContext.FI_Vouchers
             .Include(v => v.VoucherDetails)
@@ -72,6 +75,12 @@ namespace Exampler_ERP.Controllers.Finance.Report
 
         ViewBag.OpeningBalance = CurrentOpeningbalance;
         ViewBag.HeadofAccountID = model.HeadofAccount_ID;
+        ViewBag.HeadofAccountName = await _appDBContext.Settings_HeadofAccount_Fives
+          .Where(h => h.HeadofAccount_FiveID == model.HeadofAccount_ID)
+          .Select(h => h.HeadofAccount_FiveName)
+          .FirstOrDefaultAsync();
+        ViewBag.FromDate = model.FromDate;
+        ViewBag.ToDate = model.ToDate;
 
         return View("~/Views/Finance/Report/Lodgement/PrintLodgement.cshtml", Vouchers);
       }
