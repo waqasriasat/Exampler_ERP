@@ -59,6 +59,7 @@ namespace Exampler_ERP.Models.Temp
 
   public class IncomeSheetReportViewModel
   {
+    public int AccountID { get; set; }
     public string AccountName { get; set; }
     public double DrAmt { get; set; } // Debit Amount
     public double CrAmt { get; set; } // Credit Amount

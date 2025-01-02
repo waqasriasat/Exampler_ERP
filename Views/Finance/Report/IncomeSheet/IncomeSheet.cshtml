@@ -26,7 +26,7 @@
                     return;
                 }
 
-                 debugger;
+                 
                 $.ajax({
                     url: '@Url.Action("Print", "IncomeSheet")',
                     type: 'POST',
@@ -34,15 +34,15 @@
                     data: JSON.stringify(formData),
 
                     success: function (response) {
-                      debugger;
+                      
                         var printWindow = window.open();
                         printWindow.document.open();
                         printWindow.document.write(response);
                         printWindow.document.close();
-                         debugger;
+                         
                     },
                     error: function () {
-                      debugger;
+                      
                         alert('Error generating the report.');
                     }
                 });

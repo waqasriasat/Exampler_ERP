@@ -6,7 +6,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
     <title>Income Sheet</title>
     <style>
         table {
@@ -38,31 +37,65 @@
         }
     </style>
 </head>
-<body>
-    <div class="title">Income Sheet</div>
-    <div class="subtitle">For the Period: @ViewBag.Month / @ViewBag.Year</div>
+<body style="background-color:white">
+    <div class="row">
+        <div class="col-3">
+            <img src="~/img/favicon/clientlogo.png" style=" width: 200px; padding: 10px 0px 0px 20px; " />
+        </div>
+        <div class="col-6">
+            <h5 style="text-align: center; padding-top: 35px; font-size: x-large;">
+                Income Sheet Report
+            </h5>
+            <h6 style="text-align: center; padding-top: 35px; font-size: x-large;">
+                <span class="field-label">
+                    @if (ViewBag.Month != null && ViewBag.Month > 0 && ViewBag.Month <= 12)
+
+                    {
+
+                        string[] months = new string[]
+
+                        {
+                    "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+
+                        };
+                        <text>For the Month of @months[ViewBag.Month - 1] (@ViewBag.Year)</text>
+                    }
+
+                    else
+
+                    {
+                        <text>For the Year of @ViewBag.Year</text>
+                    }
+                </span>
+            </h6>
+        </div>
+    </div>
 
     <h3>Revenues</h3>
     <table>
         <thead>
             <tr>
                 <th>Account Name</th>
-                <th>Credit Amount</th>
+                <th>Amount</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var revenue in Model.Revenues)
             {
                 <tr>
+                    @{
+                        double Amt = revenue.CrAmt + revenue.DrAmt;
+                    }
                     <td>@revenue.AccountName</td>
-                    <td>@revenue.CrAmt.ToString("C")</td>
+                    <td>@Amt.ToString("N2")</td>
                 </tr>
             }
         </tbody>
         <tfoot>
             <tr>
                 <td><strong>Total Revenues</strong></td>
-                <td><strong>@Model.TotalRevenues.ToString("C")</strong></td>
+                <td><strong>@Model.TotalRevenues.ToString("N2")</strong></td>
             </tr>
         </tfoot>
     </table>
@@ -72,27 +105,33 @@
         <thead>
             <tr>
                 <th>Account Name</th>
-                <th>Debit Amount</th>
+                <th>Amount</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var expense in Model.Expenses)
             {
                 <tr>
+                    @{
+                        double Amt = expense.CrAmt + expense.DrAmt;
+                    }
                     <td>@expense.AccountName</td>
-                    <td>@expense.DrAmt.ToString("C")</td>
+                    <td>@Amt.ToString("N2")</td>
                 </tr>
             }
         </tbody>
         <tfoot>
             <tr>
                 <td><strong>Total Expenses</strong></td>
-                <td><strong>@Model.TotalExpenses.ToString("C")</strong></td>
+                <td><strong>@Model.TotalExpenses.ToString("N2")</strong></td>
             </tr>
         </tfoot>
     </table>
 
     <h3 style="text-align: center;">Net Income: @Model.NetIncome.ToString("C")</h3>
+    <script>
+        window.print();
+    </script>
 </body>
 </html>
 

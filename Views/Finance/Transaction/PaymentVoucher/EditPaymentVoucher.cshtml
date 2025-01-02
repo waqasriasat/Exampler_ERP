@@ -178,7 +178,7 @@
         </tr>`;
             
             // Append rows to the table
-            debugger;
+            
             if (incomeTaxValue && incometaxHead && saleTaxValue && saletaxHead && amount !== 0) {
                 // Income Tax aur Sales Tax dono ke rows add karega
                 tableBody.append(debitRow + creditRow + incometaxRow + saletaxRow);
@@ -208,7 +208,7 @@
     $(document).ready(function () {
         const firstRow = $('#PaymentVoucherTable tbody tr').eq(0);
         const secondRow = $('#PaymentVoucherTable tbody tr').eq(1);
-        debugger;
+        
         const rows = $('#PaymentVoucherTable tbody .transaction-account');
         const debitHeadValue = $('#PaymentVoucherTable tbody .transaction-account')
             .eq(0)
@@ -245,7 +245,7 @@
         const instrumentAmount = parseFloat(
             $('#PaymentVoucherTable tbody .debit').eq(0).val()
         ) || 0;
-        debugger;
+        
         // Set the form values
         $('#HeadofAccountid_Debit').val(debitHeadValue).change();
         $('#HeadofAccountid_Debit option:selected').text(debitHeadText);
@@ -260,7 +260,7 @@
         $('#HeadofAccountid_SaleTaxID option:selected').text(saletaxHeadText);
 
         $('#InstrumentAmount').val(instrumentAmount.toFixed(2));
-        debugger;
+        
         
         $('#PaymentVoucherTable tbody')
             .find('input, select')

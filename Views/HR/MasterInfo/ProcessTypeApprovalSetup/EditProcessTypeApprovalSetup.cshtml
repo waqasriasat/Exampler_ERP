@@ -28,7 +28,7 @@
 
         // Event handler for role checkbox change
         $(document).on('change', '.role-checkbox', function () {
-            // debugger;
+            // 
             var roleTypeId = $(this).val();
             var rankInput = $('#rank_' + roleTypeId);
 
@@ -52,7 +52,7 @@
         });
 
         function reorderRanks() {
-            // debugger;
+            // 
             var checkedRoles = [];
             $('.role-checkbox:checked').each(function () {
                 checkedRoles.push($(this).val());

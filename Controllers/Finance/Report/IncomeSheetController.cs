@@ -4,6 +4,7 @@ using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace Exampler_ERP.Controllers.Finance.Report
 {
@@ -50,36 +51,61 @@ namespace Exampler_ERP.Controllers.Finance.Report
           .Include(v => v.Voucher)
           .Include(v => v.HeadofAccount_Five)
           .Where(v => v.Voucher.VoucherDate >= startDate && v.Voucher.VoucherDate <= endDate)
-          .GroupBy(v => v.HeadofAccount_Five.HeadofAccount_FiveName)
+          .GroupBy(v => new
+          {
+            v.HeadofAccount_Five.HeadofAccount_FiveID, // AccountID
+            v.HeadofAccount_Five.HeadofAccount_FiveName
+          })
           .Select(g => new
           {
-            AccountName = g.Key,
+            AccountID = g.Key.HeadofAccount_FiveID,
+            AccountName = g.Key.HeadofAccount_FiveName,
             TotalDebit = g.Sum(v => v.DrAmt ?? 0),
             TotalCredit = g.Sum(v => v.CrAmt ?? 0),
             TransactionCount = g.Count()
           })
           .ToListAsync();
 
-      var viewModel = groupedVouchers.Select(g => new IncomeSheetReportViewModel
+      // Classify accounts as Revenue or Expense
+      var revenues = new List<IncomeSheetReportViewModel>();
+      var expenses = new List<IncomeSheetReportViewModel>();
+
+      foreach (var account in groupedVouchers)
       {
-        AccountName = g.AccountName,
-        DrAmt = g.TotalDebit,
-        CrAmt = g.TotalCredit,
-        TransactionCount = g.TransactionCount
-      }).ToList();
+        if (await IsRevenueAccountAsync(account.AccountID))
+        {
+          revenues.Add(new IncomeSheetReportViewModel
+          {
+            AccountID = account.AccountID,
+            AccountName = account.AccountName,
+            DrAmt = account.TotalDebit,
+            CrAmt = account.TotalCredit,
+            TransactionCount = account.TransactionCount
+          });
+        }
+        else if (await IsExpenseAccountAsync(account.AccountID))
+        {
+          expenses.Add(new IncomeSheetReportViewModel
+          {
+            AccountID = account.AccountID,
+            AccountName = account.AccountName,
+            DrAmt = account.TotalDebit,
+            CrAmt = account.TotalCredit,
+            TransactionCount = account.TransactionCount
+          });
+        }
+      }
 
-      var revenues = viewModel.Where(v => IsRevenueAccount(v.AccountName)).ToList();
-      var expenses = viewModel.Where(v => IsExpenseAccount(v.AccountName)).ToList();
-
-      var totalRevenues = revenues.Sum(r => r.CrAmt);
-      var totalExpenses = expenses.Sum(e => e.DrAmt);
+      // Compute totals
+      var totalRevenues = revenues.Sum(r => r.CrAmt + r.DrAmt);
+      var totalExpenses = expenses.Sum(e => e.CrAmt + e.DrAmt);
 
       var incomeSheetViewModel = new IncomeSheetViewModel
       {
         Revenues = revenues,
         Expenses = expenses,
         TotalRevenues = totalRevenues,
-        TotalExpenses = totalExpenses,
+        TotalExpenses = totalExpenses
       };
 
       ViewBag.Month = model.Month;
@@ -88,21 +114,42 @@ namespace Exampler_ERP.Controllers.Finance.Report
       return View("~/Views/Finance/Report/IncomeSheet/PrintIncomeSheet.cshtml", incomeSheetViewModel);
     }
 
-    private bool IsRevenueAccount(string accountName)
+    private async Task<bool> IsRevenueAccountAsync(int accountID)
     {
-      var revenueAccounts = new List<string> { "Sales", "Music Lesson Income" };
-      return revenueAccounts.Contains(accountName);
+      var revenueAccounts = await (from shafi in _appDBContext.Settings_HeadofAccount_Fives
+                                   join shafo in _appDBContext.Settings_HeadofAccount_Fours
+                                       on shafi.HeadofAccount_FourID equals shafo.HeadofAccount_FourID
+                                   join shat in _appDBContext.Settings_HeadofAccount_Thirds
+                                       on shafo.HeadofAccount_ThirdID equals shat.HeadofAccount_ThirdID
+                                   join shas in _appDBContext.Settings_HeadofAccount_Seconds
+                                       on shat.HeadofAccount_SecondID equals shas.HeadofAccount_SecondID
+                                   join shafir in _appDBContext.Settings_HeadofAccount_Firsts
+                                       on shas.HeadofAccount_FirstID equals shafir.HeadofAccount_FirstID
+                                   where shafir.HeadofAccount_FirstName == "Revenue"
+                                   select shafi.HeadofAccount_FiveID)
+                                   .ToListAsync();
+      return revenueAccounts.Contains(accountID);
     }
 
-    private bool IsExpenseAccount(string accountName)
+    private async Task<bool> IsExpenseAccountAsync(int accountID)
     {
-      var expenseAccounts = new List<string>
-    {
-        "Cost of Goods Sold", "Depreciation Expense", "Wage Expense",
-        "Rent Expense", "Interest Expense", "Supplies Expense", "Utilities Expense"
-    };
-      return expenseAccounts.Contains(accountName);
+      var expenseAccounts = await (from shafi in _appDBContext.Settings_HeadofAccount_Fives
+                                   join shafo in _appDBContext.Settings_HeadofAccount_Fours
+                                       on shafi.HeadofAccount_FourID equals shafo.HeadofAccount_FourID
+                                   join shat in _appDBContext.Settings_HeadofAccount_Thirds
+                                       on shafo.HeadofAccount_ThirdID equals shat.HeadofAccount_ThirdID
+                                   join shas in _appDBContext.Settings_HeadofAccount_Seconds
+                                       on shat.HeadofAccount_SecondID equals shas.HeadofAccount_SecondID
+                                   join shafir in _appDBContext.Settings_HeadofAccount_Firsts
+                                       on shas.HeadofAccount_FirstID equals shafir.HeadofAccount_FirstID
+                                   where shafir.HeadofAccount_FirstName == "Expenses"
+                                   select shafi.HeadofAccount_FiveID)
+                                   .ToListAsync();
+
+      return expenseAccounts.Contains(accountID);
     }
+
+
 
   }
 }
