@@ -4,16 +4,15 @@ using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Web.Helpers;
 
 namespace Exampler_ERP.Controllers.Finance.Report
 {
-  public class TrialBalanceController : Controller
+  public class IncomeSheetController : Controller
   {
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    public TrialBalanceController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+    public IncomeSheetController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
@@ -22,10 +21,11 @@ namespace Exampler_ERP.Controllers.Finance.Report
     public async Task<IActionResult> Index()
     {
       ViewBag.HeadofAccount_FiveList = await _utils.GetHeadofAccount_Five();
-      return View("~/Views/Finance/Report/TrialBalance/TrialBalance.cshtml", new FI_Voucher());
+
+      return View("~/Views/Finance/Report/IncomeSheet/IncomeSheet.cshtml", new FI_Voucher());
     }
     [HttpPost]
-    public async Task<IActionResult> Print([FromBody] TrialBalanceReportModel model)
+    public async Task<IActionResult> Print([FromBody] IncomeSheetReportModel model)
     {
       if (model == null || model.Year == null)
       {
@@ -56,11 +56,11 @@ namespace Exampler_ERP.Controllers.Finance.Report
             AccountName = g.Key,
             TotalDebit = g.Sum(v => v.DrAmt ?? 0),
             TotalCredit = g.Sum(v => v.CrAmt ?? 0),
-            TransactionCount = g.Count() // Count of transactions in the group
+            TransactionCount = g.Count()
           })
           .ToListAsync();
 
-      var viewModel = groupedVouchers.Select(g => new TrialBalanceReportViewModel
+      var viewModel = groupedVouchers.Select(g => new IncomeSheetReportViewModel
       {
         AccountName = g.AccountName,
         DrAmt = g.TotalDebit,
@@ -68,10 +68,41 @@ namespace Exampler_ERP.Controllers.Finance.Report
         TransactionCount = g.TransactionCount
       }).ToList();
 
+      var revenues = viewModel.Where(v => IsRevenueAccount(v.AccountName)).ToList();
+      var expenses = viewModel.Where(v => IsExpenseAccount(v.AccountName)).ToList();
+
+      var totalRevenues = revenues.Sum(r => r.CrAmt);
+      var totalExpenses = expenses.Sum(e => e.DrAmt);
+
+      var incomeSheetViewModel = new IncomeSheetViewModel
+      {
+        Revenues = revenues,
+        Expenses = expenses,
+        TotalRevenues = totalRevenues,
+        TotalExpenses = totalExpenses,
+      };
+
       ViewBag.Month = model.Month;
       ViewBag.Year = model.Year;
 
-      return View("~/Views/Finance/Report/TrialBalance/PrintTrialBalance.cshtml", viewModel);
+      return View("~/Views/Finance/Report/IncomeSheet/PrintIncomeSheet.cshtml", incomeSheetViewModel);
     }
+
+    private bool IsRevenueAccount(string accountName)
+    {
+      var revenueAccounts = new List<string> { "Sales", "Music Lesson Income" };
+      return revenueAccounts.Contains(accountName);
+    }
+
+    private bool IsExpenseAccount(string accountName)
+    {
+      var expenseAccounts = new List<string>
+    {
+        "Cost of Goods Sold", "Depreciation Expense", "Wage Expense",
+        "Rent Expense", "Interest Expense", "Supplies Expense", "Utilities Expense"
+    };
+      return expenseAccounts.Contains(accountName);
+    }
+
   }
 }

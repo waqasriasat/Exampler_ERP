@@ -1,0 +1,98 @@
+@model Exampler_ERP.Models.Temp.IncomeSheetViewModel
+@{
+    Layout = "_BlankLayout"; // Use the appropriate layout
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Income Sheet</title>
+    <style>
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Income Sheet</div>
+    <div class="subtitle">For the Period: @ViewBag.Month / @ViewBag.Year</div>
+
+    <h3>Revenues</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Account Name</th>
+                <th>Credit Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var revenue in Model.Revenues)
+            {
+                <tr>
+                    <td>@revenue.AccountName</td>
+                    <td>@revenue.CrAmt.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td><strong>Total Revenues</strong></td>
+                <td><strong>@Model.TotalRevenues.ToString("C")</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <h3>Expenses</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Account Name</th>
+                <th>Debit Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var expense in Model.Expenses)
+            {
+                <tr>
+                    <td>@expense.AccountName</td>
+                    <td>@expense.DrAmt.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td><strong>Total Expenses</strong></td>
+                <td><strong>@Model.TotalExpenses.ToString("C")</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <h3 style="text-align: center;">Net Income: @Model.NetIncome.ToString("C")</h3>
+</body>
+</html>
+

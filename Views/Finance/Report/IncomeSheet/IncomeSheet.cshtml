@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Report - TrialBalance";
+    ViewData["Title"] = "Report - IncomeSheet";
 }
 
 @section PageScripts {
@@ -28,11 +28,11 @@
 
                  debugger;
                 $.ajax({
-                    url: '@Url.Action("Print", "TrialBalance")',
+                    url: '@Url.Action("Print", "IncomeSheet")',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(formData),
-                    
+
                     success: function (response) {
                       debugger;
                         var printWindow = window.open();
@@ -53,7 +53,7 @@
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Report /</span> TrialBalance
+    <span class="text-muted fw-light">Report /</span> IncomeSheet
 </h4>
 <div class="row">
     <div class="col-md-12">
@@ -64,7 +64,7 @@
                     <div class="p-4">
                         <br />
                         <!-- Month and Year Selection Section -->
-                        <form id="TrialBalanceForm">
+                        <form id="IncomeSheetForm">
                             <div class="row mb-3">
                                 <div class="col-md-12 text-center">
                                     <label class="form-label fw-bold me-3">Select Option:</label>
