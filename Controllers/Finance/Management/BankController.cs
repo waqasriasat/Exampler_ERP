@@ -91,11 +91,28 @@ namespace Exampler_ERP.Controllers.Finance.Management
 
 
         Bank.DeleteYNID = 0;
-
         _appDBContext.FI_Banks.Add(Bank);
         await _appDBContext.SaveChangesAsync();
 
-        TempData["SuccessMessage"] = "Bank created successfully.";
+        var bankName = Bank.BankName;
+        if (bankName != "")
+        {
+          var headofAccount_Five = new Settings_HeadofAccount_Five
+          {
+            HeadofAccount_FiveName = bankName,
+            HeadofAccount_FourID = 1,
+            CategoryTypeID = 3,
+            GroupTypeID = 1,
+            DeleteYNID = 0,
+            ActiveYNID = 1,
+            OpeningBalance = 0
+          };
+
+          _appDBContext.Settings_HeadofAccount_Fives.Add(headofAccount_Five);
+          await _appDBContext.SaveChangesAsync();
+        }
+
+          TempData["SuccessMessage"] = "Bank created successfully.";
         return Json(new { success = true });
       }
 
