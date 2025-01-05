@@ -21,14 +21,9 @@ namespace Exampler_ERP.Controllers.Finance.Main
     //public async Task<IActionResult> Index()
     public async Task<IActionResult> Index()
     {
-      ViewBag.CashAgainstSaleCount = await _appDBContext.Settings_CashAgainstSales.CountAsync();
-      ViewBag.VoucherTypeCount = await _appDBContext.Settings_VoucherTypes.CountAsync();
-      ViewBag.CategoryTypeCount = await _appDBContext.Settings_HeadofAccount_CategoryTypes.CountAsync();
-      ViewBag.HeadofAccount_FirstCount = await _appDBContext.Settings_HeadofAccount_Firsts.CountAsync();
-      ViewBag.HeadofAccount_SecondCount = await _appDBContext.Settings_HeadofAccount_Seconds.CountAsync();
-      ViewBag.HeadofAccount_ThirdCount = await _appDBContext.Settings_HeadofAccount_Thirds.CountAsync();
-      ViewBag.HeadofAccount_FourCount = await _appDBContext.Settings_HeadofAccount_Fours.CountAsync();
-      ViewBag.HeadofAccount_FiveCount = await _appDBContext.Settings_HeadofAccount_Fives.CountAsync();
+      ViewBag.Lodgement = 0;
+      ViewBag.TrialBalance = 0;
+      ViewBag.IncomeSheet = 0;
       return View("~/Views/Finance/Main/Dashboard/FI_Report_Dashboard.cshtml");
     }
   }
