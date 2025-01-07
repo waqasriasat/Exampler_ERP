@@ -1,0 +1,42 @@
+@model Exampler_ERP.Models.Settings_ItemComponentType
+
+<div class="modal fade" id="editItemComponentTypeModal" tabindex="-1" role="dialog" aria-labelledby="editItemComponentTypeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editItemComponentTypeModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit Item Component Type
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <form id="editItemComponentTypeForm">
+                    <div class="row">
+                        <div class="col-2 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-12 col-md-12 col-lg-12">
+                                    <label for="ItemComponentTypeName" class="form-label fw-bold">Item Component Type Name</label>
+                                    <input type="text" class="form-control form-control-lg" id="ItemComponentTypeName" name="ItemComponentTypeName" value="@Model.ItemComponentTypeName" />
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
+                                    <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text", Model.ActiveYNID))" class="form-control form-control-lg">
+                                    </select>
+                                    <span asp-validation-for="ActiveYNID" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="ItemComponentTypeID" name="ItemComponentTypeID" value="@Model.ItemComponentTypeID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="button" class="btn btn-success" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

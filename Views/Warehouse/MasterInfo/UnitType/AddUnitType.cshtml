@@ -1,0 +1,42 @@
+@model Exampler_ERP.Models.Settings_UnitType
+
+<div class="modal fade" id="addUnitTypeModal" tabindex="-1" role="dialog" aria-labelledby="addUnitTypeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="addUnitTypeModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Add New Item Unit Type
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <form id="addUnitTypeForm">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="UnitTypeName" class="form-label fw-bold">Item Unit Type Name</label>
+                            <input type="text" class="form-control form-control-lg" id="UnitTypeName" name="UnitTypeName" value="@Model.UnitTypeName" />
+                        </div>
+                        <div class="col-6">
+                            <label for="UnitTypeCode" class="form-label fw-bold">Item Unit Type Code</label>
+                            <input type="text" class="form-control form-control-lg" id="UnitTypeCode" name="UnitTypeCode" value="@Model.UnitTypeCode" />
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
+                            <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
+                                <option>Please select</option>
+                            </select>
+                            <span asp-validation-for="ActiveYNID" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="button" class="btn btn-success" id="saveNewUnitType">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_ItemCategoryType>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Item Category Type</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Item Category Type List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Item Category Type ID</th>
+                <th>Item Category Type Name</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ItemCategoryType in Model)
+            {
+                <tr>
+                    <td>@ItemCategoryType.ItemCategoryTypeID</td>
+                    <td>@ItemCategoryType.ItemCategoryTypeName</td>
+                    <td>@(ItemCategoryType.ActiveYNID == 1 ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+@model Exampler_ERP.Models.Settings_UnitType
+
+<div class="modal fade" id="editUnitTypeModal" tabindex="-1" role="dialog" aria-labelledby="editUnitTypeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editUnitTypeModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit Item Unit Type
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <form id="editUnitTypeForm">
+                    <div class="row">
+                        <div class="col-2 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="UnitTypeName" class="form-label fw-bold">Item Unit Type Name</label>
+                                    <input type="text" class="form-control form-control-lg" id="UnitTypeName" name="UnitTypeName" value="@Model.UnitTypeName" />
+                                </div>
+                                <div class="col-6">
+                                    <label for="UnitTypeCode" class="form-label fw-bold">Item Unit Type Code</label>
+                                    <input type="text" class="form-control form-control-lg" id="UnitTypeCode" name="UnitTypeCode" value="@Model.UnitTypeCode" />
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
+                                    <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text", Model.ActiveYNID))" class="form-control form-control-lg">
+                                    </select>
+                                    <span asp-validation-for="ActiveYNID" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="UnitTypeID" name="UnitTypeID" value="@Model.UnitTypeID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="button" class="btn btn-success" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

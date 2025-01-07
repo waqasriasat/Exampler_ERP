@@ -24,8 +24,6 @@ namespace Exampler_ERP.Models
     public decimal ReorderLevel { get; set; } // Quantity level at which reordering is triggered
     public string BinLocation { get; set; } // Location of the item within the warehouse (e.g., shelf, bin)
     public string Specification { get; set; } // Free-text specification or description
-    public DateTime? ManufactureDate { get; set; } // Manufacturing date of the item (nullable)
-    public DateTime? ExpiryDate { get; set; } // Expiry date of the item (nullable)
     public string BarCode { get; set; } // Barcode or SKU for the item
     public decimal OpeningBalance { get; set; } // Initial stock balance
     public int? FinalApprovalID { get; set; } //didn't use in registration

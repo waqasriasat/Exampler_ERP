@@ -1,0 +1,53 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_ItemComponentType>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Item Component Type</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Item Component Type List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Item Component Type ID</th>
+                <th>Item Component Type Name</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ItemComponentType in Model)
+            {
+                <tr>
+                    <td>@ItemComponentType.ItemComponentTypeID</td>
+                    <td>@ItemComponentType.ItemComponentTypeName</td>
+                    <td>@(ItemComponentType.ActiveYNID == 1 ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>
