@@ -52,8 +52,8 @@ namespace Exampler_ERP.Models
 
     public DbSet<Settings_UnitType> Settings_UnitTypes { get; set; }
     public DbSet<Settings_ItemCategoryType> Settings_ItemCategoryTypes { get; set; }
-
     public DbSet<Settings_ManufacturerType> Settings_ManufacturerTypes { get; set; }
+    public DbSet<Settings_ItemComponentType> Settings_ItemComponentTypes { get; set; }
 
 
     public DbSet<CR_ProcessTypeApproval> CR_ProcessTypeApprovals { get; set; }
@@ -118,6 +118,19 @@ namespace Exampler_ERP.Models
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+      modelBuilder.Entity<Settings_ItemComponentType>().HasData(
+     new Settings_ItemComponentType() { ItemComponentTypeID = 1, ItemComponentTypeName = "Height", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemComponentType() { ItemComponentTypeID = 2, ItemComponentTypeName = "Length", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemComponentType() { ItemComponentTypeID = 3, ItemComponentTypeName = "Width", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemComponentType() { ItemComponentTypeID = 4, ItemComponentTypeName = "Weight", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemComponentType() { ItemComponentTypeID = 5, ItemComponentTypeName = "Color", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemComponentType() { ItemComponentTypeID = 6, ItemComponentTypeName = "SafetyInstructions", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemComponentType() { ItemComponentTypeID = 7, ItemComponentTypeName = "ReturnPolicy", DeleteYNID = 0, ActiveYNID = 1 }
+ );
+
+
+
       modelBuilder.Entity<Settings_ManufacturerType>().HasData(
      new Settings_ManufacturerType() { ManufacturerTypeID = 1, ManufacturerTypeName = "RitePak", DeleteYNID = 0, ActiveYNID = 1 },
      new Settings_ManufacturerType() { ManufacturerTypeID = 2, ManufacturerTypeName = "Uni-ball", DeleteYNID = 0, ActiveYNID = 1 },
