@@ -247,11 +247,11 @@
         @if (accessRightByRoleList.Contains(3) || accessRightByUsertList.Contains(3))
 
         {
-            <!-- Store Management -->
+            <!-- Warehouse -->
             <li class='menu-item@(currentPage.StartsWith("/Auth") ? " active open" : "")'>
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-store"></i>
-                    <div>Store Management</div>
+                    <div>Warehouse</div>
                 </a>
                 <ul class="menu-sub">
                     <li class='menu-item@(currentPage == "/Auth/LoginBasic" ? " active" : "")'>
@@ -261,7 +261,7 @@
                     </li>
                     <li class='menu-item@(currentPage == "/Auth/RegisterBasic" ? " active" : "")'>
                         <a asp-controller="Auth" asp-action="RegisterBasic" class="menu-link" target="_blank">
-                            <div>Store Management</div>
+                            <div>Warehouse</div>
                         </a>
                     </li>
                     <li class='menu-item@(currentPage == "/Auth/ForgotPasswordBasic" ? " active" : "")'>
@@ -299,7 +299,7 @@
                     </li>
                     <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
                         <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
-                            <div>Store Management</div>
+                            <div>Warehouse</div>
                         </a>
                     </li>
                     <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
@@ -316,7 +316,7 @@
         {
             <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
             <li class='menu-item@(currentPage == "/HRGlobalSetting/Index" || currentPage == "/FinanceGlobalSetting/Index" ||
-                              currentPage == "/StoreManagementGlobalSetting/Index" || currentPage == "/PurchaseGlobalSetting/Index" ||
+                              currentPage == "/WarehouseGlobalSetting/Index" || currentPage == "/PurchaseGlobalSetting/Index" ||
                               currentPage == "/AccessRightsByRole/Index" || currentPage == "/AccessRightsByUser/Index"? " active open" : "")'>
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon fas fa-toolbox"></i>
@@ -335,9 +335,9 @@
                             <div>Finance</div>
                         </a>
                     </li>
-                    <li class='menu-item@(currentPage == "/StoreManagementGlobalSetting/Index" ? " active" : "")'>
-                        <a asp-controller="StoreManagementGlobalSetting" asp-action="Index" class="menu-link">
-                            <div>Store Management</div>
+                    <li class='menu-item@(currentPage == "/WarehouseGlobalSetting/Index" ? " active" : "")'>
+                        <a asp-controller="WarehouseGlobalSetting" asp-action="Index" class="menu-link">
+                            <div>Warehouse</div>
                         </a>
                     </li>
                     <li class='menu-item@(currentPage == "/PurchaseGlobalSetting/Index" ? " active" : "")'>

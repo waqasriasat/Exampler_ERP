@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Exampler_ERP.Controllers.Setup
 {
-  public class StoreManagementGlobalSettingController : Controller
+  public class WarehouseGlobalSettingController : Controller
   {
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    private readonly ILogger<StoreManagementGlobalSettingController> _logger;
+    private readonly ILogger<WarehouseGlobalSettingController> _logger;
 
-    public StoreManagementGlobalSettingController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, ILogger<StoreManagementGlobalSettingController> logger)
+    public WarehouseGlobalSettingController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, ILogger<WarehouseGlobalSettingController> logger)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
@@ -27,10 +27,10 @@ namespace Exampler_ERP.Controllers.Setup
       if (globalSettings == null)
       {
         _logger.LogWarning("No global settings found.");
-        return View("~/Views/Setup/StoreManagementGlobalSetting/StoreManagementGlobalSetting.cshtml", new HR_GlobalSetting());
+        return View("~/Views/Setup/WarehouseGlobalSetting/WarehouseGlobalSetting.cshtml", new HR_GlobalSetting());
       }
 
-      return View("~/Views/Setup/StoreManagementGlobalSetting/StoreManagementGlobalSetting.cshtml", globalSettings);
+      return View("~/Views/Setup/WarehouseGlobalSetting/WarehouseGlobalSetting.cshtml", globalSettings);
 
     }
   }

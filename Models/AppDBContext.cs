@@ -50,6 +50,11 @@ namespace Exampler_ERP.Models
     public DbSet<Settings_VoucherType> Settings_VoucherTypes { get; set; }
 
 
+    public DbSet<Settings_UnitType> Settings_UnitTypes { get; set; }
+    public DbSet<Settings_ItemCategoryType> Settings_ItemCategoryTypes { get; set; }
+
+    public DbSet<Settings_ManufacturerType> Settings_ManufacturerTypes { get; set; }
+
 
     public DbSet<CR_ProcessTypeApproval> CR_ProcessTypeApprovals { get; set; }
     public DbSet<CR_ProcessTypeApprovalDetail> CR_ProcessTypeApprovalDetails { get; set; }
@@ -108,11 +113,189 @@ namespace Exampler_ERP.Models
     public DbSet<FI_VoucherDetail> FI_VoucherDetails { get; set; }
 
 
-
+    public DbSet<WH_Item> WH_Items { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      modelBuilder.Entity<Settings_ManufacturerType>().HasData(
+     new Settings_ManufacturerType() { ManufacturerTypeID = 1, ManufacturerTypeName = "RitePak", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 2, ManufacturerTypeName = "Uni-ball", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 3, ManufacturerTypeName = "Cello", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 4, ManufacturerTypeName = "Faber-Castell", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 5, ManufacturerTypeName = "Oxford", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 6, ManufacturerTypeName = "HP (Hewlett-Packard)", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 7, ManufacturerTypeName = "Dell", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 8, ManufacturerTypeName = "Lenovo", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 9, ManufacturerTypeName = "Apple", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 10, ManufacturerTypeName = "Acer", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 11, ManufacturerTypeName = "Maped", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 12, ManufacturerTypeName = "Parker", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 13, ManufacturerTypeName = "Pilot", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 14, ManufacturerTypeName = "Crayola", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 15, ManufacturerTypeName = "Kangaro", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 16, ManufacturerTypeName = "PEL (Pak Elektron Limited)", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 17, ManufacturerTypeName = "Daewoo", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 18, ManufacturerTypeName = "Orient", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 19, ManufacturerTypeName = "Samsung", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ManufacturerType() { ManufacturerTypeID = 20, ManufacturerTypeName = "Philips", DeleteYNID = 0, ActiveYNID = 1 }
+ );
+
+
+
+      modelBuilder.Entity<Settings_ItemCategoryType>().HasData(
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 1, ItemCategoryTypeName = "Marketing", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 2, ItemCategoryTypeName = "Capital Items", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 3, ItemCategoryTypeName = "General Items", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 4, ItemCategoryTypeName = "Office Supplies", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 5, ItemCategoryTypeName = "IT Equipment", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 6, ItemCategoryTypeName = "Stationery", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 7, ItemCategoryTypeName = "Electrical Supplies", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 8, ItemCategoryTypeName = "Mechanical Parts", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 9, ItemCategoryTypeName = "Packaging Materials", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 10, ItemCategoryTypeName = "Cleaning Supplies", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 11, ItemCategoryTypeName = "Furniture", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 12, ItemCategoryTypeName = "Tools & Hardware", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 13, ItemCategoryTypeName = "Automotive Parts", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 14, ItemCategoryTypeName = "Plumbing Supplies", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 15, ItemCategoryTypeName = "HVAC Supplies", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 16, ItemCategoryTypeName = "Safety Gear", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 17, ItemCategoryTypeName = "Construction Materials", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 18, ItemCategoryTypeName = "Home Appliances", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 19, ItemCategoryTypeName = "Decorative Items", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 20, ItemCategoryTypeName = "Sports Equipment", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 21, ItemCategoryTypeName = "Healthcare & Pharmaceuticals", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 22, ItemCategoryTypeName = "Medical Supplies", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 23, ItemCategoryTypeName = "Pharmacy", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 24, ItemCategoryTypeName = "Surgical Instruments", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 25, ItemCategoryTypeName = "Laboratory Equipment", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 26, ItemCategoryTypeName = "Diagnostic Tools", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 27, ItemCategoryTypeName = "Dental Supplies", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 28, ItemCategoryTypeName = "Hospital Furniture", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 29, ItemCategoryTypeName = "Personal Protective Equipment (PPE)", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 30, ItemCategoryTypeName = "Vaccines", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 31, ItemCategoryTypeName = "Nutritional Supplements", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 32, ItemCategoryTypeName = "Food & Beverages", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 33, ItemCategoryTypeName = "Kitchen Supplies", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 34, ItemCategoryTypeName = "Raw Ingredients", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 35, ItemCategoryTypeName = "Processed Foods", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 36, ItemCategoryTypeName = "Dairy Products", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 37, ItemCategoryTypeName = "Beverages", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 38, ItemCategoryTypeName = "Bakery Items", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 39, ItemCategoryTypeName = "Packaged Foods", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 40, ItemCategoryTypeName = "Fresh Produce", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 41, ItemCategoryTypeName = "Seafood", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 42, ItemCategoryTypeName = "Meat Products", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 43, ItemCategoryTypeName = "Hospitality & Housekeeping", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 44, ItemCategoryTypeName = "Housekeeping", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 45, ItemCategoryTypeName = "Linen & Towels", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 46, ItemCategoryTypeName = "Hotel Furniture", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 47, ItemCategoryTypeName = "Guest Amenities", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 48, ItemCategoryTypeName = "Cleaning Chemicals", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 49, ItemCategoryTypeName = "Laundry Supplies", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 50, ItemCategoryTypeName = "Food Service Equipment", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 51, ItemCategoryTypeName = "Bar Supplies", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 52, ItemCategoryTypeName = "Event Supplies", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemCategoryType() { ItemCategoryTypeID = 53, ItemCategoryTypeName = "Uniforms", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 54, ItemCategoryTypeName = "Retail & Consumer Goods", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 55, ItemCategoryTypeName = "Apparel", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 56, ItemCategoryTypeName = "Footwear", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 57, ItemCategoryTypeName = "Cosmetics", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 58, ItemCategoryTypeName = "Electronics", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 59, ItemCategoryTypeName = "Toys & Games", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 60, ItemCategoryTypeName = "Jewelry", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 61, ItemCategoryTypeName = "Watches", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 62, ItemCategoryTypeName = "Books & Magazines", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 63, ItemCategoryTypeName = "Home Décor", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 64, ItemCategoryTypeName = "Gardening Tools", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 65, ItemCategoryTypeName = "Manufacturing & Industrial", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 66, ItemCategoryTypeName = "Raw Materials", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 67, ItemCategoryTypeName = "Chemicals", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 68, ItemCategoryTypeName = "Lubricants", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 69, ItemCategoryTypeName = "Fasteners", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 70, ItemCategoryTypeName = "Bearings", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 71, ItemCategoryTypeName = "Gears", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 72, ItemCategoryTypeName = "Industrial Machinery", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 73, ItemCategoryTypeName = "Welding Supplies", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 74, ItemCategoryTypeName = "Construction Equipment", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 75, ItemCategoryTypeName = "Agricultural Tools", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 76, ItemCategoryTypeName = "Transportation & Logistics", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 77, ItemCategoryTypeName = "Vehicle Parts", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 78, ItemCategoryTypeName = "Tires", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 79, ItemCategoryTypeName = "Fuel", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 80, ItemCategoryTypeName = "Shipping Containers", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 81, ItemCategoryTypeName = "Packaging Tape", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 82, ItemCategoryTypeName = "Crates & Pallets", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 83, ItemCategoryTypeName = "Straps & Belts", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 84, ItemCategoryTypeName = "GPS Devices", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 85, ItemCategoryTypeName = "Fleet Accessories", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 86, ItemCategoryTypeName = "Education & Training", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 87, ItemCategoryTypeName = "Books", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 88, ItemCategoryTypeName = "Teaching Aids", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 89, ItemCategoryTypeName = "Lab Equipment", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 90, ItemCategoryTypeName = "Sports Kits", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 91, ItemCategoryTypeName = "Art Supplies", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 92, ItemCategoryTypeName = "Musical Instruments", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 93, ItemCategoryTypeName = "Stationery Kits", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 94, ItemCategoryTypeName = "Digital Learning Tools", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 95, ItemCategoryTypeName = "Science Kits", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 96, ItemCategoryTypeName = "Miscellaneous", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 97, ItemCategoryTypeName = "Gifts & Souvenirs", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 98, ItemCategoryTypeName = "Religious Items", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 99, ItemCategoryTypeName = "Pet Supplies", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 100, ItemCategoryTypeName = "Event Decorations", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 101, ItemCategoryTypeName = "Lighting Equipment", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 102, ItemCategoryTypeName = "Baby Products", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 103, ItemCategoryTypeName = "Energy Supplies", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 104, ItemCategoryTypeName = "Recycling Materials", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 105, ItemCategoryTypeName = "Luxury Goods", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 106, ItemCategoryTypeName = "Seasonal Items (e.g., Christmas, Halloween)", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_ItemCategoryType() { ItemCategoryTypeID = 107, ItemCategoryTypeName = "Renewable Energy Equipment", DeleteYNID = 0, ActiveYNID = 1 }
+);
+
+
+      modelBuilder.Entity<Settings_UnitType>().HasData(
+     new Settings_UnitType() { UnitTypeID = 1, UnitTypeCode = "PCs", UnitTypeName = "Pieces", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 2, UnitTypeCode = "PKT", UnitTypeName = "Packet", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 3, UnitTypeCode = "BOX", UnitTypeName = "Box", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 4, UnitTypeCode = "ML", UnitTypeName = "Milliliters", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 5, UnitTypeCode = "LTR", UnitTypeName = "Liters", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 6, UnitTypeCode = "GM", UnitTypeName = "Grams", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 7, UnitTypeCode = "KG", UnitTypeName = "Kilograms", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 8, UnitTypeCode = "BOT", UnitTypeName = "Bottle", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 9, UnitTypeCode = "RIM", UnitTypeName = "Rim", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 10, UnitTypeCode = "CAN", UnitTypeName = "Can", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 11, UnitTypeCode = "BDL", UnitTypeName = "Bundle", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 12, UnitTypeCode = "ROLL", UnitTypeName = "Roll", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 13, UnitTypeCode = "DOZ", UnitTypeName = "Dozen", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 14, UnitTypeCode = "CTN", UnitTypeName = "Carton", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 15, UnitTypeCode = "TAB", UnitTypeName = "Tablet", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 16, UnitTypeCode = "STRIP", UnitTypeName = "Strip", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 17, UnitTypeCode = "VIAL", UnitTypeName = "Vial", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 18, UnitTypeCode = "AMP", UnitTypeName = "Ampoule", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 19, UnitTypeCode = "UNIT", UnitTypeName = "Unit", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 20, UnitTypeCode = "SQM", UnitTypeName = "Square Meter", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 21, UnitTypeCode = "MTR", UnitTypeName = "Meter", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 22, UnitTypeCode = "FT", UnitTypeName = "Foot", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 23, UnitTypeCode = "TON", UnitTypeName = "Ton", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 24, UnitTypeCode = "SHEET", UnitTypeName = "Sheet", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 25, UnitTypeCode = "CBM", UnitTypeName = "Cubic Meter", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 26, UnitTypeCode = "DRUM", UnitTypeName = "Drum", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 27, UnitTypeCode = "GAL", UnitTypeName = "Gallon", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 28, UnitTypeCode = "YD", UnitTypeName = "Yard", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 29, UnitTypeCode = "BOLT", UnitTypeName = "Bolt", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 30, UnitTypeCode = "PAIR", UnitTypeName = "Pair", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 31, UnitTypeCode = "PACK", UnitTypeName = "Pack", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 32, UnitTypeCode = "SET", UnitTypeName = "Set", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 33, UnitTypeCode = "PCS", UnitTypeName = "Piece", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 34, UnitTypeCode = "BATCH", UnitTypeName = "Batch", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 35, UnitTypeCode = "BBL", UnitTypeName = "Barrel", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 36, UnitTypeCode = "PLT", UnitTypeName = "Pallet", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_UnitType() { UnitTypeID = 37, UnitTypeCode = "SACK", UnitTypeName = "Sack", DeleteYNID = 0, ActiveYNID = 1 }
+ );
+
+
+
       modelBuilder.Entity<Settings_HeadofAccount_Five>().HasData(
      new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 1, HeadofAccount_FiveName = "Bank Account (Bank AlHabib xxxxxxxxxxxxxxxx)", HeadofAccount_FourID = 1, CategoryTypeID = 3, GroupTypeID = 1 ,OpeningBalance=0},
      new Settings_HeadofAccount_Five { HeadofAccount_FiveID = 2, HeadofAccount_FiveName = "Vehicle Fuel", HeadofAccount_FourID = 1, CategoryTypeID = 4, GroupTypeID = 2, OpeningBalance = 0 },
@@ -276,7 +459,7 @@ namespace Exampler_ERP.Models
       modelBuilder.Entity<CR_AccessRightsByRole>().HasData(
         new CR_AccessRightsByRole() { AccessRightID = 1, ActionSOR = 1, ActionType = 0, ModuleID = 0, MenuID = 0, ActionName = "Humain Resources", _1 = 1, _2 = 0, _3 = 0, _4 = 0, _5 = 0, _6 = 0, _7 = 0, _8 = 0, _9 = 0, _10 = 0, _11 = 0, _12 = 0, _13 = 0, _14 = 0, _15 = 0, _16 = 0, _17 = 0, _18 = 0, _19 = 0, _20 = 0, _21 = 0, _22 = 0, _23 = 0, _24 = 0, _25 = 0, _26 = 0, _27 = 0, _28 = 0, _29 = 0, _30 = 0, _31 = 0, _32 = 0, _33 = 0, _34 = 0, _35 = 0, _36 = 0, _37 = 0, _38 = 0, _39 = 0, _40 = 0, _41 = 0, _42 = 0, _43 = 0, _44 = 0, _45 = 0, _46 = 0, _47 = 0, _48 = 0, _49 = 0, _50 = 0 },
         new CR_AccessRightsByRole() { AccessRightID = 2, ActionSOR = 2, ActionType = 0, ModuleID = 0, MenuID = 0, ActionName = "Finance", _1 = 1, _2 = 0, _3 = 0, _4 = 0, _5 = 0, _6 = 0, _7 = 0, _8 = 0, _9 = 0, _10 = 0, _11 = 0, _12 = 0, _13 = 0, _14 = 0, _15 = 0, _16 = 0, _17 = 0, _18 = 0, _19 = 0, _20 = 0, _21 = 0, _22 = 0, _23 = 0, _24 = 0, _25 = 0, _26 = 0, _27 = 0, _28 = 0, _29 = 0, _30 = 0, _31 = 0, _32 = 0, _33 = 0, _34 = 0, _35 = 0, _36 = 0, _37 = 0, _38 = 0, _39 = 0, _40 = 0, _41 = 0, _42 = 0, _43 = 0, _44 = 0, _45 = 0, _46 = 0, _47 = 0, _48 = 0, _49 = 0, _50 = 0 },
-        new CR_AccessRightsByRole() { AccessRightID = 3, ActionSOR = 3, ActionType = 0, ModuleID = 0, MenuID = 0, ActionName = "Store Management", _1 = 1, _2 = 0, _3 = 0, _4 = 0, _5 = 0, _6 = 0, _7 = 0, _8 = 0, _9 = 0, _10 = 0, _11 = 0, _12 = 0, _13 = 0, _14 = 0, _15 = 0, _16 = 0, _17 = 0, _18 = 0, _19 = 0, _20 = 0, _21 = 0, _22 = 0, _23 = 0, _24 = 0, _25 = 0, _26 = 0, _27 = 0, _28 = 0, _29 = 0, _30 = 0, _31 = 0, _32 = 0, _33 = 0, _34 = 0, _35 = 0, _36 = 0, _37 = 0, _38 = 0, _39 = 0, _40 = 0, _41 = 0, _42 = 0, _43 = 0, _44 = 0, _45 = 0, _46 = 0, _47 = 0, _48 = 0, _49 = 0, _50 = 0 },
+        new CR_AccessRightsByRole() { AccessRightID = 3, ActionSOR = 3, ActionType = 0, ModuleID = 0, MenuID = 0, ActionName = "Warehouse", _1 = 1, _2 = 0, _3 = 0, _4 = 0, _5 = 0, _6 = 0, _7 = 0, _8 = 0, _9 = 0, _10 = 0, _11 = 0, _12 = 0, _13 = 0, _14 = 0, _15 = 0, _16 = 0, _17 = 0, _18 = 0, _19 = 0, _20 = 0, _21 = 0, _22 = 0, _23 = 0, _24 = 0, _25 = 0, _26 = 0, _27 = 0, _28 = 0, _29 = 0, _30 = 0, _31 = 0, _32 = 0, _33 = 0, _34 = 0, _35 = 0, _36 = 0, _37 = 0, _38 = 0, _39 = 0, _40 = 0, _41 = 0, _42 = 0, _43 = 0, _44 = 0, _45 = 0, _46 = 0, _47 = 0, _48 = 0, _49 = 0, _50 = 0 },
         new CR_AccessRightsByRole() { AccessRightID = 4, ActionSOR = 4, ActionType = 0, ModuleID = 0, MenuID = 0, ActionName = "Purchase", _1 = 1, _2 = 0, _3 = 0, _4 = 0, _5 = 0, _6 = 0, _7 = 0, _8 = 0, _9 = 0, _10 = 0, _11 = 0, _12 = 0, _13 = 0, _14 = 0, _15 = 0, _16 = 0, _17 = 0, _18 = 0, _19 = 0, _20 = 0, _21 = 0, _22 = 0, _23 = 0, _24 = 0, _25 = 0, _26 = 0, _27 = 0, _28 = 0, _29 = 0, _30 = 0, _31 = 0, _32 = 0, _33 = 0, _34 = 0, _35 = 0, _36 = 0, _37 = 0, _38 = 0, _39 = 0, _40 = 0, _41 = 0, _42 = 0, _43 = 0, _44 = 0, _45 = 0, _46 = 0, _47 = 0, _48 = 0, _49 = 0, _50 = 0 },
         new CR_AccessRightsByRole() { AccessRightID = 5, ActionSOR = 5, ActionType = 0, ModuleID = 0, MenuID = 0, ActionName = "Setup", _1 = 1, _2 = 0, _3 = 0, _4 = 0, _5 = 0, _6 = 0, _7 = 0, _8 = 0, _9 = 0, _10 = 0, _11 = 0, _12 = 0, _13 = 0, _14 = 0, _15 = 0, _16 = 0, _17 = 0, _18 = 0, _19 = 0, _20 = 0, _21 = 0, _22 = 0, _23 = 0, _24 = 0, _25 = 0, _26 = 0, _27 = 0, _28 = 0, _29 = 0, _30 = 0, _31 = 0, _32 = 0, _33 = 0, _34 = 0, _35 = 0, _36 = 0, _37 = 0, _38 = 0, _39 = 0, _40 = 0, _41 = 0, _42 = 0, _43 = 0, _44 = 0, _45 = 0, _46 = 0, _47 = 0, _48 = 0, _49 = 0, _50 = 0 },
         new CR_AccessRightsByRole() { AccessRightID = 6, ActionSOR = 6, ActionType = 0, ModuleID = 0, MenuID = 0, ActionName = "Setting", _1 = 1, _2 = 0, _3 = 0, _4 = 0, _5 = 0, _6 = 0, _7 = 0, _8 = 0, _9 = 0, _10 = 0, _11 = 0, _12 = 0, _13 = 0, _14 = 0, _15 = 0, _16 = 0, _17 = 0, _18 = 0, _19 = 0, _20 = 0, _21 = 0, _22 = 0, _23 = 0, _24 = 0, _25 = 0, _26 = 0, _27 = 0, _28 = 0, _29 = 0, _30 = 0, _31 = 0, _32 = 0, _33 = 0, _34 = 0, _35 = 0, _36 = 0, _37 = 0, _38 = 0, _39 = 0, _40 = 0, _41 = 0, _42 = 0, _43 = 0, _44 = 0, _45 = 0, _46 = 0, _47 = 0, _48 = 0, _49 = 0, _50 = 0 },
