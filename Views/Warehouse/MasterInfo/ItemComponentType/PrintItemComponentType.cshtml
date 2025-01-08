@@ -31,6 +31,7 @@
         <thead>
             <tr>
                 <th>Item Component Type ID</th>
+                <th>Item Category Type Name</th>
                 <th>Item Component Type Name</th>
                 <th>Active</th>
             </tr>
@@ -40,6 +41,7 @@
             {
                 <tr>
                     <td>@ItemComponentType.ItemComponentTypeID</td>
+                    <td>@ItemComponentType.ItemCategoryType.ItemCategoryTypeName</td>
                     <td>@ItemComponentType.ItemComponentTypeName</td>
                     <td>@(ItemComponentType.ActiveYNID == 1 ? "Yes" : "No")</td>
                 </tr>

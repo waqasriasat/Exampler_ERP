@@ -120,13 +120,13 @@ namespace Exampler_ERP.Models
     {
 
       modelBuilder.Entity<Settings_ItemComponentType>().HasData(
-     new Settings_ItemComponentType() { ItemComponentTypeID = 1, ItemComponentTypeName = "Height", DeleteYNID = 0, ActiveYNID = 1 },
-     new Settings_ItemComponentType() { ItemComponentTypeID = 2, ItemComponentTypeName = "Length", DeleteYNID = 0, ActiveYNID = 1 },
-     new Settings_ItemComponentType() { ItemComponentTypeID = 3, ItemComponentTypeName = "Width", DeleteYNID = 0, ActiveYNID = 1 },
-     new Settings_ItemComponentType() { ItemComponentTypeID = 4, ItemComponentTypeName = "Weight", DeleteYNID = 0, ActiveYNID = 1 },
-     new Settings_ItemComponentType() { ItemComponentTypeID = 5, ItemComponentTypeName = "Color", DeleteYNID = 0, ActiveYNID = 1 },
-     new Settings_ItemComponentType() { ItemComponentTypeID = 6, ItemComponentTypeName = "SafetyInstructions", DeleteYNID = 0, ActiveYNID = 1 },
-     new Settings_ItemComponentType() { ItemComponentTypeID = 7, ItemComponentTypeName = "ReturnPolicy", DeleteYNID = 0, ActiveYNID = 1 }
+     new Settings_ItemComponentType() { ItemComponentTypeID = 1, ItemCategoryTypeID = 9, ItemComponentTypeName = "Height", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemComponentType() { ItemComponentTypeID = 2, ItemCategoryTypeID = 9, ItemComponentTypeName = "Length", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemComponentType() { ItemComponentTypeID = 3, ItemCategoryTypeID = 9, ItemComponentTypeName = "Width", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemComponentType() { ItemComponentTypeID = 4, ItemCategoryTypeID = 9, ItemComponentTypeName = "Weight", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemComponentType() { ItemComponentTypeID = 5, ItemCategoryTypeID = 9, ItemComponentTypeName = "Color", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemComponentType() { ItemComponentTypeID = 6, ItemCategoryTypeID = 9, ItemComponentTypeName = "SafetyInstructions", DeleteYNID = 0, ActiveYNID = 1 },
+     new Settings_ItemComponentType() { ItemComponentTypeID = 7, ItemCategoryTypeID = 9, ItemComponentTypeName = "ReturnPolicy", DeleteYNID = 0, ActiveYNID = 1 }
  );
 
 

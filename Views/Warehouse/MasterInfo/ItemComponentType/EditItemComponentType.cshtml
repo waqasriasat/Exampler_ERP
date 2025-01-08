@@ -16,7 +16,13 @@
                     <div class="row">
                         <div class="col-2 col-md-12 col-lg-12">
                             <div class="row">
-                                <div class="col-12 col-md-12 col-lg-12">
+                                <div class="col-6">
+                                    <label asp-for="ItemCategoryTypeID" class="form-label fw-bold">Select ItemCategory</label>
+                                    <select asp-for="ItemCategoryTypeID" asp-items="@(new SelectList(ViewBag.ItemCategoryList, "Value", "Text", Model.ItemCategoryTypeID))" class="form-control form-control-lg">
+                                    </select>
+                                    <span asp-validation-for="ItemCategoryTypeID" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
                                     <label for="ItemComponentTypeName" class="form-label fw-bold">Item Component Type Name</label>
                                     <input type="text" class="form-control form-control-lg" id="ItemComponentTypeName" name="ItemComponentTypeName" value="@Model.ItemComponentTypeName" />
                                 </div>

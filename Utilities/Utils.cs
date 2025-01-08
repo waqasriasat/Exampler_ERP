@@ -948,6 +948,27 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
-   
+    //GetItemCategorys
+    public async Task<List<SelectListItem>> GetItemCategorys()
+    {
+      try
+      {
+        var ItemCategoryTypeList = await _appDBContext.Settings_ItemCategoryTypes
+            .Select(d => new SelectListItem
+            {
+              Value = d.ItemCategoryTypeID.ToString(),
+              Text = d.ItemCategoryTypeName
+            })
+            .ToListAsync();
+
+
+        return ItemCategoryTypeList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
   }
 }

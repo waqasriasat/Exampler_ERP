@@ -133,8 +133,11 @@
                     <div class="row">
                         <div class="col-10 col-md-10 col-lg-10">
                             <div class="row">
-                                <div class="col-8">
-                                    <p class="text-nowrap">ItemComponent Type Name</p>
+                                <div class="col-4">
+                                    <p class="text-nowrap">Item Category Type Name</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">Item Component Type Name</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Active</p>
@@ -159,8 +162,11 @@
                         <div class="row">
                             <div class="col-10 col-md-10 col-lg-10">
                                 <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-8">
-                                        <p class="text-nowrap"><span class="smallAdd">ItemComponent Type Name : </span>@Html.DisplayFor(modelItem => item.ItemComponentTypeName)</p>
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <p class="text-nowrap"><span class="smallAdd">Item Category Type Name : </span>@Html.DisplayFor(modelItem => item.ItemCategoryType.ItemCategoryTypeName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <p class="text-nowrap"><span class="smallAdd">Item Component Type Name : </span>@Html.DisplayFor(modelItem => item.ItemComponentTypeName)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap">

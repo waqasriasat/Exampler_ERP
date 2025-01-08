@@ -29,7 +29,8 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
         ItemComponentTypesQuery = ItemComponentTypesQuery.Where(b => b.ItemComponentTypeName.Contains(searchItemComponentTypeName));
       }
 
-      var ItemComponentTypes = await ItemComponentTypesQuery.ToListAsync();
+      var ItemComponentTypes = await ItemComponentTypesQuery
+        .Include(d => d.ItemCategoryType).ToListAsync();
 
       if (!string.IsNullOrEmpty(searchItemComponentTypeName) && ItemComponentTypes.Count == 0)
       {
@@ -45,6 +46,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
     }// Add the Edit action
     public async Task<IActionResult> Edit(int id)
     {
+      ViewBag.ItemCategoryList = await _utils.GetItemCategorys();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
       var ItemComponentType = await _appDBContext.Settings_ItemComponentTypes.FindAsync(id);
       if (ItemComponentType == null)
@@ -73,6 +75,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
     [HttpGet]
     public async Task<IActionResult> Create()
     {
+      ViewBag.ItemCategoryList = await _utils.GetItemCategorys();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
       return PartialView("~/Views/Warehouse/MasterInfo/ItemComponentType/AddItemComponentType.cshtml", new Settings_ItemComponentType());
     }
@@ -115,6 +118,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
       var ItemComponentTypees = await _appDBContext.Settings_ItemComponentTypes
+        .Include(d => d.ItemCategoryType)
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
 
@@ -147,6 +151,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
     public async Task<IActionResult> Print()
     {
       var ItemComponentTypees = await _appDBContext.Settings_ItemComponentTypes
+        .Include(d => d.ItemCategoryType)
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
       return View("~/Views/Warehouse/MasterInfo/ItemComponentType/PrintItemComponentType.cshtml", ItemComponentTypees);
