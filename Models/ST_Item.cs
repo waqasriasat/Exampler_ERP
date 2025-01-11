@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Exampler_ERP.Models
 {
-  public class WH_Item
+  public class ST_Item
   {
     [Key]
     public int ItemID { get; set; } // Unique identifier for the item
@@ -22,7 +22,7 @@ namespace Exampler_ERP.Models
     public decimal MinQty { get; set; } // Minimum stock quantity threshold
     public decimal MaxQty { get; set; } // Maximum stock quantity threshold
     public decimal ReorderLevel { get; set; } // Quantity level at which reordering is triggered
-    public string BinLocation { get; set; } // Location of the item within the warehouse (e.g., shelf, bin)
+    public string BinLocation { get; set; } // Location of the item within the StoreManagement (e.g., shelf, bin)
     public string Specification { get; set; } // Free-text specification or description
     public string BarCode { get; set; } // Barcode or SKU for the item
     public decimal OpeningBalance { get; set; } // Initial stock balance

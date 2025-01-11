@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 
-namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
+namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
 {
      public class ItemCategoryTypeController : Controller
   {
@@ -36,7 +36,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
         TempData["ErrorMessage"] = "No Item Category Type found with the name '" + searchItemCategoryTypeName + "'. Please check the name and try again.";
       }
 
-      return View("~/Views/Warehouse/MasterInfo/ItemCategoryType/ItemCategoryType.cshtml", ItemCategoryTypes);
+      return View("~/Views/StoreManagement/MasterInfo/ItemCategoryType/ItemCategoryType.cshtml", ItemCategoryTypes);
     }
     public async Task<IActionResult> ItemCategoryType()
     {
@@ -51,7 +51,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
       {
         return NotFound();
       }
-      return PartialView("~/Views/Warehouse/MasterInfo/ItemCategoryType/EditItemCategoryType.cshtml", ItemCategoryType);
+      return PartialView("~/Views/StoreManagement/MasterInfo/ItemCategoryType/EditItemCategoryType.cshtml", ItemCategoryType);
     }
 
     [HttpPost]
@@ -74,7 +74,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
     public async Task<IActionResult> Create()
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      return PartialView("~/Views/Warehouse/MasterInfo/ItemCategoryType/AddItemCategoryType.cshtml", new Settings_ItemCategoryType());
+      return PartialView("~/Views/StoreManagement/MasterInfo/ItemCategoryType/AddItemCategoryType.cshtml", new Settings_ItemCategoryType());
     }
 
     [HttpPost]
@@ -149,7 +149,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
       var ItemCategoryTypees = await _appDBContext.Settings_ItemCategoryTypes
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
-      return View("~/Views/Warehouse/MasterInfo/ItemCategoryType/PrintItemCategoryType.cshtml", ItemCategoryTypees);
+      return View("~/Views/StoreManagement/MasterInfo/ItemCategoryType/PrintItemCategoryType.cshtml", ItemCategoryTypees);
     }
 
   }

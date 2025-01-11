@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 
-namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
+namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
 {
    public class ManufacturerTypeController : Controller
   {
@@ -36,7 +36,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
         TempData["ErrorMessage"] = "No Manufacturer Type found with the name '" + searchManufacturerTypeName + "'. Please check the name and try again.";
       }
 
-      return View("~/Views/Warehouse/MasterInfo/ManufacturerType/ManufacturerType.cshtml", ManufacturerTypes);
+      return View("~/Views/StoreManagement/MasterInfo/ManufacturerType/ManufacturerType.cshtml", ManufacturerTypes);
     }
     public async Task<IActionResult> ManufacturerType()
     {
@@ -51,7 +51,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
       {
         return NotFound();
       }
-      return PartialView("~/Views/Warehouse/MasterInfo/ManufacturerType/EditManufacturerType.cshtml", ManufacturerType);
+      return PartialView("~/Views/StoreManagement/MasterInfo/ManufacturerType/EditManufacturerType.cshtml", ManufacturerType);
     }
 
     [HttpPost]
@@ -74,7 +74,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
     public async Task<IActionResult> Create()
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      return PartialView("~/Views/Warehouse/MasterInfo/ManufacturerType/AddManufacturerType.cshtml", new Settings_ManufacturerType());
+      return PartialView("~/Views/StoreManagement/MasterInfo/ManufacturerType/AddManufacturerType.cshtml", new Settings_ManufacturerType());
     }
 
     [HttpPost]
@@ -149,7 +149,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
       var ManufacturerTypees = await _appDBContext.Settings_ManufacturerTypes
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
-      return View("~/Views/Warehouse/MasterInfo/ManufacturerType/PrintManufacturerType.cshtml", ManufacturerTypees);
+      return View("~/Views/StoreManagement/MasterInfo/ManufacturerType/PrintManufacturerType.cshtml", ManufacturerTypees);
     }
 
   }

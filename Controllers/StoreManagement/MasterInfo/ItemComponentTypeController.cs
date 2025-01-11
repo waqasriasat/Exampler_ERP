@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 
-namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
+namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
 {
   public class ItemComponentTypeController : Controller
   {
@@ -37,7 +37,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
         TempData["ErrorMessage"] = "No Item Component Type found with the name '" + searchItemComponentTypeName + "'. Please check the name and try again.";
       }
 
-      return View("~/Views/Warehouse/MasterInfo/ItemComponentType/ItemComponentType.cshtml", ItemComponentTypes);
+      return View("~/Views/StoreManagement/MasterInfo/ItemComponentType/ItemComponentType.cshtml", ItemComponentTypes);
     }
     public async Task<IActionResult> ItemComponentType()
     {
@@ -53,7 +53,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
       {
         return NotFound();
       }
-      return PartialView("~/Views/Warehouse/MasterInfo/ItemComponentType/EditItemComponentType.cshtml", ItemComponentType);
+      return PartialView("~/Views/StoreManagement/MasterInfo/ItemComponentType/EditItemComponentType.cshtml", ItemComponentType);
     }
 
     [HttpPost]
@@ -77,7 +77,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
     {
       ViewBag.ItemCategoryList = await _utils.GetItemCategorys();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      return PartialView("~/Views/Warehouse/MasterInfo/ItemComponentType/AddItemComponentType.cshtml", new Settings_ItemComponentType());
+      return PartialView("~/Views/StoreManagement/MasterInfo/ItemComponentType/AddItemComponentType.cshtml", new Settings_ItemComponentType());
     }
 
     [HttpPost]
@@ -154,7 +154,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
         .Include(d => d.ItemCategoryType)
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
-      return View("~/Views/Warehouse/MasterInfo/ItemComponentType/PrintItemComponentType.cshtml", ItemComponentTypees);
+      return View("~/Views/StoreManagement/MasterInfo/ItemComponentType/PrintItemComponentType.cshtml", ItemComponentTypees);
     }
 
   }

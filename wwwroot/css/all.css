@@ -5480,7 +5480,7 @@ readers do not read off random characters that represent icons */
 .fa-cogs::before {
   content: "\f085"; }
 
-.fa-warehouse::before {
+.fa-StoreManagement::before {
   content: "\f494"; }
 
 .fa-arrow-up-right-dots::before {

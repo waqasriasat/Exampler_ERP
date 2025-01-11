@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Warehouse";
+    ViewData["Title"] = "Store Management";
 
 
     var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
@@ -23,30 +23,30 @@
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Warehouse /</span> Warehouse
+    <span class="text-muted fw-light">Store Management /</span> Store Management
 </h4>
 
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-pills flex-column flex-md-row mb-3">
-            <li class="nav-item"><a class="nav-link" href="~/WH_Main_Dashboard/Index"><i class="bx bx-home me-1"></i> Main</a></li>
-            <li class="nav-item"><a class="nav-link active" href="~/WH_Warehouse_Dashboard/Index"><i class="bx bx-briefcase me-1"></i> Warehouse</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/WH_Report_Dashboard/Index"><i class="bx bx-bar-chart-alt me-1"></i> Report</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/ST_Main_Dashboard/Index"><i class="bx bx-home me-1"></i> Main</a></li>
+            <li class="nav-item"><a class="nav-link active" href="~/ST_StoreManagement_Dashboard/Index"><i class="bx bx-briefcase me-1"></i> Store Management</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/ST_Report_Dashboard/Index"><i class="bx bx-bar-chart-alt me-1"></i> Report</a></li>
         </ul>
         <div class="card mb-4">
             <h5 class="card-header">Details</h5>
             <div class="row" style="padding: 30px 30px 0px 30px;">
                 @if (accessRightByRoleList.Contains(201) || accessRightByUsertList.Contains(201))
                 {
-                    @*Item*@
+                    @*MaterialRequisition*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="Item" asp-action="Index">
+                        <a asp-controller="MaterialRequisition" asp-action="Index">
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Items</strong>
+                                        <strong class="text-primary">MaterialRequisition</strong>
                                         <h4 class="font-weight-bold text-dark">
-                                            @ViewBag.ItemCount
+                                            @ViewBag.MaterialRequisitionCount
                                         </h4>
                                     </div>
                                     <div class="icon bg-primary text-white">

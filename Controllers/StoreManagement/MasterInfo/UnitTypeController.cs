@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 
-namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
+namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
 {
   public class UnitTypeController : Controller
   {
@@ -36,7 +36,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
         TempData["ErrorMessage"] = "No Unit Type found with the name '" + searchUnitTypeName + "'. Please check the name and try again.";
       }
 
-      return View("~/Views/Warehouse/MasterInfo/UnitType/UnitType.cshtml", UnitTypes);
+      return View("~/Views/StoreManagement/MasterInfo/UnitType/UnitType.cshtml", UnitTypes);
     }
     public async Task<IActionResult> UnitType()
     {
@@ -51,7 +51,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
       {
         return NotFound();
       }
-      return PartialView("~/Views/Warehouse/MasterInfo/UnitType/EditUnitType.cshtml", UnitType);
+      return PartialView("~/Views/StoreManagement/MasterInfo/UnitType/EditUnitType.cshtml", UnitType);
     }
 
     [HttpPost]
@@ -74,7 +74,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
     public async Task<IActionResult> Create()
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      return PartialView("~/Views/Warehouse/MasterInfo/UnitType/AddUnitType.cshtml", new Settings_UnitType());
+      return PartialView("~/Views/StoreManagement/MasterInfo/UnitType/AddUnitType.cshtml", new Settings_UnitType());
     }
 
     [HttpPost]
@@ -149,7 +149,7 @@ namespace Exampler_ERP.Controllers.Warehouse.MasterInfo
       var UnitTypees = await _appDBContext.Settings_UnitTypes
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
-      return View("~/Views/Warehouse/MasterInfo/UnitType/PrintUnitType.cshtml", UnitTypees);
+      return View("~/Views/StoreManagement/MasterInfo/UnitType/PrintUnitType.cshtml", UnitTypees);
     }
 
   }
