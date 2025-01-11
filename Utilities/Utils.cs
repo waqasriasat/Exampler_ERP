@@ -970,5 +970,26 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
+    public async Task<List<SelectListItem>> GetRequisitionStatus()
+    {
+      try
+      {
+        var RequisitionStatusList = await _appDBContext.Settings_RequisitionStatusTypes
+            .Select(d => new SelectListItem
+            {
+              Value = d.RequisitionStatusTypeID.ToString(),
+              Text = d.RequisitionStatusTypeName
+            })
+            .ToListAsync();
+
+
+        return RequisitionStatusList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
   }
 }

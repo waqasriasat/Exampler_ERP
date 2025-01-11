@@ -1,5 +1,212 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model IEnumerable<Exampler_ERP.Models.ST_MaterialRequisition>
+
 @{
+    ViewData["Title"] = "StoreManagement - Material Requisition";
 }
+
+
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            // Edit MaterialRequisition modal popup
+            $('.editMaterialRequisitionLink').click(function (e) {
+                e.preventDefault();
+                var MaterialRequisitionId = $(this).data('id');
+                $.get('@Url.Action("Edit", "MaterialRequisition")', { id: MaterialRequisitionId }, function (data) {
+                    $('#editMaterialRequisitionModalContainer').html(data);
+                    $('#editMaterialRequisitionModal').modal('show');
+                    // Trigger the calculation after modal is shown
+
+                });
+            });
+
+            $('#editMaterialRequisitionModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editMaterialRequisitionForm').serialize();
+                $.post('@Url.Action("Edit", "MaterialRequisition")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Add new MaterialRequisition modal popup
+            $('.addMaterialRequisitionLink').click(function () {
+                $.get('@Url.Action("Create", "MaterialRequisition")', function (data) {
+                    $('#addMaterialRequisitionModalContainer').html(data);
+                    $('#addMaterialRequisitionModal').modal('show');
+                });
+            });
+
+            // Save new MaterialRequisition form
+            $('#addMaterialRequisitionModalContainer').on('click', '#saveNewMaterialRequisition', function () {
+                var formData = $('#addMaterialRequisitionForm').serialize();
+                $.post('@Url.Action("Create", "MaterialRequisition")', formData, function (response) {
+                    if (response.success) {
+                        $('#addMaterialRequisitionModal').modal('hide');
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Close Modal Add Contrainer
+            $('#addMaterialRequisitionModalContainer').on('click', '#Close', function () {
+                $('#addMaterialRequisitionModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editMaterialRequisitionModalContainer').on('click', '#Close', function () {
+                $('#editMaterialRequisitionModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Delete MaterialRequisition
+            $('.deleteMaterialRequisitionLink').click(function (e) {
+                e.preventDefault();
+                var MaterialRequisitionId = $(this).data('id');
+                $.post('@Url.Action("Delete", "MaterialRequisition")', { id: MaterialRequisitionId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+
+
+
+        });
+    </script>
+    <script>
+        function printMaterialRequisitiones() {
+            var printWindow = window.open('@Url.Action("Print", "MaterialRequisition")', '_blank');
+            printWindow.focus();
+        }
+        $('#searchItemNameButton').click(function () {
+            var searchValue = $('#searchItemNameInput').val();
+            window.location.href = '@Url.Action("Index", "MaterialRequisition")?searchItemName=' + searchValue;
+        });
+    </script>
+
+
+}
+
+
+
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">StoreManagement /</span> Material Requisition
+</h4>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <h5 class="card-header">Searhing Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8" style="padding-bottom: 15px;">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search Item Name" id="searchItemNameInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchItemNameButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <!-- Action Buttons -->
+                        <button type="button" class="btn btn-primary addMaterialRequisitionLink">Add New</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "MaterialRequisition")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printMaterialRequisitiones()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Material Requisition List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-11 col-lg-11">
+                            <div class="row">
+                                <div class="col-2">
+                                    <p class="text-nowrap">Material Requisition #</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">Date</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">Status</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Edit</p>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+
+
+
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-10 col-md-11 col-lg-11">
+                                <div class="row align-items-center">
+                                    <div class="col-2">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Material Requisition # :</span> @Html.DisplayFor(modelItem => item.RequisitionID)
+                                        </p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Date :</span> @(item.RequisitionDate.ToString("dd/MM/yyyy") ?? "00/00/0000")
+                                        </p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Status :</span> @item.RequisitionStatusTypes.RequisitionStatusTypeName
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2 col-md-1 col-lg-1">
+                                <div class="btn-group" role="group" aria-label="Actions">
+                                    <a href="#" class="editMaterialRequisitionLink me-2" data-id="@item.RequisitionID">
+                                        <i class="fa fa-pencil" style="font-size: large; color:steelblue;; line-height: 2;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editMaterialRequisitionModalContainer"></div>
+<div id="addMaterialRequisitionModalContainer"></div>
+
+

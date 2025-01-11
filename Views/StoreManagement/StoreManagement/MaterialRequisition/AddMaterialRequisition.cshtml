@@ -1,5 +1,227 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+@model Exampler_ERP.Models.Temp.MaterialRequisitionsIndexViewModel
+
+<style>
+    .ui-autocomplete {
+        z-index: 1000 !important;
+    }
+</style>
+
+<div class="modal fade" id="addMaterialRequisitionModal" tabindex="-1" role="dialog" aria-labelledby="addMaterialRequisitionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="addMaterialRequisitionModalLabel"><i class="fas fa-key me-2"></i>Add Material Requisition</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addMaterialRequisitionForm" enctype="multipart/form-data" asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="ItemName" class="form-label fw-bold"Item Name</label>
+                            <select id="ItemName" name="ItemName" class="form-select form-select-lg">
+                                <option value="">Select Head of Account</option>
+                                @foreach (var type in ViewBag.ItemList)
+
+                                {
+                                    <option value="@type.Value">@type.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                      
+                        <div class="col-md-12">
+                            <label asp-for="MaterialRequisitions.Remarks" class="form-label fw-bold">Remarks</label>
+                            <textarea asp-for="MaterialRequisitions.Remarks" class="form-control form-control-lg" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info add-row">Add</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="MaterialRequisitionTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Transaction Type</th>
+                                    <th>Transaction Account</th>
+                                    <th>Debit Amount</th>
+                                    <th>Credit Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.MaterialRequisitions.MaterialRequisitionDetails != null && Model.MaterialRequisitions.MaterialRequisitionDetails.Count > 0)
+
+                                {
+
+                                    for (int i = 0; i < Model.MaterialRequisitions.MaterialRequisitionDetails.Count; i++)
+
+                                    {
+                                        <tr>
+                                            <td>
+                                                <select class="form-select transaction-Type" name="MaterialRequisitions.MaterialRequisitionDetails[@i].DRCR">
+                                                    <option value="">Select Type</option>
+                                                    @foreach (var type in ViewBag.TransactionTypeList)
+
+                                                    {
+                                                        <option value="@type.Value">@type.Text</option>
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select class="form-select transaction-account" name="MaterialRequisitions.MaterialRequisitionDetails[@i].HeadofAccount_FiveID">
+                                                    <option value="">Select Account</option>
+                                                    @foreach (var type in ViewBag.HeadofAccount_FiveList)
+
+                                                    {
+                                                        <option value="@type.Value">@type.Text</option>
+                                                    }
+                                                </select>
+                                            </td>
+
+                                            <td>
+                                                <input type="text" class="form-control debit" name="MaterialRequisitions.MaterialRequisitionDetails[@i].DrAmt" value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].DrAmt" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control credit" name="MaterialRequisitions.MaterialRequisitionDetails[@i].CrAmt" value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].CrAmt" />
+                                            </td>
+                                        </tr>
+                                    }
+
+                                }
+
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                    <div class="row mt-4">
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Total Debit Amount</label>
+                            <input id="TotalCrAmt" class="form-control form-control-lg" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Total Credit Amount</label>
+                            <input id="TotalDrAmt" class="form-control form-control-lg" readonly />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="saveNewMaterialRequisition" class="btn btn-success">Save MaterialRequisition</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        function calculateTotals() {
+            let totalcredit = 0;
+            let totaldebit = 0;
+
+            $('#MaterialRequisitionTable tbody tr').each(function () {
+                const credit = parseFloat($(this).find('.credit').val()) || 0;
+                const debit = parseFloat($(this).find('.debit').val()) || 0;
+
+                totalcredit += credit;
+                totaldebit += debit;
+            });
+
+            $('#TotalDrAmt').val(totalcredit.toFixed(2));
+            $('#TotalCrAmt').val(totaldebit.toFixed(2));
+
+            if (totalcredit !== totaldebit) {
+                $('#saveNewMaterialRequisition').prop('disabled', true);
+            } else {
+                $('#saveNewMaterialRequisition').prop('disabled', false);
+            }
+        }
+
+        $(document).on('input', '.credit, .debit', calculateTotals);
+
+        // Add rows based on credit, debit, and Amount fields
+        $(document).on('click', '.add-row', function () {
+            const creditHead = $('#ItemName').val();
+            const debitHead = $('#HeadofAccountid_debit').val();
+            const amount = parseFloat($('#InstrumentAmount').val()) || 0;
+
+            if (!creditHead || !debitHead || amount === 0) {
+                alert('Please fill out all required fields: credit Account, debit Account, and Instrument Amount.');
+                return;
+            }
+
+            const tableBody = $('#MaterialRequisitionTable tbody');
+
+            tableBody.empty();
+
+            const rowCount = tableBody.find('tr').length;
+
+
+            // Add debit row
+            const debitRow = `<tr>
+                    <td>
+                        <select class="form-select transaction-Type" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount}].DRCR" >
+                            <option value="1" selected>Debit</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-select transaction-account" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount}].HeadofAccount_FiveID">
+                            <option value="${debitHead}" selected>${$('#HeadofAccountid_debit option:selected').text()}</option>
+                        </select>
+                    </td>
+
+                    <td>
+                            <input type="text" class="form-control debit" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount}].DrAmt" value="${amount.toFixed(2)}" />
+                    </td>
+                        <td>
+                                <input type="text" class="form-control credit" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount}].CrAmt" value="0" readonly />
+                        </td>
+                </tr>`;
+            // Add credit row
+            const creditRow = `<tr>
+                        <td>
+                                <select class="form-select transaction-Type" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount + 1}].DRCR">
+                                <option value="2" selected>Credit</option>
+                            </select>
+                        </td>
+                        <td>
+                                <select class="form-select transaction-account" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount + 1}].HeadofAccount_FiveID">
+                                <option value="${creditHead}" selected>${$('#ItemName option:selected').text()}</option>
+                            </select>
+                        </td>
+
+                        <td>
+                                    <input type="text" class="form-control debit" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount + 1}].DrAmt" value="0" readonly />
+                        </td>
+                            <td>
+                                        <input type="text" class="form-control credit" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount + 1}].CrAmt" value="${amount.toFixed(2)}" />
+                            </td>
+                    </tr>`;
+
+            // Append rows to the table
+            tableBody.append(debitRow + creditRow);
+
+            // Hide the add button
+            $('.add-row').hide();
+            if ($('#MaterialRequisitionTable tbody tr').eq(2).length > 0) {
+                $('#MaterialRequisitionTable tbody tr').eq(2).remove();
+            }
+            // $('#MaterialRequisitionTable tbody')
+            //     .find('input, select')
+            //     .prop('readonly', true);
+
+            // Disable select fields by adding a class
+            $('#MaterialRequisitionTable tbody')
+                .find('input, select')
+                .addClass('disabled-select')
+                .css('pointer-events', 'none')
+                .css('background-color', '#e9ecef');
+            calculateTotals();
+        });
+    });
+
+</script>

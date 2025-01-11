@@ -54,6 +54,7 @@ namespace Exampler_ERP.Models
     public DbSet<Settings_ItemCategoryType> Settings_ItemCategoryTypes { get; set; }
     public DbSet<Settings_ManufacturerType> Settings_ManufacturerTypes { get; set; }
     public DbSet<Settings_ItemComponentType> Settings_ItemComponentTypes { get; set; }
+    public DbSet<Settings_RequisitionStatusType> Settings_RequisitionStatusTypes { get; set; }
 
 
     public DbSet<CR_ProcessTypeApproval> CR_ProcessTypeApprovals { get; set; }
@@ -114,10 +115,17 @@ namespace Exampler_ERP.Models
 
 
     public DbSet<ST_Item> ST_Items { get; set; }
+    public DbSet<ST_MaterialRequisition> ST_MaterialRequisitions { get; set; }
+    public DbSet<ST_MaterialRequisitionDetail> ST_MaterialRequisitionDetails { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      modelBuilder.Entity<Settings_RequisitionStatusType>().HasData(
+    new Settings_RequisitionStatusType() { RequisitionStatusTypeID = 1, RequisitionStatusTypeName = "Pending", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_RequisitionStatusType() { RequisitionStatusTypeID = 2, RequisitionStatusTypeName = "Approved", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_RequisitionStatusType() { RequisitionStatusTypeID = 3, RequisitionStatusTypeName = "Complete", DeleteYNID = 0, ActiveYNID = 1 }
+);
 
       modelBuilder.Entity<Settings_ItemComponentType>().HasData(
      new Settings_ItemComponentType() { ItemComponentTypeID = 1, ItemCategoryTypeID = 9, ItemComponentTypeName = "Height", DeleteYNID = 0, ActiveYNID = 1 },
