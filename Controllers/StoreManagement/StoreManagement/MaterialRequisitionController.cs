@@ -54,8 +54,9 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     [HttpGet]
     public async Task<IActionResult> Create()
     {
-      ViewBag.RequisitionStatus = await _utils.GetRequisitionStatus();
- 
+      ViewBag.ItemList = await _utils.GetItemList();
+      ViewBag.ItemNameList = await _utils.GetItemList();
+
       ST_MaterialRequisition MaterialRequisitions = new ST_MaterialRequisition();
       MaterialRequisitions.MaterialRequisitionDetails.Add(new ST_MaterialRequisitionDetail() { RequisitionID = 1 });
       var model = new MaterialRequisitionsIndexViewModel

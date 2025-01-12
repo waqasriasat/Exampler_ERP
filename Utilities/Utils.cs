@@ -949,6 +949,29 @@ namespace Exampler_ERP.Utilities
       }
     }
     //GetItemCategorys
+    public async Task<List<SelectListItem>> GetItemList()
+    {
+      try
+      {
+        var ItemList = await _appDBContext.ST_Items
+            .Select(d => new SelectListItem
+            {
+              Value = d.ItemID.ToString(),
+              Text = d.ItemName
+            })
+            .ToListAsync();
+
+
+        return ItemList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+
+    //GetItemCategorys
     public async Task<List<SelectListItem>> GetItemCategorys()
     {
       try
