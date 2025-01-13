@@ -1,5 +1,71 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+@model IEnumerable<Exampler_ERP.Models.ST_Item>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Item</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Item List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Item ID</th>
+                <th>Item Code</th>
+                <th>Item Name</th>
+                <th>Status</th>
+                <th>Unit</th>
+                <th>Category</th>
+                <th>Manufacturer</th>
+                <th>Reorder Level Min</th>
+                <th>Reorder Level Max</th>
+                <th>BinLocation</th>
+                <th>BarCode</th>
+                <th>OpeningBalance</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Item in Model)
+            {
+                <tr>
+                    <td>@Item.ItemID</td>
+                    <td>@Item.ItemCode</td>
+                    <td>@Item.ItemName</td>
+                    <td>@(Item.ActiveYNID == 1 ? "Yes" : "No")</td>
+                    <td>@Item.UnitType.UnitTypeName</td>
+                    <td>@Item.ItemCategoryType.ItemCategoryTypeName</td>
+                    <td>@Item.ManufacturerType.ManufacturerTypeName</td>
+                    <td>@Item.ReorderLevelMin</td>
+                    <td>@Item.ReorderLevelMax</td>
+                    <td>@Item.BinLocation</td>
+                    <td>@Item.BarCode</td>
+                    <td>@Item.OpeningBalance</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

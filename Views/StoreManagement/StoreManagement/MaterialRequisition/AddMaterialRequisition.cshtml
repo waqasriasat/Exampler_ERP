@@ -61,7 +61,7 @@
                             <button type="button" class="btn btn-primary add-row width-button">Add</button>
                         </div>
                     </div>
-
+                    <hr />
                     <!-- Table for Added Rows -->
                     <div class="table-responsive mb-3">
                         <table class="table table-bordered" id="MaterialRequisitionTable">
@@ -120,6 +120,8 @@
 
 <script>
     $(document).ready(function () {
+      $('#MaterialRequisitionTable tbody').empty();
+
         // Add a new row
         $(document).on('click', '.add-row', function () {
             const itemName = $('#ItemName').val();
@@ -158,7 +160,7 @@
             $('#Quantity').val('');
             $('#RequiredDate').val('');
         });
-
+      
         // Remove a row
         $(document).on('click', '.remove-row', function () {
             $(this).closest('tr').remove();

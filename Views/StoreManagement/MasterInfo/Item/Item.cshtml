@@ -1,5 +1,226 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model IEnumerable<Exampler_ERP.Models.ST_Item>
+
 @{
+    ViewData["Title"] = "Master Information - Item";
 }
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            // Edit Item modal popup
+            $('.editItemLink').click(function (e) {
+                e.preventDefault();
+                var ItemId = $(this).data('id');
+                $.get('@Url.Action("Edit", "Item")', { id: ItemId }, function (data) {
+                    $('#editItemModalContainer').html(data);
+                    $('#editItemModal').modal('show');
+                });
+            });
+
+            $('#editItemModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editItemForm').serialize();
+                $.post('@Url.Action("Edit", "Item")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Add new Item modal popup
+            $('.addItemLink').click(function () {
+                $.get('@Url.Action("Create", "Item")', function (data) {
+                    $('#addItemModalContainer').html(data);
+                    $('#addItemModal').modal('show');
+                });
+            });
+
+            // Save new Item form
+            $('#addItemModalContainer').on('click', '#saveNewItem', function () {
+                var formData = $('#addItemForm').serialize();
+                $.post('@Url.Action("Create", "Item")', formData, function (response) {
+                    if (response.success) {
+                        $('#addItemModal').modal('hide');
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Close Modal Add Contrainer
+            $('#addItemModalContainer').on('click', '#Close', function () {
+                $('#addItemModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editItemModalContainer').on('click', '#Close', function () {
+                $('#editItemModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Delete Item
+            $('.deleteItemLink').click(function (e) {
+                e.preventDefault();
+                var ItemId = $(this).data('id');
+                $.post('@Url.Action("Delete", "Item")', { id: ItemId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+    </script>
+    <script>
+        function printItems() {
+            var printWindow = window.open('@Url.Action("Print", "Item")', '_blank');
+            printWindow.focus();
+        }
+        $('#searchItemButton').click(function () {
+            var searchValue = $('#searchItemInput').val();
+            window.location.href = '@Url.Action("Index", "Item")?searchItemName=' + searchValue;
+        });
+    </script>
+}
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Master Information /</span> Item
+</h4>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <h5 class="card-header">Searhing Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8" style="padding-bottom: 15px;">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search Item name" id="searchItemInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchItemButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <!-- Action Buttons -->
+                        <button type="button" class="btn btn-primary addItemLink">Add New</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Item")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printItems()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Item List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-10 col-lg-10">
+                            <div class="row">
+                                <div class="col-2">
+                                    <p class="text-nowrap">Item Code</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">Item Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Unit</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Category</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Active</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-nowrap">Edit</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">Delete</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-10 col-md-10 col-lg-10">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Item Code : </span>@Html.DisplayFor(modelItem => item.ItemCode)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <p class="text-nowrap"><span class="smallAdd">Item Name : </span>@Html.DisplayFor(modelItem => item.ItemName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Unit : </span>@Html.DisplayFor(modelItem => item.UnitType.UnitTypeName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Category : </span>@Html.DisplayFor(modelItem => item.ItemCategoryType.ItemCategoryTypeName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Active : </span>
+                                            @if (item.ActiveYNID == 1)
+                                            {
+                                                <span>Yes</span>
+                                            }
+                                            else if (item.ActiveYNID == 2)
+                                            {
+                                                <span>No</span>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2 col-md-2 col-lg-2">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editItemLink" data-id="@item.ItemID">
+                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="deleteItemLink" data-id="@item.ItemID">
+                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editItemModalContainer"></div>
+<div id="addItemModalContainer"></div>

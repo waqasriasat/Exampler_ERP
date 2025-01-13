@@ -58,7 +58,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       ViewBag.ItemNameList = await _utils.GetItemList();
 
       ST_MaterialRequisition MaterialRequisitions = new ST_MaterialRequisition();
-      MaterialRequisitions.MaterialRequisitionDetails.Add(new ST_MaterialRequisitionDetail() { RequisitionID = 1 });
+      MaterialRequisitions.MaterialRequisitionDetails.Add(new ST_MaterialRequisitionDetail() { RequisitionID = 0 });
       var model = new MaterialRequisitionsIndexViewModel
       {
         MaterialRequisitions = MaterialRequisitions

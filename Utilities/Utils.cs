@@ -993,6 +993,48 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
+    public async Task<List<SelectListItem>> GetItemUnits()
+    {
+      try
+      {
+        var ItemUnitList = await _appDBContext.Settings_UnitTypes
+            .Select(d => new SelectListItem
+            {
+              Value = d.UnitTypeID.ToString(),
+              Text = d.UnitTypeName
+            })
+            .ToListAsync();
+
+
+        return ItemUnitList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
+    public async Task<List<SelectListItem>> GetItemManufacturers()
+    {
+      try
+      {
+        var ItemManufacturerList = await _appDBContext.Settings_ManufacturerTypes
+            .Select(d => new SelectListItem
+            {
+              Value = d.ManufacturerTypeID.ToString(),
+              Text = d.ManufacturerTypeName
+            })
+            .ToListAsync();
+
+
+        return ItemManufacturerList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
     public async Task<List<SelectListItem>> GetRequisitionStatus()
     {
       try

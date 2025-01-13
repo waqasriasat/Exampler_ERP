@@ -1,5 +1,92 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+@model Exampler_ERP.Models.ST_Item
+
+<div class="modal fade" id="editItemModal" tabindex="-1" role="dialog" aria-labelledby="editItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editItemModalLabel">
+                    <i class="fas fa-key me-2"></i>
+                    Edit Item
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <form id="editItemForm">
+                    <div class="row">
+                        <div class="col-2 col-md-12 col-lg-12">
+                            <div class="row">
+
+                                <div class="col-12">
+                                    <label for="ItemName" class="form-label fw-bold">Item Name</label>
+                                    <input type="text" class="form-control form-control-lg" id="ItemName" name="ItemName" value="@Model.ItemName" />
+                                </div>
+                                <div class="col-6">
+                                    <label for="ItemCode" class="form-label fw-bold">Item Code</label>
+                                    <input type="text" class="form-control form-control-lg" id="ItemCode" name="ItemCode" value="@Model.ItemCode" />
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
+                                    <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
+                                        <option>Please select</option>
+                                    </select>
+                                    <span asp-validation-for="ActiveYNID" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="UnitTypeID" class="form-label fw-bold">Unit</label>
+                                    <select asp-for="UnitTypeID" asp-items="@(new SelectList(ViewBag.UnitTypeIDList, "Value", "Text"))" class="form-control form-control-lg">
+                                        <option>Please select</option>
+                                    </select>
+                                    <span asp-validation-for="UnitTypeID" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="ItemCategoryTypeID" class="form-label fw-bold">Category</label>
+                                    <select asp-for="ItemCategoryTypeID" asp-items="@(new SelectList(ViewBag.ItemCategoryTypeIDList, "Value", "Text"))" class="form-control form-control-lg">
+                                        <option>Please select</option>
+                                    </select>
+                                    <span asp-validation-for="ItemCategoryTypeID" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="ManufacturerTypeID" class="form-label fw-bold">Manufacturer</label>
+                                    <select asp-for="ManufacturerTypeID" asp-items="@(new SelectList(ViewBag.ManufacturerTypeIDList, "Value", "Text"))" class="form-control form-control-lg">
+                                        <option>Please select</option>
+                                    </select>
+                                    <span asp-validation-for="ManufacturerTypeID" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label for="ReorderLevelMin" class="form-label fw-bold">Reorder Level Min</label>
+                                    <input type="text" class="form-control form-control-lg" id="ReorderLevelMin" name="ReorderLevelMin" value="@Model.ReorderLevelMin" />
+                                </div>
+                                <div class="col-6">
+                                    <label for="ReorderLevelMax" class="form-label fw-bold">Reorder Level Max</label>
+                                    <input type="text" class="form-control form-control-lg" id="ReorderLevelMax" name="ReorderLevelMax" value="@Model.ReorderLevelMax" />
+                                </div>
+                                <div class="col-6">
+                                    <label for="BinLocation" class="form-label fw-bold">BinLocation</label>
+                                    <input type="text" class="form-control form-control-lg" id="BinLocation" name="BinLocation" value="@Model.BinLocation" />
+                                </div>
+                                <div class="col-12">
+                                    <label for="Specification" class="form-label fw-bold">Specification</label>
+                                    <input type="text" class="form-control form-control-lg" id="Specification" name="Specification" value="@Model.Specification" />
+                                </div>
+                                <div class="col-6">
+                                    <label for="BarCode" class="form-label fw-bold">BarCode</label>
+                                    <input type="text" class="form-control form-control-lg" id="BarCode" name="BarCode" value="@Model.BarCode" />
+                                </div>
+                                <div class="col-6">
+                                    <label for="OpeningBalance" class="form-label fw-bold">OpeningBalance</label>
+                                    <input type="text" class="form-control form-control-lg" id="OpeningBalance" name="OpeningBalance" value="@Model.OpeningBalance" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="ItemID" name="ItemID" value="@Model.ItemID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
+                <button type="button" class="btn btn-success" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
