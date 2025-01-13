@@ -42,9 +42,12 @@
                 });
             });
 
+            
             // Save new MaterialRequisition form
             $('#addMaterialRequisitionModalContainer').on('click', '#saveNewMaterialRequisition', function () {
+                debugger;
                 var formData = $('#addMaterialRequisitionForm').serialize();
+                debugger;
                 $.post('@Url.Action("Create", "MaterialRequisition")', formData, function (response) {
                     if (response.success) {
                         $('#addMaterialRequisitionModal').modal('hide');

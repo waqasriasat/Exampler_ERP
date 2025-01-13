@@ -13,7 +13,8 @@ namespace Exampler_ERP.Models
     public int ItemID { get; set; }
     [ForeignKey("ItemID")]
     public virtual ST_Item? Items { get; private set; } 
-    public decimal Quantity { get; set; } 
+    public int Quantity { get; set; } 
     public DateTime RequiredDate { get; set; }
+    public int BalanceQuantity { get; set; }
   }
 }

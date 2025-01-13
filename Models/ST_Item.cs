@@ -18,12 +18,12 @@ namespace Exampler_ERP.Models
     public int ManufacturerTypeID { get; set; } // Unit of measurement (e.g., pieces, kg, liters)
     [ForeignKey("ManufacturerTypeID")]
     public virtual Settings_ManufacturerType? ManufacturerType { get; set; }
-    public decimal ReorderLevelMin { get; set; } // Minimum stock quantity threshold
-    public decimal ReorderLevelMax { get; set; } // Maximum stock quantity threshold
+    public int ReorderLevelMin { get; set; } // Minimum stock quantity threshold
+    public int ReorderLevelMax { get; set; } // Maximum stock quantity threshold
     public string? BinLocation { get; set; } // Location of the item within the StoreManagement (e.g., shelf, bin)
     public string? Specification { get; set; } // Free-text specification or description
     public string? BarCode { get; set; } // Barcode or SKU for the item
-    public decimal OpeningBalance { get; set; } // Initial stock balance
+    public int OpeningBalance { get; set; } // Initial stock balance
     public int? FinalApprovalID { get; set; } //didn't use in registration
     public int? ProcessTypeApprovalID { get; set; } //didn't use in registration
     public int? ActiveYNID { get; set; } //didn't use in registration

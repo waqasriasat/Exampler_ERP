@@ -23,6 +23,7 @@
                             <select asp-for="Vouchers.VoucherTypeID" class="form-select form-select-lg">
                                 <option value="">Select Voucher Type</option>
                                 @foreach (var type in ViewBag.VoucherTypeList)
+
                                 {
                                     <option value="@type.Value">@type.Text</option>
                                 }
@@ -35,6 +36,7 @@
                             <select id="HeadofAccountid_credit" name="HeadofAccountid_credit" class="form-select form-select-lg">
                                 <option value="">Select Head of Account</option>
                                 @foreach (var type in ViewBag.HeadofAccount_creditList)
+
                                 {
                                     <option value="@type.Value">@type.Text</option>
                                 }
@@ -46,6 +48,7 @@
                             <select id="HeadofAccountid_debit" name="HeadofAccountid_debit" class="form-select form-select-lg">
                                 <option value="">Select Head of Account</option>
                                 @foreach (var type in ViewBag.HeadofAccount_debitList)
+
                                 {
                                     <option value="@type.Value">@type.Text</option>
                                 }
@@ -62,6 +65,7 @@
                             <select asp-for="Vouchers.InstruType" class="form-select form-select-lg">
                                 <option value="">Select Type</option>
                                 @foreach (var type in ViewBag.IntrumentTypeList)
+
                                 {
                                     <option value="@type.Value">@type.Text</option>
                                 }
@@ -89,7 +93,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                    <button type="button" class="btn btn-info add-row">Add</button>
+                        <button type="button" class="btn btn-info add-row">Add</button>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered" id="ReceivedVoucherTable">
@@ -103,14 +107,18 @@
                             </thead>
                             <tbody>
                                 @if (Model.Vouchers.VoucherDetails != null && Model.Vouchers.VoucherDetails.Count > 0)
+
                                 {
+
                                     for (int i = 0; i < Model.Vouchers.VoucherDetails.Count; i++)
+
                                     {
                                         <tr>
                                             <td>
-                                                <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[@i].DRCR" >
+                                                <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[@i].DRCR">
                                                     <option value="">Select Type</option>
                                                     @foreach (var type in ViewBag.TransactionTypeList)
+
                                                     {
                                                         <option value="@type.Value">@type.Text</option>
                                                     }
@@ -120,12 +128,13 @@
                                                 <select class="form-select transaction-account" name="Vouchers.VoucherDetails[@i].HeadofAccount_FiveID">
                                                     <option value="">Select Account</option>
                                                     @foreach (var type in ViewBag.HeadofAccount_FiveList)
+
                                                     {
                                                         <option value="@type.Value">@type.Text</option>
                                                     }
                                                 </select>
                                             </td>
-                                            
+
                                             <td>
                                                 <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[@i].DrAmt" value="@Model.Vouchers.VoucherDetails[i].DrAmt" />
                                             </td>
@@ -134,15 +143,15 @@
                                             </td>
                                         </tr>
                                     }
+
                                 }
-                             
+
                             </tbody>
 
                         </table>
                     </div>
-
                     <div class="row mt-4">
-                       
+
                         <div class="col-md-6">
                             <label class="form-label fw-bold">Total Debit Amount</label>
                             <input id="TotalCrAmt" class="form-control form-control-lg" readonly />
@@ -205,47 +214,47 @@
 
             const rowCount = tableBody.find('tr').length;
 
-            
+
             // Add debit row
             const debitRow = `<tr>
-                <td>
-                    <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount}].DRCR" >
-                        <option value="1" selected>Debit</option>
-                    </select>
-                </td>
-                <td>
-                    <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount}].HeadofAccount_FiveID">
-                        <option value="${debitHead}" selected>${$('#HeadofAccountid_debit option:selected').text()}</option>
-                    </select>
-                </td>
-                
-                <td>
-                        <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount}].DrAmt" value="${amount.toFixed(2)}" />
-                </td>
                     <td>
-                            <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount}].CrAmt" value="0" readonly />
-                    </td>
-            </tr>`;
-            // Add credit row
-            const creditRow = `<tr>
-                    <td>
-                            <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount + 1}].DRCR">
-                            <option value="2" selected>Credit</option>
+                        <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount}].DRCR" >
+                            <option value="1" selected>Debit</option>
                         </select>
                     </td>
                     <td>
-                            <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount + 1}].HeadofAccount_FiveID">
-                            <option value="${creditHead}" selected>${$('#HeadofAccountid_credit option:selected').text()}</option>
+                        <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount}].HeadofAccount_FiveID">
+                            <option value="${debitHead}" selected>${$('#HeadofAccountid_debit option:selected').text()}</option>
                         </select>
                     </td>
 
                     <td>
-                                <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount + 1}].DrAmt" value="0" readonly />
+                            <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount}].DrAmt" value="${amount.toFixed(2)}" />
                     </td>
                         <td>
-                                    <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount + 1}].CrAmt" value="${amount.toFixed(2)}" />
+                                <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount}].CrAmt" value="0" readonly />
                         </td>
                 </tr>`;
+            // Add credit row
+            const creditRow = `<tr>
+                        <td>
+                                <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[${rowCount + 1}].DRCR">
+                                <option value="2" selected>Credit</option>
+                            </select>
+                        </td>
+                        <td>
+                                <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount + 1}].HeadofAccount_FiveID">
+                                <option value="${creditHead}" selected>${$('#HeadofAccountid_credit option:selected').text()}</option>
+                            </select>
+                        </td>
+
+                        <td>
+                                    <input type="text" class="form-control debit" name="Vouchers.VoucherDetails[${rowCount + 1}].DrAmt" value="0" readonly />
+                        </td>
+                            <td>
+                                        <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[${rowCount + 1}].CrAmt" value="${amount.toFixed(2)}" />
+                            </td>
+                    </tr>`;
 
             // Append rows to the table
             tableBody.append(debitRow + creditRow);
