@@ -28,11 +28,11 @@
         width: 100%; /* Ensures the input elements stretch to match */
     }
 
-    .table .form-control,
+    /* .table .form-control,
     .table .form-select {
         border: none;
         background-color: transparent; /* Optional: for read-only appearance */
-    }
+    } */
 
    
 </style>
@@ -48,41 +48,54 @@
                 <form id="addMaterialRequisitionForm" enctype="multipart/form-data" asp-action="Create" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <!-- Row for Inputs -->
-                    <div class="row g-3 mb-3 align-items-end">
-                        <div class="col-md-4">
-                            <label for="ItemName" class="form-label fw-bold">Item Name</label>
-                            <select id="ItemName" name="ItemName" class="form-select  form-select-lg">
-                                <option value="">Select Item</option>
-                                @foreach (var type in ViewBag.ItemList)
-
-                                {
-                                    <option value="@type.Value">@type.Text</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label for="Quantity" class="form-label fw-bold">Quantity</label>
-                            <input type="text" id="Quantity" name="Quantity" class="form-control" />
-                        </div>
-                        <div class="col-md-2">
-                            <label for="BalanceQuantity" class="form-label fw-bold">Balance Quantity</label>
-                            <input type="text" id="BalanceQuantity" name="BalanceQuantity" class="form-control" />
-                        </div>
-                        <div class="col-md-2">
-                            <label for="RequiredDate" class="form-label fw-bold">Required Date</label>
-                            <input type="date" id="RequiredDate" name="RequiredDate" class="form-control" />
-                        </div>
-                        <div class="col-md-2 center-button">
-                            <button type="button" class="btn btn-primary add-row width-button">Add</button>
-                        </div>
-                    </div>
-                    <hr />
+               
                     <!-- Table for Added Rows -->
                     <div class="table-responsive mb-3">
                         <table class="table table-bordered" id="MaterialRequisitionTable">
                             <thead class="table-light">
                                 <tr>
-                                    <th class="col-md-4">Item Name</th>
+                                    <th style="width: 60%;background: transparent;border: none;">
+                                        <div class="col-md-12">
+                                            <label for="ItemName" class="form-label fw-bold">Item Name</label>
+                                            <select id="ItemName" name="ItemName" class="form-select">
+                                                <option value="">Select Item</option>
+                                                @foreach (var type in ViewBag.ItemList)
+
+
+
+                                                {
+                                                    <option value="@type.Value">@type.Text</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </th>
+                                    <th style="background: transparent;border: none;">
+                                        <div class="col-md-12">
+                                            <label for="Quantity" class="form-label fw-bold">Quantity</label>
+                                            <input type="text" id="Quantity" name="Quantity" class="form-control" />
+                                        </div>
+                                    </th>
+                                    <th style="background: transparent;border: none;">
+                                        <div class="col-md-12">
+                                            <label for="BalanceQuantity" class="form-label fw-bold">Balance Quantity</label>
+                                            <input type="text" id="BalanceQuantity" name="BalanceQuantity" class="form-control" />
+                                        </div>
+                                    </th>
+                                    <th style="background: transparent;border: none;">
+                                        <div class="col-md-12">
+                                            <label for="RequiredDate" class="form-label fw-bold">Required Date</label>
+                                            <input type="date" id="RequiredDate" name="RequiredDate" class="form-control" />
+                                        </div>
+                                    </th>
+                                    <th style="background: transparent;border: none;">
+                                        <div class="col-md-12" style="text-align-last: center;">
+                                            <button type="button" class="btn btn-primary add-row width-button">Add</button>
+                                        </div>
+                                    </th>
+                                </tr>
+                               
+                                <tr>
+                                    <th>Item Name</th>
                                     <th>Quantity</th>
                                     <th>Balance Quantity</th>
                                     <th>Required Date</th>
@@ -98,7 +111,7 @@
 
                                     {
                                 <tr>
-                                    <td class="col-md-4">
+                                    <td >
                                                 <select class="form-select" name="MaterialRequisitions.MaterialRequisitionDetails[@i].ItemID">
                                             <option value="">Select Item</option>
                                             @foreach (var type in ViewBag.ItemNameList)
@@ -117,7 +130,8 @@
                                     <td>
                                                 <input type="date" class="form-control" name="MaterialRequisitions.MaterialRequisitionDetails[@i].RequiredDate" value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].RequiredDate" />
                                     </td>
-                                    <td>
+                                            <td style="text-align-last: center;
+}">
                                         <button type="button" class="btn btn-sm btn-danger remove-row width-button">Remove</button>
                                     </td>
                                 </tr>

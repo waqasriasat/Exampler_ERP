@@ -20,8 +20,11 @@ namespace Exampler_ERP.Controllers.StoreManagement.Main
     }
     public async Task<IActionResult> Index()
     {
+      int EmployeeID = int.Parse(HttpContext.Session.GetInt32("UserID")?.ToString() ?? "0");
+      ViewBag.MaterialRequisitionCount = await _appDBContext.ST_MaterialRequisitions
+          .Where(v => v.EmployeeID == EmployeeID)
+          .CountAsync();
 
-      ViewBag.MaterialRequisitionCount = await _appDBContext.HR_Employees.CountAsync();
       //ViewBag.ContractCount = await _appDBContext.HR_Contracts.CountAsync();
       //ViewBag.SalaryCount = await _appDBContext.HR_Salarys.CountAsync();
       //ViewBag.JoiningCount = await _appDBContext.HR_Joinings.CountAsync();

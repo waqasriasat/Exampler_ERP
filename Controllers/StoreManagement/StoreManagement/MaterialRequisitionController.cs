@@ -94,30 +94,30 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
           await _appDBContext.SaveChangesAsync();
 
-          var MaterialRequisitionId = model.MaterialRequisitions.RequisitionID;
-          if (MaterialRequisitionId > 0)
+          var RequisitionID = model.MaterialRequisitions.RequisitionID;
+          if (RequisitionID > 0)
           {
             var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
-                                .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 19)
+                                .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 20)
                                 .CountAsync();
 
             if (processCount > 0)
             {
               var newProcessTypeApproval = new CR_ProcessTypeApproval
               {
-                ProcessTypeID = 19,
+                ProcessTypeID = 20,
                 Notes = "Pending New Material Requisition",
                 Date = DateTime.Now,
                 EmployeeID = HttpContext.Session.GetInt32("UserID") ?? default(int),
                 UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
-                TransactionID = MaterialRequisitionId
+                TransactionID = RequisitionID
               };
 
               _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
               await _appDBContext.SaveChangesAsync();
 
               var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
-                                          .Where(pta => pta.ProcessTypeID == 19 && pta.Rank == 1)
+                                          .Where(pta => pta.ProcessTypeID == 20 && pta.Rank == 1)
                                           .FirstOrDefaultAsync();
 
               if (nextApprovalSetup != null)
@@ -176,6 +176,79 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       }
 
       return PartialView("~/Views/StoreManagement/StoreManagement/MaterialRequisition/AddMaterialRequisition.cshtml", model);
+    }
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+      var MaterialRequisitions = await _appDBContext.ST_MaterialRequisitions
+          .Include(v => v.MaterialRequisitionDetails)
+          .FirstOrDefaultAsync(v => v.RequisitionID == id);
+
+      if (MaterialRequisitions == null)
+      {
+        return NotFound();
+      }
+
+      MaterialRequisitions.MaterialRequisitionDetails.Add(new ST_MaterialRequisitionDetail() { RequisitionID = MaterialRequisitions.RequisitionID });
+
+      var model = new MaterialRequisitionsIndexViewModel
+      {
+        MaterialRequisitions = MaterialRequisitions
+      };
+
+      ViewBag.ItemList = await _utils.GetItemList();
+      ViewBag.ItemNameList = await _utils.GetItemList();
+
+      return PartialView("~/Views/StoreManagement/StoreManagement/MaterialRequisition/EditMaterialRequisition.cshtml", model);
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(MaterialRequisitionsIndexViewModel MaterialRequisition)
+    {
+      if (ModelState.IsValid)
+      {
+        
+        var existingMaterialRequisition = await _appDBContext.ST_MaterialRequisitions
+            .Include(v => v.MaterialRequisitionDetails)
+            .FirstOrDefaultAsync(v => v.RequisitionID == MaterialRequisition.MaterialRequisitions.RequisitionID);
+
+        if (existingMaterialRequisition != null)
+        {
+          existingMaterialRequisition.Remarks = MaterialRequisition.MaterialRequisitions.Remarks;
+  
+          _appDBContext.Update(existingMaterialRequisition);
+          await _appDBContext.SaveChangesAsync();
+
+          var MaterialRequisitionDetailsToRemove = _appDBContext.ST_MaterialRequisitionDetails
+          .Where(v => v.RequisitionID == MaterialRequisition.MaterialRequisitions.RequisitionID)
+          .ToList();
+
+          _appDBContext.ST_MaterialRequisitionDetails.RemoveRange(MaterialRequisitionDetailsToRemove);
+
+          await _appDBContext.SaveChangesAsync();
+          MaterialRequisition.MaterialRequisitions.MaterialRequisitionDetails.RemoveAll(e => e.ItemID == null || e.ItemID == 0);
+
+          foreach (var detail in MaterialRequisition.MaterialRequisitions.MaterialRequisitionDetails)
+          {
+            detail.RequisitionID = MaterialRequisition.MaterialRequisitions.RequisitionID;
+            _appDBContext.ST_MaterialRequisitionDetails.Add(detail);
+          }
+
+          await _appDBContext.SaveChangesAsync();
+
+          return Json(new { success = true, message = "Received MaterialRequisition Edited successfully!" });
+        }
+        else
+        {
+          return NotFound();
+        }
+      }
+
+      ViewBag.ItemList = await _utils.GetItemList();
+      ViewBag.ItemNameList = await _utils.GetItemList();
+
+      return PartialView("~/Views/StoreManagement/StoreManagement/MaterialRequisition/EditMaterialRequisition.cshtml", MaterialRequisition);
     }
   }
 }

@@ -1,5 +1,136 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+@model Exampler_ERP.Models.Temp.MaterialRequisitionsIndexViewModel
+
+<style>
+    .ui-autocomplete {
+        z-index: 1000 !important;
+    }
+
+    .center-button {
+        margin-top: 32px;
+        text-align: center;
+    }
+
+    .width-button {
+        width: 120px;
+    }
+
+    .modal-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .table th,
+    .table td {
+        width: 20%; /* Adjust this percentage to match the inputs */
+    }
+
+    .form-label,
+    .form-control,
+    .form-select {
+        width: 100%; /* Ensures the input elements stretch to match */
+    }
+
+    .table .form-control,
+    .table .form-select {
+        border: none;
+        background-color: transparent; /* Optional: for read-only appearance */
+    }
+</style>
+
+<div class="modal fade" id="editMaterialRequisitionModal" tabindex="-1" role="dialog" aria-labelledby="editMaterialRequisitionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editMaterialRequisitionModalLabel"><i class="fas fa-key me-2"></i>Edit Material Requisition</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editMaterialRequisitionForm" enctype="multipart/form-data" asp-action="Create" method="post">
+                    @Html.Partial("~/Views/StoreManagement/StoreManagement/MaterialRequisition/_EditMaterialRequisition.cshtml", Model)
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="saveNewMaterialRequisition" class="btn btn-success">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        //$('#MaterialRequisitionTable tbody').empty();
+              $('#MaterialRequisitionTable tbody').find('tr').each(function () {
+        // Get the value of the ItemID field in the current row
+        let itemID = $(this).find('select[name*="MaterialRequisitions.MaterialRequisitionDetails"]').val();
+
+        // Check if the value is null, empty, or zero
+        if (!itemID || itemID === "0") {
+            // Remove the current row
+            $(this).remove();
+        }
+    });
+        // Add a new row
+        $(document).on('click', '.add-row', function () {
+            const itemName = $('#ItemName').val();
+            const itemText = $('#ItemName option:selected').text();
+            const quantity = parseFloat($('#Quantity').val()) || 0;
+            const balanceQuantity = parseFloat($('#BalanceQuantity').val()) || 0;
+            const requiredDate = $('#RequiredDate').val();
+
+            // Validate inputs
+            if (!itemName || quantity <= 0 || balanceQuantity <= 0 || !requiredDate) {
+                alert('Please fill out all required fields: Item Name, Quantity, Balance Quantity, and Required Date.');
+                return;
+            }
+
+            const tableBody = $('#MaterialRequisitionTable tbody');
+            const rowCount = tableBody.find('tr').length;
+
+            const dynamicRow = `
+                <tr>
+                    <td class="col-md-4">
+                        <input type="hidden" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount}].ItemID" value="${itemName}" />
+                        <input type="text" class="form-control" value="${itemText}" readonly />
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount}].Quantity" value="${quantity}" readonly />
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount}].BalanceQuantity" value="${balanceQuantity}" readonly />
+                    </td>
+                    <td>
+                        <input type="date" class="form-control" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount}].RequiredDate" value="${requiredDate}" readonly />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-danger remove-row width-button">Remove</button>
+                    </td>
+                </tr>`;
+
+            tableBody.append(dynamicRow);
+
+            // Clear input fields
+            $('#ItemName').val('');
+            $('#Quantity').val('');
+            $('#BalanceQuantity').val('');
+            $('#RequiredDate').val('');
+        });
+
+        // Remove a row
+        $(document).on('click', '.remove-row', function () {
+            $(this).closest('tr').remove();
+            // Update name attributes for proper binding
+            $('#MaterialRequisitionTable tbody tr').each(function (index) {
+                $(this).find('input, select').each(function () {
+                    const name = $(this).attr('name');
+                    if (name) {
+                        const updatedName = name.replace(/\[\d+\]/, `[${index}]`);
+                        $(this).attr('name', updatedName);
+                    }
+                });
+            });
+        });
+    });
+
+
+</script>

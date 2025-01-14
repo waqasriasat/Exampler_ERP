@@ -248,18 +248,24 @@
 
         {
             <!-- StoreManagement -->
-            <li class='menu-item@(currentPage.StartsWith("/Auth") ? " active open" : "")'>
+            <li class='menu-item@(currentPage.StartsWith("/ST_Main_Dashboard/Index") || currentPage.StartsWith("/ST_StoreManagement_Dashboard/Index") ||
+                                   currentPage.StartsWith("/ST_Report_Dashboard/Index") || currentPage.StartsWith("/ItemCategoryType/Index") ||
+                                   currentPage.StartsWith("/ItemComponentType/Index") || currentPage.StartsWith("/Item/Index") ||
+                                   currentPage.StartsWith("/ManufacturerType/Index") || currentPage.StartsWith("/UnitType/Index") ||
+                                   currentPage.StartsWith("/MaterialRequisition/Index")? " active open" : "")'>
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-store"></i>
                     <div>Store Management</div>
                 </a>
                 <ul class="menu-sub">
-                    <li class='menu-item@(currentPage == "/ST_Main_Dashboard/Index" ? " active" : "")'>
+                    <li class='menu-item@(currentPage == "/ST_Main_Dashboard/Index"|| currentPage == "/ItemCategoryType/Index" ||
+                                      currentPage == "/ItemComponentType/Index" || currentPage == "/Item/Index"||
+                                      currentPage == "/ManufacturerType/Index" || currentPage == "/UnitType/Index" ? " active" : "")'>
                         <a asp-controller="ST_Main_Dashboard" asp-action="Index" class="menu-link">
                             <div>Master Information</div>
                         </a>
                     </li>
-                    <li class='menu-item@(currentPage == "/ST_StoreManagement_Dashboard/Index" ? " active" : "")'>
+                    <li class='menu-item@(currentPage == "/ST_StoreManagement_Dashboard/Index"|| currentPage == "/MaterialRequisition/Index" ? " active" : "")'>
                         <a asp-controller="ST_StoreManagement_Dashboard" asp-action="Index" class="menu-link">
                             <div>Store Management</div>
                         </a>
