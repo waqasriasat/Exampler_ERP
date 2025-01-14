@@ -57,15 +57,17 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       ViewBag.ItemList = await _utils.GetItemList();
       ViewBag.ItemNameList = await _utils.GetItemList();
 
-      ST_MaterialRequisition MaterialRequisitions = new ST_MaterialRequisition();
-      MaterialRequisitions.MaterialRequisitionDetails.Add(new ST_MaterialRequisitionDetail() { RequisitionID = 0 });
+      ST_MaterialRequisition Requisitions = new ST_MaterialRequisition();
+      Requisitions.MaterialRequisitionDetails.Add(new ST_MaterialRequisitionDetail() { RequisitionID = 0 });
       var model = new MaterialRequisitionsIndexViewModel
       {
-        MaterialRequisitions = MaterialRequisitions
+        MaterialRequisitions = Requisitions
       };
 
       return PartialView("~/Views/StoreManagement/StoreManagement/MaterialRequisition/AddMaterialRequisition.cshtml", model);
     }
+
+
     [HttpPost]
     public async Task<IActionResult> Create(MaterialRequisitionsIndexViewModel model)
     {

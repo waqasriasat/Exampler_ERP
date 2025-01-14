@@ -1,7 +1,7 @@
 @model IEnumerable<Exampler_ERP.Models.ST_MaterialRequisition>
 
 @{
-    ViewData["Title"] = "StoreManagement - Material Requisition";
+    ViewData["Title"] = "Store Management - Material Requisition";
 }
 
 
@@ -48,14 +48,30 @@
                 debugger;
                 var formData = $('#addMaterialRequisitionForm').serialize();
                 debugger;
-                $.post('@Url.Action("Create", "MaterialRequisition")', formData, function (response) {
-                    if (response.success) {
-                        $('#addMaterialRequisitionModal').modal('hide');
-                        location.reload(); // Reload the page to reflect changes
-                    } else {
-                        showErrorAlert(response.message);
-                    }
-                });
+                // $.post('@Url.Action("Create", "MaterialRequisition")', formData, function (response) {
+                //     if (response.success) {
+                //         $('#addMaterialRequisitionModal').modal('hide');
+                //         location.reload(); Reload the page to reflect changes
+                //     } else {
+                //         showErrorAlert(response.message);
+                //     }
+                    $.post('@Url.Action("Create", "MaterialRequisition")', formData)
+                      .done(function (response) {
+                          if (response.success) {
+                             debugger;
+                              $('#addMaterialRequisitionModal').modal('hide');
+                              location.reload();
+                          } else {
+                             debugger;
+                              showErrorAlert(response.message);
+                          }
+                      })
+                      .fail(function (xhr) {
+                         debugger;
+                          showErrorAlert('An error occurred while processing the request: ' + xhr.statusText);
+                      });
+
+                
             });
 
             // Close Modal Add Contrainer
@@ -109,7 +125,7 @@
 
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">StoreManagement /</span> Material Requisition
+    <span class="text-muted fw-light">Store Management /</span> Material Requisition
 </h4>
 <div class="row">
     <div class="col-md-12">

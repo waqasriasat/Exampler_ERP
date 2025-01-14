@@ -45,13 +45,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addMaterialRequisitionForm" enctype="multipart/form-data" asp-action="Create">
+                <form id="addMaterialRequisitionForm" enctype="multipart/form-data" asp-action="Create" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <!-- Row for Inputs -->
                     <div class="row g-3 mb-3 align-items-end">
                         <div class="col-md-4">
                             <label for="ItemName" class="form-label fw-bold">Item Name</label>
-                            <select id="ItemName" class="form-select">
+                            <select id="ItemName" name="ItemName" class="form-select  form-select-lg">
                                 <option value="">Select Item</option>
                                 @foreach (var type in ViewBag.ItemList)
 
@@ -62,15 +62,15 @@
                         </div>
                         <div class="col-md-2">
                             <label for="Quantity" class="form-label fw-bold">Quantity</label>
-                            <input type="text" id="Quantity" class="form-control" />
+                            <input type="text" id="Quantity" name="Quantity" class="form-control" />
                         </div>
                         <div class="col-md-2">
                             <label for="BalanceQuantity" class="form-label fw-bold">Balance Quantity</label>
-                            <input type="text" id="BalanceQuantity" class="form-control" />
+                            <input type="text" id="BalanceQuantity" name="BalanceQuantity" class="form-control" />
                         </div>
                         <div class="col-md-2">
                             <label for="RequiredDate" class="form-label fw-bold">Required Date</label>
-                            <input type="date" id="RequiredDate" class="form-control" />
+                            <input type="date" id="RequiredDate" name="RequiredDate" class="form-control" />
                         </div>
                         <div class="col-md-2 center-button">
                             <button type="button" class="btn btn-primary add-row width-button">Add</button>
@@ -90,9 +90,16 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @if (Model.MaterialRequisitions.MaterialRequisitionDetails != null && Model.MaterialRequisitions.MaterialRequisitionDetails.Count > 0)
+
+                                {
+
+                                    for (int i = 0; i < Model.MaterialRequisitions.MaterialRequisitionDetails.Count; i++)
+
+                                    {
                                 <tr>
                                     <td class="col-md-4">
-                                        <select class="form-select" name="MaterialRequisitionDetails[0].ItemID">
+                                                <select class="form-select" name="MaterialRequisitions.MaterialRequisitionDetails[@i].ItemID">
                                             <option value="">Select Item</option>
                                             @foreach (var type in ViewBag.ItemNameList)
 
@@ -102,18 +109,22 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="MaterialRequisitionDetails[0].Quantity" />
+                                                <input type="text" class="form-control" name="MaterialRequisitions.MaterialRequisitionDetails[@i].Quantity" value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].Quantity" />
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="MaterialRequisitionDetails[0].BalanceQuantity" />
+                                                <input type="text" class="form-control" name="MaterialRequisitions.MaterialRequisitionDetails[@i].BalanceQuantity" value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].BalanceQuantity" />
                                     </td>
                                     <td>
-                                        <input type="date" class="form-control" name="MaterialRequisitionDetails[0].RequiredDate" />
+                                                <input type="date" class="form-control" name="MaterialRequisitions.MaterialRequisitionDetails[@i].RequiredDate" value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].RequiredDate" />
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-danger remove-row width-button">Remove</button>
                                     </td>
                                 </tr>
+                                    }
+
+                                }
+
                             </tbody>
                         </table>
                     </div>
@@ -147,7 +158,7 @@
     //     });
     // });
     $(document).ready(function () {
-      $('#MaterialRequisitionTable tbody').empty();
+      //$('#MaterialRequisitionTable tbody').empty();
 
         // Add a new row
         $(document).on('click', '.add-row', function () {
