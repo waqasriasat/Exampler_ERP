@@ -11,10 +11,10 @@ namespace Exampler_ERP.Models
     public int EmployeeID { get; set; }
     [ForeignKey("HR_Employee")]
     public virtual HR_Employee? HR_Employees { get; private set; }
-    public int RequisitionStatusTypeID { get; set; }
+    public int? RequisitionStatusTypeID { get; set; }
     [ForeignKey("RequisitionStatusTypeID")]
     public virtual Settings_RequisitionStatusType? RequisitionStatusTypes { get; private set; }
-    public string Remarks { get; set; }
+    public string? Remarks { get; set; }
     public int? FinalApprovalID { get; set; } //didn't use in registration
     public int? ProcessTypeApprovalID { get; set; } //didn't use in registration
 

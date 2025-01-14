@@ -27,7 +27,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
           .Include(v => v.MaterialRequisitionDetails)
           .Include(v => v.RequisitionStatusTypes)
           .Include(v => v.HR_Employees)
-          .Where(v => v.HR_Employees.EmployeeID == EmployeeID);
+          .Where(v => v.EmployeeID == EmployeeID);
 
         if (!string.IsNullOrEmpty(searchItemName))
         {
@@ -75,12 +75,13 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       {
         try
         {
-          
 
+          model.MaterialRequisitions.EmployeeID = HttpContext.Session.GetInt32("UserID") ?? default(int);
           model.MaterialRequisitions.FinalApprovalID = 0;
+          model.MaterialRequisitions.RequisitionStatusTypeID = 1;
           model.MaterialRequisitions.RequisitionDate = DateTime.Now;
           _appDBContext.ST_MaterialRequisitions.Add(model.MaterialRequisitions);
-
+          //await _appDBContext.SaveChangesAsync();
 
           model.MaterialRequisitions.MaterialRequisitionDetails.RemoveAll(e => e.ItemID == 0);
           model.MaterialRequisitions.MaterialRequisitionDetails.RemoveAll(e => e.ItemID == null || e.ItemID == 0);
@@ -143,6 +144,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
             else
             {
               model.MaterialRequisitions.FinalApprovalID = 1;
+              model.MaterialRequisitions.RequisitionStatusTypeID = 2;
               _appDBContext.ST_MaterialRequisitions.Update(model.MaterialRequisitions);
               await _appDBContext.SaveChangesAsync();
               TempData["SuccessMessage"] = " Material Requisition successfully. No process setup found,  Material Requisition Approved.";

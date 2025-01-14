@@ -45,33 +45,15 @@
             
             // Save new MaterialRequisition form
             $('#addMaterialRequisitionModalContainer').on('click', '#saveNewMaterialRequisition', function () {
-                debugger;
                 var formData = $('#addMaterialRequisitionForm').serialize();
-                debugger;
-                // $.post('@Url.Action("Create", "MaterialRequisition")', formData, function (response) {
-                //     if (response.success) {
-                //         $('#addMaterialRequisitionModal').modal('hide');
-                //         location.reload(); Reload the page to reflect changes
-                //     } else {
-                //         showErrorAlert(response.message);
-                //     }
-                    $.post('@Url.Action("Create", "MaterialRequisition")', formData)
-                      .done(function (response) {
-                          if (response.success) {
-                             debugger;
-                              $('#addMaterialRequisitionModal').modal('hide');
-                              location.reload();
-                          } else {
-                             debugger;
-                              showErrorAlert(response.message);
-                          }
-                      })
-                      .fail(function (xhr) {
-                         debugger;
-                          showErrorAlert('An error occurred while processing the request: ' + xhr.statusText);
-                      });
-
-                
+                $.post('@Url.Action("Create", "MaterialRequisition")', formData, function (response) {
+                    if (response.success) {
+                        $('#addMaterialRequisitionModal').modal('hide');
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                        });
             });
 
             // Close Modal Add Contrainer
@@ -201,7 +183,7 @@
                                     </div>
                                     <div class="col-6">
                                         <p class="text-nowrap">
-                                            <span class="smallAdd">Status :</span> @item.RequisitionStatusTypes.RequisitionStatusTypeName
+                                            <span class="smallAdd">Status :</span> @item.RequisitionStatusTypes?.RequisitionStatusTypeName
                                         </p>
                                     </div>
                                 </div>

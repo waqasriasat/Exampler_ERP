@@ -148,29 +148,20 @@
 </div>
 
 <script>
-    //   $(document).ready(function () {
-    //     const inputWidths = $('#addMaterialRequisitionForm .form-select, #addMaterialRequisitionForm .form-control').map(function () {
-    //         return $(this).outerWidth();
-    //     }).get();
-
-    //     $('#MaterialRequisitionTable thead th').each(function (index) {
-    //         $(this).css('width', inputWidths[index] + 'px');
-    //     });
-    // });
+    
     $(document).ready(function () {
-      //$('#MaterialRequisitionTable tbody').empty();
-
+        $('#MaterialRequisitionTable tbody').empty();
         // Add a new row
         $(document).on('click', '.add-row', function () {
             const itemName = $('#ItemName').val();
             const itemText = $('#ItemName option:selected').text();
             const quantity = parseFloat($('#Quantity').val()) || 0;
-            const balancequantity = parseFloat($('#BalanceQuantity').val()) || 0;
+            const balanceQuantity = parseFloat($('#BalanceQuantity').val()) || 0;
             const requiredDate = $('#RequiredDate').val();
 
             // Validate inputs
-            if (!itemName || quantity <= 0 || balancequantity <= 0 || !requiredDate) {
-                alert('Please fill out all required fields: Item Name, Quantity, Balance Quantity and Required Date.');
+            if (!itemName || quantity <= 0 || balanceQuantity <= 0 || !requiredDate) {
+                alert('Please fill out all required fields: Item Name, Quantity, Balance Quantity, and Required Date.');
                 return;
             }
 
@@ -178,35 +169,49 @@
             const rowCount = tableBody.find('tr').length;
 
             const dynamicRow = `
-                        <tr>
-                                <td class="col-md-4">
-                                <input type="text" class="form-control" name="MaterialRequisitionDetails[${rowCount}].ItemName" value="${itemText}" readonly />
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="MaterialRequisitionDetails[${rowCount}].Quantity" value="${quantity.toFixed(2)}" readonly />
-                            </td>
-                                 <td>
-                                    <input type="text" class="form-control" name="MaterialRequisitionDetails[${rowCount}].BalanceQuantity" value="${balancequantity.toFixed(2)}" readonly />
-                                </td>
-                            <td>
-                                <input type="date" class="form-control" name="MaterialRequisitionDetails[${rowCount}].RequiredDate" value="${requiredDate}" readonly />
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-sm btn-danger remove-row width-button">Remove</button>
-                            </td>
-                        </tr>`;
+                <tr>
+                    <td class="col-md-4">
+                        <input type="hidden" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount}].ItemID" value="${itemName}" />
+                        <input type="text" class="form-control" value="${itemText}" readonly />
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount}].Quantity" value="${quantity}" readonly />
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount}].BalanceQuantity" value="${balanceQuantity}" readonly />
+                    </td>
+                    <td>
+                        <input type="date" class="form-control" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount}].RequiredDate" value="${requiredDate}" readonly />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-danger remove-row width-button">Remove</button>
+                    </td>
+                </tr>`;
 
             tableBody.append(dynamicRow);
 
+            // Clear input fields
             $('#ItemName').val('');
             $('#Quantity').val('');
             $('#BalanceQuantity').val('');
             $('#RequiredDate').val('');
         });
-      
+
         // Remove a row
         $(document).on('click', '.remove-row', function () {
             $(this).closest('tr').remove();
+            // Update name attributes for proper binding
+            $('#MaterialRequisitionTable tbody tr').each(function (index) {
+                $(this).find('input, select').each(function () {
+                    const name = $(this).attr('name');
+                    if (name) {
+                        const updatedName = name.replace(/\[\d+\]/, `[${index}]`);
+                        $(this).attr('name', updatedName);
+                    }
+                });
+            });
         });
     });
+
+
 </script>
