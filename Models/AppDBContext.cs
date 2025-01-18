@@ -117,7 +117,9 @@ namespace Exampler_ERP.Models
     public DbSet<ST_Item> ST_Items { get; set; }
     public DbSet<ST_MaterialRequisition> ST_MaterialRequisitions { get; set; }
     public DbSet<ST_MaterialRequisitionDetail> ST_MaterialRequisitionDetails { get; set; }
-
+    public DbSet<ST_Stock> ST_Stocks { get; set; }
+    public DbSet<ST_StockHistory> ST_StockHistorys { get; set; }
+    public DbSet<ST_StockComponent> ST_StockComponents { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -1393,6 +1395,7 @@ namespace Exampler_ERP.Models
         // Add more items here if needed
     );
 
-   }
+   
+    }
   }
 }

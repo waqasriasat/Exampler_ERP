@@ -948,6 +948,27 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
+    public async Task<List<SelectListItem>> GetVendorList()
+    {
+      try
+      {
+        var VendorList = await _appDBContext.FI_Vendors
+            .Select(d => new SelectListItem
+            {
+              Value = d.VendorID.ToString(),
+              Text = d.PersonName
+            })
+            .ToListAsync();
+
+
+        return VendorList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
     //GetItemCategorys
     public async Task<List<SelectListItem>> GetItemList()
     {
