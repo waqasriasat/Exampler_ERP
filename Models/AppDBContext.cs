@@ -1394,8 +1394,7 @@ namespace Exampler_ERP.Models
         new Settings_EndOfServiceReasonType { EndOfServiceReasonTypeId = 5, EndOfServiceReasonTypeName = "Death" }
         // Add more items here if needed
     );
-
-   
+      
     }
   }
 }

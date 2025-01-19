@@ -48,6 +48,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
     {
       ViewBag.ItemCategoryList = await _utils.GetItemCategorys();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
+      ViewBag.DataTypeList = await _utils.GetItemComponentDataType();
       var ItemComponentType = await _appDBContext.Settings_ItemComponentTypes.FindAsync(id);
       if (ItemComponentType == null)
       {
@@ -77,6 +78,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
     {
       ViewBag.ItemCategoryList = await _utils.GetItemCategorys();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
+      ViewBag.DataTypeList = await _utils.GetItemComponentDataType();
       return PartialView("~/Views/StoreManagement/MasterInfo/ItemComponentType/AddItemComponentType.cshtml", new Settings_ItemComponentType());
     }
 

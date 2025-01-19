@@ -65,13 +65,14 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       }
 
       var components = await _appDBContext.Settings_ItemComponentTypes
-          .Where(c => c.ItemCategoryTypeID == categoryID)
-          .Select(c => new
-          {
-            ItemTypeID = c.ItemComponentTypeID,
-            ItemTypeName = c.ItemComponentTypeName
-          })
-          .ToListAsync();
+         .Where(c => c.ItemCategoryTypeID == categoryID)
+         .Select(c => new
+         {
+           ItemTypeID = c.ItemComponentTypeID,
+           ItemTypeName = c.ItemComponentTypeName,
+           ItemDataType = c.ItemComponentDataType
+         })
+         .ToListAsync();
 
       return Json(components);
     }
@@ -82,7 +83,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     {
       ViewBag.ItemList = await _utils.GetItemList();
       ViewBag.VendorList = await _utils.GetVendorList();
-
+      ViewBag.UnitList = await _utils.GetItemUnits();
       ST_Stock stock = new ST_Stock();
       stock.StockComponents.Add(new ST_StockComponent() { StockID = 0 });
       var model = new StocksIndexViewModel
@@ -100,6 +101,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         // If the model is invalid, return the partial view with validation errors
         ViewBag.ItemList = await _utils.GetItemList();
         ViewBag.VendorList = await _utils.GetVendorList();
+        ViewBag.UnitList = await _utils.GetItemUnits();
         return PartialView("~/Views/StoreManagement/StoreManagement/Stock/AddStock.cshtml", model);
       }
 
@@ -111,13 +113,13 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
           ItemID = model.Stocks.ItemID,
           VendorID = model.Stocks.VendorID,
           Quantity = model.Stocks.Quantity,
-          ManufactureDate = model.Stocks.ManufactureDate,
-          ExpiryDate = model.Stocks.ExpiryDate,
+          UnitTypeID = model.Stocks.UnitTypeID,
           LotNumber = model.Stocks.LotNumber,
           PONo = model.Stocks.PONo,
           GRNNo = model.Stocks.GRNNo,
           DCNo = model.Stocks.DCNo,
-          InvoiceNo = model.Stocks.InvoiceNo
+          InvoiceNo = model.Stocks.InvoiceNo,
+          StockDate = DateTime.Now
         };
 
         // Add stock components if provided
@@ -125,13 +127,18 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         {
           foreach (var component in model.Stocks.StockComponents)
           {
-            newStock.StockComponents.Add(new ST_StockComponent
+            if (!string.IsNullOrWhiteSpace(component.ItemComponentValue)) // Check if ItemComponentValue is not null or empty
             {
-              ItemComponentTypeID = component.ItemComponentTypeID,
-              ItemComponentValue = component.ItemComponentValue
-            });
+              newStock.StockComponents.Add(new ST_StockComponent
+              {
+                StockID = model.Stocks.StockID,
+                ItemComponentTypeID = component.ItemComponentTypeID,
+                ItemComponentValue = component.ItemComponentValue
+              });
+            }
           }
         }
+
 
         // Save the new stock record to the database
         _appDBContext.ST_Stocks.Add(newStock);
@@ -168,7 +175,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
       ViewBag.ItemList = await _utils.GetItemList();
       ViewBag.VendorList = await _utils.GetVendorList();
-
+      ViewBag.UnitList = await _utils.GetItemUnits();
       return PartialView("~/Views/StoreManagement/StoreManagement/Stock/EditStock.cshtml", Stocks);
     }
   }

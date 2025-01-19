@@ -11,12 +11,11 @@ namespace Exampler_ERP.Models
     public int ItemID { get; set; }
     [ForeignKey("ItemID")]
     public virtual ST_Item? Item { get; set; }
+    public int UnitTypeID { get; set; } // Unit of measurement (e.g., pieces, kg, liters)
     public int Quantity { get; set; }
     public int VendorID { get; set; }
     [ForeignKey("VendorID")]
     public virtual FI_Vendor? Vendor { get; set; }
-    public DateTime ManufactureDate { get; set; }
-    public DateTime ExpiryDate { get; set; }
     public string? LotNumber { get; set; }
     public string? PONo { get; set; }
     public string? GRNNo { get; set; }

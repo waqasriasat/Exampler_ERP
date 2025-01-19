@@ -18,8 +18,16 @@
                         <div class="col-2 col-md-12 col-lg-6">
                             <label asp-for="Stocks.ItemID" class="form-label fw-bold">Item Name</label>
                             <select asp-for="Stocks.ItemID" asp-items="@(new SelectList(ViewBag.ItemList, "Value", "Text", Model.Stocks.ItemID))" class="form-control form-control-lg">
+                                <option>Please select</option>
                             </select>
                             <span asp-validation-for="Stocks.ItemID" class="text-danger"></span>
+                        </div>
+                        <div class="col-2 col-md-12 col-lg-3">
+                            <label asp-for="Stocks.UnitTypeID" class="form-label fw-bold">Unit</label>
+                            <select asp-for="Stocks.UnitTypeID" asp-items="@(new SelectList(ViewBag.UnitList, "Value", "Text", Model.Stocks.UnitTypeID))" class="form-control form-control-lg">
+                                <option>Please select</option>
+                            </select>
+                            <span asp-validation-for="Stocks.UnitTypeID" class="text-danger"></span>
                         </div>
                         <div class="col-2 col-md-12 col-lg-3">
                             <label asp-for="Stocks.VendorID" class="form-label fw-bold">Vendor Name</label>
@@ -28,51 +36,56 @@
                             </select>
                             <span asp-validation-for="Stocks.VendorID" class="text-danger"></span>
                         </div>
-                        <div class="col-2 col-md-12 col-lg-3">
-                            <label asp-for="Stocks.Quantity" class="form-label fw-bold">Quantity</label>
-                            <input asp-for="Stocks.Quantity" type="text" class="form-control form-control-lg" />
-                        </div>
 
-
-                        <div class="col-2 col-md-12 col-lg-3">
-                            <label asp-for="Stocks.ManufactureDate" class="form-label fw-bold">Manufacture Date</label>
-                            <input asp-for="Stocks.ManufactureDate" type="date" class="form-control form-control-lg"  />
-                        </div>
-                        <div class="col-2 col-md-12 col-lg-3">
-                            <label asp-for="Stocks.ExpiryDate" class="form-label fw-bold">Expiry Date</label>
-                            <input asp-for="Stocks.ExpiryDate" type="date" class="form-control form-control-lg" />
-                        </div>
-                        <div class="col-2 col-md-12 col-lg-6">
-                            <label asp-for="Stocks.LotNumber" class="form-label fw-bold">Lot Number</label>
-                            <input asp-for="Stocks.LotNumber" type="text" class="form-control form-control-lg"/>
-                        </div>
                     </div>
-                        <div class="row">
-                            <div class="col-2 col-md-12 col-lg-6">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="PONo" class="form-label fw-bold">PO No</label>
-                                        <input type="text" class="form-control form-control-lg" id="PONo" name="PONo" value="@Model.Stocks.PONo" />
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="GRNNo" class="form-label fw-bold">GRN No</label>
-                                        <input type="text" class="form-control form-control-lg" id="GRNNo" name="GRNNo" value="@Model.Stocks.GRNNo" />
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="DCNo" class="form-label fw-bold">DC No</label>
-                                        <input type="text" class="form-control form-control-lg" id="DCNo" name="DCNo" value="@Model.Stocks.DCNo" />
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="InvoiceNo" class="form-label fw-bold">Invoice No</label>
-                                        <input type="text" class="form-control form-control-lg" id="InvoiceNo" name="InvoiceNo" value="@Model.Stocks.InvoiceNo" />
-                                    </div>
+                    <div class="row">
+                        <div class="col-2 col-md-12 col-lg-6">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label asp-for="Stocks.Quantity" class="form-label fw-bold">Quantity</label>
+                                    <input asp-for="Stocks.Quantity" type="text" class="form-control form-control-lg" />
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="Stocks.LotNumber" class="form-label fw-bold">Lot Number</label>
+                                    <input asp-for="Stocks.LotNumber" type="text" class="form-control form-control-lg" />
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="Stocks.PONo" class="form-label fw-bold">PO No</label>
+                                    <input asp-for="Stocks.PONo" type="text" class="form-control form-control-lg" />
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="Stocks.GRNNo" class="form-label fw-bold">GRN No</label>
+                                    <input asp-for="Stocks.GRNNo" type="text" class="form-control form-control-lg" />
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="Stocks.DCNo" class="form-label fw-bold">DC No</label>
+                                    <input asp-for="Stocks.DCNo" type="text" class="form-control form-control-lg" />
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="Stocks.InvoiceNo" class="form-label fw-bold">Invoice No</label>
+                                    <input asp-for="Stocks.InvoiceNo" type="text" class="form-control form-control-lg" />
                                 </div>
                             </div>
-                            <div class="col-2 col-md-12 col-lg-6 component-type-container">
-                                <!-- ItemComponent rows will be injected here dynamically -->
+                        </div>
+                        <div class="col-2 col-md-12 col-lg-6">
+                            <div class="component-type-container">
+                                @for (var i = 0; i < Model.StockComponents.Count; i++)
+
+
+
+                                {
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <input type="hidden" name="Stocks.StockComponents[@i].ItemComponentTypeID" value="@Model.StockComponents[i].ItemComponentTypeID" />
+                                            <label class="form-label fw-bold">@Model.StockComponents[i].ItemComponentTypeID</label>
+                                            <input type="text" class="form-control form-control-lg" name="Stocks.StockComponents[@i].ItemComponentValue" value="@Model.StockComponents[i].ItemComponentValue" placeholder="Enter value" />
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
-                    
+                    </div>
+
                 </form>
             </div>
             <div class="modal-footer">
@@ -83,6 +96,40 @@
     </div>
 </div>
 <script>
+    // $(document).ready(function () {
+    //     $('#addStockForm select[name="Stocks.ItemID"]').change(function () {
+    //         var selectedItemID = $(this).val();
+    //         if (selectedItemID) {
+    //             $.ajax({
+    //                 url: '/Stock/GetItemComponents',
+    //                 type: 'GET',
+    //                 data: { itemId: selectedItemID },
+    //                 success: function (response) {
+    //                     var componentContainer = $('#addStockForm .component-type-container');
+    //                     componentContainer.html(''); // Clear previous components
+
+    //                     // Populate new components
+    //                     response.forEach(function (component, index) {
+    //                         var componentHtml = `
+    //         <div class="row">
+    //             <div class="col-12">
+    //                 <input type="hidden" name="Stocks.StockComponents[${index}].ItemComponentTypeID" value="${component.itemTypeID}" />
+    //                 <label class="form-label fw-bold">${component.itemTypeName}</label>
+    //                 <input type="text" class="form-control form-control-lg" name="Stocks.StockComponents[${index}].ItemComponentValue" placeholder="Enter value" />
+    //             </div>
+    //         </div>`;
+    //                         componentContainer.append(componentHtml);
+    //                     });
+    //                 },
+    //                 error: function (xhr) {
+    //                     console.error('Error fetching item components:', xhr.responseText);
+    //                 }
+    //             });
+    //         }
+    //     });
+
+    // });
+
     $(document).ready(function () {
         $('#addStockForm select[name="Stocks.ItemID"]').change(function () {
             var selectedItemID = $(this).val();
@@ -93,18 +140,41 @@
                     data: { itemId: selectedItemID },
                     success: function (response) {
                         var componentContainer = $('#addStockForm .component-type-container');
-                        componentContainer.html('');
+                        componentContainer.html(''); // Clear previous components
 
-                        // Populate the new components
-                        response.forEach(function (component) {
+                        // Populate new components with proper data type handling
+                        response.forEach(function (component, index) {
+                            var inputType = "text"; // Default input type
+                            var additionalAttributes = ""; // Additional attributes for validation
+
+                            // Set input type based on ItemDataType
+                            switch (component.itemDataType) {
+                                case 1: // int
+                                    inputType = "number";
+                                    additionalAttributes = `step="1"`;
+                                    break;
+                                case 2: // date
+                                    inputType = "date";
+                                    break;
+                                case 3: // string
+                                    inputType = "text";
+                                    break;
+                                case 4: // decimal
+                                    inputType = "number";
+                                    additionalAttributes = `step="0.01"`;
+                                    break;
+                            }
+
+                            // Create HTML for the component
                             var componentHtml = `
                                 <div class="row">
-                                                <div class="col-12">
-                                                    <input type="hidden" name="ItemComponent[].ItemTypeID" value="${component.itemTypeID}" />
-                                                    <input type="hidden" name="ItemComponent[].ItemTypeName" value="${component.itemTypeName}" />
-                                                    <label class="form-label fw-bold">${component.itemTypeName}</label>
-                                                   <input type="text" class="form-control form-control-lg" name="ItemComponent[].Result" placeholder="Enter result here" />
-                                            </div>
+                                    <div class="col-12">
+                                        <input type="hidden" name="Stocks.StockComponents[${index}].ItemComponentTypeID" value="${component.itemTypeID}" />
+                                        <label class="form-label fw-bold">${component.itemTypeName}</label>
+                                        <input type="${inputType}" class="form-control form-control-lg"
+                                               name="Stocks.StockComponents[${index}].ItemComponentValue"
+                                               placeholder="Enter value" ${additionalAttributes} />
+                                    </div>
                                 </div>`;
                             componentContainer.append(componentHtml);
                         });
@@ -116,4 +186,6 @@
             }
         });
     });
+
+
 </script>
