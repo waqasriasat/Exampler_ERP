@@ -13,11 +13,11 @@ namespace Exampler_ERP.Models
     public virtual ST_Stock? ST_Stocks { get; set; }
     public DateTime StockDate { get; set; }
     public int ItemID { get; set; }
+    public int UnitTypeID { get; set; }
     public int Quantity { get; set; }
     public int VendorID { get; set; }
-    public DateTime ManufactureDate { get; set; }
-    public DateTime ExpiryDate { get; set; }
     public string? LotNumber { get; set; }
+    public DateTime? ExpiryDate { get; set; }
     public string? PONo { get; set; }
     public string? GRNNo { get; set; }
     public string? DCNo { get; set; }

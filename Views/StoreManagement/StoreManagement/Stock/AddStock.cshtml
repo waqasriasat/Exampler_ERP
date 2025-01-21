@@ -50,6 +50,10 @@
                                     <input asp-for="Stocks.LotNumber" type="text" class="form-control form-control-lg" />
                                 </div>
                                 <div class="col-6">
+                                    <label asp-for="Stocks.ExpiryDate" class="form-label fw-bold">Expiry Date</label>
+                                    <input asp-for="Stocks.ExpiryDate" type="date" class="form-control form-control-lg" />
+                                </div>
+                                <div class="col-6">
                                     <label asp-for="Stocks.PONo" class="form-label fw-bold">PO No</label>
                                     <input asp-for="Stocks.PONo" type="text" class="form-control form-control-lg" />
                                 </div>
@@ -96,39 +100,85 @@
     </div>
 </div>
 <script>
-    // $(document).ready(function () {
-    //     $('#addStockForm select[name="Stocks.ItemID"]').change(function () {
-    //         var selectedItemID = $(this).val();
-    //         if (selectedItemID) {
-    //             $.ajax({
-    //                 url: '/Stock/GetItemComponents',
-    //                 type: 'GET',
-    //                 data: { itemId: selectedItemID },
-    //                 success: function (response) {
-    //                     var componentContainer = $('#addStockForm .component-type-container');
-    //                     componentContainer.html(''); // Clear previous components
+    $(document).ready(function () {
+        // Handle ItemID change event
+        $('#addStockForm select[name="Stocks.ItemID"]').change(function () {
+            var selectedItemID = $(this).val();
+            if (selectedItemID) {
+                // Fetch item components and HasLotNumberAndExpiryDate status
+                $.ajax({
+                    url: '/Stock/GetItemComponents',
+                    type: 'GET',
+                    data: { itemId: selectedItemID },
+                    success: function (response) {
+                        var componentContainer = $('#addStockForm .component-type-container');
+                        componentContainer.html(''); // Clear previous components
 
-    //                     // Populate new components
-    //                     response.forEach(function (component, index) {
-    //                         var componentHtml = `
-    //         <div class="row">
-    //             <div class="col-12">
-    //                 <input type="hidden" name="Stocks.StockComponents[${index}].ItemComponentTypeID" value="${component.itemTypeID}" />
-    //                 <label class="form-label fw-bold">${component.itemTypeName}</label>
-    //                 <input type="text" class="form-control form-control-lg" name="Stocks.StockComponents[${index}].ItemComponentValue" placeholder="Enter value" />
-    //             </div>
-    //         </div>`;
-    //                         componentContainer.append(componentHtml);
-    //                     });
-    //                 },
-    //                 error: function (xhr) {
-    //                     console.error('Error fetching item components:', xhr.responseText);
-    //                 }
-    //             });
-    //         }
-    //     });
+                        // Handle HasLotNumberAndExpiryDate visibility
+                        if (response.hasLotNumberAndExpiryDate) {
+                            $('#addStockForm input[name="Stocks.LotNumber"]').closest('.col-6').show();
+                            $('#addStockForm input[name="Stocks.ExpiryDate"]').closest('.col-6').show();
+                        } else {
+                            $('#addStockForm input[name="Stocks.LotNumber"]').closest('.col-6').hide();
+                            $('#addStockForm input[name="Stocks.ExpiryDate"]').closest('.col-6').hide();
+                        }
 
-    // });
+                        // Populate new components
+                        response.components.forEach(function (component, index) {
+                            var inputType = "text"; // Default input type
+                            var additionalAttributes = ""; // Additional attributes for validation
+
+                            // Set input type based on ItemDataType
+                            switch (component.itemDataType) {
+                                case 1: // int
+                                    inputType = "number";
+                                    additionalAttributes = `step="1"`;
+                                    break;
+                                case 2: // date
+                                    inputType = "date";
+                                    break;
+                                case 3: // string
+                                    inputType = "text";
+                                    break;
+                                case 4: // decimal
+                                    inputType = "number";
+                                    additionalAttributes = `step="0.01"`;
+                                    break;
+                            }
+
+                            // Create HTML for the component
+                            var componentHtml = `
+                                <div class="row">
+                                    <div class="col-12">
+                                        <input type="hidden" name="Stocks.StockComponents[${index}].ItemComponentTypeID" value="${component.itemTypeID}" />
+                                        <label class="form-label fw-bold">${component.itemTypeName}</label>
+                                        <input type="${inputType}" class="form-control form-control-lg"
+                                               name="Stocks.StockComponents[${index}].ItemComponentValue"
+                                               placeholder="Enter value" ${additionalAttributes} />
+                                    </div>
+                                </div>`;
+                            componentContainer.append(componentHtml);
+                        });
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching item components:', xhr.responseText);
+                    }
+                });
+            } else {
+                // Hide Lot Number and Expiry Date fields if no item is selected
+                $('#addStockForm input[name="Stocks.LotNumber"]').closest('.col-6').hide();
+                $('#addStockForm input[name="Stocks.ExpiryDate"]').closest('.col-6').hide();
+            }
+        });
+
+        // Initially hide Lot Number and Expiry Date fields
+        $('#addStockForm input[name="Stocks.LotNumber"]').closest('.col-6').hide();
+        $('#addStockForm input[name="Stocks.ExpiryDate"]').closest('.col-6').hide();
+    });
+</script>
+
+@* <script>
+   
 
     $(document).ready(function () {
         $('#addStockForm select[name="Stocks.ItemID"]').change(function () {
@@ -188,4 +238,4 @@
     });
 
 
-</script>
+</script> *@

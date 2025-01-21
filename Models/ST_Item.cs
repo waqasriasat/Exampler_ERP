@@ -28,5 +28,7 @@ namespace Exampler_ERP.Models
     public int? ProcessTypeApprovalID { get; set; } //didn't use in registration
     public int? ActiveYNID { get; set; } //didn't use in registration
     public int? DeleteYNID { get; set; } //didn't use in registration
+
+    public bool HasLotNumberAndExpiryDate { get; set; }
   }
 }

@@ -54,28 +54,37 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     [HttpGet]
     public async Task<IActionResult> GetItemComponents(int itemId)
     {
-      var categoryID = await _appDBContext.ST_Items
+      var itemDetails = await _appDBContext.ST_Items
           .Where(item => item.ItemID == itemId)
-          .Select(item => item.ItemCategoryTypeID)
+          .Select(item => new
+          {
+            ItemCategoryTypeID = item.ItemCategoryTypeID,
+            HasLotNumberAndExpiryDate = item.HasLotNumberAndExpiryDate
+          })
           .FirstOrDefaultAsync();
 
-      if (categoryID == null)
+      if (itemDetails == null)
       {
-        return Json(new List<object>()); 
+        return Json(new { hasLotNumberAndExpiryDate = false, components = new List<object>() });
       }
 
       var components = await _appDBContext.Settings_ItemComponentTypes
-         .Where(c => c.ItemCategoryTypeID == categoryID)
-         .Select(c => new
-         {
-           ItemTypeID = c.ItemComponentTypeID,
-           ItemTypeName = c.ItemComponentTypeName,
-           ItemDataType = c.ItemComponentDataType
-         })
-         .ToListAsync();
+          .Where(c => c.ItemCategoryTypeID == itemDetails.ItemCategoryTypeID)
+          .Select(c => new
+          {
+            ItemTypeID = c.ItemComponentTypeID,
+            ItemTypeName = c.ItemComponentTypeName,
+            ItemDataType = c.ItemComponentDataType
+          })
+          .ToListAsync();
 
-      return Json(components);
+      return Json(new
+      {
+        hasLotNumberAndExpiryDate = itemDetails.HasLotNumberAndExpiryDate,
+        components
+      });
     }
+
 
 
     [HttpGet]
@@ -107,50 +116,186 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
       try
       {
-        // Create a new stock object and populate its properties from the model
-        var newStock = new ST_Stock
-        {
-          ItemID = model.Stocks.ItemID,
-          VendorID = model.Stocks.VendorID,
-          Quantity = model.Stocks.Quantity,
-          UnitTypeID = model.Stocks.UnitTypeID,
-          LotNumber = model.Stocks.LotNumber,
-          PONo = model.Stocks.PONo,
-          GRNNo = model.Stocks.GRNNo,
-          DCNo = model.Stocks.DCNo,
-          InvoiceNo = model.Stocks.InvoiceNo,
-          StockDate = DateTime.Now
-        };
 
-        // Add stock components if provided
-        if (model.Stocks.StockComponents != null && model.Stocks.StockComponents.Any())
+        var itemDetails = await _appDBContext.ST_Items
+     .Where(item => item.ItemID == model.Stocks.ItemID)
+     .Select(item => new
+     {
+       HasLotNumberAndExpiryDate = item.HasLotNumberAndExpiryDate
+     })
+     .FirstOrDefaultAsync();
+
+        if (itemDetails == null)
         {
-          foreach (var component in model.Stocks.StockComponents)
-          {
-            if (!string.IsNullOrWhiteSpace(component.ItemComponentValue)) // Check if ItemComponentValue is not null or empty
-            {
-              newStock.StockComponents.Add(new ST_StockComponent
-              {
-                StockID = model.Stocks.StockID,
-                ItemComponentTypeID = component.ItemComponentTypeID,
-                ItemComponentValue = component.ItemComponentValue
-              });
-            }
-          }
+          return Json(new { success = false, message = "Invalid ItemID!" });
         }
 
+        ST_Stock existingStock = null;
 
-        // Save the new stock record to the database
-        _appDBContext.ST_Stocks.Add(newStock);
+        if (itemDetails.HasLotNumberAndExpiryDate == false)
+        {
+          // Find existing stock by ItemID only
+          existingStock = await _appDBContext.ST_Stocks
+              .Include(s => s.StockComponents)
+              .FirstOrDefaultAsync(s => s.ItemID == model.Stocks.ItemID);
+        }
+        else
+        {
+          // Find existing stock by ItemID, LotNumber, and ExpiryDate
+          existingStock = await _appDBContext.ST_Stocks
+              .Include(s => s.StockComponents)
+              .FirstOrDefaultAsync(s => s.ItemID == model.Stocks.ItemID
+                  && s.LotNumber == model.Stocks.LotNumber
+                  && s.ExpiryDate == model.Stocks.ExpiryDate);
+        }
+
+        if (existingStock != null)
+        {
+          // Update existing stock
+          existingStock.Quantity += model.Stocks.Quantity; // Increment quantity
+          existingStock.VendorID = model.Stocks.VendorID; // Update vendor
+
+          // Conditionally update LotNumber and ExpiryDate if applicable
+          if (itemDetails.HasLotNumberAndExpiryDate)
+          {
+            existingStock.LotNumber = model.Stocks.LotNumber;
+            existingStock.ExpiryDate = model.Stocks.ExpiryDate;
+          }
+
+          existingStock.PONo = model.Stocks.PONo;
+          existingStock.GRNNo = model.Stocks.GRNNo;
+          existingStock.DCNo = model.Stocks.DCNo;
+          existingStock.InvoiceNo = model.Stocks.InvoiceNo;
+          existingStock.StockDate = DateTime.Now;
+
+          // Update or add stock components
+          if (model.Stocks.StockComponents != null && model.Stocks.StockComponents.Any())
+          {
+            foreach (var component in model.Stocks.StockComponents)
+            {
+              var existingComponent = existingStock.StockComponents
+                  .FirstOrDefault(sc => sc.ItemComponentTypeID == component.ItemComponentTypeID);
+
+              if (existingComponent != null)
+              {
+                // Update existing component
+                existingComponent.ItemComponentValue = component.ItemComponentValue;
+              }
+              else if (!string.IsNullOrWhiteSpace(component.ItemComponentValue))
+              {
+                // Add new component
+                existingStock.StockComponents.Add(new ST_StockComponent
+                {
+                  StockID = existingStock.StockID,
+                  ItemComponentTypeID = component.ItemComponentTypeID,
+                  ItemComponentValue = component.ItemComponentValue
+                });
+              }
+            }
+          }
+          var newStockHistory = new ST_StockHistory
+          {
+            ItemID = model.Stocks.ItemID,
+            VendorID = model.Stocks.VendorID,
+            Quantity = model.Stocks.Quantity,
+            UnitTypeID = model.Stocks.UnitTypeID,
+            PONo = model.Stocks.PONo,
+            GRNNo = model.Stocks.GRNNo,
+            DCNo = model.Stocks.DCNo,
+            InvoiceNo = model.Stocks.InvoiceNo,
+            StockDate = DateTime.Now,
+            StockID = existingStock.StockID,
+            ActionType = "Update",
+            ActionDate = DateTime.Now,
+            ActionUserID = HttpContext.Session.GetInt32("UserID")
+          };
+
+          // Conditionally set LotNumber and ExpiryDate
+          if (itemDetails.HasLotNumberAndExpiryDate)
+          {
+            newStockHistory.LotNumber = model.Stocks.LotNumber;
+            newStockHistory.ExpiryDate = model.Stocks.ExpiryDate;
+          }
+
+          _appDBContext.ST_StockHistorys.Add(newStockHistory);
+        }
+        else
+        {
+          // Create new stock
+          var newStock = new ST_Stock
+          {
+            ItemID = model.Stocks.ItemID,
+            VendorID = model.Stocks.VendorID,
+            Quantity = model.Stocks.Quantity,
+            UnitTypeID = model.Stocks.UnitTypeID,
+            PONo = model.Stocks.PONo,
+            GRNNo = model.Stocks.GRNNo,
+            DCNo = model.Stocks.DCNo,
+            InvoiceNo = model.Stocks.InvoiceNo,
+            StockDate = DateTime.Now
+          };
+
+          // Conditionally set LotNumber and ExpiryDate
+          if (itemDetails.HasLotNumberAndExpiryDate)
+          {
+            newStock.LotNumber = model.Stocks.LotNumber;
+            newStock.ExpiryDate = model.Stocks.ExpiryDate;
+          }
+
+          // Add stock components
+          if (model.Stocks.StockComponents != null && model.Stocks.StockComponents.Any())
+          {
+            foreach (var component in model.Stocks.StockComponents)
+            {
+              if (!string.IsNullOrWhiteSpace(component.ItemComponentValue))
+              {
+                newStock.StockComponents.Add(new ST_StockComponent
+                {
+                  ItemComponentTypeID = component.ItemComponentTypeID,
+                  ItemComponentValue = component.ItemComponentValue
+                });
+              }
+            }
+          }
+
+          _appDBContext.ST_Stocks.Add(newStock);
+          await _appDBContext.SaveChangesAsync();
+          var newStockHistory = new ST_StockHistory
+          {
+            ItemID = model.Stocks.ItemID,
+            VendorID = model.Stocks.VendorID,
+            Quantity = model.Stocks.Quantity,
+            UnitTypeID = model.Stocks.UnitTypeID,
+            PONo = model.Stocks.PONo,
+            GRNNo = model.Stocks.GRNNo,
+            DCNo = model.Stocks.DCNo,
+            InvoiceNo = model.Stocks.InvoiceNo,
+            StockDate = DateTime.Now,
+            StockID = newStock.StockID,
+            ActionType = "Insert",
+            ActionDate = DateTime.Now,
+            ActionUserID = HttpContext.Session.GetInt32("UserID")
+          };
+
+          // Conditionally set LotNumber and ExpiryDate
+          if (itemDetails.HasLotNumberAndExpiryDate)
+          {
+            newStockHistory.LotNumber = model.Stocks.LotNumber;
+            newStockHistory.ExpiryDate = model.Stocks.ExpiryDate;
+          }
+
+          _appDBContext.ST_StockHistorys.Add(newStockHistory);
+        }
+
+        // Save changes to the database
         await _appDBContext.SaveChangesAsync();
 
-        // Return success response
-        return Json(new { success = true, message = "Stock added successfully!" });
+        return Json(new { success = true, message = "Stock saved successfully!" });
+
+
       }
       catch (Exception ex)
       {
-        // Log the error and return a failure response
-        // Use your logging mechanism here
         return Json(new { success = false, message = "An error occurred while adding the stock. Please try again later.", error = ex.Message });
       }
     }

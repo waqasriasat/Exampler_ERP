@@ -75,6 +75,15 @@
                             <label for="OpeningBalance" class="form-label fw-bold">OpeningBalance</label>
                             <input type="text" class="form-control form-control-lg" id="OpeningBalance" name="OpeningBalance" value="@Model.OpeningBalance" />
                         </div>
+                        <div class="col-12">
+                            <label for="HasLotNumberAndExpiryDate" class="form-label fw-bold">Has Lot Number and Expiry Date</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="HasLotNumberAndExpiryDate" name="HasLotNumberAndExpiryDate" value="true" @(Model.HasLotNumberAndExpiryDate ? "checked" : "") />
+                                <label class="form-check-label" for="HasLotNumberAndExpiryDate">
+                                    Check if this item has a lot number and expiry date
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -17,6 +17,7 @@ namespace Exampler_ERP.Models
     [ForeignKey("VendorID")]
     public virtual FI_Vendor? Vendor { get; set; }
     public string? LotNumber { get; set; }
+    public DateTime? ExpiryDate { get; set; }
     public string? PONo { get; set; }
     public string? GRNNo { get; set; }
     public string? DCNo { get; set; }
