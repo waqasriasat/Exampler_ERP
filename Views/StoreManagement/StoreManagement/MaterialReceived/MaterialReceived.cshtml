@@ -1,0 +1,221 @@
+@model IEnumerable<Exampler_ERP.Models.ST_MaterialReceived>
+
+@{
+    ViewData["Title"] = "Store Management - Material Received";
+}
+
+
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            // Edit MaterialReceived modal popup
+            $('.editMaterialReceivedLink').click(function (e) {
+                e.preventDefault();
+                var MaterialReceivedId = $(this).data('id');
+                $.get('@Url.Action("Edit", "MaterialReceived")', { id: MaterialReceivedId }, function (data) {
+                    $('#editMaterialReceivedModalContainer').html(data);
+                    $('#editMaterialReceivedModal').modal('show');
+                    // Trigger the calculation after modal is shown
+
+                });
+            });
+
+            $('#editMaterialReceivedModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editMaterialReceivedForm').serialize();
+                $.post('@Url.Action("Edit", "MaterialReceived")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Add new MaterialReceived modal popup
+            $('.addMaterialReceivedLink').click(function () {
+                $.get('@Url.Action("Create", "MaterialReceived")', function (data) {
+                    $('#addMaterialReceivedModalContainer').html(data);
+                    $('#addMaterialReceivedModal').modal('show');
+                });
+            });
+
+
+            // Save new MaterialReceived form
+            $('#addMaterialReceivedModalContainer').on('click', '#saveNewMaterialReceived', function () {
+                var formData = $('#addMaterialReceivedForm').serialize();
+                $.post('@Url.Action("Create", "MaterialReceived")', formData, function (response) {
+                    if (response.success) {
+                        $('#addMaterialReceivedModal').modal('hide');
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                        });
+            });
+
+            // Close Modal Add Contrainer
+            $('#addMaterialReceivedModalContainer').on('click', '#Close', function () {
+                $('#addMaterialReceivedModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editMaterialReceivedModalContainer').on('click', '#Close', function () {
+                $('#editMaterialReceivedModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Delete MaterialReceived
+            $('.deleteMaterialReceivedLink').click(function (e) {
+                e.preventDefault();
+                var MaterialReceivedId = $(this).data('id');
+                $.post('@Url.Action("Delete", "MaterialReceived")', { id: MaterialReceivedId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+
+
+
+        });
+    </script>
+    <script>
+        function printMaterialReceivedes() {
+            var printWindow = window.open('@Url.Action("Print", "MaterialReceived")', '_blank');
+            printWindow.focus();
+        }
+        $('#searchItemNameButton').click(function () {
+            var searchValue = $('#searchItemNameInput').val();
+            window.location.href = '@Url.Action("Index", "MaterialReceived")?searchItemName=' + searchValue;
+        });
+    </script>
+
+
+}
+
+
+
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Store Management /</span> Material Received
+</h4>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <h5 class="card-header">Searching Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8" style="padding-bottom: 15px;">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search Item Name" id="searchItemNameInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchItemNameButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <!-- Action Buttons -->
+                        <button type="button" class="btn btn-primary addMaterialReceivedLink">Add New</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "MaterialReceived")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printMaterialReceivedes()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Material Received List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-11 col-lg-11">
+                            <div class="row">
+                                <div class="col-2">
+                                    <p class="text-nowrap">Material Received #</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap">Date</p>
+                                </div>
+                                <div class="col-5">
+                                    <p class="text-nowrap">Item Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Quantity</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Edit</p>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+
+
+
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-10 col-md-11 col-lg-11">
+                                <div class="row align-items-center">
+                                    <div class="col-2">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Material Received # :</span> @Html.DisplayFor(modelItem => item.MaterialReceivedID)
+                                        </p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Date :</span> @(item.MaterialReceivedDate.ToString("dd/MM/yyyy") ?? "00/00/0000")
+                                        </p>
+                                    </div>
+                                    <div class="col-5">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Item Name :</span> @item.Item?.ItemName
+                                        </p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Quantity :</span> @item.Quantity
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2 col-md-1 col-lg-1">
+                                <div class="btn-group" role="group" aria-label="Actions">
+                                    <a href="#" class="editMaterialReceivedLink me-2" data-id="@item.MaterialReceivedID">
+                                        <i class="fa fa-pencil" style="font-size: large; color:steelblue;; line-height: 2;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editMaterialReceivedModalContainer"></div>
+<div id="addMaterialReceivedModalContainer"></div>
+
+

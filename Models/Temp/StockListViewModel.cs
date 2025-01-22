@@ -30,7 +30,6 @@ namespace Exampler_ERP.Models.Temp
   public class StocksIndexViewModel
   {
     public ST_Stock Stocks { get; set; } = new();
-    public List<ST_StockComponent> StockComponents { get; set; } = new List<ST_StockComponent>();
 
   }
 }

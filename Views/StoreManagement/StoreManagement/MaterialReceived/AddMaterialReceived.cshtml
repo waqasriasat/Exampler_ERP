@@ -1,40 +1,40 @@
-@model Exampler_ERP.Models.Temp.StocksIndexViewModel
+@model Exampler_ERP.Models.Temp.MaterialReceivedsIndexViewModel
 
-<div class="modal fade" id="addStockModal" tabindex="-1" role="dialog" aria-labelledby="addStockModalLabel" aria-hidden="true">
+<div class="modal fade" id="addMaterialReceivedModal" tabindex="-1" role="dialog" aria-labelledby="addMaterialReceivedModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="addStockModalLabel">
+                <h5 class="modal-title" id="addMaterialReceivedModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add New Stock
+                    Add New Material Received
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
             </div>
             <div class="modal-body">
-                <form id="addStockForm">
+                <form id="addMaterialReceivedForm">
                     <div class="row">
 
                         <div class="col-2 col-md-12 col-lg-6">
-                            <label asp-for="Stocks.ItemID" class="form-label fw-bold">Item Name</label>
-                            <select asp-for="Stocks.ItemID" asp-items="@(new SelectList(ViewBag.ItemList, "Value", "Text", Model.Stocks.ItemID))" class="form-control form-control-lg">
+                            <label asp-for="MaterialReceiveds.ItemID" class="form-label fw-bold">Item Name</label>
+                            <select asp-for="MaterialReceiveds.ItemID" asp-items="@(new SelectList(ViewBag.ItemList, "Value", "Text", Model.MaterialReceiveds.ItemID))" class="form-control form-control-lg">
                                 <option>Please select</option>
                             </select>
-                            <span asp-validation-for="Stocks.ItemID" class="text-danger"></span>
+                            <span asp-validation-for="MaterialReceiveds.ItemID" class="text-danger"></span>
                         </div>
                         <div class="col-2 col-md-12 col-lg-3">
-                            <label asp-for="Stocks.UnitTypeID" class="form-label fw-bold">Unit</label>
-                            <select asp-for="Stocks.UnitTypeID" asp-items="@(new SelectList(ViewBag.UnitList, "Value", "Text", Model.Stocks.UnitTypeID))" class="form-control form-control-lg">
+                            <label asp-for="MaterialReceiveds.UnitTypeID" class="form-label fw-bold">Unit</label>
+                            <select asp-for="MaterialReceiveds.UnitTypeID" asp-items="@(new SelectList(ViewBag.UnitList, "Value", "Text", Model.MaterialReceiveds.UnitTypeID))" class="form-control form-control-lg">
                                 <option>Please select</option>
                             </select>
-                            <span asp-validation-for="Stocks.UnitTypeID" class="text-danger"></span>
+                            <span asp-validation-for="MaterialReceiveds.UnitTypeID" class="text-danger"></span>
                         </div>
                         <div class="col-2 col-md-12 col-lg-3">
-                            <label asp-for="Stocks.VendorID" class="form-label fw-bold">Vendor Name</label>
-                            <select asp-for="Stocks.VendorID" asp-items="@(new SelectList(ViewBag.VendorList, "Value", "Text", Model.Stocks.VendorID))" class="form-control form-control-lg">
+                            <label asp-for="MaterialReceiveds.VendorID" class="form-label fw-bold">Vendor Name</label>
+                            <select asp-for="MaterialReceiveds.VendorID" asp-items="@(new SelectList(ViewBag.VendorList, "Value", "Text", Model.MaterialReceiveds.VendorID))" class="form-control form-control-lg">
                                 <option>Please select</option>
                             </select>
-                            <span asp-validation-for="Stocks.VendorID" class="text-danger"></span>
+                            <span asp-validation-for="MaterialReceiveds.VendorID" class="text-danger"></span>
                         </div>
 
                     </div>
@@ -42,47 +42,47 @@
                         <div class="col-2 col-md-12 col-lg-6">
                             <div class="row">
                                 <div class="col-6">
-                                    <label asp-for="Stocks.Quantity" class="form-label fw-bold">Quantity</label>
-                                    <input asp-for="Stocks.Quantity" type="text" class="form-control form-control-lg" />
+                                    <label asp-for="MaterialReceiveds.Quantity" class="form-label fw-bold">Quantity</label>
+                                    <input asp-for="MaterialReceiveds.Quantity" type="text" class="form-control form-control-lg" />
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="Stocks.LotNumber" class="form-label fw-bold">Lot Number</label>
-                                    <input asp-for="Stocks.LotNumber" type="text" class="form-control form-control-lg" />
+                                    <label asp-for="MaterialReceiveds.LotNumber" class="form-label fw-bold">Lot Number</label>
+                                    <input asp-for="MaterialReceiveds.LotNumber" type="text" class="form-control form-control-lg" />
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="Stocks.ExpiryDate" class="form-label fw-bold">Expiry Date</label>
-                                    <input asp-for="Stocks.ExpiryDate" type="date" class="form-control form-control-lg" />
+                                    <label asp-for="MaterialReceiveds.ExpiryDate" class="form-label fw-bold">Expiry Date</label>
+                                    <input asp-for="MaterialReceiveds.ExpiryDate" type="date" class="form-control form-control-lg" />
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="Stocks.PONo" class="form-label fw-bold">PO No</label>
-                                    <input asp-for="Stocks.PONo" type="text" class="form-control form-control-lg" />
+                                    <label asp-for="MaterialReceiveds.PONo" class="form-label fw-bold">PO No</label>
+                                    <input asp-for="MaterialReceiveds.PONo" type="text" class="form-control form-control-lg" />
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="Stocks.GRNNo" class="form-label fw-bold">GRN No</label>
-                                    <input asp-for="Stocks.GRNNo" type="text" class="form-control form-control-lg" />
+                                    <label asp-for="MaterialReceiveds.GRNNo" class="form-label fw-bold">GRN No</label>
+                                    <input asp-for="MaterialReceiveds.GRNNo" type="text" class="form-control form-control-lg" />
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="Stocks.DCNo" class="form-label fw-bold">DC No</label>
-                                    <input asp-for="Stocks.DCNo" type="text" class="form-control form-control-lg" />
+                                    <label asp-for="MaterialReceiveds.DCNo" class="form-label fw-bold">DC No</label>
+                                    <input asp-for="MaterialReceiveds.DCNo" type="text" class="form-control form-control-lg" />
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="Stocks.InvoiceNo" class="form-label fw-bold">Invoice No</label>
-                                    <input asp-for="Stocks.InvoiceNo" type="text" class="form-control form-control-lg" />
+                                    <label asp-for="MaterialReceiveds.InvoiceNo" class="form-label fw-bold">Invoice No</label>
+                                    <input asp-for="MaterialReceiveds.InvoiceNo" type="text" class="form-control form-control-lg" />
                                 </div>
                             </div>
                         </div>
                         <div class="col-2 col-md-12 col-lg-6">
                             <div class="component-type-container">
-                                @for (var i = 0; i < Model.StockComponents.Count; i++)
+                                @for (var i = 0; i < Model.MaterialReceivedComponents.Count; i++)
 
 
 
                                 {
                                     <div class="row">
                                         <div class="col-12">
-                                            <input type="hidden" name="Stocks.StockComponents[@i].ItemComponentTypeID" value="@Model.StockComponents[i].ItemComponentTypeID" />
-                                            <label class="form-label fw-bold">@Model.StockComponents[i].ItemComponentTypeID</label>
-                                            <input type="text" class="form-control form-control-lg" name="Stocks.StockComponents[@i].ItemComponentValue" value="@Model.StockComponents[i].ItemComponentValue" placeholder="Enter value" />
+                                            <input type="hidden" name="MaterialReceiveds.MaterialReceivedComponents[@i].ItemComponentTypeID" value="@Model.MaterialReceivedComponents[i].ItemComponentTypeID" />
+                                            <label class="form-label fw-bold">@Model.MaterialReceivedComponents[i].ItemComponentTypeID</label>
+                                            <input type="text" class="form-control form-control-lg" name="MaterialReceiveds.MaterialReceivedComponents[@i].ItemComponentValue" value="@Model.MaterialReceivedComponents[i].ItemComponentValue" placeholder="Enter value" />
                                         </div>
                                     </div>
                                 }
@@ -94,7 +94,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-success" id="saveNewStock">Save</button>
+                <button type="button" class="btn btn-success" id="saveNewMaterialReceived">Save</button>
             </div>
         </div>
     </div>
@@ -102,25 +102,25 @@
 <script>
     $(document).ready(function () {
         // Handle ItemID change event
-        $('#addStockForm select[name="Stocks.ItemID"]').change(function () {
+        $('#addMaterialReceivedForm select[name="MaterialReceiveds.ItemID"]').change(function () {
             var selectedItemID = $(this).val();
             if (selectedItemID) {
                 // Fetch item components and HasLotNumberAndExpiryDate status
                 $.ajax({
-                    url: '/Stock/GetItemComponents',
+                    url: '/MaterialReceived/GetItemComponents',
                     type: 'GET',
                     data: { itemId: selectedItemID },
                     success: function (response) {
-                        var componentContainer = $('#addStockForm .component-type-container');
+                        var componentContainer = $('#addMaterialReceivedForm .component-type-container');
                         componentContainer.html(''); // Clear previous components
 
                         // Handle HasLotNumberAndExpiryDate visibility
                         if (response.hasLotNumberAndExpiryDate) {
-                            $('#addStockForm input[name="Stocks.LotNumber"]').closest('.col-6').show();
-                            $('#addStockForm input[name="Stocks.ExpiryDate"]').closest('.col-6').show();
+                            $('#addMaterialReceivedForm input[name="MaterialReceiveds.LotNumber"]').closest('.col-6').show();
+                            $('#addMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').show();
                         } else {
-                            $('#addStockForm input[name="Stocks.LotNumber"]').closest('.col-6').hide();
-                            $('#addStockForm input[name="Stocks.ExpiryDate"]').closest('.col-6').hide();
+                            $('#addMaterialReceivedForm input[name="MaterialReceiveds.LotNumber"]').closest('.col-6').hide();
+                            $('#addMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').hide();
                         }
 
                         // Populate new components
@@ -150,10 +150,10 @@
                             var componentHtml = `
                                 <div class="row">
                                     <div class="col-12">
-                                        <input type="hidden" name="Stocks.StockComponents[${index}].ItemComponentTypeID" value="${component.itemTypeID}" />
+                                        <input type="hidden" name="MaterialReceiveds.MaterialReceivedComponents[${index}].ItemComponentTypeID" value="${component.itemTypeID}" />
                                         <label class="form-label fw-bold">${component.itemTypeName}</label>
                                         <input type="${inputType}" class="form-control form-control-lg"
-                                               name="Stocks.StockComponents[${index}].ItemComponentValue"
+                                               name="MaterialReceiveds.MaterialReceivedComponents[${index}].ItemComponentValue"
                                                placeholder="Enter value" ${additionalAttributes} />
                                     </div>
                                 </div>`;
@@ -166,30 +166,30 @@
                 });
             } else {
                 // Hide Lot Number and Expiry Date fields if no item is selected
-                $('#addStockForm input[name="Stocks.LotNumber"]').closest('.col-6').hide();
-                $('#addStockForm input[name="Stocks.ExpiryDate"]').closest('.col-6').hide();
+                $('#addMaterialReceivedForm input[name="MaterialReceiveds.LotNumber"]').closest('.col-6').hide();
+                $('#addMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').hide();
             }
         });
 
         // Initially hide Lot Number and Expiry Date fields
-        $('#addStockForm input[name="Stocks.LotNumber"]').closest('.col-6').hide();
-        $('#addStockForm input[name="Stocks.ExpiryDate"]').closest('.col-6').hide();
+        $('#addMaterialReceivedForm input[name="MaterialReceiveds.LotNumber"]').closest('.col-6').hide();
+        $('#addMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').hide();
     });
 </script>
 
 @* <script>
-   
+
 
     $(document).ready(function () {
-        $('#addStockForm select[name="Stocks.ItemID"]').change(function () {
+        $('#addMaterialReceivedForm select[name="MaterialReceiveds.ItemID"]').change(function () {
             var selectedItemID = $(this).val();
             if (selectedItemID) {
                 $.ajax({
-                    url: '/Stock/GetItemComponents',
+                    url: '/MaterialReceived/GetItemComponents',
                     type: 'GET',
                     data: { itemId: selectedItemID },
                     success: function (response) {
-                        var componentContainer = $('#addStockForm .component-type-container');
+                        var componentContainer = $('#addMaterialReceivedForm .component-type-container');
                         componentContainer.html(''); // Clear previous components
 
                         // Populate new components with proper data type handling
@@ -219,10 +219,10 @@
                             var componentHtml = `
                                 <div class="row">
                                     <div class="col-12">
-                                        <input type="hidden" name="Stocks.StockComponents[${index}].ItemComponentTypeID" value="${component.itemTypeID}" />
+                                        <input type="hidden" name="MaterialReceiveds.MaterialReceivedComponents[${index}].ItemComponentTypeID" value="${component.itemTypeID}" />
                                         <label class="form-label fw-bold">${component.itemTypeName}</label>
                                         <input type="${inputType}" class="form-control form-control-lg"
-                                               name="Stocks.StockComponents[${index}].ItemComponentValue"
+                                               name="MaterialReceiveds.MaterialReceivedComponents[${index}].ItemComponentValue"
                                                placeholder="Enter value" ${additionalAttributes} />
                                     </div>
                                 </div>`;

@@ -119,8 +119,9 @@ namespace Exampler_ERP.Models
     public DbSet<ST_MaterialRequisitionDetail> ST_MaterialRequisitionDetails { get; set; }
     public DbSet<ST_Stock> ST_Stocks { get; set; }
     public DbSet<ST_StockHistory> ST_StockHistorys { get; set; }
-    public DbSet<ST_StockComponent> ST_StockComponents { get; set; }
-
+    public DbSet<ST_MaterialReceived> ST_MaterialReceiveds { get; set; }
+    public DbSet<ST_MaterialReceivedComponent> ST_MaterialReceivedComponents { get; set; }
+  
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       modelBuilder.Entity<ST_Item>().HasData(

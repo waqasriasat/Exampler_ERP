@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Exampler_ERP.Models
 {
-  public class ST_Stock
+  public class ST_MaterialReceived
   {
     [Key]
-    public int StockID { get; set; }
-    public DateTime StockDate { get; set; }
+    public int MaterialReceivedID { get; set; }
+    public DateTime MaterialReceivedDate { get; set; }
     public int ItemID { get; set; }
     [ForeignKey("ItemID")]
     public virtual ST_Item? Item { get; set; }
@@ -22,5 +22,6 @@ namespace Exampler_ERP.Models
     public string? GRNNo { get; set; }
     public string? DCNo { get; set; }
     public string? InvoiceNo { get; set; }
+    public virtual List<ST_MaterialReceivedComponent> MaterialReceivedComponents { get; set; } = new List<ST_MaterialReceivedComponent>();
   }
 }
