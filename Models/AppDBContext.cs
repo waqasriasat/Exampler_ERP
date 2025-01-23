@@ -115,6 +115,7 @@ namespace Exampler_ERP.Models
 
 
     public DbSet<ST_Item> ST_Items { get; set; }
+    public DbSet<ST_ItemLedger> ST_ItemLedgers { get; set; }
     public DbSet<ST_MaterialRequisition> ST_MaterialRequisitions { get; set; }
     public DbSet<ST_MaterialRequisitionDetail> ST_MaterialRequisitionDetails { get; set; }
     public DbSet<ST_Stock> ST_Stocks { get; set; }

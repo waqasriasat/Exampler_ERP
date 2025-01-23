@@ -26,6 +26,7 @@ namespace Exampler_ERP.Models.Temp
     public int ItemID { get; set; }
     public string? ItemName { get; set; }
     public int StockQuantity { get; set; }
+    public int StockCount { get; set; }
   }
   public class StocksIndexViewModel
   {

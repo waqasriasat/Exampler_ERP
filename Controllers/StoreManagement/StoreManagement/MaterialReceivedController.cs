@@ -180,6 +180,16 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
           _appDBContext.ST_StockHistorys.Add(newStockHistory);
 
+          var newItemLedger = new ST_ItemLedger
+          {
+            ItemLedgerDate = DateTime.Now,
+            ItemID = model.MaterialReceiveds.ItemID,
+            StockID = existingStock.StockID,
+            StockIn = model.MaterialReceiveds.Quantity
+          };
+
+          _appDBContext.ST_ItemLedgers.Add(newItemLedger);
+
           var newMaterialReceived = new ST_MaterialReceived
           {
             ItemID = model.MaterialReceiveds.ItemID,
@@ -270,6 +280,16 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
           }
 
           _appDBContext.ST_StockHistorys.Add(newStockHistory);
+
+          var newItemLedger = new ST_ItemLedger
+          {
+            ItemLedgerDate = DateTime.Now,
+            ItemID = model.MaterialReceiveds.ItemID,
+            StockID = newStock.StockID,
+            StockIn = model.MaterialReceiveds.Quantity
+          };
+
+          _appDBContext.ST_ItemLedgers.Add(newItemLedger);
 
           var newMaterialReceived = new ST_MaterialReceived
           {

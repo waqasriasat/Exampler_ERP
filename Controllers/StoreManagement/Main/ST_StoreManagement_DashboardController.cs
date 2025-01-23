@@ -24,7 +24,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.Main
       ViewBag.MaterialRequisitionCount = await _appDBContext.ST_MaterialRequisitions
           .Where(v => v.EmployeeID == EmployeeID)
           .CountAsync();
-
+      ViewBag.MaterialReceivedCount = await _appDBContext.ST_MaterialReceiveds.CountAsync();
       ViewBag.StockCount = await _appDBContext.ST_Stocks.CountAsync();
       //ViewBag.SalaryCount = await _appDBContext.HR_Salarys.CountAsync();
       //ViewBag.JoiningCount = await _appDBContext.HR_Joinings.CountAsync();

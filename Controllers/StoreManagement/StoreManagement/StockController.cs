@@ -33,14 +33,14 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
       var Items = await ItemsQuery.ToListAsync();
       var Stock = await _appDBContext.ST_Stocks.ToListAsync();
-
       var viewModel = new StockListViewModel
       {
         ItemsWithStockQuantity = Items.Select(pt => new ItemWithStockQuantityViewModel
         {
           ItemID = pt.ItemID,
           ItemName = pt.ItemName,
-          StockQuantity = Stock.Count(ptf => ptf.ItemID == pt.ItemID)
+          StockQuantity = Stock.Where(ptf => ptf.ItemID == pt.ItemID).Sum(ptf => ptf.Quantity),
+          StockCount = Stock.Count(ptf => ptf.ItemID == pt.ItemID)
         }).ToList()
       };
 
