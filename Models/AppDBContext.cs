@@ -55,7 +55,7 @@ namespace Exampler_ERP.Models
     public DbSet<Settings_ManufacturerType> Settings_ManufacturerTypes { get; set; }
     public DbSet<Settings_ItemComponentType> Settings_ItemComponentTypes { get; set; }
     public DbSet<Settings_RequisitionStatusType> Settings_RequisitionStatusTypes { get; set; }
-
+    public DbSet<Settings_IssuanceStatusType> Settings_IssuanceStatusTypes { get; set; }
 
     public DbSet<CR_ProcessTypeApproval> CR_ProcessTypeApprovals { get; set; }
     public DbSet<CR_ProcessTypeApprovalDetail> CR_ProcessTypeApprovalDetails { get; set; }
@@ -118,11 +118,14 @@ namespace Exampler_ERP.Models
     public DbSet<ST_ItemLedger> ST_ItemLedgers { get; set; }
     public DbSet<ST_MaterialRequisition> ST_MaterialRequisitions { get; set; }
     public DbSet<ST_MaterialRequisitionDetail> ST_MaterialRequisitionDetails { get; set; }
+    public DbSet<ST_MaterialRequisitionStatus> ST_MaterialRequisitionStatuss { get; set; }
     public DbSet<ST_Stock> ST_Stocks { get; set; }
     public DbSet<ST_StockHistory> ST_StockHistorys { get; set; }
     public DbSet<ST_MaterialReceived> ST_MaterialReceiveds { get; set; }
     public DbSet<ST_MaterialReceivedComponent> ST_MaterialReceivedComponents { get; set; }
-  
+    public DbSet<ST_MaterialIssuance> ST_MaterialIssuances { get; set; }
+    public DbSet<ST_MaterialIssuanceDetail> ST_MaterialIssuanceDetails { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       modelBuilder.Entity<ST_Item>().HasData(
@@ -852,11 +855,18 @@ new ST_Item() { ItemID = 723, ItemCode = "1723", ItemName = "ZIP LOCK BAG (7X10)
 new ST_Item() { ItemID = 724, ItemCode = "1724", ItemName = "ZIP LOCK BAG (8X12)", ItemCategoryTypeID = 3, HasLotNumberAndExpiryDate = false, OpeningBalance = 0, FinalApprovalID = 1, ProcessTypeApprovalID = 0, ActiveYNID = 1, DeleteYNID = 0, BarCode = "0", BinLocation = "0", ManufacturerTypeID = 1, ReorderLevelMax = 0, ReorderLevelMin = 0, Specification = "0", UnitTypeID = 1 }
 );
 
+      modelBuilder.Entity<Settings_IssuanceStatusType>().HasData(
+   new Settings_IssuanceStatusType() { IssuanceStatusTypeID = 1, IssuanceStatusTypeName = "Pending", DeleteYNID = 0, ActiveYNID = 1 },
+   new Settings_IssuanceStatusType() { IssuanceStatusTypeID = 2, IssuanceStatusTypeName = "Approved", DeleteYNID = 0, ActiveYNID = 1 },
+   new Settings_IssuanceStatusType() { IssuanceStatusTypeID = 3, IssuanceStatusTypeName = "Partially Complete", DeleteYNID = 0, ActiveYNID = 1 },
+   new Settings_IssuanceStatusType() { IssuanceStatusTypeID = 4, IssuanceStatusTypeName = "Complete", DeleteYNID = 0, ActiveYNID = 1 }
+);
 
       modelBuilder.Entity<Settings_RequisitionStatusType>().HasData(
     new Settings_RequisitionStatusType() { RequisitionStatusTypeID = 1, RequisitionStatusTypeName = "Pending", DeleteYNID = 0, ActiveYNID = 1 },
     new Settings_RequisitionStatusType() { RequisitionStatusTypeID = 2, RequisitionStatusTypeName = "Approved", DeleteYNID = 0, ActiveYNID = 1 },
-    new Settings_RequisitionStatusType() { RequisitionStatusTypeID = 3, RequisitionStatusTypeName = "Complete", DeleteYNID = 0, ActiveYNID = 1 }
+    new Settings_RequisitionStatusType() { RequisitionStatusTypeID = 3, RequisitionStatusTypeName = "Partially Complete", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_RequisitionStatusType() { RequisitionStatusTypeID = 4, RequisitionStatusTypeName = "Complete", DeleteYNID = 0, ActiveYNID = 1 }
 );
 
             modelBuilder.Entity<Settings_ItemComponentType>().HasData(

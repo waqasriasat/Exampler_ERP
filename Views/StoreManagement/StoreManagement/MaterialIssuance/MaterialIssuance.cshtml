@@ -1,0 +1,211 @@
+@model IEnumerable<Exampler_ERP.Models.ST_MaterialIssuance>
+
+@{
+    ViewData["Title"] = "Store Management - Material Issuance";
+}
+
+
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            // Edit MaterialIssuance modal popup
+            $('.editMaterialIssuanceLink').click(function (e) {
+                e.preventDefault();
+                var MaterialIssuanceId = $(this).data('id');
+                $.get('@Url.Action("Edit", "MaterialIssuance")', { id: MaterialIssuanceId }, function (data) {
+                    $('#editMaterialIssuanceModalContainer').html(data);
+                    $('#editMaterialIssuanceModal').modal('show');
+                    // Trigger the calculation after modal is shown
+
+                });
+            });
+
+            $('#editMaterialIssuanceModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editMaterialIssuanceForm').serialize();
+                $.post('@Url.Action("Edit", "MaterialIssuance")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Add new MaterialIssuance modal popup
+            $('.addMaterialIssuanceLink').click(function () {
+                $.get('@Url.Action("Create", "MaterialIssuance")', function (data) {
+                    $('#addMaterialIssuanceModalContainer').html(data);
+                    $('#addMaterialIssuanceModal').modal('show');
+                });
+            });
+
+
+            // Save new MaterialIssuance form
+            $('#addMaterialIssuanceModalContainer').on('click', '#saveNewMaterialIssuance', function () {
+                var formData = $('#addMaterialIssuanceForm').serialize();
+                $.post('@Url.Action("Create", "MaterialIssuance")', formData, function (response) {
+                    if (response.success) {
+                        $('#addMaterialIssuanceModal').modal('hide');
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Close Modal Add Contrainer
+            $('#addMaterialIssuanceModalContainer').on('click', '#Close', function () {
+                $('#addMaterialIssuanceModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editMaterialIssuanceModalContainer').on('click', '#Close', function () {
+                $('#editMaterialIssuanceModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Delete MaterialIssuance
+            $('.deleteMaterialIssuanceLink').click(function (e) {
+                e.preventDefault();
+                var MaterialIssuanceId = $(this).data('id');
+                $.post('@Url.Action("Delete", "MaterialIssuance")', { id: MaterialIssuanceId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+
+
+
+        });
+    </script>
+    <script>
+        function printMaterialIssuancees() {
+            var printWindow = window.open('@Url.Action("Print", "MaterialIssuance")', '_blank');
+            printWindow.focus();
+        }
+        $('#searchItemNameButton').click(function () {
+            var searchValue = $('#searchItemNameInput').val();
+            window.location.href = '@Url.Action("Index", "MaterialIssuance")?searchItemName=' + searchValue;
+        });
+    </script>
+
+
+}
+
+
+
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Store Management /</span> Material Issuance
+</h4>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <h5 class="card-header">Searching Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8" style="padding-bottom: 15px;">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search Item Name" id="searchItemNameInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchItemNameButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <!-- Action Buttons -->
+                        <button type="button" class="btn btn-primary addMaterialIssuanceLink">Add New</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "MaterialIssuance")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printMaterialIssuancees()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Material Issuance List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-11 col-lg-11">
+                            <div class="row">
+                                <div class="col-2">
+                                    <p class="text-nowrap">Material Issuance #</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">Date</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">Status</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Edit</p>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+
+
+
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-10 col-md-11 col-lg-11">
+                                <div class="row align-items-center">
+                                    <div class="col-2">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Material Issuance # :</span> @Html.DisplayFor(modelItem => item.IssuanceID)
+                                        </p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Date :</span> @(item.IssuanceDate.ToString("dd/MM/yyyy") ?? "00/00/0000")
+                                        </p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Status :</span> @item.IssuanceStatusTypes?.IssuanceStatusTypeName
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2 col-md-1 col-lg-1">
+                                <div class="btn-group" role="group" aria-label="Actions">
+                                    <a href="#" class="editMaterialIssuanceLink me-2" data-id="@item.IssuanceID">
+                                        <i class="fa fa-pencil" style="font-size: large; color:steelblue;; line-height: 2;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editMaterialIssuanceModalContainer"></div>
+<div id="addMaterialIssuanceModalContainer"></div>

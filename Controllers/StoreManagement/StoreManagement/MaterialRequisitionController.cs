@@ -95,6 +95,20 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
           await _appDBContext.SaveChangesAsync();
 
           var RequisitionID = model.MaterialRequisitions.RequisitionID;
+
+          var MaterialRequisitionStatus = new ST_MaterialRequisitionStatus
+          {
+            RequisitionID = RequisitionID,
+            ActionDate = DateTime.Now,
+            ActionID = HttpContext.Session.GetInt32("UserID") ?? default(int),
+            ActionStatusTypeID = 1
+          };
+
+          _appDBContext.ST_MaterialRequisitionStatuss.Add(MaterialRequisitionStatus);
+    
+          await _appDBContext.SaveChangesAsync();
+
+          
           if (RequisitionID > 0)
           {
             var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
@@ -146,6 +160,10 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
               model.MaterialRequisitions.FinalApprovalID = 1;
               model.MaterialRequisitions.RequisitionStatusTypeID = 2;
               _appDBContext.ST_MaterialRequisitions.Update(model.MaterialRequisitions);
+
+              MaterialRequisitionStatus.ActionStatusTypeID = 2;
+              _appDBContext.ST_MaterialRequisitionStatuss.Update(MaterialRequisitionStatus);
+
               await _appDBContext.SaveChangesAsync();
               TempData["SuccessMessage"] = " Material Requisition successfully. No process setup found,  Material Requisition Approved.";
               return Json(new { success = true, message = "No process setup found,  Material Requisition Approved." });
