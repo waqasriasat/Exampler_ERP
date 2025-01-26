@@ -70,6 +70,39 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       return PartialView("~/Views/StoreManagement/StoreManagement/MaterialIssuance/AddMaterialIssuance.cshtml", model);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetRequisitionDetails(int requisitionId1)
+    {
+      try
+      {
+        // Database se data fetch karna
+        var requisitionDetails = await _appDBContext.ST_MaterialRequisitionDetails
+          .Include(r => r.Items)
+            .Where(r => r.RequisitionID == requisitionId1)
+            .Select(r => new
+            {
+              ItemID = r.ItemID,
+              itemName = r.Items.ItemName,
+              Quantity = r.Quantity
+            })
+            .ToListAsync();
+
+        // Agar data na mile
+        if (requisitionDetails == null || !requisitionDetails.Any())
+        {
+          return Json(new { success = false, message = "No data found for the given Requisition ID." });
+        }
+
+        return Json(new { success = true, data = requisitionDetails });
+      }
+      catch (Exception ex)
+      {
+        // Error handling
+        return Json(new { success = false, message = ex.Message });
+      }
+    }
+
+
     // POST: Create MaterialIssuance
     //[HttpPost]
     //[ValidateAntiForgeryToken]
