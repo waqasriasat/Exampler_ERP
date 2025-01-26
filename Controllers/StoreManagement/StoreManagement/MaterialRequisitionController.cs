@@ -75,8 +75,8 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       {
         try
         {
-
-          model.MaterialRequisitions.EmployeeID = HttpContext.Session.GetInt32("UserID") ?? default(int);
+          int userID = HttpContext.Session.GetInt32("UserID") ?? 0;
+          model.MaterialRequisitions.EmployeeID = await _utils.PostUserIDGetEmployeeID(userID);
           model.MaterialRequisitions.FinalApprovalID = 0;
           model.MaterialRequisitions.RequisitionStatusTypeID = 1;
           model.MaterialRequisitions.RequisitionDate = DateTime.Now;
@@ -117,12 +117,13 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
             if (processCount > 0)
             {
+              
               var newProcessTypeApproval = new CR_ProcessTypeApproval
               {
                 ProcessTypeID = 20,
                 Notes = "Pending New Material Requisition",
                 Date = DateTime.Now,
-                EmployeeID = HttpContext.Session.GetInt32("UserID") ?? default(int),
+                EmployeeID = await _utils.PostUserIDGetEmployeeID(userID),
                 UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
                 TransactionID = RequisitionID
               };

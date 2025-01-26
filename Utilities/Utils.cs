@@ -1077,6 +1077,27 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
+    public async Task<List<SelectListItem>> GetIssuanceStatus()
+    {
+      try
+      {
+        var IssuanceStatusList = await _appDBContext.Settings_IssuanceStatusTypes
+            .Select(d => new SelectListItem
+            {
+              Value = d.IssuanceStatusTypeID.ToString(),
+              Text = d.IssuanceStatusTypeName
+            })
+            .ToListAsync();
+
+
+        return IssuanceStatusList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
     public async Task<List<SelectListItem>> GetItemComponentDataType()
     {
       try
@@ -1096,5 +1117,49 @@ namespace Exampler_ERP.Utilities
         throw; // Rethrow the exception to handle it at a higher level
       }
     }
+    public async Task<int> PostUserIDGetEmployeeID(int userID)
+    {
+      try
+      {
+        // User ko find karenge based on UserID
+        var user = await _appDBContext.CR_Users
+                           .Where(u => u.UserID == userID)
+                           .FirstOrDefaultAsync();
+
+        // EmployeeID return karenge agar user mil jaye
+        return user?.EmployeeID ?? 0;
+      }
+      catch (Exception ex)
+      {
+        // Error handle karne ke liye logging add karein (optional)
+        Console.WriteLine($"Error fetching EmployeeID: {ex.Message}");
+        return 0; // Default EmployeeID agar exception aaye
+      }
+    }
+    public async Task<List<SelectListItem>> GetPendingRequisitions()
+    {
+      try
+      {
+        var PendingRequisitionsList = await _appDBContext.ST_MaterialRequisitions
+            .Where(mr => mr.RequisitionStatusTypeID == 2 || mr.RequisitionStatusTypeID == 3)
+            .Include(mr => mr.HR_Employees)
+                .ThenInclude(emp => emp.DepartmentType) // Ensure DepartmentType is included
+            .Select(mr => new SelectListItem
+            {
+              Value = mr.RequisitionID.ToString(),
+              Text = $"{mr.HR_Employees.FirstName} {mr.HR_Employees.FatherName} {mr.HR_Employees.FamilyName} - Department: {mr.HR_Employees.DepartmentType.DepartmentTypeName} - Requisition Date: {mr.RequisitionDate:dd/MM/yyyy}"
+            })
+            .ToListAsync();
+
+        return PendingRequisitionsList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception details (if necessary)
+        // Example: Log.Error(ex, "Error occurred while fetching pending requisitions");
+        throw; // Rethrow the exception to handle it further up the call stack
+      }
+    }
+
   }
 }

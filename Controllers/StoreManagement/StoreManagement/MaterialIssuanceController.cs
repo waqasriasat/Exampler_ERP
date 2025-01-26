@@ -1,8 +1,11 @@
 using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Models;
-using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
+using Exampler_ERP.Utilities;
 
 namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 {
@@ -56,7 +59,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     {
       ViewBag.ItemList = await _utils.GetItemList();
       ViewBag.ItemNameList = await _utils.GetItemList();
-
+      ViewBag.PendingRequisitionsList = await _utils.GetPendingRequisitions();
       ST_MaterialIssuance Issuances = new ST_MaterialIssuance();
       Issuances.MaterialIssuanceDetails.Add(new ST_MaterialIssuanceDetail() { IssuanceID = 0 });
       var model = new MaterialIssuancesIndexViewModel
@@ -67,134 +70,37 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       return PartialView("~/Views/StoreManagement/StoreManagement/MaterialIssuance/AddMaterialIssuance.cshtml", model);
     }
 
+    // POST: Create MaterialIssuance
+    //[HttpPost]
+    //[ValidateAntiForgeryToken]
+    //public async Task<IActionResult> Create(MaterialIssuanceCreateViewModel model)
+    //{
+    //  if (ModelState.IsValid)
+    //  {
+    //    var issuance = new ST_MaterialIssuance
+    //    {
+    //      IssuanceDate = model.IssuanceDate,
+    //      RequisitionID = model.RequisitionID,
+    //      EmployeeID = model.EmployeeID,
+    //      Remarks = model.Remarks,
+    //      IssuanceStatusTypeID = model.IssuanceStatusTypeID,
+    //      MaterialIssuanceDetails = model.Details.Select(d => new ST_MaterialIssuanceDetail
+    //      {
+    //        ItemID = d.ItemID,
+    //        RequisitionQuantity = d.RequisitionQuantity,
+    //        IssuanceQuantity = d.IssuanceQuantity,
+    //        BalanceQuantity = d.RequisitionQuantity - d.IssuanceQuantity,
+    //        Remarks = d.Remarks
+    //      }).ToList()
+    //    };
 
-    [HttpPost]
-    public async Task<IActionResult> Create(MaterialIssuancesIndexViewModel model)
-    {
-      if (ModelState.IsValid)
-      {
-        try
-        {
+    //    _appDBContext.ST_MaterialIssuances.Add(issuance);
+    //    await _appDBContext.SaveChangesAsync();
+    //    return RedirectToAction("Index"); // Redirect to index or any other page
+    //  }
 
-          model.MaterialIssuances.EmployeeID = HttpContext.Session.GetInt32("UserID") ?? default(int);
-          model.MaterialIssuances.FinalApprovalID = 0;
-          model.MaterialIssuances.IssuanceStatusTypeID = 1;
-          model.MaterialIssuances.IssuanceDate = DateTime.Now;
-          _appDBContext.ST_MaterialIssuances.Add(model.MaterialIssuances);
-          //await _appDBContext.SaveChangesAsync();
-
-          model.MaterialIssuances.MaterialIssuanceDetails.RemoveAll(e => e.ItemID == 0);
-          model.MaterialIssuances.MaterialIssuanceDetails.RemoveAll(e => e.ItemID == null || e.ItemID == 0);
-
-          foreach (var detail in model.MaterialIssuances.MaterialIssuanceDetails)
-          {
-            detail.IssuanceID = model.MaterialIssuances.IssuanceID;
-            _appDBContext.ST_MaterialIssuanceDetails.Add(detail);
-          }
-
-          await _appDBContext.SaveChangesAsync();
-
-          var IssuanceID = model.MaterialIssuances.IssuanceID;
-
-          var MaterialRequisitionStatus = new ST_MaterialRequisitionStatus
-          {
-            RequisitionID = IssuanceID,
-            ActionDate = DateTime.Now,
-            ActionID = HttpContext.Session.GetInt32("UserID") ?? default(int),
-            ActionStatusTypeID = 1
-          };
-
-          _appDBContext.ST_MaterialRequisitionStatuss.Add(MaterialRequisitionStatus);
-
-          await _appDBContext.SaveChangesAsync();
-
-
-          if (IssuanceID > 0)
-          {
-            var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
-                                .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 20)
-                                .CountAsync();
-
-            if (processCount > 0)
-            {
-              var newProcessTypeApproval = new CR_ProcessTypeApproval
-              {
-                ProcessTypeID = 20,
-                Notes = "Pending New Material Issuance",
-                Date = DateTime.Now,
-                EmployeeID = HttpContext.Session.GetInt32("UserID") ?? default(int),
-                UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
-                TransactionID = IssuanceID
-              };
-
-              _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
-              await _appDBContext.SaveChangesAsync();
-
-              var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
-                                          .Where(pta => pta.ProcessTypeID == 20 && pta.Rank == 1)
-                                          .FirstOrDefaultAsync();
-
-              if (nextApprovalSetup != null)
-              {
-                var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
-                {
-                  ProcessTypeApprovalID = newProcessTypeApproval.ProcessTypeApprovalID,
-                  Date = DateTime.Now,
-                  RoleID = nextApprovalSetup.RoleTypeID,
-                  AppID = 0,
-                  AppUserID = 0,
-                  Notes = null,
-                  Rank = nextApprovalSetup.Rank
-                };
-
-                _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
-                await _appDBContext.SaveChangesAsync();
-              }
-              else
-              {
-                return Json(new { success = false, message = "Next approval setup not found." });
-              }
-            }
-            else
-            {
-              model.MaterialIssuances.FinalApprovalID = 1;
-              model.MaterialIssuances.IssuanceStatusTypeID = 2;
-              _appDBContext.ST_MaterialIssuances.Update(model.MaterialIssuances);
-
-              MaterialRequisitionStatus.ActionStatusTypeID = 2;
-              _appDBContext.ST_MaterialRequisitionStatuss.Update(MaterialRequisitionStatus);
-
-              await _appDBContext.SaveChangesAsync();
-              TempData["SuccessMessage"] = " Material Issuance successfully. No process setup found,  Material Issuance Approved.";
-              return Json(new { success = true, message = "No process setup found,  Material Issuance Approved." });
-            }
-          }
-          TempData["SuccessMessage"] = " Material Issuance Created successfully. Continue to the Approval Process Setup for  Material Issuance Approved.";
-
-          return Json(new { success = true });
-        }
-        catch (Exception ex)
-        {
-          return Json(new { success = false, message = "Error: " + ex.Message });
-        }
-
-      }
-
-      ViewBag.ItemList = await _utils.GetItemList();
-      ViewBag.ItemNameList = await _utils.GetItemList();
-
-      if (model.MaterialIssuances.MaterialIssuanceDetails == null || !model.MaterialIssuances.MaterialIssuanceDetails.Any())
-      {
-        model.MaterialIssuances.MaterialIssuanceDetails = new List<ST_MaterialIssuanceDetail> { new ST_MaterialIssuanceDetail() };
-      }
-
-      if (model.MaterialIssuances == null)
-      {
-        model.MaterialIssuances = new ST_MaterialIssuance();
-      }
-
-      return PartialView("~/Views/StoreManagement/StoreManagement/MaterialIssuance/AddMaterialIssuance.cshtml", model);
-    }
+    //  return View(model);
+    //}
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {

@@ -1,3 +1,6 @@
+using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
+
 namespace Exampler_ERP.Models.Temp
 {
  
@@ -6,4 +9,5 @@ namespace Exampler_ERP.Models.Temp
     public ST_MaterialIssuance MaterialIssuances { get; set; }
 
   }
+  
 }
