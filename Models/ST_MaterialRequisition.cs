@@ -8,9 +8,7 @@ namespace Exampler_ERP.Models
     [Key]
     public int RequisitionID { get; set; }
     public DateTime RequisitionDate { get; set; }
-    public int EmployeeID { get; set; }
-    [ForeignKey("HR_Employee")]
-    public virtual HR_Employee? HR_Employees { get; private set; }
+    public int DepartmentTypeID { get; set; }
     public int? RequisitionStatusTypeID { get; set; }
     [ForeignKey("RequisitionStatusTypeID")]
     public virtual Settings_RequisitionStatusType? RequisitionStatusTypes { get; private set; }

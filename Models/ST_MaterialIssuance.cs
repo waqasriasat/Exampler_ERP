@@ -11,9 +11,7 @@ namespace Exampler_ERP.Models
     public int RequisitionID { get; set; }
     [ForeignKey("RequisitionID")]
     public virtual ST_MaterialRequisition? ST_MaterialRequisitions { get; private set; }
-    public int EmployeeID { get; set; }
-    [ForeignKey("HR_Employee")]
-    public virtual HR_Employee? HR_Employees { get; private set; }
+    public int DepartmentTypeID { get; set; }
     public string? Remarks { get; set; }
     public int? FinalApprovalID { get; set; } //didn't use in registration
     public int? ProcessTypeApprovalID { get; set; } //didn't use in registration

@@ -253,7 +253,7 @@
                                    currentPage.StartsWith("/ItemComponentType/Index") || currentPage.StartsWith("/Item/Index") ||
                                    currentPage.StartsWith("/ManufacturerType/Index") || currentPage.StartsWith("/UnitType/Index") ||
                                    currentPage.StartsWith("/MaterialRequisition/Index") || currentPage.StartsWith("/Stock/Index") ||
-                                   currentPage.StartsWith("/MaterialReceived/Index")? " active open" : "")'>
+                                   currentPage.StartsWith("/MaterialReceived/Index") || currentPage.StartsWith("/MaterialIssuance/Index") ? " active open" : "")'>
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-store"></i>
                     <div>Store Management</div>
@@ -267,7 +267,8 @@
                         </a>
                     </li>
                     <li class='menu-item@(currentPage == "/ST_StoreManagement_Dashboard/Index"|| currentPage == "/MaterialRequisition/Index" ||
-                                          currentPage == "/Stock/Index"|| currentPage == "/MaterialReceived/Index"? " active" : "")'>
+                                          currentPage == "/Stock/Index"|| currentPage == "/MaterialReceived/Index" ||
+                                          currentPage == "/MaterialIssuance/Index"? " active" : "")'>
                         <a asp-controller="ST_StoreManagement_Dashboard" asp-action="Index" class="menu-link">
                             <div>Store Management</div>
                         </a>

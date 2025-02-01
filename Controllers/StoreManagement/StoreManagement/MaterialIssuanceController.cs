@@ -23,36 +23,30 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
-      if (HttpContext.Session.GetInt32("UserID") != null)
+      var MaterialIssuancesQuery = _appDBContext.ST_MaterialIssuances
+    .Include(v => v.MaterialIssuanceDetails)
+        .ThenInclude(d => d.Items) // Ensure Items is included
+    .Include(v => v.IssuanceStatusTypes)
+    .AsQueryable(); // ✅ Ensure it's a queryable object
+
+      if (!string.IsNullOrEmpty(searchItemName))
       {
-        int EmployeeID = int.Parse(HttpContext.Session.GetInt32("UserID").ToString());
-        var MaterialIssuancesQuery = _appDBContext.ST_MaterialIssuances
-          .Include(v => v.MaterialIssuanceDetails)
-          .Include(v => v.IssuanceStatusTypes)
-          .Include(v => v.HR_Employees)
-          .Where(v => v.EmployeeID == EmployeeID);
+        MaterialIssuancesQuery = MaterialIssuancesQuery
+            .Where(v => v.MaterialIssuanceDetails
+                .Any(d => d.Items != null && d.Items.ItemName.Contains(searchItemName))); // ✅ Null check added
+      }
 
-        if (!string.IsNullOrEmpty(searchItemName))
-        {
-          MaterialIssuancesQuery = MaterialIssuancesQuery
-              .Where(v => v.MaterialIssuanceDetails
-                  .Any(d => d.Items.ItemName
-                      .Contains(searchItemName)));
-        }
+      var MaterialIssuances = await MaterialIssuancesQuery.ToListAsync();
 
-        var MaterialIssuances = await MaterialIssuancesQuery.ToListAsync();
 
-        if (!string.IsNullOrEmpty(searchItemName) && MaterialIssuances.Count == 0)
+
+      if (!string.IsNullOrEmpty(searchItemName) && MaterialIssuances.Count == 0)
         {
           TempData["ErrorMessage"] = "No Material Issuance found with the name '" + searchItemName + "'. Please check the name and try again.";
         }
 
         return View("~/Views/StoreManagement/StoreManagement/MaterialIssuance/MaterialIssuance.cshtml", MaterialIssuances);
-      }
-      else
-      {
-        return RedirectToAction("Login", "Auth");
-      }
+      
     }
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -71,21 +65,41 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetRequisitionDetails(int requisitionId1)
+    public async Task<IActionResult> GetRequisitionDetails(int requisitionId)
     {
       try
       {
         // Database se data fetch karna
-        var requisitionDetails = await _appDBContext.ST_MaterialRequisitionDetails
-          .Include(r => r.Items)
-            .Where(r => r.RequisitionID == requisitionId1)
-            .Select(r => new
-            {
-              ItemID = r.ItemID,
-              itemName = r.Items.ItemName,
-              Quantity = r.Quantity
-            })
-            .ToListAsync();
+        //var requisitionDetails = await _appDBContext.ST_MaterialRequisitionDetails
+        //  .Include(r => r.Items)
+        //    .Where(r => r.RequisitionID == requisitionId)
+        //    .Select(r => new
+        //    {
+        //      ItemID = r.ItemID,
+        //      itemName = r.Items.ItemName,
+        //      Quantity = r.Quantity,
+        //      AvaiableStock = r.Items.
+        //    })
+        //    .ToListAsync();
+        var requisitionDetails = await (from req in _appDBContext.ST_MaterialRequisitionDetails
+                                        join stock in _appDBContext.ST_Stocks
+                                        on req.ItemID equals stock.ItemID into stockGroup
+                                        where req.RequisitionID == requisitionId
+                                        select new
+                                        {
+                                          ItemID = req.ItemID,
+                                          ItemName = req.Items.ItemName,
+                                          Quantity = req.Quantity - (
+                                        _appDBContext.ST_MaterialIssuances
+                                            .Where(iss => iss.RequisitionID == req.RequisitionID)
+                                            .SelectMany(iss => iss.MaterialIssuanceDetails)
+                                            .Where(detail => detail.ItemID == req.ItemID)
+                                            .Sum(detail => (int?)detail.IssuanceQuantity) ?? 0
+                                    ),
+                                          AvailableStock = stockGroup.Sum(s => s.Quantity) // Total stock quantity
+                                        })
+                                .ToListAsync();
+
 
         // Agar data na mile
         if (requisitionDetails == null || !requisitionDetails.Any())
@@ -104,36 +118,41 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
 
     // POST: Create MaterialIssuance
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> Create(MaterialIssuanceCreateViewModel model)
-    //{
-    //  if (ModelState.IsValid)
-    //  {
-    //    var issuance = new ST_MaterialIssuance
-    //    {
-    //      IssuanceDate = model.IssuanceDate,
-    //      RequisitionID = model.RequisitionID,
-    //      EmployeeID = model.EmployeeID,
-    //      Remarks = model.Remarks,
-    //      IssuanceStatusTypeID = model.IssuanceStatusTypeID,
-    //      MaterialIssuanceDetails = model.Details.Select(d => new ST_MaterialIssuanceDetail
-    //      {
-    //        ItemID = d.ItemID,
-    //        RequisitionQuantity = d.RequisitionQuantity,
-    //        IssuanceQuantity = d.IssuanceQuantity,
-    //        BalanceQuantity = d.RequisitionQuantity - d.IssuanceQuantity,
-    //        Remarks = d.Remarks
-    //      }).ToList()
-    //    };
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(MaterialIssuancesIndexViewModel model)
+    {
+      if (ModelState.IsValid)
+      {
+        model.MaterialIssuances.MaterialIssuanceDetails.RemoveAll(e => e.IssuanceQuantity == null || e.IssuanceQuantity == 0);
+        var issuance = new ST_MaterialIssuance
+        {
+          IssuanceDate = DateTime.Now,
+          RequisitionID = model.MaterialIssuances.RequisitionID,
+          DepartmentTypeID = model.MaterialIssuances.DepartmentTypeID,
+          Remarks = model.MaterialIssuances.Remarks,
+          IssuanceStatusTypeID = model.MaterialIssuances.IssuanceStatusTypeID,
+          
+          MaterialIssuanceDetails = model.MaterialIssuances.MaterialIssuanceDetails.Select(d => new ST_MaterialIssuanceDetail
+          {
+            ItemID = d.ItemID,
+            RequisitionQuantity = d.RequisitionQuantity,
+            IssuanceQuantity = d.IssuanceQuantity,
+            BalanceQuantity = d.RequisitionQuantity - d.IssuanceQuantity,
+            IssuanceStatusTypeID = d.IssuanceQuantity != 0
+        ? (d.RequisitionQuantity - d.IssuanceQuantity == 0 ? 4 : 3)
+        : 1,
+            Remarks = d.Remarks
+          }).ToList()
+        };
 
-    //    _appDBContext.ST_MaterialIssuances.Add(issuance);
-    //    await _appDBContext.SaveChangesAsync();
-    //    return RedirectToAction("Index"); // Redirect to index or any other page
-    //  }
+        _appDBContext.ST_MaterialIssuances.Add(issuance);
+        await _appDBContext.SaveChangesAsync();
+        return Json(new { success = true });
+      }
 
-    //  return View(model);
-    //}
+      return PartialView("~/Views/StoreManagement/StoreManagement/MaterialIssuance/AddMaterialIssuance.cshtml", model);
+    }
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {

@@ -22,12 +22,12 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     {
       if (HttpContext.Session.GetInt32("UserID") != null)
       {
-        int EmployeeID = int.Parse(HttpContext.Session.GetInt32("UserID").ToString());
+        int UserID = int.Parse(HttpContext.Session.GetInt32("UserID").ToString());
+        int departmentID = await _utils.PostUserIDGetDepartmentID(UserID);
         var MaterialRequisitionsQuery = _appDBContext.ST_MaterialRequisitions
           .Include(v => v.MaterialRequisitionDetails)
           .Include(v => v.RequisitionStatusTypes)
-          .Include(v => v.HR_Employees)
-          .Where(v => v.EmployeeID == EmployeeID);
+          .Where(v => v.DepartmentTypeID == departmentID);
 
         if (!string.IsNullOrEmpty(searchItemName))
         {
@@ -75,8 +75,9 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       {
         try
         {
-          int userID = HttpContext.Session.GetInt32("UserID") ?? 0;
-          model.MaterialRequisitions.EmployeeID = await _utils.PostUserIDGetEmployeeID(userID);
+          int userID = int.Parse(HttpContext.Session.GetInt32("UserID").ToString());
+          int departmentID = await _utils.PostUserIDGetDepartmentID(userID);
+          model.MaterialRequisitions.DepartmentTypeID = departmentID;
           model.MaterialRequisitions.FinalApprovalID = 0;
           model.MaterialRequisitions.RequisitionStatusTypeID = 1;
           model.MaterialRequisitions.RequisitionDate = DateTime.Now;

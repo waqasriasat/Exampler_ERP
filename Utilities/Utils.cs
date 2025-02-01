@@ -1121,35 +1121,64 @@ namespace Exampler_ERP.Utilities
     {
       try
       {
-        // User ko find karenge based on UserID
         var user = await _appDBContext.CR_Users
-                           .Where(u => u.UserID == userID)
-                           .FirstOrDefaultAsync();
+                            .Where(u => u.UserID == userID)
+                            .FirstOrDefaultAsync();
 
-        // EmployeeID return karenge agar user mil jaye
-        return user?.EmployeeID ?? 0;
+        return user?.EmployeeID ?? 0; 
       }
       catch (Exception ex)
       {
-        // Error handle karne ke liye logging add karein (optional)
         Console.WriteLine($"Error fetching EmployeeID: {ex.Message}");
-        return 0; // Default EmployeeID agar exception aaye
+        return 0;
       }
     }
+
+    public async Task<int> PostUserIDGetDepartmentID(int userID)
+    {
+      try
+      {
+        var departmentTypeId = await _appDBContext.HR_Employees
+            .Join(_appDBContext.CR_Users,
+                  emp => emp.EmployeeID,
+                  us => us.EmployeeID,   
+                  (emp, us) => new { emp, us }) 
+            .Where(x => x.us.UserID == userID) 
+            .Select(x => x.emp.DepartmentTypeID) 
+            .FirstOrDefaultAsync(); 
+
+        return departmentTypeId ?? 0; // If departmentTypeId is null, return 0
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Error fetching DepartmentTypeID: {ex.Message}");
+        return 0; 
+      }
+    }
+
     public async Task<List<SelectListItem>> GetPendingRequisitions()
     {
       try
       {
+
         var PendingRequisitionsList = await _appDBContext.ST_MaterialRequisitions
-            .Where(mr => mr.RequisitionStatusTypeID == 2 || mr.RequisitionStatusTypeID == 3)
-            .Include(mr => mr.HR_Employees)
-                .ThenInclude(emp => emp.DepartmentType) // Ensure DepartmentType is included
-            .Select(mr => new SelectListItem
-            {
-              Value = mr.RequisitionID.ToString(),
-              Text = $"{mr.HR_Employees.FirstName} {mr.HR_Employees.FatherName} {mr.HR_Employees.FamilyName} - Department: {mr.HR_Employees.DepartmentType.DepartmentTypeName} - Requisition Date: {mr.RequisitionDate:dd/MM/yyyy}"
-            })
-            .ToListAsync();
+     .Join(
+         _appDBContext.Settings_DepartmentTypes, 
+         mr => mr.DepartmentTypeID,        
+         dt => dt.DepartmentTypeID,         
+         (mr, dt) => new {             
+           mr.RequisitionID,
+           dt.DepartmentTypeName,
+           mr.RequisitionDate,
+           mr.RequisitionStatusTypeID
+         })
+     .Where(mr => mr.RequisitionStatusTypeID == 2 || mr.RequisitionStatusTypeID == 3)
+     .Select(mr => new SelectListItem
+     {
+       Value = mr.RequisitionID.ToString(),
+       Text = $"Department: {mr.DepartmentTypeName} - Requisition Date: {mr.RequisitionDate:dd/MM/yyyy}"
+     })
+     .ToListAsync();
 
         return PendingRequisitionsList;
       }
