@@ -145,8 +145,24 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
             Remarks = d.Remarks
           }).ToList()
         };
-
         _appDBContext.ST_MaterialIssuances.Add(issuance);
+
+        await _appDBContext.SaveChangesAsync();
+
+        // Create Item Ledger Entries for Each Issued Item
+        foreach (var detail in issuance.MaterialIssuanceDetails)
+        {
+          var itemLedger = new ST_ItemLedger
+          {
+            ItemLedgerDate = DateTime.Now,
+            ItemID = detail.ItemID,
+            IssuanceID = issuance.IssuanceID,
+            StockOut = detail.IssuanceQuantity
+          };
+
+          _appDBContext.ST_ItemLedgers.Add(itemLedger);
+        }
+
         await _appDBContext.SaveChangesAsync();
         return Json(new { success = true });
       }
