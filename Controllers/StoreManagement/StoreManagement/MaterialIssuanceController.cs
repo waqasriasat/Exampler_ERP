@@ -69,36 +69,46 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     {
       try
       {
-        // Database se data fetch karna
-        //var requisitionDetails = await _appDBContext.ST_MaterialRequisitionDetails
-        //  .Include(r => r.Items)
-        //    .Where(r => r.RequisitionID == requisitionId)
-        //    .Select(r => new
-        //    {
-        //      ItemID = r.ItemID,
-        //      itemName = r.Items.ItemName,
-        //      Quantity = r.Quantity,
-        //      AvaiableStock = r.Items.
-        //    })
-        //    .ToListAsync();
+
+        //var requisitionDetails = await (from req in _appDBContext.ST_MaterialRequisitionDetails
+        //                                join stock in _appDBContext.ST_Stocks
+        //                                on req.ItemID equals stock.ItemID into stockGroup
+        //                                where req.RequisitionID == requisitionId
+        //                                select new
+        //                                {
+        //                                  ItemID = req.ItemID,
+        //                                  ItemName = req.Items.ItemName,
+        //                                  Quantity = req.Quantity - (
+        //                                _appDBContext.ST_MaterialIssuances
+        //                                    .Where(iss => iss.RequisitionID == req.RequisitionID)
+        //                                    .SelectMany(iss => iss.MaterialIssuanceDetails)
+        //                                    .Where(detail => detail.ItemID == req.ItemID)
+        //                                    .Sum(detail => (int?)detail.IssuanceQuantity) ?? 0
+        //                            ),
+        //                                  AvailableStock = stockGroup.Sum(s => s.Quantity) // Total stock quantity
+        //                                })
+        //                        .ToListAsync();
         var requisitionDetails = await (from req in _appDBContext.ST_MaterialRequisitionDetails
                                         join stock in _appDBContext.ST_Stocks
-                                        on req.ItemID equals stock.ItemID into stockGroup
+                                            on req.ItemID equals stock.ItemID into stockGroup
                                         where req.RequisitionID == requisitionId
+                                              && req.Quantity > 0 // Exclude requisitions with Quantity = 0
                                         select new
                                         {
                                           ItemID = req.ItemID,
                                           ItemName = req.Items.ItemName,
                                           Quantity = req.Quantity - (
-                                        _appDBContext.ST_MaterialIssuances
-                                            .Where(iss => iss.RequisitionID == req.RequisitionID)
-                                            .SelectMany(iss => iss.MaterialIssuanceDetails)
-                                            .Where(detail => detail.ItemID == req.ItemID)
-                                            .Sum(detail => (int?)detail.IssuanceQuantity) ?? 0
-                                    ),
+                                                _appDBContext.ST_MaterialIssuances
+                                                    .Where(iss => iss.RequisitionID == req.RequisitionID)
+                                                    .SelectMany(iss => iss.MaterialIssuanceDetails)
+                                                    .Where(detail => detail.ItemID == req.ItemID)
+                                                    .Sum(detail => (int?)detail.IssuanceQuantity) ?? 0
+                                            ),
                                           AvailableStock = stockGroup.Sum(s => s.Quantity) // Total stock quantity
                                         })
-                                .ToListAsync();
+                         .Where(x => x.Quantity > 0) // Optional: Exclude if remaining quantity is 0
+                         .ToListAsync();
+
 
 
         // Agar data na mile
@@ -152,6 +162,27 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         // Create Item Ledger Entries for Each Issued Item
         foreach (var detail in issuance.MaterialIssuanceDetails)
         {
+          // 1. Update Stock Quantity
+          var stock = await _appDBContext.ST_Stocks
+              .FirstOrDefaultAsync(s => s.ItemID == detail.ItemID);
+
+          if (stock != null)
+          {
+            if (stock.Quantity >= detail.IssuanceQuantity)
+            {
+              stock.Quantity -= detail.IssuanceQuantity; // Deduct the issuance quantity
+            }
+            else
+            {
+              return Json(new { success = false, message = $"Insufficient stock for Item ID {detail.ItemID}." });
+            }
+          }
+          else
+          {
+            return Json(new { success = false, message = $"Stock not found for Item ID {detail.ItemID}." });
+          }
+
+          // 2. Create Item Ledger Entry
           var itemLedger = new ST_ItemLedger
           {
             ItemLedgerDate = DateTime.Now,
@@ -159,7 +190,6 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
             IssuanceID = issuance.IssuanceID,
             StockOut = detail.IssuanceQuantity
           };
-
           _appDBContext.ST_ItemLedgers.Add(itemLedger);
         }
 
