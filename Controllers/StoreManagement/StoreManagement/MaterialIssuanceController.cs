@@ -24,10 +24,10 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     public async Task<IActionResult> Index(string searchItemName)
     {
       var MaterialIssuancesQuery = _appDBContext.ST_MaterialIssuances
-    .Include(v => v.MaterialIssuanceDetails)
-        .ThenInclude(d => d.Items) // Ensure Items is included
-    .Include(v => v.IssuanceStatusTypes)
-    .AsQueryable(); // ✅ Ensure it's a queryable object
+        .Include(v => v.IssuanceStatusTypes)
+        .Include(v => v.MaterialIssuanceDetails)
+            .ThenInclude(d => d.Items) // Ensure Items is included
+        .AsQueryable(); // ✅ Ensure it's a queryable object
 
       if (!string.IsNullOrEmpty(searchItemName))
       {
@@ -158,6 +158,85 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         _appDBContext.ST_MaterialIssuances.Add(issuance);
 
         await _appDBContext.SaveChangesAsync();
+
+        //bool allCompleted = issuance.MaterialIssuanceDetails.All(d => d.IssuanceStatusTypeID == 4);
+        //int actionStatusTypeID = allCompleted ? 4 : 3;
+        // 1️⃣ Get total requisition quantities from ST_MaterialRequisitionDetail
+        // 1️⃣ Get total requisition quantities from ST_MaterialRequisitionDetails
+        var requisitionQuantities = _appDBContext.ST_MaterialRequisitionDetails
+            .Where(r => r.RequisitionID == issuance.RequisitionID)
+            .GroupBy(r => r.ItemID)
+            .ToDictionary(
+                g => g.Key,
+                g => g.Sum(r => r.Quantity)
+            );
+
+        // 2️⃣ Get total issuance quantities from MaterialIssuanceDetails
+        var issuanceQuantities = _appDBContext.ST_MaterialIssuanceDetails
+            .Where(i => i.MaterialIssuances.RequisitionID == issuance.RequisitionID)
+            .GroupBy(i => i.ItemID)
+            .ToDictionary(
+                g => g.Key,
+                g => g.Sum(i => i.IssuanceQuantity)
+            );
+
+        // 3️⃣ Initialize flags for checking statuses
+        bool allNoIssuance = false; // Start as false (will be true if any item has no issuance)
+        bool allFullyIssued = true; // Start as true (will be false if any item is partially issued)
+
+        foreach (var itemId in requisitionQuantities.Keys)
+        {
+          var requisitionQty = requisitionQuantities[itemId];
+          issuanceQuantities.TryGetValue(itemId, out var issuedQty);
+
+          if (issuedQty == 0)
+          {
+            allNoIssuance = true; // Found an item with no issuance
+            break; // If one item has no issuance, we can stop and set actionStatusTypeID to 3
+          }
+          else if (issuedQty < requisitionQty)
+          {
+            allFullyIssued = false; // Found an item with partial issuance
+          }
+          else if (issuedQty == requisitionQty)
+          {
+            // Fully issued, no change needed for `allFullyIssued`
+          }
+        }
+
+        // 4️⃣ Set Action Status
+        int actionStatusTypeID = allNoIssuance ? 3 : (allFullyIssued ? 4 : 3);
+
+        // **Insert into ST_MaterialRequisitionStatus Table**
+        var requisitionStatus = new ST_MaterialRequisitionStatus
+        {
+          RequisitionID = issuance.RequisitionID,
+          ActionID = 2, // Example: 'Issued' action
+          ActionDate = DateTime.Now,
+          ActionStatusTypeID = actionStatusTypeID
+        };
+        _appDBContext.ST_MaterialRequisitionStatuss.Add(requisitionStatus);
+        await _appDBContext.SaveChangesAsync();
+
+        var requisition = await _appDBContext.ST_MaterialRequisitions
+            .FirstOrDefaultAsync(r => r.RequisitionID == issuance.RequisitionID);
+
+        if (requisition != null)
+        {
+          requisition.RequisitionStatusTypeID = actionStatusTypeID;
+          _appDBContext.ST_MaterialRequisitions.Update(requisition);
+          await _appDBContext.SaveChangesAsync();
+        }
+
+        var issuancestatus = await _appDBContext.ST_MaterialIssuances
+           .FirstOrDefaultAsync(r => r.IssuanceID == issuance.IssuanceID);
+
+        if (issuancestatus != null)
+        {
+          issuancestatus.IssuanceStatusTypeID = actionStatusTypeID;
+          _appDBContext.ST_MaterialIssuances.Update(issuancestatus);
+          await _appDBContext.SaveChangesAsync();
+        }
 
         // Create Item Ledger Entries for Each Issued Item
         foreach (var detail in issuance.MaterialIssuanceDetails)

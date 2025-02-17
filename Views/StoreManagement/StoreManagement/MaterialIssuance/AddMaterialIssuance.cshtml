@@ -170,16 +170,22 @@
                 }
             });
         });
-        $(document).on('input', 'input[name^="MaterialIssuances.MaterialIssuanceDetails"][name$=".IssuanceQuantity"]', function () {
-            const $row = $(this).closest('tr');
-            const issuanceQuantity = parseFloat($(this).val()) || 0;
-            const balanceQuantity = parseFloat($row.find('input[name^="MaterialIssuances.MaterialIssuanceDetails"][name$=".BalanceQuantity"]').val()) || 0;
+           $(document).on('input', 'input[name^="MaterialIssuances.MaterialIssuanceDetails"][name$=".IssuanceQuantity"]', function () {
+        const $row = $(this).closest('tr');
+        const issuanceQuantity = parseFloat($(this).val()) || 0;
+        const requisitionQuantity = parseFloat($row.find('input[name^="MaterialIssuances.MaterialIssuanceDetails"][name$=".RequisitionQuantity"]').val()) || 0;
+        const balanceQuantity = parseFloat($row.find('input[name^="MaterialIssuances.MaterialIssuanceDetails"][name$=".BalanceQuantity"]').val()) || 0;
 
-            if (issuanceQuantity > balanceQuantity) {
-                alert("Issuance Quantity cannot be greater than Balance Quantity.");
-                $(this).val(balanceQuantity); // Reset to max allowable value
-            }
-        });
+        // Check against RequisitionQuantity instead of BalanceQuantity
+        if (issuanceQuantity > requisitionQuantity) {
+            alert("Issuance Quantity cannot be greater than Requisition Quantity.");
+            $(this).val(requisitionQuantity); // Reset to Requisition Quantity
+        } else if (issuanceQuantity > balanceQuantity) {
+            alert("Issuance Quantity cannot be greater than Balance Quantity.");
+            $(this).val(balanceQuantity); // Reset to Balance Quantity
+        }
+    });
+
         // Remove a row from the Material Issuance table
         $(document).on('click', '.remove-row', function () {
             $(this).closest('tr').remove();
