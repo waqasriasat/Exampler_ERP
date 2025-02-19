@@ -176,14 +176,19 @@
             const itemText = $('#ItemName option:selected').text();
             const quantity = parseFloat($('#Quantity').val()) || 0;
             const balanceQuantity = parseFloat($('#BalanceQuantity').val()) || 0;
-            const requiredDate = $('#RequiredDate').val();
-
+            //const requiredDate = $('#RequiredDate').val();
+            let requiredDate = $('#RequiredDate').val();
+            if (!requiredDate) {
+                const currentDate = new Date();
+                currentDate.setMonth(currentDate.getMonth() + 1); // Add one month
+                requiredDate = currentDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+                $('#RequiredDate').val(requiredDate); // Set the value in the input field
+            }
             // Validate inputs
-            if (!itemName || quantity <= 0 || balanceQuantity <= 0 || !requiredDate) {
-                alert('Please fill out all required fields: Item Name, Quantity, Balance Quantity, and Required Date.');
+            if (!itemName || quantity <= 0 ) {
+                alert('Please fill out all required fields: Item Name and Quantity.');
                 return;
             }
-
             const tableBody = $('#MaterialRequisitionTable tbody');
             const rowCount = tableBody.find('tr').length;
 

@@ -1,5 +1,148 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+@model Exampler_ERP.Models.ST_MaterialRequisition
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Print Card</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/super-ui@latest/dist/super-ui.min.css">
+    <style>
+        body {
+            background-color: #f4f4f9;
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+
+        .card-header {
+            background-color: #4caf50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+            .section h5 {
+                margin-bottom: 15px;
+                color: #333;
+                font-weight: bold;
+            }
+
+        .info-row {
+            /* display: flex;
+                                    justify-content: flex-start; */
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .row {
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        img {
+            border-radius: 50%;
+            width: 120px; /* Set a fixed width for the profile picture */
+            height: 120px; /* Set a fixed height for the profile picture */
+            object-fit: cover; /* Maintain aspect ratio and cover the area */
+            margin-right: 20px;
+        }
+
+        .footer {
+            text-align: right;
+            padding: 10px;
+            background-color: #f1f1f1;
+        }
+
+        .print-button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+            .print-button:hover {
+                background-color: #45a049;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="card-header">
+            <h4>Employee Bio Data</h4>
+        </div>
+
+        <div class="card-body">
+            <div class="section">
+                <h5>Personal Information</h5>
+            
+                <div class="row">
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="info-row">
+                            <div class="info-label">Passport Number:</div>
+                            @* <div>@Model.Employee.PassportNumber</div> *@
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="info-row">
+                            <div class="info-label">Passport Place of Issue:</div>
+                            @* <div>@Model.Employee.PassportPlaceOfIssue</div> *@
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="info-row">
+                            <div class="info-label">Passport Issue Date:</div>
+                            @* <div>@Model.Employee.PassportIssueDate?.ToString("dd/MM/yyyy")</div> *@
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="info-row">
+                            <div class="info-label">Passport Expiry Date:</div>
+                            @* <div>@Model.Employee.PassportExpiryDate?.ToString("dd/MM/yyyy")</div> *@
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <button class="print-button" onclick="window.print()">Print</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/super-ui@latest/dist/super-ui.min.js"></script>
+</body>
+</html>
