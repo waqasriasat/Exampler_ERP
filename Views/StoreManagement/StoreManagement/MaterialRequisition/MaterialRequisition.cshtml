@@ -93,7 +93,7 @@
             PrintMaterialRequisition(MaterialRequisitionId);
         });
         function PrintMaterialRequisition(MaterialRequisitionId) {
-            var url = '@Url.Action("PrintMaterialRequisition", "MaterialRequisition")' + '?id=' + MaterialRequisitionId;
+            var url = '@Url.Action("Print", "MaterialRequisition")' + '?id=' + MaterialRequisitionId;
 
             // Open the new window for printing
             var printWindow = window.open(url, '_blank');
@@ -104,8 +104,8 @@
         });
     </script>
     <script>
-        function printMaterialRequisitiones() {
-            var printWindow = window.open('@Url.Action("Print", "MaterialRequisition")', '_blank');
+        function printListMaterialRequisitiones() {
+            var printWindow = window.open('@Url.Action("PrintList", "MaterialRequisition")', '_blank');
             printWindow.focus();
         }
         $('#searchItemNameButton').click(function () {
@@ -142,7 +142,7 @@
                         <!-- Action Buttons -->
                         <button type="button" class="btn btn-primary addMaterialRequisitionLink">Add New</button>
                         <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "MaterialRequisition")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printMaterialRequisitiones()">Print</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printListMaterialRequisitiones()">Print</button>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,53 @@
+@model IEnumerable<Exampler_ERP.Models.ST_MaterialRequisition>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Material Requisition</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Material Requisition List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Requisition ID</th>
+                <th>Requisition Date</th>
+                <th>Requisition Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var MaterialRequisition in Model)
+            {
+                    <tr>
+                    <td>@MaterialRequisition.RequisitionID</td>
+                    <td>@MaterialRequisition.RequisitionDate.ToString("dd/MM/yyyy")</td>
+                    <td>@(MaterialRequisition.RequisitionStatusTypes?.RequisitionStatusTypeName)</td>
+                    </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

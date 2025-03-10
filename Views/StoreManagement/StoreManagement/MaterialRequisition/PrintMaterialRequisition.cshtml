@@ -1,5 +1,4 @@
-@model Exampler_ERP.Models.ST_MaterialRequisition
-
+@model Exampler_ERP.Models.Temp.MaterialRequisitionsIndexViewModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,41 +99,78 @@
 
     <div class="card">
         <div class="card-header">
-            <h4>Employee Bio Data</h4>
+            <h4>Material Requisitions Form</h4>
         </div>
 
         <div class="card-body">
-            <div class="section">
-                <h5>Personal Information</h5>
-            
-                <div class="row">
-                    <div class="col-12 col-md-3 col-lg-3">
-                        <div class="info-row">
-                            <div class="info-label">Passport Number:</div>
-                            @* <div>@Model.Employee.PassportNumber</div> *@
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-3 col-lg-3">
-                        <div class="info-row">
-                            <div class="info-label">Passport Place of Issue:</div>
-                            @* <div>@Model.Employee.PassportPlaceOfIssue</div> *@
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-3 col-lg-3">
-                        <div class="info-row">
-                            <div class="info-label">Passport Issue Date:</div>
-                            @* <div>@Model.Employee.PassportIssueDate?.ToString("dd/MM/yyyy")</div> *@
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-3 col-lg-3">
-                        <div class="info-row">
-                            <div class="info-label">Passport Expiry Date:</div>
-                            @* <div>@Model.Employee.PassportExpiryDate?.ToString("dd/MM/yyyy")</div> *@
-                        </div>
-                    </div>
-                </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MaterialRequisitions.RequisitionID" />
+            <input type="hidden" asp-for="MaterialRequisitions.FinalApprovalID" />
+            <input type="hidden" asp-for="MaterialRequisitions.ProcessTypeApprovalID" />
+            <input type="hidden" asp-for="MaterialRequisitions.RequisitionStatusTypeID" />
 
+            <!-- Table for Added Rows -->
+            <div class="table-responsive mb-3">
+                <table class="table table-bordered" id="MaterialRequisitionTable">
+                    <thead class="table-light">
+                        <tr><th style="border: none;"></th></tr>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <th>Balance Quantity</th>
+                            <th>Required Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.MaterialRequisitions.MaterialRequisitionDetails != null && Model.MaterialRequisitions.MaterialRequisitionDetails.Count > 0)
+                        {
+                            @for (int i = 0; i < Model.MaterialRequisitions.MaterialRequisitionDetails.Count; i++)
+                            {
+                                <tr>
+                                    <td class="col-md-4">
+                                        <select class="form-select inputcontrol" name="MaterialRequisitions.MaterialRequisitionDetails[@i].ItemID" value="MaterialRequisitions.MaterialRequisitionDetails[@i].ItemID">
+                                            <option value="">Select Item</option>
+                                            @foreach (var type in ViewBag.ItemNameList)
+                                            {
+                                                if (type.Value == Model.MaterialRequisitions.MaterialRequisitionDetails[i].ItemID.ToString())
+                                                {
+                                                    <option value="@type.Value" selected>@type.Text</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@type.Value">@type.Text</option>
+                                                }
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control inputcontrol" name="MaterialRequisitions.MaterialRequisitionDetails[@i].Quantity" value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].Quantity" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control inputcontrol" name="MaterialRequisitions.MaterialRequisitionDetails[@i].BalanceQuantity" value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].BalanceQuantity" />
+                                    </td>
+                                    <td>
+                                        <input type="date" class="form-control inputcontrol" name="MaterialRequisitions.MaterialRequisitionDetails[@i].RequiredDate"
+                                               value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].RequiredDate.ToString("yyyy-MM-dd")" />
+                                    </td>
+                                  
+                                </tr>
+                            }
+
+                        }
+
+                    </tbody>
+                </table>
             </div>
+
+            <!-- Remarks Section -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label asp-for="MaterialRequisitions.Remarks" class="form-label fw-bold">Remarks</label>
+                    <textarea asp-for="MaterialRequisitions.Remarks" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+
 
         </div>
 

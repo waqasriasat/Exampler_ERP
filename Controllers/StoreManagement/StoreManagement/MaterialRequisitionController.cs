@@ -282,18 +282,24 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
       return PartialView("~/Views/StoreManagement/StoreManagement/MaterialRequisition/EditMaterialRequisition.cshtml", MaterialRequisition);
     }
-    public async Task<IActionResult> PrintMaterialRequisition(int id)
+    public async Task<IActionResult> Print(int id)
     {
       var MaterialRequisitions = await _appDBContext.ST_MaterialRequisitions
-         .Include(v => v.MaterialRequisitionDetails)
-         .FirstOrDefaultAsync(v => v.RequisitionID == id);
+           .Include(v => v.MaterialRequisitionDetails)
+           .FirstOrDefaultAsync(v => v.RequisitionID == id);
 
       if (MaterialRequisitions == null)
       {
         return NotFound();
       }
 
-      
+      // Check RequisitionStatusTypeID
+      if (MaterialRequisitions.RequisitionStatusTypeID != 1)
+      {
+        TempData["ErrorMessage"] = "After approval, editing is not allowed.....";
+
+      }
+
       MaterialRequisitions.MaterialRequisitionDetails.Add(new ST_MaterialRequisitionDetail()
       {
         RequisitionID = MaterialRequisitions.RequisitionID
@@ -307,107 +313,50 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       ViewBag.ItemList = await _utils.GetItemList();
       ViewBag.ItemNameList = await _utils.GetItemList();
 
-      return View("~/Views/StoreManagement/StoreManagement/MaterialRequisition/PrintMaterialRequisition.cshtml", MaterialRequisitions);
+      return View("~/Views/StoreManagement/StoreManagement/MaterialRequisition/PrintMaterialRequisition.cshtml", model);
+    }
+    public async Task<IActionResult> PrintList()
+    {
+      int UserID = int.Parse(HttpContext.Session.GetInt32("UserID").ToString());
+      int departmentID = await _utils.PostUserIDGetDepartmentID(UserID);
+      var MaterialRequisitionsQuery = _appDBContext.ST_MaterialRequisitions
+        .Include(v => v.MaterialRequisitionDetails)
+        .Include(v => v.RequisitionStatusTypes)
+        .Where(v => v.DepartmentTypeID == departmentID);
+
+      var MaterialRequisitions = await MaterialRequisitionsQuery.ToListAsync();
+
+      return View("~/Views/StoreManagement/StoreManagement/MaterialRequisition/PrintListMaterialRequisition.cshtml", MaterialRequisitions);
     }
     public async Task<IActionResult> ExportToExcel()
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var employees = await _appDBContext.HR_Employees
-          .Where(e => e.DeleteYNID != 1)
-          .Include(e => e.BranchType)
-         .Include(e => e.DepartmentType)
-         .Include(e => e.DesignationType)
-          .ToListAsync();
-      var GenderList = await _utils.GetGender();
-      var MaritalStatusList = await _utils.GetMaritalStatus();
-      var ReligionList = await _utils.GetReligion();
-      var CountriesList = await _utils.GetCountries();
+      int UserID = int.Parse(HttpContext.Session.GetInt32("UserID").ToString());
+      int departmentID = await _utils.PostUserIDGetDepartmentID(UserID);
+      var MaterialRequisitionsQuery = _appDBContext.ST_MaterialRequisitions
+        .Include(v => v.MaterialRequisitionDetails)
+        .Include(v => v.RequisitionStatusTypes)
+        .Where(v => v.DepartmentTypeID == departmentID);
+
+      var MaterialRequisitions = await MaterialRequisitionsQuery.ToListAsync();
       using (var package = new ExcelPackage())
       {
         var worksheet = package.Workbook.Worksheets.Add("Employees");
-        worksheet.Cells["A1"].Value = "Hire Date";
-        worksheet.Cells["B1"].Value = "Branch";
-        worksheet.Cells["C1"].Value = "Department";
-        worksheet.Cells["D1"].Value = "Designation";
-        worksheet.Cells["E1"].Value = "Employee ID";
-        worksheet.Cells["F1"].Value = "Employee Code";
-        worksheet.Cells["G1"].Value = "Employee Name";
-        worksheet.Cells["H1"].Value = "Active";
-        worksheet.Cells["I1"].Value = "Gender";
-        worksheet.Cells["J1"].Value = "DOB";
-        worksheet.Cells["K1"].Value = "Marital Status";
-        worksheet.Cells["L1"].Value = "No of Children";
-        worksheet.Cells["M1"].Value = "Phone1";
-        worksheet.Cells["N1"].Value = "Phone2";
-        worksheet.Cells["O1"].Value = "Mobile";
-        worksheet.Cells["P1"].Value = "WhatsApp";
-        worksheet.Cells["Q1"].Value = "Religen";
-        worksheet.Cells["R1"].Value = "Place of Birth";
-        worksheet.Cells["S1"].Value = "Country";
-        worksheet.Cells["T1"].Value = "Fax";
-        worksheet.Cells["U1"].Value = "Email";
-        worksheet.Cells["V1"].Value = "PO Box";
-        worksheet.Cells["W1"].Value = "Address";
-        worksheet.Cells["X1"].Value = "ID Number";
-        worksheet.Cells["Y1"].Value = "ID Place of Issue";
-        worksheet.Cells["Z1"].Value = "ID Issue Date";
-        worksheet.Cells["AA1"].Value = "ID Expiry Date";
-        worksheet.Cells["AB1"].Value = "Passport Number";
-        worksheet.Cells["AC1"].Value = "Passport Place of Issue";
-        worksheet.Cells["AD1"].Value = "Passport Issue Date";
-        worksheet.Cells["AE1"].Value = "Passport Expiry Date";
-        for (int i = 0; i < employees.Count; i++)
+        worksheet.Cells["A1"].Value = "Requisition #";
+        worksheet.Cells["B1"].Value = "Requisition Date";
+        worksheet.Cells["C1"].Value = "Requisition Status";
+
+        for (int i = 0; i < MaterialRequisitions.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = employees[i].HireDate?.ToString("dd-MMM-yyyy");
-          worksheet.Cells[i + 2, 2].Value = employees[i].BranchType?.BranchTypeName;
-          worksheet.Cells[i + 2, 3].Value = employees[i].DepartmentType?.DepartmentTypeName;
-          worksheet.Cells[i + 2, 4].Value = employees[i].DesignationType?.DesignationTypeName;
-          worksheet.Cells[i + 2, 5].Value = employees[i].EmployeeID;
-          worksheet.Cells[i + 2, 6].Value = employees[i].EmployeeCode;
-          worksheet.Cells[i + 2, 7].Value = employees[i].FirstName + ' ' + employees[i].FatherName + ' ' + employees[i].FamilyName;
-          worksheet.Cells[i + 2, 8].Value = employees[i].ActiveYNID == 1 ? "Yes" : "No";
-          worksheet.Cells[i + 2, 9].Value = employees[i].Sex == 0 || employees[i].Sex == null
-          ? ""
-          : GenderList.FirstOrDefault(g => g.Value == employees[i].Sex.ToString())?.Text;
-          worksheet.Cells[i + 2, 10].Value = employees[i].DOB?.ToString("dd-MMM-yyyy");
-          worksheet.Cells[i + 2, 11].Value = employees[i].MaritalStatus == 0 || employees[i].MaritalStatus == null
-          ? ""
-          : MaritalStatusList.FirstOrDefault(m => m.Value == employees[i].MaritalStatus.ToString())?.Text;
-          worksheet.Cells[i + 2, 12].Value = employees[i].NoOfChildren;
-          worksheet.Cells[i + 2, 13].Value = employees[i].Phone1;
-          worksheet.Cells[i + 2, 14].Value = employees[i].Phone2;
-          worksheet.Cells[i + 2, 15].Value = employees[i].Mobile;
-          worksheet.Cells[i + 2, 16].Value = employees[i].Whatsapp;
-          worksheet.Cells[i + 2, 17].Value = employees[i].Religion == 0 || employees[i].Religion == null
-          ? ""
-          : ReligionList.FirstOrDefault(r => r.Value == employees[i].Religion.ToString())?.Text;
-          worksheet.Cells[i + 2, 18].Value = employees[i].PlaceOfBirth;
-          worksheet.Cells[i + 2, 19].Value = employees[i].CountryID == 0 || employees[i].CountryID == null
-          ? ""
-          : CountriesList.FirstOrDefault(c => c.Value == employees[i].CountryID.ToString())?.Text;
-          worksheet.Cells[i + 2, 20].Value = employees[i].Fax;
-          worksheet.Cells[i + 2, 21].Value = employees[i].Email;
-          worksheet.Cells[i + 2, 22].Value = employees[i].POBox;
-          worksheet.Cells[i + 2, 23].Value = employees[i].Address;
-          worksheet.Cells[i + 2, 24].Value = employees[i].IDNumber;
-          worksheet.Cells[i + 2, 25].Value = employees[i].IDPlaceOfIssue;
-          worksheet.Cells[i + 2, 26].Value = employees[i].IDIssueDate?.ToString("dd-MMM-yyyy");
-          worksheet.Cells[i + 2, 27].Value = employees[i].IDExpiryDate?.ToString("dd-MMM-yyyy");
-          worksheet.Cells[i + 2, 28].Value = employees[i].PassportNumber;
-          worksheet.Cells[i + 2, 29].Value = employees[i].PassportPlaceOfIssue;
-          worksheet.Cells[i + 2, 30].Value = employees[i].PassportIssueDate?.ToString("dd-MMM-yyyy");
-          worksheet.Cells[i + 2, 31].Value = employees[i].PassportExpiryDate?.ToString("dd-MMM-yyyy");
+          worksheet.Cells[i + 2, 1].Value = MaterialRequisitions[i].RequisitionID;
+          worksheet.Cells[i + 2, 2].Value = MaterialRequisitions[i].RequisitionDate.ToString("dd-MMM-yyyy");
+          worksheet.Cells[i + 2, 3].Value = MaterialRequisitions[i].RequisitionStatusTypes?.RequisitionStatusTypeName;
+
 
         }
 
-        worksheet.Cells["G1"].Style.Font.Bold = true;
-        worksheet.Cells["A1"].Style.Numberformat.Format = "dd-mmm-yyyy";
-        worksheet.Cells["J1"].Style.Numberformat.Format = "dd-mmm-yyyy";
-        worksheet.Cells["Z1"].Style.Numberformat.Format = "dd-mmm-yyyy";
-        worksheet.Cells["AA1"].Style.Numberformat.Format = "dd-mmm-yyyy";
-        worksheet.Cells["AD1"].Style.Numberformat.Format = "dd-mmm-yyyy";
-        worksheet.Cells["AE1"].Style.Numberformat.Format = "dd-mmm-yyyy";
+        worksheet.Cells["B1"].Style.Numberformat.Format = "dd-mmm-yyyy";
         worksheet.Cells.AutoFitColumns();
 
         var stream = new MemoryStream();
