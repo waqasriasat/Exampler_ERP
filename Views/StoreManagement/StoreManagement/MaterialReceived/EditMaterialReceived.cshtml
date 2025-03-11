@@ -1,49 +1,50 @@
 @model Exampler_ERP.Models.Temp.MaterialReceivedsIndexViewModel
 
-<div class="modal fade" id="addMaterialReceivedModal" tabindex="-1" role="dialog" aria-labelledby="addMaterialReceivedModalLabel" aria-hidden="true">
+<div class="modal fade" id="editMaterialReceivedModal" tabindex="-1" role="dialog" aria-labelledby="editMaterialReceivedModalLabel">
     <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="addMaterialReceivedModalLabel">
+                <h5 class="modal-title" id="editMaterialReceivedModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add New Material Received
+                    Edit Material Received
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
             </div>
-            <div class="modal-body">
-                <form id="addMaterialReceivedForm">
-                    <div class="row">
 
-                        <div class="col-2 col-md-12 col-lg-6">
+            <div class="modal-body">
+                <form id="editMaterialReceivedForm">
+                    <div class="row">
+                        <div class="col-md-6">
                             <label asp-for="MaterialReceiveds.ItemID" class="form-label fw-bold">Item Name</label>
                             <select asp-for="MaterialReceiveds.ItemID" asp-items="@(new SelectList(ViewBag.ItemList, "Value", "Text", Model.MaterialReceiveds.ItemID))" class="form-control form-control-lg">
-                                <option>Please select</option>
+                                <option value="">Please select</option>
                             </select>
                             <span asp-validation-for="MaterialReceiveds.ItemID" class="text-danger"></span>
                         </div>
-                        <div class="col-2 col-md-12 col-lg-3">
+
+                        <div class="col-md-3">
                             <label asp-for="MaterialReceiveds.UnitTypeID" class="form-label fw-bold">Unit</label>
                             <select asp-for="MaterialReceiveds.UnitTypeID" asp-items="@(new SelectList(ViewBag.UnitList, "Value", "Text", Model.MaterialReceiveds.UnitTypeID))" class="form-control form-control-lg">
-                                <option>Please select</option>
+                                <option value="">Please select</option>
                             </select>
                             <span asp-validation-for="MaterialReceiveds.UnitTypeID" class="text-danger"></span>
                         </div>
-                        <div class="col-2 col-md-12 col-lg-3">
+
+                        <div class="col-md-3">
                             <label asp-for="MaterialReceiveds.VendorID" class="form-label fw-bold">Vendor Name</label>
                             <select asp-for="MaterialReceiveds.VendorID" asp-items="@(new SelectList(ViewBag.VendorList, "Value", "Text", Model.MaterialReceiveds.VendorID))" class="form-control form-control-lg">
-                                <option>Please select</option>
+                                <option value="">Please select</option>
                             </select>
                             <span asp-validation-for="MaterialReceiveds.VendorID" class="text-danger"></span>
                         </div>
-
                     </div>
+
                     <div class="row">
-                        <div class="col-2 col-md-12 col-lg-6">
+                        <div class="col-md-6">
                             <div class="row">
                                 <div class="col-6">
                                     <label asp-for="MaterialReceiveds.Quantity" class="form-label fw-bold">Quantity</label>
-                                    <input asp-for="MaterialReceiveds.Quantity" type="text" class="form-control form-control-lg" />
+                                    <input asp-for="MaterialReceiveds.Quantity" type="number" class="form-control form-control-lg" />
                                 </div>
                                 <div class="col-6">
                                     <label asp-for="MaterialReceiveds.LotNumber" class="form-label fw-bold">Lot Number</label>
@@ -71,18 +72,20 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-2 col-md-12 col-lg-6">
+
+                        <div class="col-md-6">
                             <div class="component-type-container">
                                 @for (var i = 0; i < Model.MaterialReceivedComponents.Count; i++)
-
-
-
                                 {
                                     <div class="row">
                                         <div class="col-12">
-                                            <input type="hidden" name="MaterialReceiveds.MaterialReceivedComponents[@i].ItemComponentTypeID" value="@Model.MaterialReceivedComponents[i].ItemComponentTypeID" />
+                                            <input type="hidden" name="MaterialReceiveds.MaterialReceivedComponents[@i].ItemComponentTypeID" 
+                                                   value="@Model.MaterialReceivedComponents[i].ItemComponentTypeID" />
                                             <label class="form-label fw-bold">@Model.MaterialReceivedComponents[i].ItemComponentTypeID</label>
-                                            <input type="text" class="form-control form-control-lg" name="MaterialReceiveds.MaterialReceivedComponents[@i].ItemComponentValue" value="@Model.MaterialReceivedComponents[i].ItemComponentValue" placeholder="Enter value" />
+                                            <input type="text" class="form-control form-control-lg" 
+                                                   name="MaterialReceiveds.MaterialReceivedComponents[@i].ItemComponentValue" 
+                                                   value="@Model.MaterialReceivedComponents[i].ItemComponentValue" 
+                                                   placeholder="Enter value" />
                                         </div>
                                     </div>
                                 }
@@ -90,11 +93,13 @@
                         </div>
                     </div>
 
+                    <input type="hidden" id="MaterialReceivedID" name="MaterialReceivedID" value="@Model.MaterialReceiveds.MaterialReceivedID" />
                 </form>
             </div>
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-success" id="saveNewMaterialReceived">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="Close">Close</button>
+                <button type="button" class="btn btn-success" id="saveChanges">Save changes</button>
             </div>
         </div>
     </div>
@@ -102,7 +107,8 @@
 <script>
     $(document).ready(function () {
         // Handle ItemID change event
-        $('#addMaterialReceivedForm select[name="MaterialReceiveds.ItemID"]').change(function () {
+        
+        $('#editMaterialReceivedForm select[name="MaterialReceiveds.ItemID"]').change(function () {
             var selectedItemID = $(this).val();
             if (selectedItemID) {
                 // Fetch item components and HasLotNumberAndExpiryDate status
@@ -111,16 +117,16 @@
                     type: 'GET',
                     data: { itemId: selectedItemID },
                     success: function (response) {
-                        var componentContainer = $('#addMaterialReceivedForm .component-type-container');
+                        var componentContainer = $('#editMaterialReceivedForm .component-type-container');
                         componentContainer.html(''); // Clear previous components
 
                         // Handle HasLotNumberAndExpiryDate visibility
                         if (response.hasLotNumberAndExpiryDate) {
-                            $('#addMaterialReceivedForm input[name="MaterialReceiveds.LotNumber"]').closest('.col-6').show();
-                            $('#addMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').show();
+                            $('#editMaterialReceivedForm input[name="MaterialReceiveds.LotNumber"]').closest('.col-6').show();
+                            $('#editMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').show();
                         } else {
-                            $('#addMaterialReceivedForm input[name="MaterialReceiveds.LotNumber"]').closest('.col-6').hide();
-                            $('#addMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').hide();
+                            $('#editMaterialReceivedForm input[name="MaterialReceiveds.LotNumber"]').closest('.col-6').hide();
+                            $('#editMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').hide();
                         }
 
                         // Populate new components
@@ -166,14 +172,13 @@
                 });
             } else {
                 // Hide Lot Number and Expiry Date fields if no item is selected
-                $('#addMaterialReceivedForm input[name="MaterialReceiveds.LotNumber"]').closest('.col-6').hide();
-                $('#addMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').hide();
+                $('#editMaterialReceivedForm input[name="MaterialReceiveds.LotNumber"]').closest('.col-6').hide();
+                $('#editMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').hide();
             }
         });
 
         // Initially hide Lot Number and Expiry Date fields
-        $('#addMaterialReceivedForm input[name="MaterialReceiveds.LotNumber"]').closest('.col-6').hide();
-        $('#addMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').hide();
+        $('#editMaterialReceivedForm input[name="MaterialReceiveds.LotNumber"]').closest('.col-6').hide();
+        $('#editMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').hide();
     });
 </script>
-

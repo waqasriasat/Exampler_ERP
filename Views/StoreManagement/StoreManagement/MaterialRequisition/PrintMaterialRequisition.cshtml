@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Print Card</title>
+    <title>Material Requisitions Print</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/super-ui@latest/dist/super-ui.min.css">
     <style>
         body {
@@ -101,14 +101,39 @@
         <div class="card-header">
             <h4>Material Requisitions Form</h4>
         </div>
-
         <div class="card-body">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MaterialRequisitions.RequisitionID" />
-            <input type="hidden" asp-for="MaterialRequisitions.FinalApprovalID" />
-            <input type="hidden" asp-for="MaterialRequisitions.ProcessTypeApprovalID" />
-            <input type="hidden" asp-for="MaterialRequisitions.RequisitionStatusTypeID" />
 
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="section">
+
+                <div class="row">
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="info-row">
+                            <div class="info-label">Requisitions #:</div>
+                            <div>@Model.MaterialRequisitions.RequisitionID</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="info-row">
+                            <div class="info-label">Requisitions Date:</div>
+                            <div>@Model.MaterialRequisitions.RequisitionDate.ToString("dd/MM/yyyy")</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="info-row">
+                            <div class="info-label">Requisitions Status:</div>
+                            <div>@Model.MaterialRequisitions.RequisitionStatusTypes?.RequisitionStatusTypeName</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="info-row">
+                            <div class="info-label">Deaprtment:</div>
+                            <div>@ViewBag.DepartmentTypeName</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Table for Added Rows -->
             <div class="table-responsive mb-3">
                 <table class="table table-bordered" id="MaterialRequisitionTable">
@@ -126,40 +151,34 @@
                         {
                             @for (int i = 0; i < Model.MaterialRequisitions.MaterialRequisitionDetails.Count; i++)
                             {
-                                <tr>
-                                    <td class="col-md-4">
-                                        <select class="form-select inputcontrol" name="MaterialRequisitions.MaterialRequisitionDetails[@i].ItemID" value="MaterialRequisitions.MaterialRequisitionDetails[@i].ItemID">
-                                            <option value="">Select Item</option>
-                                            @foreach (var type in ViewBag.ItemNameList)
-                                            {
-                                                if (type.Value == Model.MaterialRequisitions.MaterialRequisitionDetails[i].ItemID.ToString())
+                                @if (Model.MaterialRequisitions.MaterialRequisitionDetails[i].ItemID != 0) // Skip empty row
+                                {
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <select class="form-select inputcontrol" name="MaterialRequisitions.MaterialRequisitionDetails[@i].ItemID" disabled>
+                                                <option value="">Select Item</option>
+                                                @foreach (var type in ViewBag.ItemNameList)
                                                 {
-                                                    <option value="@type.Value" selected>@type.Text</option>
+                                                    <option value="@type.Value" selected="@(type.Value == Model.MaterialRequisitions.MaterialRequisitionDetails[i].ItemID.ToString())">@type.Text</option>
                                                 }
-                                                else
-                                                {
-                                                    <option value="@type.Value">@type.Text</option>
-                                                }
-                                            }
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control inputcontrol" name="MaterialRequisitions.MaterialRequisitionDetails[@i].Quantity" value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].Quantity" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control inputcontrol" name="MaterialRequisitions.MaterialRequisitionDetails[@i].BalanceQuantity" value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].BalanceQuantity" />
-                                    </td>
-                                    <td>
-                                        <input type="date" class="form-control inputcontrol" name="MaterialRequisitions.MaterialRequisitionDetails[@i].RequiredDate"
-                                               value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].RequiredDate.ToString("yyyy-MM-dd")" />
-                                    </td>
-                                  
-                                </tr>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control inputcontrol" name="MaterialRequisitions.MaterialRequisitionDetails[@i].Quantity" value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].Quantity" readonly />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control inputcontrol" name="MaterialRequisitions.MaterialRequisitionDetails[@i].BalanceQuantity" value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].BalanceQuantity" readonly />
+                                        </td>
+                                        <td>
+                                            <input type="date" class="form-control inputcontrol" name="MaterialRequisitions.MaterialRequisitionDetails[@i].RequiredDate" value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].RequiredDate.ToString("yyyy-MM-dd")" readonly />
+                                        </td>
+                                    </tr>
+                                }
                             }
-
                         }
-
                     </tbody>
+
+
                 </table>
             </div>
 
@@ -167,7 +186,7 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <label asp-for="MaterialRequisitions.Remarks" class="form-label fw-bold">Remarks</label>
-                    <textarea asp-for="MaterialRequisitions.Remarks" class="form-control" rows="3"></textarea>
+                    <textarea asp-for="MaterialRequisitions.Remarks" class="form-control" rows="3" readonly></textarea>
                 </div>
             </div>
 

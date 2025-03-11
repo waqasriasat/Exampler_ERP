@@ -1,0 +1,55 @@
+@model IEnumerable<Exampler_ERP.Models.ST_MaterialReceived>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Material Received</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Material Received List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Received ID</th>
+                <th>Received Date</th>
+                <th>Item Name</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var MaterialReceived in Model)
+            {
+                <tr>
+                    <td>@MaterialReceived.MaterialReceivedID</td>
+                    <td>@MaterialReceived.MaterialReceivedDate.ToString("dd/MM/yyyy")</td>
+                    <td>@(MaterialReceived.Item?.ItemName)</td>
+                    <td>@(MaterialReceived.Quantity)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

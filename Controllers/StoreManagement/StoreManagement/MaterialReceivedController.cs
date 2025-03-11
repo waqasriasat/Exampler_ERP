@@ -3,6 +3,7 @@ using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 {
@@ -70,9 +71,35 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         components
       });
     }
+    [HttpGet]
+    public async Task<IActionResult> GetReceivedItemComponents(int materialReceivedID)
+    {
+      var ReceiveditemDetails = await _appDBContext.ST_MaterialReceivedComponents
+          .Where(item => item.MaterialReceivedID == materialReceivedID)
+          .Select(item => new
+          {
+            ItemCategoryTypeID = item.ItemComponentTypeID
+          })
+          .FirstOrDefaultAsync();
 
+      
 
+      //var components = await _appDBContext.ST_Items
+      //    .Where(c => c.ItemCategoryTypeID == ReceiveditemDetails.)
+      //    .Select(c => new
+      //    {
+      //      ItemTypeID = c.ItemComponentTypeID,
+      //      ItemTypeName = c.ItemComponentTypeName,
+      //      ItemDataType = c.ItemComponentDataType,
+      //      ItemTypeValue = c.
+      //    })
+      //    .ToListAsync();
 
+      return Json(new
+      {
+        //components
+      });
+    }
     [HttpGet]
     public async Task<IActionResult> Create()
     {
@@ -342,6 +369,73 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       catch (Exception ex)
       {
         return Json(new { success = false, message = "An error occurred while adding the MaterialReceived. Please try again later.", error = ex.Message });
+      }
+    }
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+      var MaterialReceiveds = await _appDBContext.ST_MaterialReceiveds
+          .Include(m => m.MaterialReceivedComponents) // Include related components
+          .FirstOrDefaultAsync(v => v.MaterialReceivedID == id);
+
+      if (MaterialReceiveds == null)
+      {
+        return NotFound();
+      }
+
+      // Load dropdown lists
+      ViewBag.ItemList = await _utils.GetItemList();
+      ViewBag.VendorList = await _utils.GetVendorList();
+      ViewBag.UnitList = await _utils.GetItemUnits();
+
+      // Prepare the ViewModel
+      var model = new MaterialReceivedsIndexViewModel
+      {
+        MaterialReceiveds = MaterialReceiveds
+      };
+
+      return PartialView("~/Views/StoreManagement/StoreManagement/MaterialReceived/EditMaterialReceived.cshtml", model);
+    }
+
+    public async Task<IActionResult> Print()
+    {
+      var MaterialReceivedsQuery = _appDBContext.ST_MaterialReceiveds.Include(m => m.Item).AsQueryable();
+      var MaterialReceiveds = await MaterialReceivedsQuery.ToListAsync();
+      return View("~/Views/StoreManagement/StoreManagement/MaterialReceived/PrintMaterialReceived.cshtml", MaterialReceiveds);
+    }
+    public async Task<IActionResult> ExportToExcel()
+    {
+      ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+      var MaterialReceivedsQuery = _appDBContext.ST_MaterialReceiveds.Include(m => m.Item).AsQueryable();
+      var MaterialReceiveds = await MaterialReceivedsQuery.ToListAsync();
+      using (var package = new ExcelPackage())
+      {
+        var worksheet = package.Workbook.Worksheets.Add("MaterialReceiveds");
+        worksheet.Cells["A1"].Value = "Received #";
+        worksheet.Cells["B1"].Value = "Received Date";
+        worksheet.Cells["C1"].Value = "Item Name";
+        worksheet.Cells["D1"].Value = "Quantity";
+
+        for (int i = 0; i < MaterialReceiveds.Count; i++)
+        {
+          worksheet.Cells[i + 2, 1].Value = MaterialReceiveds[i].MaterialReceivedID;
+          worksheet.Cells[i + 2, 2].Value = MaterialReceiveds[i].MaterialReceivedDate.ToString("dd-MMM-yyyy");
+          worksheet.Cells[i + 2, 3].Value = MaterialReceiveds[i].Item?.ItemName;
+          worksheet.Cells[i + 2, 4].Value = MaterialReceiveds[i].Quantity;
+
+
+        }
+
+        worksheet.Cells["B1"].Style.Numberformat.Format = "dd-mmm-yyyy";
+        worksheet.Cells.AutoFitColumns();
+
+        var stream = new MemoryStream();
+        package.SaveAs(stream);
+        stream.Position = 0;
+        string excelName = $"MaterialReceiveds-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+
+        return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }
     }
   }

@@ -233,8 +233,6 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       return PartialView("~/Views/StoreManagement/StoreManagement/MaterialRequisition/EditMaterialRequisition.cshtml", model);
     }
 
-
-
     [HttpPost]
     public async Task<IActionResult> Edit(MaterialRequisitionsIndexViewModel MaterialRequisition)
     {
@@ -244,36 +242,43 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         var existingMaterialRequisition = await _appDBContext.ST_MaterialRequisitions
             .Include(v => v.MaterialRequisitionDetails)
             .FirstOrDefaultAsync(v => v.RequisitionID == MaterialRequisition.MaterialRequisitions.RequisitionID);
-
-        if (existingMaterialRequisition != null)
+        if (existingMaterialRequisition?.RequisitionStatusTypeID != 1)
         {
-          existingMaterialRequisition.Remarks = MaterialRequisition.MaterialRequisitions.Remarks;
-  
-          _appDBContext.Update(existingMaterialRequisition);
-          await _appDBContext.SaveChangesAsync();
+          TempData["ErrorMessage"] = "After approval, editing is not allowed.....";
 
-          var MaterialRequisitionDetailsToRemove = _appDBContext.ST_MaterialRequisitionDetails
-          .Where(v => v.RequisitionID == MaterialRequisition.MaterialRequisitions.RequisitionID)
-          .ToList();
-
-          _appDBContext.ST_MaterialRequisitionDetails.RemoveRange(MaterialRequisitionDetailsToRemove);
-
-          await _appDBContext.SaveChangesAsync();
-          MaterialRequisition.MaterialRequisitions.MaterialRequisitionDetails.RemoveAll(e => e.ItemID == null || e.ItemID == 0);
-
-          foreach (var detail in MaterialRequisition.MaterialRequisitions.MaterialRequisitionDetails)
-          {
-            detail.RequisitionID = MaterialRequisition.MaterialRequisitions.RequisitionID;
-            _appDBContext.ST_MaterialRequisitionDetails.Add(detail);
-          }
-
-          await _appDBContext.SaveChangesAsync();
-
-          return Json(new { success = true, message = "Received MaterialRequisition Edited successfully!" });
         }
         else
         {
-          return NotFound();
+          if (existingMaterialRequisition != null)
+          {
+            existingMaterialRequisition.Remarks = MaterialRequisition.MaterialRequisitions.Remarks;
+
+            _appDBContext.Update(existingMaterialRequisition);
+            await _appDBContext.SaveChangesAsync();
+
+            var MaterialRequisitionDetailsToRemove = _appDBContext.ST_MaterialRequisitionDetails
+            .Where(v => v.RequisitionID == MaterialRequisition.MaterialRequisitions.RequisitionID)
+            .ToList();
+
+            _appDBContext.ST_MaterialRequisitionDetails.RemoveRange(MaterialRequisitionDetailsToRemove);
+
+            await _appDBContext.SaveChangesAsync();
+            MaterialRequisition.MaterialRequisitions.MaterialRequisitionDetails.RemoveAll(e => e.ItemID == null || e.ItemID == 0);
+
+            foreach (var detail in MaterialRequisition.MaterialRequisitions.MaterialRequisitionDetails)
+            {
+              detail.RequisitionID = MaterialRequisition.MaterialRequisitions.RequisitionID;
+              _appDBContext.ST_MaterialRequisitionDetails.Add(detail);
+            }
+
+            await _appDBContext.SaveChangesAsync();
+
+            return Json(new { success = true, message = "Received MaterialRequisition Edited successfully!" });
+          }
+          else
+          {
+            return NotFound();
+          }
         }
       }
 
@@ -286,6 +291,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     {
       var MaterialRequisitions = await _appDBContext.ST_MaterialRequisitions
            .Include(v => v.MaterialRequisitionDetails)
+           .Include(v => v.RequisitionStatusTypes)
            .FirstOrDefaultAsync(v => v.RequisitionID == id);
 
       if (MaterialRequisitions == null)
@@ -293,13 +299,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         return NotFound();
       }
 
-      // Check RequisitionStatusTypeID
-      if (MaterialRequisitions.RequisitionStatusTypeID != 1)
-      {
-        TempData["ErrorMessage"] = "After approval, editing is not allowed.....";
-
-      }
-
+    
       MaterialRequisitions.MaterialRequisitionDetails.Add(new ST_MaterialRequisitionDetail()
       {
         RequisitionID = MaterialRequisitions.RequisitionID
@@ -309,6 +309,14 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       {
         MaterialRequisitions = MaterialRequisitions
       };
+
+      var departmentTypeName = await _appDBContext.Settings_DepartmentTypes
+        .Where(d => d.DepartmentTypeID == MaterialRequisitions.DepartmentTypeID)
+        .Select(d => d.DepartmentTypeName)
+        .FirstOrDefaultAsync();
+
+      // Store DepartmentTypeName in ViewBag
+      ViewBag.DepartmentTypeName = departmentTypeName;
 
       ViewBag.ItemList = await _utils.GetItemList();
       ViewBag.ItemNameList = await _utils.GetItemList();
@@ -342,7 +350,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       var MaterialRequisitions = await MaterialRequisitionsQuery.ToListAsync();
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("Employees");
+        var worksheet = package.Workbook.Worksheets.Add("MaterialRequisitions");
         worksheet.Cells["A1"].Value = "Requisition #";
         worksheet.Cells["B1"].Value = "Requisition Date";
         worksheet.Cells["C1"].Value = "Requisition Status";
@@ -362,7 +370,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"Employees-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = $"MaterialRequisitions-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }
