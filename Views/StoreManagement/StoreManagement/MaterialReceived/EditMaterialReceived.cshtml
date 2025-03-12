@@ -92,8 +92,7 @@
                             </div>
                         </div>
                     </div>
-
-                    <input type="hidden" id="MaterialReceivedID" name="MaterialReceivedID" value="@Model.MaterialReceiveds.MaterialReceivedID" />
+                    <input type="hidden" asp-for="MaterialReceiveds.MaterialReceivedID" class="form-control form-control-lg" />
                 </form>
             </div>
 
@@ -182,3 +181,74 @@
         $('#editMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').hide();
     });
 </script>
+<script>
+    $(document).ready(function () {
+        $(document).ready(function () {
+            var selectedItemID = $('#editMaterialReceivedForm select[name="MaterialReceiveds.ItemID"]').val();
+            var selectedReceivedID = $('#editMaterialReceivedForm input[name="MaterialReceiveds.MaterialReceivedID"]').val();
+            function fetchItemComponents(itemId, receivedID) {
+                if (itemId && receivedID) {
+                    $.ajax({
+                        url: '/MaterialReceived/GetReceivedItemComponents',
+                        type: 'GET',
+                        data: { itemId: itemId, receivedID: receivedID },
+                        success: function (response) {
+                            var componentContainer = $('#editMaterialReceivedForm .component-type-container');
+                            componentContainer.html(''); // Clear previous components
+
+                            // Handle HasLotNumberAndExpiryDate visibility
+                            if (response.hasLotNumberAndExpiryDate) {
+                                $('#editMaterialReceivedForm input[name="MaterialReceiveds.LotNumber"]').closest('.col-6').show();
+                                $('#editMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').show();
+                            } else {
+                                $('#editMaterialReceivedForm input[name="MaterialReceiveds.LotNumber"]').closest('.col-6').hide();
+                                $('#editMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').hide();
+                            }
+
+                            // Populate new components
+                            response.components.forEach(function (component, index) {
+                                var inputType = "text";
+                                var additionalAttributes = "";
+
+                                switch (component.itemDataType) {
+                                    case 1: inputType = "number"; additionalAttributes = `step="1"`; break;
+                                    case 2: inputType = "date"; break;
+                                    case 3: inputType = "text"; break;
+                                    case 4: inputType = "number"; additionalAttributes = `step="0.01"`; break;
+                                }
+                                var componentHtml = `
+                                <div class="row">
+                                    <div class="col-12">
+                                        <input type="hidden" name="MaterialReceiveds.MaterialReceivedComponents[${index}].ItemComponentTypeID" value="${component.itemTypeID}" />
+                                        <label class="form-label fw-bold">${component.itemTypeName}</label>
+                                        <input type="${inputType}" class="form-control form-control-lg"
+                                                   name="MaterialReceiveds.MaterialReceivedComponents[${index}].ItemComponentValue" value="${component.itemTypeValue}"
+                                               placeholder="Enter value" ${additionalAttributes} />
+                                    </div>
+                                </div>`;
+                                componentContainer.append(componentHtml);
+                            });
+                        },
+                        error: function (xhr) {
+                            console.error('Error fetching item components:', xhr.responseText);
+                        }
+                    });
+                } else {
+                    $('#editMaterialReceivedForm input[name="MaterialReceiveds.LotNumber"]').closest('.col-6').hide();
+                    $('#editMaterialReceivedForm input[name="MaterialReceiveds.ExpiryDate"]').closest('.col-6').hide();
+                }
+            }
+
+            // Fetch on page load
+            fetchItemComponents(selectedItemID, selectedReceivedID);
+
+            // Fetch on ItemID change
+            $('#editMaterialReceivedForm select[name="MaterialReceiveds.ItemID"]').change(function () {
+                var newItemID = $(this).val();
+                fetchItemComponents(newItemID, selectedReceivedID);
+            });
+        });
+
+    });
+</script>
+

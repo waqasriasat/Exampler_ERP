@@ -12,6 +12,8 @@ namespace Exampler_ERP.Models
     [ForeignKey("MaterialReceivedID")]
     public virtual ST_MaterialReceived? MaterialReceiveds { get; set; }
     public int ItemComponentTypeID { get; set; }
+    [ForeignKey("ItemComponentTypeID")]
+    public virtual Settings_ItemComponentType? ItemComponentTypes { get; set; }
     public String? ItemComponentValue { get; set; }
     public MaterialComponentDataType ItemComponentDataType { get; set; }
   }

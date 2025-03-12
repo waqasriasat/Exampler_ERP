@@ -72,34 +72,37 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       });
     }
     [HttpGet]
-    public async Task<IActionResult> GetReceivedItemComponents(int materialReceivedID)
+    public async Task<IActionResult> GetReceivedItemComponents(int itemId, int receivedID)
     {
-      var ReceiveditemDetails = await _appDBContext.ST_MaterialReceivedComponents
-          .Where(item => item.MaterialReceivedID == materialReceivedID)
-          .Select(item => new
-          {
-            ItemCategoryTypeID = item.ItemComponentTypeID
-          })
+      var itemDetails = await _appDBContext.ST_MaterialReceiveds
+          .Include(mr => mr.Item) // Include Item details
+          .Where(mr => mr.ItemID == itemId && mr.MaterialReceivedID == receivedID)
           .FirstOrDefaultAsync();
 
-      
+      if (itemDetails == null)
+      {
+        return Json(new { hasLotNumberAndExpiryDate = false, components = new List<object>() });
+      }
 
-      //var components = await _appDBContext.ST_Items
-      //    .Where(c => c.ItemCategoryTypeID == ReceiveditemDetails.)
-      //    .Select(c => new
-      //    {
-      //      ItemTypeID = c.ItemComponentTypeID,
-      //      ItemTypeName = c.ItemComponentTypeName,
-      //      ItemDataType = c.ItemComponentDataType,
-      //      ItemTypeValue = c.
-      //    })
-      //    .ToListAsync();
+      var components = await _appDBContext.ST_MaterialReceivedComponents
+          .Include(c => c.ItemComponentTypes) // Include component type details
+          .Where(c => c.MaterialReceivedID == receivedID)
+          .Select(c => new
+          {
+            ItemTypeID = c.ItemComponentTypeID,
+            ItemTypeName = c.ItemComponentTypes.ItemComponentTypeName,
+            ItemDataType = c.ItemComponentTypes.ItemComponentDataType,
+            ItemTypeValue = c.ItemComponentValue
+          })
+          .ToListAsync();
 
       return Json(new
       {
-        //components
+        hasLotNumberAndExpiryDate = itemDetails.Item.HasLotNumberAndExpiryDate,
+        components
       });
     }
+
     [HttpGet]
     public async Task<IActionResult> Create()
     {
@@ -396,6 +399,53 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
       return PartialView("~/Views/StoreManagement/StoreManagement/MaterialReceived/EditMaterialReceived.cshtml", model);
     }
+    [HttpPost]
+    public async Task<IActionResult> Edit(MaterialReceivedsIndexViewModel MaterialReceived)
+    {
+      if (!ModelState.IsValid)
+      {
+        ViewBag.ItemList = await _utils.GetItemList();
+        ViewBag.ItemNameList = await _utils.GetItemList();
+
+        return PartialView("~/Views/StoreManagement/StoreManagement/MaterialReceived/EditMaterialReceived.cshtml", MaterialReceived);
+      }
+
+      var existingMaterialReceived = await _appDBContext.ST_MaterialReceiveds
+          .FirstOrDefaultAsync(v => v.MaterialReceivedID == MaterialReceived.MaterialReceiveds.MaterialReceivedID);
+
+      if (existingMaterialReceived == null)
+      {
+        return Json(new { success = false, message = "MaterialReceived not found!" });
+      }
+
+      // Update remarks and any other properties
+      //existingMaterialReceived.Remarks = MaterialReceived.MaterialReceiveds.Remarks;
+
+      _appDBContext.Update(existingMaterialReceived);
+      await _appDBContext.SaveChangesAsync();
+
+      // Remove existing MaterialReceivedComponents for this MaterialReceivedID
+      var MaterialReceivedComponentsToRemove = await _appDBContext.ST_MaterialReceivedComponents
+          .Where(v => v.MaterialReceivedID == MaterialReceived.MaterialReceiveds.MaterialReceivedID)
+          .ToListAsync();
+
+      _appDBContext.ST_MaterialReceivedComponents.RemoveRange(MaterialReceivedComponentsToRemove);
+      await _appDBContext.SaveChangesAsync();
+
+      // Remove invalid components before saving
+      MaterialReceived.MaterialReceiveds.MaterialReceivedComponents.RemoveAll(e => e.MaterialReceivedComponentID == null || e.MaterialReceivedComponentID == 0);
+
+      foreach (var Component in MaterialReceived.MaterialReceiveds.MaterialReceivedComponents)
+      {
+        Component.MaterialReceivedID = MaterialReceived.MaterialReceiveds.MaterialReceivedID;
+        _appDBContext.ST_MaterialReceivedComponents.Add(Component);
+      }
+
+      await _appDBContext.SaveChangesAsync();
+
+      return Json(new { success = true, message = "Received Material Edited successfully!" });
+    }
+
 
     public async Task<IActionResult> Print()
     {
