@@ -67,8 +67,6 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
       return PartialView("~/Views/StoreManagement/StoreManagement/MaterialRequisition/AddMaterialRequisition.cshtml", model);
     }
-
-
     [HttpPost]
     public async Task<IActionResult> Create(MaterialRequisitionsIndexViewModel model)
     {
@@ -232,7 +230,6 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
       return PartialView("~/Views/StoreManagement/StoreManagement/MaterialRequisition/EditMaterialRequisition.cshtml", model);
     }
-
     [HttpPost]
     public async Task<IActionResult> Edit(MaterialRequisitionsIndexViewModel MaterialRequisition)
     {

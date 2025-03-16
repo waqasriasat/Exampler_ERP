@@ -1,0 +1,59 @@
+@model IEnumerable<Exampler_ERP.Models.Temp.ItemWithStockQuantityViewModel>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Material Stock</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>Material Stock List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Item ID</th>
+                <th>Item Name</th>
+                <th>Stock Quantity</th>
+                <th>Stock Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stock in Model)
+            {
+                <tr>
+                    <td>@stock.ItemID</td>
+                    <td>@stock.ItemName</td>
+                    <td>@stock.StockQuantity</td>
+                    <td>@stock.StockCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <script>
+        window.onload = function () {
+            window.print();
+            setTimeout(function () { window.close(); }, 500);
+        };
+    </script>
+</body>
+</html>

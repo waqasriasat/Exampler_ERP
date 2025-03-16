@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Exampler_ERP.Utilities;
+using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 {
@@ -26,8 +27,8 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       var MaterialIssuancesQuery = _appDBContext.ST_MaterialIssuances
         .Include(v => v.IssuanceStatusTypes)
         .Include(v => v.MaterialIssuanceDetails)
-            .ThenInclude(d => d.Items) // Ensure Items is included
-        .AsQueryable(); // ✅ Ensure it's a queryable object
+            .ThenInclude(d => d.Items)
+        .AsQueryable(); 
 
       if (!string.IsNullOrEmpty(searchItemName))
       {
@@ -63,31 +64,12 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
       return PartialView("~/Views/StoreManagement/StoreManagement/MaterialIssuance/AddMaterialIssuance.cshtml", model);
     }
-
     [HttpGet]
     public async Task<IActionResult> GetRequisitionDetails(int requisitionId)
     {
       try
       {
 
-        //var requisitionDetails = await (from req in _appDBContext.ST_MaterialRequisitionDetails
-        //                                join stock in _appDBContext.ST_Stocks
-        //                                on req.ItemID equals stock.ItemID into stockGroup
-        //                                where req.RequisitionID == requisitionId
-        //                                select new
-        //                                {
-        //                                  ItemID = req.ItemID,
-        //                                  ItemName = req.Items.ItemName,
-        //                                  Quantity = req.Quantity - (
-        //                                _appDBContext.ST_MaterialIssuances
-        //                                    .Where(iss => iss.RequisitionID == req.RequisitionID)
-        //                                    .SelectMany(iss => iss.MaterialIssuanceDetails)
-        //                                    .Where(detail => detail.ItemID == req.ItemID)
-        //                                    .Sum(detail => (int?)detail.IssuanceQuantity) ?? 0
-        //                            ),
-        //                                  AvailableStock = stockGroup.Sum(s => s.Quantity) // Total stock quantity
-        //                                })
-        //                        .ToListAsync();
         var requisitionDetails = await (from req in _appDBContext.ST_MaterialRequisitionDetails
                                         join stock in _appDBContext.ST_Stocks
                                             on req.ItemID equals stock.ItemID into stockGroup
@@ -104,14 +86,10 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
                                                     .Where(detail => detail.ItemID == req.ItemID)
                                                     .Sum(detail => (int?)detail.IssuanceQuantity) ?? 0
                                             ),
-                                          AvailableStock = stockGroup.Sum(s => s.Quantity) // Total stock quantity
+                                          AvailableStock = stockGroup.Sum(s => s.Quantity) 
                                         })
-                         .Where(x => x.Quantity > 0) // Optional: Exclude if remaining quantity is 0
+                         .Where(x => x.Quantity > 0)
                          .ToListAsync();
-
-
-
-        // Agar data na mile
         if (requisitionDetails == null || !requisitionDetails.Any())
         {
           return Json(new { success = false, message = "No data found for the given Requisition ID." });
@@ -121,13 +99,10 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       }
       catch (Exception ex)
       {
-        // Error handling
         return Json(new { success = false, message = ex.Message });
       }
     }
 
-
-    // POST: Create MaterialIssuance
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(MaterialIssuancesIndexViewModel model)
@@ -142,7 +117,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
           DepartmentTypeID = model.MaterialIssuances.DepartmentTypeID,
           Remarks = model.MaterialIssuances.Remarks,
           IssuanceStatusTypeID = model.MaterialIssuances.IssuanceStatusTypeID,
-          
+
           MaterialIssuanceDetails = model.MaterialIssuances.MaterialIssuanceDetails.Select(d => new ST_MaterialIssuanceDetail
           {
             ItemID = d.ItemID,
@@ -158,11 +133,6 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         _appDBContext.ST_MaterialIssuances.Add(issuance);
 
         await _appDBContext.SaveChangesAsync();
-
-        //bool allCompleted = issuance.MaterialIssuanceDetails.All(d => d.IssuanceStatusTypeID == 4);
-        //int actionStatusTypeID = allCompleted ? 4 : 3;
-        // 1️⃣ Get total requisition quantities from ST_MaterialRequisitionDetail
-        // 1️⃣ Get total requisition quantities from ST_MaterialRequisitionDetails
         var requisitionQuantities = _appDBContext.ST_MaterialRequisitionDetails
             .Where(r => r.RequisitionID == issuance.RequisitionID)
             .GroupBy(r => r.ItemID)
@@ -171,7 +141,6 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
                 g => g.Sum(r => r.Quantity)
             );
 
-        // 2️⃣ Get total issuance quantities from MaterialIssuanceDetails
         var issuanceQuantities = _appDBContext.ST_MaterialIssuanceDetails
             .Where(i => i.MaterialIssuances.RequisitionID == issuance.RequisitionID)
             .GroupBy(i => i.ItemID)
@@ -180,9 +149,8 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
                 g => g.Sum(i => i.IssuanceQuantity)
             );
 
-        // 3️⃣ Initialize flags for checking statuses
-        bool allNoIssuance = false; // Start as false (will be true if any item has no issuance)
-        bool allFullyIssued = true; // Start as true (will be false if any item is partially issued)
+        bool allNoIssuance = false;
+        bool allFullyIssued = true;
 
         foreach (var itemId in requisitionQuantities.Keys)
         {
@@ -191,27 +159,24 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
           if (issuedQty == 0)
           {
-            allNoIssuance = true; // Found an item with no issuance
-            break; // If one item has no issuance, we can stop and set actionStatusTypeID to 3
+            allNoIssuance = true; 
+            break; 
           }
           else if (issuedQty < requisitionQty)
           {
-            allFullyIssued = false; // Found an item with partial issuance
+            allFullyIssued = false; 
           }
           else if (issuedQty == requisitionQty)
           {
-            // Fully issued, no change needed for `allFullyIssued`
           }
         }
 
-        // 4️⃣ Set Action Status
         int actionStatusTypeID = allNoIssuance ? 3 : (allFullyIssued ? 4 : 3);
 
-        // **Insert into ST_MaterialRequisitionStatus Table**
         var requisitionStatus = new ST_MaterialRequisitionStatus
         {
           RequisitionID = issuance.RequisitionID,
-          ActionID = 2, // Example: 'Issued' action
+          ActionID = 2, 
           ActionDate = DateTime.Now,
           ActionStatusTypeID = actionStatusTypeID
         };
@@ -238,10 +203,8 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
           await _appDBContext.SaveChangesAsync();
         }
 
-        // Create Item Ledger Entries for Each Issued Item
         foreach (var detail in issuance.MaterialIssuanceDetails)
         {
-          // 1. Update Stock Quantity
           var stock = await _appDBContext.ST_Stocks
               .FirstOrDefaultAsync(s => s.ItemID == detail.ItemID);
 
@@ -249,7 +212,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
           {
             if (stock.Quantity >= detail.IssuanceQuantity)
             {
-              stock.Quantity -= detail.IssuanceQuantity; // Deduct the issuance quantity
+              stock.Quantity -= detail.IssuanceQuantity; 
             }
             else
             {
@@ -261,7 +224,6 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
             return Json(new { success = false, message = $"Stock not found for Item ID {detail.ItemID}." });
           }
 
-          // 2. Create Item Ledger Entry
           var itemLedger = new ST_ItemLedger
           {
             ItemLedgerDate = DateTime.Now,
@@ -299,6 +261,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
       ViewBag.ItemList = await _utils.GetItemList();
       ViewBag.ItemNameList = await _utils.GetItemList();
+      ViewBag.PendingRequisitionsList = await _utils.GetPendingRequisitions();
 
       return PartialView("~/Views/StoreManagement/StoreManagement/MaterialIssuance/EditMaterialIssuance.cshtml", model);
     }
@@ -350,6 +313,93 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       ViewBag.ItemNameList = await _utils.GetItemList();
 
       return PartialView("~/Views/StoreManagement/StoreManagement/MaterialIssuance/EditMaterialIssuance.cshtml", MaterialIssuance);
+    }
+    public async Task<IActionResult> Print(int id)
+    {
+      var MaterialIssuances = await _appDBContext.ST_MaterialIssuances
+           .Include(v => v.MaterialIssuanceDetails)
+           .Include(v => v.IssuanceStatusTypes)
+           .FirstOrDefaultAsync(v => v.IssuanceID == id);
+
+      if (MaterialIssuances == null)
+      {
+        return NotFound();
+      }
+
+
+      MaterialIssuances.MaterialIssuanceDetails.Add(new ST_MaterialIssuanceDetail()
+      {
+        IssuanceID = MaterialIssuances.IssuanceID
+      });
+
+      var model = new MaterialIssuancesIndexViewModel
+      {
+        MaterialIssuances = MaterialIssuances
+      };
+
+      var departmentTypeName = await _appDBContext.Settings_DepartmentTypes
+        .Where(d => d.DepartmentTypeID == MaterialIssuances.DepartmentTypeID)
+        .Select(d => d.DepartmentTypeName)
+        .FirstOrDefaultAsync();
+
+      ViewBag.DepartmentTypeName = departmentTypeName;
+
+      ViewBag.ItemList = await _utils.GetItemList();
+      ViewBag.ItemNameList = await _utils.GetItemList();
+
+      return View("~/Views/StoreManagement/StoreManagement/MaterialIssuance/PrintMaterialIssuance.cshtml", model);
+    }
+    public async Task<IActionResult> PrintList()
+    {
+      int UserID = int.Parse(HttpContext.Session.GetInt32("UserID").ToString());
+      int departmentID = await _utils.PostUserIDGetDepartmentID(UserID);
+      var MaterialIssuancesQuery = _appDBContext.ST_MaterialIssuances
+        .Include(v => v.MaterialIssuanceDetails)
+        .Include(v => v.IssuanceStatusTypes)
+        .Where(v => v.DepartmentTypeID == departmentID);
+
+      var MaterialIssuances = await MaterialIssuancesQuery.ToListAsync();
+
+      return View("~/Views/StoreManagement/StoreManagement/MaterialIssuance/PrintListMaterialIssuance.cshtml", MaterialIssuances);
+    }
+    public async Task<IActionResult> ExportToExcel()
+    {
+      ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+      int UserID = int.Parse(HttpContext.Session.GetInt32("UserID").ToString());
+      int departmentID = await _utils.PostUserIDGetDepartmentID(UserID);
+      var MaterialIssuancesQuery = _appDBContext.ST_MaterialIssuances
+        .Include(v => v.MaterialIssuanceDetails)
+        .Include(v => v.IssuanceStatusTypes)
+        .Where(v => v.DepartmentTypeID == departmentID);
+
+      var MaterialIssuances = await MaterialIssuancesQuery.ToListAsync();
+      using (var package = new ExcelPackage())
+      {
+        var worksheet = package.Workbook.Worksheets.Add("MaterialIssuances");
+        worksheet.Cells["A1"].Value = "Issuance #";
+        worksheet.Cells["B1"].Value = "Issuance Date";
+        worksheet.Cells["C1"].Value = "Issuance Status";
+
+        for (int i = 0; i < MaterialIssuances.Count; i++)
+        {
+          worksheet.Cells[i + 2, 1].Value = MaterialIssuances[i].IssuanceID;
+          worksheet.Cells[i + 2, 2].Value = MaterialIssuances[i].IssuanceDate.ToString("dd-MMM-yyyy");
+          worksheet.Cells[i + 2, 3].Value = MaterialIssuances[i].IssuanceStatusTypes?.IssuanceStatusTypeName;
+
+
+        }
+
+        worksheet.Cells["B1"].Style.Numberformat.Format = "dd-mmm-yyyy";
+        worksheet.Cells.AutoFitColumns();
+
+        var stream = new MemoryStream();
+        package.SaveAs(stream);
+        stream.Position = 0;
+        string excelName = $"MaterialIssuances-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+
+        return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+      }
     }
   }
 }

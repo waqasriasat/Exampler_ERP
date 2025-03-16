@@ -1,0 +1,53 @@
+@model IEnumerable<Exampler_ERP.Models.ST_MaterialIssuance>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Material Issuance</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Material Issuance List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Issuance ID</th>
+                <th>Issuance Date</th>
+                <th>Issuance Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var MaterialIssuance in Model)
+            {
+                <tr>
+                    <td>@MaterialIssuance.IssuanceID</td>
+                    <td>@MaterialIssuance.IssuanceDate.ToString("dd/MM/yyyy")</td>
+                    <td>@(MaterialIssuance.IssuanceStatusTypes?.IssuanceStatusTypeName)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

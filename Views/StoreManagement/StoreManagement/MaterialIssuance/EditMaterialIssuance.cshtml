@@ -1,0 +1,67 @@
+@model Exampler_ERP.Models.Temp.MaterialIssuancesIndexViewModel
+
+<style>
+    .ui-autocomplete {
+        z-index: 1000 !important;
+    }
+
+    .center-button {
+        margin-top: 32px;
+        text-align: center;
+    }
+
+    .width-button {
+        width: 120px;
+    }
+
+    .modal-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .table th,
+    .table td {
+        width: 20%; /* Adjust this percentage to match the inputs */
+    }
+
+    .form-label,
+    .form-control,
+    .form-select {
+        width: 100%; /* Ensures the input elements stretch to match */
+    }
+
+    .table .inputcontrol {
+        background-color: transparent;
+        border: transparent;
+    }
+
+    .table .headercontrol {
+        background-color: white;
+        border: none;
+    }
+
+    .table .headerwidth {
+        width: 60%;
+    }
+</style>
+
+<div class="modal fade" id="editMaterialIssuanceModal" tabindex="-1" role="dialog" aria-labelledby="editMaterialIssuanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editMaterialIssuanceModalLabel"><i class="fas fa-key me-2"></i>Edit Material Issuance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editMaterialIssuanceForm" enctype="multipart/form-data" asp-action="Create" method="post">
+                    @Html.Partial("~/Views/StoreManagement/StoreManagement/MaterialIssuance/_EditMaterialIssuance.cshtml", Model)
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="saveChanges" class="btn btn-success">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

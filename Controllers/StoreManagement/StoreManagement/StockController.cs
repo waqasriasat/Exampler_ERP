@@ -84,11 +84,6 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         components
       });
     }
-
-
-
-   
-
     public async Task<IActionResult> Edit(int id)
     {
       var Stocks = await _appDBContext.ST_Stocks
@@ -100,17 +95,89 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         return NotFound();
       }
 
-      //Stocks.StockComponents.Add(new ST_StockComponent() { StockID = Stocks.StockID });
-
-      //var model = new StocksIndexViewModel
-      //{
-      //  Stocks = Stocks
-      //};
 
       ViewBag.ItemList = await _utils.GetItemList();
       ViewBag.VendorList = await _utils.GetVendorList();
       ViewBag.UnitList = await _utils.GetItemUnits();
       return PartialView("~/Views/StoreManagement/StoreManagement/Stock/EditStock.cshtml", Stocks);
     }
+    public async Task<IActionResult> Print()
+    {
+      var items = await _appDBContext.ST_Items.ToListAsync();
+      var stock = await _appDBContext.ST_Stocks.ToListAsync();
+
+      var viewModel = new StockListViewModel
+      {
+        ItemsWithStockQuantity = items.Select(pt => new ItemWithStockQuantityViewModel
+        {
+          ItemID = pt.ItemID,
+          ItemName = pt.ItemName,
+          StockQuantity = stock.Where(ptf => ptf.ItemID == pt.ItemID).Sum(ptf => ptf.Quantity),
+          StockCount = stock.Count(ptf => ptf.ItemID == pt.ItemID)
+        }).ToList()
+      };
+
+      return View("~/Views/StoreManagement/StoreManagement/Stock/PrintStock.cshtml", viewModel.ItemsWithStockQuantity);
+    }
+
+    public async Task<IActionResult> ExportToExcel()
+    {
+      ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+      var Items = await _appDBContext.ST_Items.ToListAsync();
+      var Stock = await _appDBContext.ST_Stocks.ToListAsync();
+
+      var viewModel = new StockListViewModel
+      {
+        ItemsWithStockQuantity = Items.Select(pt => new ItemWithStockQuantityViewModel
+        {
+          ItemID = pt.ItemID,
+          ItemName = pt.ItemName,
+          StockQuantity = Stock.Where(ptf => ptf.ItemID == pt.ItemID).Sum(ptf => ptf.Quantity),
+          StockCount = Stock.Count(ptf => ptf.ItemID == pt.ItemID)
+        }).ToList()
+      };
+
+      using (var package = new ExcelPackage())
+      {
+        var worksheet = package.Workbook.Worksheets.Add("Stocks");
+
+        // **Header Row**
+        worksheet.Cells["A1"].Value = "ItemID #";
+        worksheet.Cells["B1"].Value = "Item Name";
+        worksheet.Cells["C1"].Value = "Stock Quantity";
+        worksheet.Cells["D1"].Value = "Stock Count";
+
+        // **Apply Bold to Headers**
+        using (var range = worksheet.Cells["A1:D1"])
+        {
+          range.Style.Font.Bold = true;
+          range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+          range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+        }
+
+        // **Data Insertion**
+        for (int i = 0; i < viewModel.ItemsWithStockQuantity.Count; i++)
+        {
+          var item = viewModel.ItemsWithStockQuantity[i];
+          worksheet.Cells[i + 2, 1].Value = item.ItemID;
+          worksheet.Cells[i + 2, 2].Value = item.ItemName;
+          worksheet.Cells[i + 2, 3].Value = item.StockQuantity;
+          worksheet.Cells[i + 2, 4].Value = item.StockCount;
+        }
+
+        // **Auto-fit columns**
+        worksheet.Cells.AutoFitColumns();
+
+        // **Generate File**
+        var stream = new MemoryStream();
+        package.SaveAs(stream);
+        stream.Position = 0;
+        string excelName = $"Stocks-{DateTime.Now:yyyyMMddHHmmssfff}.xlsx";
+
+        return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+      }
+    }
+
   }
 }

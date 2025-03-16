@@ -1,0 +1,143 @@
+@model Exampler_ERP.Models.Temp.MaterialIssuancesIndexViewModel
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+@* <input type="hidden" asp-for="MaterialIssuances.RequisitionID" /> *@
+<input type="hidden" asp-for="MaterialIssuances.FinalApprovalID" />
+<input type="hidden" asp-for="MaterialIssuances.ProcessTypeApprovalID" />
+<input type="hidden" asp-for="MaterialIssuances.IssuanceStatusTypeID" />
+
+<!-- Table for Added Rows -->
+<div class="table-responsive mb-3">
+    <div class="row">
+
+        <div class="col-2 col-md-12 col-lg-6">
+            <label asp-for="MaterialIssuances.RequisitionID" class="form-label fw-bold">Pending Requisitions List</label>
+            <select asp-for="MaterialIssuances.RequisitionID" asp-items="@(new SelectList(ViewBag.PendingRequisitionsList, "Value", "Text", Model.MaterialIssuances.RequisitionID))" class="form-control form-control-lg custom-dropdown" id="requisitionId">
+                <option>Please select</option>
+            </select>
+            <span asp-validation-for="MaterialIssuances.RequisitionID" class="text-danger"></span>
+        </div>
+    </div>
+    <!-- Table for Added Rows -->
+    <div class="table-responsive mb-3">
+        <table id="MaterialIssuanceTable" class="table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Requisition Quantity</th>
+                    <th>Issuance Quantity</th>
+                    <th>Available Stock Quantity</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic rows will be appended here -->
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- Remarks Section -->
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <label asp-for="MaterialIssuances.Remarks" class="form-label fw-bold">Remarks</label>
+            <textarea asp-for="MaterialIssuances.Remarks" class="form-control" rows="3"></textarea>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        function fetchRequisitionDetails(requisitionId) {
+            if (!requisitionId) {
+                alert("Please select a valid Requisition ID.");
+                return;
+            }
+
+            $.ajax({
+                url: '/MaterialIssuance/GetRequisitionDetails',
+                type: 'GET',
+                data: { requisitionId: requisitionId },
+                success: function (response) {
+                    const tableBody = $('#MaterialIssuanceTable tbody');
+                    tableBody.empty(); // पुराने डेटा को साफ करें
+
+                    if (response.success && response.data.length > 0) {
+                        response.data.forEach((row, rowIndex) => {
+                            const dynamicRow = `
+                                <tr>
+                                    <td class="col-md-4">
+                                        <input type="hidden" name="MaterialIssuances.MaterialIssuanceDetails[${rowIndex}].ItemID" value="${row.itemID}" />
+                                        <input type="text" class="form-control inputcontrol" value="${row.itemName}" readonly />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[${rowIndex}].RequisitionQuantity" value="${parseFloat(row.quantity) || 0}" readonly />
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control issuance-quantity" name="MaterialIssuances.MaterialIssuanceDetails[${rowIndex}].IssuanceQuantity" value="0" min="0" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[${rowIndex}].BalanceQuantity" value="${row.availableStock}" readonly />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-danger remove-row">Remove</button>
+                                    </td>
+                                </tr>`;
+                            tableBody.append(dynamicRow);
+                        });
+                    } else {
+                        alert("No data found for the selected Requisition ID.");
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while fetching data. Please try again.");
+                }
+            });
+        }
+
+        // यदि पहले से कोई requisitionId चुना गया है, तो डेटा लोड करें
+        const requisitionId = $('#requisitionId').val().trim();
+        if (requisitionId) {
+            fetchRequisitionDetails(requisitionId);
+        }
+
+        // जब requisitionId बदले तो नए डेटा को लोड करें
+        $('#requisitionId').change(function () {
+            fetchRequisitionDetails($(this).val().trim());
+        });
+
+        // Validate Issuance Quantity
+        $(document).on('input', '.issuance-quantity', function () {
+            const $row = $(this).closest('tr');
+            const issuanceQuantity = parseFloat($(this).val()) || 0;
+            const requisitionQuantity = parseFloat($row.find('input[name$=".RequisitionQuantity"]').val()) || 0;
+            const balanceQuantity = parseFloat($row.find('input[name$=".BalanceQuantity"]').val()) || 0;
+
+            if (issuanceQuantity > requisitionQuantity) {
+                alert("Issuance Quantity cannot be greater than Requisition Quantity.");
+                $(this).val(requisitionQuantity);
+            } else if (issuanceQuantity > balanceQuantity) {
+                alert("Issuance Quantity cannot be greater than Balance Quantity.");
+                $(this).val(balanceQuantity);
+            }
+        });
+
+        // Remove row event
+        $(document).on('click', '.remove-row', function () {
+            $(this).closest('tr').remove();
+
+            // Update name attributes for proper binding
+            $('#MaterialIssuanceTable tbody tr').each(function (index) {
+                $(this).find('input, select').each(function () {
+                    const name = $(this).attr('name');
+                    if (name) {
+                        const updatedName = name.replace(/\[\d+\]/, `[${index}]`);
+                        $(this).attr('name', updatedName);
+                    }
+                });
+            });
+        });
+
+    });
+</script>
+

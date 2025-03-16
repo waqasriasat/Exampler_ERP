@@ -1,0 +1,203 @@
+@model Exampler_ERP.Models.Temp.MaterialIssuancesIndexViewModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Issuances Print</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/super-ui@latest/dist/super-ui.min.css">
+    <style>
+        body {
+            background-color: #f4f4f9;
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+
+        .card-header {
+            background-color: #4caf50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+            .section h5 {
+                margin-bottom: 15px;
+                color: #333;
+                font-weight: bold;
+            }
+
+        .info-row {
+            /* display: flex;
+                                            justify-content: flex-start; */
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .row {
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        img {
+            border-radius: 50%;
+            width: 120px; /* Set a fixed width for the profile picture */
+            height: 120px; /* Set a fixed height for the profile picture */
+            object-fit: cover; /* Maintain aspect ratio and cover the area */
+            margin-right: 20px;
+        }
+
+        .footer {
+            text-align: right;
+            padding: 10px;
+            background-color: #f1f1f1;
+        }
+
+        .print-button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+            .print-button:hover {
+                background-color: #45a049;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="card-header">
+            <h4>Material Issuances Form</h4>
+        </div>
+        <div class="card-body">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="section">
+
+                <div class="row">
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="info-row">
+                            <div class="info-label">Issuances #:</div>
+                            <div>@Model.MaterialIssuances.IssuanceID</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="info-row">
+                            <div class="info-label">Issuances Date:</div>
+                            <div>@Model.MaterialIssuances.IssuanceDate.ToString("dd/MM/yyyy")</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="info-row">
+                            <div class="info-label">Issuances Status:</div>
+                            <div>@Model.MaterialIssuances.IssuanceStatusTypes?.IssuanceStatusTypeName</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <div class="info-row">
+                            <div class="info-label">Deaprtment:</div>
+                            <div>@ViewBag.DepartmentTypeName</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Table for Added Rows -->
+            <div class="table-responsive mb-3">
+                <table class="table table-bordered" id="MaterialIssuanceTable">
+                    <thead class="table-light">
+                        <tr><th style="border: none;"></th></tr>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <th>Balance Quantity</th>
+                            <th>Required Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.MaterialIssuances.MaterialIssuanceDetails != null && Model.MaterialIssuances.MaterialIssuanceDetails.Count > 0)
+                        {
+                            @for (int i = 0; i < Model.MaterialIssuances.MaterialIssuanceDetails.Count; i++)
+                            {
+                                @if (Model.MaterialIssuances.MaterialIssuanceDetails[i].ItemID != 0) // Skip empty row
+                                {
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <select class="form-select inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[@i].ItemID" disabled>
+                                                <option value="">Select Item</option>
+                                                @foreach (var type in ViewBag.ItemNameList)
+                                                {
+                                                    <option value="@type.Value" selected="@(type.Value == Model.MaterialIssuances.MaterialIssuanceDetails[i].ItemID.ToString())">@type.Text</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[@i].Quantity" value="@Model.MaterialIssuances.MaterialIssuanceDetails[i].RequisitionQuantity" readonly />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[@i].BalanceQuantity" value="@Model.MaterialIssuances.MaterialIssuanceDetails[i].BalanceQuantity" readonly />
+                                        </td>
+                                        @* <td>
+                                            <input type="date" class="form-control inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[@i].RequiredDate" value="@Model.MaterialIssuances.MaterialIssuanceDetails[i].RequiredDate.ToString("yyyy-MM-dd")" readonly />
+                                        </td> *@
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+
+
+                </table>
+            </div>
+
+            <!-- Remarks Section -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label asp-for="MaterialIssuances.Remarks" class="form-label fw-bold">Remarks</label>
+                    <textarea asp-for="MaterialIssuances.Remarks" class="form-control" rows="3" readonly></textarea>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="footer">
+            <button class="print-button" onclick="window.print()">Print</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/super-ui@latest/dist/super-ui.min.js"></script>
+</body>
+</html>
