@@ -7,12 +7,12 @@
 <input type="hidden" asp-for="MaterialIssuances.IssuanceStatusTypeID" />
 
 <!-- Table for Added Rows -->
-<div class="table-responsive mb-3">
+<div class="mb-3">
     <div class="row">
 
         <div class="col-2 col-md-12 col-lg-6">
             <label asp-for="MaterialIssuances.RequisitionID" class="form-label fw-bold">Pending Requisitions List</label>
-            <select asp-for="MaterialIssuances.RequisitionID" asp-items="@(new SelectList(ViewBag.PendingRequisitionsList, "Value", "Text", Model.MaterialIssuances.RequisitionID))" class="form-control form-control-lg custom-dropdown" id="requisitionId">
+            <select asp-for="MaterialIssuances.RequisitionID" asp-items="@(new SelectList(ViewBag.PendingRequisitionsList, "Value", "Text", Model.MaterialIssuances.RequisitionID))" class="form-control form-control-lg custom-dropdown" id="requisitionId" disabled>
                 <option>Please select</option>
             </select>
             <span asp-validation-for="MaterialIssuances.RequisitionID" class="text-danger"></span>
@@ -26,7 +26,7 @@
                     <th>Item</th>
                     <th>Requisition Quantity</th>
                     <th>Issuance Quantity</th>
-                    <th>Available Stock Quantity</th>
+                    <th>Blance Quantity</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -55,13 +55,12 @@
             }
 
             $.ajax({
-                url: '/MaterialIssuance/GetRequisitionDetails',
+                url: '/MaterialIssuance/GetIssuanceDetails',
                 type: 'GET',
                 data: { requisitionId: requisitionId },
                 success: function (response) {
                     const tableBody = $('#MaterialIssuanceTable tbody');
-                    tableBody.empty(); // पुराने डेटा को साफ करें
-
+                    tableBody.empty(); 
                     if (response.success && response.data.length > 0) {
                         response.data.forEach((row, rowIndex) => {
                             const dynamicRow = `
@@ -71,13 +70,13 @@
                                         <input type="text" class="form-control inputcontrol" value="${row.itemName}" readonly />
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[${rowIndex}].RequisitionQuantity" value="${parseFloat(row.quantity) || 0}" readonly />
+                                            <input type="text" class="form-control inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[${rowIndex}].RequisitionQuantity" value="${parseFloat(row.requisitionQuantity) || 0}" readonly />
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control issuance-quantity" name="MaterialIssuances.MaterialIssuanceDetails[${rowIndex}].IssuanceQuantity" value="0" min="0" />
+                                                <input type="number" class="form-control" name="MaterialIssuances.MaterialIssuanceDetails[${rowIndex}].IssuanceQuantity" value="${parseFloat(row.issuanceQuantity) || 0}" />
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[${rowIndex}].BalanceQuantity" value="${row.availableStock}" readonly />
+                                                <input type="text" class="form-control inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[${rowIndex}].BalanceQuantity" value="${parseFloat(row.balanceQuantity) || 0}" readonly />
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-danger remove-row">Remove</button>

@@ -85,14 +85,27 @@
             $('#printButton').click(function () {
                 window.print();
             });
+            $(document).on('click', '.printMaterialIssuanceLink', function (e) {
+                e.preventDefault();
 
+                var MaterialIssuanceId = $(this).data('id');
+
+                PrintMaterialIssuance(MaterialIssuanceId);
+            });
+            function PrintMaterialIssuance(MaterialIssuanceId) {
+                var url = '@Url.Action("Print", "MaterialIssuance")' + '?id=' + MaterialIssuanceId;
+
+                // Open the new window for printing
+                var printWindow = window.open(url, '_blank');
+                printWindow.focus();
+            }
 
 
         });
     </script>
     <script>
         function printMaterialIssuancees() {
-            var printWindow = window.open('@Url.Action("Print", "MaterialIssuance")', '_blank');
+            var printWindow = window.open('@Url.Action("PrintList", "MaterialIssuance")', '_blank');
             printWindow.focus();
         }
         $('#searchItemNameButton').click(function () {
@@ -144,7 +157,7 @@
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
-                        <div class="col-10 col-md-11 col-lg-11">
+                        <div class="col-10 col-md-10 col-lg-10">
                             <div class="row">
                                 <div class="col-2">
                                     <p class="text-nowrap">Material Issuance #</p>
@@ -157,8 +170,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-2 col-md-1 col-lg-1">
+                        <div class="col-1 col-md-1 col-lg-1">
                             <p class="text-nowrap">Edit</p>
+                        </div>
+                        <div class="col-1 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Print</p>
                         </div>
                     </div>
                 </div>
@@ -169,7 +185,7 @@
                 {
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
                         <div class="row">
-                            <div class="col-10 col-md-11 col-lg-11">
+                            <div class="col-10 col-md-10 col-lg-10">
                                 <div class="row align-items-center">
                                     <div class="col-2">
                                         <p class="text-nowrap">
@@ -192,6 +208,13 @@
                                 <div class="btn-group" role="group" aria-label="Actions">
                                     <a href="#" class="editMaterialIssuanceLink me-2" data-id="@item.IssuanceID">
                                         <i class="fa fa-pencil" style="font-size: large; color:steelblue;; line-height: 2;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-2 col-md-1 col-lg-1">
+                                <div class="btn-group" role="group" aria-label="Actions">
+                                    <a href="#" class="printMaterialIssuanceLink me-2" data-id="@item.IssuanceID">
+                                        <i class="fa fa-print" style="font-size: large; color:steelblue;; line-height: 2;"></i>
                                     </a>
                                 </div>
                             </div>

@@ -141,9 +141,9 @@
                         <tr><th style="border: none;"></th></tr>
                         <tr>
                             <th>Item Name</th>
-                            <th>Quantity</th>
+                            <th>Requisition Quantity</th>
+                            <th>Issuance Quantity</th>
                             <th>Balance Quantity</th>
-                            <th>Required Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -164,14 +164,14 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[@i].Quantity" value="@Model.MaterialIssuances.MaterialIssuanceDetails[i].RequisitionQuantity" readonly />
+                                            <input type="text" class="form-control inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[@i].RequisitionQuantity" value="@Model.MaterialIssuances.MaterialIssuanceDetails[i].RequisitionQuantity" readonly />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[@i].IssuanceQuantity" value="@Model.MaterialIssuances.MaterialIssuanceDetails[i].IssuanceQuantity" readonly />
                                         </td>
                                         <td>
                                             <input type="text" class="form-control inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[@i].BalanceQuantity" value="@Model.MaterialIssuances.MaterialIssuanceDetails[i].BalanceQuantity" readonly />
                                         </td>
-                                        @* <td>
-                                            <input type="date" class="form-control inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[@i].RequiredDate" value="@Model.MaterialIssuances.MaterialIssuanceDetails[i].RequiredDate.ToString("yyyy-MM-dd")" readonly />
-                                        </td> *@
                                     </tr>
                                 }
                             }
