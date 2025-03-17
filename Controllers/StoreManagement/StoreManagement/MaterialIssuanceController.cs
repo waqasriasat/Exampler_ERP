@@ -103,26 +103,26 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       }
     }
     [HttpGet]
-    public async Task<IActionResult> GetIssuanceDetails(int requisitionId)
+    public async Task<IActionResult> GetIssuanceDetails(int issuanceID)
     {
       try
       {
 
-        var issueDetails = await (from issue in _appDBContext.ST_MaterialIssuanceDetails
-                                        join stock in _appDBContext.ST_Stocks
-                                            on issue.ItemID equals stock.ItemID into stockGroup
-                                        where issue.IssuanceID == requisitionId
-                                              && issue.IssuanceQuantity > 0 // Exclude requisitions with Quantity = 0
-                                        select new
-                                        {
-                                          ItemID = issue.ItemID,
-                                          ItemName = issue.Items.ItemName,
-                                          RequisitionQuantity = issue.RequisitionQuantity,
-                                          IssuanceQuantity = issue.IssuanceQuantity,
-                                          BalanceQuantity = issue.BalanceQuantity
-                                        })
-                         .Where(x => x.IssuanceQuantity > 0)
-                         .ToListAsync();
+        var issueDetails = await _appDBContext.ST_MaterialIssuanceDetails
+        .Include(s => s.MaterialIssuances)
+        .Include(s => s.Items)
+        .Where(s => s.IssuanceID == issuanceID)
+        .Select(s => new
+        {
+          ItemID = s.ItemID,
+          ItemName = s.Items.ItemName,
+          RequisitionQuantity = s.RequisitionQuantity,
+          IssuanceQuantity = s.IssuanceQuantity,
+          BalanceQuantity = s.BalanceQuantity
+        })
+        .ToListAsync();
+
+
         if (issueDetails == null || !issueDetails.Any())
         {
           return Json(new { success = false, message = "No data found for the given issue ID." });
