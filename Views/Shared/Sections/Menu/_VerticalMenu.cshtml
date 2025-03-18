@@ -285,38 +285,30 @@
 
         {
             <!-- Purchase -->
-            <li class='menu-item@(currentPage.StartsWith("/Pages/Misc") ? " active open" : "")'>
+            <li class='menu-item@(currentPage.StartsWith("/PR_Main_Dashboard/Index") || currentPage.StartsWith("/PR_Management_Dashboard/Index") ||
+                                   currentPage.StartsWith("/PR_Report_Dashboard/Index") || currentPage.StartsWith("/PurchaseRequest/Index") ||
+                                   currentPage.StartsWith("/PurchaseOrder/Index") ? " active open" : "")'>
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-cart"></i>
                     <div>Purchase</div>
                 </a>
                 <ul class="menu-sub">
-                    <li class='menu-item@(currentPage == "/Pages/MiscError" ? " active" : "")'>
-                        <a asp-controller="Pages" asp-action="MiscError" class="menu-link" target="_blank">
+                    <li class='menu-item@(currentPage == "/PR_Main_Dashboard/Index" ? " active" : "")'>
+                        <a asp-controller="PR_Main_Dashboard" asp-action="Index" class="menu-link">
                             <div>Master Information</div>
                         </a>
                     </li>
-                    <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
-                        <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
-                            <div>Direct Purchase</div>
+                    <li class='menu-item@(currentPage == "/PR_Management_Dashboard/Index"|| currentPage == "/PurchaseRequest/Index" ||
+                                      currentPage == "/PurchaseOrder/Index"  ? " active" : "")'>
+                        <a asp-controller="PR_Management_Dashboard" asp-action="Index" class="menu-link">
+                            <div>Management</div>
                         </a>
                     </li>
-                    <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
-                        <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
-                            <div>InDirect Purchase</div>
+                    <li class='menu-item@(currentPage == "/PR_Report_Dashboard/Index" ? " active" : "")'>
+                        <a asp-controller="PR_Report_Dashboard" asp-action="Index" class="menu-link">
+                            <div>Report</div>
                         </a>
                     </li>
-                    <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
-                        <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
-                            <div>Warehouse</div>
-                        </a>
-                    </li>
-                    <li class='menu-item@(currentPage == "/Pages/MiscUnderMaintenance" ? " active" : "")'>
-                        <a asp-controller="Pages" asp-action="MiscUnderMaintenance" class="menu-link" target="_blank">
-                            <div>Reports</div>
-                        </a>
-                    </li>
-
                 </ul>
             </li>
         }

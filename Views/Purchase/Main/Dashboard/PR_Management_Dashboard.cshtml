@@ -1,5 +1,162 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
 @{
+    ViewData["Title"] = "Purchase - Management";
+
+
+
+
+
+    var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
+
+    var accessRightByUsertList = string.IsNullOrEmpty(accessRightsByUserJson)
+
+        ? new List<int>()
+
+        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsByUserJson);
+
+
+
+
+
+
+
+    var accessRightsByRoleJson = Context.Session.GetString("AccessRightsByRoleActionSORs");
+
+    var accessRightByRoleList = string.IsNullOrEmpty(accessRightsByRoleJson)
+
+        ? new List<int>()
+
+        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsByRoleJson);
+
 }
+
+@section PageScripts {
+    <script src="~/js/pages-account-settings-account.js"></script>
+    <link href="~/css/custom.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <style>
+
+    </style>
+}
+
+@* ************** Content ************** *@
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Purchase /</span> Management
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-pills flex-column flex-md-row mb-3">
+            <li class="nav-item"><a class="nav-link" href="~/PR_Main_Dashboard/Index"><i class="bx bx-home me-1"></i> Main</a></li>
+            <li class="nav-item"><a class="nav-link active" href="~/PR_Management_Dashboard/Index"><i class="bx bx-dollar me-1"></i> Management</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/PR_Report_Dashboard/Index"><i class="bx bx-bar-chart-alt me-1"></i> Report</a></li>
+        </ul>
+        <div class="card mb-4">
+            <h5 class="card-header">Details</h5>
+
+            <div class="row" style="padding: 30px 30px 0px 30px;">
+                @if (accessRightByRoleList.Contains(51) || accessRightByUsertList.Contains(51))
+
+                {
+                    @*PurchaseRequest*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="PurchaseRequest" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Purchase Request</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.PurchaseRequestCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white ">
+                                        <i class="fas fa-university Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightByRoleList.Contains(52) || accessRightByUsertList.Contains(52))
+
+                {
+                    @*RequestForQuotation*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="RequestForQuotation" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Request For Quotation</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.RequestForQuotationCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white ">
+                                        <i class="fa fa-book Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightByRoleList.Contains(53) || accessRightByUsertList.Contains(53))
+
+                {
+                    @*CostComparison*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="CostComparison" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Cost Comparison</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.CostComparisonCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white ">
+                                        <i class="fa fa-users Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @if (accessRightByRoleList.Contains(53) || accessRightByUsertList.Contains(53))
+
+                {
+                    @*PurchaseOrder*@
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="PurchaseOrder" asp-action="Index">
+                            <div class="modern-card shadow mb-4">
+                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+                                    <div class="card-details">
+                                        <strong class="text-primary">Purchase Order</strong>
+                                        <h4 class="font-weight-bold text-dark">
+                                            @ViewBag.PurchaseOrderCount
+                                        </h4>
+                                    </div>
+                                    <div class="icon bg-primary text-white ">
+                                        <i class="fa fa-users Card1I" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white text-muted text-center">
+                                    View Details <i class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
