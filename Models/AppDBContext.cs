@@ -125,9 +125,15 @@ namespace Exampler_ERP.Models
     public DbSet<ST_MaterialReceivedComponent> ST_MaterialReceivedComponents { get; set; }
     public DbSet<ST_MaterialIssuance> ST_MaterialIssuances { get; set; }
     public DbSet<ST_MaterialIssuanceDetail> ST_MaterialIssuanceDetails { get; set; }
+    public DbSet<PR_ProcurementQueue> PR_ProcurementQueues { get; set; }
+    public DbSet<PR_PurchaseRequest> PR_PurchaseRequests { get; set; }
+    public DbSet<PR_PurchaseRequestDetail> PR_PurchaseRequestDetails { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+   
+
       modelBuilder.Entity<ST_Item>().HasData(
 new ST_Item() { ItemID = 1, ItemCode = "1001", ItemName = "A3 FLYER", ItemCategoryTypeID = 1, HasLotNumberAndExpiryDate = false, OpeningBalance = 0, FinalApprovalID = 1, ProcessTypeApprovalID = 0, ActiveYNID = 1, DeleteYNID = 0, BarCode = "0", BinLocation = "0", ManufacturerTypeID = 1, ReorderLevelMax = 0, ReorderLevelMin = 0, Specification = "0", UnitTypeID = 1 },
 new ST_Item() { ItemID = 2, ItemCode = "1002", ItemName = "A4 FLYERS", ItemCategoryTypeID = 1, HasLotNumberAndExpiryDate = false, OpeningBalance = 0, FinalApprovalID = 1, ProcessTypeApprovalID = 0, ActiveYNID = 1, DeleteYNID = 0, BarCode = "0", BinLocation = "0", ManufacturerTypeID = 1, ReorderLevelMax = 0, ReorderLevelMin = 0, Specification = "0", UnitTypeID = 1 },

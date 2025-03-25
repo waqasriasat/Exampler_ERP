@@ -84,17 +84,30 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         return Json(new { hasLotNumberAndExpiryDate = false, components = new List<object>() });
       }
 
-      var components = await _appDBContext.ST_MaterialReceivedComponents
-          .Include(c => c.ItemComponentTypes) // Include component type details
-          .Where(c => c.MaterialReceivedID == receivedID)
-          .Select(c => new
-          {
-            ItemTypeID = c.ItemComponentTypeID,
-            ItemTypeName = c.ItemComponentTypes.ItemComponentTypeName,
-            ItemDataType = c.ItemComponentTypes.ItemComponentDataType,
-            ItemTypeValue = c.ItemComponentValue
-          })
-          .ToListAsync();
+      //var components = await _appDBContext.ST_MaterialReceivedComponents
+      //    .Include(c => c.ItemComponentTypes) // Include component type details
+      //    .Where(c => c.MaterialReceivedID == receivedID)
+      //    .Select(c => new
+      //    {
+      //      ItemTypeID = c.ItemComponentTypeID,
+      //      ItemTypeName = c.ItemComponentTypes.ItemComponentTypeName,
+      //      ItemDataType = c.ItemComponentTypes.ItemComponentDataType,
+      //      ItemTypeValue = c.ItemComponentValue
+      //    })
+      //    .ToListAsync();
+      var components = await (from mrc in _appDBContext.ST_MaterialReceivedComponents
+                              join ict in _appDBContext.Settings_ItemComponentTypes
+                                  on mrc.ItemComponentTypeID equals ict.ItemComponentTypeID into ictGroup
+                              from ict in ictGroup.DefaultIfEmpty() // Left Join to handle null values
+                              where mrc.MaterialReceivedID == receivedID
+                              select new
+                              {
+                                ItemTypeID = mrc.ItemComponentTypeID,
+                                ItemTypeName = ict != null ? ict.ItemComponentTypeName : null,
+                                ItemDataType = ict != null ? (int?)ict.ItemComponentDataType : null, // Ensure nullable int
+                                ItemTypeValue = mrc.ItemComponentValue
+                              }).ToListAsync();
+
 
       return Json(new
       {
