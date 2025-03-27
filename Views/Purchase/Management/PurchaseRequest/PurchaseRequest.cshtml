@@ -1,5 +1,236 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model IEnumerable<Exampler_ERP.Models.PR_PurchaseRequest>
+
 @{
+    ViewData["Title"] = "Store Management - Purchase Request";
 }
+
+
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            // Edit PurchaseRequest modal popup
+            $('.editPurchaseRequestLink').click(function (e) {
+                e.preventDefault();
+                var PurchaseRequestId = $(this).data('id');
+                $.get('@Url.Action("Edit", "PurchaseRequest")', { id: PurchaseRequestId }, function (data) {
+                    $('#editPurchaseRequestModalContainer').html(data);
+                    $('#editPurchaseRequestModal').modal('show');
+                    // Trigger the calculation after modal is shown
+
+                });
+            });
+
+            $('#editPurchaseRequestModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editPurchaseRequestForm').serialize();
+                $.post('@Url.Action("Edit", "PurchaseRequest")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Add new PurchaseRequest modal popup
+            $('.addPurchaseRequestLink').click(function () {
+                $.get('@Url.Action("Create", "PurchaseRequest")', function (data) {
+                    $('#addPurchaseRequestModalContainer').html(data);
+                    $('#addPurchaseRequestModal').modal('show');
+                });
+            });
+
+
+            // Save new PurchaseRequest form
+            $('#addPurchaseRequestModalContainer').on('click', '#saveNewPurchaseRequest', function () {
+                var formData = $('#addPurchaseRequestForm').serialize();
+                $.post('@Url.Action("Create", "PurchaseRequest")', formData, function (response) {
+                    if (response.success) {
+                        $('#addPurchaseRequestModal').modal('hide');
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                        });
+            });
+
+            // Close Modal Add Contrainer
+            $('#addPurchaseRequestModalContainer').on('click', '#Close', function () {
+                $('#addPurchaseRequestModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editPurchaseRequestModalContainer').on('click', '#Close', function () {
+                $('#editPurchaseRequestModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Delete PurchaseRequest
+            $('.deletePurchaseRequestLink').click(function (e) {
+                e.preventDefault();
+                var PurchaseRequestId = $(this).data('id');
+                $.post('@Url.Action("Delete", "PurchaseRequest")', { id: PurchaseRequestId }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+            $(document).on('click', '.printPurchaseRequestLink', function (e) {
+            e.preventDefault();
+
+            var PurchaseRequestId = $(this).data('id');
+
+            PrintPurchaseRequest(PurchaseRequestId);
+        });
+        function PrintPurchaseRequest(PurchaseRequestId) {
+            var url = '@Url.Action("Print", "PurchaseRequest")' + '?id=' + PurchaseRequestId;
+
+            // Open the new window for printing
+            var printWindow = window.open(url, '_blank');
+            printWindow.focus();
+        }
+
+
+        });
+    </script>
+    <script>
+        function printListPurchaseRequestes() {
+            var printWindow = window.open('@Url.Action("PrintList", "PurchaseRequest")', '_blank');
+            printWindow.focus();
+        }
+        $('#searchItemNameButton').click(function () {
+            var searchValue = $('#searchItemNameInput').val();
+            window.location.href = '@Url.Action("Index", "PurchaseRequest")?searchItemName=' + searchValue;
+        });
+    </script>
+
+
+}
+
+
+
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Store Management /</span> Purchase Request
+</h4>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <h5 class="card-header">Searching Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8" style="padding-bottom: 15px;">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search Item Name" id="searchItemNameInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchItemNameButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <!-- Action Buttons -->
+                        <button type="button" class="btn btn-primary addPurchaseRequestLink">Add New</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "PurchaseRequest")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printListPurchaseRequestes()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Purchase Request List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-10 col-lg-10">
+                            <div class="row">
+                                <div class="col-2">
+                                    <p class="text-nowrap">Purchase Request #</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">Date</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">Status</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Edit</p>
+                        </div>
+                        <div class="col-1 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Print</p>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+
+
+
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-10 col-md-10 col-lg-10">
+                                <div class="row align-items-center">
+                                    <div class="col-2">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Purchase Request # :</span> @Html.DisplayFor(modelItem => item.PurchaseRequestID)
+                                        </p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Date :</span> @(item.PurchaseRequestDate.ToString("dd/MM/yyyy") ?? "00/00/0000")
+                                        </p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Status :</span> @item.RequestStatusTypes?.RequestStatusTypeName
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-md-1 col-lg-1">
+                                <div class="btn-group" role="group" aria-label="Actions">
+                                    <a href="#" class="editPurchaseRequestLink me-2" data-id="@item.PurchaseRequestID">
+                                        <i class="fa fa-pencil" style="font-size: large; color:steelblue;; line-height: 2;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-1 col-md-1 col-lg-1">
+                                <div class="btn-group" role="group" aria-label="Actions">
+                                    <a href="#" class="printPurchaseRequestLink me-2" data-id="@item.PurchaseRequestID">
+                                        <i class="fa fa-print" style="font-size: large; color:steelblue;; line-height: 2;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editPurchaseRequestModalContainer"></div>
+<div id="addPurchaseRequestModalContainer"></div>
+
+

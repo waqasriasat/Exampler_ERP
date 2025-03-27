@@ -1,0 +1,109 @@
+@model Exampler_ERP.Models.Temp.PurchaseRequestIndexViewModel
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<input type="hidden" asp-for="PurchaseRequests.RequisitionID" />
+<input type="hidden" asp-for="PurchaseRequests.FinalApprovalID" />
+<input type="hidden" asp-for="PurchaseRequests.ProcessTypeApprovalID" />
+<input type="hidden" asp-for="PurchaseRequests.RequisitionStatusTypeID" />
+
+<!-- Table for Added Rows -->
+<div class="table-responsive mb-3">
+    <table class="table table-bordered" id="PurchaseRequestTable">
+        <thead class="table-light">
+            <tr>
+                <th class="headercontrol headerwidth">
+                    <div class="col-md-12">
+                        <label for="ItemName" class="form-label fw-bold">Item Name</label>
+                        <select id="ItemName" name="ItemName" class="form-select">
+                            <option value="">Select Item</option>
+                            @foreach (var type in ViewBag.ItemList)
+                            {
+                                <option value="@type.Value">@type.Text</option>
+                            }
+                        </select>
+                    </div>
+                </th>
+                <th class="headercontrol">
+                    <div class="col-md-12">
+                        <label for="Quantity" class="form-label fw-bold">Quantity</label>
+                        <input type="text" id="Quantity" name="Quantity" class="form-control" />
+                    </div>
+                </th>
+                <th class="headercontrol">
+                    <div class="col-md-12">
+                        <label for="BalanceQuantity" class="form-label fw-bold">Balance Quantity</label>
+                        <input type="text" id="BalanceQuantity" name="BalanceQuantity" class="form-control" />
+                    </div>
+                </th>
+                <th class="headercontrol">
+                    <div class="col-md-12">
+                        <label for="RequiredDate" class="form-label fw-bold">Required Date</label>
+                        <input type="date" id="RequiredDate" name="RequiredDate" class="form-control" />
+                    </div>
+                </th>
+                <th class="headercontrol">
+                    <div class="col-md-12" style="text-align-last: center;">
+                        <button type="button" class="btn btn-primary add-row width-button">Add</button>
+                    </div>
+                </th>
+            </tr>
+            <tr><th style="border: none;"></th></tr>
+            <tr>
+                <th>Item Name</th>
+                <th>Quantity</th>
+                <th>Balance Quantity</th>
+                <th>Required Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.PurchaseRequests.PurchaseRequestDetails != null && Model.PurchaseRequests.PurchaseRequestDetails.Count > 0)
+            {
+                @for (int i = 0; i < Model.PurchaseRequests.PurchaseRequestDetails.Count; i++)
+                {
+                    <tr>
+                        <td class="col-md-4">
+                            <select class="form-select inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].ItemID" value="PurchaseRequests.PurchaseRequestDetails[@i].ItemID">
+                                <option value="">Select Item</option>
+                                @foreach (var type in ViewBag.ItemNameList)
+                                {
+                                    if (type.Value == Model.PurchaseRequests.PurchaseRequestDetails[i].ItemID.ToString())
+                                    {
+                                        <option value="@type.Value" selected>@type.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@type.Value">@type.Text</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].Quantity" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].Quantity" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].BalanceQuantity" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].BalanceQuantity" />
+                        </td>
+                        <td>
+                            <input type="date" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].RequiredDate"
+                                   value="@Model.PurchaseRequests.PurchaseRequestDetails[i].RequiredDate.ToString("yyyy-MM-dd")" />
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-danger remove-row width-button">Remove</button>
+                        </td>
+                    </tr>
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<!-- Remarks Section -->
+<div class="row mb-3">
+    <div class="col-md-12">
+        <label asp-for="PurchaseRequests.Remarks" class="form-label fw-bold">Remarks</label>
+        <textarea asp-for="PurchaseRequests.Remarks" class="form-control" rows="3"></textarea>
+    </div>
+</div>

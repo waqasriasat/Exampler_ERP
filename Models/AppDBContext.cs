@@ -57,6 +57,8 @@ namespace Exampler_ERP.Models
     public DbSet<Settings_RequisitionStatusType> Settings_RequisitionStatusTypes { get; set; }
     public DbSet<Settings_IssuanceStatusType> Settings_IssuanceStatusTypes { get; set; }
 
+    public DbSet<Settings_RequestStatusType> Settings_RequestStatusTypes { get; set; }
+
     public DbSet<CR_ProcessTypeApproval> CR_ProcessTypeApprovals { get; set; }
     public DbSet<CR_ProcessTypeApprovalDetail> CR_ProcessTypeApprovalDetails { get; set; }
     public DbSet<CR_ProcessTypeApprovalDetailDoc> CR_ProcessTypeApprovalDetailDocs { get; set; }
@@ -125,9 +127,12 @@ namespace Exampler_ERP.Models
     public DbSet<ST_MaterialReceivedComponent> ST_MaterialReceivedComponents { get; set; }
     public DbSet<ST_MaterialIssuance> ST_MaterialIssuances { get; set; }
     public DbSet<ST_MaterialIssuanceDetail> ST_MaterialIssuanceDetails { get; set; }
+
+
     public DbSet<PR_ProcurementQueue> PR_ProcurementQueues { get; set; }
     public DbSet<PR_PurchaseRequest> PR_PurchaseRequests { get; set; }
     public DbSet<PR_PurchaseRequestDetail> PR_PurchaseRequestDetails { get; set; }
+    public DbSet<PR_PurchaseRequestStatus> PR_PurchaseRequestStatuss { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

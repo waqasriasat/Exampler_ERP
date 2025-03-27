@@ -1,0 +1,53 @@
+@model IEnumerable<Exampler_ERP.Models.PR_PurchaseRequest>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Purchase Request</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Purchase Request List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Requisition ID</th>
+                <th>Requisition Date</th>
+                <th>Requisition Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var PurchaseRequest in Model)
+            {
+                <tr>
+                    @* <td>@PurchaseRequest.RequisitionID</td>
+                    <td>@PurchaseRequest.RequisitionDate.ToString("dd/MM/yyyy")</td>
+                    <td>@(PurchaseRequest.RequisitionStatusTypes?.RequisitionStatusTypeName)</td> *@
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

@@ -434,5 +434,54 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }
     }
+    [HttpPost]
+    public IActionResult CreatePurchaseRequest(int ItemID, int Quantity)
+    {
+      if (Quantity <= 0)
+      {
+        return Json(new { success = false, message = "Invalid purchase quantity!" });
+      }
+      var procurementQueue = new PR_ProcurementQueue
+      {
+        ProcurementQueueDate = DateTime.Now,
+        ItemID = ItemID,
+        UnitTypeID = _appDBContext.ST_Items
+                     .Where(v => v.ItemID == ItemID)
+                     .Select(v => v.UnitTypeID)
+                     .FirstOrDefault(),
+        Quantity = Quantity,
+        ForwardYNID = 0
+      };
+
+      _appDBContext.PR_ProcurementQueues.Add(procurementQueue);
+      // Example: Create a new purchase entry in the database
+      //var purchase = new PR_PurchaseRequest
+      //{
+      //  PurchaseRequestDate = DateTime.Now,
+      //  Remarks = "Get by Issuance",
+      //  FinalApprovalID = 0,
+      //  ProcessTypeApprovalID = 0
+      //};
+
+      //_appDBContext.PR_PurchaseRequests.Add(purchase);
+
+      //var purchaseDetail = new PR_PurchaseRequestDetail
+      //{
+      //  PR_PurchaseRequestID = purchase.PurchaseRequestID,
+      //  UnitTypeID = _appDBContext.ST_Items
+      //             .Where(v => v.ItemID == ItemID)
+      //             .Select(v => v.UnitTypeID)
+      //             .FirstOrDefault(),
+      //  ItemID = ItemID,
+      //  Quantity = Quantity,
+      //  PriorityLevel = 1,
+      //};
+
+      //_appDBContext.PR_PurchaseRequestDetails.Add(purchaseDetail);
+      _appDBContext.SaveChanges();
+
+      return Json(new { success = true, message = "Purchase request created successfully!" });
+    }
+
   }
 }
