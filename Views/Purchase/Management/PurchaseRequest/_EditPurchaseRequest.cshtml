@@ -1,10 +1,10 @@
 @model Exampler_ERP.Models.Temp.PurchaseRequestIndexViewModel
 
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-<input type="hidden" asp-for="PurchaseRequests.RequisitionID" />
+<input type="hidden" asp-for="PurchaseRequests.PurchaseRequestID" />
 <input type="hidden" asp-for="PurchaseRequests.FinalApprovalID" />
 <input type="hidden" asp-for="PurchaseRequests.ProcessTypeApprovalID" />
-<input type="hidden" asp-for="PurchaseRequests.RequisitionStatusTypeID" />
+<input type="hidden" asp-for="PurchaseRequests.RequestStatusTypeID" />
 
 <!-- Table for Added Rows -->
 <div class="table-responsive mb-3">
@@ -25,20 +25,20 @@
                 </th>
                 <th class="headercontrol">
                     <div class="col-md-12">
+                        <label for="UnitType" class="form-label fw-bold">Unit Type</label>
+                        <input type="text" id="UnitType" name="UnitType" class="form-control" />
+                    </div>
+                </th>
+                <th class="headercontrol">
+                    <div class="col-md-12">
                         <label for="Quantity" class="form-label fw-bold">Quantity</label>
                         <input type="text" id="Quantity" name="Quantity" class="form-control" />
                     </div>
                 </th>
                 <th class="headercontrol">
                     <div class="col-md-12">
-                        <label for="BalanceQuantity" class="form-label fw-bold">Balance Quantity</label>
-                        <input type="text" id="BalanceQuantity" name="BalanceQuantity" class="form-control" />
-                    </div>
-                </th>
-                <th class="headercontrol">
-                    <div class="col-md-12">
-                        <label for="RequiredDate" class="form-label fw-bold">Required Date</label>
-                        <input type="date" id="RequiredDate" name="RequiredDate" class="form-control" />
+                        <label for="PriorityLevel" class="form-label fw-bold">Priority Level</label>
+                        <input type="text" id="PriorityLevel" name="PriorityLevel" class="form-control" />
                     </div>
                 </th>
                 <th class="headercontrol">
@@ -50,45 +50,55 @@
             <tr><th style="border: none;"></th></tr>
             <tr>
                 <th>Item Name</th>
+                <th>Unit Type</th>
                 <th>Quantity</th>
-                <th>Balance Quantity</th>
-                <th>Required Date</th>
+                <th>Priority Level</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @if (Model.PurchaseRequests.PurchaseRequestDetails != null && Model.PurchaseRequests.PurchaseRequestDetails.Count > 0)
+
             {
-                @for (int i = 0; i < Model.PurchaseRequests.PurchaseRequestDetails.Count; i++)
+
+                for (int i = 0; i < Model.PurchaseRequests.PurchaseRequestDetails.Count; i++)
+
                 {
                     <tr>
-                        <td class="col-md-4">
-                            <select class="form-select inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].ItemID" value="PurchaseRequests.PurchaseRequestDetails[@i].ItemID">
+                        <td>
+                            <select class="form-select" name="PurchaseRequestDetails[@i].ItemID">
                                 <option value="">Select Item</option>
                                 @foreach (var type in ViewBag.ItemNameList)
+
                                 {
-                                    if (type.Value == Model.PurchaseRequests.PurchaseRequestDetails[i].ItemID.ToString())
-                                    {
-                                        <option value="@type.Value" selected>@type.Text</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@type.Value">@type.Text</option>
-                                    }
+                                    <option value="@type.Value">@type.Text</option>
                                 }
                             </select>
                         </td>
                         <td>
-                            <input type="text" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].Quantity" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].Quantity" />
+                            <select class="form-select" name="PurchaseRequestDetails[@i].UnitTypeID">
+                                <option value="">Select Unit</option>
+                                @foreach (var type in ViewBag.ItemUnitList)
+
+                                {
+                                    <option value="@type.Value">@type.Text</option>
+                                }
+                            </select>
                         </td>
                         <td>
-                            <input type="text" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].BalanceQuantity" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].BalanceQuantity" />
+                            <input type="text" class="form-control" name="PurchaseRequestDetails[@i].Quantity" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].Quantity" />
                         </td>
                         <td>
-                            <input type="date" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].RequiredDate"
-                                   value="@Model.PurchaseRequests.PurchaseRequestDetails[i].RequiredDate.ToString("yyyy-MM-dd")" />
+                            <select class="form-select" name="PurchaseRequestDetails[@i].PriorityLevel">
+                                <option value="">Select Priority Level</option>
+                                @foreach (var type in ViewBag.PriorityLevelList)
+
+                                {
+                                    <option value="@type.Value">@type.Text</option>
+                                }
+                            </select>
                         </td>
-                        <td>
+                        <td style="text-align-last: center;">
                             <button type="button" class="btn btn-sm btn-danger remove-row width-button">Remove</button>
                         </td>
                     </tr>

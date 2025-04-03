@@ -23,15 +23,15 @@ namespace Exampler_ERP.Controllers.Purchase.Management
     {
       var PurchaseRequestsQuery = _appDBContext.PR_PurchaseRequests
           .Include(v => v.PurchaseRequestDetails)
-              .ThenInclude(d => d.Item) // Ensure Item is included to avoid null reference issues
+              .ThenInclude(d => d.Item) 
           .Include(v => v.RequestStatusTypes)
-          .AsQueryable(); // Ensure efficient query building
+          .AsQueryable();
 
       if (!string.IsNullOrEmpty(searchItemName))
       {
         PurchaseRequestsQuery = PurchaseRequestsQuery
             .Where(v => v.PurchaseRequestDetails
-                .Any(d => d.Item != null && d.Item.ItemName.Contains(searchItemName))); // Null check added
+                .Any(d => d.Item != null && d.Item.ItemName.Contains(searchItemName)));
       }
 
       var PurchaseRequests = await PurchaseRequestsQuery.ToListAsync();
@@ -41,167 +41,167 @@ namespace Exampler_ERP.Controllers.Purchase.Management
         TempData["ErrorMessage"] = $"No Purchase Request found with the name '{searchItemName}'. Please check the name and try again.";
       }
 
-      return View("~/Views/Purchase/Purchase/PurchaseRequest/PurchaseRequest.cshtml", PurchaseRequests);
+      return View("~/Views/Purchase/Management/PurchaseRequest/PurchaseRequest.cshtml", PurchaseRequests);
     }
 
-    //[HttpGet]
-    //public async Task<IActionResult> Create()
-    //{
-    //  ViewBag.ItemList = await _utils.GetItemList();
-    //  ViewBag.ItemNameList = await _utils.GetItemList();
+    [HttpGet]
+    public async Task<IActionResult> Create()
+    {
+      ViewBag.ItemList = await _utils.GetItemList();
+      ViewBag.ItemNameList = await _utils.GetItemList();
+      ViewBag.ItemUnitList = await _utils.GetItemUnits();
+      ViewBag.PriorityLevelList = await _utils.GetPriorityLevel();
 
-    //  PR_PurchaseRequest Requisitions = new PR_PurchaseRequest();
-    //  Requisitions.PurchaseRequestDetails.Add(new PR_PurchaseRequestDetail() { RequisitionID = 0 });
-    //  var model = new PurchaseRequestsIndexViewModel
-    //  {
-    //    PurchaseRequests = Requisitions
-    //  };
+      PR_PurchaseRequest Requests = new PR_PurchaseRequest();
+      Requests.PurchaseRequestDetails.Add(new PR_PurchaseRequestDetail() { PR_PurchaseRequestID = 0 });
+      var model = new PurchaseRequestIndexViewModel
+      {
+        PurchaseRequests = Requests
+      };
 
-    //  return PartialView("~/Views/Purchase/Purchase/PurchaseRequest/AddPurchaseRequest.cshtml", model);
-    //}
-    //[HttpPost]
-    //public async Task<IActionResult> Create(PurchaseRequestsIndexViewModel model)
-    //{
-    //  if (ModelState.IsValid)
-    //  {
-    //    try
-    //    {
-    //      int userID = int.Parse(HttpContext.Session.GetInt32("UserID").ToString());
-    //      int departmentID = await _utils.PostUserIDGetDepartmentID(userID);
-    //      model.PurchaseRequests.DepartmentTypeID = departmentID;
-    //      model.PurchaseRequests.FinalApprovalID = 0;
-    //      model.PurchaseRequests.RequisitionStatusTypeID = 1;
-    //      model.PurchaseRequests.RequisitionDate = DateTime.Now;
-    //      _appDBContext.PR_PurchaseRequests.Add(model.PurchaseRequests);
-    //      //await _appDBContext.SaveChangesAsync();
+      return PartialView("~/Views/Purchase/Management/PurchaseRequest/AddPurchaseRequest.cshtml", model);
+    }
+    [HttpPost]
+    public async Task<IActionResult> Create(PurchaseRequestIndexViewModel model)
+    {
+      if (ModelState.IsValid)
+      {
+        try
+        {
+          int userID = int.Parse(HttpContext.Session.GetInt32("UserID").ToString());
+          model.PurchaseRequests.FinalApprovalID = 0;
+          model.PurchaseRequests.RequestStatusTypeID = 1;
+          model.PurchaseRequests.PurchaseRequestDate = DateTime.Now;
+          _appDBContext.PR_PurchaseRequests.Add(model.PurchaseRequests);
+    
+          model.PurchaseRequests.PurchaseRequestDetails.RemoveAll(e => e.ItemID == 0);
+          model.PurchaseRequests.PurchaseRequestDetails.RemoveAll(e => e.ItemID == null || e.ItemID == 0);
 
-    //      model.PurchaseRequests.PurchaseRequestDetails.RemoveAll(e => e.ItemID == 0);
-    //      model.PurchaseRequests.PurchaseRequestDetails.RemoveAll(e => e.ItemID == null || e.ItemID == 0);
+          foreach (var detail in model.PurchaseRequests.PurchaseRequestDetails)
+          {
+            detail.PR_PurchaseRequestID = model.PurchaseRequests.PurchaseRequestID;
+            _appDBContext.PR_PurchaseRequestDetails.Add(detail);
+          }
 
-    //      foreach (var detail in model.PurchaseRequests.PurchaseRequestDetails)
-    //      {
-    //        detail.RequisitionID = model.PurchaseRequests.RequisitionID;
-    //        _appDBContext.PR_PurchaseRequestDetails.Add(detail);
-    //      }
+          await _appDBContext.SaveChangesAsync();
 
-    //      await _appDBContext.SaveChangesAsync();
+          var RequestID = model.PurchaseRequests.PurchaseRequestID;
 
-    //      var RequisitionID = model.PurchaseRequests.RequisitionID;
+          var PurchaseRequestStatus = new PR_PurchaseRequestStatus
+          {
+            PurchaseRequestID = RequestID,
+            ActionDate = DateTime.Now,
+            ActionID = HttpContext.Session.GetInt32("UserID") ?? default(int),
+            ActionStatusTypeID = 1
+          };
 
-    //      var PurchaseRequestStatus = new PR_PurchaseRequestStatus
-    //      {
-    //        RequisitionID = RequisitionID,
-    //        ActionDate = DateTime.Now,
-    //        ActionID = HttpContext.Session.GetInt32("UserID") ?? default(int),
-    //        ActionStatusTypeID = 1
-    //      };
+          _appDBContext.PR_PurchaseRequestStatuss.Add(PurchaseRequestStatus);
 
-    //      _appDBContext.PR_PurchaseRequestStatuss.Add(PurchaseRequestStatus);
-
-    //      await _appDBContext.SaveChangesAsync();
+          await _appDBContext.SaveChangesAsync();
 
 
-    //      if (RequisitionID > 0)
-    //      {
-    //        var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
-    //                            .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 20)
-    //                            .CountAsync();
+          if (RequestID > 0)
+          {
+            var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
+                                .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 21)
+                                .CountAsync();
 
-    //        if (processCount > 0)
-    //        {
+            if (processCount > 0)
+            {
+              var newProcessTypeApproval = new CR_ProcessTypeApproval
+              {
+                ProcessTypeID = 21,
+                Notes = "Pending New Purchase Request",
+                Date = DateTime.Now,
+                UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
+                EmployeeID = await _utils.PostUserIDGetEmployeeID(userID),
+                TransactionID = RequestID
+              };
 
-    //          var newProcessTypeApproval = new CR_ProcessTypeApproval
-    //          {
-    //            ProcessTypeID = 20,
-    //            Notes = "Pending New Purchase Request",
-    //            Date = DateTime.Now,
-    //            EmployeeID = await _utils.PostUserIDGetEmployeeID(userID),
-    //            UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
-    //            TransactionID = RequisitionID
-    //          };
+              _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
+              await _appDBContext.SaveChangesAsync();
 
-    //          _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
-    //          await _appDBContext.SaveChangesAsync();
+              var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
+                                          .Where(pta => pta.ProcessTypeID == 21 && pta.Rank == 1)
+                                          .FirstOrDefaultAsync();
 
-    //          var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
-    //                                      .Where(pta => pta.ProcessTypeID == 20 && pta.Rank == 1)
-    //                                      .FirstOrDefaultAsync();
+              if (nextApprovalSetup != null)
+              {
+                var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
+                {
+                  ProcessTypeApprovalID = newProcessTypeApproval.ProcessTypeApprovalID,
+                  Date = DateTime.Now,
+                  RoleID = nextApprovalSetup.RoleTypeID,
+                  AppID = 0,
+                  AppUserID = 0,
+                  Notes = null,
+                  Rank = nextApprovalSetup.Rank
+                };
 
-    //          if (nextApprovalSetup != null)
-    //          {
-    //            var newProcessTypeApprovalDetail = new CR_ProcessTypeApprovalDetail
-    //            {
-    //              ProcessTypeApprovalID = newProcessTypeApproval.ProcessTypeApprovalID,
-    //              Date = DateTime.Now,
-    //              RoleID = nextApprovalSetup.RoleTypeID,
-    //              AppID = 0,
-    //              AppUserID = 0,
-    //              Notes = null,
-    //              Rank = nextApprovalSetup.Rank
-    //            };
+                _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
+                await _appDBContext.SaveChangesAsync();
+              }
+              else
+              {
+                return Json(new { success = false, message = "Next approval setup not found." });
+              }
+            }
+            else
+            {
+              model.PurchaseRequests.FinalApprovalID = 1;
+              model.PurchaseRequests.RequestStatusTypeID = 2;
+              _appDBContext.PR_PurchaseRequests.Update(model.PurchaseRequests);
 
-    //            _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
-    //            await _appDBContext.SaveChangesAsync();
-    //          }
-    //          else
-    //          {
-    //            return Json(new { success = false, message = "Next approval setup not found." });
-    //          }
-    //        }
-    //        else
-    //        {
-    //          model.PurchaseRequests.FinalApprovalID = 1;
-    //          model.PurchaseRequests.RequisitionStatusTypeID = 2;
-    //          _appDBContext.PR_PurchaseRequests.Update(model.PurchaseRequests);
+              PurchaseRequestStatus.ActionStatusTypeID = 2;
+              _appDBContext.PR_PurchaseRequestStatuss.Update(PurchaseRequestStatus);
 
-    //          PurchaseRequestStatus.ActionStatusTypeID = 2;
-    //          _appDBContext.PR_PurchaseRequestStatuss.Update(PurchaseRequestStatus);
+              await _appDBContext.SaveChangesAsync();
+              TempData["SuccessMessage"] = " Purchase Request successfully. No process setup found,  Purchase Request Approved.";
+              return Json(new { success = true, message = "No process setup found,  Purchase Request Approved." });
+            }
+          }
+          TempData["SuccessMessage"] = " Purchase Request Created successfully. Continue to the Approval Process Setup for  Purchase Request Approved.";
 
-    //          await _appDBContext.SaveChangesAsync();
-    //          TempData["SuccessMessage"] = " Purchase Request successfully. No process setup found,  Purchase Request Approved.";
-    //          return Json(new { success = true, message = "No process setup found,  Purchase Request Approved." });
-    //        }
-    //      }
-    //      TempData["SuccessMessage"] = " Purchase Request Created successfully. Continue to the Approval Process Setup for  Purchase Request Approved.";
+          return Json(new { success = true });
+        }
+        catch (Exception ex)
+        {
+          return Json(new { success = false, message = "Error: " + ex.Message });
+        }
 
-    //      return Json(new { success = true });
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //      return Json(new { success = false, message = "Error: " + ex.Message });
-    //    }
+      }
 
-    //  }
+      ViewBag.ItemList = await _utils.GetItemList();
+      ViewBag.ItemNameList = await _utils.GetItemList();
+      ViewBag.ItemUnitList = await _utils.GetItemUnits();
+      ViewBag.PriorityLevelList = await _utils.GetPriorityLevel();
 
-    //  ViewBag.ItemList = await _utils.GetItemList();
-    //  ViewBag.ItemNameList = await _utils.GetItemList();
+      if (model.PurchaseRequests.PurchaseRequestDetails == null || !model.PurchaseRequests.PurchaseRequestDetails.Any())
+      {
+        model.PurchaseRequests.PurchaseRequestDetails = new List<PR_PurchaseRequestDetail> { new PR_PurchaseRequestDetail() };
+      }
 
-    //  if (model.PurchaseRequests.PurchaseRequestDetails == null || !model.PurchaseRequests.PurchaseRequestDetails.Any())
-    //  {
-    //    model.PurchaseRequests.PurchaseRequestDetails = new List<PR_PurchaseRequestDetail> { new PR_PurchaseRequestDetail() };
-    //  }
+      if (model.PurchaseRequests == null)
+      {
+        model.PurchaseRequests = new PR_PurchaseRequest();
+      }
 
-    //  if (model.PurchaseRequests == null)
-    //  {
-    //    model.PurchaseRequests = new PR_PurchaseRequest();
-    //  }
-
-    //  return PartialView("~/Views/Purchase/Purchase/PurchaseRequest/AddPurchaseRequest.cshtml", model);
-    //}
+      return PartialView("~/Views/Purchase/Management/PurchaseRequest/AddPurchaseRequest.cshtml", model);
+    }
     //[HttpGet]
     //public async Task<IActionResult> Edit(int id)
     //{
     //  var PurchaseRequests = await _appDBContext.PR_PurchaseRequests
     //      .Include(v => v.PurchaseRequestDetails)
-    //      .FirstOrDefaultAsync(v => v.RequisitionID == id);
+    //      .FirstOrDefaultAsync(v => v.RequestID == id);
 
     //  if (PurchaseRequests == null)
     //  {
     //    return NotFound();
     //  }
 
-    //  // Check RequisitionStatusTypeID
-    //  if (PurchaseRequests.RequisitionStatusTypeID != 1)
+    //  // Check RequeststatusTypeID
+    //  if (PurchaseRequests.RequeststatusTypeID != 1)
     //  {
     //    TempData["ErrorMessage"] = "After approval, editing is not allowed.....";
 
@@ -209,7 +209,7 @@ namespace Exampler_ERP.Controllers.Purchase.Management
 
     //  PurchaseRequests.PurchaseRequestDetails.Add(new PR_PurchaseRequestDetail()
     //  {
-    //    RequisitionID = PurchaseRequests.RequisitionID
+    //    RequestID = PurchaseRequests.RequestID
     //  });
 
     //  var model = new PurchaseRequestsIndexViewModel
@@ -220,7 +220,7 @@ namespace Exampler_ERP.Controllers.Purchase.Management
     //  ViewBag.ItemList = await _utils.GetItemList();
     //  ViewBag.ItemNameList = await _utils.GetItemList();
 
-    //  return PartialView("~/Views/Purchase/Purchase/PurchaseRequest/EditPurchaseRequest.cshtml", model);
+    //  return PartialView("~/Views/Purchase/Management/PurchaseRequest/EditPurchaseRequest.cshtml", model);
     //}
     //[HttpPost]
     //public async Task<IActionResult> Edit(PurchaseRequestsIndexViewModel PurchaseRequest)
@@ -230,8 +230,8 @@ namespace Exampler_ERP.Controllers.Purchase.Management
 
     //    var existingPurchaseRequest = await _appDBContext.PR_PurchaseRequests
     //        .Include(v => v.PurchaseRequestDetails)
-    //        .FirstOrDefaultAsync(v => v.RequisitionID == PurchaseRequest.PurchaseRequests.RequisitionID);
-    //    if (existingPurchaseRequest?.RequisitionStatusTypeID != 1)
+    //        .FirstOrDefaultAsync(v => v.RequestID == PurchaseRequest.PurchaseRequests.RequestID);
+    //    if (existingPurchaseRequest?.RequeststatusTypeID != 1)
     //    {
     //      TempData["ErrorMessage"] = "After approval, editing is not allowed.....";
 
@@ -246,7 +246,7 @@ namespace Exampler_ERP.Controllers.Purchase.Management
     //        await _appDBContext.SaveChangesAsync();
 
     //        var PurchaseRequestDetailsToRemove = _appDBContext.PR_PurchaseRequestDetails
-    //        .Where(v => v.RequisitionID == PurchaseRequest.PurchaseRequests.RequisitionID)
+    //        .Where(v => v.RequestID == PurchaseRequest.PurchaseRequests.RequestID)
     //        .ToList();
 
     //        _appDBContext.PR_PurchaseRequestDetails.RemoveRange(PurchaseRequestDetailsToRemove);
@@ -256,7 +256,7 @@ namespace Exampler_ERP.Controllers.Purchase.Management
 
     //        foreach (var detail in PurchaseRequest.PurchaseRequests.PurchaseRequestDetails)
     //        {
-    //          detail.RequisitionID = PurchaseRequest.PurchaseRequests.RequisitionID;
+    //          detail.RequestID = PurchaseRequest.PurchaseRequests.RequestID;
     //          _appDBContext.PR_PurchaseRequestDetails.Add(detail);
     //        }
 
@@ -274,14 +274,14 @@ namespace Exampler_ERP.Controllers.Purchase.Management
     //  ViewBag.ItemList = await _utils.GetItemList();
     //  ViewBag.ItemNameList = await _utils.GetItemList();
 
-    //  return PartialView("~/Views/Purchase/Purchase/PurchaseRequest/EditPurchaseRequest.cshtml", PurchaseRequest);
+    //  return PartialView("~/Views/Purchase/Management/PurchaseRequest/EditPurchaseRequest.cshtml", PurchaseRequest);
     //}
     //public async Task<IActionResult> Print(int id)
     //{
     //  var PurchaseRequests = await _appDBContext.PR_PurchaseRequests
     //       .Include(v => v.PurchaseRequestDetails)
-    //       .Include(v => v.RequisitionStatusTypes)
-    //       .FirstOrDefaultAsync(v => v.RequisitionID == id);
+    //       .Include(v => v.RequeststatusTypes)
+    //       .FirstOrDefaultAsync(v => v.RequestID == id);
 
     //  if (PurchaseRequests == null)
     //  {
@@ -291,7 +291,7 @@ namespace Exampler_ERP.Controllers.Purchase.Management
 
     //  PurchaseRequests.PurchaseRequestDetails.Add(new PR_PurchaseRequestDetail()
     //  {
-    //    RequisitionID = PurchaseRequests.RequisitionID
+    //    RequestID = PurchaseRequests.RequestID
     //  });
 
     //  var model = new PurchaseRequestsIndexViewModel
@@ -310,7 +310,7 @@ namespace Exampler_ERP.Controllers.Purchase.Management
     //  ViewBag.ItemList = await _utils.GetItemList();
     //  ViewBag.ItemNameList = await _utils.GetItemList();
 
-    //  return View("~/Views/Purchase/Purchase/PurchaseRequest/PrintPurchaseRequest.cshtml", model);
+    //  return View("~/Views/Purchase/Management/PurchaseRequest/PrintPurchaseRequest.cshtml", model);
     //}
     //public async Task<IActionResult> PrintList()
     //{
@@ -318,12 +318,12 @@ namespace Exampler_ERP.Controllers.Purchase.Management
     //  int departmentID = await _utils.PostUserIDGetDepartmentID(UserID);
     //  var PurchaseRequestsQuery = _appDBContext.PR_PurchaseRequests
     //    .Include(v => v.PurchaseRequestDetails)
-    //    .Include(v => v.RequisitionStatusTypes)
+    //    .Include(v => v.RequeststatusTypes)
     //    .Where(v => v.DepartmentTypeID == departmentID);
 
     //  var PurchaseRequests = await PurchaseRequestsQuery.ToListAsync();
 
-    //  return View("~/Views/Purchase/Purchase/PurchaseRequest/PrintListPurchaseRequest.cshtml", PurchaseRequests);
+    //  return View("~/Views/Purchase/Management/PurchaseRequest/PrintListPurchaseRequest.cshtml", PurchaseRequests);
     //}
     //public async Task<IActionResult> ExportToExcel()
     //{
@@ -333,22 +333,22 @@ namespace Exampler_ERP.Controllers.Purchase.Management
     //  int departmentID = await _utils.PostUserIDGetDepartmentID(UserID);
     //  var PurchaseRequestsQuery = _appDBContext.PR_PurchaseRequests
     //    .Include(v => v.PurchaseRequestDetails)
-    //    .Include(v => v.RequisitionStatusTypes)
+    //    .Include(v => v.RequeststatusTypes)
     //    .Where(v => v.DepartmentTypeID == departmentID);
 
     //  var PurchaseRequests = await PurchaseRequestsQuery.ToListAsync();
     //  using (var package = new ExcelPackage())
     //  {
     //    var worksheet = package.Workbook.Worksheets.Add("PurchaseRequests");
-    //    worksheet.Cells["A1"].Value = "Requisition #";
-    //    worksheet.Cells["B1"].Value = "Requisition Date";
-    //    worksheet.Cells["C1"].Value = "Requisition Status";
+    //    worksheet.Cells["A1"].Value = "Request #";
+    //    worksheet.Cells["B1"].Value = "Request Date";
+    //    worksheet.Cells["C1"].Value = "Request Status";
 
     //    for (int i = 0; i < PurchaseRequests.Count; i++)
     //    {
-    //      worksheet.Cells[i + 2, 1].Value = PurchaseRequests[i].RequisitionID;
-    //      worksheet.Cells[i + 2, 2].Value = PurchaseRequests[i].RequisitionDate.ToString("dd-MMM-yyyy");
-    //      worksheet.Cells[i + 2, 3].Value = PurchaseRequests[i].RequisitionStatusTypes?.RequisitionStatusTypeName;
+    //      worksheet.Cells[i + 2, 1].Value = PurchaseRequests[i].RequestID;
+    //      worksheet.Cells[i + 2, 2].Value = PurchaseRequests[i].RequestDate.ToString("dd-MMM-yyyy");
+    //      worksheet.Cells[i + 2, 3].Value = PurchaseRequests[i].RequeststatusTypes?.RequeststatusTypeName;
 
 
     //    }

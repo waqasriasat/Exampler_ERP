@@ -872,6 +872,13 @@ new ST_Item() { ItemID = 724, ItemCode = "1724", ItemName = "ZIP LOCK BAG (8X12)
    new Settings_IssuanceStatusType() { IssuanceStatusTypeID = 3, IssuanceStatusTypeName = "Partially Complete", DeleteYNID = 0, ActiveYNID = 1 },
    new Settings_IssuanceStatusType() { IssuanceStatusTypeID = 4, IssuanceStatusTypeName = "Complete", DeleteYNID = 0, ActiveYNID = 1 }
 );
+      //Settings_RequestStatusTypes
+      modelBuilder.Entity<Settings_RequestStatusType>().HasData(
+    new Settings_RequestStatusType() { RequestStatusTypeID = 1, RequestStatusTypeName = "Pending", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_RequestStatusType() { RequestStatusTypeID = 2, RequestStatusTypeName = "Approved", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_RequestStatusType() { RequestStatusTypeID = 3, RequestStatusTypeName = "Partially Complete", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_RequestStatusType() { RequestStatusTypeID = 4, RequestStatusTypeName = "Complete", DeleteYNID = 0, ActiveYNID = 1 }
+);
 
       modelBuilder.Entity<Settings_RequisitionStatusType>().HasData(
     new Settings_RequisitionStatusType() { RequisitionStatusTypeID = 1, RequisitionStatusTypeName = "Pending", DeleteYNID = 0, ActiveYNID = 1 },
@@ -1688,7 +1695,8 @@ new ST_Item() { ItemID = 724, ItemCode = "1724", ItemName = "ZIP LOCK BAG (8X12)
      new Settings_ProcessType() { ProcessTypeID = 17, ProcessTypeName = "Transfer Voucher", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_ProcessType() { ProcessTypeID = 18, ProcessTypeName = "Payment Voucher", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_ProcessType() { ProcessTypeID = 19, ProcessTypeName = "Received Voucher", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_ProcessType() { ProcessTypeID = 20, ProcessTypeName = "Material Requisition", ActiveYNID = 1, DeleteYNID = 0 }
+     new Settings_ProcessType() { ProcessTypeID = 20, ProcessTypeName = "Material Requisition", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 21, ProcessTypeName = "Purchase Request", ActiveYNID = 1, DeleteYNID = 0 }
 
      );
 

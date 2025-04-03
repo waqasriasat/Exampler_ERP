@@ -14,6 +14,8 @@
         width: 120px;
     }
 
+    priorityLevelText
+
     .modal-header {
         padding: 1rem 1.5rem;
     }
@@ -40,7 +42,11 @@
     }
 
     .table .headerwidth {
-        width: 60%;
+        width: 40%;
+    }
+
+    .table .headerwidthRow {
+        width: 20%;
     }
 </style>
 
@@ -66,34 +72,43 @@
                                             <select id="ItemName" name="ItemName" class="form-select">
                                                 <option value="">Select Item</option>
                                                 @foreach (var type in ViewBag.ItemList)
-
-
-
                                                 {
                                                     <option value="@type.Value">@type.Text</option>
                                                 }
                                             </select>
                                         </div>
                                     </th>
-                                    <th class="headercontrol">
+                                    <th class="headercontrol headerwidthRow">
+                                        <div class="col-md-12">
+                                            <label for="UnitTypeID" class="form-label fw-bold">Unit</label>
+                                            <select id="UnitTypeID" name="UnitTypeID" class="form-select">
+                                                <option value="">Select Unit</option>
+                                                @foreach (var type in ViewBag.ItemUnitList)
+                                                {
+                                                    <option value="@type.Value">@type.Text</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </th>
+                                    <th class="headercontrol headerwidthRow">
                                         <div class="col-md-12">
                                             <label for="Quantity" class="form-label fw-bold">Quantity</label>
                                             <input type="text" id="Quantity" name="Quantity" class="form-control" />
                                         </div>
                                     </th>
-                                    <th class="headercontrol">
+                                    <th class="headercontrol headerwidthRow">
                                         <div class="col-md-12">
-                                            <label for="BalanceQuantity" class="form-label fw-bold">Balance Quantity</label>
-                                            <input type="text" id="BalanceQuantity" name="BalanceQuantity" class="form-control" />
+                                            <label for="PriorityLevel" class="form-label fw-bold">Priority Level</label>
+                                            <select id="PriorityLevel" name="PriorityLevel" class="form-select">
+                                                <option value="">Select Priority Level</option>
+                                                @foreach (var type in ViewBag.PriorityLevelList)
+                                                {
+                                                    <option value="@type.Value">@type.Text</option>
+                                                }
+                                            </select>
                                         </div>
                                     </th>
-                                    <th class="headercontrol">
-                                        <div class="col-md-12">
-                                            <label for="RequiredDate" class="form-label fw-bold">Required Date</label>
-                                            <input type="date" id="RequiredDate" name="RequiredDate" class="form-control" />
-                                        </div>
-                                    </th>
-                                    <th class="headercontrol">
+                                    <th class="headercontrol headerwidthRow">
                                         <div class="col-md-12" style="text-align-last: center;">
                                             <button type="button" class="btn btn-primary add-row width-button">Add</button>
                                         </div>
@@ -102,9 +117,9 @@
                                 <tr><th style="border: none;"></th></tr>
                                 <tr>
                                     <th>Item Name</th>
+                                    <th>Unit</th>
                                     <th>Quantity</th>
-                                    <th>Balance Quantity</th>
-                                    <th>Required Date</th>
+                                    <th>Priority Level</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -128,13 +143,27 @@
                                                 </select>
                                             </td>
                                             <td>
+                                                <select class="form-select" name="PurchaseRequests.PurchaseRequestDetails[@i].UnitTypeID">
+                                                    <option value="">Select Unit</option>
+                                                    @foreach (var type in ViewBag.ItemUnitList)
+
+                                                    {
+                                                        <option value="@type.Value">@type.Text</option>
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td>
                                                 <input type="text" class="form-control" name="PurchaseRequests.PurchaseRequestDetails[@i].Quantity" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].Quantity" />
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control" name="PurchaseRequests.PurchaseRequestDetails[@i].BalanceQuantity" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].BalanceQuantity" />
-                                            </td>
-                                            <td>
-                                                <input type="date" class="form-control" name="PurchaseRequests.PurchaseRequestDetails[@i].RequiredDate" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].RequiredDate" />
+                                                <select class="form-select" name="PurchaseRequests.PurchaseRequestDetails[@i].PriorityLevel">
+                                                    <option value="">Select Priority Level</option>
+                                                    @foreach (var type in ViewBag.PriorityLevelList)
+
+                                                    {
+                                                        <option value="@type.Value">@type.Text</option>
+                                                    }
+                                                </select>
                                             </td>
                                             <td style="text-align-last: center;">
                                                 <button type="button" class="btn btn-sm btn-danger remove-row width-button">Remove</button>
@@ -175,16 +204,11 @@
             const itemName = $('#ItemName').val();
             const itemText = $('#ItemName option:selected').text();
             const quantity = parseFloat($('#Quantity').val()) || 0;
-            const balanceQuantity = parseFloat($('#BalanceQuantity').val()) || 0;
-            //const requiredDate = $('#RequiredDate').val();
-            let requiredDate = $('#RequiredDate').val();
-            if (!requiredDate) {
-                const currentDate = new Date();
-                currentDate.setMonth(currentDate.getMonth() + 1); // Add one month
-                requiredDate = currentDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-                $('#RequiredDate').val(requiredDate); // Set the value in the input field
-            }
-            // Validate inputs
+            const unitName = $('#UnitTypeID').val();
+            const unitText = $('#UnitTypeID option:selected').text();
+            const priorityLevelName = $('#PriorityLevel').val();
+            const priorityLevelText = $('#PriorityLevel option:selected').text();
+            
             if (!itemName || quantity <= 0 ) {
                 alert('Please fill out all required fields: Item Name and Quantity.');
                 return;
@@ -198,16 +222,18 @@
                         <input type="hidden" name="PurchaseRequests.PurchaseRequestDetails[${rowCount}].ItemID" value="${itemName}" />
                         <input type="text" class="form-control inputcontrol" value="${itemText}" readonly />
                     </td>
-                    <td>
+                    <td class="col-md-2">
+                        <input type="hidden" name="PurchaseRequests.PurchaseRequestDetails[${rowCount}].UnitTypeID" value="${unitName}" />
+                        <input type="text" class="form-control inputcontrol" value="${unitText}" readonly />
+                    </td>
+                    <td class="col-md-2">
                         <input type="text" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[${rowCount}].Quantity" value="${quantity}" readonly />
                     </td>
-                    <td>
-                        <input type="text" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[${rowCount}].BalanceQuantity" value="${balanceQuantity}" readonly />
+                    <td class="col-md-2">
+                        <input type="hidden" name="PurchaseRequests.PurchaseRequestDetails[${rowCount}].PriorityLevel" value="${priorityLevelName}" />
+                        <input type="text" class="form-control inputcontrol" value="${priorityLevelText}" readonly />
                     </td>
-                    <td>
-                        <input type="date" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[${rowCount}].RequiredDate" value="${requiredDate}" readonly />
-                    </td>
-                    <td>
+                    <td class="col-md-2">
                         <button type="button" class="btn btn-sm btn-danger remove-row width-button">Remove</button>
                     </td>
                 </tr>`;
@@ -216,9 +242,9 @@
 
             // Clear input fields
             $('#ItemName').val('');
+            $('#UnitTypeID').val('');
             $('#Quantity').val('');
-            $('#BalanceQuantity').val('');
-            $('#RequiredDate').val('');
+            $('#PriorityLevel').val('');
         });
 
         // Remove a row

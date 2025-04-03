@@ -1035,6 +1035,25 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
+    public async Task<List<SelectListItem>> GetPriorityLevel()
+    {
+      try
+      {
+        var PriorityLevelList = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "1", Text = "LOW" },
+            new SelectListItem { Value = "2", Text = "MED" },
+            new SelectListItem { Value = "3", Text = "HGH" },
+            new SelectListItem { Value = "4", Text = "URG" }
+        };
+
+        return await Task.FromResult(PriorityLevelList);
+      }
+      catch (Exception ex)
+      {
+        throw; // Rethrow the exception to handle it at a higher level
+      }
+    }
     public async Task<List<SelectListItem>> GetItemManufacturers()
     {
       try
