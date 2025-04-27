@@ -30,18 +30,18 @@
     <table>
         <thead>
             <tr>
-                <th>Requisition ID</th>
-                <th>Requisition Date</th>
-                <th>Requisition Status</th>
+                <th>Request ID</th>
+                <th>Request Date</th>
+                <th>Request Status</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var PurchaseRequest in Model)
             {
                 <tr>
-                    @* <td>@PurchaseRequest.RequisitionID</td>
-                    <td>@PurchaseRequest.RequisitionDate.ToString("dd/MM/yyyy")</td>
-                    <td>@(PurchaseRequest.RequisitionStatusTypes?.RequisitionStatusTypeName)</td> *@
+                    <td>@PurchaseRequest.PurchaseRequestID</td>
+                    <td>@PurchaseRequest.PurchaseRequestDate.ToString("dd/MM/yyyy")</td>
+                    <td>@(PurchaseRequest.RequestStatusTypes?.RequestStatusTypeName)</td>
                 </tr>
             }
         </tbody>

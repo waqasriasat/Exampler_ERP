@@ -67,14 +67,9 @@
 <script>
 
     $(document).ready(function () {
-        //$('#MaterialRequisitionTable tbody').empty();
-              $('#MaterialRequisitionTable tbody').find('tr').each(function () {
-        // Get the value of the ItemID field in the current row
+        $('#MaterialRequisitionTable tbody').find('tr').each(function () {
         let itemID = $(this).find('select[name*="MaterialRequisitions.MaterialRequisitionDetails"]').val();
-
-        // Check if the value is null, empty, or zero
         if (!itemID || itemID === "0") {
-            // Remove the current row
             $(this).remove();
         }
     });

@@ -16,5 +16,15 @@ namespace Exampler_ERP.Models
     public int UnitTypeID { get; set; }
     public int Quantity { get; set; }
     public int PriorityLevel { get; set; }
+    public int? RequestStatusTypeID { get; set; }
+    public int? RequestForQuotationID { get; set; }
+    public int? QuotationVendorID1 { get; set; }
+    public int? QuotationVendorID2 { get; set; }
+    public int? QuotationVendorID3 { get; set; }
+    public int? DeliverdVendorID { get; set; }
+    public int? QuotationID { get; set; }
+    public int? DCNo { get; set; }
+    public int? InvoiceNo { get; set; }
+
   }
 }

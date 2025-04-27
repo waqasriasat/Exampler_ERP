@@ -877,7 +877,11 @@ new ST_Item() { ItemID = 724, ItemCode = "1724", ItemName = "ZIP LOCK BAG (8X12)
     new Settings_RequestStatusType() { RequestStatusTypeID = 1, RequestStatusTypeName = "Pending", DeleteYNID = 0, ActiveYNID = 1 },
     new Settings_RequestStatusType() { RequestStatusTypeID = 2, RequestStatusTypeName = "Approved", DeleteYNID = 0, ActiveYNID = 1 },
     new Settings_RequestStatusType() { RequestStatusTypeID = 3, RequestStatusTypeName = "Partially Complete", DeleteYNID = 0, ActiveYNID = 1 },
-    new Settings_RequestStatusType() { RequestStatusTypeID = 4, RequestStatusTypeName = "Complete", DeleteYNID = 0, ActiveYNID = 1 }
+    new Settings_RequestStatusType() { RequestStatusTypeID = 4, RequestStatusTypeName = "Complete", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_RequestStatusType() { RequestStatusTypeID = 5, RequestStatusTypeName = "Request for Quotation", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_RequestStatusType() { RequestStatusTypeID = 6, RequestStatusTypeName = "Cost Comparison", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_RequestStatusType() { RequestStatusTypeID = 7, RequestStatusTypeName = "Purchase Order", DeleteYNID = 0, ActiveYNID = 1 },
+    new Settings_RequestStatusType() { RequestStatusTypeID = 8, RequestStatusTypeName = "Deliverd", DeleteYNID = 0, ActiveYNID = 1 }
 );
 
       modelBuilder.Entity<Settings_RequisitionStatusType>().HasData(
