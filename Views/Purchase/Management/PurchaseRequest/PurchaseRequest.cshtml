@@ -53,12 +53,40 @@
                     } else {
                         showErrorAlert(response.message);
                     }
-                        });
+                });
             });
 
             // Close Modal Add Contrainer
             $('#addPurchaseRequestModalContainer').on('click', '#Close', function () {
                 $('#addPurchaseRequestModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Add From Store PurchaseRequest modal popup
+            $('.addFromStorePurchaseRequestLink').click(function () {
+                $.get('@Url.Action("CreateFromStore", "PurchaseRequest")', function (data) {
+                    $('#addFromStorePurchaseRequestModalContainer').html(data);
+                    $('#addFromStorePurchaseRequestModal').modal('show');
+                });
+            });
+
+
+            // Save new PurchaseRequest form
+            $('#addFromStorePurchaseRequestModalContainer').on('click', '#saveNewPurchaseRequest', function () {
+                var formData = $('#addFromStorePurchaseRequestForm').serialize();
+                $.post('@Url.Action("Create", "PurchaseRequest")', formData, function (response) {
+                    if (response.success) {
+                        $('#addFromStorePurchaseRequestModal').modal('hide');
+                        location.reload();
+                    } else {
+                        showErrorAlert(response.message);
+                    }
+                });
+            });
+
+            // Close Modal Add Contrainer
+            $('#addFromStorePurchaseRequestModalContainer').on('click', '#Close', function () {
+                $('#addFromStorePurchaseRequestModal').modal('hide'); // Close the modal directly
                 // Additional logic if needed
             });
 
@@ -129,7 +157,7 @@
             <h5 class="card-header">Searching Box</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
-                    <div class="col-md-8" style="padding-bottom: 15px;">
+                    <div class="col-md-6" style="padding-bottom: 15px;">
                         <!-- Search Field and Button -->
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search Item Name" id="searchItemNameInput">
@@ -138,8 +166,9 @@
                             </button>
                         </div>
                     </div>
-                    <div class="col-md-4 text-end">
+                    <div class="col-md-6 text-end">
                         <!-- Action Buttons -->
+                        <button type="button" class="btn btn-primary addFromStorePurchaseRequestLink">Add New From Store</button>
                         <button type="button" class="btn btn-primary addPurchaseRequestLink">Add New</button>
                         <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "PurchaseRequest")'">Excel</button>
                         <button type="button" class="btn btn-outline-secondary" onclick="printListPurchaseRequestes()">Print</button>
@@ -162,10 +191,16 @@
                                 <div class="col-2">
                                     <p class="text-nowrap">Purchase Request #</p>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-2">
                                     <p class="text-nowrap">Date</p>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-4">
+                                    <p class="text-nowrap">Item Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Quantity</p>
+                                </div>
+                                <div class="col-2">
                                     <p class="text-nowrap">Status</p>
                                 </div>
                             </div>
@@ -192,14 +227,24 @@
                                             <span class="smallAdd">Purchase Request # :</span> @Html.DisplayFor(modelItem => item.PurchaseRequestID)
                                         </p>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-2">
                                         <p class="text-nowrap">
                                             <span class="smallAdd">Date :</span> @(item.PurchaseRequestDate.ToString("dd/MM/yyyy") ?? "00/00/0000")
                                         </p>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-4">
                                         <p class="text-nowrap">
-                                            <span class="smallAdd">Status :</span> @item.RequestStatusTypes?.RequestStatusTypeName
+                                            <span class="smallAdd">Item Name :</span> @item.Item?.ItemName
+                                        </p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Quantity :</span> @item.Quantity
+                                        </p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Status :</span> @item.RequestStatusType?.RequestStatusTypeName
                                         </p>
                                     </div>
                                 </div>
@@ -232,5 +277,6 @@
 <!-- Include the modal partial -->
 <div id="editPurchaseRequestModalContainer"></div>
 <div id="addPurchaseRequestModalContainer"></div>
+<div id="addFromStorePurchaseRequestModalContainer"></div>
 
 

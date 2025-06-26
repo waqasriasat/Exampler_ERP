@@ -55,6 +55,8 @@ namespace Exampler_ERP.Controllers.Finance.Management
       {
         return NotFound();
       }
+      Vendor.UserName = CR_CipherKey.Decrypt(Vendor.UserName);
+      Vendor.Password = CR_CipherKey.Decrypt(Vendor.Password);
       return PartialView("~/Views/Finance/Management/Vendor/EditVendor.cshtml", Vendor);
     }
 
@@ -63,12 +65,12 @@ namespace Exampler_ERP.Controllers.Finance.Management
     {
       if (ModelState.IsValid)
       {
-        //if (string.IsNullOrEmpty(Vendor.HeadofAccount_Five.HeadofAccount_FiveName))
-        //{
-        //  return Json(new { success = false, message = "Vendor Name field is required. Please enter a valid text value." });
-        //}
-
-
+        if (string.IsNullOrEmpty(Vendor.PayeeName) && string.IsNullOrEmpty(Vendor.UserName) && string.IsNullOrEmpty(Vendor.Password) && Vendor.VendorID.ToString().Length > 0)
+        {
+          return Json(new { success = false, message = "Payee Name, User Name, Password and Vendor Name field is required. Please enter a valid text value." });
+        }
+        Vendor.UserName = CR_CipherKey.Encrypt(Vendor.UserName);
+        Vendor.Password = CR_CipherKey.Encrypt(Vendor.Password);
         _appDBContext.Update(Vendor);
         await _appDBContext.SaveChangesAsync();
         TempData["SuccessMessage"] = "Vendor updated successfully.";
@@ -92,12 +94,12 @@ namespace Exampler_ERP.Controllers.Finance.Management
     {
       if (ModelState.IsValid)
       {
-        //if (string.IsNullOrEmpty(Vendor.HeadofAccount_Five.HeadofAccount_FiveName))
-        //{
-        //  return Json(new { success = false, message = "Vendor Name field is required. Please enter a valid text value." });
-        //}
-
-
+        if (string.IsNullOrEmpty(Vendor.PayeeName) && string.IsNullOrEmpty(Vendor.UserName) && string.IsNullOrEmpty(Vendor.Password) && Vendor.VendorID.ToString().Length > 0)
+        {
+          return Json(new { success = false, message = "Payee Name, User Name, Password and Vendor Name field is required. Please enter a valid text value." });
+        }
+        Vendor.UserName = CR_CipherKey.Encrypt(Vendor.UserName);
+        Vendor.Password = CR_CipherKey.Encrypt(Vendor.Password);
         Vendor.DeleteYNID = 0;
 
         _appDBContext.FI_Vendors.Add(Vendor);

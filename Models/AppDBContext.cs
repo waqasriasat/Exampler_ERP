@@ -131,7 +131,6 @@ namespace Exampler_ERP.Models
 
     public DbSet<PR_ProcurementQueue> PR_ProcurementQueues { get; set; }
     public DbSet<PR_PurchaseRequest> PR_PurchaseRequests { get; set; }
-    public DbSet<PR_PurchaseRequestDetail> PR_PurchaseRequestDetails { get; set; }
     public DbSet<PR_PurchaseRequestStatus> PR_PurchaseRequestStatuss { get; set; }
 
 
@@ -1700,7 +1699,8 @@ new ST_Item() { ItemID = 724, ItemCode = "1724", ItemName = "ZIP LOCK BAG (8X12)
      new Settings_ProcessType() { ProcessTypeID = 18, ProcessTypeName = "Payment Voucher", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_ProcessType() { ProcessTypeID = 19, ProcessTypeName = "Received Voucher", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_ProcessType() { ProcessTypeID = 20, ProcessTypeName = "Material Requisition", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_ProcessType() { ProcessTypeID = 21, ProcessTypeName = "Purchase Request", ActiveYNID = 1, DeleteYNID = 0 }
+     new Settings_ProcessType() { ProcessTypeID = 21, ProcessTypeName = "New Purchase Request", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 22, ProcessTypeName = "Edited Purchase Request", ActiveYNID = 1, DeleteYNID = 0 }
 
      );
 

@@ -969,6 +969,34 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
+    //GetItemFromProcurementQueueList
+    public async Task<List<SelectListItem>> GetItemFromProcurementQueueList()
+    {
+      try
+      {
+        var usedProcurementQueueIDs = _appDBContext.PR_PurchaseRequests
+    .Select(p => p.ProcurementQueueID)
+    .Distinct();
+
+        var ItemList = await _appDBContext.PR_ProcurementQueues
+            .Where(q => !usedProcurementQueueIDs.Contains(q.ProcurementQueueID))
+            .Include(q => q.Item)
+            .Select(d => new SelectListItem
+            {
+              Value = d.ProcurementQueueID.ToString(),
+              Text = d.Item.ItemName + " (Qty-" + d.Quantity + ")"
+            })
+            .ToListAsync();
+
+        return ItemList;
+
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
     //GetItemCategorys
     public async Task<List<SelectListItem>> GetItemList()
     {
@@ -991,6 +1019,7 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
+
 
     //GetItemCategorys
     public async Task<List<SelectListItem>> GetItemCategorys()

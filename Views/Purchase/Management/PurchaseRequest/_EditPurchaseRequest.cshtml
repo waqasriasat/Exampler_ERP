@@ -1,156 +1,63 @@
-@model Exampler_ERP.Models.Temp.PurchaseRequestIndexViewModel
+@model List<Exampler_ERP.Models.PR_PurchaseRequest>
 
-<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-<input type="hidden" asp-for="PurchaseRequests.PurchaseRequestID" />
-<input type="hidden" asp-for="PurchaseRequests.FinalApprovalID" />
-<input type="hidden" asp-for="PurchaseRequests.ProcessTypeApprovalID" />
-<input type="hidden" asp-for="PurchaseRequests.RequestStatusTypeID" />
 
-<!-- Table for Added Rows -->
 <div class="table-responsive mb-3">
-    <table class="table table-bordered" id="PurchaseRequestTable">
+    <table class="table table-bordered" id="purchaseRequestTable">
         <thead class="table-light">
+            
             <tr>
-                <th class="headercontrol headerwidth">
-                    <div class="col-md-12">
-                        <label for="ItemName" class="form-label fw-bold">Item Name</label>
-                        <select id="ItemName" name="ItemName" class="form-select">
+                <th>Item Name</th>
+                <th>Unit</th>
+                <th>Quantity</th>
+                <th>Priority Level</th>
+            </tr>
+        </thead>
+        <tbody id="purchaseRequestBody">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <select name="[@i].ItemID" class="form-select" required>
                             <option value="">Select Item</option>
                             @foreach (var type in ViewBag.ItemList)
                             {
-                                <option value="@type.Value">@type.Text</option>
+                                var isSelected = type.Value == Model[i].ItemID.ToString();
+                                var optionHtml = $"<option value='{type.Value}' {(isSelected ? "selected='selected'" : "")}>{type.Text}</option>";
+                                @Html.Raw(optionHtml)
+
                             }
                         </select>
-                    </div>
-                </th>
-                <th class="headercontrol headerwidthRow">
-                    <div class="col-md-12">
-                        <label for="UnitTypeID" class="form-label fw-bold">Unit</label>
-                        <select id="UnitTypeID" name="UnitTypeID" class="form-select">
-                            <option value="">Select Unit</option>
+                    </td>
+                    <td>
+                        <select name="[@i].UnitTypeID" class="form-select" required>
+                            <option value="">Select Unit Type</option>
                             @foreach (var type in ViewBag.ItemUnitList)
                             {
-                                <option value="@type.Value">@type.Text</option>
+                                var isSelected = type.Value == Model[i].UnitTypeID.ToString();
+                                var optionHtml = $"<option value='{type.Value}' {(isSelected ? "selected='selected'" : "")}>{type.Text}</option>";
+                                @Html.Raw(optionHtml)
                             }
                         </select>
-                    </div>
-                </th>
-                <th class="headercontrol headerwidthRow">
-                    <div class="col-md-12">
-                        <label for="Quantity" class="form-label fw-bold">Quantity</label>
-                        <input type="text" id="Quantity" name="Quantity" class="form-control" />
-                    </div>
-                </th>
-                <th class="headercontrol headerwidthRow">
-                    <div class="col-md-12">
-                        <label for="PriorityLevel" class="form-label fw-bold">Priority Level</label>
-                        <select id="PriorityLevel" name="PriorityLevel" class="form-select">
+                    </td>
+                    <td>
+                        <input type="hidden" name="[@i].PurchaseRequestID" value="@Model[i].PurchaseRequestID" />
+                        <input type="number" name="[@i].Quantity" class="form-control" value="@Model[i].Quantity" min="1" required />
+                    </td>
+                    <td>
+                        <select name="[@i].PriorityLevel" class="form-select" required>
                             <option value="">Select Priority Level</option>
                             @foreach (var type in ViewBag.PriorityLevelList)
                             {
-                                <option value="@type.Value">@type.Text</option>
+                                var isSelected = type.Value == Model[i].PriorityLevel.ToString();
+                                var optionHtml = $"<option value='{type.Value}' {(isSelected ? "selected='selected'" : "")}>{type.Text}</option>";
+                                @Html.Raw(optionHtml)
                             }
                         </select>
-                    </div>
-                </th>
-                <th class="headercontrol">
-                    <div class="col-md-12" style="text-align-last: center;">
-                        <button type="button" class="btn btn-primary add-row width-button">Add</button>
-                    </div>
-                </th>
-            </tr>
-            <tr><th style="border: none;"></th></tr>
-            <tr>
-                <th>Item Name</th>
-                <th>Unit Type</th>
-                <th>Quantity</th>
-                <th>Priority Level</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.PurchaseRequests.PurchaseRequestDetails != null && Model.PurchaseRequests.PurchaseRequestDetails.Count > 0)
-            {
-                for (int i = 0; i < Model.PurchaseRequests.PurchaseRequestDetails.Count; i++)
-                {
-                    <tr>
-                        <td>
-                            <input type="hidden" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].RequestStatusTypeID" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].RequestStatusTypeID" />
-                            <input type="hidden" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].RequestForQuotationID" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].RequestForQuotationID" />
-                            <input type="hidden" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].QuotationVendorID1" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].QuotationVendorID1" />
-                            <input type="hidden" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].QuotationVendorID2" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].QuotationVendorID2" />
-                            <input type="hidden" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].QuotationVendorID3" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].QuotationVendorID3" />
-                            <input type="hidden" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].DeliverdVendorID" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].DeliverdVendorID" />
-                            <input type="hidden" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].QuotationID" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].QuotationID" />
-                            <input type="hidden" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].DCNo" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].DCNo" />
-                            <input type="hidden" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].InvoiceNo" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].InvoiceNo" />
+                    </td>
+                </tr>
 
-                        </td>
-                        <td class="col-md-4">
-                            <select class="form-select inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].ItemID" value="PurchaseRequests.PurchaseRequestDetails[@i].ItemID">
-                                <option value="">Select Item</option>
-                                @foreach (var type in ViewBag.ItemNameList)
-                                {
-                                    if (type.Value == Model.PurchaseRequests.PurchaseRequestDetails[i].ItemID.ToString())
-                                    {
-                                        <option value="@type.Value" selected>@type.Text</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@type.Value">@type.Text</option>
-                                    }
-                                }
-                            </select>
-                        </td>
-                        <td>
-                            <select class="form-select inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].UnitTypeID" value="PurchaseRequests.PurchaseRequestDetails[@i].UnitTypeID">
-                                <option value="">Select Unit</option>
-                                @foreach (var type in ViewBag.ItemUnitList)
-                                {
-                                    if (type.Value == Model.PurchaseRequests.PurchaseRequestDetails[i].UnitTypeID.ToString())
-                                    {
-                                        <option value="@type.Value" selected>@type.Text</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@type.Value">@type.Text</option>
-                                    }
-                                }
-                            </select>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].Quantity" value="@Model.PurchaseRequests.PurchaseRequestDetails[i].Quantity" />
-                        </td>
-                        <td>
-                            <select class="form-select inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[@i].PriorityLevel" value="PurchaseRequests.PurchaseRequestDetails[@i].PriorityLevel">
-                                <option value="">Select Priority Level</option>
-                                @foreach (var type in ViewBag.PriorityLevelList)
-                                {
-                                    if (type.Value == Model.PurchaseRequests.PurchaseRequestDetails[i].PriorityLevel.ToString())
-                                    {
-                                        <option value="@type.Value" selected>@type.Text</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@type.Value">@type.Text</option>
-                                    }
-                                }
-                            </select>
-                        </td>
-                        <td style="text-align-last: center;">
-                            <button type="button" class="btn btn-sm btn-danger remove-row width-button">Remove</button>
-                        </td>
-                    </tr>
-                }
             }
         </tbody>
-    </table>
-</div>
 
-<!-- Remarks Section -->
-<div class="row mb-3">
-    <div class="col-md-12">
-        <label asp-for="PurchaseRequests.Remarks" class="form-label fw-bold">Remarks</label>
-        <textarea asp-for="PurchaseRequests.Remarks" class="form-control" rows="3"></textarea>
-    </div>
+    </table>
 </div>

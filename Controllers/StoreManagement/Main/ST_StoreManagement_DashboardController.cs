@@ -28,7 +28,10 @@ namespace Exampler_ERP.Controllers.StoreManagement.Main
       ViewBag.MaterialReceivedCount = await _appDBContext.ST_MaterialReceiveds.CountAsync();
       ViewBag.StockCount = await _appDBContext.ST_Stocks.CountAsync();
       ViewBag.MaterialIssuanceCount = await _appDBContext.ST_MaterialIssuances.CountAsync();
-      //ViewBag.JoiningCount = await _appDBContext.HR_Joinings.CountAsync();
+      ViewBag.ProcurementQueueCount = await _appDBContext.PR_ProcurementQueues
+    .Include(d => d.Item)
+    .Where(d => d.ForwardYNID == 0)
+    .CountAsync(); 
       //ViewBag.BankAccountCount = await _appDBContext.HR_BankAccounts.CountAsync();
       //ViewBag.ContractRenewwalCount = await _appDBContext.HR_ContractRenewals.CountAsync();
       //ViewBag.LeaveBalanceCount = await _appDBContext.leave.CountAsync();

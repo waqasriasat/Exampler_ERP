@@ -20,7 +20,7 @@ namespace Exampler_ERP.Controllers
       _utils = utils;
       _hubContext = hubContext;
     }
-    public async Task<IActionResult> SupplierIndex()
+    public async Task<IActionResult> Index()
     {
       if (HttpContext.Session.GetInt32("SupplierID") != null)
       {

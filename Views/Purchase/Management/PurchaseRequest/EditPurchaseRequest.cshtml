@@ -1,4 +1,4 @@
-@model Exampler_ERP.Models.Temp.PurchaseRequestIndexViewModel
+@model List<Exampler_ERP.Models.PR_PurchaseRequest>
 
 <style>
     .ui-autocomplete {
@@ -20,13 +20,13 @@
 
     .table th,
     .table td {
-        width: 20%; /* Adjust this percentage to match the inputs */
+        width: 20%;
     }
 
     .form-label,
     .form-control,
     .form-select {
-        width: 100%; /* Ensures the input elements stretch to match */
+        width: 100%;
     }
 
     .table .inputcontrol {
@@ -40,7 +40,11 @@
     }
 
     .table .headerwidth {
-        width: 60%;
+        width: 40%;
+    }
+
+    .table .headerwidthRow {
+        width: 20%;
     }
 </style>
 
@@ -52,90 +56,84 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editPurchaseRequestForm" enctype="multipart/form-data" asp-action="Create" method="post">
+                <form id="editPurchaseRequestForm" enctype="multipart/form-data" asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     @Html.Partial("~/Views/Purchase/Management/PurchaseRequest/_EditPurchaseRequest.cshtml", Model)
-                </form>
-            </div>
+               
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="saveChanges" class="btn btn-success">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-
     $(document).ready(function () {
-        $('#PurchaseRequestTable tbody').find('tr').each(function () {
-        let itemID = $(this).find('select[name*="PurchaseRequests.PurchaseRequestDetails"]').val();
-        if (!itemID || itemID === "0") {
-            $(this).remove();
-        }
-    });
-        // Add a new row
-        $(document).on('click', '.add-row', function () {
-            const itemName = $('#ItemName').val();
-            const itemText = $('#ItemName option:selected').text();
-            const quantity = parseFloat($('#Quantity').val()) || 0;
-            const unitName = $('#UnitTypeID').val();
-            const unitText = $('#UnitTypeID option:selected').text();
-            const priorityLevelName = $('#PriorityLevel').val();
-            const priorityLevelText = $('#PriorityLevel option:selected').text();
+        let rowIndex = 0;
 
-            if (!itemName || quantity <= 0 ) {
-              debugger;
-                alert('Please fill out all required fields: Item Name and Quantity.');
+        const itemList = @Html.Raw(Json.Serialize(ViewBag.ItemList));
+        const unitList = @Html.Raw(Json.Serialize(ViewBag.ItemUnitList));
+        const priorityLevelList = @Html.Raw(Json.Serialize(ViewBag.PriorityLevelList));
+
+        function createOptions(list, selectedVal = "") {
+            return list.map(item => {
+                const selected = item.value === selectedVal ? "selected" : "";
+                return `<option value="${item.value}" ${selected}>${item.text}</option>`;
+            }).join('');
+        }
+
+        $("#addRowBtn").click(function () {
+            const item = $("#ItemName").val();
+            const unit = $("#UnitTypeID").val();
+            const quantity = $("#Quantity").val();
+            const priority = $("#PriorityLevel").val();
+
+            if (!item || !unit || !quantity || !priority) {
+                alert("Please fill all fields before adding.");
                 return;
             }
-            const tableBody = $('#PurchaseRequestTable tbody');
-            const rowCount = tableBody.find('tr').length;
 
-            const dynamicRow = `
+            const newRow = `
                 <tr>
-                    <td class="col-md-4">
-                        <input type="hidden" name="PurchaseRequests.PurchaseRequestDetails[${rowCount}].ItemID" value="${itemName}" />
-                        <input type="text" class="form-control inputcontrol" value="${itemText}" readonly />
+                    <td>
+                        <select name="[${rowIndex}].ItemID" class="form-control" required>
+                            ${createOptions(itemList, item)}
+                        </select>
                     </td>
-                    <td class="col-md-2">
-                        <input type="hidden" name="PurchaseRequests.PurchaseRequestDetails[${rowCount}].UnitTypeID" value="${unitName}" />
-                        <input type="text" class="form-control inputcontrol" value="${unitText}" readonly />
+                    <td>
+                        <select name="[${rowIndex}].UnitTypeID" class="form-control" required>
+                            ${createOptions(unitList, unit)}
+                        </select>
                     </td>
-                    <td class="col-md-2">
-                        <input type="text" class="form-control inputcontrol" name="PurchaseRequests.PurchaseRequestDetails[${rowCount}].Quantity" value="${quantity}" readonly />
+                    <td>
+                        <input type="number" name="[${rowIndex}].Quantity" class="form-control" value="${quantity}" min="1" required />
                     </td>
-                    <td class="col-md-2">
-                        <input type="hidden" name="PurchaseRequests.PurchaseRequestDetails[${rowCount}].PriorityLevel" value="${priorityLevelName}" />
-                        <input type="text" class="form-control inputcontrol" value="${priorityLevelText}" readonly />
+                    <td>
+                        <select name="[${rowIndex}].PriorityLevel" class="form-control" required>
+                            ${createOptions(priorityLevelList, priority)}
+                        </select>
                     </td>
-                    <td class="col-md-2">
-                        <button type="button" class="btn btn-sm btn-danger remove-row width-button">Remove</button>
+                    <td>
+                        <button type="button" class="btn btn-danger removeRow">Remove</button>
                     </td>
-                </tr>`;
+                </tr>
+            `;
 
-            tableBody.append(dynamicRow);
+            $("#purchaseRequestBody").append(newRow);
+            rowIndex++;
 
-            // Clear input fields
-            $('#ItemName').val('');
-            $('#UnitTypeID').val('');
-            $('#Quantity').val('');
-            $('#PriorityLevel').val('');
+            // Clear inputs
+            $("#ItemName").val("");
+            $("#UnitTypeID").val("");
+            $("#Quantity").val("");
+            $("#PriorityLevel").val("");
         });
 
-        // Remove a row
-        $(document).on('click', '.remove-row', function () {
-            $(this).closest('tr').remove();
-            // Update name attributes for proper binding
-            $('#PurchaseRequestTable tbody tr').each(function (index) {
-                $(this).find('input, select').each(function () {
-                    const name = $(this).attr('name');
-                    if (name) {
-                        const updatedName = name.replace(/\[\d+\]/, `[${index}]`);
-                        $(this).attr('name', updatedName);
-                    }
-                });
-            });
+        $(document).on("click", ".removeRow", function () {
+            $(this).closest("tr").remove();
         });
     });
-
 </script>

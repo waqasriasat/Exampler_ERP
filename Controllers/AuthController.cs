@@ -160,11 +160,12 @@ namespace Exampler_ERP.Controllers
       string encryptedpassword = CR_CipherKey.Encrypt(Password);
 
       // Query the database for the user with the given username and hashed password
-      var user = await _appDBContext.CR_Users
+      var vendor = await _appDBContext.FI_Vendors
+          .Include(u => u.HeadofAccount_Five)
           .Where(u => u.UserName == encryptedusername && u.Password == encryptedpassword && u.ActiveYNID == 1 && u.DeleteYNID != 1)
           .FirstOrDefaultAsync();
 
-      if (user == null)
+      if (vendor == null)
       {
         ModelState.AddModelError(string.Empty, "Invalid login attempt.");
         return View();
@@ -172,11 +173,12 @@ namespace Exampler_ERP.Controllers
 
 
       // Logic for setting up user session or authentication cookie goes here
-      HttpContext.Session.SetInt32("UserID", user.UserID);
-      HttpContext.Session.SetString("UserName", Username);
-      HttpContext.Session.SetInt32("UserRoleID", user.RoleTypeID);
-      HttpContext.Session.SetString("UserRoleName", Username);
-
+      HttpContext.Session.SetInt32("SupplierID", vendor.VendorID);
+      if (vendor?.HeadofAccount_Five?.HeadofAccount_FiveName != null)
+      {
+        HttpContext.Session.SetString("SupplierName", vendor.HeadofAccount_Five.HeadofAccount_FiveName);
+      }
+  
 
 
       return RedirectToAction("Index", "SupplierDashboards");
