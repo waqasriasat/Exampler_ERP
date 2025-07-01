@@ -1,4 +1,4 @@
-@model IEnumerable<Exampler_ERP.Models.PR_RequestForQuotation>
+@model IEnumerable<Exampler_ERP.Models.PR_PurchaseRequest>
 
 @{
     ViewData["Title"] = "Purchase - Request For Quotation";
@@ -10,21 +10,21 @@
 
     <script>
         $(document).ready(function () {
-            // Edit RequestForQuotation modal popup
-            $('.editRequestForQuotationLink').click(function (e) {
+            // Forword RequestForQuotation modal popup
+            $('.forwordRequestForQuotationLink').click(function (e) {
                 e.preventDefault();
                 var RequestForQuotationId = $(this).data('id');
-                $.get('@Url.Action("Edit", "RequestForQuotation")', { id: RequestForQuotationId }, function (data) {
-                    $('#editRequestForQuotationModalContainer').html(data);
-                    $('#editRequestForQuotationModal').modal('show');
+                $.get('@Url.Action("Forword", "RequestForQuotation")', { id: RequestForQuotationId }, function (data) {
+                    $('#forwordRequestForQuotationModalContainer').html(data);
+                    $('#forwordRequestForQuotationModal').modal('show');
                     // Trigger the calculation after modal is shown
 
                 });
             });
 
-            $('#editRequestForQuotationModalContainer').on('click', '#saveChanges', function () {
-                var formData = $('#editRequestForQuotationForm').serialize();
-                $.post('@Url.Action("Edit", "RequestForQuotation")', formData, function (response) {
+            $('#forwordRequestForQuotationModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#forwordRequestForQuotationForm').serialize();
+                $.post('@Url.Action("Forword", "RequestForQuotation")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
                         location.reload();
@@ -34,37 +34,9 @@
                 });
             });
 
-            // Add new RequestForQuotation modal popup
-            $('.addRequestForQuotationLink').click(function () {
-                $.get('@Url.Action("Create", "RequestForQuotation")', function (data) {
-                    $('#addRequestForQuotationModalContainer').html(data);
-                    $('#addRequestForQuotationModal').modal('show');
-                });
-            });
-
-
-            // Save new RequestForQuotation form
-            $('#addRequestForQuotationModalContainer').on('click', '#saveNewRequestForQuotation', function () {
-                var formData = $('#addRequestForQuotationForm').serialize();
-                $.post('@Url.Action("Create", "RequestForQuotation")', formData, function (response) {
-                    if (response.success) {
-                        $('#addRequestForQuotationModal').modal('hide');
-                        location.reload();
-                    } else {
-                        showErrorAlert(response.message);
-                    }
-                        });
-            });
-
-            // Close Modal Add Contrainer
-            $('#addRequestForQuotationModalContainer').on('click', '#Close', function () {
-                $('#addRequestForQuotationModal').modal('hide'); // Close the modal directly
-                // Additional logic if needed
-            });
-
-            // Close Modal Edit Contrainer
-            $('#editRequestForQuotationModalContainer').on('click', '#Close', function () {
-                $('#editRequestForQuotationModal').modal('hide'); // Close the modal directly
+             // Close Modal Forword Contrainer
+            $('#forwordRequestForQuotationModalContainer').on('click', '#Close', function () {
+                $('#forwordRequestForQuotationModal').modal('hide'); // Close the modal directly
                 // Additional logic if needed
             });
 
@@ -140,7 +112,6 @@
                     </div>
                     <div class="col-md-4 text-end">
                         <!-- Action Buttons -->
-                        <button type="button" class="btn btn-primary addRequestForQuotationLink">Add New</button>
                         <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "RequestForQuotation")'">Excel</button>
                         <button type="button" class="btn btn-outline-secondary" onclick="printListRequestForQuotationes()">Print</button>
                     </div>
@@ -162,19 +133,26 @@
                                 <div class="col-2">
                                     <p class="text-nowrap">Purchase Request #</p>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-3">
                                     <p class="text-nowrap">Date</p>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-3">
+                                    <p class="text-nowrap">Item Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Quantity</p>
+                                </div>
+                                <div class="col-2">
                                     <p class="text-nowrap">Status</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-1 col-md-1 col-lg-1">
-                            <p class="text-nowrap">Edit</p>
+                            <p class="text-nowrap">Forword</p>
                         </div>
                         <div class="col-1 col-md-1 col-lg-1">
                             <p class="text-nowrap">Print</p>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -189,15 +167,25 @@
                                 <div class="row align-items-center">
                                     <div class="col-2">
                                         <p class="text-nowrap">
-                                            <span class="smallAdd">Purchase Request # :</span> @Html.DisplayFor(modelItem => item.RequestForQuotationID)
+                                            <span class="smallAdd">Purchase Request # :</span> @item.PurchaseRequestID
                                         </p>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-3">
                                         <p class="text-nowrap">
-                                            <span class="smallAdd">Date :</span> @(item.RequestForQuotationDate.ToString("dd/MM/yyyy") ?? "00/00/0000")
+                                            <span class="smallAdd">Date :</span> @(item.PurchaseRequestDate.ToString("dd/MM/yyyy") ?? "00/00/0000")
                                         </p>
                                     </div>
-                                    <div class="col-6">
+                                <div class="col-3">
+                                    <p class="text-nowrap">
+                                        <span class="smallAdd">Item Name :</span> @item.Item?.ItemName
+                                    </p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">
+                                        <span class="smallAdd">Quantuty :</span> @item.Quantity
+                                    </p>
+                                </div>
+                                    <div class="col-2">
                                         <p class="text-nowrap">
                                             <span class="smallAdd">Status :</span> @item.RequestStatusType?.RequestStatusTypeName
                                         </p>
@@ -206,15 +194,15 @@
                             </div>
                             <div class="col-1 col-md-1 col-lg-1">
                                 <div class="btn-group" role="group" aria-label="Actions">
-                                    <a href="#" class="editRequestForQuotationLink me-2" data-id="@item.RequestForQuotationID">
-                                        <i class="fa fa-pencil" style="font-size: large; color:steelblue;; line-height: 2;"></i>
+                                <a href="#" class="forwordRequestForQuotationLink me-2" data-id="@item.PurchaseRequestID">
+                                        <i class="fa fa-forward-step" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                     </a>
                                 </div>
                             </div>
                             <div class="col-1 col-md-1 col-lg-1">
                                 <div class="btn-group" role="group" aria-label="Actions">
-                                    <a href="#" class="printRequestForQuotationLink me-2" data-id="@item.RequestForQuotationID">
-                                        <i class="fa fa-print" style="font-size: large; color:steelblue;; line-height: 2;"></i>
+                                <a href="#" class="printRequestForQuotationLink me-2" data-id="@item.PurchaseRequestID">
+                                        <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
                                     </a>
                                 </div>
                             </div>
@@ -230,7 +218,6 @@
 </div>
 
 <!-- Include the modal partial -->
-<div id="editRequestForQuotationModalContainer"></div>
-<div id="addRequestForQuotationModalContainer"></div>
+<div id="forwordRequestForQuotationModalContainer"></div>
 
 

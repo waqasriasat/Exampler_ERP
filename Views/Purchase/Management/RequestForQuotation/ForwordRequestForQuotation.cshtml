@@ -1,0 +1,139 @@
+@model Exampler_ERP.Models.Temp.PurchaseRequestwithRequestForQuotationViewModel
+
+<style>
+    .ui-autocomplete {
+        z-index: 1000 !important;
+    }
+
+    .center-button {
+        margin-top: 32px;
+        text-align: center;
+    }
+
+    .width-button {
+        width: 120px;
+    }
+
+    .modal-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .table th,
+    .table td {
+        width: 20%;
+    }
+
+    .form-label,
+    .form-control,
+    .form-select {
+        width: 100%;
+    }
+
+    .table .inputcontrol {
+        background-color: transparent;
+        border: transparent;
+    }
+
+    .table .headercontrol {
+        background-color: white;
+        border: none;
+    }
+
+    .table .headerwidth {
+        width: 40%;
+    }
+
+    .table .headerwidthRow {
+        width: 20%;
+    }
+</style>
+
+<div class="modal fade" id="forwordRequestForQuotationModal" tabindex="-1" role="dialog" aria-labelledby="forwordRequestForQuotationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="forwordRequestForQuotationModalLabel"><i class="fas fa-key me-2"></i>Forword Request For Quotation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="forwordRequestForQuotationForm" enctype="multipart/form-data" asp-action="Forword" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    @Html.Partial("~/Views/Purchase/Management/RequestForQuotation/_ForwordRequestForQuotation.cshtml", Model)
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        let rowIndex = 0;
+
+        const itemList = @Html.Raw(Json.Serialize(ViewBag.ItemList));
+        const unitList = @Html.Raw(Json.Serialize(ViewBag.ItemUnitList));
+        const priorityLevelList = @Html.Raw(Json.Serialize(ViewBag.PriorityLevelList));
+
+        function createOptions(list, selectedVal = "") {
+            return list.map(item => {
+                const selected = item.value === selectedVal ? "selected" : "";
+                return `<option value="${item.value}" ${selected}>${item.text}</option>`;
+            }).join('');
+        }
+
+        $("#addRowBtn").click(function () {
+            const item = $("#ItemName").val();
+            const unit = $("#UnitTypeID").val();
+            const quantity = $("#Quantity").val();
+            const priority = $("#PriorityLevel").val();
+
+            if (!item || !unit || !quantity || !priority) {
+                alert("Please fill all fields before adding.");
+                return;
+            }
+
+            const newRow = `
+                <tr>
+                    <td>
+                        <select name="[${rowIndex}].ItemID" class="form-control" required>
+                            ${createOptions(itemList, item)}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="[${rowIndex}].UnitTypeID" class="form-control" required>
+                            ${createOptions(unitList, unit)}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" name="[${rowIndex}].Quantity" class="form-control" value="${quantity}" min="1" required />
+                    </td>
+                    <td>
+                        <select name="[${rowIndex}].PriorityLevel" class="form-control" required>
+                            ${createOptions(priorityLevelList, priority)}
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger removeRow">Remove</button>
+                    </td>
+                </tr>
+            `;
+
+            $("#purchaseRequestBody").append(newRow);
+            rowIndex++;
+
+            // Clear inputs
+            $("#ItemName").val("");
+            $("#UnitTypeID").val("");
+            $("#Quantity").val("");
+            $("#PriorityLevel").val("");
+        });
+
+        $(document).on("click", ".removeRow", function () {
+            $(this).closest("tr").remove();
+        });
+    });
+</script>

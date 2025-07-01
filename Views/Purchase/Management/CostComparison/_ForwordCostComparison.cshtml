@@ -1,0 +1,219 @@
+@model Exampler_ERP.Models.Temp.PurchaseRequestwithCostComparisonViewModel
+@{
+    var QuotationVendorID1 = ViewBag.QuotationVendorID1 ?? 0;
+    var QuotationVendorID2 = ViewBag.QuotationVendorID2 ?? 0;
+    var QuotationVendorID3 = ViewBag.QuotationVendorID3 ?? 0;
+    //var DeliverdVendorID = ViewBag.DeliverdVendorID ?? 0;
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <h5 class="card-header">Order Detail</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <table class="table table-bordered" id="purchaseRequestTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Unit</th>
+                                <th>Quantity</th>
+                                <th>Priority Level</th>
+                            </tr>
+                        </thead>
+                        <tbody id="purchaseRequestBody">
+                            @for (int i = 0; i < Model.PurchaseRequests.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        <select name="[@i].ItemID" class="form-select" disabled>
+                                            <option value="">Select Item</option>
+                                            @foreach (var type in ViewBag.ItemList)
+                                            {
+                                                var isSelected = type.Value == Model.PurchaseRequests[i].ItemID.ToString();
+                                                var optionHtml = $"<option value='{type.Value}' {(isSelected ? "selected='selected'" : "")}>{type.Text}</option>";
+                                                @Html.Raw(optionHtml)
+
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="[@i].UnitTypeID" class="form-select" disabled>
+                                            <option value="">Select Unit Type</option>
+                                            @foreach (var type in ViewBag.ItemUnitList)
+                                            {
+                                                var isSelected = type.Value == Model.PurchaseRequests[i].UnitTypeID.ToString();
+                                                var optionHtml = $"<option value='{type.Value}' {(isSelected ? "selected='selected'" : "")}>{type.Text}</option>";
+                                                @Html.Raw(optionHtml)
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="[@i].PurchaseRequestID" value="@Model.PurchaseRequests[i].PurchaseRequestID" />
+                                        <input type="number" name="[@i].Quantity" class="form-control" value="@Model.PurchaseRequests[i].Quantity" min="1" disabled />
+                                    </td>
+                                    <td>
+                                        <select name="[@i].PriorityLevel" class="form-select" disabled>
+                                            <option value="">Select Priority Level</option>
+                                            @foreach (var type in ViewBag.PriorityLevelList)
+                                            {
+                                                var isSelected = type.Value == Model.PurchaseRequests[i].PriorityLevel.ToString();
+                                                var optionHtml = $"<option value='{type.Value}' {(isSelected ? "selected='selected'" : "")}>{type.Text}</option>";
+                                                @Html.Raw(optionHtml)
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <h5 class="card-header">Vendor Detail</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>First Vendor</label>
+                            <select name="QuotationVendorID1" class="form-select" disabled>
+                                <option value="">Select First Vendor</option>
+                                @foreach (var type in ViewBag.VendorList)
+                                {
+                                    var isSelected = type.Value == QuotationVendorID1.ToString();
+                                    var optionHtml = $"<option value='{type.Value}' {(isSelected ? "selected='selected'" : "")}>{type.Text}</option>";
+                                    @Html.Raw(optionHtml)
+
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Second Vendor</label>
+                            <select name="QuotationVendorID2" class="form-select" disabled>
+                                <option value="">Select Second Vendor</option>
+                                @foreach (var type in ViewBag.VendorList)
+                                {
+                                    var isSelected = type.Value == QuotationVendorID2.ToString();
+                                    var optionHtml = $"<option value='{type.Value}' {(isSelected ? "selected='selected'" : "")}>{type.Text}</option>";
+                                    @Html.Raw(optionHtml)
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Third Vendor</label>
+                            <select name="QuotationVendorID3" class="form-select" disabled>
+                                <option value="">Select Third Vendor</option>
+                                @foreach (var type in ViewBag.VendorList)
+                                {
+                                    var isSelected = type.Value == QuotationVendorID3.ToString();
+                                    var optionHtml = $"<option value='{type.Value}' {(isSelected ? "selected='selected'" : "")}>{type.Text}</option>";
+                                    @Html.Raw(optionHtml)
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>First Quotation ID</label>
+                            <input name="QuotationID1" class="form-control" disabled />
+                        </div>
+                        <div class="col-md-4">
+                            <label>Second Quotation ID</label>
+                            <input name="QuotationID2" class="form-control" disabled />
+                        </div>
+                        <div class="col-md-4">
+                            <label>Third Quotation ID</label>
+                            <input name="QuotationID3" class="form-control" disabled />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>First Quotation Price</label>
+                            <input name="QuotationPrice1" class="form-control" disabled />
+                        </div>
+                        <div class="col-md-4">
+                            <label>Second Quotation Price</label>
+                            <input name="QuotationPrice2" class="form-control" disabled />
+                        </div>
+                        <div class="col-md-4">
+                            <label>Third Quotation Price</label>
+                            <input name="QuotationPrice3" class="form-control" disabled />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>First Quotation Amount</label>
+                            <input name="QuotationAmount1" class="form-control" disabled />
+                        </div>
+                        <div class="col-md-4">
+                            <label>Second Quotation Amount</label>
+                            <input name="QuotationAmount2" class="form-control" disabled />
+                        </div>
+                        <div class="col-md-4">
+                            <label>Third Quotation Amount</label>
+                            <input name="QuotationAmount3" class="form-control" disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <h5 class="card-header">Comparison Passed Vendor</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <table class="table table-bordered" id="purchaseRequestTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Comfirmed Vendor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="purchaseRequestBody">
+                            @for (int i = 0; i < Model.CostComparisons.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        <select name="CostComparisons[@i].DeliverdVendorID" class="form-select" required>
+                                            <option value="">Select Comparison Passed Vendor</option>
+                                            @foreach (var type in ViewBag.VendorListbyComparison)
+                                            {
+                                                bool isSelected = false;
+                                                if (Model.CostComparisons != null && Model.CostComparisons.Count > i && Model.CostComparisons[i] != null)
+                                                {
+                                                    isSelected = type.Value == Model.CostComparisons[i].DeliverdVendorID?.ToString();
+                                                }
+                                                var optionHtml = $"<option value='{type.Value}' {(isSelected ? "selected='selected'" : "")}>{type.Text}</option>";
+                                                @Html.Raw(optionHtml)
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />

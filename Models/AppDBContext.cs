@@ -132,6 +132,9 @@ namespace Exampler_ERP.Models
     public DbSet<PR_ProcurementQueue> PR_ProcurementQueues { get; set; }
     public DbSet<PR_PurchaseRequest> PR_PurchaseRequests { get; set; }
     public DbSet<PR_PurchaseRequestStatus> PR_PurchaseRequestStatuss { get; set; }
+    public DbSet<PR_RequestForQuotation> PR_RequestForQuotations { get; set; }
+    public DbSet<PR_CostComparison> PR_CostComparison { get; set; }
+    public DbSet<PR_PurchaseOrder> PR_PurchaseOrders { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

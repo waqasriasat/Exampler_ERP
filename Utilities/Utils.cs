@@ -46,14 +46,14 @@ namespace Exampler_ERP.Utilities
           })
           .ToListAsync();
 
-    
+
       return employees;
     }
     public async Task<List<SelectListItem>> GetActiveYNIDList()
     {
       var ActiveYNIDList = await _appDBContext.Settings_ActiveYNIDTypes.ToListAsync();
 
-      var selectList = ActiveYNIDList.Select(r => new SelectListItem { Value = r.ActiveYNID.ToString(), Text = r.ActiveName}).ToList();
+      var selectList = ActiveYNIDList.Select(r => new SelectListItem { Value = r.ActiveYNID.ToString(), Text = r.ActiveName }).ToList();
       return selectList;
     }
 
@@ -61,14 +61,14 @@ namespace Exampler_ERP.Utilities
     {
       var DeleteYNIDList = await _appDBContext.Settings_DeleteYNIDTypes.ToListAsync();
 
-      var selectList = DeleteYNIDList.Select(r => new SelectListItem { Value = r.DeleteYNID.ToString(), Text = r.DeleteName}).ToList();
+      var selectList = DeleteYNIDList.Select(r => new SelectListItem { Value = r.DeleteYNID.ToString(), Text = r.DeleteName }).ToList();
       return selectList;
     }
     public async Task<List<SelectListItem>> GetEmployee()
     {
       var Employees = await _appDBContext.HR_Employees.ToListAsync();
 
-      var selectList = Employees.Select(r => new SelectListItem { Value = r.EmployeeID.ToString(), Text = r.FirstName +' '+r.FatherName + ' ' + r.FamilyName }).ToList();
+      var selectList = Employees.Select(r => new SelectListItem { Value = r.EmployeeID.ToString(), Text = r.FirstName + ' ' + r.FatherName + ' ' + r.FamilyName }).ToList();
       selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
       return selectList;
     }
@@ -124,7 +124,7 @@ namespace Exampler_ERP.Utilities
 
       return ReligionList;
     }
-   
+
     public async Task<List<SelectListItem>> GetCountries()
     {
       var GetcountriesList = await _appDBContext.Settings_CountryTypes.ToArrayAsync();
@@ -243,7 +243,7 @@ namespace Exampler_ERP.Utilities
 
       return ContractTypeList;
     }
-     public async Task<List<SelectListItem>> GetEndOfServiceReasonTypes()
+    public async Task<List<SelectListItem>> GetEndOfServiceReasonTypes()
     {
       var EndOfServiceReasonTypes = await _appDBContext.Settings_EndOfServiceReasonTypes.ToListAsync();
 
@@ -369,7 +369,7 @@ namespace Exampler_ERP.Utilities
           .ToListAsync();
 
       // Add a default 'Please Select' option
-     
+
       return vacationDateList;
     }
     public async Task<List<SelectListItem>> GetVacationDatesByEmployeeID(int employeeID)
@@ -399,7 +399,7 @@ namespace Exampler_ERP.Utilities
        Text = v.Date.ToString("dd-MMM-yyyy") // Format the date
      })
      .ToListAsync();
-     
+
       // Add a default 'Please Select' option
       vacationDateList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
 
@@ -481,7 +481,7 @@ namespace Exampler_ERP.Utilities
             })
             .ToListAsync();
 
- 
+
         return monthTypeList;
       }
       catch (Exception ex)
@@ -497,14 +497,14 @@ namespace Exampler_ERP.Utilities
            {
              Value = d.UserID.ToString(),
              Text = CR_CipherKey.Decrypt(d.UserName)
-            })
+           })
            .ToListAsync();
 
       directManagerList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
 
       return directManagerList;
     }
-    
+
     public async Task<List<SelectListItem>> GetHeadofAccount_GroupType()
     {
       try
@@ -706,7 +706,7 @@ namespace Exampler_ERP.Utilities
         // Log the exception (ex.Message or ex.StackTrace)
         throw; // or handle it accordingly
       }
-      
+
     }
     public async Task<List<SelectListItem>> GetHeadofAccount_FiveOnlyReceivable()
     {
@@ -953,10 +953,11 @@ namespace Exampler_ERP.Utilities
       try
       {
         var VendorList = await _appDBContext.FI_Vendors
+          .Include(d => d.HeadofAccount_Five)
             .Select(d => new SelectListItem
             {
               Value = d.VendorID.ToString(),
-              Text = d.PersonName
+              Text = d.HeadofAccount_Five.HeadofAccount_FiveName
             })
             .ToListAsync();
 
@@ -969,6 +970,52 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
+    public async Task<List<SelectListItem>> GetVendorListbyComparison(int purchaseRequestId)
+    {
+      try
+      {
+        var vendorIdRow = await _appDBContext.PR_RequestForQuotations
+    .Where(pr => pr.PurchaseRequestID == purchaseRequestId)
+    .Select(pr => new
+    {
+      pr.QuotationVendorID1,
+      pr.QuotationVendorID2,
+      pr.QuotationVendorID3
+    })
+    .FirstOrDefaultAsync();
+
+        if (vendorIdRow == null)
+        {
+          return new List<SelectListItem>();
+        }
+
+        // Ab directly `OR` condition
+        var VendorListbyComparison = await _appDBContext.FI_Vendors
+          .Include(d => d.HeadofAccount_Five)
+            .Where(v =>
+                v.VendorID == vendorIdRow.QuotationVendorID1 ||
+                v.VendorID == vendorIdRow.QuotationVendorID2 ||
+                v.VendorID == vendorIdRow.QuotationVendorID3
+            )
+            .Select(v => new SelectListItem
+            {
+              Value = v.VendorID.ToString(),
+              Text = v.HeadofAccount_Five.HeadofAccount_FiveName
+            })
+            .ToListAsync();
+
+        return VendorListbyComparison;
+
+      }
+      catch (Exception ex)
+      {
+        throw;
+      }
+
+    }
+
+
+
     //GetItemFromProcurementQueueList
     public async Task<List<SelectListItem>> GetItemFromProcurementQueueList()
     {
@@ -1173,7 +1220,7 @@ namespace Exampler_ERP.Utilities
                             .Where(u => u.UserID == userID)
                             .FirstOrDefaultAsync();
 
-        return user?.EmployeeID ?? 0; 
+        return user?.EmployeeID ?? 0;
       }
       catch (Exception ex)
       {
@@ -1189,18 +1236,18 @@ namespace Exampler_ERP.Utilities
         var departmentTypeId = await _appDBContext.HR_Employees
             .Join(_appDBContext.CR_Users,
                   emp => emp.EmployeeID,
-                  us => us.EmployeeID,   
-                  (emp, us) => new { emp, us }) 
-            .Where(x => x.us.UserID == userID) 
-            .Select(x => x.emp.DepartmentTypeID) 
-            .FirstOrDefaultAsync(); 
+                  us => us.EmployeeID,
+                  (emp, us) => new { emp, us })
+            .Where(x => x.us.UserID == userID)
+            .Select(x => x.emp.DepartmentTypeID)
+            .FirstOrDefaultAsync();
 
         return departmentTypeId ?? 0; // If departmentTypeId is null, return 0
       }
       catch (Exception ex)
       {
         Console.WriteLine($"Error fetching DepartmentTypeID: {ex.Message}");
-        return 0; 
+        return 0;
       }
     }
 
@@ -1211,10 +1258,11 @@ namespace Exampler_ERP.Utilities
 
         var PendingRequisitionsList = await _appDBContext.ST_MaterialRequisitions
      .Join(
-         _appDBContext.Settings_DepartmentTypes, 
-         mr => mr.DepartmentTypeID,        
-         dt => dt.DepartmentTypeID,         
-         (mr, dt) => new {             
+         _appDBContext.Settings_DepartmentTypes,
+         mr => mr.DepartmentTypeID,
+         dt => dt.DepartmentTypeID,
+         (mr, dt) => new
+         {
            mr.RequisitionID,
            dt.DepartmentTypeName,
            mr.RequisitionDate,

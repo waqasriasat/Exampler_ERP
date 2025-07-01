@@ -1,0 +1,57 @@
+@model IEnumerable<Exampler_ERP.Models.PR_PurchaseRequest>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Cost Comparison</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>Cost Comparison List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Request ID</th>
+                <th>Request Date</th>
+                <th>Item Name</th>
+                <th>Quantity</th>
+                <th>Request Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var PurchaseRequest in Model)
+            {
+                <tr>
+                    <td>@PurchaseRequest.PurchaseRequestID</td>
+                    <td>@PurchaseRequest.PurchaseRequestDate.ToString("dd/MM/yyyy")</td>
+                    <td>@(PurchaseRequest.Item?.ItemName)</td>
+                    <td>@PurchaseRequest.Quantity</td>
+                    <td>@(PurchaseRequest.RequestStatusType?.RequestStatusTypeName)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>
