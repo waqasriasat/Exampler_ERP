@@ -1,8 +1,10 @@
+using Exampler_ERP.Hubs;
 using Exampler_ERP.Models;
 using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using System.Diagnostics.Contracts;
@@ -16,12 +18,14 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     private readonly IConfiguration _configuration;
     private readonly ILogger<SalaryController> _logger;
     private readonly Utils _utils;
-    public SalaryController(AppDBContext appDBContext, IConfiguration configuration, ILogger<SalaryController> logger, Utils utils)
+    private readonly IHubContext<NotificationHub> _hubContext;
+    public SalaryController(AppDBContext appDBContext, IConfiguration configuration, ILogger<SalaryController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
+      _hubContext = hubContext;
     }
     public async Task<IActionResult> Index(int? id) // EmployeeID
     {
@@ -209,6 +213,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
                   _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
                   await _appDBContext.SaveChangesAsync();
+                  await _hubContext.Clients.All.SendAsync("ReceiveProcessNotification");
                 }
                 else
                 {

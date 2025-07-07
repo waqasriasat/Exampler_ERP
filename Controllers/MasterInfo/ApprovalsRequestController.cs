@@ -128,7 +128,6 @@ namespace Exampler_ERP.Controllers.MasterInfo
       // Return the document for inline viewing
       return File(document.Doc, mimeType, document.DocName);
     }
-
     public async Task<IActionResult> Approvals(int id)
     {
     
@@ -179,7 +178,6 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
       return PartialView("~/Views/MasterInfo/ApprovalsRequest/ActionsProcessTypeApproval.cshtml", result);
     }
-
     [HttpPost]
     public async Task<IActionResult> Approved(CR_ProcessTypeApprovalDetail processTypeApprovalDetail, IFormFile FileUpload, int ProcessTypeID, int TransactionID, string Password)
     {
@@ -690,6 +688,70 @@ namespace Exampler_ERP.Controllers.MasterInfo
                     await _appDBContext.SaveChangesAsync();
                   }
                 }
+                if (ProcessTypeID == 20)
+                {
+                  var requisitio = await _appDBContext.ST_MaterialRequisitions
+                                                           .Where(u => u.RequisitionID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+                  if (requisitio != null)
+                  {
+                    requisitio.FinalApprovalID = 1;
+                    requisitio.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(requisitio);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 21)
+                {
+                  var purchaseRequest = await _appDBContext.PR_PurchaseRequests
+                                                           .Where(u => u.PurchaseRequestID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+                  if (purchaseRequest != null)
+                  {
+                    purchaseRequest.FinalApprovalID = 1;
+                    purchaseRequest.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(purchaseRequest);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 22)
+                {
+                  var purchaseRequest = await _appDBContext.PR_PurchaseRequests
+                                                           .Where(u => u.PurchaseRequestID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+                  if (purchaseRequest != null)
+                  {
+                    purchaseRequest.FinalApprovalID = 1;
+                    purchaseRequest.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(purchaseRequest);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
+                if (ProcessTypeID == 23)
+                {
+                  var purchaseOrder = await _appDBContext.PR_PurchaseOrders
+                                                           .Where(u => u.PurchaseRequestID == transactionID)
+                                                           .FirstOrDefaultAsync();
+
+
+                  if (purchaseOrder != null)
+                  {
+                    purchaseOrder.FinalApprovalID = 1;
+                    purchaseOrder.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+                    _appDBContext.Update(purchaseOrder);
+                    await _appDBContext.SaveChangesAsync();
+                  }
+                }
               }
               TempData["SuccessMessage"] = "Successfully Approved.";
               return Json(new { success = true });
@@ -1024,6 +1086,70 @@ namespace Exampler_ERP.Controllers.MasterInfo
               vouchers.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
               _appDBContext.Update(vouchers);
+              await _appDBContext.SaveChangesAsync();
+            }
+          }
+          if (ProcessTypeID == 20)
+          {
+            var requisitio = await _appDBContext.ST_MaterialRequisitions
+                                                     .Where(u => u.RequisitionID == transactionID)
+                                                     .FirstOrDefaultAsync();
+
+
+            if (requisitio != null)
+            {
+              requisitio.FinalApprovalID = 2;
+              requisitio.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+              _appDBContext.Update(requisitio);
+              await _appDBContext.SaveChangesAsync();
+            }
+          }
+          if (ProcessTypeID == 21)
+          {
+            var purchaseRequest = await _appDBContext.PR_PurchaseRequests
+                                                     .Where(u => u.PurchaseRequestID == transactionID)
+                                                     .FirstOrDefaultAsync();
+
+
+            if (purchaseRequest != null)
+            {
+              purchaseRequest.FinalApprovalID = 2;
+              purchaseRequest.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+              _appDBContext.Update(purchaseRequest);
+              await _appDBContext.SaveChangesAsync();
+            }
+          }
+          if (ProcessTypeID == 22)
+          {
+            var purchaseRequest = await _appDBContext.PR_PurchaseRequests
+                                                     .Where(u => u.PurchaseRequestID == transactionID)
+                                                     .FirstOrDefaultAsync();
+
+
+            if (purchaseRequest != null)
+            {
+              purchaseRequest.FinalApprovalID = 2;
+              purchaseRequest.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+              _appDBContext.Update(purchaseRequest);
+              await _appDBContext.SaveChangesAsync();
+            }
+          }
+          if (ProcessTypeID == 23)
+          {
+            var purchaseOrder = await _appDBContext.PR_PurchaseOrders
+                                                     .Where(u => u.PurchaseRequestID == transactionID)
+                                                     .FirstOrDefaultAsync();
+
+
+            if (purchaseOrder != null)
+            {
+              purchaseOrder.FinalApprovalID = 2;
+              purchaseOrder.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+
+              _appDBContext.Update(purchaseOrder);
               await _appDBContext.SaveChangesAsync();
             }
           }
@@ -1392,11 +1518,122 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
         return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", model);
       }
+      if (processTypeID == 20)
+      {
+        var MaterialRequisitions = await _appDBContext.ST_MaterialRequisitions
+          .Include(v => v.MaterialRequisitionDetails)
+          .FirstOrDefaultAsync(v => v.RequisitionID == transactionID);
+
+        if (MaterialRequisitions == null)
+        {
+          return NotFound();
+        }
+
+        // Check RequisitionStatusTypeID
+        if (MaterialRequisitions.RequisitionStatusTypeID != 1)
+        {
+          TempData["ErrorMessage"] = "After approval, editing is not allowed.....";
+
+        }
+
+        MaterialRequisitions.MaterialRequisitionDetails.Add(new ST_MaterialRequisitionDetail()
+        {
+          RequisitionID = MaterialRequisitions.RequisitionID
+        });
+
+        var model = new MaterialRequisitionsIndexViewModel
+        {
+          MaterialRequisitions = MaterialRequisitions
+        };
+
+        ViewBag.ItemList = await _utils.GetItemList();
+        ViewBag.ItemNameList = await _utils.GetItemList();
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", model);
+      }
+      if (processTypeID == 21)
+      {
+        var purchaseRequestList = await _appDBContext.PR_PurchaseRequests
+          .Where(v => v.PurchaseRequestID == transactionID)
+          .ToListAsync(); // Fetch all items related to the ID
+
+        if (purchaseRequestList == null || !purchaseRequestList.Any())
+        {
+          return NotFound();
+        }
+
+        ViewBag.ItemList = await _utils.GetItemList();
+        ViewBag.ItemNameList = await _utils.GetItemList();
+        ViewBag.ItemUnitList = await _utils.GetItemUnits();
+        ViewBag.PriorityLevelList = await _utils.GetPriorityLevel();
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", purchaseRequestList);
+      }
+      if (processTypeID == 22)
+      {
+        var purchaseRequestList = await _appDBContext.PR_PurchaseRequests
+          .Where(v => v.PurchaseRequestID == transactionID)
+          .ToListAsync(); // Fetch all items related to the ID
+
+        if (purchaseRequestList == null || !purchaseRequestList.Any())
+        {
+          return NotFound();
+        }
+
+        ViewBag.ItemList = await _utils.GetItemList();
+        ViewBag.ItemNameList = await _utils.GetItemList();
+        ViewBag.ItemUnitList = await _utils.GetItemUnits();
+        ViewBag.PriorityLevelList = await _utils.GetPriorityLevel();
+
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", purchaseRequestList);
+      }
+      if (processTypeID == 23)
+      {
+        var PurchaseRequests = await _appDBContext.PR_PurchaseRequests
+           .Include(v => v.Item)
+           .Include(v => v.RequestStatusType)
+           .FirstOrDefaultAsync(v => v.PurchaseRequestID == id);
+
+        var RequestForQuotationList = await _appDBContext.PR_RequestForQuotations
+            .FirstOrDefaultAsync(v => v.PurchaseRequestID == id);
+
+        var CostComparisonList = await _appDBContext.PR_CostComparison
+            .FirstOrDefaultAsync(v => v.PurchaseRequestID == id);
+
+
+        if (PurchaseRequests == null)
+        {
+          return NotFound();
+        }
+
+        if (RequestForQuotationList == null)
+        {
+          return NotFound();
+        }
+
+        ViewBag.ItemList = await _utils.GetItemList();
+        ViewBag.ItemNameList = await _utils.GetItemList();
+        ViewBag.ItemUnitList = await _utils.GetItemUnits();
+        ViewBag.PriorityLevelList = await _utils.GetPriorityLevel();
+        ViewBag.VendorList = await _utils.GetVendorList();
+
+        if (RequestForQuotationList != null)
+        {
+          ViewBag.QuotationVendorID1 = RequestForQuotationList.QuotationVendorID1;
+          ViewBag.QuotationVendorID2 = RequestForQuotationList.QuotationVendorID2;
+          ViewBag.QuotationVendorID3 = RequestForQuotationList.QuotationVendorID3;
+          ViewBag.VendorListbyComparison = await _utils.GetVendorListbyComparison(RequestForQuotationList.PurchaseRequestID);
+        }
+
+        var model = new PurchaseRequestwithCostComparisonViewModel
+        {
+          PurchaseRequests = new List<PR_PurchaseRequest> { PurchaseRequests },
+          CostComparisons = new List<PR_CostComparison> { CostComparisonList },
+        };
+        return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", model);
+      }
       // Fallback view if no ProcessTypeID matches
       return View("~/Views/MasterInfo/ApprovalsRequest/ApprovalsRequest.cshtml", result);
     }
-
-
     private async Task<MonthlySalarySheetViewModel> GetMonthlySalarySheetAsync(string employeeId, int month, int year)
     {
       var salarySheet = new MonthlySalarySheetViewModel

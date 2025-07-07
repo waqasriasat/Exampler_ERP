@@ -22,9 +22,9 @@
                 $.post('@Url.Action("Edit", "EmployeeRequestTypeForward")', formData, function (response) {
                     if (response.success) {
                         $('#editEmployeeRequestTypeForwardModal').modal('hide');
-                        location.reload(); // Reload the page to reflect changes
+                         // Reload the page to reflect changes
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -42,9 +42,9 @@
                 var EmployeeRequestTypeId = $(this).data('id');
                 $.post('@Url.Action("Delete", "EmployeeRequestTypeForward")', { id: EmployeeRequestTypeId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

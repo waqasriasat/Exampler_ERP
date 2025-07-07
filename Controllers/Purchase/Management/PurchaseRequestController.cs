@@ -4,20 +4,25 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using System.Configuration;
 
 namespace Exampler_ERP.Controllers.Purchase.Management
 {
   public class PurchaseRequestController : Controller
   {
     private readonly AppDBContext _appDBContext;
-    private readonly IConfiguration _conSTguration;
+    private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public PurchaseRequestController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils)
+    public PurchaseRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
-      _conSTguration = conSTguration;
+      _configuration = configuration;
       _utils = utils;
+      _hubContext = hubContext;
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -159,6 +164,8 @@ namespace Exampler_ERP.Controllers.Purchase.Management
         }
 
         await _appDBContext.SaveChangesAsync(); // Final save
+
+        await _hubContext.Clients.All.SendAsync("ReceiveProcessNotification");
         var PurchaseRequests = await _appDBContext.PR_PurchaseRequests
         .Include(v => v.Item)
         .Include(v => v.RequestStatusType)
@@ -312,6 +319,7 @@ namespace Exampler_ERP.Controllers.Purchase.Management
 
         await _appDBContext.SaveChangesAsync();
 
+        await _hubContext.Clients.All.SendAsync("ReceiveProcessNotification");
         var purchaseRequests = await _appDBContext.PR_PurchaseRequests
             .Include(v => v.Item)
             .Include(v => v.RequestStatusType)

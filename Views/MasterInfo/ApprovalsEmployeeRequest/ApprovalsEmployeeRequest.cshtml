@@ -58,7 +58,7 @@
         processData: false,  // Prevent jQuery from automatically transforming the data into a query string
         success: function (response) {
             if (response.success) {
-                location.reload();  // Reload the page or update the part of the page with the updated data
+                  // Reload the page or update the part of the page with the updated data
             } else {
                 console.log("Validation error or unsuccessful approval");
             }
@@ -74,9 +74,9 @@
                 $.post('@Url.Action("Reject", "ApprovalsEmployeeRequest")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -92,9 +92,9 @@
                 var EmployeeRequestTypeApprovalId = $(this).data('id');
                 $.post('@Url.Action("Delete", "EmployeeRequestTypeApproval")', { id: EmployeeRequestTypeApprovalId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

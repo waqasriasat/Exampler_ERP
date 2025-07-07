@@ -1,5 +1,252 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model List<Exampler_ERP.Models.Temp.PurchaseRequestwithPurchaseOrderViewModel>
+
 @{
+    ViewData["Title"] = "Purchase - Purchase Order";
 }
+
+@section PageScripts {
+    <script>
+        $(document).ready(function () {
+            var selectedVendorName = null;
+
+            // ✅ Vendor same check logic
+            $(document).on('change', 'input[name="selectedRequests"]', function () {
+                var currentRow = $(this).closest('.GVDetail');
+                var vendorName = currentRow.find('.recommendedVendor').text().trim();
+
+                if (this.checked) {
+                    if (selectedVendorName === null) {
+                        selectedVendorName = vendorName;
+                    } else {
+                        if (vendorName !== selectedVendorName) {
+                            alert('You can only select Purchase Requests with the SAME Recommended Vendor.');
+                            this.checked = false;
+                        }
+                    }
+                } else {
+                    if ($('input[name="selectedRequests"]:checked').length === 0) {
+                        selectedVendorName = null;
+                    }
+                }
+            });
+
+            // ✅ Make Purchase Order with selected list
+            $('.makePurchaseOrderLink').click(function (e) {
+                e.preventDefault();
+
+                var selected = [];
+                $('input[name="selectedRequests"]:checked').each(function () {
+                    selected.push($(this).val());
+                });
+
+                if (selected.length === 0) {
+                    alert('Please select at least one Purchase Request.');
+                    return;
+                }
+                    // 🟢 Make proper query string: ids=1&ids=2&ids=3
+                var query = $.param({ ids: selected }, true);
+                $.get('@Url.Action("MakeOrder", "PurchaseOrder")' + '?' + query, function (data) {
+                    $('#makePurchaseOrderModalContainer').html(data);
+                    $('#makePurchaseOrderModal').modal('show');
+                });
+            });
+
+            // ✅ Other actions remain same
+            $('#makePurchaseOrderModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#makePurchaseOrderForm').serialize();
+                $.post('@Url.Action("MakeOrder", "PurchaseOrder")', formData, function (response) {
+                    if (response.success) {
+                        
+                    } else {
+                        
+                    }
+                });
+            });
+
+            $('#makePurchaseOrderModalContainer').on('click', '#Close', function () {
+                $('#makePurchaseOrderModal').modal('hide');
+            });
+
+            $('.deletePurchaseOrderLink').click(function (e) {
+                e.preventDefault();
+                var PurchaseOrderId = $(this).data('id');
+                $.post('@Url.Action("Delete", "PurchaseOrder")', { id: PurchaseOrderId }, function (response) {
+                    if (response.success) {
+                        
+                    } else {
+                        
+                    }
+                });
+            });
+
+            $(document).on('click', '.printPurchaseOrderLink', function (e) {
+                e.preventDefault();
+                var PurchaseOrderId = $(this).data('id');
+                var url = '@Url.Action("Print", "PurchaseOrder")' + '?id=' + PurchaseOrderId;
+                var printWindow = window.open(url, '_blank');
+                printWindow.focus();
+            });
+
+            $('#searchItemNameButton').click(function () {
+                var searchValue = $('#searchItemNameInput').val();
+                window.location.href = '@Url.Action("Index", "PurchaseOrder")?searchItemName=' + searchValue;
+            });
+        });
+
+        function printListPurchaseOrderes() {
+            var printWindow = window.open('@Url.Action("PrintList", "PurchaseOrder")', '_blank');
+            printWindow.focus();
+        }
+                    $('#vendorSelect').on('change', function () {
+            var selectedVendor = $(this).val();
+
+            if (selectedVendor === "none") {
+                $('input[name="selectedRequests"]').prop('checked', false);
+            } else if (selectedVendor !== "") {
+                $('input[name="selectedRequests"]').each(function () {
+                    var vendorId = $(this).data('vendor-id');
+                    if (vendorId == selectedVendor) {
+                        $(this).prop('checked', true);
+                    } else {
+                        $(this).prop('checked', false);
+                    }
+                });
+            }
+        });
+
+    </script>
+}
+
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Purchase /</span> Purchase Order
+</h4>
+
+<!-- 🔍 Search & Action buttons -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Searching Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8" style="padding-bottom: 15px;">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search Item Name" id="searchItemNameInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchItemNameButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <button type="button" class="btn btn-primary makePurchaseOrderLink">Make Purchase Order</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "PurchaseOrder")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printListPurchaseOrderes()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+
+<!-- ✅ Purchase Order List -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+           
+            <h5 class="card-header d-flex align-items-center gap-3">
+                Purchase Order List
+                <select id="vendorSelect" class="form-select" style="width: auto;">
+                    <option value="">-- Select Vendor --</option>
+                    <option value="none">Select None</option>
+                    @foreach (var vendor in ViewBag.VendorList)
+                    {
+                        <option value="@vendor.Value">@vendor.Text</option>
+                    }
+                </select>
+            </h5>
+
+            <div>
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-11 col-lg-11">
+                            <div class="row">
+                                <div class="col-1">
+                                    <p class="text-nowrap">Select</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Purchase Request #</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Date</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Item Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">Quantity</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap">Recommended Vendor</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-1 col-lg-1">
+                            <p class="text-nowrap">Print</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @foreach (var row in Model)
+            {
+                <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                    <div class="row">
+                        <div class="col-10 col-md-11 col-lg-11">
+                            <div class="row align-items-center">
+                                <div class="col-1">
+                                    <input type="checkbox" name="selectedRequests" value="@row.PurchaseRequests.PurchaseRequestID"
+                                           data-vendor-id="@row.CostComparisons?.Vendor?.VendorID" />
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">
+                                        <span class="smallAdd">Purchase Request # :</span> @row.PurchaseRequests.PurchaseRequestID
+                                    </p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">
+                                        <span class="smallAdd">Date :</span>
+                                        @(row.PurchaseRequests.PurchaseRequestDate.ToString("dd/MM/yyyy") ?? "00/00/0000")
+                                    </p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">
+                                        <span class="smallAdd">Item Name :</span> @row.Item?.ItemName
+                                    </p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">
+                                        <span class="smallAdd">Quantity :</span> @row.PurchaseRequests.Quantity
+                                    </p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap recommendedVendor">
+                                        @row.CostComparisons?.Vendor?.HeadofAccount_Five?.HeadofAccount_FiveName
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-1 col-lg-1">
+                            <a href="#" class="printPurchaseOrderLink me-2" data-id="@row.PurchaseRequests.PurchaseRequestID">
+                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- ✅ Modal Container -->
+<div id="makePurchaseOrderModalContainer"></div>

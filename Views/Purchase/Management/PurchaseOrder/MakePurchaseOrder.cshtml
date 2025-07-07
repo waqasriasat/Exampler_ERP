@@ -1,0 +1,240 @@
+@model List<Exampler_ERP.Models.PR_PurchaseRequest>
+@{
+    var today = DateTime.Now.ToString("dd-MM-yyyy");
+}
+<style>
+    .ui-autocomplete {
+        z-index: 1000 !important;
+    }
+
+    .center-button {
+        margin-top: 32px;
+        text-align: center;
+    }
+
+    .width-button {
+        width: 120px;
+    }
+
+    .modal-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .table th,
+    .table td {
+        width: 20%;
+    }
+
+    .form-label,
+    .form-control,
+    .form-select {
+        width: 100%;
+    }
+
+    .table .inputcontrol {
+        background-color: transparent;
+        border: transparent;
+    }
+
+    .table .headercontrol {
+        background-color: white;
+        border: none;
+    }
+
+    .table .headerwidth {
+        width: 40%;
+    }
+
+    .table .headerwidthRow {
+        width: 20%;
+    }
+</style>
+<style>
+    .vendor-heading {
+        font-size: 1.5rem; /* like h5/h4 */
+        font-weight: bold;
+        text-align: center;
+        border: none;
+        border-bottom: 2px solid #ccc;
+        background: transparent;
+        box-shadow: none;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        text-align-last: center; /* to center option text too */
+    }
+
+        .vendor-heading:focus {
+            outline: none;
+            box-shadow: none;
+            border-color: #999;
+        }
+</style>
+
+<div class="modal fade" id="makePurchaseOrderModal" tabindex="-1" role="dialog" aria-labelledby="makePurchaseOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="makePurchaseOrderModalLabel"><i class="fas fa-key me-2"></i>Make Purchase Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="makePurchaseOrderForm" enctype="multipart/form-data" asp-action="MakeOrder" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="table-responsive mb-3">
+                        <div style="justify-items: center;">
+                            <select id="vendorSelect" class="form-select vendor-heading" style="width: 50%;text-align: center;margin: 0 auto; display: block;">
+                            @foreach (var vendor in ViewBag.VendorList)
+                            {
+                                <option value="@vendor.Value">@vendor.Text</option>
+                            }
+                        </select>
+                        <span class="ms-auto" style="">Dated : @today</span>
+                        </div>
+                        <table class="table table-bordered" id="purchaseOrderTable">
+                            <thead class="table-light">
+
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Unit</th>
+                                    <th>Quantity</th>
+                                    <th>Priority Level</th>
+                                </tr>
+                            </thead>
+                            <tbody id="purchaseRequestBody">
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            <select name="[@i].ItemID" class="form-select" disabled>
+                                                <option value="">Select Item</option>
+                                                @foreach (var type in ViewBag.ItemList)
+                                                {
+                                                    var isSelected = type.Value == Model[i].ItemID.ToString();
+                                                    var optionHtml = $"<option value='{type.Value}' {(isSelected ? "selected='selected'" : "")}>{type.Text}</option>";
+                                                    @Html.Raw(optionHtml)
+
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select name="[@i].UnitTypeID" class="form-select" disabled>
+                                                <option value="">Select Unit Type</option>
+                                                @foreach (var type in ViewBag.ItemUnitList)
+                                                {
+                                                    var isSelected = type.Value == Model[i].UnitTypeID.ToString();
+                                                    var optionHtml = $"<option value='{type.Value}' {(isSelected ? "selected='selected'" : "")}>{type.Text}</option>";
+                                                    @Html.Raw(optionHtml)
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="[@i].PurchaseRequestID" value="@Model[i].PurchaseRequestID" />
+                                            <input type="number" name="[@i].Quantity" class="form-control" value="@Model[i].Quantity" min="1" disabled />
+                                        </td>
+                                        <td>
+                                            <select name="[@i].PriorityLevel" class="form-select" disabled>
+                                                <option value="">Select Priority Level</option>
+                                                @foreach (var type in ViewBag.PriorityLevelList)
+                                                {
+                                                    var isSelected = type.Value == Model[i].PriorityLevel.ToString();
+                                                    var optionHtml = $"<option value='{type.Value}' {(isSelected ? "selected='selected'" : "")}>{type.Text}</option>";
+                                                    @Html.Raw(optionHtml)
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                        <div class="mt-3">
+                            <label for="Remarks" class="form-label fw-bold">Remarks</label>
+                            <textarea name="Remarks" id="Remarks" class="form-control" rows="6" readonly>@{
+                                    var index = 1;
+                                    foreach (var item in Model)
+                                    {
+                                        @($"{index}. {item.Remarks}{Environment.NewLine}")
+                                        index++;
+                                    }
+                                }</textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        let rowIndex = 0;
+
+        const itemList = @Html.Raw(Json.Serialize(ViewBag.ItemList));
+        const unitList = @Html.Raw(Json.Serialize(ViewBag.ItemUnitList));
+        const priorityLevelList = @Html.Raw(Json.Serialize(ViewBag.PriorityLevelList));
+
+        function createOptions(list, selectedVal = "") {
+            return list.map(item => {
+                const selected = item.value === selectedVal ? "selected" : "";
+                return `<option value="${item.value}" ${selected}>${item.text}</option>`;
+            }).join('');
+        }
+
+        $("#addRowBtn").click(function () {
+            const item = $("#ItemName").val();
+            const unit = $("#UnitTypeID").val();
+            const quantity = $("#Quantity").val();
+            const priority = $("#PriorityLevel").val();
+
+            if (!item || !unit || !quantity || !priority) {
+                alert("Please fill all fields before adding.");
+                return;
+            }
+
+            const newRow = `
+                <tr>
+                    <td>
+                        <select name="[${rowIndex}].ItemID" class="form-control" required>
+                            ${createOptions(itemList, item)}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="[${rowIndex}].UnitTypeID" class="form-control" required>
+                            ${createOptions(unitList, unit)}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" name="[${rowIndex}].Quantity" class="form-control" value="${quantity}" min="1" required />
+                    </td>
+                    <td>
+                        <select name="[${rowIndex}].PriorityLevel" class="form-control" required>
+                            ${createOptions(priorityLevelList, priority)}
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger removeRow">Remove</button>
+                    </td>
+                </tr>
+            `;
+
+            $("#purchaseRequestBody").append(newRow);
+            rowIndex++;
+
+            // Clear inputs
+            $("#ItemName").val("");
+            $("#UnitTypeID").val("");
+            $("#Quantity").val("");
+            $("#PriorityLevel").val("");
+        });
+
+        $(document).on("click", ".removeRow", function () {
+            $(this).closest("tr").remove();
+        });
+    });
+</script>

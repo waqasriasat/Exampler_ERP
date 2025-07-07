@@ -23,9 +23,9 @@
                 $.post('@Url.Action("Edit", "ProcessTypeApprovalSetup")', formData, function (response) {
                     if (response.success) {
                         $('#editProcessTypeApprovalSetupModal').modal('hide');
-                        location.reload(); // Reload the page to reflect changes
+                         // Reload the page to reflect changes
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -43,9 +43,9 @@
                 var ProcessTypeApprovalSetupId = $(this).data('id');
                 $.post('@Url.Action("Delete", "ProcessTypeApprovalSetup")', { id: ProcessTypeApprovalSetupId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

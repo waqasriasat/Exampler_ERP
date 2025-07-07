@@ -28,7 +28,7 @@
                             {
                                 <tr>
                                     <td>
-                                        <select name="[@i].ItemID" class="form-select" disabled>
+                                        <select name="PurchaseRequests[@i].ItemID" class="form-select" disabled>
                                             <option value="">Select Item</option>
                                             @foreach (var type in ViewBag.ItemList)
                                             {
@@ -40,7 +40,7 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <select name="[@i].UnitTypeID" class="form-select" disabled>
+                                        <select name="PurchaseRequests[@i].UnitTypeID" class="form-select" disabled>
                                             <option value="">Select Unit Type</option>
                                             @foreach (var type in ViewBag.ItemUnitList)
                                             {
@@ -51,11 +51,11 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="hidden" name="[@i].PurchaseRequestID" value="@Model.PurchaseRequests[i].PurchaseRequestID" />
-                                        <input type="number" name="[@i].Quantity" class="form-control" value="@Model.PurchaseRequests[i].Quantity" min="1" disabled />
+                                        <input type="hidden" name="PurchaseRequests[@i].PurchaseRequestID" value="@Model.PurchaseRequests[i].PurchaseRequestID" />
+                                        <input type="number" name="PurchaseRequests[@i].Quantity" class="form-control" value="@Model.PurchaseRequests[i].Quantity" min="1" disabled />
                                     </td>
                                     <td>
-                                        <select name="[@i].PriorityLevel" class="form-select" disabled>
+                                        <select name="PurchaseRequests[@i].PriorityLevel" class="form-select" disabled>
                                             <option value="">Select Priority Level</option>
                                             @foreach (var type in ViewBag.PriorityLevelList)
                                             {
@@ -180,7 +180,7 @@
             <h5 class="card-header">Comparison Passed Vendor</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
-                    <table class="table table-bordered" id="purchaseRequestTable">
+                    <table class="table table-bordered" id="ComparisonPassedVendorTable">
                         <thead class="table-light">
                             <tr>
                                 <th>Comfirmed Vendor</th>
@@ -188,7 +188,7 @@
                         </thead>
                         <tbody id="purchaseRequestBody">
                             @for (int i = 0; i < Model.CostComparisons.Count; i++)
-                            {
+                            { 
                                 <tr>
                                     <td>
                                         <select name="CostComparisons[@i].DeliverdVendorID" class="form-select" required>
@@ -204,6 +204,7 @@
                                                 @Html.Raw(optionHtml)
                                             }
                                         </select>
+                                      
                                     </td>
                                 </tr>
 

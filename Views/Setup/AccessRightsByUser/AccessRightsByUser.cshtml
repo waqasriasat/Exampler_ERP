@@ -25,9 +25,9 @@
                 $.post('@Url.Action("Edit", "AccessRightsByUser")', formData, function (response) {
                     if (response.success) {
                         $('#editAccessRightsByUserModal').modal('hide');
-                        location.reload(); // Reload the page to reflect changes
+                         // Reload the page to reflect changes
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -45,9 +45,9 @@
                 var AccessRightsByUserId = $(this).data('id');
                 $.post('@Url.Action("Delete", "AccessRightsByUser")', { id: AccessRightsByUserId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

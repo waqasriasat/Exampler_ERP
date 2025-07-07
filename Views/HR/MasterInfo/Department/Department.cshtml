@@ -23,9 +23,9 @@
                 $.post('@Url.Action("Edit", "Department")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -44,9 +44,9 @@
                 $.post('@Url.Action("Create", "Department")', formData, function (response) {
                     if (response.success) {
                         $('#addDepartmentModal').modal('hide');
-                        location.reload(); // Reload the page to reflect changes
+                         // Reload the page to reflect changes
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -69,9 +69,9 @@
                 var DepartmentId = $(this).data('id');
                 $.post('@Url.Action("Delete", "Department")', { id: DepartmentId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

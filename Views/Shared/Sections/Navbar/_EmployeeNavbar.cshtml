@@ -106,14 +106,14 @@ else
                     if (response.success) {
                         $('#changepictureModal').modal('hide');
                         $('#successMessagePicture').text(response.message).show();
-                        location.reload(); // Reload the page to reflect changes
+                         // Reload the page to reflect changes
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                         // You might want to display validation errors here
                     }
                 },
                 error: function () {
-                    showErrorAlert(response.message);
+                    showError
                 }
             });
         });

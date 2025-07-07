@@ -1,7 +1,9 @@
+using Exampler_ERP.Hubs;
 using Exampler_ERP.Models;
 using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using System.Globalization;
@@ -13,12 +15,14 @@ namespace Exampler_ERP.Controllers.HR.HR
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public VacationSettleController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+    public VacationSettleController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+      _hubContext = hubContext;
     }
     public async Task<IActionResult> Index(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? VacationTypeID)
     {
@@ -197,6 +201,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
               _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
               await _appDBContext.SaveChangesAsync();
+              await _hubContext.Clients.All.SendAsync("ReceiveProcessNotification");
               TempData["SuccessMessage"] = "Vacation Settle Created successfully. Continue to the Approval Process Setup for Vacation Settle Activation.";
               return Json(new { success = true });
             }

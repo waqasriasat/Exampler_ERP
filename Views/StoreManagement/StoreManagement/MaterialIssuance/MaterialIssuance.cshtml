@@ -27,9 +27,9 @@
                 $.post('@Url.Action("Edit", "MaterialIssuance")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -49,9 +49,9 @@
                 $.post('@Url.Action("Create", "MaterialIssuance")', formData, function (response) {
                     if (response.success) {
                         $('#addMaterialIssuanceModal').modal('hide');
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -74,9 +74,9 @@
                 var MaterialIssuanceId = $(this).data('id');
                 $.post('@Url.Action("Delete", "MaterialIssuance")', { id: MaterialIssuanceId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

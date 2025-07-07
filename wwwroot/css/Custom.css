@@ -1165,5 +1165,8 @@ a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:h
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
 }
+.swal2-container {
+  z-index: 1091 !important;
+}
 
   

@@ -36,7 +36,7 @@
                             // Hide the modal only on success
                             $('#editDocumentUploadModal').modal('hide');
                             // Optionally reload the page to reflect changes
-                            location.reload();
+                            
                         } else {
                             // Show errors in the modal
                             let errorMessages = response.errors.join('<br>');
@@ -75,7 +75,7 @@
                             // Hide the modal only on success
                             $('#addDocumentUploadModal').modal('hide');
                             // Optionally reload the page to reflect changes
-                            location.reload();
+                            
                         } else {
                             // Show errors in the modal
                             let errorMessages = response.errors.join('<br>');
@@ -111,9 +111,9 @@
                 if (confirm('Are you sure you want to delete this DocumentUpload?')) {
                     $.post('@Url.Action("Delete", "DocumentUpload")', { id: DocumentUploadId }, function (response) {
                         if (response.success) {
-                            location.reload();
+                            
                         } else {
-                            showErrorAlert(response.message);
+                            showError
                         }
                     });
                 } else {

@@ -11,6 +11,8 @@ namespace Exampler_ERP.Models
     [ForeignKey("PurchaseRequestID")]
     public virtual PR_PurchaseRequest? PurchaseRequests { get; set; }
     public int? DeliverdVendorID { get; set; }
+    [ForeignKey("DeliverdVendorID")]
+    public virtual FI_Vendor? Vendor { get; set; }
     public int? QuotationID1 { get; set; }
     public int? QuotationID2 { get; set; }
     public int? QuotationID3 { get; set; }

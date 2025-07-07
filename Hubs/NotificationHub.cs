@@ -7,7 +7,8 @@ namespace Exampler_ERP.Hubs
     // You can add methods here to send notifications
     public async Task SendNotification(string message)
     {
-      await Clients.All.SendAsync("ReceiveNotification", message);
+      await Clients.All.SendAsync("ReceiveSuccessTrue", message);
+      await Clients.All.SendAsync("ReceiveSuccessFalse", message);
     }
   }
 }

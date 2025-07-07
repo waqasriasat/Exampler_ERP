@@ -23,7 +23,7 @@
                 var formData = $('#editEmployeeRequestForm').serialize();
                 $.post('@Url.Action("Edit", "EmployeeRequest")', formData, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
                         let errorMessages = response.errors.join('<br>');
                         $('#successMessage').removeClass('alert-success').addClass('alert-danger').html(errorMessages).show();
@@ -44,7 +44,7 @@
                 var formData = $('#addEmployeeRequestForm').serialize();
                 $.post('@Url.Action("Create", "EmployeeRequest")', formData, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
                         let errorMessages = response.errors.join('<br>');
                         $('#successMessage').removeClass('alert-success').addClass('alert-danger').html(errorMessages).show();
@@ -73,9 +73,9 @@
                 if (confirm('Are you sure you want to delete this EmployeeRequest?')) {
                     $.post('@Url.Action("Delete", "EmployeeRequest")', { id: EmployeeRequestId }, function (response) {
                         if (response.success) {
-                            location.reload();
+                            
                         } else {
-                            showErrorAlert(response.message);
+                            showError
                         }
                     });
                 } else {

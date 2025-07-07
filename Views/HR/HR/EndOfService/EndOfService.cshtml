@@ -21,9 +21,9 @@
                 $.post('@Url.Action("Edit", "EndOfService")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -43,9 +43,9 @@
                 $.post('@Url.Action("Create", "EndOfService")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -71,9 +71,9 @@
                 if (confirm('Are you sure you want to delete this EndOfService?')) {
                     $.post('@Url.Action("Delete", "EndOfService")', { id: EndOfServiceId }, function (response) {
                         if (response.success) {
-                            location.reload();
+                            
                         } else {
-                            showErrorAlert(response.message);
+                            showError
                         }
                     });
                 } else {

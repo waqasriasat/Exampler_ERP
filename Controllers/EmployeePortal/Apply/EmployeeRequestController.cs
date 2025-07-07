@@ -1,7 +1,9 @@
+using Exampler_ERP.Hubs;
 using Exampler_ERP.Models;
 using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 
@@ -12,11 +14,13 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    public EmployeeRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+    private readonly IHubContext<NotificationHub> _hubContext;
+    public EmployeeRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+      _hubContext = hubContext;
     }
     public async Task<IActionResult> Index()
     {
@@ -105,6 +109,7 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
 
               _appDBContext.HR_EmployeeRequestTypeApprovalDetails.Add(newEmployeeRequestTypeApprovalDetail);
               await _appDBContext.SaveChangesAsync();
+              await _hubContext.Clients.All.SendAsync("ReceiveProcessNotification");
               return Json(new { success = true });
             }
             else

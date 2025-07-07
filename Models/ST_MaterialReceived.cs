@@ -18,10 +18,12 @@ namespace Exampler_ERP.Models
     public virtual FI_Vendor? Vendor { get; set; }
     public string? LotNumber { get; set; }
     public DateTime? ExpiryDate { get; set; }
-    public string? PONo { get; set; }
+    public int? PONo { get; set; }
     public string? GRNNo { get; set; }
     public string? DCNo { get; set; }
     public string? InvoiceNo { get; set; }
+    public int? PurchaseRequestID { get; set; }
+   
     public virtual List<ST_MaterialReceivedComponent> MaterialReceivedComponents { get; set; } = new List<ST_MaterialReceivedComponent>();
   }
 }

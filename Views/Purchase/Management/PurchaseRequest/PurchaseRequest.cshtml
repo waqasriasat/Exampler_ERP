@@ -27,9 +27,9 @@
                 $.post('@Url.Action("Edit", "PurchaseRequest")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -49,9 +49,9 @@
                 $.post('@Url.Action("Create", "PurchaseRequest")', formData, function (response) {
                     if (response.success) {
                         $('#addPurchaseRequestModal').modal('hide');
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -77,9 +77,9 @@
                 $.post('@Url.Action("Create", "PurchaseRequest")', formData, function (response) {
                     if (response.success) {
                         $('#addFromStorePurchaseRequestModal').modal('hide');
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -102,9 +102,9 @@
                 var PurchaseRequestId = $(this).data('id');
                 $.post('@Url.Action("Delete", "PurchaseRequest")', { id: PurchaseRequestId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

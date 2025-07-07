@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Contracts;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Exampler_ERP.Controllers.HR.HR;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Exampler_ERP.Controllers.HR.Financial
 {
@@ -12,14 +15,16 @@ namespace Exampler_ERP.Controllers.HR.Financial
   {
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
-    private readonly ILogger<FixedDeductionController> _logger;
+    private readonly ILogger<AddionalAllowanceController> _logger;
     private readonly Utils _utils;
-    public FixedDeductionController(AppDBContext appDBContext, IConfiguration configuration, ILogger<FixedDeductionController> logger, Utils utils)
+    private readonly IHubContext<NotificationHub> _hubContext;
+    public FixedDeductionController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AddionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
+      _hubContext = hubContext;
     }
     public async Task<IActionResult> Index(int? id)
     {
@@ -209,6 +214,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
                   _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
                   await _appDBContext.SaveChangesAsync();
+                  await _hubContext.Clients.All.SendAsync("ReceiveProcessNotification");
                 }
                 else
                 {

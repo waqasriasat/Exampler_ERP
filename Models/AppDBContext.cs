@@ -1703,7 +1703,8 @@ new ST_Item() { ItemID = 724, ItemCode = "1724", ItemName = "ZIP LOCK BAG (8X12)
      new Settings_ProcessType() { ProcessTypeID = 19, ProcessTypeName = "Received Voucher", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_ProcessType() { ProcessTypeID = 20, ProcessTypeName = "Material Requisition", ActiveYNID = 1, DeleteYNID = 0 },
      new Settings_ProcessType() { ProcessTypeID = 21, ProcessTypeName = "New Purchase Request", ActiveYNID = 1, DeleteYNID = 0 },
-     new Settings_ProcessType() { ProcessTypeID = 22, ProcessTypeName = "Edited Purchase Request", ActiveYNID = 1, DeleteYNID = 0 }
+     new Settings_ProcessType() { ProcessTypeID = 22, ProcessTypeName = "Edited Purchase Request", ActiveYNID = 1, DeleteYNID = 0 },
+     new Settings_ProcessType() { ProcessTypeID = 23, ProcessTypeName = "Approval For Purchase Order", ActiveYNID = 1, DeleteYNID = 0 }
 
      );
 

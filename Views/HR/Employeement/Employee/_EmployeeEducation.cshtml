@@ -11,9 +11,9 @@
                 // If user clicks 'Yes', proceed with the deletion
                 $.post('@Url.Action("DeleteEmployeeEducation", "Employee")', { id: educationId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             } else {

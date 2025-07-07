@@ -23,9 +23,9 @@
                 $.post('@Url.Action("Edit", "Salary")', formData, function (response) {
                     if (response.success) {
                         $('#editSalaryModal').modal('hide');
-                        location.reload(); // Reload the page to reflect changes
+                         // Reload the page to reflect changes
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -43,9 +43,9 @@
                 var SalaryId = $(this).data('id');
                 $.post('@Url.Action("Delete", "Salary")', { id: SalaryId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

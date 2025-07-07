@@ -23,9 +23,9 @@
                 $.post('@Url.Action("Edit", "SalaryType")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -44,9 +44,9 @@
                 $.post('@Url.Action("Create", "SalaryType")', formData, function (response) {
                     if (response.success) {
                         $('#addSalaryTypeModal').modal('hide');
-                        location.reload(); // Reload the page to reflect changes
+                         // Reload the page to reflect changes
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -69,9 +69,9 @@
                 var SalaryTypeId = $(this).data('id');
                 $.post('@Url.Action("Delete", "SalaryType")', { id: SalaryTypeId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

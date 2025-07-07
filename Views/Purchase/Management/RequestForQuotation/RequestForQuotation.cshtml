@@ -27,9 +27,9 @@
                 $.post('@Url.Action("Forword", "RequestForQuotation")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -46,9 +46,9 @@
                 var RequestForQuotationId = $(this).data('id');
                 $.post('@Url.Action("Delete", "RequestForQuotation")', { id: RequestForQuotationId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

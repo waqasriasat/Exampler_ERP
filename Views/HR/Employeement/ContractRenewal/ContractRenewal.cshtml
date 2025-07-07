@@ -21,9 +21,9 @@
                 $.post('@Url.Action("Edit", "ContractRenewal")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

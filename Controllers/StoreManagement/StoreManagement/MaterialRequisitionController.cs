@@ -1,23 +1,28 @@
+using Exampler_ERP.Hubs;
 using Exampler_ERP.Models;
 using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using System.Configuration;
 
 namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 {
   public class MaterialRequisitionController : Controller
   {
     private readonly AppDBContext _appDBContext;
-    private readonly IConfiguration _conSTguration;
+    private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public MaterialRequisitionController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils)
+    public MaterialRequisitionController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
-      _conSTguration = conSTguration;
+      _configuration = configuration;
       _utils = utils;
+      _hubContext = hubContext;
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -150,6 +155,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
                 _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
                 await _appDBContext.SaveChangesAsync();
+                await _hubContext.Clients.All.SendAsync("ReceiveProcessNotification");
               }
               else
               {

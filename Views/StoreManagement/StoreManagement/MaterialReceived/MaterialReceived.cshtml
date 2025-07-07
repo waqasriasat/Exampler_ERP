@@ -27,9 +27,9 @@
                 $.post('@Url.Action("Edit", "MaterialReceived")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -49,9 +49,9 @@
                 $.post('@Url.Action("Create", "MaterialReceived")', formData, function (response) {
                     if (response.success) {
                         $('#addMaterialReceivedModal').modal('hide');
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                         });
             });
@@ -61,7 +61,33 @@
                 $('#addMaterialReceivedModal').modal('hide'); // Close the modal directly
                 // Additional logic if needed
             });
+            // Add new MaterialReceived modal popup
+            $('.addMaterialReceivedViaPOLink').click(function () {
+                $.get('@Url.Action("CreateViaPO", "MaterialReceived")', function (data) {
+                    $('#addMaterialReceivedViaPOModalContainer').html(data);
+                    $('#addMaterialReceivedViaPOModal').modal('show');
+                });
+            });
 
+
+            // Save new MaterialReceived form
+            $('#addMaterialReceivedViaPOModalContainer').on('click', '#saveNewMaterialReceived', function () {
+                var formData = $('#addMaterialReceivedViaPOForm').serialize();
+                $.post('@Url.Action("CreateViaPO", "MaterialReceived")', formData, function (response) {
+                    if (response.success) {
+                        $('#addMaterialReceivedViaPOModal').modal('hide');
+                        
+                    } else {
+                        showError
+                    }
+                        });
+            });
+
+            // Close Modal Add Contrainer
+            $('#addMaterialReceivedViaPOModalContainer').on('click', '#Close', function () {
+                $('#addMaterialReceivedViaPOModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
             // Close Modal Edit Contrainer
             $('#editMaterialReceivedModalContainer').on('click', '#Close', function () {
                 $('#editMaterialReceivedModal').modal('hide'); // Close the modal directly
@@ -74,9 +100,9 @@
                 var MaterialReceivedId = $(this).data('id');
                 $.post('@Url.Action("Delete", "MaterialReceived")', { id: MaterialReceivedId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -127,6 +153,7 @@
                     </div>
                     <div class="col-md-4 text-end">
                         <!-- Action Buttons -->
+                        <button type="button" class="btn btn-primary addMaterialReceivedViaPOLink">Add Via PO</button>
                         <button type="button" class="btn btn-primary addMaterialReceivedLink">Add New</button>
                         <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "MaterialReceived")'">Excel</button>
                         <button type="button" class="btn btn-outline-secondary" onclick="printMaterialReceivedes()">Print</button>
@@ -217,5 +244,6 @@
 <!-- Include the modal partial -->
 <div id="editMaterialReceivedModalContainer"></div>
 <div id="addMaterialReceivedModalContainer"></div>
+<div id="addMaterialReceivedViaPOModalContainer"></div>
 
 

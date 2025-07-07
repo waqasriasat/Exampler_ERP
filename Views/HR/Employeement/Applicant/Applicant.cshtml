@@ -32,14 +32,14 @@
                     success: function (response) {
                         if (response.success) {
                             $('#editApplicantModal').modal('hide');
-                            location.reload(); // Reload the page to reflect changes
+                             // Reload the page to reflect changes
                         } else {
-                            showErrorAlert(response.message);
+                            showError
                             // You might want to display validation errors here
                         }
                     },
                     error: function () {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -68,14 +68,14 @@
                     success: function (response) {
                         if (response.success) {
                             $('#addApplicantModal').modal('hide');
-                            location.reload(); // Reload the page to reflect changes
+                             // Reload the page to reflect changes
                         } else {
-                            showErrorAlert(response.message);
+                            showError
                             // You might want to display validation errors here
                         }
                     },
                     error: function () {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -102,9 +102,9 @@
                     // If user clicks 'Yes', proceed with the deletion
                     $.post('@Url.Action("Delete", "Applicant")', { id: ApplicantId }, function (response) {
                         if (response.success) {
-                            location.reload();
+                            
                         } else {
-                            showErrorAlert(response.message);
+                            showError
                         }
                     });
                 } else {

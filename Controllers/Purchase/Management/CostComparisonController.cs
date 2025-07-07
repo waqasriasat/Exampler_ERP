@@ -46,25 +46,22 @@ namespace Exampler_ERP.Controllers.Purchase.Management
           .Where(v => v.PurchaseRequestID == id)
           .ToListAsync(); // Fetch all items related to the ID
 
-      if (purchaseRequestList == null || !purchaseRequestList.Any())
-      {
-        return NotFound();
-      }
-
-
       var RequestForQuotationList = await _appDBContext.PR_RequestForQuotations
           .Where(v => v.PurchaseRequestID == id)
           .ToListAsync();
 
+      var CostComparisonList = await _appDBContext.PR_CostComparison
+          .FirstOrDefaultAsync(v => v.PurchaseRequestID == id);
+
+      if (purchaseRequestList == null || !purchaseRequestList.Any())
+      {
+        return NotFound();
+      }
+      
       if (RequestForQuotationList == null || !RequestForQuotationList.Any())
       {
         return NotFound();
       }
-
-      var CostComparisonList = await _appDBContext.PR_CostComparison
-          .Where(v => v.PurchaseRequestID == id)
-          .ToListAsync();
-
       
       ViewBag.ItemList = await _utils.GetItemList();
       ViewBag.ItemNameList = await _utils.GetItemList();
@@ -81,16 +78,10 @@ namespace Exampler_ERP.Controllers.Purchase.Management
         ViewBag.VendorListbyComparison = await _utils.GetVendorListbyComparison(firstRequestForQuotation.PurchaseRequestID);
       }
 
-      var firstCostComparison = CostComparisonList.FirstOrDefault();
-      if (firstCostComparison != null)
-      {
-        ViewBag.DeliverdVendorID = firstCostComparison.DeliverdVendorID;
-        ViewBag.VendorListbyComparison = await _utils.GetVendorListbyComparison(firstCostComparison.PurchaseRequestID);
-      }
       var model = new PurchaseRequestwithCostComparisonViewModel
       {
         PurchaseRequests = purchaseRequestList,
-        CostComparisons = CostComparisonList
+        CostComparisons = new List<PR_CostComparison> { CostComparisonList }
       };
       return PartialView("~/Views/Purchase/Management/CostComparison/ForwordCostComparison.cshtml", model);
     }
@@ -107,20 +98,20 @@ namespace Exampler_ERP.Controllers.Purchase.Management
 
           if (existing != null)
           {
-            existing.RequestStatusTypeID = 7;
+            existing.RequestStatusTypeID = 6;
             _appDBContext.PR_PurchaseRequests.Update(existing);
           }
-
-        }
-        foreach (var request in requests.CostComparisons)
-        {
+          foreach (var request1 in requests.CostComparisons)
+          {
             var CostComparisons = new PR_CostComparison
             {
               PurchaseRequestID = request.PurchaseRequestID,
-              DeliverdVendorID = request.DeliverdVendorID,
+              DeliverdVendorID = request1.DeliverdVendorID,
             };
             _appDBContext.PR_CostComparison.Add(CostComparisons);
+          }
         }
+        
 
         await _appDBContext.SaveChangesAsync();
 
@@ -178,25 +169,22 @@ namespace Exampler_ERP.Controllers.Purchase.Management
            .Include(v => v.RequestStatusType)
            .FirstOrDefaultAsync(v => v.PurchaseRequestID == id);
 
+      var RequestForQuotationList = await _appDBContext.PR_RequestForQuotations
+          .FirstOrDefaultAsync(v => v.PurchaseRequestID == id);
+
+      var CostComparisonList = await _appDBContext.PR_CostComparison
+          .FirstOrDefaultAsync(v => v.PurchaseRequestID == id);
+
+
       if (PurchaseRequests == null)
       {
         return NotFound();
       }
 
-
-      var RequestForQuotationList = await _appDBContext.PR_RequestForQuotations
-          .Where(v => v.PurchaseRequestID == id)
-          .ToListAsync();
-
-      if (RequestForQuotationList == null || !RequestForQuotationList.Any())
+      if (RequestForQuotationList == null)
       {
         return NotFound();
       }
-
-      var CostComparisonList = await _appDBContext.PR_CostComparison
-          .Where(v => v.PurchaseRequestID == id)
-          .ToListAsync();
-
       
       ViewBag.ItemList = await _utils.GetItemList();
       ViewBag.ItemNameList = await _utils.GetItemList();
@@ -204,26 +192,18 @@ namespace Exampler_ERP.Controllers.Purchase.Management
       ViewBag.PriorityLevelList = await _utils.GetPriorityLevel();
       ViewBag.VendorList = await _utils.GetVendorList();
 
-      var firstRequestForQuotation = RequestForQuotationList.FirstOrDefault();
-      if (firstRequestForQuotation != null)
+      if (RequestForQuotationList != null)
       {
-        ViewBag.QuotationVendorID1 = firstRequestForQuotation.QuotationVendorID1;
-        ViewBag.QuotationVendorID2 = firstRequestForQuotation.QuotationVendorID2;
-        ViewBag.QuotationVendorID3 = firstRequestForQuotation.QuotationVendorID3;
-        ViewBag.VendorListbyComparison = await _utils.GetVendorListbyComparison(firstRequestForQuotation.PurchaseRequestID);
-      }
-
-      var firstCostComparison = CostComparisonList.FirstOrDefault();
-      if (firstCostComparison != null)
-      {
-        ViewBag.DeliverdVendorID = firstCostComparison.DeliverdVendorID;
-        ViewBag.VendorListbyComparison = await _utils.GetVendorListbyComparison(firstCostComparison.PurchaseRequestID);
+        ViewBag.QuotationVendorID1 = RequestForQuotationList.QuotationVendorID1;
+        ViewBag.QuotationVendorID2 = RequestForQuotationList.QuotationVendorID2;
+        ViewBag.QuotationVendorID3 = RequestForQuotationList.QuotationVendorID3;
+        ViewBag.VendorListbyComparison = await _utils.GetVendorListbyComparison(RequestForQuotationList.PurchaseRequestID);
       }
 
       var model = new PurchaseRequestwithCostComparisonViewModel
       {
         PurchaseRequests = new List<PR_PurchaseRequest> { PurchaseRequests },
-        CostComparisons = CostComparisonList
+        CostComparisons = new List<PR_CostComparison> { CostComparisonList },
       };
       return View("~/Views/Purchase/Management/CostComparison/PrintCostComparison.cshtml", model);
     }

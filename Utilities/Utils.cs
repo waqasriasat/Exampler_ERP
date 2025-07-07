@@ -970,6 +970,28 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
+    public async Task<List<SelectListItem>> GetVendorListbyPurchaseOrder(int purchaseRequestId)
+    {
+      try
+      {
+        var VendorList = await _appDBContext.PR_CostComparison
+          .Include(d => d.Vendor)
+            .Select(d => new SelectListItem
+            {
+              Value = d.DeliverdVendorID.ToString(),
+              Text = d.Vendor.HeadofAccount_Five.HeadofAccount_FiveName
+            })
+            .ToListAsync();
+
+
+        return VendorList;
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
     public async Task<List<SelectListItem>> GetVendorListbyComparison(int purchaseRequestId)
     {
       try
@@ -1066,7 +1088,39 @@ namespace Exampler_ERP.Utilities
         throw; // or handle it accordingly
       }
     }
+    public async Task<List<SelectListItem>> GetItemListFromPO()
+    {
+      try
+      {
+        var ItemList = await (
+              from item in _appDBContext.ST_Items
+              where (
+                  from pr in _appDBContext.PR_PurchaseRequests
+                  join po in _appDBContext.PR_PurchaseOrders
+                      on pr.PurchaseRequestID equals po.PurchaseRequestID
+                  where pr.ItemID == item.ItemID && pr.RequestStatusTypeID == 7
+                  where !_appDBContext.ST_MaterialReceiveds
+                      .Any(mr => mr.ItemID == pr.ItemID && mr.PONo == po.PONO)
+                  select pr
+              ).Any()
+              select new SelectListItem
+              {
+                Value = item.ItemID.ToString(),
+                Text = item.ItemName
+              }
+          ).ToListAsync();
 
+
+        return ItemList;
+
+
+      }
+      catch (Exception ex)
+      {
+        // Log the exception (ex.Message or ex.StackTrace)
+        throw; // or handle it accordingly
+      }
+    }
 
     //GetItemCategorys
     public async Task<List<SelectListItem>> GetItemCategorys()

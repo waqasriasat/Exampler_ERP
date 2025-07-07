@@ -11,7 +11,8 @@ namespace Exampler_ERP.Models
     [ForeignKey("PurchaseRequestID")]
     public virtual PR_PurchaseRequest? PurchaseRequests { get; set; }
     public int? PONO { get; set; }
-    public int? DCNo { get; set; }
-    public int? InvoiceNo { get; set; }
+    public DateTime PurchaseOrderDate { get; set; }
+    public int? FinalApprovalID { get; set; }
+    public int? ProcessTypeApprovalID { get; set; }
   }
 }

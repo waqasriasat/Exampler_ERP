@@ -324,10 +324,16 @@
                                             <td>
                                                 <select class="form-select" disabled>
                                                     <option value="">Select Comparison Passed Vendor</option>
-                                                    @foreach (var type in ViewBag.VendorListbyComparison)
-                                                    {
-                                                        <option value="@type.Value" selected="@(type.Value == Model.CostComparisons[i].DeliverdVendorID.ToString())">@type.Text</option>
-                                                    }
+                                                        @foreach (var type in ViewBag.VendorListbyComparison)
+                                                        {
+                                                            bool isSelected = false;
+                                                            if (Model.CostComparisons != null && Model.CostComparisons.Count > i && Model.CostComparisons[i] != null)
+                                                            {
+                                                                isSelected = type.Value == Model.CostComparisons[i].DeliverdVendorID?.ToString();
+                                                            }
+                                                            var optionHtml = $"<option value='{type.Value}' {(isSelected ? "selected='selected'" : "")}>{type.Text}</option>";
+                                                            @Html.Raw(optionHtml)
+                                                        }
                                                 </select>
                                             </td>
                                         </tr>

@@ -23,9 +23,9 @@
                 $.post('@Url.Action("Edit", "AddionalAllowance")', formData, function (response) {
                     if (response.success) {
                         $('#editAddionalAllowanceModal').modal('hide');
-                        location.reload(); // Reload the page to reflect changes
+                         // Reload the page to reflect changes
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -48,7 +48,7 @@
                         console.log("Response:", response);
                         if (response.success) {
                             $('#addAddionalAllowanceModal').modal('hide');
-                            location.reload();
+                            
                         } else {
                             console.log("Validation error or other issue:", response);
                         }
@@ -76,9 +76,9 @@
                 var AddionalAllowanceId = $(this).data('id');
                 $.post('@Url.Action("Delete", "AddionalAllowance")', { id: AddionalAllowanceId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

@@ -23,9 +23,9 @@
                 $.post('@Url.Action("Edit", "Stock")', formData, function (response) {
                     if (response.success) {
                         $('#editStockModal').modal('hide');
-                        location.reload(); // Reload the page to reflect changes
+                         // Reload the page to reflect changes
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -50,9 +50,9 @@
                 $.post('@Url.Action("Create", "Stock")', formData, function (response) {
                     if (response.success) {
                         $('#addStockModal').modal('hide');
-                        location.reload(); // Reload the page to reflect changes
+                         // Reload the page to reflect changes
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -71,9 +71,9 @@
                 var StockId = $(this).data('id');
                 $.post('@Url.Action("Delete", "Stock")', { id: StockId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

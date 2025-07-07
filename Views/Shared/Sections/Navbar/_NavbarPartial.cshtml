@@ -8,169 +8,6 @@
     var UserRoleName = Context.Session.GetString("UserRoleName");
 }
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-    $(document).ready(function () {
-        let processNotificationsTotal = 0;
-        let employeeRequestNotificationsTotal = 0;
-
-        function updateGrandTotal() {
-            let grandTotal = processNotificationsTotal + employeeRequestNotificationsTotal;
-            $('#TotalNotifications').text(grandTotal);  // Update the grand total
-        }
-
-        function fetchProcessNotifications() {
-            $.ajax({
-                url: '@Url.Action("GetProcessNotifications", "Notifications")',
-                type: 'GET',
-                success: function (data) {
-                    if (data.notifications) {
-                        processNotificationsTotal = 0;  // Reset total for this fetch
-
-                        // Iterate through each process type count
-                        $.each(data.notifications, function (index, notification) {
-                            const { processTypeID, processCount } = notification;
-
-                            if (processCount > 0) {
-                                $('#count' + getNotificationName(processTypeID)).text(processCount);
-                                $('#li' + getNotificationName(processTypeID)).show();
-                            }
-
-                            processNotificationsTotal += processCount;
-                        });
-
-                        updateGrandTotal();  // Update grand total after process notifications are fetched
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error fetching process notifications: ", error);
-                }
-            });
-        }
-
-        function fetchEmployeeRequestNotifications() {
-            $.ajax({
-                url: '@Url.Action("GetEmployeeRequestNotifications", "Notifications")',
-                type: 'GET',
-                success: function (data) {
-                    if (data.notifications) {
-                        employeeRequestNotificationsTotal = 0;  // Reset total for this fetch
-
-                        $.each(data.notifications, function (index, notification) {
-                            const { employeeRequestTypeID, employeeRequestCount } = notification;
-
-                            if (employeeRequestCount > 0) {
-                                $('#count' + getemployeeRequestName(employeeRequestTypeID)).text(employeeRequestCount);
-                                $('#li' + getemployeeRequestName(employeeRequestTypeID)).show();
-                            }
-
-                            employeeRequestNotificationsTotal += employeeRequestCount;
-                        });
-
-                        updateGrandTotal();  // Update grand total after employee request notifications are fetched
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error fetching employee request notifications: ", error);
-                }
-            });
-        }
-
-
-        function getNotificationName(processTypeID) {
-            const names = [
-                '',          // 0 (not used)
-                'User',      // 1
-                'Employee',   // 2
-                'Contract',   // 3
-                'ContractRenewal', // 4
-                'EndofService', // 5
-                'Salary',     // 6
-                'Overtime',   // 7
-                'Allowance',   // 8
-                'Deduction',  // 9
-                'FixedDeduction', // 10
-                'Vacation',   // 11
-                'VacationSettle', // 12
-                'PayRoll',    // 13
-                'EmployeeRequest', // 14
-                'ABEmployeeRequest', // 15
-                'JournalVoucher', // 16
-                'TransferVoucher', // 17
-                'PaymentVoucher', // 18
-                'ReceivedVoucher' // 19
-            ];
-            return names[processTypeID] || '';
-        }
-
-        function getemployeeRequestName(employeeRequestTypeID) {
-            const names = [
-                '',          // 0 (not used)
-                'OvertimeRequest', // 1
-                'EarlyGoingRequest', // 2
-                'LateComingRequest', // 3
-                'TimesheetCorrectionRequest', // 4
-                'TravelExpensesRequest', // 5
-                'AccommodationExpenseRequest', // 6
-                'ReimbursementRequest', // 7
-                'ShiftTimingChangeRequest', // 8
-                'ShiftSwappingRequest', // 9
-                'WorkFromHomeRequest', // 10
-                'OfficeDeskRequest', // 11
-                'OfficeChairRequest', // 12
-                'FilingCabinetsRequest', // 13
-                'StorageShelvesRequest', // 14
-                'BookshelvesRequest', // 15
-                'MeetingTablesRequest', // 16
-                'ReceptionDeskRequest', // 17
-                'SideTablesRequest', // 18
-                'FootrestRequest', // 19
-                'LaptopsRequest', // 20
-                'DesktopComputersRequest', // 21
-                'MonitorsRequest', // 22
-                'LEDRequest', // 23
-                'KeyboardRequest', // 24
-                'MouseRequest', // 25
-                'ExternalHardDrivesRequest', // 26
-                'USBFlashDrivesRequest', // 27
-                'WebcamRequest', // 28
-                'HeadsetMicrophoneRequest', // 29
-                'PrintersRequest', // 30
-                'ScannersRequest', // 31
-                'ProjectorRequest', // 32
-                'ExternalSpeakersRequest', // 33
-                'ExternalMicrophoneRequest', // 34
-                'UPSRequest', // 35
-                'WiFiRouterRequest', // 36
-                'EthernetCablesRequest', // 37
-                'SwitchesAndHubsRequest', // 38
-                'LANCardsRequest', // 39
-                'ModemsRequest', // 40
-                'VPNDevicesRequest', // 41
-                'MousePadsRequest', // 42
-                'DeskLampsRequest', // 43
-                'LaptopCoolingPadsRequest', // 44
-                'PhoneStandsRequest', // 45
-                'PenHoldersDeskOrganizersRequest', // 46
-                'WhiteboardsNoticeBoardsRequest', // 47
-                'PresentationPointerClickerRequest', // 48
-                'PensPencilsRequest', // 49
-                'NotebooksStickyNotesRequest' // 50
-            ];
-            return names[employeeRequestTypeID] || '';
-        }
-
-        // Fetch notifications on page load
-        fetchProcessNotifications();
-        fetchEmployeeRequestNotifications();
-    });
-
-</script>
-
-
-
-
 @if (ViewData["navbarFull"] != null)
 
 {
@@ -438,6 +275,42 @@
                             <i class="bx bx-fast-forward-circle me-2"></i>
                             <span class="flex-grow-1 align-middle ms-1">Received Voucher Approval</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countReceivedVoucher"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liMaterialRequisition" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="20">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Material Requisition Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countMaterialRequisition"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liNewPurchaseRequest" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="21">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">New Purchase Request Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countNewPurchaseRequest"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liEditedPurchaseRequest" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="22">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Edited Purchase Request Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countEditedPurchaseRequest"></label></span>
+                        </span>
+                    </a>
+                </li>
+                <li id="liApprovalForPurchaseOrder" style="display:none">
+                    <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="23">
+                        <span class="d-flex align-items-center align-middle">
+                            <i class="bx bx-fast-forward-circle me-2"></i>
+                            <span class="flex-grow-1 align-middle ms-1">Purchase Order Approval</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countApprovalForPurchaseOrder"></label></span>
                         </span>
                     </a>
                 </li>

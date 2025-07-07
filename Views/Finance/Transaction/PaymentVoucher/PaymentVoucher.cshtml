@@ -27,9 +27,9 @@
                 $.post('@Url.Action("Edit", "PaymentVoucher")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -48,9 +48,9 @@
                 $.post('@Url.Action("Create", "PaymentVoucher")', formData, function (response) {
                     if (response.success) {
                         $('#addVoucherModal').modal('hide');
-                        location.reload(); // Reload the page to reflect changes
+                         // Reload the page to reflect changes
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -73,9 +73,9 @@
                 var VoucherId = $(this).data('id');
                 $.post('@Url.Action("Delete", "PaymentVoucher")', { id: VoucherId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

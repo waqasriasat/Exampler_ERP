@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using Microsoft.AspNetCore.SignalR;
+using Exampler_ERP.Controllers.HR.HR;
+using Exampler_ERP.Hubs;
 
 namespace Exampler_ERP.Controllers.HR.Financial
 {
@@ -13,15 +16,17 @@ namespace Exampler_ERP.Controllers.HR.Financial
   {
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
-    private readonly ILogger<MonthlySalarySheetController> _logger;
+    private readonly ILogger<AddionalAllowanceController> _logger;
     private readonly Utils _utils;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public MonthlySalarySheetController(AppDBContext appDBContext, IConfiguration configuration, ILogger<MonthlySalarySheetController> logger, Utils utils)
+    public MonthlySalarySheetController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AddionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
+      _hubContext = hubContext;
     }
     public async Task<IActionResult> Index(int Branch, int MonthsTypeID = 10, int YearsTypeID = 1998)
     {
@@ -250,6 +255,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
               _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
               await _appDBContext.SaveChangesAsync();
+              await _hubContext.Clients.All.SendAsync("ReceiveProcessNotification");
             }
             else
             {

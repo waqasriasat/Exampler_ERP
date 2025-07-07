@@ -22,9 +22,9 @@
                 $.post('@Url.Action("Edit", "ProcessTypeForward")', formData, function (response) {
                     if (response.success) {
                         $('#editProcessTypeForwardModal').modal('hide');
-                        location.reload(); // Reload the page to reflect changes
+                         // Reload the page to reflect changes
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -42,9 +42,9 @@
                 var processTypeId = $(this).data('id');
                 $.post('@Url.Action("Delete", "ProcessTypeForward")', { id: processTypeId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

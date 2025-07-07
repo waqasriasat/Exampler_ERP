@@ -1,7 +1,9 @@
+using Exampler_ERP.Hubs;
 using Exampler_ERP.Models;
 using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 
@@ -12,12 +14,14 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public TransferVoucherController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+    public TransferVoucherController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+      _hubContext = hubContext;
     }
     public async Task<IActionResult> Index(string searchHeadofAccount_FiveName)
     {
@@ -229,6 +233,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
                 _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
                 await _appDBContext.SaveChangesAsync();
+                await _hubContext.Clients.All.SendAsync("ReceiveProcessNotification");
               }
               else
               {

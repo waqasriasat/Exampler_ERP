@@ -1,6 +1,7 @@
 using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Exampler_ERP.Controllers.Purchase.Main
 {
@@ -19,10 +20,10 @@ namespace Exampler_ERP.Controllers.Purchase.Main
     }
     public async Task<IActionResult> Index()
     {
-      //ViewBag.ItemCategoryTypeCount = await _appDBContext.Settings_ItemCategoryTypes.CountAsync();
-      //ViewBag.UnitTypeCount = await _appDBContext.Settings_UnitTypes.CountAsync();
-      //ViewBag.ItemComponentTypeCount = await _appDBContext.Settings_ItemComponentTypes.CountAsync();
-      //ViewBag.ManufacturerTypeCount = await _appDBContext.Settings_ManufacturerTypes.CountAsync();
+      ViewBag.PurchaseRequestCount = await _appDBContext.PR_PurchaseRequests.CountAsync();
+      ViewBag.RequestForQuotationCount = await _appDBContext.PR_PurchaseRequests.Where(v => v.RequestStatusTypeID == 2).CountAsync();
+      ViewBag.CostComparisonCount = await _appDBContext.PR_PurchaseRequests.Where(v => v.RequestStatusTypeID == 5).CountAsync();
+      ViewBag.PurchaseOrderCount = await _appDBContext.PR_PurchaseRequests.Where(v => v.RequestStatusTypeID == 6).CountAsync();
       //ViewBag.ItemCount = await _appDBContext.ST_Items.CountAsync();
       //ViewBag.JoiningCount = await _appDBContext.HR_Joinings.CountAsync();
       //ViewBag.BankAccountCount = await _appDBContext.HR_BankAccounts.CountAsync();

@@ -59,9 +59,9 @@
                     success: function (response) {
                         if (response.success) {
                             // Reload the page or update the part of the page with the updated data
-                            location.reload();
+                            
                         } else {
-                            showErrorAlert(response.message);
+                            showError
                             // You can display errors here
                         }
                     },
@@ -76,9 +76,9 @@
                 $.post('@Url.Action("Reject", "ApprovalsRequest")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -94,9 +94,9 @@
                 var ProcessTypeApprovalId = $(this).data('id');
                 $.post('@Url.Action("Delete", "ProcessTypeApproval")', { id: ProcessTypeApprovalId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

@@ -23,9 +23,9 @@
                 $.post('@Url.Action("Edit", "EmployeeStatusType")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -44,9 +44,9 @@
                 $.post('@Url.Action("Create", "EmployeeStatusType")', formData, function (response) {
                     if (response.success) {
                         $('#addEmployeeStatusTypeModal').modal('hide');
-                        location.reload(); // Reload the page to reflect changes
+                         // Reload the page to reflect changes
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -69,9 +69,9 @@
                 var EmployeeStatusTypeId = $(this).data('id');
                 $.post('@Url.Action("Delete", "EmployeeStatusType")', { id: EmployeeStatusTypeId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });

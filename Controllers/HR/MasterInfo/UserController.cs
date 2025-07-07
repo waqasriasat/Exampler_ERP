@@ -1,7 +1,9 @@
+using Exampler_ERP.Hubs;
 using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 
@@ -12,12 +14,14 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public UserController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+    public UserController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+      _hubContext = hubContext;
     }
     public async Task<IActionResult> Index(string searchUserName)
     {
@@ -113,7 +117,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         if (string.IsNullOrEmpty(User.UserName) && string.IsNullOrEmpty(User.Password) && User.RoleTypeID.ToString().Length > 0)
         {
-          return Json(new { success = false, message = "user Name, Password and Role Name field is required. Please enter a valid text value." });
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "user Name, Password and Role Name field is required. Please enter a valid text value.!");
+          return Json(new { success = false});
         }
         User.UserName = CR_CipherKey.Encrypt(User.UserName);
         User.Password = CR_CipherKey.Encrypt(User.Password);
@@ -165,10 +170,12 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
               _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
               await _appDBContext.SaveChangesAsync();
+              await _hubContext.Clients.All.SendAsync("ReceiveProcessNotification");
             }
             else
             {
-              return Json(new { success = false, message = "Next approval setup not found." });
+              await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Next approval setup not found.!");
+              return Json(new { success = false});
             }
           }
           else
@@ -176,14 +183,15 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
             User.ActiveYNID = 1;
             _appDBContext.CR_Users.Update(User);
             await _appDBContext.SaveChangesAsync();
-            TempData["SuccessMessage"] = "User Created successfully. No process setup found, User activated.";
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "User Created successfully. No process setup found, User activated.");
             return Json(new { success = true});
           }
         }
-        TempData["SuccessMessage"] = "User Created successfully. Continue to the Approval Process Setup for User Activation.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "User Created successfully. Continue to the Approval Process Setup for User Activation.");
         return Json(new { success = true });
       }
-      return Json(new { success = false, message = "Error creating user. Please check the inputs." });
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating user. Please check the inputs.!");
+      return Json(new { success = false});
     }
 
     public async Task<IActionResult> Delete(int id)

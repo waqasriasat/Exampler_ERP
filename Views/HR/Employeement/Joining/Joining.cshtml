@@ -23,9 +23,9 @@
                 $.post('@Url.Action("Edit", "Joining")', formData, function (response) {
                     if (response.success) {
                         $('#editJoiningModal').modal('hide');
-                        location.reload(); // Reload the page to reflect changes
+                         // Reload the page to reflect changes
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
@@ -43,9 +43,9 @@
                 var JoiningId = $(this).data('id');
                 $.post('@Url.Action("Delete", "Joining")', { id: JoiningId }, function (response) {
                     if (response.success) {
-                        location.reload();
+                        
                     } else {
-                        showErrorAlert(response.message);
+                        showError
                     }
                 });
             });
