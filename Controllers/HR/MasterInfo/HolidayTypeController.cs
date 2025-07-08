@@ -3,6 +3,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
@@ -12,12 +14,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly AppDBContext _appDBContext;
   private readonly IConfiguration _configuration;
   private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-  public HolidayTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+  public HolidayTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
   {
     _appDBContext = appDBContext;
     _configuration = configuration;
     _utils = utils;
+_hubContext = hubContext;
+ 
   }
   public async Task<IActionResult> Index(string searchHolidayTypeName)
   {
@@ -34,7 +40,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
     if (!string.IsNullOrEmpty(searchHolidayTypeName) && HolidayTypes.Count == 0)
     {
-      TempData["ErrorMessage"] = "No HolidayType found with the name '" + searchHolidayTypeName + "'. Please check the name and try again.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No HolidayType found with the name '" + searchHolidayTypeName + "'. Please check the name and try again.");
     }
 
     return View("~/Views/HR/MasterInfo/HolidayType/HolidayType.cshtml", HolidayTypes);
@@ -67,7 +73,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       }
       _appDBContext.Update(HolidayType);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Holiday Type Updated successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Holiday Type Updated successfully.");
       return Json(new { success = true });
     }
     return Json(new { success = false, message = "Error creating HolidayType. Please check the inputs." });
@@ -91,7 +97,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       HolidayType.DeleteYNID = 0;
       _appDBContext.Settings_HolidayTypes.Add(HolidayType);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Holiday Type Created successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Holiday Type Created successfully.");
       return Json(new { success = true });
     }
     return Json(new { success = false, message = "Error creating HolidayType. Please check the inputs." });
@@ -109,7 +115,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
     _appDBContext.Settings_HolidayTypes.Update(HolidayType);
     await _appDBContext.SaveChangesAsync();
-    TempData["SuccessMessage"] = "Holiday Type Deleted successfully.";
+    await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Holiday Type Deleted successfully.");
     return Json(new { success = true });
   }
   public async Task<IActionResult> ExportToExcel()

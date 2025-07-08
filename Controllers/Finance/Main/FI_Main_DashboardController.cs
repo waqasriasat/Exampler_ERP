@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Exampler_ERP.Controllers.Finance.Main
 {
@@ -10,13 +12,17 @@ namespace Exampler_ERP.Controllers.Finance.Main
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public FI_Main_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public FI_Main_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     //public async Task<IActionResult> Index()
     public async Task<IActionResult> Index()

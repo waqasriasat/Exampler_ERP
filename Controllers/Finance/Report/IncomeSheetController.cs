@@ -4,6 +4,8 @@ using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Client;
 
 namespace Exampler_ERP.Controllers.Finance.Report
@@ -13,11 +15,15 @@ namespace Exampler_ERP.Controllers.Finance.Report
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    public IncomeSheetController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    public IncomeSheetController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index()
     {

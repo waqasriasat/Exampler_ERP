@@ -2,6 +2,8 @@ using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Exampler_ERP.Utilities;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
@@ -12,12 +14,16 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     private readonly IConfiguration _configuration;
     private readonly ILogger<BankAccountController> _logger;
     private readonly Utils _utils;
-    public BankAccountController(AppDBContext appDBContext, IConfiguration configuration, ILogger<BankAccountController> logger, Utils utils)
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    public BankAccountController(AppDBContext appDBContext, IConfiguration configuration, ILogger<BankAccountController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(int? id)
     {
@@ -132,17 +138,17 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
           }
           await _appDBContext.SaveChangesAsync();
-          TempData["SuccessMessage"] = "BankAccount Created successfully.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "BankAccount Created successfully.");
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
-          TempData["ErrorMessage"] = "Error creating BankAccount. Please check the inputs.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating BankAccount. Please check the inputs.");
           _logger.LogError(ex, "Error saving BankAccount changes");
           return Json(new { success = false, message = "An error occurred while saving changes." });
         }
       }
-      TempData["ErrorMessage"] = "Error creating BankAccount. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating BankAccount. Please check the inputs.");
       return Json(new { success = false, message = "Invalid model state." });
     }
   }

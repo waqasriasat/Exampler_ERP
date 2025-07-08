@@ -3,7 +3,10 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.Purchase.Management
@@ -13,12 +16,16 @@ namespace Exampler_ERP.Controllers.Purchase.Management
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _conSTguration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public CostComparisonController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils)
+
+    public CostComparisonController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _conSTguration = conSTguration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -34,7 +41,7 @@ namespace Exampler_ERP.Controllers.Purchase.Management
 
       if (!string.IsNullOrEmpty(searchItemName) && CostComparisons.Count == 0)
       {
-        TempData["ErrorMessage"] = $"No Purchase Request found with the name '{searchItemName}'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Purchase Request found with the name '{searchItemName}'. Please check the name and try again.");
       }
 
       return View("~/Views/Purchase/Management/CostComparison/CostComparison.cshtml", CostComparisons);

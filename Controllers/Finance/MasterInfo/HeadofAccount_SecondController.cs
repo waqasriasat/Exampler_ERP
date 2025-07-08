@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.Finance.MasterInfo
@@ -11,12 +13,16 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public HeadofAccount_SecondController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public HeadofAccount_SecondController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchSecondName)
     {
@@ -33,7 +39,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
 
       if (!string.IsNullOrEmpty(searchSecondName) && HeadofAccount_Seconds.Count == 0)
       {
-        TempData["ErrorMessage"] = "No HeadofAccount_Second Name found with the name '" + searchSecondName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No HeadofAccount_Second Name found with the name '" + searchSecondName + "'. Please check the name and try again.");
       }
       return View("~/Views/Finance/MasterInfo/HeadofAccount_Second/HeadofAccount_Second.cshtml", HeadofAccount_Seconds);
     }
@@ -69,7 +75,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
 
         _appDBContext.Update(HeadofAccount_Second);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "HeadofAccount_Second Name updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "HeadofAccount_Second Name updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating HeadofAccount_Second Name. Please check the inputs." });
@@ -98,7 +104,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
         _appDBContext.Settings_HeadofAccount_Seconds.Add(HeadofAccount_Second);
         await _appDBContext.SaveChangesAsync();
 
-        TempData["SuccessMessage"] = "HeadofAccount_Second Name created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "HeadofAccount_Second Name created successfully.");
         return Json(new { success = true });
       }
 
@@ -118,7 +124,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
 
       _appDBContext.Settings_HeadofAccount_Seconds.Update(HeadofAccount_Second);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "HeadofAccount_Second Name deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "HeadofAccount_Second Name deleted successfully.");
 
       return Json(new { success = true });
     }

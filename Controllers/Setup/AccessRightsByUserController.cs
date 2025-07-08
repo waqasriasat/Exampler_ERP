@@ -4,6 +4,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Exampler_ERP.Controllers.Setup
@@ -14,12 +16,16 @@ namespace Exampler_ERP.Controllers.Setup
     private readonly IConfiguration _configuration;
     private readonly ILogger<AccessRightsByUserController> _logger;
     private readonly Utils _utils;
-    public AccessRightsByUserController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AccessRightsByUserController> logger, Utils utils)
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    public AccessRightsByUserController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AccessRightsByUserController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchUserName)
     {
@@ -48,7 +54,7 @@ namespace Exampler_ERP.Controllers.Setup
 
       if (!string.IsNullOrEmpty(searchUserName) && viewModel.AccessRightsWithUserCount.Count == 0)
       {
-        TempData["ErrorMessage"] = "No User Name found with the name '" + searchUserName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No User Name found with the name '" + searchUserName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/Setup/AccessRightsByUser/AccessRightsByUser.cshtml", viewModel);
@@ -159,7 +165,7 @@ namespace Exampler_ERP.Controllers.Setup
 
       if (accessRightsByUsers == null || accessRightsByUsers.Count == 0)
       {
-        TempData["ErrorMessage"] = "No data received.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No data received.");
         _logger.LogWarning("No data received for edit.");
         return Json(new { success = false, message = "No data received." });
       }
@@ -171,7 +177,7 @@ namespace Exampler_ERP.Controllers.Setup
           var accessRightsByUser = accessRightsByUsers.FirstOrDefault()?.UserID;
           if (accessRightsByUser == null)
           {
-            TempData["ErrorMessage"] = "Invalid accessRightsByUser.";
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Invalid accessRightsByUser.");
             return BadRequest("Invalid accessRightsByUser.");
           }
 
@@ -190,12 +196,12 @@ namespace Exampler_ERP.Controllers.Setup
           }
 
           await _appDBContext.SaveChangesAsync();
-          TempData["SuccessMessage"] = "Access Rights By User Setup Update successfully.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Access Rights By User Setup Update successfully.");
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
-          TempData["ErrorMessage"] = "An error occurred while updating the data.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "An error occurred while updating the data.");
           _logger.LogError(ex, "Error updating Access Rights By User");
           return Json(new { success = false, message = "An error occurred while updating the data." });
         }
@@ -220,7 +226,7 @@ namespace Exampler_ERP.Controllers.Setup
 
       _appDBContext.CR_AccessRightsByUsers.RemoveRange(setups);
       _appDBContext.SaveChanges();
-      TempData["SuccessMessage"] = "Access Rights By Users Setups deleted successfully.";
+      _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Access Rights By Users Setups deleted successfully.");
       return Json(new { success = true });
     }
 

@@ -4,6 +4,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using System.Data;
 using System.Drawing.Printing;
@@ -15,12 +17,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public DepartmentController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public DepartmentController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchDepartmentName)
     {
@@ -38,7 +44,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       if (!string.IsNullOrEmpty(searchDepartmentName) && departments.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Department found with the name '" + searchDepartmentName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Department found with the name '" + searchDepartmentName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/HR/MasterInfo/Department/Department.cshtml", departments);
@@ -74,7 +80,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
         _appDBContext.Update(Department);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Department Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Department Updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Department. Please check the inputs." });
@@ -101,7 +107,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         Department.DeleteYNID = 0;
         _appDBContext.Settings_DepartmentTypes.Add(Department);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Department Created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Department Created successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Department. Please check the inputs." });
@@ -119,7 +125,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_DepartmentTypes.Update(Department);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Department Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Department Deleted successfully.");
 
       return Json(new { success = true });
     }

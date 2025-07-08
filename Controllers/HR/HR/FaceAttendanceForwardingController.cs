@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using OfficeOpenXml;
 using System.Data;
@@ -17,12 +19,16 @@ namespace Exampler_ERP.Controllers.HR.HR
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public FaceAttendanceForwardingController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public FaceAttendanceForwardingController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(int? Branch, int? MonthsTypeID, int? YearsTypeID)
     {
@@ -75,7 +81,7 @@ namespace Exampler_ERP.Controllers.HR.HR
               }
               catch (InvalidCastException ex)
               {
-                TempData["ErrorMessage"] = "InvalidCastException occurred: " + ex.Message;
+                await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "InvalidCastException occurred: " + ex.Message);
               }
             }
           }
@@ -116,7 +122,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
         if (FatchExistingFaceAttendancePosted != null)
         {
-          TempData["ErrorMessage"] = "Already posting found for the specified branch, month, and year.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Already posting found for the specified branch, month, and year.");
           return Json(new { success = false });
         }
 
@@ -328,12 +334,12 @@ namespace Exampler_ERP.Controllers.HR.HR
         };
         _appDBContext.CR_FaceAttendancePosteds.Add(faceAttendancePosted);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Successfully Posted.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Successfully Posted.");
         return Json(new { success = true });
       }
       catch (Exception ex)
       {
-        TempData["ErrorMessage"] = "InvalidCastException occurred: " + ex.Message;
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "InvalidCastException occurred: " + ex.Message);
         return Json(new { success = false, message = ex.Message });
       }
     }

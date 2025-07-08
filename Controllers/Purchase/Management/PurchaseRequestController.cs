@@ -6,6 +6,8 @@ using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using System.Configuration;
 
 namespace Exampler_ERP.Controllers.Purchase.Management
@@ -15,14 +17,18 @@ namespace Exampler_ERP.Controllers.Purchase.Management
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    
 
     public PurchaseRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+ 
+      
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -42,7 +48,7 @@ namespace Exampler_ERP.Controllers.Purchase.Management
 
       if (!string.IsNullOrEmpty(searchItemName) && purchaseRequests.Count == 0)
       {
-        TempData["ErrorMessage"] = $"No Purchase Request found with the name '{searchItemName}'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Purchase Request found with the name '{searchItemName}'. Please check the name and try again.");
       }
 
       ViewBag.SearchItemName = searchItemName; // Optional, for displaying in view
@@ -159,7 +165,7 @@ namespace Exampler_ERP.Controllers.Purchase.Management
             };
             _appDBContext.PR_PurchaseRequestStatuss.Add(approvedStatus);
 
-            TempData["SuccessMessage"] = "Purchase Request saved. No process setup found; Request Approved.";
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Purchase Request saved. No process setup found; Request Approved.");
           }
         }
 
@@ -313,7 +319,7 @@ namespace Exampler_ERP.Controllers.Purchase.Management
             };
             _appDBContext.PR_PurchaseRequestStatuss.Add(approvedStatus);
 
-            TempData["SuccessMessage"] = "Purchase Request updated. No process setup found; auto-approved.";
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Purchase Request updated. No process setup found; auto-approved.");
           }
         }
 

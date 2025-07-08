@@ -3,6 +3,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
@@ -12,12 +14,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public QualificationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public QualificationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchQualificationName)
     {
@@ -34,7 +40,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       if (!string.IsNullOrEmpty(searchQualificationName) && Qualificationes.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Qualification found with the name '" + searchQualificationName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Qualification found with the name '" + searchQualificationName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/HR/MasterInfo/Qualification/Qualification.cshtml", Qualificationes);
@@ -67,7 +73,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         }
         _appDBContext.Update(Qualification);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Qualification Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Qualification Updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Qualification. Please check the inputs." });
@@ -91,7 +97,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         Qualification.DeleteYNID = 0;
         _appDBContext.Settings_QualificationTypes.Add(Qualification);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Qualification Created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Qualification Created successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Qualification. Please check the inputs." });
@@ -109,7 +115,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_QualificationTypes.Update(Qualification);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Qualification Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Qualification Deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

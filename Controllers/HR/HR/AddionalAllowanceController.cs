@@ -3,6 +3,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR;
 using Exampler_ERP.Hubs;
 
@@ -14,14 +16,18 @@ namespace Exampler_ERP.Controllers.HR.HR
     private readonly IConfiguration _configuration;
     private readonly ILogger<AddionalAllowanceController> _logger;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    
     public AddionalAllowanceController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AddionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+ 
+      
     }
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
     {
@@ -76,7 +82,7 @@ namespace Exampler_ERP.Controllers.HR.HR
       }
       if (allowance.PostedID != null && allowance.PostedID != 0)
       {
-        //TempData["ErrorMessage"] = "This deduction has already been posted to the Payroll Department and cannot be edited..";
+        //await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "This deduction has already been posted to the Payroll Department and cannot be edited..");
         return NotFound();
       }
        ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
@@ -131,7 +137,7 @@ namespace Exampler_ERP.Controllers.HR.HR
         }
 
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Addional Allowance updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Addional Allowance updated successfully.");
         return Json(new { success = true });
       }
 
@@ -141,7 +147,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.MonthsList = await _utils.GetMonthsTypes();
-      TempData["ErrorMessage"] = "Error updating Addional Allowance. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error updating Addional Allowance. Please check the inputs.");
       return PartialView("~/Views/HR/HR/AddionalAllowance/EditAddionalAllowance.cshtml", model);
     }
 
@@ -224,10 +230,10 @@ namespace Exampler_ERP.Controllers.HR.HR
             model.FinalApprovalID = 1;
             _appDBContext.HR_AddionalAllowances.Update(model);
             await _appDBContext.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Addional Allowance Created successfully. No process setup found, Addional Allowance activated.";
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Addional Allowance Created successfully. No process setup found, Addional Allowance activated.");
           }
         }
-        TempData["SuccessMessage"] = "Addional Allowance Created successfully. Continue to the Approval Process Setup for Addional Allowance Activation.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Addional Allowance Created successfully. Continue to the Approval Process Setup for Addional Allowance Activation.");
         return Json(new { success = true });
       }
 
@@ -236,7 +242,7 @@ namespace Exampler_ERP.Controllers.HR.HR
           .ToListAsync();
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.MonthsList = await _utils.GetMonthsTypes();
-      TempData["ErrorMessage"] = "Error creating Addional Allowance. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating Addional Allowance. Please check the inputs.");
       return PartialView("~/Views/HR/HR/AddionalAllowance/AddAddionalAllowance.cshtml", model);
     }
 

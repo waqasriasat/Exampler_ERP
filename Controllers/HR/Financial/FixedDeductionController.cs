@@ -3,11 +3,12 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using System.Diagnostics.Contracts;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Exampler_ERP.Controllers.HR.HR;
-using Exampler_ERP.Hubs;
-using Microsoft.AspNetCore.SignalR;
+
 
 namespace Exampler_ERP.Controllers.HR.Financial
 {
@@ -17,14 +18,18 @@ namespace Exampler_ERP.Controllers.HR.Financial
     private readonly IConfiguration _configuration;
     private readonly ILogger<AddionalAllowanceController> _logger;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    
     public FixedDeductionController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AddionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+ 
+      
     }
     public async Task<IActionResult> Index(int? id)
     {
@@ -99,7 +104,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
         }
         else
         {
-          TempData["ErrorMessage"] = "Employees Not Found.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Employees Not Found.");
           return NotFound(); 
         }
       }
@@ -123,7 +128,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
       if (FixedDeductionDetails == null || FixedDeductionDetails.Count == 0)
       {
-        TempData["ErrorMessage"] = "No data received for edit.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No data received for edit.");
         _logger.LogWarning("No data received for edit.");
         return Json(new { success = false, message = "No data received." });
       }
@@ -218,7 +223,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
                 }
                 else
                 {
-                  TempData["ErrorMessage"] = "Next approval setup not found.";
+                  await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Next approval setup not found.");
                   return Json(new { success = false });
                 }
               }
@@ -227,24 +232,24 @@ namespace Exampler_ERP.Controllers.HR.Financial
                 FixedDeduction.FinalApprovalID = 1;
                 _appDBContext.HR_FixedDeductions.Update(FixedDeduction);
                 await _appDBContext.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Fixed Deduction created successfully. No process setup found, Fixed Deduction activated.";
+                await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Fixed Deduction created successfully. No process setup found, Fixed Deduction activated.");
                 return Json(new { success = true});
               }
             }
           }
-          TempData["SuccessMessage"] = "Fixed Deduction Created successfully. Continue to the Approval Process Setup for Fixed Deduction Final Approved.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Fixed Deduction Created successfully. Continue to the Approval Process Setup for Fixed Deduction Final Approved.");
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
-          TempData["ErrorMessage"] = "Error updating FixedDeductionDetails. " + ex;
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error updating FixedDeductionDetails. " + ex);
           _logger.LogError(ex, "Error updating FixedDeductionDetails");
           return Json(new { success = false});
         }
       }
 
       var errors = ModelState.Values.SelectMany(v => v.Errors);
-      TempData["ErrorMessage"] = "Error updating FixedDeductionDetails. " + errors;
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error updating FixedDeductionDetails. " + errors);
       return PartialView("~/Views/HR/Financial/FixedDeduction/EditFixedDeduction.cshtml", FixedDeductionDetails);
     }
 

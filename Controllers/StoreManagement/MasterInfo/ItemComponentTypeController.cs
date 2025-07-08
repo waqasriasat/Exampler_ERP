@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
@@ -11,12 +13,16 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ItemComponentTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public ItemComponentTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchItemComponentTypeName)
     {
@@ -34,7 +40,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
 
       if (!string.IsNullOrEmpty(searchItemComponentTypeName) && ItemComponentTypes.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Item Component Type found with the name '" + searchItemComponentTypeName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Item Component Type found with the name '" + searchItemComponentTypeName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/StoreManagement/MasterInfo/ItemComponentType/ItemComponentType.cshtml", ItemComponentTypes);
@@ -68,7 +74,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
         }
         _appDBContext.Update(ItemComponentType);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Item Component Type Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Item Component Type Updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating ItemComponentType. Please check the inputs." });
@@ -94,7 +100,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
         ItemComponentType.DeleteYNID = 0;
         _appDBContext.Settings_ItemComponentTypes.Add(ItemComponentType);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Item Component Type Created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Item Component Type Created successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating ItemComponentType. Please check the inputs." });
@@ -112,7 +118,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
 
       _appDBContext.Settings_ItemComponentTypes.Update(ItemComponentType);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Item Component Type Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Item Component Type Deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

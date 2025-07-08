@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.Finance.Management
@@ -11,12 +13,16 @@ namespace Exampler_ERP.Controllers.Finance.Management
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public BankController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public BankController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchBankName)
     {
@@ -32,7 +38,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
 
       if (!string.IsNullOrEmpty(searchBankName) && Banks.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Bank found with the name '" + searchBankName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Bank found with the name '" + searchBankName + "'. Please check the name and try again.");
       }
       return View("~/Views/Finance/Management/Bank/Bank.cshtml", Banks);
     }
@@ -67,7 +73,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
 
         _appDBContext.Update(Bank);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Bank updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Bank updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Bank. Please check the inputs." });
@@ -112,7 +118,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
           await _appDBContext.SaveChangesAsync();
         }
 
-          TempData["SuccessMessage"] = "Bank created successfully.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Bank created successfully.");
         return Json(new { success = true });
       }
 
@@ -132,7 +138,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
 
       _appDBContext.FI_Banks.Update(Bank);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Bank deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Bank deleted successfully.");
 
       return Json(new { success = true });
     }

@@ -5,6 +5,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using System.Diagnostics.Contracts;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
@@ -14,14 +16,18 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    
 
     public ContractRenewalController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+ 
+      
     }
 
     public async Task<IActionResult> Index(int? id)
@@ -155,14 +161,14 @@ namespace Exampler_ERP.Controllers.HR.Employeement
               _appDBContext.SaveChanges();
             }
             await _appDBContext.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Contract Renewal Created successfully. No process setup found, Contract activated.";
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Contract Renewal Created successfully. No process setup found, Contract activated.");
             return Json(new { success = true});
           }
         }
-        TempData["SuccessMessage"] = "Contract Renewal Created successfully. Continue to the Approval Process Setup for Contract Activation.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Contract Renewal Created successfully. Continue to the Approval Process Setup for Contract Activation.");
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating Contract Renewal. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating Contract Renewal. Please check the inputs.");
       return PartialView("~/Views/HR/Employeement/ContractRenewal/EditContractRenewal.cshtml", model);
     }
 

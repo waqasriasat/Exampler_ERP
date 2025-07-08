@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.Financial
@@ -11,12 +13,16 @@ namespace Exampler_ERP.Controllers.HR.Financial
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public WorkDayController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public WorkDayController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
     {
@@ -89,17 +95,17 @@ namespace Exampler_ERP.Controllers.HR.Financial
         {
           _appDBContext.HR_WorkDays.Update(WorkDay);
           await _appDBContext.SaveChangesAsync();
-          TempData["SuccessMessage"] = "WorkDay updated successfully.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "WorkDay updated successfully.");
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
-          TempData["ErrorMessage"] = "Unable to save changes: " + ex.Message;
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Unable to save changes: " + ex.Message);
         }
       }
 
       ViewBag.EmployeeList = await _utils.GetEmployee();
-      TempData["ErrorMessage"] = "Error updating WorkDay. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error updating WorkDay. Please check the inputs.");
       return PartialView("~/Views/HR/financial/WorkDay/EditWorkDay.cshtml", WorkDay);
     }
 
@@ -118,10 +124,10 @@ namespace Exampler_ERP.Controllers.HR.Financial
         WorkDay.DeleteYNID = 0;
         _appDBContext.HR_WorkDays.Add(WorkDay);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "WorkDay created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "WorkDay created successfully.");
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating WorkDay. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating WorkDay. Please check the inputs.");
       return PartialView("~/Views/HR/financial/WorkDay/AddWorkDay.cshtml", WorkDay);
     }
     public async Task<IActionResult> Delete(int id)
@@ -136,7 +142,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
       _appDBContext.HR_WorkDays.Update(WorkDay);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "WorkDay deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "WorkDay deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

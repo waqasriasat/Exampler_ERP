@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
@@ -15,7 +17,9 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    
 
 
     public EmployeeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
@@ -23,7 +27,9 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+ 
+      
     }
     public async Task<IActionResult> Index(int? id)
     {
@@ -39,7 +45,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       if (id.HasValue && id == 0)
       {
-        TempData["ErrorMessage"] = "No User found. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No User found. Please check the name and try again.");
       }
       return View("~/Views/HR/Employeement/Employee/Employee.cshtml", employees);
     }
@@ -50,7 +56,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       var result = await _utils.GetSearchingEmployee(term);
       if (!string.IsNullOrEmpty(term) && result.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Employee found with the name '" + term + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Employee found with the name '" + term + "'. Please check the name and try again.");
       }
       return Json(result);
     }
@@ -117,7 +123,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         employee.Password = CR_CipherKey.Encrypt(employee.Password);
         _appDBContext.Update(employee);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Employee Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Employee Updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Employee. Please check the inputs." });
@@ -224,11 +230,11 @@ namespace Exampler_ERP.Controllers.HR.Employeement
             employee.ActiveYNID = 1;
             _appDBContext.HR_Employees.Update(employee);
             await _appDBContext.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Employee Created successfully. No process setup found, Employee activated.";
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Employee Created successfully. No process setup found, Employee activated.");
             return Json(new { success = true, message = "No process setup found, Employee activated." });
           }
         }
-        TempData["SuccessMessage"] = "Employee Created successfully. Continue to the Approval Process Setup for Employee Activation.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Employee Created successfully. Continue to the Approval Process Setup for Employee Activation.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Employee. Please check the inputs." });
@@ -246,7 +252,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       _appDBContext.HR_Employees.Update(employee);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Employee Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Employee Deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> Print()
@@ -479,7 +485,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         // Save changes
         await _appDBContext.SaveChangesAsync();
 
-        TempData["SuccessMessage"] = "Password changed successfully!";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Password changed successfully!");
 
         // Return a JSON response for success
         return Json(new { success = true, message = "Password changed successfully!" });
@@ -536,7 +542,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       employee.Picture = model.Picture;
       await _appDBContext.SaveChangesAsync();
 
-      TempData["SuccessMessage"] = "Profile picture updated successfully!";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Profile picture updated successfully!");
       return Json(new { success = true, message = "Profile picture updated successfully!" });
 
     }

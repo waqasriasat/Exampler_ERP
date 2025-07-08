@@ -4,6 +4,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
@@ -13,12 +15,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly IConfiguration _configuration;
     private readonly ILogger<EmployeeRequestTypeApprovalSetupController> _logger;
     private readonly Utils _utils;
-    public EmployeeRequestTypeApprovalSetupController(AppDBContext appDBContext, IConfiguration configuration, ILogger<EmployeeRequestTypeApprovalSetupController> logger, Utils utils)
+    private readonly IHubContext<NotificationHub> _hubContext;
+
+    public EmployeeRequestTypeApprovalSetupController(AppDBContext appDBContext, IConfiguration configuration, ILogger<EmployeeRequestTypeApprovalSetupController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
+      _hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchEmployeeRequestTypeName)
     {
@@ -47,7 +53,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       if (!string.IsNullOrEmpty(searchEmployeeRequestTypeName) && viewModel.EmployeeRequestTypesWithRankCount.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Employee Request Type found with the name '" + searchEmployeeRequestTypeName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Employee Request Type found with the name '" + searchEmployeeRequestTypeName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/HR/MasterInfo/EmployeeRequestTypeApprovalSetup/EmployeeRequestTypeApprovalSetup.cshtml", viewModel);
@@ -111,7 +117,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       if (EmployeeRequestTypeApprovalSetups == null || EmployeeRequestTypeApprovalSetups.Count == 0)
       {
-        TempData["ErrorMessage"] = "No data received.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No data received.");
         _logger.LogWarning("No data received for edit.");
         return Json(new { success = false});
       }
@@ -123,7 +129,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           var EmployeeRequestTypeId = EmployeeRequestTypeApprovalSetups.FirstOrDefault()?.EmployeeRequestTypeID;
           if (EmployeeRequestTypeId == null)
           {
-            TempData["ErrorMessage"] = "Invalid EmployeeRequestTypeID.";
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Invalid EmployeeRequestTypeID.");
             return BadRequest("Invalid EmployeeRequestTypeID.");
           }
 
@@ -142,12 +148,12 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           }
 
           await _appDBContext.SaveChangesAsync();
-          TempData["SuccessMessage"] = "Employee Request Type Approval Setup Update successfully.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Employee Request Type Approval Setup Update successfully.");
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
-          TempData["ErrorMessage"] = "An error occurred while updating the data.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "An error occurred while updating the data.");
           _logger.LogError(ex, "Error updating EmployeeRequestTypeApprovalSetups");
           return Json(new { success = false});
         }
@@ -173,7 +179,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.HR_EmployeeRequestTypeApprovalSetups.RemoveRange(setups);
       _appDBContext.SaveChanges();
-      TempData["SuccessMessage"] = "Employee Request Type Approval Setups deleted successfully.";
+      _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Employee Request Type Approval Setups deleted successfully.");
       return Json(new { success = true });
     }
 

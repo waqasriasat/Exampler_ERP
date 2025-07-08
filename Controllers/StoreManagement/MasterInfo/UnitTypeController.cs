@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
@@ -11,12 +13,16 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public UnitTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public UnitTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchUnitTypeName)
     {
@@ -33,7 +39,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
 
       if (!string.IsNullOrEmpty(searchUnitTypeName) && UnitTypes.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Unit Type found with the name '" + searchUnitTypeName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Unit Type found with the name '" + searchUnitTypeName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/StoreManagement/MasterInfo/UnitType/UnitType.cshtml", UnitTypes);
@@ -65,7 +71,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
         }
         _appDBContext.Update(UnitType);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Unit Type Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Unit Type Updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating UnitType. Please check the inputs." });
@@ -89,7 +95,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
         UnitType.DeleteYNID = 0;
         _appDBContext.Settings_UnitTypes.Add(UnitType);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Unit Type Created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Unit Type Created successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating UnitType. Please check the inputs." });
@@ -107,7 +113,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
 
       _appDBContext.Settings_UnitTypes.Update(UnitType);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Unit Type Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Unit Type Deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

@@ -1,6 +1,8 @@
 using Exampler_ERP.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Exampler_ERP.Controllers
 {
@@ -8,11 +10,12 @@ namespace Exampler_ERP.Controllers
   {
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
-
-    public FaceAttendanceController(AppDBContext appDBContext, IConfiguration configuration)
+    private readonly IHubContext<NotificationHub> _hubContext;
+    public FaceAttendanceController(AppDBContext appDBContext, IConfiguration configuration, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
+      _hubContext = hubContext; 
     }
 
     // Initial Load (without webcam)
@@ -98,7 +101,7 @@ namespace Exampler_ERP.Controllers
           existingAttendance.DMinutes = duration.Minutes;
 
           await _appDBContext.SaveChangesAsync();
-          TempData["SuccessMessage"] = "Attendance marked (out).";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Attendance marked (out).");
           return Json(new { success = true, message = "Attendance updated (out)." });
         }
       }
@@ -115,7 +118,7 @@ namespace Exampler_ERP.Controllers
 
       _appDBContext.CR_FaceAttendances.Add(attendance);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Attendance marked (in).";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Attendance marked (in).");
       return Json(new { success = true, message = "Attendance marked (in)." });
     }
   }

@@ -5,6 +5,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using System.Linq;
 
 namespace Exampler_ERP.Controllers.HR.Reports
@@ -15,13 +17,17 @@ namespace Exampler_ERP.Controllers.HR.Reports
     private readonly IConfiguration _configuration;
     private readonly ILogger<MonthlyPayslip> _logger;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public MonthlyPayslip(AppDBContext appDBContext, IConfiguration configuration, ILogger<MonthlyPayslip> logger, Utils utils)
+
+    public MonthlyPayslip(AppDBContext appDBContext, IConfiguration configuration, ILogger<MonthlyPayslip> logger, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
   
 

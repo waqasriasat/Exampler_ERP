@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Exampler_ERP.Controllers.MasterInfo
 {
@@ -13,11 +15,15 @@ namespace Exampler_ERP.Controllers.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    public ApprovalsRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    public ApprovalsRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     
     public async Task<IActionResult> Index(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? ProcessTypeID)
@@ -753,7 +759,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
                   }
                 }
               }
-              TempData["SuccessMessage"] = "Successfully Approved.";
+              await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Successfully Approved.");
               return Json(new { success = true });
             }
             else
@@ -1532,7 +1538,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
         // Check RequisitionStatusTypeID
         if (MaterialRequisitions.RequisitionStatusTypeID != 1)
         {
-          TempData["ErrorMessage"] = "After approval, editing is not allowed.....";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "After approval, editing is not allowed.....");
 
         }
 

@@ -4,6 +4,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.HR
@@ -13,14 +15,18 @@ namespace Exampler_ERP.Controllers.HR.HR
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    
 
     public OverTimeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+ 
+      
     }
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID, int? OvertimeTypeID)
     {
@@ -93,7 +99,7 @@ namespace Exampler_ERP.Controllers.HR.HR
       }
       if (OverTime.PostedID != null && OverTime.PostedID != 0)
       {
-        //TempData["ErrorMessage"] = "This deduction has already been posted to the Payroll Department and cannot be edited..";
+        //await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "This deduction has already been posted to the Payroll Department and cannot be edited..");
         return NotFound();
       }
 
@@ -109,12 +115,12 @@ namespace Exampler_ERP.Controllers.HR.HR
         {
           _appDBContext.HR_OverTimes.Update(OverTime);
           await _appDBContext.SaveChangesAsync();
-          TempData["SuccessMessage"] = "OverTime updated successfully.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "OverTime updated successfully.");
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
-          TempData["ErrorMessage"] = "Unable to save changes: " + ex.Message;
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Unable to save changes: " + ex.Message);
         }
       }
 
@@ -125,7 +131,7 @@ namespace Exampler_ERP.Controllers.HR.HR
       ViewBag.MonthsList = await _utils.GetMonthsTypes();
 
       // Return the partial view with validation errors
-      TempData["ErrorMessage"] = "Error updating OverTime. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error updating OverTime. Please check the inputs.");
       return PartialView("~/Views/HR/HR/OverTime/EditOverTime.cshtml", OverTime);
     }
     [HttpGet]
@@ -201,14 +207,14 @@ namespace Exampler_ERP.Controllers.HR.HR
             OverTime.FinalApprovalID = 1;
             _appDBContext.HR_OverTimes.Update(OverTime);
             await _appDBContext.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Addional Allowance Created successfully. No process setup found, Addional Allowance activated.";
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Addional Allowance Created successfully. No process setup found, Addional Allowance activated.");
           }
         }
-        TempData["SuccessMessage"] = "Addional Allowance Created successfully. Continue to the Approval Process Setup for Addional Allowance Activation.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Addional Allowance Created successfully. Continue to the Approval Process Setup for Addional Allowance Activation.");
 
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating OverTime. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating OverTime. Please check the inputs.");
       return PartialView("~/Views/HR/HR/OverTime/AddOverTime.cshtml", OverTime);
     }
     public async Task<IActionResult> Delete(int id)
@@ -223,7 +229,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       _appDBContext.HR_OverTimes.Update(OverTime);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "OverTime deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "OverTime deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

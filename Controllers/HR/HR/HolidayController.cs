@@ -5,6 +5,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.HR
@@ -14,14 +16,18 @@ namespace Exampler_ERP.Controllers.HR.HR
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    
 
     public HolidayController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+ 
+      
     }
 
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? HolidayTypeName, int? HolidayTypeID)
@@ -45,7 +51,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       if (!Holidays.Any())
       {
-        TempData["ErrorMessage"] = "No Holidays Found for the selected filters.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Holidays Found for the selected filters.");
       }
 
       ViewBag.MonthsTypeID = MonthsTypeID;
@@ -86,7 +92,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
         _appDBContext.Update(Holiday);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Holiday Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Holiday Updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Holiday. Please check the inputs." });
@@ -165,11 +171,11 @@ namespace Exampler_ERP.Controllers.HR.HR
             Holiday.FinalApprovalID = 1;
             _appDBContext.HR_Holidays.Update(Holiday);
             await _appDBContext.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Holiday Created successfully. No process setup found, Holiday activated.";
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Holiday Created successfully. No process setup found, Holiday activated.");
             return Json(new { success = true, message = "No process setup found, Holiday activated." });
           }
         }
-        TempData["SuccessMessage"] = "Holiday Created successfully. Continue to the Approval Process Setup for Holiday Activation.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Holiday Created successfully. Continue to the Approval Process Setup for Holiday Activation.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Employee. Please check the inputs." });
@@ -188,7 +194,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       _appDBContext.HR_Holidays.Update(Holiday);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Holiday Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Holiday Deleted successfully.");
       return Json(new { success = true });
     }
 

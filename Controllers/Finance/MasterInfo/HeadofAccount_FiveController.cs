@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.Finance.MasterInfo
@@ -11,12 +13,16 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public HeadofAccount_FiveController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public HeadofAccount_FiveController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchFiveName)
     {
@@ -33,7 +39,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
 
       if (!string.IsNullOrEmpty(searchFiveName) && HeadofAccount_Fives.Count == 0)
       {
-        TempData["ErrorMessage"] = "No HeadofAccount_Five Name found with the name '" + searchFiveName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No HeadofAccount_Five Name found with the name '" + searchFiveName + "'. Please check the name and try again.");
       }
       return View("~/Views/Finance/MasterInfo/HeadofAccount_Five/HeadofAccount_Five.cshtml", HeadofAccount_Fives);
     }
@@ -71,7 +77,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
 
         _appDBContext.Update(HeadofAccount_Five);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "HeadofAccount_Five Name updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "HeadofAccount_Five Name updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating HeadofAccount_Five Name. Please check the inputs." });
@@ -102,7 +108,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
         _appDBContext.Settings_HeadofAccount_Fives.Add(HeadofAccount_Five);
         await _appDBContext.SaveChangesAsync();
 
-        TempData["SuccessMessage"] = "HeadofAccount_Five Name created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "HeadofAccount_Five Name created successfully.");
         return Json(new { success = true });
       }
 
@@ -122,7 +128,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
 
       _appDBContext.Settings_HeadofAccount_Fives.Update(HeadofAccount_Five);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "HeadofAccount_Five Name deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "HeadofAccount_Five Name deleted successfully.");
 
       return Json(new { success = true });
     }

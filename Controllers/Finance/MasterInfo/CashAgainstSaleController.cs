@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.Finance.MasterInfo
@@ -11,12 +13,16 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public CashAgainstSaleController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public CashAgainstSaleController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchBranchName)
     {
@@ -34,7 +40,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
 
       if (!string.IsNullOrEmpty(searchBranchName) && CashAgainstSales.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Branch Name found with the name '" + searchBranchName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Branch Name found with the name '" + searchBranchName + "'. Please check the name and try again.");
       }
       return View("~/Views/Finance/MasterInfo/CashAgainstSale/CashAgainstSale.cshtml", CashAgainstSales);
     }
@@ -66,7 +72,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
    
         _appDBContext.Update(CashAgainstSale);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Cash Against Sale Account connected updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Cash Against Sale Account connected updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error connecting Cash Against Sale Account. Please check the inputs." });
@@ -91,7 +97,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
         _appDBContext.Settings_CashAgainstSales.Add(CashAgainstSale);
         await _appDBContext.SaveChangesAsync();
 
-        TempData["SuccessMessage"] = "Cash Against Sale Account connected successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Cash Against Sale Account connected successfully.");
         return Json(new { success = true });
       }
 
@@ -111,7 +117,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
 
       _appDBContext.Settings_CashAgainstSales.Update(CashAgainstSale);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Cash Against Sale Account deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Cash Against Sale Account deleted successfully.");
 
       return Json(new { success = true });
     }

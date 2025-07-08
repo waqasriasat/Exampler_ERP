@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Exampler_ERP.Models;
 using System.Security.Cryptography;
 using System.Text;
@@ -12,10 +14,12 @@ namespace Exampler_ERP.Controllers
   {
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
-    public AuthController(AppDBContext appDBContext, IConfiguration configuration)
+    private readonly IHubContext<NotificationHub> _hubContext;
+    public AuthController(AppDBContext appDBContext, IConfiguration configuration, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
+      _hubContext = hubContext;
     }
     [HttpGet]
     public IActionResult ForgotPassword() => View();
@@ -56,7 +60,7 @@ namespace Exampler_ERP.Controllers
 
       if (user == null)
       {
-        TempData["ErrorMessage"] = "Wrong username or password";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Wrong username or password");
         return View();
       }
 
@@ -92,7 +96,7 @@ namespace Exampler_ERP.Controllers
 
 
 
-      TempData["SuccessMessage"] = "Successfully Login. Wellcome to " + Username;
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Successfully Login. Wellcome to " + Username);
       return RedirectToAction("Index", "Dashboards");
     }
 

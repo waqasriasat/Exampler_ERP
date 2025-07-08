@@ -4,6 +4,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 {
@@ -12,12 +14,16 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _conSTguration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ProcurementQueueController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils)
+
+    public ProcurementQueueController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _conSTguration = conSTguration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -36,7 +42,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
       if (!string.IsNullOrEmpty(searchItemName) && ProcurementQueues.Count == 0)
       {
-        TempData["ErrorMessage"] = $"No Procurement Queue found with the name '{searchItemName}'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Procurement Queue found with the name '{searchItemName}'. Please check the name and try again.");
       }
 
       return View("~/Views/StoreManagement/StoreManagement/ProcurementQueue/ProcurementQueue.cshtml", ProcurementQueues);
@@ -156,11 +162,11 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     //          _appDBContext.PR_ProcurementQueueStatuss.Update(ProcurementQueueStatus);
 
     //          await _appDBContext.SaveChangesAsync();
-    //          TempData["SuccessMessage"] = " Procurement Queue successfully. No process setup found,  Procurement Queue Approved.";
+    //          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", " Procurement Queue successfully. No process setup found,  Procurement Queue Approved.");
     //          return Json(new { success = true, message = "No process setup found,  Procurement Queue Approved." });
     //        }
     //      }
-    //      TempData["SuccessMessage"] = " Procurement Queue Created successfully. Continue to the Approval Process Setup for  Procurement Queue Approved.";
+    //      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", " Procurement Queue Created successfully. Continue to the Approval Process Setup for  Procurement Queue Approved.");
 
     //      return Json(new { success = true });
     //    }
@@ -201,7 +207,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     //  // Check RequisitionStatusTypeID
     //  if (ProcurementQueues.RequisitionStatusTypeID != 1)
     //  {
-    //    TempData["ErrorMessage"] = "After approval, editing is not allowed.....";
+    //    await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "After approval, editing is not allowed.....");
 
     //  }
 
@@ -231,7 +237,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     //        .FirstOrDefaultAsync(v => v.RequisitionID == ProcurementQueue.ProcurementQueues.RequisitionID);
     //    if (existingProcurementQueue?.RequisitionStatusTypeID != 1)
     //    {
-    //      TempData["ErrorMessage"] = "After approval, editing is not allowed.....";
+    //      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "After approval, editing is not allowed.....");
 
     //    }
     //    else

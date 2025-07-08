@@ -5,6 +5,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.Finance.Transaction
@@ -14,14 +16,16 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+    
 
     public PaymentVoucherController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+      
     }
     public async Task<IActionResult> Index(string searchHeadofAccount_FiveName)
     {
@@ -43,7 +47,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       if (!string.IsNullOrEmpty(searchHeadofAccount_FiveName) && Vouchers.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Voucher found with the name '" + searchHeadofAccount_FiveName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Voucher found with the name '" + searchHeadofAccount_FiveName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/Finance/Transaction/PaymentVoucher/PaymentVoucher.cshtml", Vouchers);
@@ -270,11 +274,11 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
               model.Vouchers.FinalApprovalID = 1;
               _appDBContext.FI_Vouchers.Update(model.Vouchers);
               await _appDBContext.SaveChangesAsync();
-              TempData["SuccessMessage"] = "Payment Voucher successfully. No process setup found, Payment Voucher Approved.";
+              await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Payment Voucher successfully. No process setup found, Payment Voucher Approved.");
               return Json(new { success = true, message = "No process setup found, Payment Voucher Approved." });
             }
           }
-          TempData["SuccessMessage"] = "Payment Voucher Created successfully. Continue to the Approval Process Setup for Payment Voucher Approved.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Payment Voucher Created successfully. Continue to the Approval Process Setup for Payment Voucher Approved.");
 
           return Json(new { success = true });
         }

@@ -4,6 +4,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
@@ -14,12 +16,16 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     private readonly IConfiguration _configuration;
     private readonly ILogger<StockController> _logger;
     private readonly Utils _utils;
-    public StockController(AppDBContext appDBContext, IConfiguration configuration, ILogger<StockController> logger, Utils utils)
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    public StockController(AppDBContext appDBContext, IConfiguration configuration, ILogger<StockController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -46,7 +52,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
       if (!string.IsNullOrEmpty(searchItemName) && viewModel.ItemsWithStockQuantity.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Item found with the name '" + searchItemName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Item found with the name '" + searchItemName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/StoreManagement/StoreManagement/Stock/Stock.cshtml", viewModel);

@@ -4,6 +4,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.HR
@@ -13,14 +15,18 @@ namespace Exampler_ERP.Controllers.HR.HR
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    
 
     public DeductionController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+ 
+      
     }
 
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID, int? DeducationTypeID)
@@ -91,7 +97,7 @@ namespace Exampler_ERP.Controllers.HR.HR
       }
       if (deduction.PostedID != null && deduction.PostedID != 0)
       {
-        //TempData["ErrorMessage"] = "This deduction has already been posted to the Payroll Department and cannot be edited..";
+        //await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "This deduction has already been posted to the Payroll Department and cannot be edited..");
         return NotFound();
       }
       // Return the partial view with the deduction model
@@ -107,12 +113,12 @@ namespace Exampler_ERP.Controllers.HR.HR
         {
           _appDBContext.HR_Deductions.Update(deduction);
           await _appDBContext.SaveChangesAsync();
-          TempData["SuccessMessage"] = "Deduction updated successfully.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Deduction updated successfully.");
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
-          TempData["ErrorMessage"] = "Unable to save changes: " + ex.Message;
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Unable to save changes: " + ex.Message);
         }
       }
 
@@ -121,7 +127,7 @@ namespace Exampler_ERP.Controllers.HR.HR
       ViewBag.DeductionTypesList = await _utils.GetDeductionTypes();
 
       // Return the partial view with validation errors
-      TempData["ErrorMessage"] = "Error updating Deduction. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error updating Deduction. Please check the inputs.");
       return PartialView("~/Views/HR/HR/Deduction/EditDeduction.cshtml", deduction);
     }
 
@@ -197,14 +203,14 @@ namespace Exampler_ERP.Controllers.HR.HR
             Deduction.FinalApprovalID = 1;
             _appDBContext.HR_Deductions.Update(Deduction);
             await _appDBContext.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Deduction Created successfully. No process setup found, Deduction activated.";
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Deduction Created successfully. No process setup found, Deduction activated.");
           }
         }
-        TempData["SuccessMessage"] = "Deduction Created successfully. Continue to the Approval Process Setup for Deduction Activation.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Deduction Created successfully. Continue to the Approval Process Setup for Deduction Activation.");
 
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating Deduction. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating Deduction. Please check the inputs.");
       return PartialView("~/Views/HR/HR/Deduction/AddDeduction.cshtml", Deduction);
     }
     public async Task<IActionResult> Delete(int id)
@@ -219,7 +225,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       _appDBContext.HR_Deductions.Update(Deduction);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Deduction deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Deduction deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

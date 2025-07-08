@@ -3,6 +3,8 @@ using Exampler_ERP.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Exampler_ERP.Utilities;
 using OfficeOpenXml;
 
@@ -14,12 +16,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly IConfiguration _configuration;
     private readonly ILogger<ProcessTypeForwardController> _logger;
     private readonly Utils _utils;
-    public ProcessTypeForwardController(AppDBContext appDBContext, IConfiguration configuration, ILogger<ProcessTypeForwardController> logger, Utils utils)
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    public ProcessTypeForwardController(AppDBContext appDBContext, IConfiguration configuration, ILogger<ProcessTypeForwardController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchProcessTypeName)
     {
@@ -48,7 +54,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       if (!string.IsNullOrEmpty(searchProcessTypeName) && viewModel.ProcessTypesWithRoleCount.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Process Type found with the name '" + searchProcessTypeName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Process Type found with the name '" + searchProcessTypeName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/HR/MasterInfo/ProcessTypeForward/ProcessTypeForward.cshtml", viewModel);
@@ -105,7 +111,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       if (ProcessTypeForwards == null || ProcessTypeForwards.Count == 0)
       {
-        TempData["ErrorMessage"] = "No data received.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No data received.");
         _logger.LogWarning("No data received for edit.");
         return Json(new { success = false, message = "No data received." });
       }
@@ -117,7 +123,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           var processTypeId = ProcessTypeForwards.FirstOrDefault()?.ProcessTypeID;
           if (processTypeId == null)
           {
-            TempData["ErrorMessage"] = "Invalid ProcessTypeID.";
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Invalid ProcessTypeID.");
             return BadRequest("Invalid ProcessTypeID.");
           }
 
@@ -136,12 +142,12 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           }
 
           await _appDBContext.SaveChangesAsync();
-          TempData["SuccessMessage"] = "Process Type Forward Update successfully.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Process Type Forward Update successfully.");
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
-          TempData["ErrorMessage"] = "An error occurred while updating the data.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "An error occurred while updating the data.");
           _logger.LogError(ex, "Error updating ProcessTypeForwards");
           return Json(new { success = false, message = "An error occurred while updating the data." });
         }
@@ -166,7 +172,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.CR_ProcessTypeForwards.RemoveRange(setups);
       _appDBContext.SaveChanges();
-      TempData["SuccessMessage"] = "Process Type Forward deleted successfully.";
+      _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Process Type Forward deleted successfully.");
       return Json(new { success = true });
     }
 

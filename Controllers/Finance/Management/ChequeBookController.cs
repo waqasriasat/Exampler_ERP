@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.Finance.Management
@@ -11,12 +13,16 @@ namespace Exampler_ERP.Controllers.Finance.Management
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ChequeBookController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public ChequeBookController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchBankName)
     {
@@ -33,7 +39,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
 
       if (!string.IsNullOrEmpty(searchBankName) && ChequeBooks.Count == 0)
       {
-        TempData["ErrorMessage"] = "No ChequeBook found with the name '" + searchBankName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No ChequeBook found with the name '" + searchBankName + "'. Please check the name and try again.");
       }
       return View("~/Views/Finance/Management/ChequeBook/ChequeBook.cshtml", ChequeBooks);
     }
@@ -68,7 +74,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
        
         _appDBContext.Update(ChequeBook);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "ChequeBook updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "ChequeBook updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating ChequeBook. Please check the inputs." });
@@ -109,7 +115,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
         _appDBContext.FI_ChequeBookDetails.AddRange(chequeDetails);
         await _appDBContext.SaveChangesAsync();
 
-        TempData["SuccessMessage"] = "ChequeBook created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "ChequeBook created successfully.");
         return Json(new { success = true });
       }
 
@@ -129,7 +135,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
 
       _appDBContext.FI_ChequeBooks.Update(ChequeBook);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "ChequeBook deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "ChequeBook deleted successfully.");
 
       return Json(new { success = true });
     }

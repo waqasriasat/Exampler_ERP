@@ -3,6 +3,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
@@ -12,12 +14,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public DesignationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public DesignationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchDesignationName)
     {
@@ -35,7 +41,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       if (!string.IsNullOrEmpty(searchDesignationName) && Designations.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Designation found with the name '" + searchDesignationName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Designation found with the name '" + searchDesignationName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/HR/MasterInfo/Designation/Designation.cshtml", Designations);
@@ -68,7 +74,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         }
         _appDBContext.Update(Designation);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Designation Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Designation Updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Designation. Please check the inputs." });
@@ -92,7 +98,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         Designation.DeleteYNID = 0;
         _appDBContext.Settings_DesignationTypes.Add(Designation);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Designation Created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Designation Created successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Designation. Please check the inputs." });
@@ -110,7 +116,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_DesignationTypes.Update(Designation);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Designation Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Designation Deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

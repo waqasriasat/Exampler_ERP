@@ -5,6 +5,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using System.Configuration;
 
@@ -15,14 +17,18 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    
 
     public MaterialRequisitionController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+ 
+      
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -47,7 +53,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
         if (!string.IsNullOrEmpty(searchItemName) && MaterialRequisitions.Count == 0)
         {
-          TempData["ErrorMessage"] = "No Material Requisition found with the name '" + searchItemName + "'. Please check the name and try again.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Material Requisition found with the name '" + searchItemName + "'. Please check the name and try again.");
         }
 
         return View("~/Views/StoreManagement/StoreManagement/MaterialRequisition/MaterialRequisition.cshtml", MaterialRequisitions);
@@ -172,11 +178,11 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
               _appDBContext.ST_MaterialRequisitionStatuss.Update(MaterialRequisitionStatus);
 
               await _appDBContext.SaveChangesAsync();
-              TempData["SuccessMessage"] = " Material Requisition successfully. No process setup found,  Material Requisition Approved.";
+              await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", " Material Requisition successfully. No process setup found,  Material Requisition Approved.");
               return Json(new { success = true, message = "No process setup found,  Material Requisition Approved." });
             }
           }
-          TempData["SuccessMessage"] = " Material Requisition Created successfully. Continue to the Approval Process Setup for  Material Requisition Approved.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", " Material Requisition Created successfully. Continue to the Approval Process Setup for  Material Requisition Approved.");
 
           return Json(new { success = true });
         }
@@ -217,7 +223,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       // Check RequisitionStatusTypeID
       if (MaterialRequisitions.RequisitionStatusTypeID != 1)
       {
-        TempData["ErrorMessage"] = "After approval, editing is not allowed.....";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "After approval, editing is not allowed.....");
         
       }
 
@@ -247,7 +253,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
             .FirstOrDefaultAsync(v => v.RequisitionID == MaterialRequisition.MaterialRequisitions.RequisitionID);
         if (existingMaterialRequisition?.RequisitionStatusTypeID != 1)
         {
-          TempData["ErrorMessage"] = "After approval, editing is not allowed.....";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "After approval, editing is not allowed.....");
 
         }
         else

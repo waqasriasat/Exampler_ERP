@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.HR
@@ -11,12 +13,16 @@ namespace Exampler_ERP.Controllers.HR.HR
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public FaceAttendanceTimeAdjustController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public FaceAttendanceTimeAdjustController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
     {
@@ -88,19 +94,19 @@ namespace Exampler_ERP.Controllers.HR.HR
 
           _appDBContext.CR_FaceAttendances.Update(FaceAttendance);
           await _appDBContext.SaveChangesAsync();
-          TempData["SuccessMessage"] = "Attendance updated successfully.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Attendance updated successfully.");
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
-          TempData["ErrorMessage"] = "Error updating Attendance. Please check the inputs.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error updating Attendance. Please check the inputs.");
           ModelState.AddModelError("", "Unable to save changes: " + ex.Message);
         }
       }
 
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
-      TempData["ErrorMessage"] = "Error updating Attendance. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error updating Attendance. Please check the inputs.");
       return PartialView("~/Views/HR/HR/FaceAttendanceTimeAdjust/EditFaceAttendanceTimeAdjust.cshtml", FaceAttendance);
     }
     [HttpGet]
@@ -127,10 +133,10 @@ namespace Exampler_ERP.Controllers.HR.HR
 
         _appDBContext.CR_FaceAttendances.Add(FaceAttendance);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Attendance created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Attendance created successfully.");
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating Attendance. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating Attendance. Please check the inputs.");
       return PartialView("~/Views/HR/HR/FaceAttendanceTimeAdjust/AddFaceAttendanceTimeAdjust.cshtml", FaceAttendance);
     }
     public async Task<IActionResult> Delete(int id)
@@ -145,7 +151,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       _appDBContext.CR_FaceAttendances.Update(FaceAttendance);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Attendance Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Attendance Deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
@@ -11,12 +13,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public AddionalAllowanceTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public AddionalAllowanceTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchAddionalAllowanceTypeName)
     {
@@ -34,7 +40,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       if (!string.IsNullOrEmpty(searchAddionalAllowanceTypeName) && AddionalAllowanceTypes.Count == 0)
       {
-        TempData["ErrorMessage"] = "No AllowanceType found with the name '" + searchAddionalAllowanceTypeName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No AllowanceType found with the name '" + searchAddionalAllowanceTypeName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/HR/MasterInfo/AddionalAllowanceType/AddionalAllowanceType.cshtml", AddionalAllowanceTypes);
@@ -67,7 +73,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         }
         _appDBContext.Update(AddionalAllowanceType);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Addional Allowance Type Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Addional Allowance Type Updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating AddionalAllowanceType. Please check the inputs." });
@@ -91,7 +97,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         AddionalAllowanceType.DeleteYNID = 0;
         _appDBContext.Settings_AddionalAllowanceTypes.Add(AddionalAllowanceType);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Addional Allowance Type Created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Addional Allowance Type Created successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating AddionalAllowanceType. Please check the inputs." });
@@ -109,7 +115,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_AddionalAllowanceTypes.Update(AddionalAllowanceType);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Addional Allowance Type Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Addional Allowance Type Deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

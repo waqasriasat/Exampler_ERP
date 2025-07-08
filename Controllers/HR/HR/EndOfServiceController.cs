@@ -4,6 +4,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.HR
@@ -13,14 +15,18 @@ namespace Exampler_ERP.Controllers.HR.HR
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    
 
     public EndOfServiceController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+ 
+      
     }
     public async Task<IActionResult> Index(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? EndOfServiceReasonTypeID)
     {
@@ -202,15 +208,15 @@ namespace Exampler_ERP.Controllers.HR.HR
               employee.ActiveYNID = 2; // Deactivate employee
             }
             await _appDBContext.SaveChangesAsync();
-            TempData["SuccessMessage"] = "EndOfService Created successfully. No process setup found, Employee deactivated.";
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "EndOfService Created successfully. No process setup found, Employee deactivated.");
             return Json(new { success = true, message = "No process setup found, Employee deactivated." });
           }
         }
 
-        TempData["SuccessMessage"] = "EndOfService Created successfully. Continue to the Approval Process Setup for Employee deactivated.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "EndOfService Created successfully. Continue to the Approval Process Setup for Employee deactivated.");
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating EndOfService. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating EndOfService. Please check the inputs.");
       return PartialView("~/Views/HR/HR/EndOfService/AddEndOfService.cshtml", endofservice);
     }
 
@@ -238,13 +244,13 @@ namespace Exampler_ERP.Controllers.HR.HR
       {
         _appDBContext.Update(endofservice);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "EndOfService Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "EndOfService Updated successfully.");
         return Json(new { success = true });
      }
 
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.EndOfServiceReasonTypesList = await _utils.GetEndOfServiceReasonTypes();
-      TempData["ErrorMessage"] = "Error Updating EndOfService. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error Updating EndOfService. Please check the inputs.");
       return PartialView("~/Views/HR/HR/EndOfService/EditEndOfService.cshtml", endofservice);
     }
     public async Task<IActionResult> Delete(int id)
@@ -259,7 +265,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       _appDBContext.HR_EndOfServices.Update(endofservice);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Employee Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Employee Deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> Print()

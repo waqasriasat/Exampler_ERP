@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
@@ -14,14 +16,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext; 
+    
 
     public UserController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+      
     }
     public async Task<IActionResult> Index(string searchUserName)
     {
@@ -34,10 +38,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       var decryptedUsers = users.Select(user => new CR_User
       {
         UserID = user.UserID,
-        UserName = CR_CipherKey.Decrypt(user.UserName), // Decrypt the UserName
+        UserName = CR_CipherKey.Decrypt(user.UserName),
         ActiveYNID = user.ActiveYNID,
         RoleTypeID = user.RoleTypeID,
-        RoleType = user.RoleType // Preserve RoleType information
+        RoleType = user.RoleType
       }).ToList();
 
       if (!string.IsNullOrEmpty(searchUserName))
@@ -47,8 +51,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
             .ToList();
       }
 
+     
       return View("~/Views/HR/MasterInfo/User/User.cshtml", decryptedUsers);
     }
+
 
 
 
@@ -76,7 +82,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         if (string.IsNullOrEmpty(user.UserName) && string.IsNullOrEmpty(user.Password) && user.RoleTypeID.ToString().Length>0)
         {
-          return Json(new { success = false, message = "user Name, Password and Role Name field is required. Please enter a valid text value." });
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "user Name, Password and Role Name field is required. Please enter a valid text value.!");
+          return Json(new { success = false});
         }
         var userInDb = await _appDBContext.CR_Users.FindAsync(user.UserID);
         if (userInDb == null)
@@ -91,14 +98,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         userInDb.ActiveYNID = user.ActiveYNID;
 
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "User Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "User Updated successfully.!");
+        //await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "User Updated successfully.");
         return Json(new { success = true });
       }
      
       ViewBag.RoleList = await _utils.GetRoles();
       ViewBag.EmployeeList = await _utils.GetEmployee();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      return Json(new { success = false, message = "Error creating user. Please check the inputs." });
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating user. Please check the inputs.!");
+      return Json(new { success = false});
     }
 
     [HttpGet]
@@ -207,7 +216,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.CR_Users.Update(User);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "User Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "User Deleted successfully.!");
+      //await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "User Deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

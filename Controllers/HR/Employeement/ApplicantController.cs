@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
@@ -11,11 +13,15 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    public ApplicantController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    public ApplicantController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(int? id)
     {
@@ -32,7 +38,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       if (id.HasValue && id == 0)
       {
-        TempData["ErrorMessage"] = "No Applicant Found.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Applicant Found.");
       }
 
       return View("~/Views/HR/Employeement/Applicant/Applicant.cshtml", Applicants);
@@ -78,7 +84,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       if (!string.IsNullOrEmpty(term) && applicants.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Applicant found with the name '" + term + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Applicant found with the name '" + term + "'. Please check the name and try again.");
       }
       // Return the result as JSON for autocomplete
       return Json(applicants);
@@ -123,10 +129,10 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         }
         _appDBContext.Update(Applicant);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Applicant updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Applicant updated successfully.");
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error updating Applicant. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error updating Applicant. Please check the inputs.");
       return PartialView("~/Views/HR/Employeement/Applicant/EditApplicant.cshtml", Applicant);
     }
     [HttpGet]
@@ -157,10 +163,10 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
         _appDBContext.HR_Applicants.Add(Applicant);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Applicant created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Applicant created successfully.");
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error creating Applicant. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating Applicant. Please check the inputs.");
 
       return PartialView("~/Views/HR/Employeement/Applicant/AddApplicant.cshtml", Applicant);
     }
@@ -175,7 +181,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     
       _appDBContext.HR_Applicants.Update(Applicant);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Applicant deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Applicant deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> Print()

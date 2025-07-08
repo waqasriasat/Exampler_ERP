@@ -6,6 +6,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using System.Configuration;
 
@@ -16,14 +18,18 @@ namespace Exampler_ERP.Controllers.Purchase.Management
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    
 
     public PurchaseOrderController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+ 
+      
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -71,7 +77,7 @@ namespace Exampler_ERP.Controllers.Purchase.Management
 
       if (!string.IsNullOrEmpty(searchItemName) && rows.Count == 0)
       {
-        TempData["ErrorMessage"] = $"No Purchase Order found with the item name '{searchItemName}'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Purchase Order found with the item name '{searchItemName}'. Please check the name and try again.");
       }
       ViewBag.VendorList = await _utils.GetVendorList();
       return View("~/Views/Purchase/Management/PurchaseOrder/PurchaseOrder.cshtml", rows);
@@ -228,7 +234,7 @@ namespace Exampler_ERP.Controllers.Purchase.Management
                   {
                     po.FinalApprovalID = 1;
                   }
-          TempData["SuccessMessage"] = "Purchase Request saved. No process setup found; Request Approved.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Purchase Request saved. No process setup found; Request Approved.");
           }
         await _appDBContext.SaveChangesAsync();
 

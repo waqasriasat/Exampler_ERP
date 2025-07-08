@@ -5,6 +5,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using System.Globalization;
 
@@ -15,14 +17,18 @@ namespace Exampler_ERP.Controllers.HR.HR
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    
 
     public VacationSettleController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+ 
+      
     }
     public async Task<IActionResult> Index(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? VacationTypeID)
     {
@@ -128,10 +134,10 @@ namespace Exampler_ERP.Controllers.HR.HR
 
         _appDBContext.HR_VacationSettles.Update(vacationSettle);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Vacation Settle updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Vacation Settle updated successfully.");
         return Json(new { success = true });
       }
-      TempData["ErrorMessage"] = "Error updating Vacation Settle. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error updating Vacation Settle. Please check the inputs.");
       return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
     }
 
@@ -202,7 +208,7 @@ namespace Exampler_ERP.Controllers.HR.HR
               _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
               await _appDBContext.SaveChangesAsync();
               await _hubContext.Clients.All.SendAsync("ReceiveProcessNotification");
-              TempData["SuccessMessage"] = "Vacation Settle Created successfully. Continue to the Approval Process Setup for Vacation Settle Activation.";
+              await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Vacation Settle Created successfully. Continue to the Approval Process Setup for Vacation Settle Activation.");
               return Json(new { success = true });
             }
             else
@@ -216,16 +222,16 @@ namespace Exampler_ERP.Controllers.HR.HR
             vacationSettle.ProcessTypeApprovalID = 0;
             _appDBContext.HR_VacationSettles.Update(vacationSettle);
             await _appDBContext.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Vacation Settle Created successfully. No process setup found, Vacation Settle activated.";
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Vacation Settle Created successfully. No process setup found, Vacation Settle activated.");
             return Json(new { success = true });
           }
         }
 
-        TempData["SuccessMessage"] = "Vacation Settle Created successfully. Continue to the Approval Process Setup for Vacation Settle Activation.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Vacation Settle Created successfully. Continue to the Approval Process Setup for Vacation Settle Activation.");
         return Json(new { success = true });
       }
 
-      TempData["ErrorMessage"] = "Error creating Vacation Settle. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating Vacation Settle. Please check the inputs.");
       return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
     }
     [HttpGet]
@@ -320,7 +326,7 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       _appDBContext.HR_Vacations.Update(vacations);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Vacation Settle deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Vacation Settle deleted successfully.");
       return Json(new { success = true });
     }
 

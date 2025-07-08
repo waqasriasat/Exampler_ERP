@@ -2,6 +2,8 @@ using Exampler_ERP.Hubs;
 using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 

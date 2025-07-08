@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
@@ -11,12 +13,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public OvertimeRateController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public OvertimeRateController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchOverTimeRateName)
     {
@@ -34,7 +40,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       if (OverTimeRates.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Over Time Rate found.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Over Time Rate found.");
       }
 
       return View("~/Views/HR/MasterInfo/OverTimeRate/OverTimeRate.cshtml", OverTimeRates);
@@ -67,7 +73,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         }
         _appDBContext.Update(OvertimeRate);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Overtime Rate Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Overtime Rate Updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating OvertimeRate Value. Please check the inputs." });
@@ -91,7 +97,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         OvertimeRate.DeleteYNID = 0;
         _appDBContext.Settings_OverTimeRates.Add(OvertimeRate);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Overtime Rate Created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Overtime Rate Created successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating OvertimeRate Value. Please check the inputs." });
@@ -109,7 +115,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_OverTimeRates.Update(OvertimeRate);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Overtime Rate Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Overtime Rate Deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

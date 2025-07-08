@@ -4,6 +4,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
@@ -13,12 +15,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public DeductionSetupController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public DeductionSetupController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchDeductionTypeName)
     {
@@ -48,7 +54,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       if (!string.IsNullOrEmpty(searchDeductionTypeName) && viewModel.DeductionTypeWithRowCount.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Deduction Type found with the name '" + searchDeductionTypeName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Deduction Type found with the name '" + searchDeductionTypeName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/HR/MasterInfo/DeductionSetup/DeductionSetup.cshtml", viewModel);
@@ -116,7 +122,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         ViewBag.DeductionValueList = deductionValueList;
         ViewBag.SalaryTypes = await _appDBContext.Settings_SalaryTypes.ToListAsync();
         ViewBag.salaryTypeList = _utils.GetSalaryTypeList();
-        TempData["ErrorMessage"] = "Error creating Deduction setups. Please check the inputs.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating Deduction setups. Please check the inputs.");
         return PartialView("~/Views/HR/MasterInfo/DeductionSetup/EditDeductionSetup.cshtml", viewModel);
       }
 
@@ -138,7 +144,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.HR_DeductionSetups.AddRange(newSetups);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Deduction setup updated successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Deduction setup updated successfully.");
       return Json(new { success = true});
     }
 
@@ -152,18 +158,18 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
         if (!deductionSetups.Any())
         {
-          TempData["ErrorMessage"] = "Deduction setups not found.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Deduction setups not found.");
           return Json(new { success = false});
         }
 
         _appDBContext.HR_DeductionSetups.RemoveRange(deductionSetups);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Deduction setups deleted successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Deduction setups deleted successfully.");
         return Json(new { success = true});
       }
       catch (Exception ex)
       {
-        TempData["ErrorMessage"] = "Error Updating Deduction setups. Please check the inputs.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error Updating Deduction setups. Please check the inputs.");
         return Json(new { success = false});
       }
     }

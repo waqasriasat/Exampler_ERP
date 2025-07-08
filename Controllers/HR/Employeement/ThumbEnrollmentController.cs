@@ -3,6 +3,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,11 +14,15 @@ namespace Exampler_ERP.Controllers.HR.Employeement
   {
     private readonly AppDBContext _appDBContext;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ThumbEnrollmentController(AppDBContext appDBContext, Utils utils)
+
+    public ThumbEnrollmentController(AppDBContext appDBContext, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
 
     public async Task<IActionResult> Index(int? id) // EmployeeID

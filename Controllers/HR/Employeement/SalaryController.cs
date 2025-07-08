@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using System.Diagnostics.Contracts;
 using Contract = Exampler_ERP.Models.HR_Contract;
@@ -18,14 +20,18 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     private readonly IConfiguration _configuration;
     private readonly ILogger<SalaryController> _logger;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    
     public SalaryController(AppDBContext appDBContext, IConfiguration configuration, ILogger<SalaryController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+ 
+      
     }
     public async Task<IActionResult> Index(int? id) // EmployeeID
     {
@@ -125,7 +131,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       if (SalaryDetails == null || SalaryDetails.Count == 0)
       {
-        TempData["ErrorMessage"] = "No data received.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No data received.");
         _logger.LogWarning("No data received for edit.");
         return Json(new { success = false, message = "No data received." });
       }
@@ -225,7 +231,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
                 salary.FinalApprovalID = 1;
                 _appDBContext.HR_Salarys.Update(salary);
                 await _appDBContext.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Salary Created successfully. No process setup found, Salary activated.";
+                await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Salary Created successfully. No process setup found, Salary activated.");
                 return Json(new { success = true});
               }
             }
@@ -309,23 +315,23 @@ namespace Exampler_ERP.Controllers.HR.Employeement
                 salary.FinalApprovalID = 1;
                 _appDBContext.HR_Salarys.Update(salary);
                 await _appDBContext.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Salary Created successfully. No process setup found, Salary activated.";
+                await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Salary Created successfully. No process setup found, Salary activated.");
                 return Json(new { success = true, message = "No process setup found, User activated." });
               }
             }
           }
 
-          TempData["SuccessMessage"] = "Salary Created successfully. Continue to the Approval Process Setup for Salary Activation.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Salary Created successfully. Continue to the Approval Process Setup for Salary Activation.");
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
-          TempData["ErrorMessage"] = "Error creating Salary. Please check the inputs.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating Salary. Please check the inputs.");
           _logger.LogError(ex, "Error updating SalaryDetails");
           return Json(new { success = false, message = "An error occurred while updating the data." });
         }
       }
-      TempData["ErrorMessage"] = "Error creating Salary. Please check the inputs.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating Salary. Please check the inputs.");
       var errors = ModelState.Values.SelectMany(v => v.Errors);
       return PartialView("~/Views/HR/Employeement/Salary/EditSalary.cshtml", SalaryDetails);
     }

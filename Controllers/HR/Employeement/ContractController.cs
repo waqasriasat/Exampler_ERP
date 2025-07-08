@@ -5,6 +5,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
@@ -14,14 +16,18 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    
 
     public ContractController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+      
+      
     }
 
     public async Task<IActionResult> Index(int? id)
@@ -41,7 +47,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       if (id.HasValue && id == 0)
       {
-        TempData["ErrorMessage"] = "No Contract Found.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Contract Found.");
       }
 
       return View("~/Views/HR/Employeement/Contract/Contract.cshtml", contracts);
@@ -80,7 +86,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         }
         _appDBContext.Update(contract);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Contract Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Contract Updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Employee. Please check the inputs." });
@@ -164,11 +170,11 @@ namespace Exampler_ERP.Controllers.HR.Employeement
             contract.ActiveYNID = 1;
             _appDBContext.HR_Contracts.Update(contract);
             await _appDBContext.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Contract Created successfully. No process setup found, Contract activated.";
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Contract Created successfully. No process setup found, Contract activated.");
             return Json(new { success = true, message = "No process setup found, Contract activated." });
           }
         }
-        TempData["SuccessMessage"] = "Contract Created successfully. Continue to the Approval Process Setup for Contract Activation.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Contract Created successfully. Continue to the Approval Process Setup for Contract Activation.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Employee. Please check the inputs." });
@@ -187,7 +193,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       _appDBContext.HR_Contracts.Update(contract);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Contract Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Contract Deleted successfully.");
       return Json(new { success = true });
     }
 

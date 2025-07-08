@@ -3,6 +3,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
@@ -12,12 +14,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public EmployeeStatusTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public EmployeeStatusTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchEmployeeStatusTypeName)
     {
@@ -34,7 +40,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       if (!string.IsNullOrEmpty(searchEmployeeStatusTypeName) && EmployeeStatusTypes.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Employee Status Type found with the name '" + searchEmployeeStatusTypeName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Employee Status Type found with the name '" + searchEmployeeStatusTypeName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/HR/MasterInfo/EmployeeStatusType/EmployeeStatusType.cshtml", EmployeeStatusTypes);
@@ -67,7 +73,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         }
         _appDBContext.Update(EmployeeStatusType);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Employee Status Type Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Employee Status Type Updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating EmployeeStatusType. Please check the inputs." });
@@ -91,7 +97,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         EmployeeStatusType.DeleteYNID = 0;
         _appDBContext.Settings_EmployeeStatusTypes.Add(EmployeeStatusType);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Employee Status Type Created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Employee Status Type Created successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating EmployeeStatusType. Please check the inputs." });
@@ -109,7 +115,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_EmployeeStatusTypes.Update(EmployeeStatusType);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Employee Status Type Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Employee Status Type Deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

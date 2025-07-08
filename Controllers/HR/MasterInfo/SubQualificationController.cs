@@ -1,8 +1,12 @@
+using Exampler_ERP.Hubs;
 using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using static System.Collections.Specialized.BitVector32;
 
@@ -13,12 +17,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public SubQualificationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public SubQualificationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchSubQualificationName)
     {
@@ -35,7 +43,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       if (!string.IsNullOrEmpty(searchSubQualificationName) && SubQualifications.Count == 0)
       {
-        TempData["ErrorMessage"] = "No SubQualification found with the name '" + searchSubQualificationName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No SubQualification found with the name '" + searchSubQualificationName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/HR/MasterInfo/SubQualification/SubQualification.cshtml", SubQualifications);
@@ -70,7 +78,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         }
         _appDBContext.Update(SubQualification);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "SubQualification Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "SubQualification Updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating SubQualification. Please check the inputs." });
@@ -95,7 +103,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         SubQualification.DeleteYNID = 0;
         _appDBContext.Settings_SubQualificationTypes.Add(SubQualification);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "SubQualification Created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "SubQualification Created successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating SubQualification. Please check the inputs." });
@@ -113,7 +121,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_SubQualificationTypes.Update(SubQualification);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "SubQualification Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "SubQualification Deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

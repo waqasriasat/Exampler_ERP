@@ -4,6 +4,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Data.SqlClient;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.AspNetCore.SignalR;
@@ -18,7 +20,9 @@ namespace Exampler_ERP.Controllers.HR.Financial
     private readonly IConfiguration _configuration;
     private readonly ILogger<AddionalAllowanceController> _logger;
     private readonly Utils _utils;
-    private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    
 
     public MonthlySalarySheetController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AddionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
     {
@@ -26,7 +30,9 @@ namespace Exampler_ERP.Controllers.HR.Financial
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-      _hubContext = hubContext;
+_hubContext = hubContext;
+ 
+      
     }
     public async Task<IActionResult> Index(int Branch, int MonthsTypeID = 10, int YearsTypeID = 1998)
     {
@@ -64,7 +70,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
       //  ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
       //  ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
-      //  TempData["ErrorMessage"] = "Already posting found for the specified branch, month, and year.";
+      //  await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Already posting found for the specified branch, month, and year.");
       //  return View("~/Views/HR/Financial/MonthlySalarySheet/MonthlySalarySheet.cshtml", new List<MonthlySalarySheetViewModel>());
       //}
 
@@ -405,7 +411,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
       }
       catch (Exception ex)
       {
-        TempData["ErrorMessage"] = "Error updating Salary. " + ex;
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error updating Salary. " + ex);
         // Handle the error and return failure response
         return Json(new { success = false, message = ex.Message });
       }

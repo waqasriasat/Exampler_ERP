@@ -4,6 +4,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 
@@ -15,12 +17,16 @@ namespace Exampler_ERP.Controllers.Setup
     private readonly IConfiguration _configuration;
     private readonly ILogger<AccessRightsByRoleController> _logger;
     private readonly Utils _utils;
-    public AccessRightsByRoleController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AccessRightsByRoleController> logger, Utils utils)
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    public AccessRightsByRoleController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AccessRightsByRoleController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchRoleName)
     {
@@ -64,7 +70,7 @@ namespace Exampler_ERP.Controllers.Setup
 
       if (!string.IsNullOrEmpty(searchRoleName) && viewModel.AccessRightsWithRoleCount.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Role found with the name '" + searchRoleName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Role found with the name '" + searchRoleName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/Setup/AccessRightsByRole/AccessRightsByRole.cshtml", viewModel);
@@ -163,7 +169,7 @@ namespace Exampler_ERP.Controllers.Setup
       string roleTypeColumnName = RoleTypeProperty;
       if (string.IsNullOrEmpty(roleTypeColumnName))
       {
-        TempData["ErrorMessage"] = "Invalid RoleTypeProperty column name.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Invalid RoleTypeProperty column name.");
         return BadRequest("RoleTypeProperty is missing.");
       }
 
@@ -176,7 +182,7 @@ namespace Exampler_ERP.Controllers.Setup
 
       if (accessRightsByRoles == null || accessRightsByRoles.Count == 0)
       {
-        TempData["ErrorMessage"] = "No data received.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No data received.");
         _logger.LogWarning("No data received for edit.");
         return Json(new { success = false, message = "No data received." });
       }
@@ -203,12 +209,12 @@ namespace Exampler_ERP.Controllers.Setup
           }
 
           await _appDBContext.SaveChangesAsync();
-          TempData["SuccessMessage"] = "Access Rights By Role Setup updated successfully.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Access Rights By Role Setup updated successfully.");
           return Json(new { success = true });
         }
         catch (Exception ex)
         {
-          TempData["ErrorMessage"] = "An error occurred while updating the data.";
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "An error occurred while updating the data.");
           _logger.LogError(ex, "Error updating Access Rights By Role Setups");
           return Json(new { success = false, message = "An error occurred while updating the data." });
         }
@@ -251,11 +257,11 @@ namespace Exampler_ERP.Controllers.Setup
 
         await _appDBContext.SaveChangesAsync();
 
-        TempData["SuccessMessage"] = "Access Rights By Role Setups deleted successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Access Rights By Role Setups deleted successfully.");
         return Json(new { success = true });
       }
 
-      TempData["ErrorMessage"] = "No matching records found for deletion.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No matching records found for deletion.");
       return Json(new { success = false, message = "No matching records found." });
     }
 

@@ -2,6 +2,8 @@ using Exampler_ERP.Models.Temp;
 using Exampler_ERP.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Exampler_ERP.Utilities;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
@@ -12,12 +14,16 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     private readonly IConfiguration _configuration;
     private readonly ILogger<CardPrintController> _logger;
     private readonly Utils _utils;
-    public CardPrintController(AppDBContext appDBContext, IConfiguration configuration, ILogger<CardPrintController> logger, Utils utils)
+private readonly IHubContext<NotificationHub> _hubContext;
+
+    public CardPrintController(AppDBContext appDBContext, IConfiguration configuration, ILogger<CardPrintController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
 
     public async Task<IActionResult> Index(int? id)

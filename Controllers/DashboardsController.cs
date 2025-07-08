@@ -14,13 +14,15 @@ public class DashboardsController : Controller
   private readonly AppDBContext _appDBContext;
   private readonly IConfiguration _configuration;
   private readonly Utils _utils;
-  private readonly IHubContext<NotificationHub> _hubContext;
+private readonly IHubContext<NotificationHub> _hubContext;
+
   public DashboardsController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
   {
     _appDBContext = appDBContext;
     _configuration = configuration;
     _utils = utils;
-    _hubContext = hubContext;
+_hubContext = hubContext;
+ 
   }
   public async Task<IActionResult> Index()
   {

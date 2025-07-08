@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.MasterInfo.StoreManagement
@@ -11,12 +13,16 @@ namespace Exampler_ERP.Controllers.MasterInfo.StoreManagement
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ItemController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public ItemController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -35,7 +41,7 @@ namespace Exampler_ERP.Controllers.MasterInfo.StoreManagement
 
       if (!string.IsNullOrEmpty(searchItemName) && Items.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Item found with the name '" + searchItemName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Item found with the name '" + searchItemName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/StoreManagement/MasterInfo/Item/Item.cshtml", Items);
@@ -70,7 +76,7 @@ namespace Exampler_ERP.Controllers.MasterInfo.StoreManagement
         }
         _appDBContext.Update(Item);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Item Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Item Updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Item. Please check the inputs." });
@@ -98,7 +104,7 @@ namespace Exampler_ERP.Controllers.MasterInfo.StoreManagement
         Item.DeleteYNID = 0;
         _appDBContext.ST_Items.Add(Item);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Item Created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Item Created successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Item. Please check the inputs." });
@@ -116,7 +122,7 @@ namespace Exampler_ERP.Controllers.MasterInfo.StoreManagement
 
       _appDBContext.ST_Items.Update(Item);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Item Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Item Deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()

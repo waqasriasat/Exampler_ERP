@@ -2,6 +2,8 @@ using Exampler_ERP.Models;
 using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.Finance.Management
@@ -11,12 +13,16 @@ namespace Exampler_ERP.Controllers.Finance.Management
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public VendorController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public VendorController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchVendorName)
     {
@@ -33,7 +39,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
 
       if (!string.IsNullOrEmpty(searchVendorName) && Vendors.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Vendor found with the name '" + searchVendorName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Vendor found with the name '" + searchVendorName + "'. Please check the name and try again.");
       }
       return View("~/Views/Finance/Management/Vendor/Vendor.cshtml", Vendors);
     }
@@ -73,7 +79,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
         Vendor.Password = CR_CipherKey.Encrypt(Vendor.Password);
         _appDBContext.Update(Vendor);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Vendor updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Vendor updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Vendor. Please check the inputs." });
@@ -105,7 +111,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
         _appDBContext.FI_Vendors.Add(Vendor);
         await _appDBContext.SaveChangesAsync();
 
-        TempData["SuccessMessage"] = "Vendor created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Vendor created successfully.");
         return Json(new { success = true });
       }
 
@@ -125,7 +131,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
 
       _appDBContext.FI_Vendors.Update(Vendor);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Vendor deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Vendor deleted successfully.");
 
       return Json(new { success = true });
     }

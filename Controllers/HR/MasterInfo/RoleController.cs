@@ -3,6 +3,8 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Exampler_ERP.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
@@ -12,12 +14,16 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly AppDBContext _appDBContext;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
+private readonly IHubContext<NotificationHub> _hubContext;
 
-    public RoleController(AppDBContext appDBContext, IConfiguration configuration, Utils utils)
+
+    public RoleController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
+_hubContext = hubContext;
+ 
     }
     public async Task<IActionResult> Index(string searchRoleTypeName)
     {
@@ -34,7 +40,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       if (!string.IsNullOrEmpty(searchRoleTypeName) && RoleTypes.Count == 0)
       {
-        TempData["ErrorMessage"] = "No Role found with the name '" + searchRoleTypeName + "'. Please check the name and try again.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Role found with the name '" + searchRoleTypeName + "'. Please check the name and try again.");
       }
 
       return View("~/Views/HR/MasterInfo/Role/Role.cshtml", RoleTypes);
@@ -62,7 +68,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         }
         _appDBContext.Update(Role);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Role Updated successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Role Updated successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Role. Please check the inputs." });
@@ -86,7 +92,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         Role.DeleteYNID = 0;
         _appDBContext.Settings_RoleTypes.Add(Role);
         await _appDBContext.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Role Created successfully.";
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Role Created successfully.");
         return Json(new { success = true });
       }
       return Json(new { success = false, message = "Error creating Role. Please check the inputs." });
@@ -104,7 +110,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_RoleTypes.Update(Role);
       await _appDBContext.SaveChangesAsync();
-      TempData["SuccessMessage"] = "Role Deleted successfully.";
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Role Deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()
