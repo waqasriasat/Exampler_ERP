@@ -1,0 +1,48 @@
+@model List<Exampler_ERP.Models.Temp.PurchaseRequestwithPurchaseOrderViewModel>
+
+@foreach (var row in Model)
+            {
+                <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                    <div class="row">
+                        <div class="col-10 col-md-11 col-lg-11">
+                            <div class="row align-items-center">
+                                <div class="col-1">
+                                    <input type="checkbox" name="selectedRequests" value="@row.PurchaseRequests.PurchaseRequestID"
+                                           data-vendor-id="@row.CostComparisons?.Vendor?.VendorID" />
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">
+                                        <span class="smallAdd">Purchase Request # :</span> @row.PurchaseRequests.PurchaseRequestID
+                                    </p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">
+                                        <span class="smallAdd">Date :</span>
+                                        @(row.PurchaseRequests.PurchaseRequestDate.ToString("dd/MM/yyyy") ?? "00/00/0000")
+                                    </p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">
+                                        <span class="smallAdd">Item Name :</span> @row.Item?.ItemName
+                                    </p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">
+                                        <span class="smallAdd">Quantity :</span> @row.PurchaseRequests.Quantity
+                                    </p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap recommendedVendor">
+                                        @row.CostComparisons?.Vendor?.HeadofAccount_Five?.HeadofAccount_FiveName
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-1 col-lg-1">
+                            <a href="#" class="printPurchaseOrderLink me-2" data-id="@row.PurchaseRequests.PurchaseRequestID">
+                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }

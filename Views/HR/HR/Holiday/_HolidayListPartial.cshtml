@@ -1,0 +1,311 @@
+@model IEnumerable<Exampler_ERP.Models.HR_Holiday>
+
+@{
+    ViewData["Title"] = "HR - Holiday";
+}
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            // Edit Holiday modal popup
+            $('.editHolidayLink').click(function (e) {
+                e.preventDefault();
+                var HolidayId = $(this).data('id');
+                $.get('@Url.Action("Edit", "Holiday")', { id: HolidayId }, function (data) {
+                    $('#editHolidayModalContainer').html(data);
+                    $('#editHolidayModal').modal('show');
+                });
+            });
+
+            $('#editHolidayModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editHolidayForm').serialize();
+                $.post('@Url.Action("Edit", "Holiday")', formData, function (response) {
+                    if (response.success) {
+                        // Reload the page or update the part of the page with the updated data
+                        
+                    } else {
+                        showError
+                    }
+                });
+            });
+
+            // Add new Holiday modal popup
+            $('.addHolidayLink').click(function () {
+                $.get('@Url.Action("Create", "Holiday")', function (data) {
+                    $('#addHolidayModalContainer').html(data);
+                    $('#addHolidayModal').modal('show');
+                });
+            });
+
+            // Save new Holiday form
+            $('#addHolidayModalContainer').on('click', '#saveNewHoliday', function () {
+                var formData = $('#addHolidayForm').serialize();
+                $.post('@Url.Action("Create", "Holiday")', formData, function (response) {
+                    if (response.success) {
+                        $('#addHolidayModal').modal('hide');
+                         // Reload the page to reflect changes
+                    } else {
+                        showError
+                    }
+                });
+            });
+
+            // Close Modal Add Contrainer
+            $('#addHolidayModalContainer').on('click', '#Close', function () {
+                $('#addHolidayModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editHolidayModalContainer').on('click', '#Close', function () {
+                $('#editHolidayModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Delete Holiday
+            $('.deleteHolidayLink').click(function (e) {
+                e.preventDefault();
+                var HolidayId = $(this).data('id');
+                $.post('@Url.Action("Delete", "Holiday")', { id: HolidayId }, function (response) {
+                    if (response.success) {
+                        
+                    } else {
+                        showError
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+            $.widget("custom.autocomplete", $.ui.autocomplete, {
+                _renderItem: function (ul, item) {
+                    return $("<li>")
+                        .append(item.label)  // Render the HTML content in `label`
+                        .appendTo(ul);
+                }
+            });
+
+
+            $("#searchEmployeeInput").autocomplete({
+                source: function (request, response) {
+
+                    $.ajax({
+                        url: '@Url.Action("GetEmployeeSuggestions", "Employee")', // Ensure this matches the C# method
+                        type: 'GET',
+                        data: { term: request.term },
+                        success: function (data) {
+
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.label,  // HTML content to be displayed in suggestions
+                                    id: item.id,     // Employee ID for the hidden input
+                                    name: item.name,      // Full name to be used in the input field
+                                    value: item.name
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    
+                    // Set the selected employee's ID and name
+                    $("#EmployeeID").val(ui.item.id); // Set the hidden input for Employee ID
+                    $("#searchEmployeeInput").val(ui.item.name); // Set the input field for Employee Name
+                }
+            });
+        });
+    </script>
+    <script>
+        function printHolidays() {
+            var printWindow = window.open('@Url.Action("Print", "Holiday")', '_blank');
+            printWindow.focus();
+        }
+    </script>
+}
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">HR /</span> Holiday
+</h4>
+<form method="get" action="@Url.Action("Index", "Holiday")">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <h5 class="card-header">Search Box</h5>
+                <div class="Searching-Box-padding" style="padding-bottom: 15px;">
+                    <div class="row mb-4">
+                        <!-- From Date Field -->
+                        <div class="col-md-4 mb-4">
+                            <label class="form-label fw-bold">Month Type</label>
+                            <select name="MonthsTypeID" class="form-control">
+                                @foreach (var item in ViewBag.MonthsTypeList)
+                                {
+                                    if (item.Value == ViewBag.MonthsTypeID?.ToString())
+                                    {
+                                        <option value="@item.Value" selected>@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+
+                        <!-- To Date Field -->
+                        <div class="col-md-4 mb-4">
+                            <label for="YearsTypeID" class="form-label fw-bold">Year</label>
+                            <select name="YearsTypeID" class="form-control">
+                                @for (int year = DateTime.Now.Year; year >= 1900; year--)
+                                {
+                                    // Corrected to compare with ViewBag.YearsTypeID
+                                    if (year == (ViewBag.YearsTypeID ?? 0))
+                                    {
+                                        <option value="@year" selected>@year</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@year">@year</option>
+                                    }
+                                }
+                            </select>
+                            </select>
+                        </div>
+
+
+                        <!-- Process Type Dropdown -->
+                        <div class="col-md-4 mb-4">
+                            <label class="form-label fw-bold">Holiday Type</label>
+                            <select name="HolidayTypeID" class="form-control">
+                                @foreach (var item in ViewBag.HolidayTypeList)
+                                {
+                                    if (item.Value == ViewBag.HolidayTypeID?.ToString())
+                                    {
+                                        <option value="@item.Value" selected>@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="row">
+                        <div class="col-md-12 text-end">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="button" class="btn btn-primary addHolidayLink">Add New</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Holiday")'">Excel</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="printHolidays()">Print</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Holiday List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-11 col-lg-10">
+                            <div class="row">
+                                <div class="col-4">
+                                    <p class="text-nowrap">Holiday Type</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">Date</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">Approved</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-1 col-lg-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-nowrap">Edit</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">Delete</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-10 col-md-11 col-lg-10">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Holiday Type: </span>@(item.HolidayType?.HolidayTypeName ?? "N/A")
+                                        </p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Date: </span>@item.HolidayDate.ToString("dd/MMM/yyyy")
+                                        </p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Approved: </span>
+                                            @if (item.FinalApprovalID == 0)
+                                            {
+                                                <span>Pending</span>
+                                            }
+                                            else if (item.FinalApprovalID == 1)
+                                            {
+                                                <span>Approved</span>
+                                            }
+                                            else if (item.FinalApprovalID == 2)
+                                            {
+                                                <span>Disapproved</span>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2 col-md-1 col-lg-2">
+                                <div class="row">
+                                    <div class="col-12 col-md-6 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editHolidayLink" data-id="@item.HolidayID">
+                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="deleteHolidayLink" data-id="@item.HolidayID">
+                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editHolidayModalContainer"></div>
+<div id="addHolidayModalContainer"></div>

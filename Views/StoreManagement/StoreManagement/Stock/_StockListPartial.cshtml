@@ -1,0 +1,33 @@
+@model Exampler_ERP.Models.Temp.StockListViewModel
+
+@foreach (var item in Model.ItemsWithStockQuantity)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-10 col-md-10 col-lg-11">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <p class="text-nowrap"><span class="smallAdd">Item Name : </span>@Html.DisplayFor(modelItem => item.ItemName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Stock Quantity : </span>@Html.DisplayFor(modelItem => item.StockQuantity)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Stock Count : </span>@Html.DisplayFor(modelItem => item.StockCount)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2 col-md-2 col-lg-1">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-12">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editStockLink" data-id="@item.ItemID">
+                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }

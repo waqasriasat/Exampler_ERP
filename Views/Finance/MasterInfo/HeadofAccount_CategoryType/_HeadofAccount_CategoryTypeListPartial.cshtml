@@ -1,0 +1,47 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_HeadofAccount_CategoryType>
+
+@foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-10 col-md-10 col-lg-10">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-8">
+                                        <p class="text-nowrap"><span class="smallAdd">Category Type Name : </span>@Html.DisplayFor(modelItem => item.CategoryTypeName)</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <p class="text-nowrap">
+                                            <span class="smallAdd">Active : </span>
+                                            @if (item.ActiveYNID == 1)
+                                            {
+                                                <span>Yes</span>
+                                            }
+                                            else if (item.ActiveYNID == 2)
+                                            {
+                                                <span>No</span>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2 col-md-2 col-lg-2">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editHeadofAccount_CategoryTypeLink" data-id="@item.CategoryTypeID">
+                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="deleteHeadofAccount_CategoryTypeLink" data-id="@item.CategoryTypeID">
+                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }

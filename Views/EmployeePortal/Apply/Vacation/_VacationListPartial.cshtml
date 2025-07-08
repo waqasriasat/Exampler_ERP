@@ -1,0 +1,51 @@
+@model IEnumerable<Exampler_ERP.Models.HR_Vacation>
+
+@foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-8 col-md-10 col-lg-8">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-3">
+                                        <p class="text-nowrap"><span class="smallAdd">Vacation Type : </span>@item.Settings_VacationType?.VacationTypeName</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-3">
+                                        <p class="text-nowrap"><span class="smallAdd">Date : </span>@item.Date.ToString("dd/MM/yyyy")</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-2">
+                                        <p class="text-nowrap"><span class="smallAdd">Total Days : </span>@item.TotalDays</p>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-2 col-lg-4">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editVacationLink" data-id="@item.VacationID">
+                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="printVacationLink" data-id="@item.VacationID">
+                                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-4">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="deleteVacationLink" data-id="@item.VacationID">
+                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }

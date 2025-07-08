@@ -1,0 +1,289 @@
+@model IEnumerable<Exampler_ERP.Models.HR_AddionalAllowance>
+
+@{
+    ViewData["Title"] = "HR - Addional Allowance";
+}
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            $('.editAddionalAllowanceLink').click(function (e) {
+                e.preventDefault();
+                var AddionalAllowanceTypeId = $(this).data('id');
+                $.get('@Url.Action("Edit", "AddionalAllowance")', { id: AddionalAllowanceTypeId }, function (data) {
+                    $('#editAddionalAllowanceModalContainer').html(data);
+                    $('#editAddionalAllowanceModal').modal('show');
+                });
+            });
+
+            $('#editAddionalAllowanceModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editAddionalAllowanceForm').serialize();
+                console.log("Serialized form data:", formData); // Log serialized data for debugging
+                $.post('@Url.Action("Edit", "AddionalAllowance")', formData, function (response) {
+                    if (response.success) {
+                        $('#editAddionalAllowanceModal').modal('hide');
+                         // Reload the page to reflect changes
+                    } else {
+                        showError
+                    }
+                });
+            });
+
+            $('.addAddionalAllowanceLink').click(function () {
+                
+                $.get('@Url.Action("Create", "AddionalAllowance")', function (data) {
+                    $('#addAddionalAllowanceModalContainer').html(data);
+                    $('#addAddionalAllowanceModal').modal('show');
+                });
+            });
+
+            $('#addAddionalAllowanceModalContainer').on('click', '#saveNewChanges', function () {
+                
+                var formData = $('#addAddionalAllowanceForm').serialize();
+                console.log('@Url.Action("Create", "AddionalAllowance")');
+                console.log("Serialized form data:", formData); // Log serialized data for debugging
+                $.post('@Url.Action("Create", "AddionalAllowance")', formData)
+                    .done(function (response) {
+                        console.log("Response:", response);
+                        if (response.success) {
+                            $('#addAddionalAllowanceModal').modal('hide');
+                            
+                        } else {
+                            console.log("Validation error or other issue:", response);
+                        }
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log("AJAX request failed:", textStatus, errorThrown);
+                    });
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editAddionalAllowanceModalContainer').on('click', '#Close', function () {
+                $('#editAddionalAllowanceModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            $('#addAddionalAllowanceModalContainer').on('click', '#Close', function () {
+                $('#addAddionalAllowanceModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+
+            // Delete AddionalAllowance
+            $('.deleteAddionalAllowanceLink').click(function (e) {
+                e.preventDefault();
+                var AddionalAllowanceId = $(this).data('id');
+                $.post('@Url.Action("Delete", "AddionalAllowance")', { id: AddionalAllowanceId }, function (response) {
+                    if (response.success) {
+                        
+                    } else {
+                        showError
+                    }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+            $.widget("custom.autocomplete", $.ui.autocomplete, {
+                _renderItem: function (ul, item) {
+                    return $("<li>")
+                        .append(item.label)  // Render the HTML content in `label`
+                        .appendTo(ul);
+                }
+            });
+
+
+            $("#searchEmployeeInput").autocomplete({
+                source: function (request, response) {
+
+                    $.ajax({
+                        url: '@Url.Action("GetEmployeeSuggestions", "Employee")', // Ensure this matches the C# method
+                        type: 'GET',
+                        data: { term: request.term },
+                        success: function (data) {
+
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.label,  // HTML content to be displayed in suggestions
+                                    id: item.id,     // Employee ID for the hidden input
+                                    name: item.name,      // Full name to be used in the input field
+                                    value: item.name
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    
+                    // Set the selected employee's ID and name
+                    $("#EmployeeID").val(ui.item.id); // Set the hidden input for Employee ID
+                    $("#searchEmployeeInput").val(ui.item.name); // Set the input field for Employee Name
+                }
+            });
+        });
+    </script>
+    <script>
+        function printAddionalAllowances() {
+            var printWindow = window.open('@Url.Action("Print", "AddionalAllowance")', '_blank');
+            printWindow.focus();
+        }
+    </script>
+}
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">HR /</span> Addional Allowance
+</h4>
+<form method="get" action="@Url.Action("Index", "AddionalAllowance")">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <h5 class="card-header">Search Box</h5>
+                <div class="Searching-Box-padding" style="padding-bottom: 15px;">
+                    <div class="row mb-4">
+                        <!-- From Date Field -->
+                        <div class="col-md-4 mb-4">
+                            <label class="form-label fw-bold">Month Type</label>
+                            <select name="MonthsTypeID" class="form-control">
+                                @foreach (var item in ViewBag.MonthsTypeList)
+                                {
+                                    if (item.Value == ViewBag.MonthsTypeID?.ToString())
+                                    {
+                                        <option value="@item.Value" selected>@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+
+                        <!-- To Date Field -->
+                        <div class="col-md-4 mb-4">
+                            <label for="YearsTypeID" class="form-label fw-bold">Year</label>
+                            <select name="YearsTypeID" class="form-control">
+                                @for (int year = DateTime.Now.Year; year >= 1900; year--)
+                                {
+                                    // Corrected to compare with ViewBag.YearsTypeID
+                                    if (year == (ViewBag.YearsTypeID ?? 0))
+                                    {
+                                        <option value="@year" selected>@year</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@year">@year</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+
+                        <!-- Employee Name Search Field -->
+                        <div class="col-md-4 mb-4">
+                            <label class="form-label fw-bold">Employee Name</label>
+                            <input type="text" class="form-control" id="searchEmployeeInput" placeholder="Search Employee" name="EmployeeName" value="@ViewBag.EmployeeName" />
+                            <input type="hidden" class="form-control" id="EmployeeID" placeholder="Search Employee" name="EmployeeID" value="@ViewBag.EmployeeID" />
+                        </div>
+
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="row">
+                        <div class="col-md-12 text-end">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="button" class="btn btn-primary addAddionalAllowanceLink">Add New</button>
+                            <!-- Example: Add buttons for exporting to Excel and printing -->
+                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "AddionalAllowance")'">Excel</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="printAddionalAllowances()">Print</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Addional Allowance List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-11 col-lg-10">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-nowrap">Employee Name</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap">Month</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap">Year</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-1 col-lg-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-nowrap">Edit</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">Print</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-10 col-md-11 col-lg-10">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-3">
+                                        <p class="text-nowrap"><span class="smallAdd">Type Count : </span>@item.MonthType?.MonthTypeName</p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-3">
+                                        <p class="text-nowrap"><span class="smallAdd">Type Count : </span>@Html.DisplayFor(modelItem => item.Year)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2 col-md-1 col-lg-2">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editAddionalAllowanceLink" data-id="@item.AddionalAllowanceID">
+                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="PrintAddionalAllowanceLink" data-id="@item.AddionalAllowanceID">
+                                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Include the modal partial -->
+<div id="editAddionalAllowanceModalContainer"></div>
+<div id="addAddionalAllowanceModalContainer"></div>

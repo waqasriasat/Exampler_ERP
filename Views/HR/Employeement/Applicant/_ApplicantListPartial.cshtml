@@ -1,0 +1,276 @@
+@model IEnumerable<Exampler_ERP.Models.HR_Applicant>
+
+@{
+    ViewData["Title"] = "HR - Applicant";
+}
+
+@section PageScripts {
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+    <link href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css" rel="stylesheet">
+    <script>
+        $(document).ready(function () {
+            // Edit Applicant modal popup
+            $('.editApplicantLink').click(function (e) {
+                e.preventDefault();
+                var ApplicantId = $(this).data('id');
+                $.get('@Url.Action("Edit", "Applicant")', { id: ApplicantId }, function (data) {
+                    $('#editApplicantModalContainer').html(data);
+                    $('#editApplicantModal').modal('show');
+                });
+            });
+
+            $('#editApplicantModalContainer').on('click', '#saveApplicantChanges', function () {
+                var form = document.getElementById('editApplicantForm');
+                var formData = new FormData(form);
+
+                $.ajax({
+                    url: '@Url.Action("Edit", "Applicant")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            $('#editApplicantModal').modal('hide');
+                             // Reload the page to reflect changes
+                        } else {
+                            showError
+                            // You might want to display validation errors here
+                        }
+                    },
+                    error: function () {
+                        showError
+                    }
+                });
+            });
+
+            // Add new Applicant modal popup
+            $('.addApplicantLink').click(function () {
+                $.get('@Url.Action("Create", "Applicant")', function (data) {
+                    $('#addApplicantModalContainer').html(data);
+                    $('#addApplicantModal').modal('show');
+                });
+            });
+
+
+
+            // // Save new Applicant form
+            $('#addApplicantModalContainer').on('click', '#saveNewApplicant', function () {
+                var form = document.getElementById('addApplicantForm');
+                var formData = new FormData(form);
+
+                $.ajax({
+                    url: '@Url.Action("Create", "Applicant")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            $('#addApplicantModal').modal('hide');
+                             // Reload the page to reflect changes
+                        } else {
+                            showError
+                            // You might want to display validation errors here
+                        }
+                    },
+                    error: function () {
+                        showError
+                    }
+                });
+            });
+
+            // Close Modal Add Contrainer
+            $('#addApplicantModalContainer').on('click', '#Close', function () {
+                $('#addApplicantModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editApplicantModalContainer').on('click', '#Close', function () {
+                $('#editApplicantModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Delete Applicant
+            $('.deleteApplicantLink').click(function (e) {
+                e.preventDefault();
+                var ApplicantId = $(this).data('id');
+
+                // Show confirmation dialog
+                if (confirm('Are you sure you want to delete this Applicant?')) {
+                    // If user clicks 'Yes', proceed with the deletion
+                    $.post('@Url.Action("Delete", "Applicant")', { id: ApplicantId }, function (response) {
+                        if (response.success) {
+                            
+                        } else {
+                            showError
+                        }
+                    });
+                } else {
+                    // If user clicks 'No', do nothing
+                }
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+            $(function () {
+                $("#searchApplicantInput").autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: '@Url.Action("GetApplicantSuggestions", "Applicant")',
+                            type: 'GET',
+                            data: { term: request.term },
+                            success: function (data) {
+                                response(data);
+                            }
+                        });
+                    },
+                    select: function (event, ui) {
+                        console.log("Selected Applicant ID: " + ui.item.id);
+                        window.location.href = '@Url.Action("Index", "Applicant")?id=' + ui.item.id;
+                    },
+                    minLength: 2
+                });
+            });
+        });
+    </script>
+    <script>
+        function printApplicants() {
+            var printWindow = window.open('@Url.Action("Print", "Applicant")', '_blank');
+            printWindow.focus();
+        }
+        //Close Modal
+        function closeModal() {
+            $('.close').click(function () {
+                $('#addApplicantModal').modal('hide');
+                $('#editApplicantModal').modal('hide');
+            });
+        }
+
+        $('#searcApplicantButton').click(function () {
+            var searchValue = $('#searchApplicantInput').val();
+            window.location.href = '@Url.Action("Index", "Applicant")?id=' + searchValue;
+        });
+    </script>
+}
+
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Employeement /</span> Applicant
+</h4>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <h5 class="card-header">Searching Box</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8" style="padding-bottom: 15px;">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search Applicant" id="searchApplicantInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchApplicantButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <!-- Action Buttons -->
+                        <button type="button" class="btn btn-primary addApplicantLink">Add New</button>
+                        <!-- Example: Add buttons for exporting to Excel and printing -->
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Applicant")'">Excel</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printApplicants()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Applicant List</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-10 col-md-10 col-lg-10">
+                            <div class="row">
+                                <div class="col-3">
+                                    <p class="text-nowrap">Picture</p>
+                                </div>
+                                <div class="col-9">
+                                    <p class="text-nowrap">Applicant Name</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2">
+                            <div class="row">
+                                <div class="col-12 col-md-12 col-lg-6">
+                                    <p class="text-nowrap">Edit</p>
+                                </div>
+                                <div class="col-12 col-md-12 col-lg-6">
+                                    <p class="text-nowrap">Print</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+                        <div class="row">
+                            <div class="col-10 col-md-10 col-lg-10">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-3">
+                                        <p class="text-nowrap">
+                                            @if (item.Picture != null)
+                                            {
+                                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.Picture)" style="width: 50px; height: 50px; border-radius:50%" alt="Profile Picture" />
+                                            }
+                                            else
+                                            {
+                                                <img src="~/img/icons/noimage.jpg" style="width: 50px; height: 50px; border-radius:50%" alt="No Image Available" />
+                                            }
+                                        </p>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-9">
+                                        <p class="text-nowrap"><span class="smallAdd">Applicant Name: </span>@Html.Raw($"{item.FirstName} {item.FatherName} {item.FamilyName}")</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-2 col-md-2 col-lg-2">
+                                <div class="row">
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editApplicantLink" data-id="@item.ApplicantID">
+                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-6">
+                                        <div class="btn-group" role="group" aria-label="Actions">
+                                            <a href="#" class="editApplicantLink" data-id="@item.ApplicantID">
+                                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+          
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editApplicantModalContainer"></div>
+<div id="addApplicantModalContainer"></div>
