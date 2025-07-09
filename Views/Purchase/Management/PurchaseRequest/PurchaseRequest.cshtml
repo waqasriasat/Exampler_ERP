@@ -213,61 +213,9 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model)
-
-
-
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-10 col-lg-10">
-                                <div class="row align-items-center">
-                                    <div class="col-2">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Purchase Request # :</span> @Html.DisplayFor(modelItem => item.PurchaseRequestID)
-                                        </p>
-                                    </div>
-                                    <div class="col-2">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Date :</span> @(item.PurchaseRequestDate.ToString("dd/MM/yyyy") ?? "00/00/0000")
-                                        </p>
-                                    </div>
-                                    <div class="col-4">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Item Name :</span> @item.Item?.ItemName
-                                        </p>
-                                    </div>
-                                    <div class="col-2">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Quantity :</span> @item.Quantity
-                                        </p>
-                                    </div>
-                                    <div class="col-2">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Status :</span> @item.RequestStatusType?.RequestStatusTypeName
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-1 col-md-1 col-lg-1">
-                                <div class="btn-group" role="group" aria-label="Actions">
-                                    <a href="#" class="editPurchaseRequestLink me-2" data-id="@item.PurchaseRequestID">
-                                        <i class="fa fa-pencil" style="font-size: large; color:steelblue;; line-height: 2;"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-1 col-md-1 col-lg-1">
-                                <div class="btn-group" role="group" aria-label="Actions">
-                                    <a href="#" class="printPurchaseRequestLink me-2" data-id="@item.PurchaseRequestID">
-                                        <i class="fa fa-print" style="font-size: large; color:steelblue;; line-height: 2;"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                }
-
+                <div id="purchaseRequestListContainer">
+                    @Html.Partial("~/Views/Purchase/Management/PurchaseRequest/_PurchaseRequestListPartial.cshtml", Model)
+                </div>
             </div>
 
         </div>

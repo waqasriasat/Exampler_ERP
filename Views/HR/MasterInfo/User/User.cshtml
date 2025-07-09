@@ -9,13 +9,21 @@
     <script>
         $(document).ready(function () {
             // Edit User modal popup
-            $('.editUserLink').click(function (e) {
-                e.preventDefault();
-                var UserId = $(this).data('id');
-                $.get('@Url.Action("Edit", "User")', { id: UserId }, function (data) {
-                    $('#editUserModalContainer').html(data);
-                    $('#editUserModal').modal('show');
-                });
+            // $('.editUserLink').click(function (e) {
+            //     e.preventDefault();
+            //     var UserId = $(this).data('id');
+            //     $.get('@Url.Action("Edit", "User")', { id: UserId }, function (data) {
+            //         $('#editUserModalContainer').html(data);
+            //         $('#editUserModal').modal('show');
+            //     });
+            // });
+            $('#userListContainer').on('click', '.editUserLink', function (e) {
+              e.preventDefault();
+              var UserId = $(this).data('id');
+              $.get('@Url.Action("Edit", "User")', { id: UserId }, function (data) {
+                $('#editUserModalContainer').html(data);
+                $('#editUserModal').modal('show');
+              });
             });
 
             $('#editUserModalContainer').on('click', '#saveChanges', function () {
@@ -70,20 +78,32 @@
             });
 
             // Delete User
-            $('.deleteUserLink').click(function (e) {
+     //        $('.deleteUserLink').click(function (e) {
+     //            e.preventDefault();
+     //            var UserId = $(this).data('id');
+     //            $.post('@Url.Action("Delete", "User")', { id: UserId }, function (response) {
+					// if (response.success) {
+						
+					// 		// ✅ Ab poora list AJAX se reload karo
+					// 		$.get('@Url.Action("Index", "User")', function (partialHtml) {
+					// 			var html = $(partialHtml).find('#userListContainer').html();
+					// 			$('#userListContainer').html(html);
+					// 		});
+					// 	}
+     //            });
+     //        });
+              $('#userListContainer').on('click', '.deleteUserLink', function (e) {
                 e.preventDefault();
                 var UserId = $(this).data('id');
                 $.post('@Url.Action("Delete", "User")', { id: UserId }, function (response) {
-					if (response.success) {
-						
-							// ✅ Ab poora list AJAX se reload karo
-							$.get('@Url.Action("Index", "User")', function (partialHtml) {
-								var html = $(partialHtml).find('#userListContainer').html();
-								$('#userListContainer').html(html);
-							});
-						}
+                  if (response.success) {
+                    $.get('@Url.Action("Index", "User")', function (partialHtml) {
+                      var html = $(partialHtml).find('#userListContainer').html();
+                      $('#userListContainer').html(html);
+                    });
+                  }
                 });
-            });
+              });
 
             // Print functionality
             $('#printButton').click(function () {

@@ -164,64 +164,9 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-11 col-lg-11">
-                                <div class="row align-items-center">
-                                    <div class="col-2">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Voucher # :</span> @Html.DisplayFor(modelItem => item.VoucherNo)
-                                        </p>
-                                    </div>
-                                    <div class="col-2">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Date :</span> @(item.VoucherDate?.ToString("dd/MM/yyyy") ?? "00/00/0000")
-                                        </p>
-                                    </div>
-                                    <div class="col-6">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Head of Accounts:</span>
-                                            @{
-                                                var drDetails = item.VoucherDetails.Where(d => d.DRCR == 1).FirstOrDefault();
-                                                var crDetails = item.VoucherDetails.Where(d => d.DRCR == 2).FirstOrDefault();
-                                            }
-                                            @if (drDetails != null)
-                                            {
-                                                <span> @drDetails.HeadofAccount_Five.HeadofAccount_FiveName</span>
-                                            }
-                                            @if (crDetails != null)
-                                            {
-                                                <span> -> @crDetails.HeadofAccount_Five.HeadofAccount_FiveName</span>
-                                            }
-                                        </p>
-                                    </div>
-                                   <div class="col-2">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Credit Amount:</span>
-                                            <span>
-                                                @(crDetails != null && crDetails.CrAmt.HasValue
-                                                    ? crDetails.CrAmt.Value.ToString("N2")
-                                                    : "0.00")
-                                            </span>
-
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-1 col-lg-1">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                        <a href="#" class="editVoucherLink me-2" data-id="@item.VoucherID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue;; line-height: 2;"></i>
-                                        </a>
-                                        </div>
-                            </div>
-                        </div>
-                    </div>
-
-                }
-
+                <div id="journalVoucherListContainer">
+                    @Html.Partial("~/Views/Finance/Transaction/JournalVoucher/_JournalVoucherListPartial.cshtml", Model)
+                </div>
             </div>
 
         </div>
