@@ -21,12 +21,15 @@
             $('#editUserModalContainer').on('click', '#saveChanges', function () {
                 var formData = $('#editUserForm').serialize();
                 $.post('@Url.Action("Edit", "User")', formData, function (response) {
-                    if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
-                        
-                    } else {
-                        showError
-                    }
+					if (response.success) {
+							$('#editUserModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "User")', function (partialHtml) {
+								var html = $(partialHtml).find('#userListContainer').html();
+								$('#userListContainer').html(html);
+							});
+						}
                 });
             });
 
@@ -71,11 +74,14 @@
                 e.preventDefault();
                 var UserId = $(this).data('id');
                 $.post('@Url.Action("Delete", "User")', { id: UserId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+					if (response.success) {
+						
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "User")', function (partialHtml) {
+								var html = $(partialHtml).find('#userListContainer').html();
+								$('#userListContainer').html(html);
+							});
+						}
                 });
             });
 
