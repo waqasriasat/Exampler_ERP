@@ -9,24 +9,27 @@
     <script>
         $(document).ready(function () {
             // Edit branch modal popup
-            $('.editBranchLink').click(function (e) {
-                e.preventDefault();
-                var branchId = $(this).data('id');
-                $.get('@Url.Action("Edit", "Branch")', { id: branchId }, function (data) {
-                    $('#editBranchModalContainer').html(data);
-                    $('#editBranchModal').modal('show');
-                });
+            $('#branchListContainer').on('click', '.editBranchLink', function (e) {
+              e.preventDefault();
+              var BranchId = $(this).data('id');
+              $.get('@Url.Action("Edit", "Branch")', { id: BranchId }, function (data) {
+                $('#editBranchModalContainer').html(data);
+                $('#editBranchModal').modal('show');
+              });
             });
 
             $('#editBranchModalContainer').on('click', '#saveChanges', function () {
                 var formData = $('#editBranchForm').serialize();
                 $.post('@Url.Action("Edit", "Branch")', formData, function (response) {
                     if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
-                        
-                    } else {
-                        showError 
-                    }
+                            $('#editBranchModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "Branch")', function (partialHtml) {
+                                var html = $(partialHtml).find('#branchListContainer').html();
+                                $('#branchListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -43,11 +46,14 @@
                 var formData = $('#addBranchForm').serialize();
                 $.post('@Url.Action("Create", "Branch")', formData, function (response) {
                     if (response.success) {
-                        $('#addBranchModal').modal('hide');
-                         // Reload the page to reflect changes
-                    } else {
-                        showError
-                    }
+                            $('#addBranchModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "Branch")', function (partialHtml) {
+                                var html = $(partialHtml).find('#branchListContainer').html();
+                                $('#branchListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -73,6 +79,18 @@
                     } else {
                         showError
                     }
+                });
+            });
+            $('#branchListContainer').on('click', '.deleteBranchLink', function (e) {
+                e.preventDefault();
+                var branchId = $(this).data('id');
+                $.post('@Url.Action("Delete", "Branch")', { id: branchId }, function (response) {
+                    if (response.success) {
+                    $.get('@Url.Action("Index", "Branch")', function (partialHtml) {
+                      var html = $(partialHtml).find('#branchListContainer').html();
+                      $('#branchListContainer').html(html);
+                    });
+                  }
                 });
             });
 
@@ -158,51 +176,9 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-10 col-lg-10">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-8">
-                                        <p class="text-nowrap"><span class="smallAdd">Branch Name : </span>@Html.DisplayFor(modelItem => item.BranchTypeName)</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Active : </span>
-                                            @if (item.ActiveYNID == 1)
-                                            {
-                                                <span>Yes</span>
-                                            }
-                                            else if (item.ActiveYNID == 2)
-                                            {
-                                                <span>No</span>
-                                            }
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-2 col-lg-2">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editBranchLink" data-id="@item.BranchTypeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteBranchLink" data-id="@item.BranchTypeID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+                <div id="branchListContainer">
+                    @Html.Partial("~/Views/HR/MasterInfo/Branch/_BranchListPartial.cshtml", Model)
+                </div>
             </div>
 
         </div>
@@ -212,8 +188,3 @@
 <!-- Include the modal partial -->
 <div id="editBranchModalContainer"></div>
 <div id="addBranchModalContainer"></div>
-
-<script>
-   
-
-</script>
