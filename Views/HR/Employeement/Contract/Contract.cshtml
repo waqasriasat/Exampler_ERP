@@ -8,7 +8,7 @@
     <script>
         $(document).ready(function () {
             // Edit contract modal popup
-            $('.editContractLink').click(function (e) {
+			$('#ContractListContainer').on('click', '.editContractLink', function (e) {
                 e.preventDefault();
                 var contractId = $(this).data('id');
                 $.get('@Url.Action("Edit", "Contract")', { id: contractId }, function (data) {
@@ -19,12 +19,15 @@
             $('#editContractModalContainer').on('click', '#saveContractChanges', function () {
                 var formData = $('#editContractForm').serialize();
                 $.post('@Url.Action("Edit", "Contract")', formData, function (response) {
-                    if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
-                        
-                    } else {
-                        showError
-                    }
+					if (response.success) {
+							$('#editContractModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "Contract")', function (partialHtml) {
+								var html = $(partialHtml).find('#ContractListContainer').html();
+								$('#ContractListContainer').html(html);
+							});
+						}
                 });
             });
           
@@ -41,12 +44,15 @@
              $('#addContractModalContainer').on('click', '#saveNewContract', function () {
                 var formData = $('#addContractForm').serialize();
                 $.post('@Url.Action("Create", "Contract")', formData, function (response) {
-                    if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
-                        
-                    } else {
-                        showError
-                    }
+				   if (response.success) {
+							$('#addContractModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "Contract")', function (partialHtml) {
+								var html = $(partialHtml).find('#ContractListContainer').html();
+								$('#ContractListContainer').html(html);
+							});
+						}
                 });
             });
 
@@ -63,18 +69,19 @@
             });
 
             // Delete contract
-            $('.deleteContractLink').click(function (e) {
+			 $('#ContractListContainer').on('click', '.deleteContractLink', function (e) {
                 e.preventDefault();
                 var contractId = $(this).data('id');
 
                 // Show confirmation dialog
                 if (confirm('Are you sure you want to delete this contract?')) {
                     $.post('@Url.Action("Delete", "Contract")', { id: contractId }, function (response) {
-                        if (response.success) {
-                            
-                        } else {
-                            showError
-                        }
+						if (response.success) {
+					$.get('@Url.Action("Index", "Contract")', function (partialHtml) {
+					  var html = $(partialHtml).find('#ContractListContainer').html();
+					  $('#ContractListContainer').html(html);
+					});
+				  }
                     });
                 } else {
                     // If user clicks 'No', do nothing
@@ -209,65 +216,9 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-10 col-lg-9">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Issue Date : </span>@item.IssueDate.ToString("dd/MM/yyyy")</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Contract Type : </span>
-                                            @if (item.ContractTypeID == 1)
-                                            {
-                                                <span>Limited</span>
-                                            }
-                                            else if (item.ContractTypeID == 2)
-                                            {
-                                                <span>Unlimited</span>
-                                            }
-                                            else
-                                            {
-                                                 <span></span>
-                                            }
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-2 col-lg-3">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editContractLink" data-id="@item.ContractID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="printContractLink" data-id="@item.ContractID">
-                                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteContractLink" data-id="@item.ContractID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+				<div id="ContractListContainer">
+					@Html.Partial("~/Views/HR/Employeement/Contract/_ContractListPartial.cshtml", Model)
+				</div>
             </div>
         </div>
     </div>

@@ -10,7 +10,7 @@
     <script>
         $(document).ready(function () {
             // Edit Applicant modal popup
-            $('.editApplicantLink').click(function (e) {
+			 $('#ApplicantListContainer').on('click', '.editApplicantLink', function (e) {
                 e.preventDefault();
                 var ApplicantId = $(this).data('id');
                 $.get('@Url.Action("Edit", "Applicant")', { id: ApplicantId }, function (data) {
@@ -30,13 +30,15 @@
                     processData: false,
                     contentType: false,
                     success: function (response) {
-                        if (response.success) {
-                            $('#editApplicantModal').modal('hide');
-                             // Reload the page to reflect changes
-                        } else {
-                            showError
-                            // You might want to display validation errors here
-                        }
+						if (response.success) {
+							$('#editApplicantModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "Applicant")', function (partialHtml) {
+								var html = $(partialHtml).find('#ApplicantListContainer').html();
+								$('#ApplicantListContainer').html(html);
+							});
+						}
                     },
                     error: function () {
                         showError
@@ -66,13 +68,15 @@
                     processData: false,
                     contentType: false,
                     success: function (response) {
-                        if (response.success) {
-                            $('#addApplicantModal').modal('hide');
-                             // Reload the page to reflect changes
-                        } else {
-                            showError
-                            // You might want to display validation errors here
-                        }
+					   if (response.success) {
+							$('#addApplicantModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "Applicant")', function (partialHtml) {
+								var html = $(partialHtml).find('#ApplicantListContainer').html();
+								$('#ApplicantListContainer').html(html);
+							});
+						}
                     },
                     error: function () {
                         showError
@@ -93,7 +97,7 @@
             });
 
             // Delete Applicant
-            $('.deleteApplicantLink').click(function (e) {
+			$('#ApplicantListContainer').on('click', '.deleteApplicantLink', function (e) {
                 e.preventDefault();
                 var ApplicantId = $(this).data('id');
 
@@ -101,11 +105,12 @@
                 if (confirm('Are you sure you want to delete this Applicant?')) {
                     // If user clicks 'Yes', proceed with the deletion
                     $.post('@Url.Action("Delete", "Applicant")', { id: ApplicantId }, function (response) {
-                        if (response.success) {
-                            
-                        } else {
-                            showError
-                        }
+					   if (response.success) {
+					$.get('@Url.Action("Index", "Applicant")', function (partialHtml) {
+					  var html = $(partialHtml).find('#ApplicantListContainer').html();
+					  $('#ApplicantListContainer').html(html);
+					});
+				  }
                     });
                 } else {
                     // If user clicks 'No', do nothing
@@ -219,51 +224,9 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-10 col-lg-10">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap">
-                                            @if (item.Picture != null)
-                                            {
-                                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.Picture)" style="width: 50px; height: 50px; border-radius:50%" alt="Profile Picture" />
-                                            }
-                                            else
-                                            {
-                                                <img src="~/img/icons/noimage.jpg" style="width: 50px; height: 50px; border-radius:50%" alt="No Image Available" />
-                                            }
-                                        </p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-9">
-                                        <p class="text-nowrap"><span class="smallAdd">Applicant Name: </span>@Html.Raw($"{item.FirstName} {item.FatherName} {item.FamilyName}")</p>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-2 col-lg-2">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editApplicantLink" data-id="@item.ApplicantID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editApplicantLink" data-id="@item.ApplicantID">
-                                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+				<div id="ApplicantListContainer">
+					@Html.Partial("~/Views/HR/Employeement/Applicant/_ApplicantListPartial.cshtml", Model)
+				</div>
             </div>
 
           

@@ -8,7 +8,7 @@
 
     <script>
         $(document).ready(function () {
-            $('.editEmployeeRequestTypeApprovalSetupLink').click(function (e) {
+			 $('#EmployeeRequestTypeApprovalSetupListContainer').on('click', '.editEmployeeRequestTypeApprovalSetupLink', function (e) {
                 e.preventDefault();
                 var EmployeeRequestTypeId = $(this).data('id');
                 $.get('@Url.Action("Edit", "EmployeeRequestTypeApprovalSetup")', { id: EmployeeRequestTypeId }, function (data) {
@@ -21,12 +21,15 @@
                 var formData = $('#editEmployeeRequestTypeApprovalSetupForm').serialize();
                 console.log("Serialized form data:", formData); // Log serialized data for debugging
                 $.post('@Url.Action("Edit", "EmployeeRequestTypeApprovalSetup")', formData, function (response) {
-                    if (response.success) {
-                        $('#editEmployeeRequestTypeApprovalSetupModal').modal('hide');
-                         // Reload the page to reflect changes
-                    } else {
-                        showError
-                    }
+				   if (response.success) {
+							$('#addEmployeeRequestTypeApprovalSetupModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "EmployeeRequestTypeApprovalSetup")', function (partialHtml) {
+								var html = $(partialHtml).find('#EmployeeRequestTypeApprovalSetupListContainer').html();
+								$('#EmployeeRequestTypeApprovalSetupListContainer').html(html);
+							});
+						}
                 });
             });
 
@@ -38,15 +41,16 @@
 
 
             // Delete EmployeeRequestTypeApprovalSetup
-            $('.deleteEmployeeRequestTypeApprovalSetupLink').click(function (e) {
+			 $('#EmployeeRequestTypeApprovalSetupListContainer').on('click', '.deleteEmployeeRequestTypeApprovalSetupLink', function (e) {
                 e.preventDefault();
                 var EmployeeRequestTypeApprovalSetupId = $(this).data('id');
                 $.post('@Url.Action("Delete", "EmployeeRequestTypeApprovalSetup")', { id: EmployeeRequestTypeApprovalSetupId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+					 if (response.success) {
+					$.get('@Url.Action("Index", "EmployeeRequestTypeApprovalSetup")', function (partialHtml) {
+					  var html = $(partialHtml).find('#EmployeeRequestTypeApprovalSetupListContainer').html();
+					  $('#EmployeeRequestTypeApprovalSetupListContainer').html(html);
+					});
+				  }
                 });
             });
 
@@ -126,41 +130,9 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model.EmployeeRequestTypesWithRankCount)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-10 col-lg-10">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-8">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Request Type Name : </span>@Html.DisplayFor(modelItem => item.EmployeeRequestTypeName)</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Total Role : </span>@Html.DisplayFor(modelItem => item.RankCount)</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-2 col-lg-2">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editEmployeeRequestTypeApprovalSetupLink" data-id="@item.EmployeeRequestTypeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteEmployeeRequestTypeApprovalSetupLink" data-id="@item.EmployeeRequestTypeID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+				<div id="EmployeeRequestTypeApprovalSetupListContainer">
+					@Html.Partial("~/Views/HR/MasterInfo/EmployeeRequestTypeApprovalSetup/_EmployeeRequestTypeApprovalSetupListPartial.cshtml", Model)
+				</div>
             </div>
         </div>
     </div>

@@ -7,7 +7,7 @@
 
     <script>
         $(document).ready(function () {
-            $('.editEmployeeRequestTypeForwardLink').click(function (e) {
+			 $('#EmployeeRequestTypeForwardListContainer').on('click', '.editEmployeeRequestTypeForwardLink', function (e) {
                 e.preventDefault();
                 var EmployeeRequestTypeId = $(this).data('id');
                 $.get('@Url.Action("Edit", "EmployeeRequestTypeForward")', { id: EmployeeRequestTypeId }, function (data) {
@@ -20,12 +20,15 @@
                 var formData = $('#editEmployeeRequestTypeForwardForm').serialize();
                 console.log("Serialized form data:", formData); // Log serialized data for debugging
                 $.post('@Url.Action("Edit", "EmployeeRequestTypeForward")', formData, function (response) {
-                    if (response.success) {
-                        $('#editEmployeeRequestTypeForwardModal').modal('hide');
-                         // Reload the page to reflect changes
-                    } else {
-                        showError
-                    }
+				   if (response.success) {
+							$('#editEmployeeRequestTypeForwardModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "EmployeeRequestTypeForward")', function (partialHtml) {
+								var html = $(partialHtml).find('#EmployeeRequestTypeForwardListContainer').html();
+								$('#EmployeeRequestTypeForwardListContainer').html(html);
+							});
+						}
                 });
             });
 
@@ -37,15 +40,16 @@
 
 
             // Delete EmployeeRequestTypeForward
-            $('.deleteEmployeeRequestTypeForwardLink').click(function (e) {
+		   $('#EmployeeRequestTypeForwardListContainer').on('click', '.deleteEmployeeRequestTypeForwardLink', function (e) {
                 e.preventDefault();
                 var EmployeeRequestTypeId = $(this).data('id');
                 $.post('@Url.Action("Delete", "EmployeeRequestTypeForward")', { id: EmployeeRequestTypeId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+					 if (response.success) {
+					$.get('@Url.Action("Index", "EmployeeRequestTypeForward")', function (partialHtml) {
+					  var html = $(partialHtml).find('#EmployeeRequestTypeForwardListContainer').html();
+					  $('#EmployeeRequestTypeForwardListContainer').html(html);
+					});
+				  }
                 });
             });
 
@@ -132,41 +136,9 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model.EmployeeRequestTypesWithRoleCount)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-10 col-lg-10">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-8">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Request Type Name : </span>@Html.DisplayFor(modelItem => item.EmployeeRequestTypeName)</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Total Role : </span>@Html.DisplayFor(modelItem => item.RoleCount)</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-2 col-lg-2">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editEmployeeRequestTypeForwardLink" data-id="@item.EmployeeRequestTypeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color: steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteEmployeeRequestTypeForwardLink" data-id="@item.EmployeeRequestTypeID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color: maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+				<div id="EmployeeRequestTypeForwardListContainer">
+					@Html.Partial("~/Views/HR/MasterInfo/EmployeeRequestTypeForward/_EmployeeRequestTypeForwardListPartial.cshtml", Model)
+				</div>
             </div>
         </div>
     </div>

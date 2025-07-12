@@ -9,7 +9,7 @@
     
     <script>
         $(document).ready(function () {
-            $('.editEmployeeLink').click(function (e) {
+			 $('#EmployeeListContainer').on('click', '.editEmployeeLink', function (e) {
                 e.preventDefault();
                 var employeeId = $(this).data('id');
                 $.get('@Url.Action("Edit", "Employee")', { id: employeeId }, function (data) {
@@ -29,12 +29,15 @@
                     processData: false,
                     contentType: false,
                     success: function (response) {
-                        if (response.success) {
-                            $('#editEmployeeModal').modal('hide');
-                             
-                        } else {
-                            showError
-                        }
+						if (response.success) {
+							$('#editEmployeeModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "Employee")', function (partialHtml) {
+								var html = $(partialHtml).find('#EmployeeListContainer').html();
+								$('#EmployeeListContainer').html(html);
+							});
+						}
                     },
                     error: function () {
                         showError
@@ -61,12 +64,15 @@
                     processData: false,
                     contentType: false,
                     success: function (response) {
-                        if (response.success) {
-                            $('#addEmployeeModal').modal('hide');
-                            
-                        } else {
-                            showError
-                        }
+						if (response.success) {
+							$('#addEmployeeModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "Employee")', function (partialHtml) {
+								var html = $(partialHtml).find('#EmployeeListContainer').html();
+								$('#EmployeeListContainer').html(html);
+							});
+						}
                     },
                     error: function () {
                         showError
@@ -175,17 +181,18 @@
             });
 
 
-            $('.deleteEmployeeLink').click(function (e) {
+			$('#EmployeeListContainer').on('click', '.deleteEmployeeLink', function (e) {
                 e.preventDefault();
                 var employeeId = $(this).data('id');
 
                 if (confirm('Are you sure you want to delete this employee?')) {
                     $.post('@Url.Action("Delete", "Employee")', { id: employeeId }, function (response) {
-                        if (response.success) {
-                            
-                        } else {
-                            showError
-                        }
+						  if (response.success) {
+					$.get('@Url.Action("Index", "Employee")', function (partialHtml) {
+					  var html = $(partialHtml).find('#EmployeeListContainer').html();
+					  $('#EmployeeListContainer').html(html);
+					});
+				  }
                     });
                 } else {
                     showError
@@ -348,100 +355,9 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-11 col-md-10 col-lg-6">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap">
-                                            @if (item.Picture != null)
-                                            {
-                                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.Picture)" style="width: 50px; height: 50px; border-radius:50%" alt="Profile Picture" />
-                                            }
-                                            else
-                                            {
-                                                <img src="~/img/icons/noimage.jpg" style="width: 50px; height: 50px; border-radius:50%" alt="No Image Available" />
-                                            }
-                                        </p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name: </span>@Html.Raw($"{item.FirstName} {item.FatherName} {item.FamilyName}")</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-3">
-
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Active: </span>
-                                            @if (item.ActiveYNID == 1)
-                                            {
-                                                <span>Yes</span>
-                                            }
-                                            else if (item.ActiveYNID == 2)
-                                            {
-                                                <span>No</span>
-                                            }
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-1 col-md-2 col-lg-6">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editEmployeeLink" data-id="@item.EmployeeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="directManagerEmployeeLink" data-id="@item.EmployeeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="employeeEducationLink" data-id="@item.EmployeeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="employeeExperienceLink" data-id="@item.EmployeeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="PrintEmployeeBioDataLink" data-id="@item.EmployeeID">
-                                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteEmployeeLink" data-id="@item.EmployeeID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-
-            <div class="card-body">
-                <div class="row">
-                    <div class="mt-4">
-                        
-                    </div>
-                </div>
+				<div id="EmployeeListContainer">
+					@Html.Partial("~/Views/HR/Employeement/Employee/_EmployeeListPartial.cshtml", Model)
+				</div>
             </div>
         </div>
     </div>

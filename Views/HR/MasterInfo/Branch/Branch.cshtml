@@ -70,17 +70,7 @@
             });
 
             // Delete branch
-            $('.deleteBranchLink').click(function (e) {
-                e.preventDefault();
-                var branchId = $(this).data('id');
-                $.post('@Url.Action("Delete", "Branch")', { id: branchId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
-                });
-            });
+			
             $('#branchListContainer').on('click', '.deleteBranchLink', function (e) {
                 e.preventDefault();
                 var branchId = $(this).data('id');
@@ -174,7 +164,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> 
                 </div>
                 <div id="branchListContainer">
                     @Html.Partial("~/Views/HR/MasterInfo/Branch/_BranchListPartial.cshtml", Model)

@@ -9,7 +9,7 @@
     <script>
         $(document).ready(function () {
             // Edit EmployeeRequestType modal popup
-            $('.editEmployeeRequestTypeLink').click(function (e) {
+			$('#EmployeeRequestTypeListContainer').on('click', '.editEmployeeRequestTypeLink', function (e) {
                 e.preventDefault();
                 var EmployeeRequestTypeId = $(this).data('id');
                 $.get('@Url.Action("Edit", "EmployeeRequestType")', { id: EmployeeRequestTypeId }, function (data) {
@@ -21,12 +21,15 @@
             $('#editEmployeeRequestTypeModalContainer').on('click', '#saveChanges', function () {
                 var formData = $('#editEmployeeRequestTypeForm').serialize();
                 $.post('@Url.Action("Edit", "EmployeeRequestType")', formData, function (response) {
-                    if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
-                        
-                    } else {
-                        showError
-                    }
+					if (response.success) {
+							$('#editEmployeeRequestTypeModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "EmployeeRequestType")', function (partialHtml) {
+								var html = $(partialHtml).find('#EmployeeRequestTypeListContainer').html();
+								$('#EmployeeRequestTypeListContainer').html(html);
+							});
+						}
                 });
             });
 
@@ -42,12 +45,15 @@
             $('#addEmployeeRequestTypeModalContainer').on('click', '#saveNewEmployeeRequestType', function () {
                 var formData = $('#addEmployeeRequestTypeForm').serialize();
                 $.post('@Url.Action("Create", "EmployeeRequestType")', formData, function (response) {
-                    if (response.success) {
-                        $('#addEmployeeRequestTypeModal').modal('hide');
-                         // Reload the page to reflect changes
-                    } else {
-                        showError
-                    }
+				   if (response.success) {
+							$('#addEmployeeRequestTypeModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "EmployeeRequestType")', function (partialHtml) {
+								var html = $(partialHtml).find('#EmployeeRequestTypeListContainer').html();
+								$('#EmployeeRequestTypeListContainer').html(html);
+							});
+						}
                 });
             });
 
@@ -64,15 +70,16 @@
             });
 
             // Delete EmployeeRequestType
-            $('.deleteEmployeeRequestTypeLink').click(function (e) {
+			$('#EmployeeRequestTypeListContainer').on('click', '.deleteEmployeeRequestTypeLink', function (e) {
                 e.preventDefault();
                 var EmployeeRequestTypeId = $(this).data('id');
                 $.post('@Url.Action("Delete", "EmployeeRequestType")', { id: EmployeeRequestTypeId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+					 if (response.success) {
+					$.get('@Url.Action("Index", "EmployeeRequestType")', function (partialHtml) {
+					  var html = $(partialHtml).find('#EmployeeRequestTypeListContainer').html();
+					  $('#EmployeeRequestTypeListContainer').html(html);
+					});
+				  }
                 });
             });
 
@@ -153,51 +160,9 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-10 col-lg-10">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-8">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Request Type Name : </span>@Html.DisplayFor(modelItem => item.EmployeeRequestTypeName)</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Active : </span>
-                                            @if (item.ActiveYNID == 1)
-                                            {
-                                                <span>Yes</span>
-                                            }
-                                            else if (item.ActiveYNID == 2)
-                                            {
-                                                <span>No</span>
-                                            }
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-2 col-lg-2">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editEmployeeRequestTypeLink" data-id="@item.EmployeeRequestTypeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteEmployeeRequestTypeLink" data-id="@item.EmployeeRequestTypeID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+				<div id="EmployeeRequestTypeListContainer">
+					@Html.Partial("~/Views/HR/MasterInfo/EmployeeRequestType/_EmployeeRequestTypeListPartial.cshtml", Model)
+				</div>
             </div>
         </div>
     </div>

@@ -8,7 +8,7 @@
     <script>
         $(document).ready(function () {
             // Edit contract modal popup
-            $('.editContractRenewalLink').click(function (e) {
+			 $('#ContractRenewalListContainer').on('click', '.editContractRenewalLink', function (e) {
                 e.preventDefault();
                 var contractId = $(this).data('id');
                 $.get('@Url.Action("Edit", "ContractRenewal")', { id: contractId }, function (data) {
@@ -19,12 +19,15 @@
             $('#editContractRenewalModalContainer').on('click', '#saveContractChanges', function () {
                 var formData = $('#editContractRenewalForm').serialize();
                 $.post('@Url.Action("Edit", "ContractRenewal")', formData, function (response) {
-                    if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
-                        
-                    } else {
-                        showError
-                    }
+					if (response.success) {
+							$('#editContractRenewalModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "ContractRenewal")', function (partialHtml) {
+								var html = $(partialHtml).find('#ContractRenewalListContainer').html();
+								$('#ContractRenewalListContainer').html(html);
+							});
+						}
                 });
             });
 
@@ -136,34 +139,9 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-11 col-md-11 col-lg-11">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <p class="text-nowrap"><span class="smallAdd">End Date : </span>@(item.EndDate?.ToString("dd/MM/yyyy") ?? "N/A")</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-1 col-md-1 col-lg-1">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-12">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editContractRenewalLink" data-id="@item.ContractID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+				<div id="ContractRenewalListContainer">
+					@Html.Partial("~/Views/HR/Employeement/ContractRenewal/_ContractRenewalListPartial.cshtml", Model)
+				</div>
             </div>
 
             <div class="card-body">

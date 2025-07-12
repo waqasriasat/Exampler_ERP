@@ -8,7 +8,7 @@
 
     <script>
         $(document).ready(function () {
-            $('.editProcessTypeApprovalSetupLink').click(function (e) {
+			$('#ProcessTypeApprovalSetupListContainer').on('click', '.editProcessTypeApprovalSetupLink', function (e) {
                 e.preventDefault();
                 var processTypeId = $(this).data('id');
                 $.get('@Url.Action("Edit", "ProcessTypeApprovalSetup")', { id: processTypeId }, function (data) {
@@ -21,12 +21,15 @@
                 var formData = $('#editProcessTypeApprovalSetupForm').serialize();
                 console.log("Serialized form data:", formData); // Log serialized data for debugging
                 $.post('@Url.Action("Edit", "ProcessTypeApprovalSetup")', formData, function (response) {
-                    if (response.success) {
-                        $('#editProcessTypeApprovalSetupModal').modal('hide');
-                         // Reload the page to reflect changes
-                    } else {
-                        showError
-                    }
+				   if (response.success) {
+							$('#editProcessTypeApprovalSetupModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "ProcessTypeApprovalSetup")', function (partialHtml) {
+								var html = $(partialHtml).find('#ProcessTypeApprovalSetupListContainer').html();
+								$('#ProcessTypeApprovalSetupListContainer').html(html);
+							});
+						}
                 });
             });
 
@@ -38,15 +41,16 @@
 
 
             // Delete ProcessTypeApprovalSetup
-            $('.deleteProcessTypeApprovalSetupLink').click(function (e) {
+			 $('#ProcessTypeApprovalSetupListContainer').on('click', '.deleteProcessTypeApprovalSetupLink', function (e) {
                 e.preventDefault();
                 var ProcessTypeApprovalSetupId = $(this).data('id');
                 $.post('@Url.Action("Delete", "ProcessTypeApprovalSetup")', { id: ProcessTypeApprovalSetupId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+				   if (response.success) {
+					$.get('@Url.Action("Index", "ProcessTypeApprovalSetup")', function (partialHtml) {
+					  var html = $(partialHtml).find('#ProcessTypeApprovalSetupListContainer').html();
+					  $('#ProcessTypeApprovalSetupListContainer').html(html);
+					});
+				  }
                 });
             });
 
@@ -126,41 +130,9 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model.ProcessTypesWithRankCount)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-10 col-lg-10">
-                                <div class="row">
-                                        <div class="col-12 col-md-12 col-lg-8">
-                                            <p class="text-nowrap"><span class="smallAdd">Process Type Name : </span>@Html.DisplayFor(modelItem => item.ProcessTypeName)</p>
-                                        </div>
-                                        <div class="col-12 col-md-12 col-lg-2">
-                                            <p class="text-nowrap"><span class="smallAdd">Total Role : </span>@Html.DisplayFor(modelItem => item.RankCount)</p>
-                                        </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-2 col-lg-2">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editProcessTypeApprovalSetupLink" data-id="@item.ProcessTypeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteProcessTypeApprovalSetupLink" data-id="@item.ProcessTypeID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+				<div id="ProcessTypeApprovalSetupListContainer">
+					@Html.Partial("~/Views/HR/MasterInfo/ProcessTypeApprovalSetup/_ProcessTypeApprovalSetupListPartial.cshtml", Model)
+				</div>
             </div>
         </div>
     </div>

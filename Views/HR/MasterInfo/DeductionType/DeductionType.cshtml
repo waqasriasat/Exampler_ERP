@@ -1,206 +1,171 @@
 @model IEnumerable<Exampler_ERP.Models.Settings_DeductionType>
 
 @{
-    ViewData["Title"] = "Master Information - Deduction Type";
+	ViewData["Title"] = "Master Information - Deduction Type";
 }
 
 @section PageScripts {
 
-    <script>
-        $(document).ready(function () {
-            // Edit DeductionType modal popup
-            $('.editDeductionTypeLink').click(function (e) {
-                e.preventDefault();
-                var DeductionTypeId = $(this).data('id');
-                $.get('@Url.Action("Edit", "DeductionType")', { id: DeductionTypeId }, function (data) {
-                    $('#editDeductionTypeModalContainer').html(data);
-                    $('#editDeductionTypeModal').modal('show');
-                });
-            });
+	<script>
+		$(document).ready(function () {
+			// Edit DeductionType modal popup
+			$('#DeductionTypeListContainer').on('click', '.editDeductionTypeLink', function (e) {
+				e.preventDefault();
+				var DeductionTypeId = $(this).data('id');
+				$.get('@Url.Action("Edit", "DeductionType")', { id: DeductionTypeId }, function (data) {
+					$('#editDeductionTypeModalContainer').html(data);
+					$('#editDeductionTypeModal').modal('show');
+				});
+			});
 
-            $('#editDeductionTypeModalContainer').on('click', '#saveChanges', function () {
-                var formData = $('#editDeductionTypeForm').serialize();
-                $.post('@Url.Action("Edit", "DeductionType")', formData, function (response) {
-                    if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
-                        
-                    } else {
-                        showError
-                    }
-                });
-            });
+			$('#editDeductionTypeModalContainer').on('click', '#saveChanges', function () {
+				var formData = $('#editDeductionTypeForm').serialize();
+				$.post('@Url.Action("Edit", "DeductionType")', formData, function (response) {
+					if (response.success) {
+							$('#editDeductionTypeModal').modal('hide');
 
-            // Add new DeductionType modal popup
-            $('.addDeductionTypeLink').click(function () {
-                $.get('@Url.Action("Create", "DeductionType")', function (data) {
-                    $('#addDeductionTypeModalContainer').html(data);
-                    $('#addDeductionTypeModal').modal('show');
-                });
-            });
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "DeductionType")', function (partialHtml) {
+								var html = $(partialHtml).find('#DeductionTypeListContainer').html();
+								$('#DeductionTypeListContainer').html(html);
+							});
+						}
+				});
+			});
 
-            // Save new DeductionType form
-            $('#addDeductionTypeModalContainer').on('click', '#saveNewDeductionType', function () {
-                var formData = $('#addDeductionTypeForm').serialize();
-                $.post('@Url.Action("Create", "DeductionType")', formData, function (response) {
-                    if (response.success) {
-                        $('#addDeductionTypeModal').modal('hide');
-                         // Reload the page to reflect changes
-                    } else {
-                        showError
-                    }
-                });
-            });
+			// Add new DeductionType modal popup
+			$('.addDeductionTypeLink').click(function () {
+				$.get('@Url.Action("Create", "DeductionType")', function (data) {
+					$('#addDeductionTypeModalContainer').html(data);
+					$('#addDeductionTypeModal').modal('show');
+				});
+			});
 
-            // Close Modal Add Contrainer
-            $('#addDeductionTypeModalContainer').on('click', '#Close', function () {
-                $('#addDeductionTypeModal').modal('hide'); // Close the modal directly
-                // Additional logic if needed
-            });
+			// Save new DeductionType form
+			$('#addDeductionTypeModalContainer').on('click', '#saveNewDeductionType', function () {
+				var formData = $('#addDeductionTypeForm').serialize();
+				$.post('@Url.Action("Create", "DeductionType")', formData, function (response) {
+					 if (response.success) {
+							$('#addDeductionTypeModal').modal('hide');
 
-            // Close Modal Edit Contrainer
-            $('#editDeductionTypeModalContainer').on('click', '#Close', function () {
-                $('#editDeductionTypeModal').modal('hide'); // Close the modal directly
-                // Additional logic if needed
-            });
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "DeductionType")', function (partialHtml) {
+								var html = $(partialHtml).find('#DeductionTypeListContainer').html();
+								$('#DeductionTypeListContainer').html(html);
+							});
+						}
+				});
+			});
 
-            // Delete DeductionType
-            $('.deleteDeductionTypeLink').click(function (e) {
-                e.preventDefault();
-                var DeductionTypeId = $(this).data('id');
-                $.post('@Url.Action("Delete", "DeductionType")', { id: DeductionTypeId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
-                });
-            });
+			// Close Modal Add Contrainer
+			$('#addDeductionTypeModalContainer').on('click', '#Close', function () {
+				$('#addDeductionTypeModal').modal('hide'); // Close the modal directly
+				// Additional logic if needed
+			});
 
-            // Print functionality
-            $('#printButton').click(function () {
-                window.print();
-            });
-        });
-    </script>
-    <script>
-        function printDeductionTypes() {
-            var printWindow = window.open('@Url.Action("Print", "DeductionType")', '_blank');
-            printWindow.focus();
-        }
-        $('#searchDeductionTypeButton').click(function () {
-            var searchValue = $('#searchDeductionTypeInput').val();
-            window.location.href = '@Url.Action("Index", "DeductionType")?searchDeductionTypeName=' + searchValue;
-        });
-    </script>
+			// Close Modal Edit Contrainer
+			$('#editDeductionTypeModalContainer').on('click', '#Close', function () {
+				$('#editDeductionTypeModal').modal('hide'); // Close the modal directly
+				// Additional logic if needed
+			});
+
+			// Delete DeductionType
+			$('#DeductionTypeListContainer').on('click', '.deleteDeductionTypeLink', function (e) {
+				e.preventDefault();
+				var DeductionTypeId = $(this).data('id');
+				$.post('@Url.Action("Delete", "DeductionType")', { id: DeductionTypeId }, function (response) {
+					if (response.success) {
+					$.get('@Url.Action("Index", "DeductionType")', function (partialHtml) {
+					  var html = $(partialHtml).find('#DeductionTypeListContainer').html();
+					  $('#DeductionTypeListContainer').html(html);
+					});
+				  }
+				});
+			});
+
+			// Print functionality
+			$('#printButton').click(function () {
+				window.print();
+			});
+		});
+	</script>
+	<script>
+		function printDeductionTypes() {
+			var printWindow = window.open('@Url.Action("Print", "DeductionType")', '_blank');
+			printWindow.focus();
+		}
+		$('#searchDeductionTypeButton').click(function () {
+			var searchValue = $('#searchDeductionTypeInput').val();
+			window.location.href = '@Url.Action("Index", "DeductionType")?searchDeductionTypeName=' + searchValue;
+		});
+	</script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Master Information /</span> Deduction Type
+	<span class="text-muted fw-light">Master Information /</span> Deduction Type
 </h4>
 <div class="row">
-    <div class="col-md-12">
+	<div class="col-md-12">
 
-        <div class="card">
-            <h5 class="card-header">Searching Box</h5>
-            <div class="Searching-Box-padding">
-                <div class="row mb-4">
-                    <div class="col-md-8" style="padding-bottom: 15px;">
-                        <!-- Search Field and Button -->
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search Deduction Type name" id="searchDeductionTypeInput">
-                            <button class="btn btn-outline-secondary" type="button" id="searchDeductionTypeButton">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-md-4 text-end">
-                        <!-- Action Buttons -->
-                        <button type="button" class="btn btn-primary addDeductionTypeLink">Add New</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "DeductionType")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printDeductionTypes()">Print</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+		<div class="card">
+			<h5 class="card-header">Searching Box</h5>
+			<div class="Searching-Box-padding">
+				<div class="row mb-4">
+					<div class="col-md-8" style="padding-bottom: 15px;">
+						<!-- Search Field and Button -->
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search Deduction Type name" id="searchDeductionTypeInput">
+							<button class="btn btn-outline-secondary" type="button" id="searchDeductionTypeButton">
+								<i class="fa fa-search"></i>
+							</button>
+						</div>
+					</div>
+					<div class="col-md-4 text-end">
+						<!-- Action Buttons -->
+						<button type="button" class="btn btn-primary addDeductionTypeLink">Add New</button>
+						<button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "DeductionType")'">Excel</button>
+						<button type="button" class="btn btn-outline-secondary" onclick="printDeductionTypes()">Print</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <br />
 <div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <h5 class="card-header">Deduction Type List</h5>
-            <div class="">
-                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
-                    <div class="row">
-                       <div class="col-10 col-md-10 col-lg-10">
-                            <div class="row">
-                                <div class="col-8">
-                                    <p class="text-nowrap">Deduction Type Name</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">Active</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-2 col-md-2 col-lg-2">
-                            <div class="row">
-                                <div class="col-6">
-                                    <p class="text-nowrap">Edit</p>
-                                </div>
-                                <div class="col-6">
-                                    <p class="text-nowrap">Delete</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-10 col-lg-10">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-8">
-                                        <p class="text-nowrap"><span class="smallAdd">Deduction Type Name : </span>@Html.DisplayFor(modelItem => item.DeductionTypeName)</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Active : </span>
-                                            @if (item.ActiveYNID == 1)
-                                            {
-                                                <span>Yes</span>
-                                            }
-                                            else if (item.ActiveYNID == 2)
-                                            {
-                                                <span>No</span>
-                                            }
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-2 col-lg-2">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editDeductionTypeLink" data-id="@item.DeductionTypeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteDeductionTypeLink" data-id="@item.DeductionTypeID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
+	<div class="col-md-12">
+		<div class="card">
+			<h5 class="card-header">Deduction Type List</h5>
+			<div class="">
+				<div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+					<div class="row">
+						<div class="col-10 col-md-10 col-lg-10">
+							<div class="row">
+								<div class="col-8">
+									<p class="text-nowrap">Deduction Type Name</p>
+								</div>
+								<div class="col-2">
+									<p class="text-nowrap">Active</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-2 col-md-2 col-lg-2">
+							<div class="row">
+								<div class="col-6">
+									<p class="text-nowrap">Edit</p>
+								</div>
+								<div class="col-6">
+									<p class="text-nowrap">Delete</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="DeductionTypeListContainer">
+					@Html.Partial("~/Views/HR/MasterInfo/DeductionType/_DeductionTypeListPartial.cshtml", Model)
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <!-- Include the modal partial -->

@@ -9,7 +9,7 @@
     <script>
         $(document).ready(function () {
             // Edit SalaryType modal popup
-            $('.editSalaryTypeLink').click(function (e) {
+			 $('#SalaryTypeListContainer').on('click', '.editSalaryTypeLink', function (e) {
                 e.preventDefault();
                 var SalaryTypeId = $(this).data('id');
                 $.get('@Url.Action("Edit", "SalaryType")', { id: SalaryTypeId }, function (data) {
@@ -21,12 +21,15 @@
             $('#editSalaryTypeModalContainer').on('click', '#saveChanges', function () {
                 var formData = $('#editSalaryTypeForm').serialize();
                 $.post('@Url.Action("Edit", "SalaryType")', formData, function (response) {
-                    if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
-                        
-                    } else {
-                        showError
-                    }
+					if (response.success) {
+							$('#editSalaryTypeModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "SalaryType")', function (partialHtml) {
+								var html = $(partialHtml).find('#SalaryTypeListContainer').html();
+								$('#SalaryTypeListContainer').html(html);
+							});
+						}
                 });
             });
 
@@ -42,12 +45,15 @@
             $('#addSalaryTypeModalContainer').on('click', '#saveNewSalaryType', function () {
                 var formData = $('#addSalaryTypeForm').serialize();
                 $.post('@Url.Action("Create", "SalaryType")', formData, function (response) {
-                    if (response.success) {
-                        $('#addSalaryTypeModal').modal('hide');
-                         // Reload the page to reflect changes
-                    } else {
-                        showError
-                    }
+				   if (response.success) {
+							$('#addSalaryTypeModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "SalaryType")', function (partialHtml) {
+								var html = $(partialHtml).find('#SalaryTypeListContainer').html();
+								$('#SalaryTypeListContainer').html(html);
+							});
+						}
                 });
             });
 
@@ -64,15 +70,16 @@
             });
 
             // Delete SalaryType
-            $('.deleteSalaryTypeLink').click(function (e) {
+		   $('#SalaryTypeListContainer').on('click', '.deleteSalaryTypeLink', function (e) {
                 e.preventDefault();
                 var SalaryTypeId = $(this).data('id');
                 $.post('@Url.Action("Delete", "SalaryType")', { id: SalaryTypeId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+					if (response.success) {
+					$.get('@Url.Action("Index", "SalaryType")', function (partialHtml) {
+					  var html = $(partialHtml).find('#SalaryTypeListContainer').html();
+					  $('#SalaryTypeListContainer').html(html);
+					});
+				  }
                 });
             });
 
@@ -153,51 +160,9 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-10 col-lg-10">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-8">
-                                        <p class="text-nowrap"><span class="smallAdd">Salary Type Name : </span>@Html.DisplayFor(modelItem => item.SalaryTypeName)</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Active : </span>
-                                            @if (item.ActiveYNID == 1)
-                                            {
-                                                <span>Yes</span>
-                                            }
-                                            else if (item.ActiveYNID == 2)
-                                            {
-                                                <span>No</span>
-                                            }
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-2 col-lg-2">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editSalaryTypeLink" data-id="@item.SalaryTypeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteSalaryTypeLink" data-id="@item.SalaryTypeID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+				<div id="SalaryTypeListContainer">
+					@Html.Partial("~/Views/HR/MasterInfo/SalaryType/_SalaryTypeListPartial.cshtml", Model)
+				</div>
             </div>
         </div>
     </div>

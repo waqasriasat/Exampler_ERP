@@ -7,7 +7,7 @@
 
     <script>
         $(document).ready(function () {
-            $('.editProcessTypeForwardLink').click(function (e) {
+			$('#ProcessTypeForwardListContainer').on('click', '.editProcessTypeForwardLink', function (e) {
                 e.preventDefault();
                 var processTypeId = $(this).data('id');
                 $.get('@Url.Action("Edit", "ProcessTypeForward")', { id: processTypeId }, function (data) {
@@ -20,12 +20,15 @@
                 var formData = $('#editProcessTypeForwardForm').serialize();
                 console.log("Serialized form data:", formData); // Log serialized data for debugging
                 $.post('@Url.Action("Edit", "ProcessTypeForward")', formData, function (response) {
-                    if (response.success) {
-                        $('#editProcessTypeForwardModal').modal('hide');
-                         // Reload the page to reflect changes
-                    } else {
-                        showError
-                    }
+					if (response.success) {
+							$('#editProcessTypeForwardModal').modal('hide');
+
+							// ✅ Ab poora list AJAX se reload karo
+							$.get('@Url.Action("Index", "ProcessTypeForward")', function (partialHtml) {
+								var html = $(partialHtml).find('#ProcessTypeForwardListContainer').html();
+								$('#ProcessTypeForwardListContainer').html(html);
+							});
+						}
                 });
             });
 
@@ -37,15 +40,16 @@
 
 
             // Delete ProcessTypeForward
-            $('.deleteProcessTypeForwardLink').click(function (e) {
+		   $('#ProcessTypeForwardListContainer').on('click', '.deleteProcessTypeForwardLink', function (e) {
                 e.preventDefault();
                 var processTypeId = $(this).data('id');
                 $.post('@Url.Action("Delete", "ProcessTypeForward")', { id: processTypeId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+				   if (response.success) {
+					$.get('@Url.Action("Index", "ProcessTypeForward")', function (partialHtml) {
+					  var html = $(partialHtml).find('#ProcessTypeForwardListContainer').html();
+					  $('#ProcessTypeForwardListContainer').html(html);
+					});
+				  }
                 });
             });
 
@@ -132,41 +136,9 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model.ProcessTypesWithRoleCount)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-10 col-lg-10">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-8">
-                                        <p class="text-nowrap"><span class="smallAdd">Process Type Name : </span>@Html.DisplayFor(modelItem => item.ProcessTypeName)</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Total Role : </span>@Html.DisplayFor(modelItem => item.RoleCount)</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-2 col-lg-2">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editProcessTypeForwardLink" data-id="@item.ProcessTypeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color: steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteProcessTypeForwardLink" data-id="@item.ProcessTypeID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color: maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+				<div id="ProcessTypeForwardListContainer">
+					@Html.Partial("~/Views/HR/MasterInfo/ProcessTypeForward/_ProcessTypeForwardListPartial.cshtml", Model)
+				</div>
             </div>
          </div>
     </div>
