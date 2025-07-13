@@ -5,24 +5,27 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.MasterInfo.StoreManagement
 {
   public class ItemController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<ItemController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public ItemController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public ItemController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ItemController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -88,7 +91,7 @@ _hubContext = hubContext;
       ViewBag.UnitTypeIDList = await _utils.GetItemUnits();
       ViewBag.ItemCategoryTypeIDList = await _utils.GetItemCategorys();
       ViewBag.ManufacturerTypeIDList = await _utils.GetItemManufacturers();
-   
+
       return PartialView("~/Views/StoreManagement/MasterInfo/Item/AddItem.cshtml", new ST_Item());
     }
 

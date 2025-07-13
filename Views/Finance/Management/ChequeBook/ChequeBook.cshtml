@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.FI_ChequeBook>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Management - Cheque Book";
 }
@@ -9,7 +10,7 @@
     <script>
         $(document).ready(function () {
             // Edit ChequeBook modal popup
-            $('.editChequeBookLink').click(function (e) {
+            $('#ChequeBookListContainer').on('click', '.editChequeBookLink', function (e) {
                 e.preventDefault();
                 var ChequeBookId = $(this).data('id');
                 $.get('@Url.Action("Edit", "ChequeBook")', { id: ChequeBookId }, function (data) {
@@ -21,12 +22,15 @@
             $('#editChequeBookModalContainer').on('click', '#saveChanges', function () {
                 var formData = $('#editChequeBookForm').serialize();
                 $.post('@Url.Action("Edit", "ChequeBook")', formData, function (response) {
-                    if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
-                        
-                    } else {
-                        showError
-                    }
+                   if (response.success) {
+                            $('#editChequeBookModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "ChequeBook")', function (partialHtml) {
+                                var html = $(partialHtml).find('#ChequeBookListContainer').html();
+                                $('#ChequeBookListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -43,11 +47,14 @@
                 var formData = $('#addChequeBookForm').serialize();
                 $.post('@Url.Action("Create", "ChequeBook")', formData, function (response) {
                     if (response.success) {
-                        $('#addChequeBookModal').modal('hide');
-                         // Reload the page to reflect changes
-                    } else {
-                        showError
-                    }
+                            $('#addChequeBookModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "ChequeBook")', function (partialHtml) {
+                                var html = $(partialHtml).find('#ChequeBookListContainer').html();
+                                $('#ChequeBookListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -64,15 +71,16 @@
             });
 
             // Delete ChequeBook
-            $('.deleteChequeBookLink').click(function (e) {
+           $('#ChequeBookListContainer').on('click', '.deleteChequeBookLink', function (e) {
                 e.preventDefault();
                 var ChequeBookId = $(this).data('id');
                 $.post('@Url.Action("Delete", "ChequeBook")', { id: ChequeBookId }, function (response) {
                     if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+                    $.get('@Url.Action("Index", "ChequeBook")', function (partialHtml) {
+                      var html = $(partialHtml).find('#ChequeBookListContainer').html();
+                      $('#ChequeBookListContainer').html(html);
+                    });
+                  }
                 });
             });
 
@@ -105,7 +113,7 @@
     <div class="col-md-12">
 
         <div class="card">
-            <h5 class="card-header">Searching Box</h5>
+            <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
                     <div class="col-md-8" style="padding-bottom: 15px;">
@@ -119,9 +127,9 @@
                     </div>
                     <div class="col-md-4 text-end">
                         <!-- Action Buttons -->
-                        <button type="button" class="btn btn-primary addChequeBookLink">Add New</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "ChequeBook")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printChequeBookes()">Print</button>
+                        <button type="button" class="btn btn-primary addChequeBookLink">@Localizer["lbl_AddNew"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "ChequeBook")'">@Localizer["lbl_Excel"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printChequeBookes()">@Localizer["lbl_Print"]</button>
                     </div>
                 </div>
             </div>
@@ -142,7 +150,7 @@
                                     <p class="text-nowrap">Bank Name</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Active</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Active"]</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Total Pages</p>
@@ -158,10 +166,10 @@
                         <div class="col-2 col-md-2 col-lg-2">
                             <div class="row">
                                 <div class="col-6">
-                                    <p class="text-nowrap">Edit</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="text-nowrap">Delete</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Delete"]</p>
                                 </div>
                             </div>
                         </div>

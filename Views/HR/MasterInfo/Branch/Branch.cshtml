@@ -1,11 +1,28 @@
 @model IEnumerable<Exampler_ERP.Models.Settings_BranchType>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Master Information - Branch";
+    ViewData["Title"] = @Localizer["lbl_MasterInformation"] + " - " + @Localizer["lbl_Branch"];
 }
 
 @section PageScripts {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-KyZXEAg3QhqLMpG8r+Knujsl5+5hb5z2N7O6eHg4d5e2jtV5Wz4w69F+QYw1Fz4yD61DdE8kOkWJLvHh7vDkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @* <script>
+        $(document).ready(function () {
+            setupModalCrud({
+                controllerName: 'MaterialIssuance',
+                listContainerId: 'MaterialIssuanceListContainer',
+                addLinkClass: 'addMaterialIssuanceLink',
+                editLinkClass: 'editMaterialIssuanceLink',
+                deleteLinkClass: 'deleteMaterialIssuanceLink',
+                printLinkClass: 'printMaterialIssuanceLink',
+                addModalContainerId: 'addMaterialIssuanceModalContainer',
+                editModalContainerId: 'editMaterialIssuanceModalContainer',
+                listPartialSelector: '#MaterialIssuanceListContainer'
+            });
+        });
+    </script> *@
+
     <script>
         $(document).ready(function () {
             // Edit branch modal popup
@@ -107,19 +124,19 @@
 
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Master Information /</span> Branch
+    <span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> @Localizer["lbl_Branch"]
 </h4>
 <div class="row">
     <div class="col-md-12">
        
         <div class="card">
-            <h5 class="card-header">Searching Box</h5>
+            <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
                     <div class="col-md-8" style="padding-bottom: 15px;">
                         <!-- Search Field and Button -->
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search branch name" id="searchBranchInput">
+                            <input type="text" class="form-control" placeholder="@Localizer["lbl_SearchBranchName"]" id="searchBranchInput">
                             <button class="btn btn-outline-secondary" type="button" id="searchBranchButton">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -127,9 +144,9 @@
                     </div>
                     <div class="col-md-4 text-end">
                         <!-- Action Buttons -->
-                        <button type="button" class="btn btn-primary addBranchLink">Add New</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Branch")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printBranches()">Print</button>
+                        <button type="button" class="btn btn-primary addBranchLink">@Localizer["lbl_AddNew"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Branch")'">@Localizer["lbl_Excel"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printBranches()">@Localizer["lbl_Print"]</button>
                     </div>
                 </div>
             </div>
@@ -140,27 +157,27 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Branch List</h5>
+            <h5 class="card-header">@Localizer["lbl_BranchList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                         <div class="col-10 col-md-10 col-lg-10">
                             <div class="row">
                                 <div class="col-8">
-                                    <p class="text-nowrap">Branch Name</p>
+                                    <p class="text-nowrap">@Localizer["lbl_BranchName"]</p>
                                 </div>
                                 <div class="col-4">
-                                    <p class="text-nowrap">Active</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Active"]</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-2 col-md-2 col-lg-2">
                             <div class="row">
                                 <div class="col-6">
-                                    <p class="text-nowrap">Edit</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="text-nowrap">Delete</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Delete"]</p>
                                 </div>
                             </div>
                         </div>

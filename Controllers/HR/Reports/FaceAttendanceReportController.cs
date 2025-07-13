@@ -5,24 +5,27 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Reports
 {
   public class FaceAttendanceReportController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<FaceAttendanceReportController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public FaceAttendanceReportController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public FaceAttendanceReportController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<FaceAttendanceReportController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
     {
@@ -60,7 +63,7 @@ _hubContext = hubContext;
       ViewBag.EmployeeName = EmployeeName;
 
       ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
-  
+
       return View("~/Views/HR/Reports/FaceAttendanceReport/FaceAttendanceReport.cshtml", faceAttendance);
     }
     [HttpGet]
@@ -157,7 +160,7 @@ _hubContext = hubContext;
         worksheet.Cells["E1"].Value = "Out Time";
         worksheet.Cells["F1"].Value = "D-Hours";
         worksheet.Cells["G1"].Value = "D-Minute";
-    
+
 
         for (int i = 0; i < FaceAttendance.Count; i++)
         {
@@ -165,7 +168,7 @@ _hubContext = hubContext;
           worksheet.Cells[i + 2, 2].Value = FaceAttendance[i].Employee?.FirstName + ' ' + FaceAttendance[i].Employee?.FatherName + ' ' + FaceAttendance[i].Employee?.FamilyName;
           worksheet.Cells[i + 2, 3].Value = FaceAttendance[i].MarkDate.ToString("dd/MMM/yyyy");
           worksheet.Cells[i + 2, 4].Value = FaceAttendance[i].InTime.ToString("hh:mm:ss");
-          worksheet.Cells[i + 2, 5].Value = FaceAttendance[i].OutTime.ToString("hh:mm:ss"); 
+          worksheet.Cells[i + 2, 5].Value = FaceAttendance[i].OutTime.ToString("hh:mm:ss");
           worksheet.Cells[i + 2, 6].Value = FaceAttendance[i].DHours;
           worksheet.Cells[i + 2, 7].Value = FaceAttendance[i].DMinutes;
         }

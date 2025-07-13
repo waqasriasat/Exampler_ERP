@@ -71,8 +71,10 @@ namespace Exampler_ERP.Models
     public DbSet<CR_FaceAttendancePosted> CR_FaceAttendancePosteds { get; set; }
     public DbSet<CR_AccessRightsByRole> CR_AccessRightsByRoles { get; set; }
     public DbSet<CR_AccessRightsByUser> CR_AccessRightsByUsers { get; set; }
-    public DbSet<HR_ThumbEnrollment> HR_ThumbEnrollments { get; set; }
     public DbSet<CR_User> CR_Users { get; set; }
+    public DbSet<CR_LanguageRecord> CR_LanguageRecords { get; set; }
+
+    public DbSet<HR_ThumbEnrollment> HR_ThumbEnrollments { get; set; }
     public DbSet<HR_DeductionSetup> HR_DeductionSetups { get; set; }
     public DbSet<HR_Employee> HR_Employees { get; set; }
     public DbSet<HR_Contract> HR_Contracts { get; set; }
@@ -141,7 +143,12 @@ namespace Exampler_ERP.Models
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-   
+      modelBuilder.Entity<CR_LanguageRecord>().HasData(
+      new CR_LanguageRecord() { LanguageRecordId = 1, LabelName = "", LabelValue = "", Culture = "" },
+      new CR_LanguageRecord() { LanguageRecordId = 2, LabelName = "", LabelValue = "", Culture = "" },
+      new CR_LanguageRecord() { LanguageRecordId = 3, LabelName = "", LabelValue = "", Culture = "" },
+      new CR_LanguageRecord() { LanguageRecordId = 4, LabelName = "", LabelValue = "", Culture = "" }
+   );
 
       modelBuilder.Entity<ST_Item>().HasData(
 new ST_Item() { ItemID = 1, ItemCode = "1001", ItemName = "A3 FLYER", ItemCategoryTypeID = 1, HasLotNumberAndExpiryDate = false, OpeningBalance = 0, FinalApprovalID = 1, ProcessTypeApprovalID = 0, ActiveYNID = 1, DeleteYNID = 0, BarCode = "0", BinLocation = "0", ManufacturerTypeID = 1, ReorderLevelMax = 0, ReorderLevelMin = 0, Specification = "0", UnitTypeID = 1 },

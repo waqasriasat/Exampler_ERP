@@ -5,24 +5,27 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Financial
 {
   public class WorkDayController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<WorkDayController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public WorkDayController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public WorkDayController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<WorkDayController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
     {
@@ -53,7 +56,7 @@ _hubContext = hubContext;
             .Contains(EmployeeName));
       }
 
-    
+
 
       var WorkDays = await query.ToListAsync();
 
@@ -63,7 +66,7 @@ _hubContext = hubContext;
       ViewBag.EmployeeName = EmployeeName;
 
       ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
-  
+
       return View("~/Views/HR/financial/WorkDay/WorkDay.cshtml", WorkDays);
     }
     [HttpGet]
@@ -71,7 +74,7 @@ _hubContext = hubContext;
     {
       // Load necessary data for dropdowns or lists
       ViewBag.EmployeesList = await _utils.GetEmployee();
-  
+
       // Find the WorkDay by ID
       var WorkDay = await _appDBContext.HR_WorkDays
                                          .Include(d => d.Employee)

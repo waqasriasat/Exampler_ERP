@@ -8,23 +8,26 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.EmployeePortal.Apply
 {
   public class EmployeeRequestController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<EmployeeRequestController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
-    
-    public EmployeeRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    private readonly IHubContext<NotificationHub> _hubContext;
+
+    public EmployeeRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeRequestController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index()
     {
@@ -56,7 +59,7 @@ _hubContext = hubContext;
     {
       if (ModelState.IsValid)
       {
-     
+
         _appDBContext.Update(EmployeeRequest);
         await _appDBContext.SaveChangesAsync();
         return Json(new { success = true });
@@ -79,7 +82,7 @@ _hubContext = hubContext;
       {
         EmployeeRequest.Date = DateTime.Now;
 
-    
+
         // Add the EmployeeRequest entry to the database
         _appDBContext.Add(EmployeeRequest);
         await _appDBContext.SaveChangesAsync();
@@ -192,7 +195,7 @@ _hubContext = hubContext;
         worksheet.Cells["C1"].Value = "EmployeeRequest Type";
         worksheet.Cells["D1"].Value = "Apply Date";
         worksheet.Cells["E1"].Value = "Notes";
-       
+
 
         for (int i = 0; i < EmployeeRequests.Count; i++)
         {
@@ -203,7 +206,7 @@ _hubContext = hubContext;
           : EmployeeRequestsList.FirstOrDefault(g => g.Value == EmployeeRequests[i].EmployeeRequestTypeID.ToString())?.Text;
           worksheet.Cells[i + 2, 4].Value = EmployeeRequests[i].Date.ToString("dd-MMM-yyyy");
           worksheet.Cells[i + 2, 5].Value = EmployeeRequests[i].Notes;
-          
+
 
         }
 

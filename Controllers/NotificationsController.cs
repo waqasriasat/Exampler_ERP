@@ -4,18 +4,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Localization;
+using Exampler_ERP.Controllers.MasterInfo;
 
 namespace Exampler_ERP.Controllers
 {
   public class NotificationsController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<NotificationsController> _localizer;
     private readonly IConfiguration _configuration;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public NotificationsController(AppDBContext appDBContext, IConfiguration configuration)
+    public NotificationsController(AppDBContext appDBContext, IConfiguration configuration, IHubContext<NotificationHub> hubContext, IStringLocalizer<NotificationsController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
+      _hubContext = hubContext;
+      _localizer = localizer;
     }
 
     public async Task<IActionResult> GetProcessNotifications()

@@ -1,5 +1,6 @@
 @model List<Exampler_ERP.Models.Temp.PurchaseRequestwithPurchaseOrderViewModel>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Purchase - Purchase Order";
 }
@@ -55,11 +56,15 @@
             $('#makePurchaseOrderModalContainer').on('click', '#saveChanges', function () {
                 var formData = $('#makePurchaseOrderForm').serialize();
                 $.post('@Url.Action("MakeOrder", "PurchaseOrder")', formData, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        
-                    }
+                  if (response.success) {
+                            $('#makePurchaseOrderModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "PurchaseOrder")', function (partialHtml) {
+                                var html = $(partialHtml).find('#PurchaseOrderListContainer').html();
+                                $('#PurchaseOrderListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -67,15 +72,16 @@
                 $('#makePurchaseOrderModal').modal('hide');
             });
 
-            $('.deletePurchaseOrderLink').click(function (e) {
+          $('#PurchaseOrderListContainer').on('click', '.deletePurchaseOrderLink', function (e) {
                 e.preventDefault();
                 var PurchaseOrderId = $(this).data('id');
                 $.post('@Url.Action("Delete", "PurchaseOrder")', { id: PurchaseOrderId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        
-                    }
+                   if (response.success) {
+                    $.get('@Url.Action("Index", "PurchaseOrder")', function (partialHtml) {
+                      var html = $(partialHtml).find('#PurchaseOrderListContainer').html();
+                      $('#PurchaseOrderListContainer').html(html);
+                    });
+                  }
                 });
             });
 
@@ -125,7 +131,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Searching Box</h5>
+            <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
                     <div class="col-md-8" style="padding-bottom: 15px;">
@@ -138,8 +144,8 @@
                     </div>
                     <div class="col-md-4 text-end">
                         <button type="button" class="btn btn-primary makePurchaseOrderLink">Make Purchase Order</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "PurchaseOrder")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printListPurchaseOrderes()">Print</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "PurchaseOrder")'">@Localizer["lbl_Excel"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printListPurchaseOrderes()">@Localizer["lbl_Print"]</button>
                     </div>
                 </div>
             </div>

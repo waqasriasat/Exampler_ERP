@@ -7,26 +7,29 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Localization;
 
 
 namespace Exampler_ERP.Controllers.Setup
 {
-    public class AccessRightsByRoleController : Controller
+  public class AccessRightsByRoleController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<AccessRightsByRoleController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AccessRightsByRoleController> _logger;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public AccessRightsByRoleController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AccessRightsByRoleController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
+    public AccessRightsByRoleController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AccessRightsByRoleController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<AccessRightsByRoleController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchRoleName)
     {
@@ -121,7 +124,7 @@ _hubContext = hubContext;
 };
 
       ViewBag.AccessRoleList = await _appDBContext.CR_AccessRightsByRoles
-         .Select(r => new 
+         .Select(r => new
          {
            r.ActionSOR,
            r.ActionName,
@@ -135,17 +138,17 @@ _hubContext = hubContext;
 
          })
          .ToListAsync();
-     
+
 
       return PartialView("~/Views/Setup/AccessRightsByRole/EditAccessRightsByRole.cshtml", accessRightsByRoles);
     }
     public async Task<IActionResult> GetRoleRow(string actionSOR)
     {
-     var data = await _appDBContext.CR_AccessRightsByRoles
-          .Where(u => u.ActionSOR.ToString() == actionSOR)
-          .FirstOrDefaultAsync();
+      var data = await _appDBContext.CR_AccessRightsByRoles
+           .Where(u => u.ActionSOR.ToString() == actionSOR)
+           .FirstOrDefaultAsync();
 
-     if (data == null)
+      if (data == null)
       {
         return Json(new { success = false, message = "No data found" });
       }
@@ -200,7 +203,7 @@ _hubContext = hubContext;
               {
                 if (propertyInfo.PropertyType == typeof(int?))
                 {
-                  propertyInfo.SetValue(setup, 1); 
+                  propertyInfo.SetValue(setup, 1);
                 }
 
                 _appDBContext.Entry(setup).Property(roleTypeColumnName).IsModified = true;
@@ -249,7 +252,7 @@ _hubContext = hubContext;
           var propertyInfo = setup.GetType().GetProperty(roleTypeProperty);
           if (propertyInfo != null && propertyInfo.CanWrite)
           {
-            propertyInfo.SetValue(setup, 0); 
+            propertyInfo.SetValue(setup, 0);
           }
 
           _appDBContext.Entry(setup).Property(roleTypeProperty).IsModified = true;
@@ -273,7 +276,7 @@ _hubContext = hubContext;
 
       var ProcessTypeApprovalSetups = await _appDBContext.CR_ProcessTypeApprovalSetups
       .Distinct()
-      .Include(d => d.ProcessType) 
+      .Include(d => d.ProcessType)
       .ToListAsync();
 
 

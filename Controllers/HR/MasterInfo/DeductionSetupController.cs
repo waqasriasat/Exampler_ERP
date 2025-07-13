@@ -7,24 +7,27 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
-   public class DeductionSetupController : Controller
+  public class DeductionSetupController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<DeductionSetupController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public DeductionSetupController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public DeductionSetupController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<DeductionSetupController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchDeductionTypeName)
     {
@@ -68,7 +71,7 @@ _hubContext = hubContext;
     // Add the Edit action
     public async Task<IActionResult> Edit(int id)
     {
-      var classIDList =  await _utils.GetClassIDList();
+      var classIDList = await _utils.GetClassIDList();
       var deductionValueList = await _utils.GetDeductionValueList();
 
       var deductionSetups = await _appDBContext.HR_DeductionSetups
@@ -145,7 +148,7 @@ _hubContext = hubContext;
       _appDBContext.HR_DeductionSetups.AddRange(newSetups);
       await _appDBContext.SaveChangesAsync();
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Deduction setup updated successfully.");
-      return Json(new { success = true});
+      return Json(new { success = true });
     }
 
     public async Task<IActionResult> Delete(int id)
@@ -159,18 +162,18 @@ _hubContext = hubContext;
         if (!deductionSetups.Any())
         {
           await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Deduction setups not found.");
-          return Json(new { success = false});
+          return Json(new { success = false });
         }
 
         _appDBContext.HR_DeductionSetups.RemoveRange(deductionSetups);
         await _appDBContext.SaveChangesAsync();
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Deduction setups deleted successfully.");
-        return Json(new { success = true});
+        return Json(new { success = true });
       }
       catch (Exception ex)
       {
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error Updating Deduction setups. Please check the inputs.");
-        return Json(new { success = false});
+        return Json(new { success = false });
       }
     }
 

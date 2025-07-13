@@ -9,26 +9,29 @@ using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using System.Configuration;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 {
   public class MaterialRequisitionController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<MaterialRequisitionController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    
 
-    public MaterialRequisitionController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+
+    public MaterialRequisitionController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<MaterialRequisitionController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
+
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -116,10 +119,10 @@ _hubContext = hubContext;
           };
 
           _appDBContext.ST_MaterialRequisitionStatuss.Add(MaterialRequisitionStatus);
-    
+
           await _appDBContext.SaveChangesAsync();
 
-          
+
           if (RequisitionID > 0)
           {
             var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
@@ -128,7 +131,7 @@ _hubContext = hubContext;
 
             if (processCount > 0)
             {
-              
+
               var newProcessTypeApproval = new CR_ProcessTypeApproval
               {
                 ProcessTypeID = 20,
@@ -224,7 +227,7 @@ _hubContext = hubContext;
       if (MaterialRequisitions.RequisitionStatusTypeID != 1)
       {
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "After approval, editing is not allowed.....");
-        
+
       }
 
       MaterialRequisitions.MaterialRequisitionDetails.Add(new ST_MaterialRequisitionDetail()
@@ -247,7 +250,7 @@ _hubContext = hubContext;
     {
       if (ModelState.IsValid)
       {
-        
+
         var existingMaterialRequisition = await _appDBContext.ST_MaterialRequisitions
             .Include(v => v.MaterialRequisitionDetails)
             .FirstOrDefaultAsync(v => v.RequisitionID == MaterialRequisition.MaterialRequisitions.RequisitionID);
@@ -308,7 +311,7 @@ _hubContext = hubContext;
         return NotFound();
       }
 
-    
+
       MaterialRequisitions.MaterialRequisitionDetails.Add(new ST_MaterialRequisitionDetail()
       {
         RequisitionID = MaterialRequisitions.RequisitionID

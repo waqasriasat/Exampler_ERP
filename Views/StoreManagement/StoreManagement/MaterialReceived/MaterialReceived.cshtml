@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.ST_MaterialReceived>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Store Management - Material Received";
 }
@@ -11,7 +12,7 @@
     <script>
         $(document).ready(function () {
             // Edit MaterialReceived modal popup
-            $('.editMaterialReceivedLink').click(function (e) {
+            $('#BranchListContainer').on('click', '.editBranchLink', function (e) {
                 e.preventDefault();
                 var MaterialReceivedId = $(this).data('id');
                 $.get('@Url.Action("Edit", "MaterialReceived")', { id: MaterialReceivedId }, function (data) {
@@ -25,12 +26,15 @@
             $('#editMaterialReceivedModalContainer').on('click', '#saveChanges', function () {
                 var formData = $('#editMaterialReceivedForm').serialize();
                 $.post('@Url.Action("Edit", "MaterialReceived")', formData, function (response) {
-                    if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
-                        
-                    } else {
-                        showError
-                    }
+                  if (response.success) {
+                            $('#editBranchModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "Branch")', function (partialHtml) {
+                                var html = $(partialHtml).find('#BranchListContainer').html();
+                                $('#BranchListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -47,12 +51,15 @@
             $('#addMaterialReceivedModalContainer').on('click', '#saveNewMaterialReceived', function () {
                 var formData = $('#addMaterialReceivedForm').serialize();
                 $.post('@Url.Action("Create", "MaterialReceived")', formData, function (response) {
-                    if (response.success) {
-                        $('#addMaterialReceivedModal').modal('hide');
-                        
-                    } else {
-                        showError
-                    }
+                     if (response.success) {
+                            $('#addBranchModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "Branch")', function (partialHtml) {
+                                var html = $(partialHtml).find('#BranchListContainer').html();
+                                $('#BranchListContainer').html(html);
+                            });
+                        }
                         });
             });
 
@@ -74,12 +81,15 @@
             $('#addMaterialReceivedViaPOModalContainer').on('click', '#saveNewMaterialReceived', function () {
                 var formData = $('#addMaterialReceivedViaPOForm').serialize();
                 $.post('@Url.Action("CreateViaPO", "MaterialReceived")', formData, function (response) {
-                    if (response.success) {
-                        $('#addMaterialReceivedViaPOModal').modal('hide');
-                        
-                    } else {
-                        showError
-                    }
+                  if (response.success) {
+                            $('#addBranchModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "Branch")', function (partialHtml) {
+                                var html = $(partialHtml).find('#BranchListContainer').html();
+                                $('#BranchListContainer').html(html);
+                            });
+                        }
                         });
             });
 
@@ -95,15 +105,16 @@
             });
 
             // Delete MaterialReceived
-            $('.deleteMaterialReceivedLink').click(function (e) {
+           $('#BranchListContainer').on('click', '.deleteBranchLink', function (e) {
                 e.preventDefault();
                 var MaterialReceivedId = $(this).data('id');
                 $.post('@Url.Action("Delete", "MaterialReceived")', { id: MaterialReceivedId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+                     if (response.success) {
+                    $.get('@Url.Action("Index", "Branch")', function (partialHtml) {
+                      var html = $(partialHtml).find('#BranchListContainer').html();
+                      $('#BranchListContainer').html(html);
+                    });
+                  }
                 });
             });
 
@@ -139,7 +150,7 @@
     <div class="col-md-12">
 
         <div class="card">
-            <h5 class="card-header">Searching Box</h5>
+            <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
                     <div class="col-md-8" style="padding-bottom: 15px;">
@@ -154,9 +165,9 @@
                     <div class="col-md-4 text-end">
                         <!-- Action Buttons -->
                         <button type="button" class="btn btn-primary addMaterialReceivedViaPOLink">Add Via PO</button>
-                        <button type="button" class="btn btn-primary addMaterialReceivedLink">Add New</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "MaterialReceived")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printMaterialReceivedes()">Print</button>
+                        <button type="button" class="btn btn-primary addMaterialReceivedLink">@Localizer["lbl_AddNew"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "MaterialReceived")'">@Localizer["lbl_Excel"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printMaterialReceivedes()">@Localizer["lbl_Print"]</button>
                     </div>
                 </div>
             </div>
@@ -188,7 +199,7 @@
                             </div>
                         </div>
                         <div class="col-2 col-md-1 col-lg-1">
-                            <p class="text-nowrap">Edit</p>
+                            <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                         </div>
                     </div>
                 </div>

@@ -9,26 +9,29 @@ using Microsoft.AspNetCore.SignalR;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using System.Configuration;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Purchase.Management
 {
   public class PurchaseRequestController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<PurchaseRequestController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    
 
-    public PurchaseRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+
+    public PurchaseRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<PurchaseRequestController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
+
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -355,7 +358,7 @@ _hubContext = hubContext;
         return NotFound();
       }
 
- 
+
       ViewBag.ItemList = await _utils.GetItemList();
       ViewBag.ItemNameList = await _utils.GetItemList();
       ViewBag.ItemUnitList = await _utils.GetItemUnits();

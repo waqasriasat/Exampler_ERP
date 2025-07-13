@@ -8,23 +8,26 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.EmployeePortal.Apply
 {
   public class VacationController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<VacationController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
-    
-    public VacationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    private readonly IHubContext<NotificationHub> _hubContext;
+
+    public VacationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<VacationController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index()
     {
@@ -70,7 +73,7 @@ _hubContext = hubContext;
     public async Task<IActionResult> Create()
     {
       ViewBag.VacationTypeList = await _utils.GetVacationTypes();
- 
+
       return PartialView("~/Views/EmployeePortal/Apply/Vacation/AddVacation.cshtml", new HR_Vacation());
     }
 
@@ -192,13 +195,13 @@ _hubContext = hubContext;
       var employeeID = HttpContext.Session.GetInt32("EmployeeID");
 
       var vacations = await _appDBContext.HR_Vacations
-                                   .Where(v => employeeID != null && v.EmployeeID == employeeID && v.DeleteYNID !=1)
+                                   .Where(v => employeeID != null && v.EmployeeID == employeeID && v.DeleteYNID != 1)
                                    .OrderByDescending(v => v.VacationID)
                                    .Include(c => c.Employee)
                                     .Include(c => c.Settings_VacationType)
                                    .ToListAsync();
 
-    
+
       var vacationTypesList = await _utils.GetVacationTypes();
       using (var package = new ExcelPackage())
       {
@@ -211,7 +214,7 @@ _hubContext = hubContext;
         worksheet.Cells["E1"].Value = "Start Date";
         worksheet.Cells["F1"].Value = "End Date";
         worksheet.Cells["G1"].Value = "Total Days";
-       
+
         for (int i = 0; i < vacations.Count; i++)
         {
           worksheet.Cells[i + 2, 1].Value = vacations[i].VacationID;
@@ -223,7 +226,7 @@ _hubContext = hubContext;
           worksheet.Cells[i + 2, 5].Value = vacations[i].StartDate.ToString("dd-MMM-yyyy");
           worksheet.Cells[i + 2, 6].Value = vacations[i].EndDate.ToString("dd-MMM-yyyy");
           worksheet.Cells[i + 2, 7].Value = vacations[i].TotalDays;
-          
+
         }
 
         worksheet.Cells["B1:G1"].Style.Font.Bold = true;

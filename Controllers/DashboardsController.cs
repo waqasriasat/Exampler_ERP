@@ -6,23 +6,26 @@ using Exampler_ERP.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Localization;
 
 namespace AspnetCoreMvcFull.Controllers;
 
 public class DashboardsController : Controller
 {
   private readonly AppDBContext _appDBContext;
+  private readonly IStringLocalizer<DashboardsController> _localizer;
   private readonly IConfiguration _configuration;
   private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+  private readonly IHubContext<NotificationHub> _hubContext;
 
-  public DashboardsController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+  public DashboardsController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<DashboardsController> localizer)
   {
     _appDBContext = appDBContext;
     _configuration = configuration;
     _utils = utils;
-_hubContext = hubContext;
- 
+    _hubContext = hubContext;
+    _localizer = localizer;
+
   }
   public async Task<IActionResult> Index()
   {
@@ -52,6 +55,6 @@ _hubContext = hubContext;
 
   }
 
- 
+
 
 }

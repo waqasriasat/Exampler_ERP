@@ -30,5 +30,7 @@ namespace Exampler_ERP.Models
     public int? FlexibleDutyHourID { get; set; } = 1;
 
     public int? WorkingDayInWeek { get; set; } = 5;
+
+    public string? CultureSetting { get; set; }
   }
 }

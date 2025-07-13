@@ -5,40 +5,43 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Exampler_ERP.Utilities;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
   public class CardPrintController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<CardPrintController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly ILogger<CardPrintController> _logger;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public CardPrintController(AppDBContext appDBContext, IConfiguration configuration, ILogger<CardPrintController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
+    public CardPrintController(AppDBContext appDBContext, IConfiguration configuration, ILogger<CardPrintController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<CardPrintController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
 
     public async Task<IActionResult> Index(int? id)
     {
       var employeeCards = from emp in _appDBContext.HR_Employees
-                                      join con in _appDBContext.HR_Contracts
-                                         on emp.EmployeeID equals con.EmployeeID
-                                         where con.ActiveYNID == 1 && emp.ActiveYNID == 1
-                                         select new
-                                         {
-                                           emp.EmployeeID,
-                                           emp.FirstName,
-                                           emp.FatherName,
-                                           emp.FamilyName
-                                         };
+                          join con in _appDBContext.HR_Contracts
+                             on emp.EmployeeID equals con.EmployeeID
+                          where con.ActiveYNID == 1 && emp.ActiveYNID == 1
+                          select new
+                          {
+                            emp.EmployeeID,
+                            emp.FirstName,
+                            emp.FatherName,
+                            emp.FamilyName
+                          };
 
       if (id.HasValue)
       {

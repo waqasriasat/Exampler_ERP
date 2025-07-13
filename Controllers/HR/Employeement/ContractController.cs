@@ -8,32 +8,35 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
   public class ContractController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<ContractController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    
 
-    public ContractController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+
+    public ContractController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ContractController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
-      
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
+
     }
 
     public async Task<IActionResult> Index(int? id)
     {
       var contractQuery = _appDBContext.HR_Contracts
-          .Where(c => c.DeleteYNID != 1); 
+          .Where(c => c.DeleteYNID != 1);
 
       if (id.HasValue)
       {
@@ -52,7 +55,7 @@ _hubContext = hubContext;
 
       return View("~/Views/HR/Employeement/Contract/Contract.cshtml", contracts);
     }
-  
+
     public async Task<IActionResult> Contract()
     {
       var contracts = await _appDBContext.HR_Contracts.ToListAsync();
@@ -79,7 +82,7 @@ _hubContext = hubContext;
     {
       if (ModelState.IsValid)
       {
-       
+
         if (contract.ContractID == 2)
         {
           contract.EndDate = null;
@@ -107,10 +110,10 @@ _hubContext = hubContext;
     {
       if (ModelState.IsValid)
       {
-       
+
         contract.DeleteYNID = 0;
         contract.ActiveYNID = 2;
-        if(contract.ContractID == 2)
+        if (contract.ContractID == 2)
         {
           contract.EndDate = null;
         }

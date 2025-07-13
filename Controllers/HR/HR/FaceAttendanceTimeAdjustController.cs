@@ -5,24 +5,27 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
   public class FaceAttendanceTimeAdjustController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<FaceAttendanceTimeAdjustController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public FaceAttendanceTimeAdjustController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public FaceAttendanceTimeAdjustController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<FaceAttendanceTimeAdjustController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
     {
@@ -125,10 +128,10 @@ _hubContext = hubContext;
 
 
         //if(FaceAttendance.InTime != null && FaceAttendance.OutTime != null)
-        { 
-        var duration = FaceAttendance.OutTime - FaceAttendance.InTime;
-        FaceAttendance.DHours = (int)duration.TotalHours;
-        FaceAttendance.DMinutes = duration.Minutes;
+        {
+          var duration = FaceAttendance.OutTime - FaceAttendance.InTime;
+          FaceAttendance.DHours = (int)duration.TotalHours;
+          FaceAttendance.DMinutes = duration.Minutes;
         }
 
         _appDBContext.CR_FaceAttendances.Add(FaceAttendance);

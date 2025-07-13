@@ -5,24 +5,27 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
   public class AddionalAllowanceTypeController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<AddionalAllowanceTypeController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public AddionalAllowanceTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public AddionalAllowanceTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<AddionalAllowanceTypeController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchAddionalAllowanceTypeName)
     {
@@ -45,7 +48,7 @@ _hubContext = hubContext;
 
       return View("~/Views/HR/MasterInfo/AddionalAllowanceType/AddionalAllowanceType.cshtml", AddionalAllowanceTypes);
     }
-  
+
     public async Task<IActionResult> AddionalAllowanceType()
     {
       var AddionalAllowanceTypes = await _appDBContext.Settings_AddionalAllowanceTypes.ToListAsync();

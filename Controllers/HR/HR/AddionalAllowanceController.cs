@@ -7,27 +7,30 @@ using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR;
 using Exampler_ERP.Hubs;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
   public class AddionalAllowanceController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<AddionalAllowanceController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AddionalAllowanceController> _logger;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    
-    public AddionalAllowanceController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AddionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
+
+    public AddionalAllowanceController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AddionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<AddionalAllowanceController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-_hubContext = hubContext;
- 
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
+
     }
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
     {
@@ -74,7 +77,7 @@ _hubContext = hubContext;
     {
       var allowance = await _appDBContext.HR_AddionalAllowances
           .Include(a => a.AddionalAllowanceDetails)
-          .FirstOrDefaultAsync(a => a.AddionalAllowanceID == id );
+          .FirstOrDefaultAsync(a => a.AddionalAllowanceID == id);
 
       if (allowance == null)
       {
@@ -85,9 +88,9 @@ _hubContext = hubContext;
         //await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "This deduction has already been posted to the Payroll Department and cannot be edited..");
         return NotFound();
       }
-       ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
-          .Select(r => new { Value = r.AddionalAllowanceTypeID, Text = r.AddionalAllowanceTypeName })
-          .ToListAsync();
+      ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
+         .Select(r => new { Value = r.AddionalAllowanceTypeID, Text = r.AddionalAllowanceTypeName })
+         .ToListAsync();
 
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.MonthsList = await _utils.GetMonthsTypes();

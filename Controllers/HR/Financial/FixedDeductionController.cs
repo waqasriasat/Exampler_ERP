@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.SignalR;
 using System.Diagnostics.Contracts;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Exampler_ERP.Controllers.HR.HR;
+using Microsoft.Extensions.Localization;
 
 
 namespace Exampler_ERP.Controllers.HR.Financial
@@ -15,21 +16,23 @@ namespace Exampler_ERP.Controllers.HR.Financial
   public class FixedDeductionController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<FixedDeductionController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AddionalAllowanceController> _logger;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    
-    public FixedDeductionController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AddionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
+
+    public FixedDeductionController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AddionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<FixedDeductionController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-_hubContext = hubContext;
- 
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
+
     }
     public async Task<IActionResult> Index(int? id)
     {
@@ -105,7 +108,7 @@ _hubContext = hubContext;
         else
         {
           await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Employees Not Found.");
-          return NotFound(); 
+          return NotFound();
         }
       }
 
@@ -233,7 +236,7 @@ _hubContext = hubContext;
                 _appDBContext.HR_FixedDeductions.Update(FixedDeduction);
                 await _appDBContext.SaveChangesAsync();
                 await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Fixed Deduction created successfully. No process setup found, Fixed Deduction activated.");
-                return Json(new { success = true});
+                return Json(new { success = true });
               }
             }
           }
@@ -244,7 +247,7 @@ _hubContext = hubContext;
         {
           await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error updating FixedDeductionDetails. " + ex);
           _logger.LogError(ex, "Error updating FixedDeductionDetails");
-          return Json(new { success = false});
+          return Json(new { success = false });
         }
       }
 

@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.EmployeeListViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Finance - Fixed Deduction";
 }
@@ -8,7 +9,7 @@
 
     <script>
         $(document).ready(function () {
-            $('.editFixedDeductionLink').click(function (e) {
+           $('#FixedDeductionListContainer').on('click', '.editFixedDeductionLink', function (e) {
                 e.preventDefault();
                 var FixedDeductionTypeId = $(this).data('id');
                 $.get('@Url.Action("Edit", "FixedDeduction")', { id: FixedDeductionTypeId }, function (data) {
@@ -22,11 +23,14 @@
                 console.log("Serialized form data:", formData); // Log serialized data for debugging
                 $.post('@Url.Action("Edit", "FixedDeduction")', formData, function (response) {
                     if (response.success) {
-                        $('#editFixedDeductionModal').modal('hide');
-                         // Reload the page to reflect changes
-                    } else {
-                        showError
-                    }
+                            $('#editFixedDeductionModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "FixedDeduction")', function (partialHtml) {
+                                var html = $(partialHtml).find('#FixedDeductionListContainer').html();
+                                $('#FixedDeductionListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -38,15 +42,16 @@
 
 
             // Delete FixedDeduction
-            $('.deleteFixedDeductionLink').click(function (e) {
+           $('#FixedDeductionListContainer').on('click', '.deleteFixedDeductionLink', function (e) {
                 e.preventDefault();
                 var FixedDeductionId = $(this).data('id');
                 $.post('@Url.Action("Delete", "FixedDeduction")', { id: FixedDeductionId }, function (response) {
                     if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+                    $.get('@Url.Action("Index", "FixedDeduction")', function (partialHtml) {
+                      var html = $(partialHtml).find('#FixedDeductionListContainer').html();
+                      $('#FixedDeductionListContainer').html(html);
+                    });
+                  }
                 });
             });
 
@@ -106,7 +111,7 @@
 <div class="row">
         <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Searching Box</h5>
+            <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
                     <div class="col-md-8" style="padding-bottom: 15px;">
@@ -147,40 +152,15 @@
                         <div class="col-2 col-md-1 col-lg-1">
                             <div class="row">
                                 <div class="col-12">
-                                    <p class="text-nowrap">Edit</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model.EmployeeCount)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-11 col-lg-11">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@Html.DisplayFor(modelItem => item.EmployeeName)</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <p class="text-nowrap"><span class="smallAdd">Type Count : </span>@Html.DisplayFor(modelItem => item.TypeCount)</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-1 col-lg-1">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-12">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editFixedDeductionLink" data-id="@item.EmployeeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+                <div id="FixedDeductionListContainer">
+                    @Html.Partial("~/Views/HR/FixedDeduction/FixedDeduction/_FixedDeductionListPartial.cshtml", Model)
+                </div>
             </div>
         </div>
     </div>

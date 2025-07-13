@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.Settings_OverTimeRate>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Master Information - Over Time Rate";
 }
@@ -97,13 +98,13 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Master Information /</span> Over Time Rate
+    <span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> Over Time Rate
 </h4>
 <div class="row">
     <div class="col-md-12">
 
         <div class="card">
-            <h5 class="card-header">Searching Box</h5>
+            <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
                     <div class="col-md-8" style="padding-bottom: 15px;">
@@ -117,9 +118,9 @@
                     </div>
                     <div class="col-md-4 text-end">
                         <!-- Action Buttons -->
-                       <button type="button" class="btn btn-primary addOverTimeRateLink">Add New</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "OverTimeRate")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printOverTimeRates()">Print</button>
+                       <button type="button" class="btn btn-primary addOverTimeRateLink">@Localizer["lbl_AddNew"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "OverTimeRate")'">@Localizer["lbl_Excel"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printOverTimeRates()">@Localizer["lbl_Print"]</button>
                     </div>
                 </div>
             </div>
@@ -140,17 +141,17 @@
                                     <p class="text-nowrap">Over Time Rate Value</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Active</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Active"]</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-2 col-md-2 col-lg-2">
                             <div class="row">
                                 <div class="col-6">
-                                    <p class="text-nowrap">Edit</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="text-nowrap">Delete</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Delete"]</p>
                                 </div>
                             </div>
                         </div>

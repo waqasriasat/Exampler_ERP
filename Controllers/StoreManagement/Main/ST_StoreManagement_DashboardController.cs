@@ -4,25 +4,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.StoreManagement.Main
 {
   public class ST_StoreManagement_DashboardController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<ST_StoreManagement_DashboardController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
 
-    public ST_StoreManagement_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public ST_StoreManagement_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ST_StoreManagement_DashboardController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index()
     {
@@ -37,7 +40,7 @@ _hubContext = hubContext;
       ViewBag.ProcurementQueueCount = await _appDBContext.PR_ProcurementQueues
     .Include(d => d.Item)
     .Where(d => d.ForwardYNID == 0)
-    .CountAsync(); 
+    .CountAsync();
       //ViewBag.BankAccountCount = await _appDBContext.HR_BankAccounts.CountAsync();
       //ViewBag.ContractRenewwalCount = await _appDBContext.HR_ContractRenewals.CountAsync();
       //ViewBag.LeaveBalanceCount = await _appDBContext.leave.CountAsync();

@@ -5,25 +5,28 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Exampler_ERP.Utilities;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
   public class JoiningController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<JoiningController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly ILogger<JoiningController> _logger;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public JoiningController(AppDBContext appDBContext, IConfiguration configuration, ILogger<JoiningController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
+    public JoiningController(AppDBContext appDBContext, IConfiguration configuration, ILogger<JoiningController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<JoiningController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(int? id) // EmployeeID
     {

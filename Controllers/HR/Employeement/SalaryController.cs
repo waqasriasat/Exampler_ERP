@@ -11,27 +11,30 @@ using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using System.Diagnostics.Contracts;
 using Contract = Exampler_ERP.Models.HR_Contract;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
-   public class SalaryController : Controller
+  public class SalaryController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<SalaryController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly ILogger<SalaryController> _logger;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    
-    public SalaryController(AppDBContext appDBContext, IConfiguration configuration, ILogger<SalaryController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
+
+    public SalaryController(AppDBContext appDBContext, IConfiguration configuration, ILogger<SalaryController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<SalaryController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-_hubContext = hubContext;
- 
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
+
     }
     public async Task<IActionResult> Index(int? id) // EmployeeID
     {
@@ -116,7 +119,7 @@ _hubContext = hubContext;
           .Select(r => new { Value = r.SalaryTypeID, Text = r.SalaryTypeName })
           .ToListAsync();
 
-   
+
       return PartialView("~/Views/HR/Employeement/Salary/EditSalary.cshtml", SalaryDetails);
 
     }
@@ -232,7 +235,7 @@ _hubContext = hubContext;
                 _appDBContext.HR_Salarys.Update(salary);
                 await _appDBContext.SaveChangesAsync();
                 await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Salary Created successfully. No process setup found, Salary activated.");
-                return Json(new { success = true});
+                return Json(new { success = true });
               }
             }
           }
@@ -336,7 +339,7 @@ _hubContext = hubContext;
       return PartialView("~/Views/HR/Employeement/Salary/EditSalary.cshtml", SalaryDetails);
     }
 
-   
+
 
   }
 }

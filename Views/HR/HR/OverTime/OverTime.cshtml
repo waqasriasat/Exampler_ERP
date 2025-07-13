@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.HR_OverTime>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "HR - Over Time";
 }
@@ -9,7 +10,7 @@
     <script>
         $(document).ready(function () {
             // Edit OverTime modal popup
-            $('.editOverTimeLink').click(function (e) {
+            $('#OverTimeListContainer').on('click', '.editOverTimeLink', function (e) {
                 e.preventDefault();
                 var OverTimeId = $(this).data('id');
                 $.get('@Url.Action("Edit", "OverTime")', { id: OverTimeId }, function (data) {
@@ -22,11 +23,14 @@
                 var formData = $('#editOverTimeForm').serialize();
                 $.post('@Url.Action("Edit", "OverTime")', formData, function (response) {
                     if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
-                        
-                    } else {
-                        showError
-                    }
+                            $('#editOverTimeModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "OverTime")', function (partialHtml) {
+                                var html = $(partialHtml).find('#OverTimeListContainer').html();
+                                $('#OverTimeListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -43,11 +47,14 @@
                 var formData = $('#addOverTimeForm').serialize();
                 $.post('@Url.Action("Create", "OverTime")', formData, function (response) {
                     if (response.success) {
-                        $('#addOverTimeModal').modal('hide');
-                         // Reload the page to reflect changes
-                    } else {
-                        showError
-                    }
+                            $('#addOverTimeModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "OverTime")', function (partialHtml) {
+                                var html = $(partialHtml).find('#OverTimeListContainer').html();
+                                $('#OverTimeListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -64,15 +71,16 @@
             });
 
             // Delete OverTime
-            $('.deleteOverTimeLink').click(function (e) {
+            $('#OverTimeListContainer').on('click', '.deleteOverTimeLink', function (e) {
                 e.preventDefault();
                 var OverTimeId = $(this).data('id');
                 $.post('@Url.Action("Delete", "OverTime")', { id: OverTimeId }, function (response) {
                     if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+                    $.get('@Url.Action("Index", "OverTime")', function (partialHtml) {
+                      var html = $(partialHtml).find('#OverTimeListContainer').html();
+                      $('#OverTimeListContainer').html(html);
+                    });
+                  }
                 });
             });
 
@@ -207,9 +215,9 @@
                         <div class="col-md-12 text-end">
                             <button type="submit" class="btn btn-primary">Search</button>
 
-                            <button type="button" class="btn btn-primary addOverTimeLink">Add New</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "OverTime")'">Excel</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="printOverTimes()">Print</button>
+                            <button type="button" class="btn btn-primary addOverTimeLink">@Localizer["lbl_AddNew"]</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "OverTime")'">@Localizer["lbl_Excel"]</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="printOverTimes()">@Localizer["lbl_Print"]</button>
 
                         </div>
                     </div>
@@ -252,62 +260,18 @@
                         <div class="col-2 col-md-1 col-lg-2">
                             <div class="row">
                                 <div class="col-6">
-                                    <p class="text-nowrap">Edit</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="text-nowrap">Delete</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Delete"]</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-11 col-lg-10">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-1">
-                                        <p class="text-nowrap"><span class="smallAdd">Month : </span>@item.MonthType?.MonthTypeName</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-1">
-                                        <p class="text-nowrap"><span class="smallAdd">Year : </span>@Html.DisplayFor(modelItem => item.Year)</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Total OverTime Days : </span>@Html.DisplayFor(modelItem => item.Days)</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Per Day Hours : </span>@Html.DisplayFor(modelItem => item.Hours)</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-1">
-                                        <p class="text-nowrap"><span class="smallAdd">Amount : </span>@Html.DisplayFor(modelItem => item.Amount)</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-1 col-lg-2">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editOverTimeLink" data-id="@item.OverTimeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteOverTimeLink" data-id="@item.OverTimeID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+                <div id="branchListContainer">
+                    @Html.Partial("~/Views/HR/HR/branch/_branchListPartial.cshtml", Model)
+                </div>
             </div>
         </div>
     </div>

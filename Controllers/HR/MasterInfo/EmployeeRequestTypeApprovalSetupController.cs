@@ -6,25 +6,28 @@ using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
   public class EmployeeRequestTypeApprovalSetupController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<EmployeeRequestTypeApprovalSetupController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly ILogger<EmployeeRequestTypeApprovalSetupController> _logger;
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public EmployeeRequestTypeApprovalSetupController(AppDBContext appDBContext, IConfiguration configuration, ILogger<EmployeeRequestTypeApprovalSetupController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
+    public EmployeeRequestTypeApprovalSetupController(AppDBContext appDBContext, IConfiguration configuration, ILogger<EmployeeRequestTypeApprovalSetupController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeRequestTypeApprovalSetupController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
       _hubContext = hubContext;
- 
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchEmployeeRequestTypeName)
     {
@@ -119,7 +122,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No data received.");
         _logger.LogWarning("No data received for edit.");
-        return Json(new { success = false});
+        return Json(new { success = false });
       }
 
       if (ModelState.IsValid)
@@ -155,7 +158,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         {
           await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "An error occurred while updating the data.");
           _logger.LogError(ex, "Error updating EmployeeRequestTypeApprovalSetups");
-          return Json(new { success = false});
+          return Json(new { success = false });
         }
       }
 

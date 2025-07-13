@@ -11,33 +11,36 @@ using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.AspNetCore.SignalR;
 using Exampler_ERP.Controllers.HR.HR;
 using Exampler_ERP.Hubs;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Financial
 {
   public class MonthlySalarySheetController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<MonthlySalarySheetController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AddionalAllowanceController> _logger;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    
 
-    public MonthlySalarySheetController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AddionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
+
+    public MonthlySalarySheetController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AddionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<MonthlySalarySheetController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-_hubContext = hubContext;
- 
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
+
     }
     public async Task<IActionResult> Index(int Branch, int MonthsTypeID = 10, int YearsTypeID = 1998)
     {
       var employeeList = await _appDBContext.HR_Employees
-          .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID==0)
+          .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID == 0)
           .ToListAsync();
 
       var salarySheets = new List<MonthlySalarySheetViewModel>();
@@ -50,7 +53,7 @@ _hubContext = hubContext;
       var salaryDataResults = await Task.WhenAll(tasks);
       salarySheets.AddRange(salaryDataResults);
 
-   
+
       ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
       ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
 
@@ -81,7 +84,7 @@ _hubContext = hubContext;
       var salarySheets = new List<MonthlySalarySheetViewModel>();
       var tasks = employeeList.Select(async employee =>
       {
-        var salaryData = await GetMonthlySalarySheetAsync(Branch,employee.EmployeeID, MonthsTypeID, YearsTypeID);
+        var salaryData = await GetMonthlySalarySheetAsync(Branch, employee.EmployeeID, MonthsTypeID, YearsTypeID);
         return salaryData;
       });
       var salaryDataResults = await Task.WhenAll(tasks);
@@ -98,8 +101,8 @@ _hubContext = hubContext;
     }
     private async Task<MonthlySalarySheetViewModel> GetMonthlySalarySheetAsync(int Branch, int employeeId, int month, int year)
     {
-     
-      
+
+
       var salarySheet = new MonthlySalarySheetViewModel
       {
         EmployeeID = employeeId
@@ -136,11 +139,11 @@ _hubContext = hubContext;
 
                 if (columnName == "EmployeeName")
                 {
-                  salarySheet.EmployeeName = value; 
+                  salarySheet.EmployeeName = value;
                 }
                 if (columnName == "BranchID")
                 {
-                  salarySheet.BranchID = int.Parse(value); 
+                  salarySheet.BranchID = int.Parse(value);
                 }
                 if (columnName == "MonthID")
                 {
@@ -148,11 +151,11 @@ _hubContext = hubContext;
                 }
                 if (columnName == "MonthName")
                 {
-                  salarySheet.MonthName = value; 
+                  salarySheet.MonthName = value;
                 }
                 if (columnName == "Year")
                 {
-                  salarySheet.Year = int.Parse(value); 
+                  salarySheet.Year = int.Parse(value);
                 }
 
                 // Process each column by category
@@ -220,7 +223,7 @@ _hubContext = hubContext;
 
         int PayrollPostedID = monthlyPayrollPosted.PayrollPostedID;
 
-        
+
 
         if (PayrollPostedID > 0)
         {
@@ -312,7 +315,7 @@ _hubContext = hubContext;
             await _appDBContext.SaveChangesAsync();
 
 
-            
+
 
 
 
@@ -417,8 +420,8 @@ _hubContext = hubContext;
       }
     }
     public async Task<IActionResult> Print(int Branch, int MonthsTypeID, int YearsTypeID)
-      {
-  
+    {
+
       var employeeList = await _appDBContext.HR_Employees
         .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID == Branch)
         .ToListAsync();

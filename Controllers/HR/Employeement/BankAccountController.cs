@@ -5,43 +5,46 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Exampler_ERP.Utilities;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
   public class BankAccountController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<BankAccountController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly ILogger<BankAccountController> _logger;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public BankAccountController(AppDBContext appDBContext, IConfiguration configuration, ILogger<BankAccountController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
+    public BankAccountController(AppDBContext appDBContext, IConfiguration configuration, ILogger<BankAccountController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<BankAccountController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(int? id)
     {
       var employeeBankAccountsQuery = from emp in _appDBContext.HR_Employees
-                                        join con in _appDBContext.HR_Contracts
-                                        on emp.EmployeeID equals con.EmployeeID
-                                        join bank in _appDBContext.HR_BankAccounts
-                                        on emp.EmployeeID equals bank.EmployeeID into joinGroup
-                                        from j in joinGroup.DefaultIfEmpty()
-                                        where con.ActiveYNID == 1 && emp.ActiveYNID == 1
-                                        select new
-                                        {
-                                          emp.EmployeeID,
-                                          emp.FirstName,
-                                          emp.FatherName,
-                                          emp.FamilyName,
-                                          BankName = j != null ? j.BankName : "N/A"
-                                        };
+                                      join con in _appDBContext.HR_Contracts
+                                      on emp.EmployeeID equals con.EmployeeID
+                                      join bank in _appDBContext.HR_BankAccounts
+                                      on emp.EmployeeID equals bank.EmployeeID into joinGroup
+                                      from j in joinGroup.DefaultIfEmpty()
+                                      where con.ActiveYNID == 1 && emp.ActiveYNID == 1
+                                      select new
+                                      {
+                                        emp.EmployeeID,
+                                        emp.FirstName,
+                                        emp.FatherName,
+                                        emp.FamilyName,
+                                        BankName = j != null ? j.BankName : "N/A"
+                                      };
 
       if (id.HasValue)
       {
@@ -91,11 +94,11 @@ _hubContext = hubContext;
             Employee = employee,
             AccountHolderName = "",
             AccountNumber = "",
-            BankName = "", 
-            BranchName = "", 
-            AccountType = "", 
-            BankContact = "", 
-            BankAddress = "" 
+            BankName = "",
+            BranchName = "",
+            AccountType = "",
+            BankContact = "",
+            BankAddress = ""
           };
 
           var BankAccounts = new List<HR_BankAccount> { newBankAccount };

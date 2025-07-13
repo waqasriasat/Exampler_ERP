@@ -6,28 +6,31 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
-   public class DesignationController : Controller
+  public class DesignationController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<DesignationController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public DesignationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public DesignationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<DesignationController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchDesignationName)
     {
-  
+
       var DesignationsQuery = _appDBContext.Settings_DesignationTypes
           .Where(b => b.DeleteYNID != 1);
 
@@ -46,7 +49,7 @@ _hubContext = hubContext;
 
       return View("~/Views/HR/MasterInfo/Designation/Designation.cshtml", Designations);
     }
-   
+
     public async Task<IActionResult> Designation()
     {
       var Designations = await _appDBContext.Settings_DesignationTypes.ToListAsync();

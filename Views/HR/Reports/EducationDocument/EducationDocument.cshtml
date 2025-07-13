@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.HR_Employee>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Reports - Education Document";
 }
@@ -83,7 +84,7 @@
     <div class="col-md-12">
 
         <div class="card">
-            <h5 class="card-header">Searching Box</h5>
+            <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
                     <div class="col-md-8" style="padding-bottom: 15px;">

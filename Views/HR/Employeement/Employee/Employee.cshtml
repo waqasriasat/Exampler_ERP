@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.HR_Employee>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "HR - Employee";
 }
@@ -286,7 +287,7 @@
     <div class="col-md-12">
 
         <div class="card">
-            <h5 class="card-header">Searching Box</h5>
+            <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
                     <div class="col-md-8" style="padding-bottom: 15px;">
@@ -301,9 +302,9 @@
                     </div>
                     <div class="col-md-4 text-end">
                         <!-- Action Buttons -->
-                        <button type="button" class="btn btn-primary addEmployeeLink">Add New</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Employee")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printEmployees()">Print</button>
+                        <button type="button" class="btn btn-primary addEmployeeLink">@Localizer["lbl_AddNew"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Employee")'">@Localizer["lbl_Excel"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printEmployees()">@Localizer["lbl_Print"]</button>
                     </div>
                 </div>
             </div>
@@ -327,7 +328,7 @@
                                     <p class="text-nowrap">Employee Name</p>
                                 </div>
                                 <div class="col-3">
-                                    <p class="text-nowrap">Active</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Active"]</p>
                                 </div>
                             </div>
                         </div>
@@ -349,7 +350,7 @@
                                     <p class="text-nowrap">Print</p>
                                 </div>
                                 <div class="col-12 col-md-12 col-lg-2">
-                                    <p class="text-nowrap">Delete</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Delete"]</p>
                                 </div>
                             </div>
                         </div>

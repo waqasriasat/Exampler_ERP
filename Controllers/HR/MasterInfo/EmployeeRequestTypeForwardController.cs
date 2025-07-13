@@ -6,25 +6,28 @@ using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
   public class EmployeeRequestTypeForwardController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<EmployeeRequestTypeForwardController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly ILogger<EmployeeRequestTypeForwardController> _logger;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public EmployeeRequestTypeForwardController(AppDBContext appDBContext, IConfiguration configuration, ILogger<EmployeeRequestTypeForwardController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
+    public EmployeeRequestTypeForwardController(AppDBContext appDBContext, IConfiguration configuration, ILogger<EmployeeRequestTypeForwardController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeRequestTypeForwardController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchEmployeeRequestTypeName)
     {
@@ -163,7 +166,7 @@ _hubContext = hubContext;
     {
       var setups = _appDBContext.HR_EmployeeRequestTypeForwards
         .Where(x => x.EmployeeRequestTypeID == id)
-        .ToList(); 
+        .ToList();
       if (setups == null)
       {
         return Json(new { success = false, message = "Setup not found" });
@@ -171,7 +174,7 @@ _hubContext = hubContext;
 
       _appDBContext.HR_EmployeeRequestTypeForwards.RemoveRange(setups);
       _appDBContext.SaveChanges();
-       _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Employee Request Type Forward deleted successfully.");
+      _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Employee Request Type Forward deleted successfully.");
       return Json(new { success = true });
     }
 

@@ -9,25 +9,28 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 using OfficeOpenXml;
 using System.Data;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
   public class ProcessTypeApprovalSetupController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<ProcessTypeApprovalSetupController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly ILogger<ProcessTypeApprovalSetupController> _logger;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ProcessTypeApprovalSetupController(AppDBContext appDBContext, IConfiguration configuration, ILogger<ProcessTypeApprovalSetupController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
+    public ProcessTypeApprovalSetupController(AppDBContext appDBContext, IConfiguration configuration, ILogger<ProcessTypeApprovalSetupController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ProcessTypeApprovalSetupController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchProcessTypeName)
     {
@@ -62,7 +65,7 @@ _hubContext = hubContext;
       return View("~/Views/HR/MasterInfo/ProcessTypeApprovalSetup/ProcessTypeApprovalSetup.cshtml", viewModel);
     }
 
-   
+
     public async Task<IActionResult> ProcessTypeApprovalSetup()
     {
       var ProcessTypeApprovalSetups = await _appDBContext.CR_ProcessTypeApprovalSetups.ToListAsync();
@@ -108,7 +111,7 @@ _hubContext = hubContext;
       return PartialView("~/Views/HR/MasterInfo/ProcessTypeApprovalSetup/EditProcessTypeApprovalSetup.cshtml", processTypeApprovalSetups);
     }
 
-   
+
 
     [HttpPost]
     public async Task<IActionResult> Edit(List<CR_ProcessTypeApprovalSetup> ProcessTypeApprovalSetups)
@@ -181,7 +184,7 @@ _hubContext = hubContext;
 
       _appDBContext.CR_ProcessTypeApprovalSetups.RemoveRange(setups);
       _appDBContext.SaveChanges();
-       _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Process Type Approval Setups deleted successfully.");
+      _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Process Type Approval Setups deleted successfully.");
       return Json(new { success = true });
     }
 
@@ -232,6 +235,6 @@ _hubContext = hubContext;
       .ToListAsync();
       return View("~/Views/HR/MasterInfo/ProcessTypeApprovalSetup/PrintProcessTypeApprovalSetups.cshtml", ProcessTypeApprovalSetups);
     }
-    
+
   }
 }

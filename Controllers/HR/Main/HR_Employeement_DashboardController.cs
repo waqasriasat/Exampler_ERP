@@ -4,25 +4,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Main
 {
   public class HR_Employeement_DashboardController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<HR_Employeement_DashboardController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
 
-    public HR_Employeement_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public HR_Employeement_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<HR_Employeement_DashboardController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index()
     {
@@ -35,7 +38,7 @@ _hubContext = hubContext;
       ViewBag.ContractRenewwalCount = await _appDBContext.HR_ContractRenewals.CountAsync();
       //ViewBag.LeaveBalanceCount = await _appDBContext.leave.CountAsync();
       //ViewBag.CardPrintCount = await _appDBContext.Card.CountAsync();
-    
+
       return View("~/Views/HR/Main/Dashboard/HR_Employeement_Dashboard.cshtml");
     }
   }

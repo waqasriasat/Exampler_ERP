@@ -4,25 +4,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Setup
 {
   public class StoreManagementGlobalSettingController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<StoreManagementGlobalSettingController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
     private readonly ILogger<StoreManagementGlobalSettingController> _logger;
 
-    public StoreManagementGlobalSettingController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, ILogger<StoreManagementGlobalSettingController> logger)
+    public StoreManagementGlobalSettingController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<StoreManagementGlobalSettingController> localizer, ILogger<StoreManagementGlobalSettingController> logger)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
       _logger = logger;
     }
     public async Task<IActionResult> Index()

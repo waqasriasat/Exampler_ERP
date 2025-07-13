@@ -5,28 +5,31 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Reports
 {
   public class EmployeeBioDataController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<EmployeeBioDataController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public EmployeeBioDataController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public EmployeeBioDataController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeBioDataController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(int? id)
     {
       var employeesQuery = _appDBContext.HR_Employees
-       .Where(c => c.DeleteYNID != 1 && c.FinalApprovalID==1);
+       .Where(c => c.DeleteYNID != 1 && c.FinalApprovalID == 1);
 
       if (id.HasValue)
       {

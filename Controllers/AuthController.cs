@@ -7,19 +7,22 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers
 {
   public class AuthController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<AuthController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly IHubContext<NotificationHub> _hubContext;
-    public AuthController(AppDBContext appDBContext, IConfiguration configuration, IHubContext<NotificationHub> hubContext)
+    public AuthController(AppDBContext appDBContext, IConfiguration configuration, IHubContext<NotificationHub> hubContext, IStringLocalizer<AuthController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _hubContext = hubContext;
+      _localizer = localizer;
     }
     [HttpGet]
     public IActionResult ForgotPassword() => View();
@@ -145,7 +148,7 @@ namespace Exampler_ERP.Controllers
       {
         HttpContext.Session.SetString("EmployeeDesignationName", "Unknown");
       }
-    
+
 
       return RedirectToAction("Index", "EmployeeDashboards");
     }
@@ -182,7 +185,7 @@ namespace Exampler_ERP.Controllers
       {
         HttpContext.Session.SetString("SupplierName", vendor.HeadofAccount_Five.HeadofAccount_FiveName);
       }
-  
+
 
 
       return RedirectToAction("Index", "SupplierDashboards");

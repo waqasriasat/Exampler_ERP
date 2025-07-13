@@ -5,23 +5,26 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
   public class ApplicantController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<ApplicantController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ApplicantController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public ApplicantController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ApplicantController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(int? id)
     {
@@ -178,7 +181,7 @@ _hubContext = hubContext;
         return NotFound();
       }
 
-    
+
       _appDBContext.HR_Applicants.Update(Applicant);
       await _appDBContext.SaveChangesAsync();
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Applicant deleted successfully.");

@@ -9,26 +9,29 @@ using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using System.Globalization;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
   public class VacationSettleController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<VacationSettleController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    
 
-    public VacationSettleController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+
+    public VacationSettleController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<VacationSettleController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
+
     }
     public async Task<IActionResult> Index(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? VacationTypeID)
     {
@@ -155,12 +158,12 @@ _hubContext = hubContext;
     {
       if (ModelState.IsValid)
       {
-     
+
         var vacationSettle = new HR_VacationSettle
         {
           VacationID = model.VacationID,
           SettleDays = model.SettleDays,
-          SettleAmount = model.SettleAmount, 
+          SettleAmount = model.SettleAmount,
         };
 
         _appDBContext.HR_VacationSettles.Add(vacationSettle);
@@ -263,12 +266,12 @@ _hubContext = hubContext;
             - (_appDBContext.HR_Vacations
                 .Where(vac => vac.EmployeeID == emp.Employee.EmployeeID
                               && vac.FinalApprovalID == 1
-                              && _appDBContext.HR_VacationSettles.Any(vs => vs.VacationID == vac.VacationID)) 
+                              && _appDBContext.HR_VacationSettles.Any(vs => vs.VacationID == vac.VacationID))
                 .Sum(vac => (int?)vac.TotalDays) ?? 0),
           })
           .FirstOrDefaultAsync();
 
-      
+
       var vacation = await _appDBContext.HR_Vacations
           .Where(v => v.VacationID == vacationID)
           .Select(v => new
@@ -279,7 +282,7 @@ _hubContext = hubContext;
             SettleDays = (VacationBalanceresult.VacationBalance < v.TotalDays)
                   ? VacationBalanceresult.VacationBalance
                   : v.TotalDays
-            
+
 
           })
           .FirstOrDefaultAsync();

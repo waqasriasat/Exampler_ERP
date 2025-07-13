@@ -10,26 +10,29 @@ using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using System.Configuration;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Purchase.Management
 {
   public class PurchaseOrderController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<PurchaseOrderController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    
 
-    public PurchaseOrderController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+
+    public PurchaseOrderController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<PurchaseOrderController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
+
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -41,7 +44,7 @@ _hubContext = hubContext;
                   join itm in _appDBContext.ST_Items
                   on pr.ItemID equals itm.ItemID
 
-                  
+
                   join rfq in _appDBContext.PR_RequestForQuotations on pr.PurchaseRequestID equals rfq.PurchaseRequestID into rfqs
                   from rfq in rfqs.DefaultIfEmpty()
 
@@ -85,7 +88,7 @@ _hubContext = hubContext;
     [HttpGet]
     public async Task<IActionResult> MakeOrder(List<int> ids)
     {
-      
+
       try
       {
         if (ids == null || !ids.Any())
@@ -107,7 +110,7 @@ _hubContext = hubContext;
             .Include(pr => pr.RequestStatusType)
             .ToList();
 
-        
+
         Console.WriteLine(list);
 
         if (!list.Any())
@@ -121,10 +124,10 @@ _hubContext = hubContext;
         ViewBag.PriorityLevelList = await _utils.GetPriorityLevel();
         ViewBag.VendorList = await _utils.GetVendorListbyPurchaseOrder(purchaseRequestId);
 
-        
+
         return PartialView("~/Views/Purchase/Management/PurchaseOrder/MakePurchaseOrder.cshtml", list);
       }
-      catch(Exception ex)
+      catch (Exception ex)
       {
         Console.WriteLine(ex); // or use logger
         return StatusCode(500, "An error occurred.");
@@ -187,55 +190,55 @@ _hubContext = hubContext;
                                   .Where(pta => pta.ProcessTypeID == 23)
                                   .CountAsync();
 
-          if (processCount > 0)
+        if (processCount > 0)
+        {
+          var newProcessTypeApproval = new CR_ProcessTypeApproval
           {
-            var newProcessTypeApproval = new CR_ProcessTypeApproval
+            ProcessTypeID = 23,
+            Notes = "Approval For Purchase Order",
+            Date = DateTime.Now,
+            UserID = userID,
+            EmployeeID = await _utils.PostUserIDGetEmployeeID(userID),
+            TransactionID = requestID
+          };
+
+          _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
+          await _appDBContext.SaveChangesAsync(); // Save to get ID for detail
+
+          var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
+                                      .FirstOrDefaultAsync(pta =>
+                                          pta.ProcessTypeID == 23 && pta.Rank == 1);
+
+          if (nextApprovalSetup != null)
+          {
+            var newDetail = new CR_ProcessTypeApprovalDetail
             {
-              ProcessTypeID = 23,
-              Notes = "Approval For Purchase Order",
+              ProcessTypeApprovalID = newProcessTypeApproval.ProcessTypeApprovalID,
               Date = DateTime.Now,
-              UserID = userID,
-              EmployeeID = await _utils.PostUserIDGetEmployeeID(userID),
-              TransactionID = requestID
+              RoleID = nextApprovalSetup.RoleTypeID,
+              AppID = 0,
+              AppUserID = 0,
+              Notes = null,
+              Rank = nextApprovalSetup.Rank
             };
 
-            _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
-            await _appDBContext.SaveChangesAsync(); // Save to get ID for detail
-
-            var nextApprovalSetup = await _appDBContext.CR_ProcessTypeApprovalSetups
-                                        .FirstOrDefaultAsync(pta =>
-                                            pta.ProcessTypeID == 23 && pta.Rank == 1);
-
-            if (nextApprovalSetup != null)
-            {
-              var newDetail = new CR_ProcessTypeApprovalDetail
-              {
-                ProcessTypeApprovalID = newProcessTypeApproval.ProcessTypeApprovalID,
-                Date = DateTime.Now,
-                RoleID = nextApprovalSetup.RoleTypeID,
-                AppID = 0,
-                AppUserID = 0,
-                Notes = null,
-                Rank = nextApprovalSetup.Rank
-              };
-
-              _appDBContext.CR_ProcessTypeApprovalDetails.Add(newDetail);
-            }
+            _appDBContext.CR_ProcessTypeApprovalDetails.Add(newDetail);
+          }
           await _appDBContext.SaveChangesAsync();
           await _hubContext.Clients.All.SendAsync("ReceiveProcessNotification");
         }
-          else
-          {
+        else
+        {
           var poList = await _appDBContext.PR_PurchaseOrders
               .Where(x => x.PONO == nextPONO)
               .ToListAsync();
 
-                  foreach (var po in poList)
-                  {
-                    po.FinalApprovalID = 1;
-                  }
-          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Purchase Request saved. No process setup found; Request Approved.");
+          foreach (var po in poList)
+          {
+            po.FinalApprovalID = 1;
           }
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Purchase Request saved. No process setup found; Request Approved.");
+        }
         await _appDBContext.SaveChangesAsync();
 
         return RedirectToAction("Index");

@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.Temp.MonthlySalarySheetViewModel>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <script>
     $(document).ready(function () {
         $('#postedButton').click(function () {
@@ -160,8 +161,8 @@
                             <button type="submit" class="btn btn-primary">Search</button>
 
                             <button type="button" class="btn btn-primary" id="postedButton">Posted</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "OverTime")'">Excel</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="printMonthlySalarySheets()">Print</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "OverTime")'">@Localizer["lbl_Excel"]</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="printMonthlySalarySheets()">@Localizer["lbl_Print"]</button>
 
                         </div>
                     </div>

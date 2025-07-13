@@ -5,24 +5,27 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Finance.MasterInfo
 {
   public class CashAgainstSaleController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<CashAgainstSaleController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public CashAgainstSaleController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public CashAgainstSaleController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<CashAgainstSaleController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchBranchName)
     {
@@ -69,7 +72,7 @@ _hubContext = hubContext;
     {
       if (ModelState.IsValid)
       {
-   
+
         _appDBContext.Update(CashAgainstSale);
         await _appDBContext.SaveChangesAsync();
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Cash Against Sale Account connected updated successfully.");
@@ -91,7 +94,7 @@ _hubContext = hubContext;
     {
       if (ModelState.IsValid)
       {
- 
+
         CashAgainstSale.DeleteYNID = 0;
 
         _appDBContext.Settings_CashAgainstSales.Add(CashAgainstSale);

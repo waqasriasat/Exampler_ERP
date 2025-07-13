@@ -7,25 +7,28 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.MasterInfo
 {
   public class ApprovalsRequestController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<ApprovalsRequestController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ApprovalsRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public ApprovalsRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ApprovalsRequestController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
-    
+
     public async Task<IActionResult> Index(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? ProcessTypeID)
     {
       var query = _appDBContext.CR_ProcessTypeApprovalDetails
@@ -136,16 +139,16 @@ _hubContext = hubContext;
     }
     public async Task<IActionResult> Approvals(int id)
     {
-    
+
 
       var result = await _appDBContext.CR_ProcessTypeApprovalDetails
-    .Include(pta => pta.CR_ProcessTypeApproval) 
+    .Include(pta => pta.CR_ProcessTypeApproval)
     .ThenInclude(pta => pta.Employee)
-    .Include(pta => pta.CR_ProcessTypeApproval) 
+    .Include(pta => pta.CR_ProcessTypeApproval)
     .ThenInclude(pta => pta.ProcessType)
-    .Include(pta => pta.ProcessTypeApprovalDetailDoc) 
+    .Include(pta => pta.ProcessTypeApprovalDetailDoc)
     .Where(pta => pta.AppID == 1 && pta.ProcessTypeApprovalID == id)
-    .OrderBy(pta => pta.Rank) 
+    .OrderBy(pta => pta.Rank)
     .ToListAsync();
 
       ViewBag.EmployeesList = await _utils.GetEmployee();
@@ -203,7 +206,7 @@ _hubContext = hubContext;
                 .Where(pta => pta.UserID == userId)
                 .FirstOrDefaultAsync();
 
-            if(CR_CipherKey.Encrypt(Password) == currentUser.Password)
+            if (CR_CipherKey.Encrypt(Password) == currentUser.Password)
             {
               processTypeApprovalDetail.AppID = 1;
               processTypeApprovalDetail.AppUserID = HttpContext.Session.GetInt32("UserID") ?? default(int);
@@ -767,10 +770,10 @@ _hubContext = hubContext;
               return Json(new { success = false, message = "The password you entered is incorrect. Please try again." });
             }
           }
-          
+
         }
 
-       
+
       }
       return Json(new { success = false, message = "Error updating Approval. Please check the inputs." });
     }
@@ -806,21 +809,21 @@ _hubContext = hubContext;
 
         var processTypeId = ProcessTypeID;
         var transactionID = TransactionID;
-          if (ProcessTypeID == 1)
+        if (ProcessTypeID == 1)
+        {
+          var user = await _appDBContext.CR_Users
+          .Where(u => u.UserID == transactionID)
+          .FirstOrDefaultAsync();
+
+          if (user != null)
           {
-            var user = await _appDBContext.CR_Users
-            .Where(u => u.UserID == transactionID)
-            .FirstOrDefaultAsync();
+            user.ActiveYNID = 2;
+            user.FinalApprovalID = 2;
+            user.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
-            if (user != null)
-            {
-              user.ActiveYNID = 2;
-              user.FinalApprovalID = 2;
-              user.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
-
-              _appDBContext.Update(user);
-              await _appDBContext.SaveChangesAsync();
-            }
+            _appDBContext.Update(user);
+            await _appDBContext.SaveChangesAsync();
+          }
         }
         if (ProcessTypeID == 2)
         {
@@ -1004,7 +1007,7 @@ _hubContext = hubContext;
 
             if (monthlyPayrollPosted != null)
             {
-          
+
               monthlyPayrollPosted.FinalApprovalID = 2;
               monthlyPayrollPosted.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
@@ -1268,7 +1271,7 @@ _hubContext = hubContext;
       }
       if (processTypeID == 6)
       {
-   
+
 
         var salaryDetails = await _appDBContext.HR_SalaryDetails
        .Where(pt => pt.SalaryID == transactionID)
@@ -1286,7 +1289,7 @@ _hubContext = hubContext;
         var OverTime = await _appDBContext.HR_OverTimes
                                          .Include(d => d.Employee)
                                          .Include(d => d.OverTimeType)
-                                         .FirstOrDefaultAsync(d => d.OverTimeID == transactionID && d.DeleteYNID != 1 );
+                                         .FirstOrDefaultAsync(d => d.OverTimeID == transactionID && d.DeleteYNID != 1);
         if (OverTime == null)
         {
           return NotFound(); // Handle not found case

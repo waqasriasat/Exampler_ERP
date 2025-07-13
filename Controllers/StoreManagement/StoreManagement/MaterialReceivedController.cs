@@ -6,24 +6,27 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 {
   public class MaterialReceivedController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<MaterialReceivedController> _localizer;
     private readonly IConfiguration _conSTguration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public MaterialReceivedController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public MaterialReceivedController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<MaterialReceivedController> localizer)
     {
       _appDBContext = appDBContext;
       _conSTguration = conSTguration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -202,7 +205,7 @@ _hubContext = hubContext;
           existingStock.StockDate = DateTime.Now;
 
           // Update or add stock components
-          
+
           var newStockHistory = new ST_StockHistory
           {
             ItemID = model.MaterialReceiveds.ItemID,
@@ -300,7 +303,7 @@ _hubContext = hubContext;
             newStock.ExpiryDate = model.MaterialReceiveds.ExpiryDate;
           }
 
-          
+
 
           _appDBContext.ST_Stocks.Add(newStock);
           await _appDBContext.SaveChangesAsync();
@@ -376,10 +379,10 @@ _hubContext = hubContext;
             }
           }
 
-           _appDBContext.ST_MaterialReceiveds.Add(newMaterialReceived);
+          _appDBContext.ST_MaterialReceiveds.Add(newMaterialReceived);
 
         }
-        
+
 
         // Save changes to the database
         await _appDBContext.SaveChangesAsync();

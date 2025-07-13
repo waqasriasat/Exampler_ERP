@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.FI_Vendor>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Management - Vendor";
 }
@@ -9,7 +10,7 @@
     <script>
         $(document).ready(function () {
             // Edit Vendor modal popup
-            $('.editVendorLink').click(function (e) {
+           $('#VendorListContainer').on('click', '.editVendorLink', function (e) {
                 e.preventDefault();
                 var VendorId = $(this).data('id');
                 $.get('@Url.Action("Edit", "Vendor")', { id: VendorId }, function (data) {
@@ -21,12 +22,15 @@
             $('#editVendorModalContainer').on('click', '#saveChanges', function () {
                 var formData = $('#editVendorForm').serialize();
                 $.post('@Url.Action("Edit", "Vendor")', formData, function (response) {
-                    if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
-                        
-                    } else {
-                        showError
-                    }
+                   if (response.success) {
+                            $('#editVendorModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "Vendor")', function (partialHtml) {
+                                var html = $(partialHtml).find('#VendorListContainer').html();
+                                $('#VendorListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -43,11 +47,14 @@
                 var formData = $('#addVendorForm').serialize();
                 $.post('@Url.Action("Create", "Vendor")', formData, function (response) {
                     if (response.success) {
-                        $('#addVendorModal').modal('hide');
-                         // Reload the page to reflect changes
-                    } else {
-                        showError
-                    }
+                            $('#addVendorModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "Vendor")', function (partialHtml) {
+                                var html = $(partialHtml).find('#VendorListContainer').html();
+                                $('#VendorListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -64,15 +71,16 @@
             });
 
             // Delete Vendor
-            $('.deleteVendorLink').click(function (e) {
+            $('#VendorListContainer').on('click', '.deleteVendorLink', function (e) {
                 e.preventDefault();
                 var VendorId = $(this).data('id');
                 $.post('@Url.Action("Delete", "Vendor")', { id: VendorId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+                     if (response.success) {
+                    $.get('@Url.Action("Index", "Vendor")', function (partialHtml) {
+                      var html = $(partialHtml).find('#VendorListContainer').html();
+                      $('#VendorListContainer').html(html);
+                    });
+                  }
                 });
             });
 
@@ -105,7 +113,7 @@
     <div class="col-md-12">
 
         <div class="card">
-            <h5 class="card-header">Searching Box</h5>
+            <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
                     <div class="col-md-8" style="padding-bottom: 15px;">
@@ -119,9 +127,9 @@
                     </div>
                     <div class="col-md-4 text-end">
                         <!-- Action Buttons -->
-                        <button type="button" class="btn btn-primary addVendorLink">Add New</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Vendor")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printVendores()">Print</button>
+                        <button type="button" class="btn btn-primary addVendorLink">@Localizer["lbl_AddNew"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Vendor")'">@Localizer["lbl_Excel"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printVendores()">@Localizer["lbl_Print"]</button>
                     </div>
                 </div>
             </div>
@@ -142,7 +150,7 @@
                                     <p class="text-nowrap">Vendor Name</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Active</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Active"]</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Payee Name</p>
@@ -155,10 +163,10 @@
                         <div class="col-2 col-md-2 col-lg-2">
                             <div class="row">
                                 <div class="col-6">
-                                    <p class="text-nowrap">Edit</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="text-nowrap">Delete</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Delete"]</p>
                                 </div>
                             </div>
                         </div>

@@ -11,28 +11,31 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using OfficeOpenXml;
 using System.Data;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
   public class FaceAttendanceForwardingController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<FaceAttendanceForwardingController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public FaceAttendanceForwardingController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public FaceAttendanceForwardingController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<FaceAttendanceForwardingController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(int? Branch, int? MonthsTypeID, int? YearsTypeID)
     {
-     
+
 
       HttpContext.Session.SetInt32("FaceAttendanceBranchID", Branch ?? 0);
       HttpContext.Session.SetInt32("FaceAttendanceMonthID", MonthsTypeID ?? 0);
@@ -158,7 +161,7 @@ _hubContext = hubContext;
           bool deductionExists = _appDBContext.HR_Deductions
               .Any(d => d.EmployeeID == employeeID && d.Month == monthID && d.Year == year && d.DeductionTypeID == 3);
 
-         
+
 
           var perDaySalary = _appDBContext.HR_Salarys
               .Join(_appDBContext.HR_SalaryDetails,
@@ -187,21 +190,21 @@ _hubContext = hubContext;
 
           if (absentDays > 0 && !deductionExists)
           {
-              var deduction = new HR_Deduction
-              {
-                DeductionTypeID = 3, // Absence Deduction
-                EmployeeID = employeeID,
-                Month = monthID,
-                Year = year,
-                Days = absentDays,
-                FromDate = new DateTime(year, monthID, 1),
-                ToDate = new DateTime(year, monthID, daysInMonth),
-                Amount = amount, // Calculated deduction amount
-                DeleteYNID = 0,
-                FinalApprovalID = 1
-              };
+            var deduction = new HR_Deduction
+            {
+              DeductionTypeID = 3, // Absence Deduction
+              EmployeeID = employeeID,
+              Month = monthID,
+              Year = year,
+              Days = absentDays,
+              FromDate = new DateTime(year, monthID, 1),
+              ToDate = new DateTime(year, monthID, daysInMonth),
+              Amount = amount, // Calculated deduction amount
+              DeleteYNID = 0,
+              FinalApprovalID = 1
+            };
 
-              _appDBContext.HR_Deductions.Add(deduction);
+            _appDBContext.HR_Deductions.Add(deduction);
           }
           if (absentDays < 0)
           {
@@ -211,11 +214,11 @@ _hubContext = hubContext;
 
             if (addionalAllowance != null)
             {
-              var allowanceAmount = Math.Abs(absentDays) * perDaySalarys; 
+              var allowanceAmount = Math.Abs(absentDays) * perDaySalarys;
               var allowanceDetail = new HR_AddionalAllowanceDetail
               {
                 AddionalAllowanceID = addionalAllowance.AddionalAllowanceID,
-                AddionalAllowanceTypeID = 1, 
+                AddionalAllowanceTypeID = 1,
                 AddionalAllowanceAmount = allowanceAmount
               };
 
@@ -241,7 +244,7 @@ _hubContext = hubContext;
               var allowanceDetail = new HR_AddionalAllowanceDetail
               {
                 AddionalAllowanceID = newAllowance.AddionalAllowanceID,
-                AddionalAllowanceTypeID = 3, 
+                AddionalAllowanceTypeID = 3,
                 AddionalAllowanceAmount = allowanceAmount
               };
 

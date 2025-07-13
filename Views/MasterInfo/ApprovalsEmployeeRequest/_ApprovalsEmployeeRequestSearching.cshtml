@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.HR_EmployeeRequestTypeApprovalDetail>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <form method="get" action="@Url.Action("Index", "ApprovalsEmployeeRequest")">
     <div class="row">
         <div class="col-md-12">
@@ -50,8 +51,8 @@
                     <div class="row">
                         <div class="col-md-12 text-end">
                             <button type="submit" class="btn btn-primary">Search</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "EmployeeRequestTypeApproval")'">Export to Excel</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="printEmployeeRequestTypeApprovals()">Print</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "EmployeeRequestTypeApproval")'">Export to @Localizer["lbl_Excel"]</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="printEmployeeRequestTypeApprovals()">@Localizer["lbl_Print"]</button>
                         </div>
                     </div>
                 </div>

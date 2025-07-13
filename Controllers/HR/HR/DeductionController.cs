@@ -7,26 +7,29 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
   public class DeductionController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<DeductionController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    
 
-    public DeductionController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+
+    public DeductionController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<DeductionController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
+
     }
 
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID, int? DeducationTypeID)
@@ -253,7 +256,7 @@ _hubContext = hubContext;
         for (int i = 0; i < Deduction.Count; i++)
         {
           worksheet.Cells[i + 2, 1].Value = Deduction[i].DeductionID;
-          worksheet.Cells[i + 2, 2].Value = Deduction[i].Employee?.FirstName +' '+ Deduction[i].Employee?.FatherName+' '+ Deduction[i].Employee?.FamilyName;
+          worksheet.Cells[i + 2, 2].Value = Deduction[i].Employee?.FirstName + ' ' + Deduction[i].Employee?.FatherName + ' ' + Deduction[i].Employee?.FamilyName;
           worksheet.Cells[i + 2, 3].Value = Deduction[i].DeductionType?.DeductionTypeName;
           worksheet.Cells[i + 2, 4].Value = Deduction[i].Month;
           worksheet.Cells[i + 2, 5].Value = Deduction[i].Year;

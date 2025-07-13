@@ -8,26 +8,29 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using System.Diagnostics.Contracts;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
   public class ContractRenewalController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<ContractRenewalController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    
 
-    public ContractRenewalController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+
+    public ContractRenewalController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ContractRenewalController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
+
     }
 
     public async Task<IActionResult> Index(int? id)
@@ -56,7 +59,7 @@ _hubContext = hubContext;
       var contractRenewal = await _appDBContext.HR_ContractRenewals
         .Where(c => c.ContractID == id)
         .FirstOrDefaultAsync();
-      
+
 
       var contract = await _appDBContext.HR_Contracts
        .Where(c => c.ContractID == id)
@@ -162,7 +165,7 @@ _hubContext = hubContext;
             }
             await _appDBContext.SaveChangesAsync();
             await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Contract Renewal Created successfully. No process setup found, Contract activated.");
-            return Json(new { success = true});
+            return Json(new { success = true });
           }
         }
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Contract Renewal Created successfully. Continue to the Approval Process Setup for Contract Activation.");

@@ -7,25 +7,28 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Setup
 {
   public class AccessRightsByUserController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<AccessRightsByUserController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AccessRightsByUserController> _logger;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public AccessRightsByUserController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AccessRightsByUserController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
+    public AccessRightsByUserController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AccessRightsByUserController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<AccessRightsByUserController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchUserName)
     {

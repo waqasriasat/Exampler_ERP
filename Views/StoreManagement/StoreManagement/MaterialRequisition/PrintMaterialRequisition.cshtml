@@ -1,4 +1,6 @@
 @model Exampler_ERP.Models.Temp.MaterialRequisitionsIndexViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -194,7 +196,7 @@
         </div>
 
         <div class="footer">
-            <button class="print-button" onclick="window.print()">Print</button>
+            <button class="print-button" onclick="window.print()">@Localizer["lbl_Print"]</button>
         </div>
     </div>
 

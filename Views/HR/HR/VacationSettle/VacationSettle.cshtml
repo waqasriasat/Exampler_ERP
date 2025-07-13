@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.HR_VacationSettle>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "HR - Vacation Settle";
 }
@@ -8,7 +9,7 @@
     <script>
         $(document).ready(function () {
             // Edit VacationSettle modal popup
-            $('.editVacationSettleLink').click(function (e) {
+            $('#VacationSettleListContainer').on('click', '.editVacationSettleLink', function (e) {
                 e.preventDefault();
                 var VacationSettleId = $(this).data('id');
                 $.get('@Url.Action("Edit", "VacationSettle")', { id: VacationSettleId }, function (data) {
@@ -21,12 +22,15 @@
             $('#editVacationSettleModalContainer').on('click', '#saveVacationSettleChanges', function () {
                 var formData = $('#editVacationSettleForm').serialize();
                 $.post('@Url.Action("Edit", "VacationSettle")', formData, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        let errorMessages = response.errors.join('<br>');
-                        $('#successMessage').removeClass('alert-success').addClass('alert-danger').html(errorMessages).show();
-                    }
+                     if (response.success) {
+                            $('#editVacationSettleModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "VacationSettle")', function (partialHtml) {
+                                var html = $(partialHtml).find('#VacationSettleListContainer').html();
+                                $('#VacationSettleListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -42,12 +46,15 @@
             $('#addVacationSettleModalContainer').on('click', '#saveNewVacationSettle', function () {
                 var formData = $('#addVacationSettleForm').serialize();
                 $.post('@Url.Action("Create", "VacationSettle")', formData, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        let errorMessages = response.errors.join('<br>');
-                        $('#successMessage').removeClass('alert-success').addClass('alert-danger').html(errorMessages).show();
-                    }
+                   if (response.success) {
+                            $('#addVacationSettleModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "VacationSettle")', function (partialHtml) {
+                                var html = $(partialHtml).find('#VacationSettleListContainer').html();
+                                $('#VacationSettleListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -64,18 +71,19 @@
             });
 
             // Delete VacationSettle
-            $('.deleteVacationSettleLink').click(function (e) {
+              $('#VacationSettleListContainer').on('click', '.deleteVacationSettleLink', function (e) {
                 e.preventDefault();
                 var VacationSettleId = $(this).data('id');
 
                 // Show confirmation dialog
                 if (confirm('Are you sure you want to delete this VacationSettle?')) {
                     $.post('@Url.Action("Delete", "VacationSettle")', { id: VacationSettleId }, function (response) {
-                        if (response.success) {
-                            
-                        } else {
-                            showError
-                        }
+                         if (response.success) {
+                    $.get('@Url.Action("Index", "VacationSettle")', function (partialHtml) {
+                      var html = $(partialHtml).find('#VacationSettleListContainer').html();
+                      $('#VacationSettleListContainer').html(html);
+                    });
+                  }
                     });
                 } else {
                     // If user clicks 'No', do nothing
@@ -193,10 +201,10 @@
                     <div class="row">
                         <div class="col-md-12 text-end">
                             <button type="submit" class="btn btn-primary">Search</button>
-                            <button type="button" class="btn btn-primary addVacationSettleLink">Add New</button>
+                            <button type="button" class="btn btn-primary addVacationSettleLink">@Localizer["lbl_AddNew"]</button>
                             <!-- Example: Add buttons for exporting to Excel and printing -->
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "VacationSettle")'">Excel</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="printVacationSettles()">Print</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "VacationSettle")'">@Localizer["lbl_Excel"]</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="printVacationSettles()">@Localizer["lbl_Print"]</button>
                         </div>
                     </div>
                 </div>
@@ -232,67 +240,21 @@
                         <div class="col-2 col-md-1 col-lg-3">
                             <div class="row">
                                 <div class="col-12 col-md-12 col-lg-4">
-                                    <p class="text-nowrap">Edit</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                                 <div class="col-12 col-md-12 col-lg-4">
                                     <p class="text-nowrap">Print</p>
                                 </div>
                                 <div class="col-12 col-md-12 col-lg-4">
-                                    <p class="text-nowrap">Delete</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Delete"]</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-11 col-lg-9">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Vacation?.Employee?.FirstName @item.Vacation?.Employee?.FatherName @item.Vacation?.Employee?.FamilyName</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Vacation Type : </span>@item.Vacation?.Settings_VacationType?.VacationTypeName</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Settle Days : </span>@item.SettleDays</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Settle Amount : </span>@item.SettleAmount</p>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-1 col-lg-3">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editVacationSettleLink" data-id="@item.VacationSettleID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="printVacationSettleLink" data-id="@item.VacationSettleID">
-                                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteVacationSettleLink" data-id="@item.VacationSettleID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+                <div id="VacationSettleListContainer">
+                    @Html.Partial("~/Views/HR/HR/VacationSettle/_VacationSettleListPartial.cshtml", Model)
+                </div>
             </div>
         </div>
     </div>

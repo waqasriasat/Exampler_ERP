@@ -6,28 +6,31 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
   public class QualificationController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<QualificationController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public QualificationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public QualificationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<QualificationController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchQualificationName)
     {
-  
+
       var QualificationesQuery = _appDBContext.Settings_QualificationTypes
           .Where(b => b.DeleteYNID != 1);
 
@@ -45,7 +48,7 @@ _hubContext = hubContext;
 
       return View("~/Views/HR/MasterInfo/Qualification/Qualification.cshtml", Qualificationes);
     }
-    
+
     public async Task<IActionResult> Qualification()
     {
       var Qualifications = await _appDBContext.Settings_QualificationTypes.ToListAsync();
@@ -132,7 +135,7 @@ _hubContext = hubContext;
         worksheet.Cells["A1"].Value = "Qualification ID";
         worksheet.Cells["B1"].Value = "Qualification Name";
         worksheet.Cells["C1"].Value = "Active";
-      
+
 
         for (int i = 0; i < Qualificationes.Count; i++)
         {

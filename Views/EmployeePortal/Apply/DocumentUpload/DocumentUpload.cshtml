@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.HR_DocumentUpload>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     Layout = "_EmployeeContentNavbarLayout";
     ViewData["Title"] = "Apply - DocumentUploads";
@@ -176,7 +177,7 @@
                         <div class="col-4 col-md-2 col-lg-4">
                             <div class="row">
                             <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
-                                    <p class="text-nowrap">Edit</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                                 <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
                                     <p class="text-nowrap">Download</p>
@@ -185,7 +186,7 @@
                                     <p class="text-nowrap">Print</p>
                                 </div>
                             <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
-                                    <p class="text-nowrap">Delete</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Delete"]</p>
                                 </div>
                             </div>
                         </div>
@@ -198,7 +199,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="mt-4">
-                        <button type="button" class="btn btn-primary addDocumentUploadLink">Add New</button>
+                        <button type="button" class="btn btn-primary addDocumentUploadLink">@Localizer["lbl_AddNew"]</button>
                     </div>
                 </div>
             </div>

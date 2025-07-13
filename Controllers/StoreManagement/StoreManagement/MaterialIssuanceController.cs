@@ -9,24 +9,27 @@ using System.Linq;
 using System.Threading.Tasks;
 using Exampler_ERP.Utilities;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 {
   public class MaterialIssuanceController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<MaterialIssuanceController> _localizer;
     private readonly IConfiguration _conSTguration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public MaterialIssuanceController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public MaterialIssuanceController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<MaterialIssuanceController> localizer)
     {
       _appDBContext = appDBContext;
       _conSTguration = conSTguration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -34,7 +37,7 @@ _hubContext = hubContext;
         .Include(v => v.IssuanceStatusTypes)
         .Include(v => v.MaterialIssuanceDetails)
             .ThenInclude(d => d.Items)
-        .AsQueryable(); 
+        .AsQueryable();
 
       if (!string.IsNullOrEmpty(searchItemName))
       {
@@ -48,12 +51,12 @@ _hubContext = hubContext;
 
 
       if (!string.IsNullOrEmpty(searchItemName) && MaterialIssuances.Count == 0)
-        {
-          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Material Issuance found with the name '" + searchItemName + "'. Please check the name and try again.");
-        }
+      {
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Material Issuance found with the name '" + searchItemName + "'. Please check the name and try again.");
+      }
 
-        return View("~/Views/StoreManagement/StoreManagement/MaterialIssuance/MaterialIssuance.cshtml", MaterialIssuances);
-      
+      return View("~/Views/StoreManagement/StoreManagement/MaterialIssuance/MaterialIssuance.cshtml", MaterialIssuances);
+
     }
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -92,7 +95,7 @@ _hubContext = hubContext;
                                                     .Where(detail => detail.ItemID == req.ItemID)
                                                     .Sum(detail => (int?)detail.IssuanceQuantity) ?? 0
                                             ),
-                                          AvailableStock = stockGroup.Sum(s => s.Quantity) 
+                                          AvailableStock = stockGroup.Sum(s => s.Quantity)
                                         })
                          .Where(x => x.Quantity > 0)
                          .ToListAsync();
@@ -198,12 +201,12 @@ _hubContext = hubContext;
 
           if (issuedQty == 0)
           {
-            allNoIssuance = true; 
-            break; 
+            allNoIssuance = true;
+            break;
           }
           else if (issuedQty < requisitionQty)
           {
-            allFullyIssued = false; 
+            allFullyIssued = false;
           }
           else if (issuedQty == requisitionQty)
           {
@@ -215,7 +218,7 @@ _hubContext = hubContext;
         var requisitionStatus = new ST_MaterialRequisitionStatus
         {
           RequisitionID = issuance.RequisitionID,
-          ActionID = 2, 
+          ActionID = 2,
           ActionDate = DateTime.Now,
           ActionStatusTypeID = actionStatusTypeID
         };
@@ -251,7 +254,7 @@ _hubContext = hubContext;
           {
             if (stock.Quantity >= detail.IssuanceQuantity)
             {
-              stock.Quantity -= detail.IssuanceQuantity; 
+              stock.Quantity -= detail.IssuanceQuantity;
             }
             else
             {

@@ -7,26 +7,29 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
   public class EndOfServiceController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<EndOfServiceController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    
 
-    public EndOfServiceController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+
+    public EndOfServiceController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EndOfServiceController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
+
     }
     public async Task<IActionResult> Index(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? EndOfServiceReasonTypeID)
     {
@@ -246,7 +249,7 @@ _hubContext = hubContext;
         await _appDBContext.SaveChangesAsync();
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "EndOfService Updated successfully.");
         return Json(new { success = true });
-     }
+      }
 
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.EndOfServiceReasonTypesList = await _utils.GetEndOfServiceReasonTypes();

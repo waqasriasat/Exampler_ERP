@@ -5,23 +5,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.MasterInfo
 {
   public class ApprovalsEmployeeRequestController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<ApprovalsEmployeeRequestController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ApprovalsEmployeeRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public ApprovalsEmployeeRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ApprovalsEmployeeRequestController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
 
     public async Task<IActionResult> Index(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? EmployeeRequestTypeID)
@@ -235,17 +238,17 @@ _hubContext = hubContext;
         }
         else
         {
-            var EmployeeRequestTypeApproval = await _appDBContext.HR_EmployeeRequestTypeApprovals
-            .Where(u => u.EmployeeRequestTypeApprovalID == EmployeeRequestTypeApprovalDetail.EmployeeRequestTypeApprovalID)
-            .FirstOrDefaultAsync();
+          var EmployeeRequestTypeApproval = await _appDBContext.HR_EmployeeRequestTypeApprovals
+          .Where(u => u.EmployeeRequestTypeApprovalID == EmployeeRequestTypeApprovalDetail.EmployeeRequestTypeApprovalID)
+          .FirstOrDefaultAsync();
 
-            if (EmployeeRequestTypeApproval != null)
-            {
+          if (EmployeeRequestTypeApproval != null)
+          {
             EmployeeRequestTypeApproval.FinalApprovalID = 1;
-       
-              _appDBContext.Update(EmployeeRequestTypeApproval);
-              await _appDBContext.SaveChangesAsync();
-            }
+
+            _appDBContext.Update(EmployeeRequestTypeApproval);
+            await _appDBContext.SaveChangesAsync();
+          }
         }
         return Json(new { success = true });
       }
@@ -313,16 +316,16 @@ _hubContext = hubContext;
       var EmployeeData = await _appDBContext.HR_Employees
           .Where(u => u.EmployeeID == fatchDetail.EmployeeID)
           .FirstOrDefaultAsync();
-      var EmployeeName = EmployeeData?.FirstName+' '+ EmployeeData?.FatherName + ' ' + EmployeeData?.FamilyName;
+      var EmployeeName = EmployeeData?.FirstName + ' ' + EmployeeData?.FatherName + ' ' + EmployeeData?.FamilyName;
       HttpContext.Session.SetString("EmployeeName", EmployeeName);
 
       var EmployeeRequestTypeID = fatchDetail.EmployeeRequestTypeID;
- 
+
       ViewBag.EmployeeRequestTypeID = EmployeeRequestTypeID;
-  
+
       object result = null;
 
-      if (EmployeeRequestTypeID >0)
+      if (EmployeeRequestTypeID > 0)
       {
         ViewBag.EmployeeRequestTypeList = await _utils.GetEmployeeRequestTypes();
         var EmployeeRequests = await _appDBContext.HR_EmployeeRequestTypeApprovals

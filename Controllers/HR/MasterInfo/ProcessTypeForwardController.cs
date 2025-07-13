@@ -7,25 +7,28 @@ using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Exampler_ERP.Utilities;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
   public class ProcessTypeForwardController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<ProcessTypeForwardController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly ILogger<ProcessTypeForwardController> _logger;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ProcessTypeForwardController(AppDBContext appDBContext, IConfiguration configuration, ILogger<ProcessTypeForwardController> logger, Utils utils, IHubContext<NotificationHub> hubContext)
+    public ProcessTypeForwardController(AppDBContext appDBContext, IConfiguration configuration, ILogger<ProcessTypeForwardController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ProcessTypeForwardController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _logger = logger;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchProcessTypeName)
     {
@@ -193,7 +196,7 @@ _hubContext = hubContext;
         worksheet.Cells["A1"].Value = "ProcessType ApprovalID";
         worksheet.Cells["B1"].Value = "ProcessType Name";
         worksheet.Cells["C1"].Value = "Role";
-    
+
 
         for (int i = 0; i < ProcessTypeForwards.Count; i++)
         {

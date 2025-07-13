@@ -1,4 +1,6 @@
 @model Exampler_ERP.Models.Temp.PurchaseRequestwithRequestForQuotationViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -289,7 +291,7 @@
         </div>
 
         <div class="footer">
-            <button class="print-button" onclick="window.print()">Print</button>
+            <button class="print-button" title="@Localizer["lbl_Print"]" onclick="window.print()">@Localizer["lbl_Print"]</button>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/super-ui@latest/dist/super-ui.min.js"></script>

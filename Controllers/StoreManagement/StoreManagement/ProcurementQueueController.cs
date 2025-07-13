@@ -6,24 +6,27 @@ using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 {
   public class ProcurementQueueController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<ProcurementQueueController> _localizer;
     private readonly IConfiguration _conSTguration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public ProcurementQueueController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public ProcurementQueueController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ProcurementQueueController> localizer)
     {
       _appDBContext = appDBContext;
       _conSTguration = conSTguration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchItemName)
     {

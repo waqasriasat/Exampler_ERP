@@ -1,4 +1,6 @@
 @model Exampler_ERP.Models.Temp.EmployeeBioDataViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Employee Bio Data";
     var genderList = ViewBag.GenderList as List<SelectListItem>;
@@ -515,7 +517,7 @@
         </div>
 
         <div class="footer">
-            <button class="print-button" onclick="window.print()">Print</button>
+            <button class="print-button" onclick="window.print()">@Localizer["lbl_Print"]</button>
         </div>
     </div>
 

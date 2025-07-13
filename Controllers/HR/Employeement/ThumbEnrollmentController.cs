@@ -7,22 +7,25 @@ using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
   public class ThumbEnrollmentController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<ThumbEnrollmentController> _localizer;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public ThumbEnrollmentController(AppDBContext appDBContext, Utils utils, IHubContext<NotificationHub> hubContext)
+    public ThumbEnrollmentController(AppDBContext appDBContext, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ThumbEnrollmentController> localizer)
     {
       _appDBContext = appDBContext;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
 
     public async Task<IActionResult> Index(int? id) // EmployeeID

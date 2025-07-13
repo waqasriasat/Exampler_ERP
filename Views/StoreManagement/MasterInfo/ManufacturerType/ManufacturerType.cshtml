@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.Settings_ManufacturerType>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Master Information - Item Manufacturer Type";
 }
@@ -9,7 +10,7 @@
     <script>
         $(document).ready(function () {
             // Edit ManufacturerType modal popup
-            $('.editManufacturerTypeLink').click(function (e) {
+         $('#ManufacturerTypeListContainer').on('click', '.editManufacturerTypeLink', function (e) {
                 e.preventDefault();
                 var ManufacturerTypeId = $(this).data('id');
                 $.get('@Url.Action("Edit", "ManufacturerType")', { id: ManufacturerTypeId }, function (data) {
@@ -22,11 +23,14 @@
                 var formData = $('#editManufacturerTypeForm').serialize();
                 $.post('@Url.Action("Edit", "ManufacturerType")', formData, function (response) {
                     if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
-                        
-                    } else {
-                        showError
-                    }
+                            $('#editManufacturerTypeModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "ManufacturerType")', function (partialHtml) {
+                                var html = $(partialHtml).find('#ManufacturerTypeListContainer').html();
+                                $('#ManufacturerTypeListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -42,12 +46,15 @@
             $('#addManufacturerTypeModalContainer').on('click', '#saveNewManufacturerType', function () {
                 var formData = $('#addManufacturerTypeForm').serialize();
                 $.post('@Url.Action("Create", "ManufacturerType")', formData, function (response) {
-                    if (response.success) {
-                        $('#addManufacturerTypeModal').modal('hide');
-                         // Reload the page to reflect changes
-                    } else {
-                        showError
-                    }
+                 if (response.success) {
+                            $('#addManufacturerTypeModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "ManufacturerType")', function (partialHtml) {
+                                var html = $(partialHtml).find('#ManufacturerTypeListContainer').html();
+                                $('#ManufacturerTypeListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -64,15 +71,16 @@
             });
 
             // Delete ManufacturerType
-            $('.deleteManufacturerTypeLink').click(function (e) {
+             $('#ManufacturerTypeListContainer').on('click', '.deleteManufacturerTypeLink', function (e) {
                 e.preventDefault();
                 var ManufacturerTypeId = $(this).data('id');
                 $.post('@Url.Action("Delete", "ManufacturerType")', { id: ManufacturerTypeId }, function (response) {
                     if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+                    $.get('@Url.Action("Index", "ManufacturerType")', function (partialHtml) {
+                      var html = $(partialHtml).find('#ManufacturerTypeListContainer').html();
+                      $('#ManufacturerTypeListContainer').html(html);
+                    });
+                  }
                 });
             });
 
@@ -94,13 +102,13 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Master Information /</span> Item Manufacturer Type
+    <span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> Item Manufacturer Type
 </h4>
 <div class="row">
     <div class="col-md-12">
 
         <div class="card">
-            <h5 class="card-header">Searching Box</h5>
+            <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
                     <div class="col-md-8" style="padding-bottom: 15px;">
@@ -114,9 +122,9 @@
                     </div>
                     <div class="col-md-4 text-end">
                         <!-- Action Buttons -->
-                        <button type="button" class="btn btn-primary addManufacturerTypeLink">Add New</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "ManufacturerType")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printManufacturerTypes()">Print</button>
+                        <button type="button" class="btn btn-primary addManufacturerTypeLink">@Localizer["lbl_AddNew"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "ManufacturerType")'">@Localizer["lbl_Excel"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printManufacturerTypes()">@Localizer["lbl_Print"]</button>
                     </div>
                 </div>
             </div>
@@ -137,17 +145,17 @@
                                     <p class="text-nowrap">Manufacturer Type Name</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Active</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Active"]</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-2 col-md-2 col-lg-2">
                             <div class="row">
                                 <div class="col-6">
-                                    <p class="text-nowrap">Edit</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="text-nowrap">Delete</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Delete"]</p>
                                 </div>
                             </div>
                         </div>

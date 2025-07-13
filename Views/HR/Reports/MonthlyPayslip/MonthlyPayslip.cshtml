@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.MonthlyPayrollPrintViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <script>
     $(document).ready(function () {
       
@@ -92,8 +93,8 @@
                     <div class="row">
                         <div class="col-md-12 text-end">
                             <button type="submit" class="btn btn-primary">Search</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "OverTime")'">Excel</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="printMonthlyPayslips()">Print</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "OverTime")'">@Localizer["lbl_Excel"]</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="printMonthlyPayslips()">@Localizer["lbl_Print"]</button>
 
                         </div>
                     </div>

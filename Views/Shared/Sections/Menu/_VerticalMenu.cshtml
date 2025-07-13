@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
 	
     string? currentPage = Context.Request.Path;
@@ -147,7 +149,7 @@
                                       currentPage == "/EmployeeRequestTypeApprovalSetup/Index" || currentPage == "/EmployeeRequestTypeForward/Index" ||
                                       currentPage == "/Holiday/Index" ? " active" : "")'>
                         <a asp-controller="HR_Main_Dashboard" asp-action="Index" class="menu-link">
-                            <div>Master Information</div>
+                            <div>@Localizer["lbl_MasterInformation"]</div>
                         </a>
                     </li>
 
@@ -220,7 +222,7 @@
                                       currentPage == "/HeadofAccount_Four/Index" || currentPage == "/HeadofAccount_Five/Index"||
                                       currentPage == "/VoucherType/Index" ? " active" : "")'>
                         <a asp-controller ="FI_Main_Dashboard" asp-action="Index" class="menu-link">
-                            <div>Master Information</div>
+                            <div>@Localizer["lbl_MasterInformation"]</div>
                         </a>
                     </li>
                     <li class='menu-item@(currentPage == "/FI_Management_Dashboard/Index"|| currentPage == "/Bank/Index" ||
@@ -263,7 +265,7 @@
                                       currentPage == "/ItemComponentType/Index" || currentPage == "/Item/Index"||
                                       currentPage == "/ManufacturerType/Index" || currentPage == "/UnitType/Index" ? " active" : "")'>
                         <a asp-controller="ST_Main_Dashboard" asp-action="Index" class="menu-link">
-                            <div>Master Information</div>
+                            <div>@Localizer["lbl_MasterInformation"]</div>
                         </a>
                     </li>
                     <li class='menu-item@(currentPage == "/ST_StoreManagement_Dashboard/Index"|| currentPage == "/MaterialRequisition/Index" ||
@@ -295,7 +297,7 @@
                 <ul class="menu-sub">
                     <li class='menu-item@(currentPage == "/PR_Main_Dashboard/Index" ? " active" : "")'>
                         <a asp-controller="PR_Main_Dashboard" asp-action="Index" class="menu-link">
-                            <div>Master Information</div>
+                            <div>@Localizer["lbl_MasterInformation"]</div>
                         </a>
                     </li>
                     <li class='menu-item@(currentPage == "/PR_Management_Dashboard/Index"|| currentPage == "/PurchaseRequest/Index" ||

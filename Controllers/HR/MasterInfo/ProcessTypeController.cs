@@ -6,24 +6,27 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
-   public class ProcessTypeController : Controller
+  public class ProcessTypeController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<ProcessTypeController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public ProcessTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public ProcessTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ProcessTypeController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchProcessTypeName)
     {
@@ -45,7 +48,7 @@ _hubContext = hubContext;
 
       return View("~/Views/HR/MasterInfo/ProcessType/ProcessType.cshtml", ProcessTypes);
     }
-   
+
     public async Task<IActionResult> ProcessType()
     {
       var ProcessTypes = await _appDBContext.Settings_ProcessTypes.ToListAsync();

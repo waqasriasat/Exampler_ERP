@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.Settings_HeadofAccount_CategoryType>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Master Information - Category Type";
 }
@@ -9,7 +10,7 @@
     <script>
         $(document).ready(function () {
             // Edit HeadofAccount_CategoryType modal popup
-            $('.editHeadofAccount_CategoryTypeLink').click(function (e) {
+            $('#HeadofAccount_CategoryTypeListContainer').on('click', '.editHeadofAccount_CategoryTypeLink', function (e) {
                 e.preventDefault();
                 var CategoryTypeId = $(this).data('id');
                 $.get('@Url.Action("Edit", "HeadofAccount_CategoryType")', { id: CategoryTypeId }, function (data) {
@@ -22,11 +23,14 @@
                 var formData = $('#editHeadofAccount_CategoryTypeForm').serialize();
                 $.post('@Url.Action("Edit", "HeadofAccount_CategoryType")', formData, function (response) {
                     if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
-                        
-                    } else {
-                        showError
-                    }
+                            $('#editHeadofAccount_CategoryTypeModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "HeadofAccount_CategoryType")', function (partialHtml) {
+                                var html = $(partialHtml).find('#HeadofAccount_CategoryTypeListContainer').html();
+                                $('#HeadofAccount_CategoryTypeListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -43,11 +47,14 @@
                 var formData = $('#addHeadofAccount_CategoryTypeForm').serialize();
                 $.post('@Url.Action("Create", "HeadofAccount_CategoryType")', formData, function (response) {
                     if (response.success) {
-                        $('#addHeadofAccount_CategoryTypeModal').modal('hide');
-                         // Reload the page to reflect changes
-                    } else {
-                        showError
-                    }
+                            $('#addHeadofAccount_CategoryTypeModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "HeadofAccount_CategoryType")', function (partialHtml) {
+                                var html = $(partialHtml).find('#HeadofAccount_CategoryTypeListContainer').html();
+                                $('#HeadofAccount_CategoryTypeListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -64,15 +71,16 @@
             });
 
             // Delete HeadofAccount_CategoryType
-            $('.deleteHeadofAccount_CategoryTypeLink').click(function (e) {
+            $('#HeadofAccount_CategoryTypeListContainer').on('click', '.deleteHeadofAccount_CategoryTypeLink', function (e) {
                 e.preventDefault();
                 var HeadofAccount_CategoryTypeId = $(this).data('id');
                 $.post('@Url.Action("Delete", "HeadofAccount_CategoryType")', { id: CategoryTypeId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+                   if (response.success) {
+                    $.get('@Url.Action("Index", "HeadofAccount_CategoryType")', function (partialHtml) {
+                      var html = $(partialHtml).find('#HeadofAccount_CategoryTypeListContainer').html();
+                      $('#HeadofAccount_CategoryTypeListContainer').html(html);
+                    });
+                  }
                 });
             });
 
@@ -99,13 +107,13 @@
 
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Master Information /</span> Category Type
+    <span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> Category Type
 </h4>
 <div class="row">
     <div class="col-md-12">
 
         <div class="card">
-            <h5 class="card-header">Searching Box</h5>
+            <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
                     <div class="col-md-8" style="padding-bottom: 15px;">
@@ -119,9 +127,9 @@
                     </div>
                     <div class="col-md-4 text-end">
                         <!-- Action Buttons -->
-                        <button type="button" class="btn btn-primary addHeadofAccount_CategoryTypeLink">Add New</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "HeadofAccount_CategoryType")'">Excel</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printHeadofAccount_CategoryTypees()">Print</button>
+                        <button type="button" class="btn btn-primary addHeadofAccount_CategoryTypeLink">@Localizer["lbl_AddNew"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "HeadofAccount_CategoryType")'">@Localizer["lbl_Excel"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printHeadofAccount_CategoryTypees()">@Localizer["lbl_Print"]</button>
                     </div>
                 </div>
             </div>
@@ -142,17 +150,17 @@
                                     <p class="text-nowrap">Category Type Name</p>
                                 </div>
                                 <div class="col-4">
-                                    <p class="text-nowrap">Active</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Active"]</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-2 col-md-2 col-lg-2">
                             <div class="row">
                                 <div class="col-6">
-                                    <p class="text-nowrap">Edit</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="text-nowrap">Delete</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Delete"]</p>
                                 </div>
                             </div>
                         </div>

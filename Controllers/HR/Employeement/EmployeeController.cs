@@ -9,27 +9,30 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
   public class EmployeeController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<EmployeeController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
-
-    
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public EmployeeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+
+
+    public EmployeeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
+
     }
     public async Task<IActionResult> Index(int? id)
     {
@@ -161,7 +164,7 @@ _hubContext = hubContext;
         {
           return Json(new { success = false, message = "Password field is required. Please enter a valid text value." });
         }
-       
+
         if (profilePicture != null && profilePicture.Length > 0)
         {
           using (var memoryStream = new MemoryStream())
@@ -703,7 +706,7 @@ _hubContext = hubContext;
       };
 
       // Return the document for inline viewing
-      return File(document.DocImage, mimeType, "("+document.EmployeeID+") "+document.QualificationType?.QualificationTypeName+document.DocExt);
+      return File(document.DocImage, mimeType, "(" + document.EmployeeID + ") " + document.QualificationType?.QualificationTypeName + document.DocExt);
     }
     public async Task<IActionResult> DeleteEmployeeEducation(int id)
     {

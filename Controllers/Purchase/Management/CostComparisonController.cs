@@ -8,24 +8,27 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Purchase.Management
 {
   public class CostComparisonController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<CostComparisonController> _localizer;
     private readonly IConfiguration _conSTguration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public CostComparisonController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public CostComparisonController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<CostComparisonController> localizer)
     {
       _appDBContext = appDBContext;
       _conSTguration = conSTguration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchItemName)
     {
@@ -64,12 +67,12 @@ _hubContext = hubContext;
       {
         return NotFound();
       }
-      
+
       if (RequestForQuotationList == null || !RequestForQuotationList.Any())
       {
         return NotFound();
       }
-      
+
       ViewBag.ItemList = await _utils.GetItemList();
       ViewBag.ItemNameList = await _utils.GetItemList();
       ViewBag.ItemUnitList = await _utils.GetItemUnits();
@@ -118,7 +121,7 @@ _hubContext = hubContext;
             _appDBContext.PR_CostComparison.Add(CostComparisons);
           }
         }
-        
+
 
         await _appDBContext.SaveChangesAsync();
 
@@ -146,7 +149,7 @@ _hubContext = hubContext;
 
         await _appDBContext.SaveChangesAsync();
 
-     
+
         var CostComparisonsQuery = _appDBContext.PR_PurchaseRequests
           .Include(v => v.RequestStatusType)
           .Include(v => v.Item)
@@ -192,7 +195,7 @@ _hubContext = hubContext;
       {
         return NotFound();
       }
-      
+
       ViewBag.ItemList = await _utils.GetItemList();
       ViewBag.ItemNameList = await _utils.GetItemList();
       ViewBag.ItemUnitList = await _utils.GetItemUnits();
@@ -216,7 +219,7 @@ _hubContext = hubContext;
     }
     public async Task<IActionResult> PrintList()
     {
-   
+
       var PurchaseRequestsQuery = _appDBContext.PR_PurchaseRequests
           .Include(v => v.RequestStatusType)
           .Include(v => v.Item)

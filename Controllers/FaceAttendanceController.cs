@@ -3,19 +3,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers
 {
   public class FaceAttendanceController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<FaceAttendanceController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly IHubContext<NotificationHub> _hubContext;
-    public FaceAttendanceController(AppDBContext appDBContext, IConfiguration configuration, IHubContext<NotificationHub> hubContext)
+    public FaceAttendanceController(AppDBContext appDBContext, IConfiguration configuration, IHubContext<NotificationHub> hubContext, IStringLocalizer<FaceAttendanceController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
-      _hubContext = hubContext; 
+      _hubContext = hubContext;
+      _localizer = localizer;
     }
 
     // Initial Load (without webcam)
@@ -81,7 +84,7 @@ namespace Exampler_ERP.Controllers
       var today = DateTime.Today;
 
       var existingAttendance = await _appDBContext.CR_FaceAttendances
-          .Where(a => a.EmployeeID == request.EmployeeID && a.MarkDate == today && a.MarkSourceID==1)
+          .Where(a => a.EmployeeID == request.EmployeeID && a.MarkDate == today && a.MarkSourceID == 1)
           .FirstOrDefaultAsync();
 
       byte[] imageBytes = Convert.FromBase64String(request.ImageData.Substring(request.ImageData.IndexOf(",") + 1));

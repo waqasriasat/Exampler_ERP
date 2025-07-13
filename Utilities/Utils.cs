@@ -9,7 +9,7 @@ namespace Exampler_ERP.Utilities
 {
   public class Utils
   {
-    private readonly AppDBContext _appDBContext;
+    private readonly AppDBContext _appDBContext; 
     public Utils(AppDBContext appDBContext)
     {
       _appDBContext = appDBContext;

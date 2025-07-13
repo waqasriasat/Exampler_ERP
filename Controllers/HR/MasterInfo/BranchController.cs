@@ -8,24 +8,27 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 using OfficeOpenXml;
 using System.Drawing.Printing;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
   public class BranchController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<BranchController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public BranchController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+    public BranchController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<BranchController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchBranchName)
     {
@@ -49,12 +52,12 @@ _hubContext = hubContext;
 
       if (!string.IsNullOrEmpty(searchBranchName) && branches.Count == 0)
       {
-        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No branch found with the name '"+ searchBranchName + "'. Please check the name and try again.");
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No branch found with the name '" + searchBranchName + "'. Please check the name and try again.");
       }
       return View("~/Views/HR/MasterInfo/Branch/Branch.cshtml", branches);
     }
 
-  
+
     public async Task<IActionResult> Branch()
     {
       var Branchs = await _appDBContext.Settings_BranchTypes.ToListAsync();
@@ -81,7 +84,7 @@ _hubContext = hubContext;
           return Json(new { success = false, message = "Branch Name field is required. Please enter a valid text value." });
         }
 
-       
+
         _appDBContext.Update(branch);
         await _appDBContext.SaveChangesAsync();
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Branch updated successfully.");
@@ -106,7 +109,7 @@ _hubContext = hubContext;
           return Json(new { success = false, message = "Branch Name field is required. Please enter a valid text value." });
         }
 
- 
+
         branch.Date = DateTime.Now;
         branch.DeleteYNID = 0;
 
@@ -160,7 +163,7 @@ _hubContext = hubContext;
         worksheet.Cells["J1"].Value = "Fax";
         worksheet.Cells["K1"].Value = "Mobile";
         worksheet.Cells["L1"].Value = "Address";
-      
+
 
         for (int i = 0; i < branches.Count; i++)
         {
@@ -197,6 +200,6 @@ _hubContext = hubContext;
       return View("~/Views/HR/MasterInfo/Branch/PrintBranches.cshtml", branches);
     }
 
- 
+
   }
 }

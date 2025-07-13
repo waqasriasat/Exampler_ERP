@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.HR_EmployeeExperience>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="modal fade" id="employeeExperienceModal" tabindex="-1" role="dialog" aria-labelledby="employeeExperienceModalLabel" aria-hidden="true" style="--bs-modal-width: 60rem;">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -37,7 +38,7 @@
                                                 <p class="text-nowrap">Download</p>
                                             </div>
                                             <div class="col-12 col-md-12 col-lg-5">
-                                                <p class="text-nowrap">Delete</p>
+                                                <p class="text-nowrap">@Localizer["lbl_Delete"]</p>
                                             </div>
                                         </div>
                                     </div>

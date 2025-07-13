@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.HR_Holiday>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "HR - Holiday";
 }
@@ -9,7 +10,7 @@
     <script>
         $(document).ready(function () {
             // Edit Holiday modal popup
-            $('.editHolidayLink').click(function (e) {
+            $('#HolidayListContainer').on('click', '.editHolidayLink', function (e) {
                 e.preventDefault();
                 var HolidayId = $(this).data('id');
                 $.get('@Url.Action("Edit", "Holiday")', { id: HolidayId }, function (data) {
@@ -21,12 +22,15 @@
             $('#editHolidayModalContainer').on('click', '#saveChanges', function () {
                 var formData = $('#editHolidayForm').serialize();
                 $.post('@Url.Action("Edit", "Holiday")', formData, function (response) {
-                    if (response.success) {
-                        // Reload the page or update the part of the page with the updated data
-                        
-                    } else {
-                        showError
-                    }
+                     if (response.success) {
+                            $('#editHolidayModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "Holiday")', function (partialHtml) {
+                                var html = $(partialHtml).find('#HolidayListContainer').html();
+                                $('#HolidayListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -43,11 +47,14 @@
                 var formData = $('#addHolidayForm').serialize();
                 $.post('@Url.Action("Create", "Holiday")', formData, function (response) {
                     if (response.success) {
-                        $('#addHolidayModal').modal('hide');
-                         // Reload the page to reflect changes
-                    } else {
-                        showError
-                    }
+                            $('#addHolidayModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "Holiday")', function (partialHtml) {
+                                var html = $(partialHtml).find('#HolidayListContainer').html();
+                                $('#HolidayListContainer').html(html);
+                            });
+                        }
                 });
             });
 
@@ -64,15 +71,16 @@
             });
 
             // Delete Holiday
-            $('.deleteHolidayLink').click(function (e) {
+            $('#HolidayListContainer').on('click', '.deleteHolidayLink', function (e) {
                 e.preventDefault();
                 var HolidayId = $(this).data('id');
                 $.post('@Url.Action("Delete", "Holiday")', { id: HolidayId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+                     if (response.success) {
+                    $.get('@Url.Action("Index", "Holiday")', function (partialHtml) {
+                      var html = $(partialHtml).find('#HolidayListContainer').html();
+                      $('#HolidayListContainer').html(html);
+                    });
+                  }
                 });
             });
 
@@ -200,9 +208,9 @@
                     <div class="row">
                         <div class="col-md-12 text-end">
                             <button type="submit" class="btn btn-primary">Search</button>
-                            <button type="button" class="btn btn-primary addHolidayLink">Add New</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Holiday")'">Excel</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="printHolidays()">Print</button>
+                            <button type="button" class="btn btn-primary addHolidayLink">@Localizer["lbl_AddNew"]</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Holiday")'">@Localizer["lbl_Excel"]</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="printHolidays()">@Localizer["lbl_Print"]</button>
                         </div>
                     </div>
                 </div>
@@ -235,71 +243,18 @@
                         <div class="col-2 col-md-1 col-lg-2">
                             <div class="row">
                                 <div class="col-6">
-                                    <p class="text-nowrap">Edit</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="text-nowrap">Delete</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Delete"]</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-11 col-lg-10">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Holiday Type: </span>@(item.HolidayType?.HolidayTypeName ?? "N/A")
-                                        </p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Date: </span>@item.HolidayDate.ToString("dd/MMM/yyyy")
-                                        </p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Approved: </span>
-                                            @if (item.FinalApprovalID == 0)
-                                            {
-                                                <span>Pending</span>
-                                            }
-                                            else if (item.FinalApprovalID == 1)
-                                            {
-                                                <span>Approved</span>
-                                            }
-                                            else if (item.FinalApprovalID == 2)
-                                            {
-                                                <span>Disapproved</span>
-                                            }
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-1 col-lg-2">
-                                <div class="row">
-                                    <div class="col-12 col-md-6 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editHolidayLink" data-id="@item.HolidayID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteHolidayLink" data-id="@item.HolidayID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+                <div id="HolidayListContainer">
+                    @Html.Partial("~/Views/HR/HR/Holiday/_HolidayListPartial.cshtml", Model)
+                </div>
 
             </div>
         </div>

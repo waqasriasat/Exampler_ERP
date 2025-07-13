@@ -8,24 +8,27 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
   public class UserController : Controller
   {
     private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<UserController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext; 
-    
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public UserController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext)
+
+    public UserController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<UserController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext;
-      
+      _hubContext = hubContext;
+      _localizer = localizer;
+
     }
     public async Task<IActionResult> Index(string searchUserName)
     {
@@ -51,7 +54,7 @@ _hubContext = hubContext;
             .ToList();
       }
 
-     
+
       return View("~/Views/HR/MasterInfo/User/User.cshtml", decryptedUsers);
     }
 
@@ -80,10 +83,10 @@ _hubContext = hubContext;
     {
       if (ModelState.IsValid)
       {
-        if (string.IsNullOrEmpty(user.UserName) && string.IsNullOrEmpty(user.Password) && user.RoleTypeID.ToString().Length>0)
+        if (string.IsNullOrEmpty(user.UserName) && string.IsNullOrEmpty(user.Password) && user.RoleTypeID.ToString().Length > 0)
         {
           await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "user Name, Password and Role Name field is required. Please enter a valid text value.!");
-          return Json(new { success = false});
+          return Json(new { success = false });
         }
         var userInDb = await _appDBContext.CR_Users.FindAsync(user.UserID);
         if (userInDb == null)
@@ -102,12 +105,12 @@ _hubContext = hubContext;
         //await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "User Updated successfully.");
         return Json(new { success = true });
       }
-     
+
       ViewBag.RoleList = await _utils.GetRoles();
       ViewBag.EmployeeList = await _utils.GetEmployee();
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating user. Please check the inputs.!");
-      return Json(new { success = false});
+      return Json(new { success = false });
     }
 
     [HttpGet]
@@ -127,7 +130,7 @@ _hubContext = hubContext;
         if (string.IsNullOrEmpty(User.UserName) && string.IsNullOrEmpty(User.Password) && User.RoleTypeID.ToString().Length > 0)
         {
           await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "user Name, Password and Role Name field is required. Please enter a valid text value.!");
-          return Json(new { success = false});
+          return Json(new { success = false });
         }
         User.UserName = CR_CipherKey.Encrypt(User.UserName);
         User.Password = CR_CipherKey.Encrypt(User.Password);
@@ -184,7 +187,7 @@ _hubContext = hubContext;
             else
             {
               await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Next approval setup not found.!");
-              return Json(new { success = false});
+              return Json(new { success = false });
             }
           }
           else
@@ -193,14 +196,14 @@ _hubContext = hubContext;
             _appDBContext.CR_Users.Update(User);
             await _appDBContext.SaveChangesAsync();
             await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "User Created successfully. No process setup found, User activated.");
-            return Json(new { success = true});
+            return Json(new { success = true });
           }
         }
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "User Created successfully. Continue to the Approval Process Setup for User Activation.");
         return Json(new { success = true });
       }
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating user. Please check the inputs.!");
-      return Json(new { success = false});
+      return Json(new { success = false });
     }
 
     public async Task<IActionResult> Delete(int id)
