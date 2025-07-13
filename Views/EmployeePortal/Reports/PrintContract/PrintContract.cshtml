@@ -1,4 +1,6 @@
 @model Exampler_ERP.Models.HR_Contract
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     Layout = "_EmployeeContentNavbarLayout";
     ViewData["Title"] = "Report - Print Contract";
@@ -8,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Print Contract</title>
+    <title>@Localizer["lbl_Print"]  Contract</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -118,16 +120,16 @@
         <!-- Contract Details -->
         <div class="contract-section">
             <h3>Employee Details</h3>
-            <p><strong>Name:</strong> @Model.Employee?.FirstName @Model.Employee?.FatherName @Model.Employee?.FamilyName</p>
-            <p><strong>Position:</strong> @Model.Employee?.DesignationType?.DesignationTypeName</p>
-            <p><strong>Department:</strong> @Model.Employee?.DepartmentType?.DepartmentTypeName</p>
+            <p><strong>Name:</strong> @Model.Employee?.FirstName @Model.Employee?.FatherName @Model.Employee?.Family@Localizer["lbl_Name"]</p>
+            <p><strong>Position:</strong> @Model.Employee?.DesignationType?.DesignationType@Localizer["lbl_Name"]</p>
+            <p><strong>Department:</strong> @Model.Employee?.DepartmentType?.DepartmentType@Localizer["lbl_Name"]</p>
         </div>
 
         <div class="contract-section">
             <h3>Contract Information</h3>
             <p><strong>Start Date:</strong> @Model.StartDate.ToString("dd/MM/yyyy")</p>
             <p><strong>End Date:</strong> @Model.EndDate?.ToString("dd/MM/yyyy")</p>
-            <p><strong>Contract Type:</strong> @Model.Settings_ContractType?.ContractTypeName</p>
+            <p><strong>Contract Type:</strong> @Model.Settings_ContractType?.ContractType@Localizer["lbl_Name"]</p>
         </div>
 
         <!-- Dynamic Terms and Conditions Section -->

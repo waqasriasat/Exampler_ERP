@@ -15,7 +15,7 @@
                 <form id="editCashAgainstSaleForm">
                     <div class="row">
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label asp-for="BranchTypeID" class="form-label fw-bold">@Localizer["lbl_SelectBranch"]</label>
+                            <label asp-for="BranchTypeID" class="form-label fw-bold">@Localizer["lbl_Select"] @Localizer["lbl_Branch"]</label>
                             <select asp-for="BranchTypeID" asp-items="@(new SelectList(ViewBag.BranchList, "Value", "Text", Model.BranchTypeID))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="BranchTypeID" class="text-danger"></span>

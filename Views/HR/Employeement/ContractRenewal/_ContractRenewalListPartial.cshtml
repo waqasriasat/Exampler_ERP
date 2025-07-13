@@ -7,7 +7,7 @@
                             <div class="col-11 col-md-11 col-lg-11">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-6">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.Family@Localizer["lbl_Name"]</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-6">
                                         <p class="text-nowrap"><span class="smallAdd">End Date : </span>@(item.EndDate?.ToString("dd/MM/yyyy") ?? "N/A")</p>

@@ -7,10 +7,10 @@
                             <div class="col-8 col-md-10 col-lg-8">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.Family@Localizer["lbl_Name"]</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Document Name : </span>@item.DocumentName</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Document Name : </span>@item.Document@Localizer["lbl_Name"]</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
                                         <p class="text-nowrap"><span class="smallAdd">Date : </span>@item.Date.ToString("dd/MM/yyyy")</p>

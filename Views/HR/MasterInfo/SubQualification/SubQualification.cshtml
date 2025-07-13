@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Master Information - SubQualification";
+	ViewData["Title"] = @Localizer["lbl_MasterInformation"] + " - SubQualification";
 }
 
 @section PageScripts {
@@ -114,7 +114,7 @@
                     <div class="col-md-8" style="padding-bottom: 15px;">
                         <!-- Search Field and Button -->
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search SubQualification name" id="searchSubQualificationInput">
+                            <input type="text" class="form-control" placeholder="@Localizer["lbl_Search"] SubQualification @Localizer["lbl_Name"]" id="searchSubQualificationInput">
                             <button class="btn btn-outline-secondary" type="button" id="searchSubQualificationButton">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -135,17 +135,17 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">SubQualification List</h5>
+            <h5 class="card-header">SubQualification @Localizer["lbl_List"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                        <div class="col-10 col-md-10 col-lg-10">
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="text-nowrap">Qualification Name</p>
+                                    <p class="text-nowrap">Qualification @Localizer["lbl_Name"]</p>
                                 </div>
                                 <div class="col-4">
-                                    <p class="text-nowrap">SubQualification Name</p>
+                                    <p class="text-nowrap">SubQualification @Localizer["lbl_Name"]</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">@Localizer["lbl_Active"]</p>

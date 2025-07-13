@@ -150,10 +150,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("Branches");
-        worksheet.Cells["A1"].Value = _localizer["lbl_BranchID"];
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Branch"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_Branch"] +" "+ _localizer["lbl_ID"];
         worksheet.Cells["B1"].Value = _localizer["lbl_Date"];
-        worksheet.Cells["C1"].Value = _localizer["lbl_BranchName"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_Name"] + " " + _localizer["lbl_Name"];
         worksheet.Cells["D1"].Value = _localizer["lbl_Active"];
         worksheet.Cells["E1"].Value = _localizer["lbl_POBox"];
         worksheet.Cells["F1"].Value = _localizer["lbl_Country"];
@@ -187,7 +187,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"Branches-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_Branch"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

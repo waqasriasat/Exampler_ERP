@@ -1,9 +1,10 @@
 @model IEnumerable<Exampler_ERP.Models.CR_ProcessTypeApprovalSetup>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Print Process Type Approval Setup</title>
+    <title>@Localizer["lbl_Print"]  Process Type Approval Setup</title>
     <style>
         table {
             width: 100%;

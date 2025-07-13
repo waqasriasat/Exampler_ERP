@@ -7,10 +7,10 @@
                             <div class="col-10 col-md-11 col-lg-9">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Vacation?.Employee?.FirstName @item.Vacation?.Employee?.FatherName @item.Vacation?.Employee?.FamilyName</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Vacation?.Employee?.FirstName @item.Vacation?.Employee?.FatherName @item.Vacation?.Employee?.Family@Localizer["lbl_Name"]</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Vacation Type : </span>@item.Vacation?.Settings_VacationType?.VacationTypeName</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Vacation Type : </span>@item.Vacation?.Settings_VacationType?.VacationType@Localizer["lbl_Name"]</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
                                         <p class="text-nowrap"><span class="smallAdd">Settle Days : </span>@item.SettleDays</p>

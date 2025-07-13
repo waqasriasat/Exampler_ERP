@@ -1,9 +1,10 @@
 @model IEnumerable<Exampler_ERP.Models.HR_EmployeeRequestTypeApproval>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Print EmployeeRequestes</title>
+	<title>@Localizer["lbl_Print"] +" - "+ @Localizer["lbl_EmployeeRequest"]</title>
     <style>
         table {
             width: 100%;
@@ -26,14 +27,14 @@
     </style>
 </head>
 <body style="background-color:white">
-    <h2>EmployeeRequest List</h2>
+    <h2>@Localizer["lbl_EmployeeRequest"] @Localizer["lbl_List"]</h2>
     <table>
         <thead>
             <tr>
-                <th>EmployeeRequest ID</th>
-                <th>EmployeeRequest Type</th>
-                <th>Request Date</th>
-                <th>Notes</th>
+                <th>@Localizer["lbl_EmployeeRequest"] @Localizer["lbl_ID"]</th>
+                <th>@Localizer["lbl_EmployeeRequest"] @Localizer["lbl_Type"]</th>
+                <th>@Localizer["lbl_Request"] @Localizer["lbl_Date"]</th>
+                <th>@Localizer["lbl_Note"]</th>
             </tr>
         </thead>
         <tbody>

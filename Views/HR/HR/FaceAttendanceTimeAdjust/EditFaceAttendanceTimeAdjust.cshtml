@@ -21,7 +21,7 @@
                             <!-- Employee Selection -->
                             <div class="row">
                                 <div class="col-12">
-                                    <label asp-for="EmployeeID" class="form-label fw-bold">Employee Name</label>
+                                    <label asp-for="EmployeeID" class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
                                     <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control form-control-lg" disabled></select>
                                     <span asp-validation-for="EmployeeID" class="text-danger"></span>
                                 </div>

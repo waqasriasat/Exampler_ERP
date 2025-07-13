@@ -66,30 +66,30 @@
                     <div class="col-12">
                         <div class="row bleft bright btop bbottom">
                             <div class="col-3">
-                                <p>Employee Name: @empPayroll.Employee.FirstName @empPayroll.Employee.FatherName @empPayroll.Employee.FamilyName</p>
+                                <p>Employee Name: @empPayroll.Employee.FirstName @empPayroll.Employee.FatherName @empPayroll.Employee.Family@Localizer["lbl_Name"]</p>
                             </div>
                             <div class="col-3">
-                                <p>Branch: @empPayroll.Employee.BranchType.BranchTypeName</p>
+                                <p>Branch: @empPayroll.Employee.BranchType.BranchType@Localizer["lbl_Name"]</p>
                             </div>
                             <div class="col-3">
-                                <p>Department: @empPayroll.Employee.DepartmentType.DepartmentTypeName</p>
+                                <p>Department: @empPayroll.Employee.DepartmentType.DepartmentType@Localizer["lbl_Name"]</p>
                             </div>
                             <div class="col-3">
-                                <p>Designation: @empPayroll.Employee.DesignationType.DesignationTypeName</p>
+                                <p>Designation: @empPayroll.Employee.DesignationType.DesignationType@Localizer["lbl_Name"]</p>
                             </div>
                             @if (empPayroll.BankDetails != null)
                             {
                                 <div class="col-3">
-                                    <p>Bank Name: @empPayroll.BankDetails.BankName</p>
+                                    <p>Bank Name: @empPayroll.BankDetails.Bank@Localizer["lbl_Name"]</p>
                                 </div>
                                 <div class="col-3">
-                                    <p>Bank Branch: @empPayroll.BankDetails.BranchName</p>
+                                    <p>Bank Branch: @empPayroll.BankDetails.Branch@Localizer["lbl_Name"]</p>
                                 </div>
                                 <div class="col-3">
                                     <p>Account #: @empPayroll.BankDetails.AccountNumber</p>
                                 </div>
                                 <div class="col-3">
-                                    <p>Account Title: @empPayroll.BankDetails.AccountHolderName</p>
+                                    <p>Account Title: @empPayroll.BankDetails.AccountHolder@Localizer["lbl_Name"]</p>
                                 </div>
                             }
 

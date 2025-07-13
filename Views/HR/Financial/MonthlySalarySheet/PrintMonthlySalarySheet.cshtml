@@ -1,8 +1,10 @@
 @model IEnumerable<Exampler_ERP.Models.Temp.MonthlySalarySheetViewModel>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Print Monthly Salary Sheet</title>
+    <title>@Localizer["lbl_Print"]  Monthly Salary Sheet</title>
     <style>
         table {
             width: 100%;

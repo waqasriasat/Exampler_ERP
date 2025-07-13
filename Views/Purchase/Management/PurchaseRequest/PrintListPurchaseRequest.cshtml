@@ -1,9 +1,10 @@
 @model IEnumerable<Exampler_ERP.Models.PR_PurchaseRequest>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Print Purchase Request</title>
+    <title>@Localizer["lbl_Print"]  Purchase Request</title>
     <style>
         table {
             width: 100%;
@@ -31,7 +32,7 @@
         <thead>
             <tr>
                 <th>Request ID</th>
-                <th>Request Date</th>
+                <th>@Localizer["lbl_Request"] @Localizer["lbl_Date"]</th>
                 <th>Item Name</th>
                 <th>Quantity</th>
                 <th>Request Status</th>

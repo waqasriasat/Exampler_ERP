@@ -1,11 +1,13 @@
 @model Exampler_ERP.Models.Temp.MonthlyPayrollPrintViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     Layout = "_BlankLayout";
 }
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Print Monthly Payslip</title>
+    <title>@Localizer["lbl_Print"]  Monthly Payslip</title>
    
 </head>
 <body style="background-color:white">

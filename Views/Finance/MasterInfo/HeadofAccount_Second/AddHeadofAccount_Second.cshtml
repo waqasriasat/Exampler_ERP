@@ -28,7 +28,7 @@
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                         </div>
                         <div class="col-12 col-md-12 col-lg-12">
-                            <label for="HeadofAccount_SecondName" class="form-label fw-bold">HeadofAccount_Second Name</label>
+                            <label for="HeadofAccount_SecondName" class="form-label fw-bold">@Localizer["lbl_HeadofAccount"]_@Localizer["lbl_Second"] @Localizer["lbl_Name"]</label>
                             <input type="text" class="form-control form-control-lg" id="HeadofAccount_SecondName" name="HeadofAccount_SecondName" value="@Model.HeadofAccount_SecondName" />
                         </div>
                     </div>

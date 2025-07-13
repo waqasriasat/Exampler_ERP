@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Master Information - Employee Request Type Forward";
+    ViewData["Title"] = @Localizer["lbl_MasterInformation"] +"  - Employee Request Type Forward";
 }
 
 @section PageScripts {
@@ -90,7 +90,7 @@
                     <div class="col-md-8" style="padding-bottom: 15px;">
                         <!-- Search Field and Button -->
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search Employee Request Type name" id="searchEmployeeRequestTypeInput">
+                            <input type="text" class="form-control" placeholder="@Localizer["lbl_Search"] Employee Request Type @Localizer["lbl_Name"]" id="searchEmployeeRequestTypeInput">
                             <button class="btn btn-outline-secondary" type="button" id="searchEmployeeRequestTypeButton">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -110,14 +110,14 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Employee Request Type Forward List</h5>
+            <h5 class="card-header">Employee Request Type Forward @Localizer["lbl_List"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                         <div class="col-10 col-md-10 col-lg-10">
                             <div class="row">
                                 <div class="col-8">
-                                    <p class="text-nowrap">Employee Request Type Name</p>
+                                    <p class="text-nowrap">Employee Request Type @Localizer["lbl_Name"]</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Total Role</p>

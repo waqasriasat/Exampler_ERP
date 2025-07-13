@@ -1,9 +1,10 @@
 @model IEnumerable<Exampler_ERP.Models.HR_EmployeeRequestTypeApprovalSetup>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Print Employee Request Type Approval Setup</title>
+    <title>@Localizer["lbl_Print"]  Employee Request Type Approval Setup</title>
     <style>
         table {
             width: 100%;

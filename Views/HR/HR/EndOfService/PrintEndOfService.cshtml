@@ -1,11 +1,10 @@
 @model IEnumerable<Exampler_ERP.Models.HR_EndOfService>
-@{
-    
-}
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Print  End Of Service</title>
+    <title>@Localizer["lbl_Print"]   End Of Service</title>
     <style>
         table {
             width: 100%;
@@ -33,7 +32,7 @@
         <thead>
             <tr>
                 <th> End Of Service ID</th>
-                <th>Employee Name</th>
+                <th>@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</th>
                 <th>Reason Type</th>
                 <th>Total Salary</th>
                 <th>Total Day Of Absent</th>

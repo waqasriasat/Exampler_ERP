@@ -1,9 +1,10 @@
 @model IEnumerable<Exampler_ERP.Models.HR_WorkDay>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Print WorkDays</title>
+    <title>@Localizer["lbl_Print"]  WorkDays</title>
     <style>
         table {
             width: 100%;
@@ -31,7 +32,7 @@
         <thead>
             <tr>
                 <th>WorkDay ID</th>
-                <th>Employee Name</th>
+                <th>@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</th>
                 <th>Month</th>
                 <th>Year</th>
                 <th>Days</th>

@@ -7,10 +7,10 @@
                             <div class="col-10 col-md-11 col-lg-10">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.Family@Localizer["lbl_Name"]</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-1">
-                                        <p class="text-nowrap"><span class="smallAdd">Month : </span>@item.MonthType?.MonthTypeName</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Month : </span>@item.MonthType?.MonthType@Localizer["lbl_Name"]</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-1">
                                         <p class="text-nowrap"><span class="smallAdd">Year : </span>@Html.DisplayFor(modelItem => item.Year)</p>

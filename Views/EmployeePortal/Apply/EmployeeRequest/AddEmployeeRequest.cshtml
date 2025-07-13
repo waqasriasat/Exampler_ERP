@@ -1,4 +1,6 @@
 @model Exampler_ERP.Models.HR_EmployeeRequestTypeApproval
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     var EmployeeID = Context.Session.GetInt32("EmployeeID");
     var EmployeeName = Context.Session.GetString("EmployeeName");
@@ -10,7 +12,7 @@
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="addEmployeeRequestModalLabel"><i class="fas fa-key me-2"></i>Add EmployeeRequest
+                <h5 class="modal-title" id="addEmployeeRequestModalLabel"><i class="fas fa-key me-2"></i>@Localizer["lbl_Add"] @Localizer["lbl_EmployeeRequest"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -22,12 +24,12 @@
                     <div class="row">
                         <div class="col-12">
                             <input type="hidden" asp-for="EmployeeID" value="@EmployeeID" class="form-control form-control-lg" />
-                            <label class="form-label fw-bold">Employee Name</label>
+							<label class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
                             <input type="text" class="form-control form-control-lg" value="@EmployeeName" readonly />
                         </div>
 
                         <div class="col-12">
-                            <label asp-for="EmployeeRequestTypeID" class="form-label fw-bold">EmployeeRequest Type</label>
+                            <label asp-for="EmployeeRequestTypeID" class="form-label fw-bold">@Localizer["lbl_EmployeeRequest"] @Localizer["lbl_Type"]</label>
                             <select asp-for="EmployeeRequestTypeID" asp-items="@(new SelectList(ViewBag.EmployeeRequestTypeList, "Value", "Text"))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="EmployeeRequestTypeID" class="text-danger small"></span>
@@ -36,7 +38,7 @@
                         
                         <!-- Notes Field -->
                         <div class="col-12">
-                            <label asp-for="Notes" class="form-label fw-bold">Notes</label>
+                            <label asp-for="Notes" class="form-label fw-bold">@Localizer["lbl_Note"]</label>
                             <textarea asp-for="Notes" class="form-control form-control-lg" rows="4" placeholder="Enter Notes here..."></textarea>
                             <span asp-validation-for="Notes" class="text-danger small"></span>
                         </div>

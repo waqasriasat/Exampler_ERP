@@ -1,9 +1,10 @@
 @model IEnumerable<Exampler_ERP.Models.Temp.ItemWithStockQuantityViewModel>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Print Material Stock</title>
+    <title>@Localizer["lbl_Print"]  Material Stock</title>
     <style>
         table {
             width: 100%;

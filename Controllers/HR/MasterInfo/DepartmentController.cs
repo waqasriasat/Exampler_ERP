@@ -144,10 +144,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("Departments");
-        worksheet.Cells["A1"].Value = "Department ID";
-        worksheet.Cells["B1"].Value = _localizer["lbl_BranchName"];
-        worksheet.Cells["C1"].Value = "Department Name";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Department"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_Department"] + " " + _localizer["lbl_ID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_Branch"] + " " + _localizer["lbl_Name"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_Department"] + " " + _localizer["lbl_Name"];
         worksheet.Cells["D1"].Value = _localizer["lbl_Active"];
 
 
@@ -165,7 +165,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"Departments-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_Department"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

@@ -35,10 +35,10 @@
                         <div class="col-11 col-md-11 col-lg-10">
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="text-nowrap">Employee Name</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</p>
                                 </div>
                                 <div class="col-3">
-                                    <p class="text-nowrap">Process Type Name</p>
+                                    <p class="text-nowrap">Process Type @Localizer["lbl_Name"]</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Rank</p>
@@ -67,7 +67,7 @@
                             <div class="col-11 col-md-11 col-lg-10">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.CR_ProcessTypeApproval?.Employee?.FirstName @item.CR_ProcessTypeApproval?.Employee?.FatherName @item.CR_ProcessTypeApproval?.Employee?.FamilyName</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.CR_ProcessTypeApproval?.Employee?.FirstName @item.CR_ProcessTypeApproval?.Employee?.FatherName @item.CR_ProcessTypeApproval?.Employee?.Family@Localizer["lbl_Name"]</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
                                         <p class="text-nowrap"><span class="smallAdd">Process Type Name : </span>@(item.CR_ProcessTypeApproval?.ProcessType?.ProcessTypeName ?? "N/A")  </p>

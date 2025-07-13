@@ -22,14 +22,14 @@
 
                         <!-- Employee Name Search Field -->
                         <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">Employee Name</label>
-                            <input type="text" class="form-control" id="searchEmployeeInput" placeholder="Search Employee" name="EmployeeName" value="@ViewBag.EmployeeName" />
-                            <input type="hidden" class="form-control" id="EmployeeID" placeholder="Search Employee" name="EmployeeID" value="@ViewBag.EmployeeID" />
+                            <label class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
+                            <input type="text" class="form-control" id="searchEmployeeInput" placeholder="@Localizer["lbl_Search"] Employee" name="EmployeeName" value="@ViewBag.EmployeeName" />
+                            <input type="hidden" class="form-control" id="EmployeeID" placeholder="@Localizer["lbl_Search"] Employee" name="EmployeeID" value="@ViewBag.EmployeeID" />
                         </div>
 
                         <!-- EmployeeRequest Type Dropdown -->
                         <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">EmployeeRequest Type</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_EmployeeRequest"] @Localizer["lbl_Type"]</label>
                             <select name="EmployeeRequestTypeID" class="form-control">
                                 @foreach (var item in ViewBag.EmployeeRequestTypeList)
                                 {

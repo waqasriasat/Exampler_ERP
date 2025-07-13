@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editSectionModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit Section
+					@Localizer["lbl_Edit"] @Localizer["lbl_Section"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -18,7 +18,7 @@
                         <div class="col-2 col-md-12 col-lg-12">
                             <div class="row">
                                 <div class="col-6">
-                                    <label asp-for="DepartmentTypeID" class="form-label fw-bold">Select Department</label>
+                                    <label asp-for="DepartmentTypeID" class="form-label fw-bold">@Localizer["lbl_Select"] @Localizer["lbl_Department"]</label>
                                     <select asp-for="DepartmentTypeID" asp-items="@(new SelectList(ViewBag.DepartmentList, "Value", "Text", Model.DepartmentTypeID))" class="form-control form-control-lg">
                                     </select>
                                     <span asp-validation-for="DepartmentTypeID" class="text-danger"></span>
@@ -31,7 +31,7 @@
                                     <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <label for="SectionTypeName" class="form-label fw-bold">Section Name</label>
+                                    <label for="SectionTypeName" class="form-label fw-bold">@Localizer["lbl_Section"] @Localizer["lbl_Name"]</label>
                                     <input type="text" class="form-control form-control-lg" id="SectionTypeName" name="SectionTypeName" value="@Model.SectionTypeName" />
                                 </div>
                             </div>

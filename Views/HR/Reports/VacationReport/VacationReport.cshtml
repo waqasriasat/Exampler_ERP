@@ -85,9 +85,9 @@
 
                         <!-- Employee Name Search Field -->
                         <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">Employee Name</label>
-                            <input type="text" class="form-control" id="searchEmployeeInput" placeholder="Search Employee" name="EmployeeName" value="@ViewBag.EmployeeName" />
-                            <input type="hidden" class="form-control" id="EmployeeID" placeholder="Search Employee" name="EmployeeID" value="@ViewBag.EmployeeID" />
+                            <label class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
+                            <input type="text" class="form-control" id="searchEmployeeInput" placeholder="@Localizer["lbl_Search"] Employee" name="EmployeeName" value="@ViewBag.EmployeeName" />
+                            <input type="hidden" class="form-control" id="EmployeeID" placeholder="@Localizer["lbl_Search"] Employee" name="EmployeeID" value="@ViewBag.EmployeeID" />
                         </div>
 
                         <!-- Vacation Type Dropdown -->
@@ -134,13 +134,13 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Vacation Report List</h5>
+            <h5 class="card-header">Vacation Report @Localizer["lbl_List"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                             <div class="row">
 
                                 <div class="col-4">
-                                    <p class="text-nowrap">Employee Name</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Start Date</p>
@@ -162,7 +162,7 @@
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
                                 <div class="row">
                                     <div class="col-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name: </span>@item.EmployeeName</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name: </span>@item.Employee@Localizer["lbl_Name"]</p>
                                     </div>
                                     <div class="col-2">
                                         <p class="text-nowrap"><span class="smallAdd">Start Date: </span>@item.StartDate?.ToString("dd-MMM-yyyy")</p>
