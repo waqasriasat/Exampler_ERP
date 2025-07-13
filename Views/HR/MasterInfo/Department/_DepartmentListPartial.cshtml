@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.Settings_DepartmentType>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @foreach (var item in Model)
                 {
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
@@ -7,21 +8,21 @@
                             <div class="col-10 col-md-10 col-lg-10">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Branch Name : </span>@(item.BranchType?.BranchTypeName ?? "N/A")  </p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_BranchName"]  : </span>@(item.BranchType?.BranchTypeName ?? "N/A")  </p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <p class="text-nowrap"><span class="smallAdd">Department Name : </span>@Html.DisplayFor(modelItem => item.DepartmentTypeName)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <p class="text-nowrap">
-                                            <span class="smallAdd">Active : </span>
+                                            <span class="smallAdd">@Localizer["lbl_Active"]  : </span>
                                             @if (item.ActiveYNID == 1)
                                             {
-                                                <span>Yes</span>
+                                                <span>@Localizer["lbl_Yes"]</span>
                                             }
                                             else if (item.ActiveYNID == 2)
                                             {
-                                                <span>No</span>
+                                                <span>@Localizer["lbl_No"]</span>
                                             }
                                         </p>
                                     </div>

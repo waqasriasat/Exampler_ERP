@@ -139,7 +139,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         worksheet.Cells["A1"].Value = "Section ID";
         worksheet.Cells["B1"].Value = "Department Name";
         worksheet.Cells["C1"].Value = "Section Name";
-        worksheet.Cells["D1"].Value = "Active";
+        worksheet.Cells["D1"].Value = _localizer["lbl_Active"];
 
 
         for (int i = 0; i < Sections.Count; i++)

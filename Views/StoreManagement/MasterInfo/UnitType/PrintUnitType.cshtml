@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.Settings_UnitType>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,7 +34,7 @@
                 <th>Item Unit Type ID</th>
                 <th>Item Unit Type Name</th>
                 <th>Item Unit Type Code</th>
-                <th>Active</th>
+                <th>@Localizer["lbl_Active"]</th>
             </tr>
         </thead>
         <tbody>

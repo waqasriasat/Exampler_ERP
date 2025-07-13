@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     Layout = "_EmployeeContentNavbarLayout";
     ViewData["Title"] = "Employee Portal - Apply";
@@ -19,10 +21,10 @@
     <div class="col-md-12">
         <ul class="nav nav-pills flex-column flex-md-row mb-3">
             <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Apply</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/EmployeeHR_Report_Dashboard/Index"><i class="bx bx-bell me-1"></i> Report</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/EmployeeHR_Report_Dashboard/Index"><i class="bx bx-bell me-1"></i> @Localizer["lbl_Report"]</a></li>
         </ul>
         <div class="card mb-4">
-            <h5 class="card-header">Details</h5>
+            <h5 class="card-header"> @Localizer["lbl_Details"]</h5>
             <div class="row" style="padding: 30px 30px 0px 30px;">
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <a asp-controller="Vacation" asp-action="Index">

@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.HR_AddionalAllowance
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="modal fade" id="editAddionalAllowanceModal" tabindex="-1" role="dialog" aria-labelledby="editAddionalAllowanceModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -17,8 +18,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="submit" class="btn btn-success" id="saveChanges">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">@Localizer["lbl_Close"]</button>
+                <button type="submit" class="btn btn-success" id="saveChanges">@Localizer["lbl_SaveChanges"]</button>
             </div>
         </div>
     </div>

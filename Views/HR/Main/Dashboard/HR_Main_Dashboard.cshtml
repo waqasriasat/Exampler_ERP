@@ -1,8 +1,12 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Human Resources - Master Infomation";
 
 
-    var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
+	ViewData["Title"] = @Localizer["lbl_HumanResources"] + " - " + @Localizer["lbl_MasterInformation"];
+
+
+	var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
     var accessRightByUsertList = string.IsNullOrEmpty(accessRightsByUserJson)
         ? new List<int>()
         : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsByUserJson);
@@ -28,20 +32,20 @@
 
 @* ************** Content ************** *@
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Human Resources /</span> Master Infomation
+    <span class="text-muted fw-light">@Localizer["lbl_HumanResources"]  /</span> @Localizer["lbl_MasterInformation"]
 </h4>
 
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-pills flex-column flex-md-row mb-3">
-            <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-home me-1"></i> Main</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/HR_Employeement_Dashboard/Index"><i class="bx bx-briefcase me-1"></i> Employeement</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/HR_HR_Dashboard/Index"><i class="bx bx-group me-1"></i> HR</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/HR_Finance_Dashboard/Index"><i class="bx bx-dollar me-1"></i> Finance</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/HR_Report_Dashboard/Index"><i class="bx bx-bar-chart-alt me-1"></i> Report</a></li>
+            <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-home me-1"></i> @Localizer["lbl_Main"]</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/HR_Employeement_Dashboard/Index"><i class="bx bx-briefcase me-1"></i> @Localizer["lbl_Employeement"]</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/HR_HR_Dashboard/Index"><i class="bx bx-group me-1"></i> @Localizer["lbl_HR"]</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/HR_Finance_Dashboard/Index"><i class="bx bx-dollar me-1"></i> @Localizer["lbl_Finance"]</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/HR_Report_Dashboard/Index"><i class="bx bx-bar-chart-alt me-1"></i> @Localizer["lbl_Report"]</a></li>
         </ul>
         <div class="card mb-4">
-            <h5 class="card-header">Details</h5>
+            <h5 class="card-header"> @Localizer["lbl_Details"]</h5>
 
             <div class="row" style="padding: 30px 30px 0px 30px;">
                 @if (accessRightByRoleList.Contains(51) || accessRightByUsertList.Contains(51))
@@ -52,7 +56,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Branch</strong>
+                                        <strong class="text-primary">@Localizer["lbl_Branch"]</strong>
                                         <h4 class="font-weight-bold text-dark">
                                             @ViewBag.BranchCount
                                         </h4>
@@ -62,7 +66,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -76,7 +80,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Department</strong>
+                                        <strong class="text-primary"> @Localizer["lbl_Department"]</strong>
                                         <h4 class="font-weight-bold text-dark">
                                             @ViewBag.DepartmentCount
                                         </h4>
@@ -86,7 +90,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -110,7 +114,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -134,7 +138,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -158,7 +162,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -182,7 +186,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -206,7 +210,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -230,7 +234,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -254,7 +258,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -278,7 +282,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -302,7 +306,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -326,7 +330,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -350,7 +354,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -374,7 +378,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -398,7 +402,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -422,7 +426,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -446,7 +450,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -470,7 +474,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -494,7 +498,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -518,7 +522,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -542,7 +546,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -566,7 +570,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -588,7 +592,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -610,7 +614,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -632,7 +636,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -654,7 +658,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>

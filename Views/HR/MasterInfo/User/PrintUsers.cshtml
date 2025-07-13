@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.CR_User>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,7 +34,7 @@
                 <th>User ID</th>
                 <th>User Name</th>
                 <th>Role Name</th>
-                <th>Active</th>
+                <th>@Localizer["lbl_Active"]</th>
             </tr>
         </thead>
         <tbody>

@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.MaterialReceivedsIndexViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="modal fade" id="editMaterialReceivedModal" tabindex="-1" role="dialog" aria-labelledby="editMaterialReceivedModalLabel">
     <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
         <div class="modal-content">
@@ -97,8 +98,8 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-success" id="saveChanges">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="Close">@Localizer["lbl_Close"]</button>
+                <button type="button" class="btn btn-success" id="saveChanges">@Localizer["lbl_SaveChanges"]</button>
             </div>
         </div>
     </div>

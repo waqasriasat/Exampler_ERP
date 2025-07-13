@@ -132,7 +132,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
         var worksheet = package.Workbook.Worksheets.Add("UnitTypees");
         worksheet.Cells["A1"].Value = "UnitType ID";
         worksheet.Cells["B1"].Value = "UnitType Name";
-        worksheet.Cells["C1"].Value = "Active";
+        worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
         for (int i = 0; i < UnitTypees.Count; i++)

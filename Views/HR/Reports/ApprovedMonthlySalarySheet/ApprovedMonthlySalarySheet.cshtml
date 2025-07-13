@@ -63,7 +63,7 @@
                         </div>
                         <!-- Branch Dropdown -->
                         <div class="col-md-4 mb-4">
-                            <label class="form-label fw-bold">Branch</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_Branch"]</label>
                             <select name="Branch" class="form-control">
                                 @foreach (var item in ViewBag.BranchList)
                                 {
@@ -129,7 +129,7 @@
                             <div class="col-11 col-md-10 col-lg-11">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Branch Name : </span>@(item.BranchType?.BranchTypeName ?? "N/A")  </p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_BranchName"]  : </span>@(item.BranchType?.BranchTypeName ?? "N/A")  </p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
                                         <p class="text-nowrap"><span class="smallAdd">Month : </span>@(item.MonthType?.MonthTypeName ?? "N/A") </p>

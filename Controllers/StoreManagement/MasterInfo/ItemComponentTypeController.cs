@@ -138,7 +138,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
         var worksheet = package.Workbook.Worksheets.Add("ItemComponentTypees");
         worksheet.Cells["A1"].Value = "ItemComponentType ID";
         worksheet.Cells["B1"].Value = "ItemComponentType Name";
-        worksheet.Cells["C1"].Value = "Active";
+        worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
         for (int i = 0; i < ItemComponentTypees.Count; i++)

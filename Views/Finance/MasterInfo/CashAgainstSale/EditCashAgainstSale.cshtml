@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Settings_CashAgainstSale
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="modal fade" id="editCashAgainstSaleModal" tabindex="-1" role="dialog" aria-labelledby="editCashAgainstSaleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -14,7 +15,7 @@
                 <form id="editCashAgainstSaleForm">
                     <div class="row">
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label asp-for="BranchTypeID" class="form-label fw-bold">Select Branch</label>
+                            <label asp-for="BranchTypeID" class="form-label fw-bold">@Localizer["lbl_SelectBranch"]</label>
                             <select asp-for="BranchTypeID" asp-items="@(new SelectList(ViewBag.BranchList, "Value", "Text", Model.BranchTypeID))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="BranchTypeID" class="text-danger"></span>
@@ -26,7 +27,7 @@
                             <span asp-validation-for="HeadofAccount_FiveID" class="text-danger"></span>
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
+                            <label asp-for="ActiveYNID" class="form-label fw-bold">@Localizer["lbl_Active"]</label>
                             <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text", Model.ActiveYNID))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
@@ -36,8 +37,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-success" id="saveChanges">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">@Localizer["lbl_Close"]</button>
+                <button type="button" class="btn btn-success" id="saveChanges">@Localizer["lbl_SaveChanges"]</button>
             </div>
         </div>
     </div>

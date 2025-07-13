@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Purchase - Report";
 
@@ -23,18 +25,18 @@
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Purchase /</span> Report
+    <span class="text-muted fw-light"> @Localizer["lbl_Purchase"] /</span> @Localizer["lbl_Report"]
 </h4>
 
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-pills flex-column flex-md-row mb-3">
-            <li class="nav-item"><a class="nav-link" href="~/PR_Main_Dashboard/Index"><i class="bx bx-home me-1"></i> Main</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/PR_Management_Dashboard/Index"><i class="bx bx-briefcase me-1"></i> Management</a></li>
-            <li class="nav-item"><a class="nav-link active" href="~/PR_Report_Dashboard/Index"><i class="bx bx-bar-chart-alt me-1"></i> Reports</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/PR_Main_Dashboard/Index"><i class="bx bx-home me-1"></i> @Localizer["lbl_Main"]</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/PR_Management_Dashboard/Index"><i class="bx bx-briefcase me-1"></i> @Localizer["lbl_Management"]</a></li>
+            <li class="nav-item"><a class="nav-link active" href="~/PR_Report_Dashboard/Index"><i class="bx bx-bar-chart-alt me-1"></i> @Localizer["lbl_Report"]</a></li>
         </ul>
         <div class="card mb-4">
-            <h5 class="card-header">Details</h5>
+            <h5 class="card-header"> @Localizer["lbl_Details"]</h5>
             <div class="row" style="padding: 30px 30px 0px 30px;">
               
             </div>

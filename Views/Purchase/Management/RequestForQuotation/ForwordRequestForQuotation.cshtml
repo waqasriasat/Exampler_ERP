@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.PurchaseRequestwithRequestForQuotationViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <style>
     .ui-autocomplete {
         z-index: 1000 !important;
@@ -61,8 +62,8 @@
                     @Html.Partial("~/Views/Purchase/Management/RequestForQuotation/_ForwordRequestForQuotation.cshtml", Model)
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
+                        <button type="submit" class="btn btn-success">@Localizer["lbl_Save"] </button>
                     </div>
                 </form>
             </div>

@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.EmployeeRequestTypeForwardViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="modal fade" id="addNewEmployeeRequestTypeForwardModal" tabindex="-1" role="dialog" aria-labelledby="addNewEmployeeRequestTypeForwardModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -34,8 +35,8 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                        <button type="submit" class="btn btn-success" id="saveNewEmployeeRequestTypeForward">Save</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">@Localizer["lbl_Close"]</button>
+                        <button type="submit" class="btn btn-success" id="saveNewEmployeeRequestTypeForward">@Localizer["lbl_Save"] </button>
                     </div>
                 </form>
             </div>

@@ -149,7 +149,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
         var worksheet = package.Workbook.Worksheets.Add("HeadofAccount_Fives");
         worksheet.Cells["A1"].Value = "HeadofAccount_Five ID";
         worksheet.Cells["B1"].Value = "HeadofAccount_Five Name";
-        worksheet.Cells["C1"].Value = "Active";
+        worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
         for (int i = 0; i < HeadofAccount_Fives.Count; i++)

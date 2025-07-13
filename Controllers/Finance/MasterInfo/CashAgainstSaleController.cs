@@ -137,9 +137,9 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
       using (var package = new ExcelPackage())
       {
         var worksheet = package.Workbook.Worksheets.Add("CashAgainstSales");
-        worksheet.Cells["A1"].Value = "Branch Name";
+        worksheet.Cells["A1"].Value = _localizer["lbl_BranchName"];
         worksheet.Cells["B1"].Value = "CashAgainstSale Account";
-        worksheet.Cells["C1"].Value = "Active";
+        worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
         for (int i = 0; i < CashAgainstSales.Count; i++)

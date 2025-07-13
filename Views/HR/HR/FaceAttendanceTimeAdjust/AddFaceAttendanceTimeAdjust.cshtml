@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.CR_FaceAttendance
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="modal fade" id="addFaceAttendanceTimeAdjustModal" tabindex="-1" role="dialog" aria-labelledby="addFaceAttendanceTimeAdjustModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -56,8 +57,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success" id="saveNewFaceAttendanceTimeAdjust">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["lbl_Close"]</button>
+                <button type="button" class="btn btn-success" id="saveNewFaceAttendanceTimeAdjust">@Localizer["lbl_Save"] </button>
             </div>
         </div>
     </div>

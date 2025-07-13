@@ -134,7 +134,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         var worksheet = package.Workbook.Worksheets.Add("OvertimeRatees");
         worksheet.Cells["A1"].Value = "OvertimeRate ID";
         worksheet.Cells["B1"].Value = "OvertimeRate Name";
-        worksheet.Cells["C1"].Value = "Active";
+        worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
         for (int i = 0; i < OvertimeRatees.Count; i++)

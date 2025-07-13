@@ -4,15 +4,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Exampler_ERP.Controllers;
+using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Utilities
 {
   public class Utils
   {
-    private readonly AppDBContext _appDBContext; 
-    public Utils(AppDBContext appDBContext)
+    private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<Utils> _localizer;
+    public Utils(AppDBContext appDBContext, IStringLocalizer<Utils> localizer)
     {
       _appDBContext = appDBContext;
+      _localizer = localizer;
     }
     public async Task<dynamic> GetSearchingEmployee(string term)
     {
@@ -71,7 +75,7 @@ namespace Exampler_ERP.Utilities
       var Employees = await _appDBContext.HR_Employees.ToListAsync();
 
       var selectList = Employees.Select(r => new SelectListItem { Value = r.EmployeeID.ToString(), Text = r.FirstName + ' ' + r.FatherName + ' ' + r.FamilyName }).ToList();
-      selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
+      selectList.Insert(0, new SelectListItem { Value = _localizer["lbl_Pleaseselect"], Text = _localizer["lbl_Pleaseselect"] });
       return selectList;
     }
     //public async Task<List<SelectListItem>> GetEmployees()
@@ -81,7 +85,7 @@ namespace Exampler_ERP.Utilities
     //.ToListAsync();
 
     //  var selectList = employees.Select(r => new SelectListItem { Value = r.EmployeeID.ToString(), Text = r.FirstName + r.FatherName + r.FamilyName }).ToList();
-    //  selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
+    //  selectList.Insert(0, new SelectListItem { Value = _localizer["lbl_Pleaseselect"], Text = _localizer["lbl_Pleaseselect"] });
     //  return selectList;
     //}
     public async Task<List<SelectListItem>> GetGender()
@@ -94,7 +98,7 @@ namespace Exampler_ERP.Utilities
         Text = g.GenderTypeName
       }).ToList();
 
-      GenderList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      GenderList.Insert(0, new SelectListItem { Value = _localizer["lbl_Pleaseselect"], Text = _localizer["lbl_Pleaseselect"] });
 
       return GenderList;
     }
@@ -108,7 +112,7 @@ namespace Exampler_ERP.Utilities
         Text = ms.MaritalStatusTypeName
       }).ToList();
 
-      MaritalStatusList.Insert(0, new SelectListItem { Value = "0", Text = "Select Marital Status" });
+      MaritalStatusList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return MaritalStatusList;
     }
@@ -122,7 +126,7 @@ namespace Exampler_ERP.Utilities
         Text = r.ReligionTypeName
       }).ToList();
 
-      ReligionList.Insert(0, new SelectListItem { Value = "0", Text = "Select Religion" });
+      ReligionList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return ReligionList;
     }
@@ -136,7 +140,7 @@ namespace Exampler_ERP.Utilities
         Text = r.CountryTypeName
       }).ToList();
 
-      countriesList.Insert(0, new SelectListItem { Value = "0", Text = "Select Country" });
+      countriesList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return countriesList;
     }
@@ -147,7 +151,7 @@ namespace Exampler_ERP.Utilities
         .ToListAsync();
 
       var selectList = branchs.Select(r => new SelectListItem { Value = r.BranchTypeID.ToString(), Text = r.BranchTypeName }).ToList();
-      selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
+      selectList.Insert(0, new SelectListItem { Value = _localizer["lbl_Pleaseselect"], Text = _localizer["lbl_Pleaseselect"] });
       return selectList;
     }
     public async Task<List<SelectListItem>> GetBranchsWithoutZeroLine()
@@ -164,7 +168,7 @@ namespace Exampler_ERP.Utilities
       var departments = await _appDBContext.Settings_DepartmentTypes.ToListAsync();
 
       var selectList = departments.Select(r => new SelectListItem { Value = r.DepartmentTypeID.ToString(), Text = r.DepartmentTypeName }).ToList();
-      selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
+      selectList.Insert(0, new SelectListItem { Value = _localizer["lbl_Pleaseselect"], Text = _localizer["lbl_Pleaseselect"] });
       return selectList;
     }
     public async Task<List<SelectListItem>> GetDesignations()
@@ -172,7 +176,7 @@ namespace Exampler_ERP.Utilities
       var designations = await _appDBContext.Settings_DesignationTypes.ToListAsync();
 
       var selectList = designations.Select(r => new SelectListItem { Value = r.DesignationTypeID.ToString(), Text = r.DesignationTypeName }).ToList();
-      selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
+      selectList.Insert(0, new SelectListItem { Value = _localizer["lbl_Pleaseselect"], Text = _localizer["lbl_Pleaseselect"] });
       return selectList;
     }
     public async Task<List<SelectListItem>> GetQualifications()
@@ -180,7 +184,7 @@ namespace Exampler_ERP.Utilities
       var qualifications = await _appDBContext.Settings_QualificationTypes.ToListAsync();
 
       var selectList = qualifications.Select(r => new SelectListItem { Value = r.QualificationTypeID.ToString(), Text = r.QualificationTypeName }).ToList();
-      selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
+      selectList.Insert(0, new SelectListItem { Value = _localizer["lbl_Pleaseselect"], Text = _localizer["lbl_Pleaseselect"] });
       return selectList;
     }
     public async Task<List<SelectListItem>> GetUsers()
@@ -188,7 +192,7 @@ namespace Exampler_ERP.Utilities
       var users = await _appDBContext.CR_Users.ToListAsync();
 
       var selectList = users.Select(r => new SelectListItem { Value = r.UserID.ToString(), Text = CR_CipherKey.Decrypt(r.UserName) }).ToList();
-      selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
+      selectList.Insert(0, new SelectListItem { Value = _localizer["lbl_Pleaseselect"], Text = _localizer["lbl_Pleaseselect"] });
       return selectList;
     }
 
@@ -199,7 +203,7 @@ namespace Exampler_ERP.Utilities
     .ToListAsync();
 
       var selectList = roles.Select(r => new SelectListItem { Value = r.RoleTypeID.ToString(), Text = r.RoleTypeName }).ToList();
-      selectList.Insert(0, new SelectListItem { Value = "Please Select", Text = "Please Select" });
+      selectList.Insert(0, new SelectListItem { Value = _localizer["lbl_Pleaseselect"], Text = _localizer["lbl_Pleaseselect"] });
       return selectList;
     }
     public async Task<List<SelectListItem>> GetSalaryOptions()
@@ -212,7 +216,7 @@ namespace Exampler_ERP.Utilities
         Text = r.SalaryOptionName
       }).ToList();
 
-      SalaryTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      SalaryTypeList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return SalaryTypeList;
     }
@@ -226,7 +230,7 @@ namespace Exampler_ERP.Utilities
         Text = r.HolidayTypeName
       }).ToList();
 
-      HolidayTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      HolidayTypeList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return HolidayTypeList;
     }
@@ -241,7 +245,7 @@ namespace Exampler_ERP.Utilities
         Text = r.ContractTypeName
       }).ToList();
 
-      ContractTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      ContractTypeList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return ContractTypeList;
     }
@@ -255,7 +259,7 @@ namespace Exampler_ERP.Utilities
         Text = r.EndOfServiceReasonTypeName
       }).ToList();
 
-      EndOfServiceReasonTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      EndOfServiceReasonTypeList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return EndOfServiceReasonTypeList;
     }
@@ -269,7 +273,7 @@ namespace Exampler_ERP.Utilities
           })
           .ToListAsync();
 
-      deductionValues.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      deductionValues.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return deductionValues;
     }
@@ -283,7 +287,7 @@ namespace Exampler_ERP.Utilities
           })
           .ToListAsync();
 
-      classIDList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      classIDList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return classIDList;
     }
@@ -297,7 +301,7 @@ namespace Exampler_ERP.Utilities
           })
           .ToListAsync();
 
-      deductionTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      deductionTypeList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return deductionTypeList;
     }
@@ -312,7 +316,7 @@ namespace Exampler_ERP.Utilities
           })
           .ToListAsync();
 
-      overTimeTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      overTimeTypeList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return overTimeTypeList;
     }
@@ -341,7 +345,7 @@ namespace Exampler_ERP.Utilities
           })
           .ToListAsync();
 
-      vacationTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      vacationTypeList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return vacationTypeList;
     }
@@ -355,7 +359,7 @@ namespace Exampler_ERP.Utilities
           })
           .ToListAsync();
 
-      vacationDateList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      vacationDateList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return vacationDateList;
     }
@@ -386,7 +390,7 @@ namespace Exampler_ERP.Utilities
           .ToListAsync();
 
       // Add a default 'Please Select' option
-      vacationDateList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      vacationDateList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return vacationDateList;
     }
@@ -403,7 +407,7 @@ namespace Exampler_ERP.Utilities
      .ToListAsync();
 
       // Add a default 'Please Select' option
-      vacationDateList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      vacationDateList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return vacationDateList;
     }
@@ -417,7 +421,7 @@ namespace Exampler_ERP.Utilities
           })
           .ToListAsync();
 
-      SalaryTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      SalaryTypeList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return SalaryTypeList;
     }
@@ -431,7 +435,7 @@ namespace Exampler_ERP.Utilities
           })
           .ToListAsync();
 
-      EmployeeRequestTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      EmployeeRequestTypeList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return EmployeeRequestTypeList;
     }
@@ -445,7 +449,7 @@ namespace Exampler_ERP.Utilities
           })
           .ToListAsync();
 
-      processTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      processTypeList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return processTypeList;
     }
@@ -461,7 +465,7 @@ namespace Exampler_ERP.Utilities
             })
             .ToListAsync();
 
-        monthTypeList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+        monthTypeList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
         return monthTypeList;
       }
@@ -502,7 +506,7 @@ namespace Exampler_ERP.Utilities
            })
            .ToListAsync();
 
-      directManagerList.Insert(0, new SelectListItem { Value = "0", Text = "Please Select" });
+      directManagerList.Insert(0, new SelectListItem { Value = "0", Text = _localizer["lbl_Pleaseselect"] });
 
       return directManagerList;
     }

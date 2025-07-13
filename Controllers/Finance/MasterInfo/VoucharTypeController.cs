@@ -141,7 +141,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
         var worksheet = package.Workbook.Worksheets.Add("VoucherTypes");
         worksheet.Cells["A1"].Value = "VoucherType ID";
         worksheet.Cells["B1"].Value = "Voucher Type Name";
-        worksheet.Cells["C1"].Value = "Active";
+        worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
         worksheet.Cells["D1"].Value = "Voucher Nature";
         worksheet.Cells["E1"].Value = "Voucher Prefix";
 

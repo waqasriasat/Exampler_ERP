@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.FI_Bank>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,9 +33,9 @@
             <tr>
                 <th>Bank ID</th>
                 <th>Bank Name</th>
-                <th>Active</th>
+                <th>@Localizer["lbl_Active"]</th>
                 <th>Account No</th>
-                <th>Phone</th>
+                <th>@Localizer["lbl_Phone"] </th>
             </tr>
         </thead>
         <tbody>

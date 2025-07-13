@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.HR_ThumbEnrollment
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="modal fade" id="addThumbEnrollmentModal" tabindex="-1" role="dialog" aria-labelledby="addThumbEnrollmentModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -33,7 +34,7 @@
                         <label for="EnrollmentDate">Enrollment Date</label>
                         <input type="date" class="form-control" asp-for="EnrollmentDate" />
                     </div>
-                    <button type="button" id="saveNewThumbEnrollment" class="btn btn-primary">Save</button>
+                    <button type="button" id="saveNewThumbEnrollment" class="btn btn-primary">@Localizer["lbl_Save"] </button>
                 </form>
             </div>
         </div>

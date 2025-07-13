@@ -143,7 +143,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         worksheet.Cells["A1"].Value = "SubQualification ID";
         worksheet.Cells["B1"].Value = "Qualification Name";
         worksheet.Cells["C1"].Value = "SubQualification Name";
-        worksheet.Cells["D1"].Value = "Active";
+        worksheet.Cells["D1"].Value = _localizer["lbl_Active"];
 
 
         for (int i = 0; i < SubQualification.Count; i++)

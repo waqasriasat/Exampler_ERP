@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.ST_Item
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="modal fade" id="editItemModal" tabindex="-1" role="dialog" aria-labelledby="editItemModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -26,30 +27,30 @@
                                     <input type="text" class="form-control form-control-lg" id="ItemCode" name="ItemCode" value="@Model.ItemCode" />
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
+                                    <label asp-for="ActiveYNID" class="form-label fw-bold">@Localizer["lbl_Active"]</label>
                                     <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
-                                        <option>Please select</option>
+                                        <option>@Localizer["lbl_Pleaseselect"]</option>
                                     </select>
                                     <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label asp-for="UnitTypeID" class="form-label fw-bold">Unit</label>
                                     <select asp-for="UnitTypeID" asp-items="@(new SelectList(ViewBag.UnitTypeIDList, "Value", "Text"))" class="form-control form-control-lg">
-                                        <option>Please select</option>
+                                        <option>@Localizer["lbl_Pleaseselect"]</option>
                                     </select>
                                     <span asp-validation-for="UnitTypeID" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label asp-for="ItemCategoryTypeID" class="form-label fw-bold">Category</label>
                                     <select asp-for="ItemCategoryTypeID" asp-items="@(new SelectList(ViewBag.ItemCategoryTypeIDList, "Value", "Text"))" class="form-control form-control-lg">
-                                        <option>Please select</option>
+                                        <option>@Localizer["lbl_Pleaseselect"]</option>
                                     </select>
                                     <span asp-validation-for="ItemCategoryTypeID" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label asp-for="ManufacturerTypeID" class="form-label fw-bold">Manufacturer</label>
                                     <select asp-for="ManufacturerTypeID" asp-items="@(new SelectList(ViewBag.ManufacturerTypeIDList, "Value", "Text"))" class="form-control form-control-lg">
-                                        <option>Please select</option>
+                                        <option>@Localizer["lbl_Pleaseselect"]</option>
                                     </select>
                                     <span asp-validation-for="ManufacturerTypeID" class="text-danger"></span>
                                 </div>
@@ -93,8 +94,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-success" id="saveChanges">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">@Localizer["lbl_Close"]</button>
+                <button type="button" class="btn btn-success" id="saveChanges">@Localizer["lbl_SaveChanges"]</button>
             </div>
         </div>
     </div>

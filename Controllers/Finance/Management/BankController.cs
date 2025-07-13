@@ -158,9 +158,9 @@ namespace Exampler_ERP.Controllers.Finance.Management
         var worksheet = package.Workbook.Worksheets.Add("Banks");
         worksheet.Cells["A1"].Value = "Bank ID";
         worksheet.Cells["B1"].Value = "Bank Name";
-        worksheet.Cells["C1"].Value = "Active";
+        worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
         worksheet.Cells["D1"].Value = "Account No";
-        worksheet.Cells["E1"].Value = "Address";
+        worksheet.Cells["E1"].Value = _localizer["lbl_Address"];
 
 
         for (int i = 0; i < Banks.Count; i++)

@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
   ViewData["Title"] = "Modals - UI elements";
 }
@@ -51,8 +53,8 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-success">Save changes</button>
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
+                  <button type="button" class="btn btn-success">@Localizer["lbl_SaveChanges"]</button>
                 </div>
               </div>
             </div>
@@ -96,8 +98,8 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-success">Save changes</button>
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
+                  <button type="button" class="btn btn-success">@Localizer["lbl_SaveChanges"]</button>
                 </div>
               </div>
             </div>
@@ -141,8 +143,8 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-success">Save</button>
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
+                  <button type="button" class="btn btn-success">@Localizer["lbl_Save"] </button>
                 </div>
               </form>
             </div>
@@ -273,8 +275,8 @@
                     consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-success">Save changes</button>
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
+                  <button type="button" class="btn btn-success">@Localizer["lbl_SaveChanges"]</button>
                 </div>
               </div>
             </div>
@@ -316,8 +318,8 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Save changes</button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
+                <button type="button" class="btn btn-success">@Localizer["lbl_SaveChanges"]</button>
               </div>
             </div>
           </div>
@@ -349,8 +351,8 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Save changes</button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
+                <button type="button" class="btn btn-success">@Localizer["lbl_SaveChanges"]</button>
               </div>
             </div>
           </div>
@@ -382,8 +384,8 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Save changes</button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
+                <button type="button" class="btn btn-success">@Localizer["lbl_SaveChanges"]</button>
               </div>
             </div>
           </div>
@@ -453,8 +455,8 @@
                   consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Save changes</button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
+                <button type="button" class="btn btn-success">@Localizer["lbl_SaveChanges"]</button>
               </div>
             </div>
           </div>
@@ -506,8 +508,8 @@
                   consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Save changes</button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
+                <button type="button" class="btn btn-success">@Localizer["lbl_SaveChanges"]</button>
               </div>
             </div>
           </div>
@@ -561,8 +563,8 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-success">Save</button>
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
+                  <button type="button" class="btn btn-success">@Localizer["lbl_Save"] </button>
                 </div>
               </form>
             </div>

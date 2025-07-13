@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.ProcessTypeForwardViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="modal fade" id="addNewProcessTypeForwardModal" tabindex="-1" role="dialog" aria-labelledby="addNewProcessTypeForwardModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -34,8 +35,8 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                        <button type="submit" class="btn btn-success" id="saveNewProcessTypeForward">Save</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">@Localizer["lbl_Close"]</button>
+                        <button type="submit" class="btn btn-success" id="saveNewProcessTypeForward">@Localizer["lbl_Save"] </button>
                     </div>
                 </form>
             </div>

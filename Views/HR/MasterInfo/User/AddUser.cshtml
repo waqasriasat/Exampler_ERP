@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.CR_User
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -38,8 +39,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-success" id="saveNewUser">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">@Localizer["lbl_Close"]</button>
+                <button type="button" class="btn btn-success" id="saveNewUser">@Localizer["lbl_Save"] </button>
             </div>
         </div>
     </div>

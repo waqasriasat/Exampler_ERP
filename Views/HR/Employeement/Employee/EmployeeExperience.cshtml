@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.EmployeeExperienceViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="modal fade" id="employeeExperienceModal" tabindex="-1" role="dialog" aria-labelledby="employeeExperienceModalLabel" aria-hidden="true" style="--bs-modal-width: 60rem;">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -28,12 +29,12 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-6">
-                            <label asp-for="NewExperience.City" class="form-label">City</label>
+                            <label asp-for="NewExperience.City" class="form-label">@Localizer["lbl_City"] </label>
                             <input asp-for="NewExperience.City" class="form-control" />
                             <span asp-validation-for="NewExperience.City" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="NewExperience.CountryTypeID" class="form-label">Country</label>
+                            <label asp-for="NewExperience.CountryTypeID" class="form-label">@Localizer["lbl_Country"] </label>
                             <select asp-for="NewExperience.CountryTypeID" asp-items="@(new SelectList(ViewBag.CountryTypes, "Value", "Text"))" class="form-control"></select>
                             <span asp-validation-for="NewExperience.CountryTypeID" class="text-danger"></span>
                         </div>
@@ -68,8 +69,8 @@
                 </form>
             </div>
             <div class="modal-footer" style="padding-top: 20px;">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-success" id="saveEmployeeChanges" form="employeeExperienceForm">Save Changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">@Localizer["lbl_Close"]</button>
+                <button type="button" class="btn btn-success" id="saveEmployeeChanges" form="employeeExperienceForm">@Localizer["lbl_SaveChanges"]</button>
             </div>
             @Html.Partial("~/Views/HR/Employeement/Employee/_EmployeeExperience.cshtml", Model.EmployeeExperiences)
         </div>

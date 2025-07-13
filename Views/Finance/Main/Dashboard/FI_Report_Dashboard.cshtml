@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Finance - Report";
 
@@ -41,19 +43,19 @@
 
 @* ************** Content ************** *@
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Finance /</span> Report
+    <span class="text-muted fw-light">Finance /</span> @Localizer["lbl_Report"]
 </h4>
 
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-pills flex-column flex-md-row mb-3">
-            <li class="nav-item"><a class="nav-link" href="~/FI_Main_Dashboard/Index"><i class="bx bx-home me-1"></i> Main</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/FI_Management_Dashboard/Index"><i class="bx bx-group me-1"></i> Management</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/FI_Main_Dashboard/Index"><i class="bx bx-home me-1"></i> @Localizer["lbl_Main"]</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/FI_Management_Dashboard/Index"><i class="bx bx-group me-1"></i> @Localizer["lbl_Management"]</a></li>
             <li class="nav-item"><a class="nav-link" href="~/FI_Transaction_Dashboard/Index"><i class="bx bx-dollar me-1"></i> Transaction</a></li>
-            <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-bar-chart-alt me-1"></i> Report</a></li>
+            <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-bar-chart-alt me-1"></i> @Localizer["lbl_Report"]</a></li>
         </ul>
         <div class="card mb-4">
-            <h5 class="card-header">Details</h5>
+            <h5 class="card-header"> @Localizer["lbl_Details"]</h5>
 
             <div class="row" style="padding: 30px 30px 0px 30px;">
                 @if (accessRightByRoleList.Contains(51) || accessRightByUsertList.Contains(51))
@@ -75,7 +77,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -100,7 +102,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>
@@ -125,7 +127,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white text-muted text-center">
-                                    View Details <i class="fa fa-arrow-right"></i>
+                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
                                 </div>
                             </div>
                         </a>

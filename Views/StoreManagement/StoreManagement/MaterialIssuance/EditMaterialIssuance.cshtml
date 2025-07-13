@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.MaterialIssuancesIndexViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <style>
     .ui-autocomplete {
         z-index: 1000 !important;
@@ -57,8 +58,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="saveChanges" class="btn btn-success">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
+                <button type="button" id="saveChanges" class="btn btn-success">@Localizer["lbl_Save"] </button>
             </div>
         </div>
     </div>

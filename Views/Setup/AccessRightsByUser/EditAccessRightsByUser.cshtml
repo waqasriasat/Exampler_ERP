@@ -1,5 +1,6 @@
 @model List<Exampler_ERP.Models.CR_AccessRightsByUser>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <script>
     $(document).ready(function () {
@@ -123,8 +124,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="submit" class="btn btn-success" id="saveChanges">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">@Localizer["lbl_Close"]</button>
+                <button type="submit" class="btn btn-success" id="saveChanges">@Localizer["lbl_SaveChanges"]</button>
             </div>
         </div>
     </div>

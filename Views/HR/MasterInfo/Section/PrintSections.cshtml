@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.Settings_SectionType>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,9 +32,9 @@
         <thead>
             <tr>
                 <th>Section ID</th>
-                <th>Department Name</th>
+                <th>@Localizer["lbl_DepartmentName"]</th>
                 <th>Section Name</th>
-                <th>Active</th>
+                <th>@Localizer["lbl_Active"]</th>
             </tr>
         </thead>
         <tbody>

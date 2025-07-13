@@ -151,18 +151,18 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       using (var package = new ExcelPackage())
       {
         var worksheet = package.Workbook.Worksheets.Add("Branches");
-        worksheet.Cells["A1"].Value = "Branch ID";
-        worksheet.Cells["B1"].Value = "Date";
-        worksheet.Cells["C1"].Value = "Branch Name";
-        worksheet.Cells["D1"].Value = "Active";
-        worksheet.Cells["E1"].Value = "PO Box";
-        worksheet.Cells["F1"].Value = "Country";
-        worksheet.Cells["G1"].Value = "City";
-        worksheet.Cells["H1"].Value = "Street";
-        worksheet.Cells["I1"].Value = "Phone";
-        worksheet.Cells["J1"].Value = "Fax";
-        worksheet.Cells["K1"].Value = "Mobile";
-        worksheet.Cells["L1"].Value = "Address";
+        worksheet.Cells["A1"].Value = _localizer["lbl_BranchID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_Date"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_BranchName"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_Active"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_POBox"];
+        worksheet.Cells["F1"].Value = _localizer["lbl_Country"];
+        worksheet.Cells["G1"].Value = _localizer["lbl_City"];
+        worksheet.Cells["H1"].Value = _localizer["lbl_Street"];
+        worksheet.Cells["I1"].Value = _localizer["lbl_Phone"];
+        worksheet.Cells["J1"].Value = _localizer["lbl_Fax"];
+        worksheet.Cells["K1"].Value = _localizer["lbl_Mobile"];
+        worksheet.Cells["L1"].Value = _localizer["lbl_Address"];
 
 
         for (int i = 0; i < branches.Count; i++)

@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.FI_Bank
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="modal fade" id="editBankModal" tabindex="-1" role="dialog" aria-labelledby="editBankModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -18,7 +19,7 @@
                             <input type="text" class="form-control form-control-lg" id="BankName" name="BankName" value="@Model.BankName" />
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label asp-for="ActiveYNID" class="form-label fw-bold">Active</label>
+                            <label asp-for="ActiveYNID" class="form-label fw-bold">@Localizer["lbl_Active"]</label>
                             <select asp-for="ActiveYNID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text", Model.ActiveYNID))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
@@ -28,11 +29,11 @@
                             <input type="text" class="form-control form-control-lg" id="AccountNo" name="AccountNo" value="@Model.AccountNo" />
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label for="Phone" class="form-label fw-bold">Phone</label>
+                            <label for="Phone" class="form-label fw-bold">@Localizer["lbl_Phone"] </label>
                             <input type="text" class="form-control form-control-lg" id="Phone" name="Phone" value="@Model.Phone" />
                         </div>
                         <div class="col-12 col-md-12 col-lg-12">
-                            <label for="Address" class="form-label fw-bold">Address</label>
+                            <label for="Address" class="form-label fw-bold">@Localizer["lbl_Address"] </label>
                             <input type="text" class="form-control form-control-lg" id="Address" name="Address" value="@Model.Address" />
                         </div>
                     </div>
@@ -40,8 +41,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-success" id="saveChanges">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">@Localizer["lbl_Close"]</button>
+                <button type="button" class="btn btn-success" id="saveChanges">@Localizer["lbl_SaveChanges"]</button>
             </div>
         </div>
     </div>

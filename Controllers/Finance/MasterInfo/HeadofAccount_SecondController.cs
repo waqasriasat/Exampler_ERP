@@ -145,7 +145,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
         var worksheet = package.Workbook.Worksheets.Add("HeadofAccount_Seconds");
         worksheet.Cells["A1"].Value = "HeadofAccount_Second ID";
         worksheet.Cells["B1"].Value = "HeadofAccount_Second Name";
-        worksheet.Cells["C1"].Value = "Active";
+        worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
         for (int i = 0; i < HeadofAccount_Seconds.Count; i++)

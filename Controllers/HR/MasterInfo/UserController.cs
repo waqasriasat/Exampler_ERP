@@ -247,7 +247,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         worksheet.Cells["A1"].Value = "User ID";
         worksheet.Cells["B1"].Value = "User Name";
         worksheet.Cells["C1"].Value = "Role Name";
-        worksheet.Cells["D1"].Value = "Active";
+        worksheet.Cells["D1"].Value = _localizer["lbl_Active"];
 
 
         for (int i = 0; i < decryptedUsers.Count; i++)

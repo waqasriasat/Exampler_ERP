@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.Settings_EmployeeStatusType>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,7 +33,7 @@
             <tr>
                 <th>Employee Status Type ID</th>
                 <th>Employee Status Type Name</th>
-                <th>Active</th>
+                <th>@Localizer["lbl_Active"]</th>
             </tr>
         </thead>
         <tbody>

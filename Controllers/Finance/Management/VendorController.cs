@@ -156,9 +156,9 @@ namespace Exampler_ERP.Controllers.Finance.Management
         worksheet.Cells["B1"].Value = "Vendor Name";
         worksheet.Cells["C1"].Value = "Payee Name";
         worksheet.Cells["D1"].Value = "Cell";
-        worksheet.Cells["E1"].Value = "Phone";
+        worksheet.Cells["E1"].Value = _localizer["lbl_Phone"];
         worksheet.Cells["F1"].Value = "Person Name";
-        worksheet.Cells["G1"].Value = "Fax";
+        worksheet.Cells["G1"].Value = _localizer["lbl_Fax"];
         worksheet.Cells["H1"].Value = "Filer";
         worksheet.Cells["I1"].Value = "STN";
         worksheet.Cells["J1"].Value = "STN Rate";
@@ -169,7 +169,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
         worksheet.Cells["O1"].Value = "Province";
         worksheet.Cells["P1"].Value = "Federal";
         worksheet.Cells["Q1"].Value = "Payment Section";
-        worksheet.Cells["R1"].Value = "Address";
+        worksheet.Cells["R1"].Value = _localizer["lbl_Address"];
 
         // Adding data rows
         for (int i = 0; i < Vendors.Count; i++)

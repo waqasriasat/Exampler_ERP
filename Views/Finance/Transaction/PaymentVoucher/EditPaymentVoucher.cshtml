@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.PaymentVoucherIndexViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <style>
     .ui-autocomplete {
         z-index: 1000 !important;
@@ -19,7 +20,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
                 <button type="button" id="saveChanges" class="btn btn-success">Save Voucher</button>
             </div>
         </div>

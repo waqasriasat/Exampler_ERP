@@ -132,7 +132,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         var worksheet = package.Workbook.Worksheets.Add("SalaryTypees");
         worksheet.Cells["A1"].Value = "SalaryType ID";
         worksheet.Cells["B1"].Value = "SalaryType Name";
-        worksheet.Cells["C1"].Value = "Active";
+        worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
         for (int i = 0; i < SalaryTypees.Count; i++)

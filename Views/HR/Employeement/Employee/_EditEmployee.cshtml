@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.HR_Employee
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="row">
         <h5 class="modal-title" style="padding-top:10px">Company Information</h5>
         <hr />
@@ -50,13 +51,13 @@
 
         <div class="row">
             <div class="col-4">
-                <label asp-for="BranchTypeID" class="form-label fw-bold">Branch</label>
+                <label asp-for="BranchTypeID" class="form-label fw-bold">@Localizer["lbl_Branch"]</label>
                 <select asp-for="BranchTypeID" asp-items="@(new SelectList(ViewBag.BranchsList, "Value", "Text", Model.BranchTypeID))" class="form-control form-control-lg">
                 </select>
                 <span asp-validation-for="BranchTypeID" class="text-danger"></span>
             </div>
             <div class="col-4">
-                <label asp-for="DepartmentTypeID" class="form-label fw-bold">Department</label>
+                <label asp-for="DepartmentTypeID" class="form-label fw-bold"> @Localizer["lbl_Department"]</label>
                 <select asp-for="DepartmentTypeID" asp-items="@(new SelectList(ViewBag.DepartmentsList, "Value", "Text"))" class="form-control form-control-lg">
                 </select>
                 <span asp-validation-for="DepartmentTypeID" class="text-danger"></span>
@@ -148,7 +149,7 @@
         <span asp-validation-for="Phone2" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="Mobile" class="form-label fw-bold">Mobile</label>
+        <label asp-for="Mobile" class="form-label fw-bold">@Localizer["lbl_Mobile"] </label>
         <input asp-for="Mobile" class="form-control form-control-lg" />
         <span asp-validation-for="Mobile" class="text-danger"></span>
     </div>
@@ -172,7 +173,7 @@
         <span asp-validation-for="PlaceOfBirth" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="CountryID" class="form-label fw-bold">Country</label>
+        <label asp-for="CountryID" class="form-label fw-bold">@Localizer["lbl_Country"] </label>
         <select asp-for="CountryID" asp-items="@(new SelectList(ViewBag.CountriesList, "Value", "Text"))" class="form-control form-control-lg">
         </select>
         <span asp-validation-for="CountryID" class="text-danger"></span>
@@ -180,7 +181,7 @@
 </div>
 <div class="row">
     <div class="col-3">
-        <label asp-for="Fax" class="form-label fw-bold">Fax</label>
+        <label asp-for="Fax" class="form-label fw-bold">@Localizer["lbl_Fax"] </label>
         <input asp-for="Fax" class="form-control form-control-lg" />
         <span asp-validation-for="Fax" class="text-danger"></span>
     </div>
@@ -197,7 +198,7 @@
 </div>
 <div class="row">
     <div class="col-12">
-        <label asp-for="Address" class="form-label fw-bold">Address</label>
+        <label asp-for="Address" class="form-label fw-bold">@Localizer["lbl_Address"] </label>
         <textarea asp-for="Address" class="form-control form-control-lg" rows="4"></textarea>
         <span asp-validation-for="Address" class="text-danger"></span>
     </div>

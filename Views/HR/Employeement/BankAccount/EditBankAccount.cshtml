@@ -1,5 +1,6 @@
 @model List<Exampler_ERP.Models.HR_BankAccount>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="modal fade" id="editBankAccountModal" tabindex="-1" role="dialog" aria-labelledby="editBankAccountModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -41,7 +42,7 @@
                         </div>
                         <div class="col-6 mb-2">
                             <div class="form-group">
-                                <label for="BranchName" class="form-label fw-bold">Branch Name</label>
+                                <label for="BranchName" class="form-label fw-bold">@Localizer["lbl_BranchName"]</label>
                                 <input type="text" class="form-control form-control-lg" id="BranchName" name="BranchName" value="@Model.FirstOrDefault()?.BranchName" />
                             </div>
                         </div>
@@ -68,8 +69,8 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="submit" class="btn btn-success" id="saveChanges">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">@Localizer["lbl_Close"]</button>
+                <button type="submit" class="btn btn-success" id="saveChanges">@Localizer["lbl_SaveChanges"]</button>
             </div>
         </div>
     </div>

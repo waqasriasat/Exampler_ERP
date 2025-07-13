@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.MaterialIssuancesIndexViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <style>
     .ui-autocomplete {
         z-index: 1000 !important;
@@ -63,7 +64,7 @@
                         <div class="col-2 col-md-12 col-lg-6">
                             <label asp-for="MaterialIssuances.RequisitionID" class="form-label fw-bold">Pending Requisitions List</label>
                             <select asp-for="MaterialIssuances.RequisitionID" asp-items="@(new SelectList(ViewBag.PendingRequisitionsList, "Value", "Text", Model.MaterialIssuances.RequisitionID))" class="form-control form-control-lg custom-dropdown" id="requisitionId">
-                                <option>Please select</option>
+                                <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
                             <span asp-validation-for="MaterialIssuances.RequisitionID" class="text-danger"></span>
                         </div>
@@ -98,8 +99,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="saveNewMaterialIssuance" class="btn btn-success">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
+                <button type="button" id="saveNewMaterialIssuance" class="btn btn-success">@Localizer["lbl_Save"] </button>
             </div>
         </div>
     </div>

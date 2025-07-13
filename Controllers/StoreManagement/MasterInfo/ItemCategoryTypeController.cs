@@ -132,7 +132,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
         var worksheet = package.Workbook.Worksheets.Add("ItemCategoryTypees");
         worksheet.Cells["A1"].Value = "ItemCategoryType ID";
         worksheet.Cells["B1"].Value = "ItemCategoryType Name";
-        worksheet.Cells["C1"].Value = "Active";
+        worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
         for (int i = 0; i < ItemCategoryTypees.Count; i++)

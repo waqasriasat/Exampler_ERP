@@ -375,7 +375,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
         // Adding header row
         worksheet.Cells["A1"].Value = "Voucher #";
-        worksheet.Cells["B1"].Value = "Date";
+        worksheet.Cells["B1"].Value = _localizer["lbl_Date"];
         worksheet.Cells["C1"].Value = "Head of Account";
         worksheet.Cells["D1"].Value = "Credit Amount";
 

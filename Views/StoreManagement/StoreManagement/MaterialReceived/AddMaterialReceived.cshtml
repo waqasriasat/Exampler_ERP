@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.MaterialReceivedsIndexViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="modal fade" id="addMaterialReceivedModal" tabindex="-1" role="dialog" aria-labelledby="addMaterialReceivedModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
         <div class="modal-content">
@@ -18,21 +19,21 @@
                         <div class="col-2 col-md-12 col-lg-6">
                             <label asp-for="MaterialReceiveds.ItemID" class="form-label fw-bold">Item Name</label>
                             <select asp-for="MaterialReceiveds.ItemID" asp-items="@(new SelectList(ViewBag.ItemList, "Value", "Text", Model.MaterialReceiveds.ItemID))" class="form-control form-control-lg">
-                                <option>Please select</option>
+                                <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
                             <span asp-validation-for="MaterialReceiveds.ItemID" class="text-danger"></span>
                         </div>
                         <div class="col-2 col-md-12 col-lg-3">
                             <label asp-for="MaterialReceiveds.UnitTypeID" class="form-label fw-bold">Unit</label>
                             <select asp-for="MaterialReceiveds.UnitTypeID" asp-items="@(new SelectList(ViewBag.UnitList, "Value", "Text", Model.MaterialReceiveds.UnitTypeID))" class="form-control form-control-lg">
-                                <option>Please select</option>
+                                <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
                             <span asp-validation-for="MaterialReceiveds.UnitTypeID" class="text-danger"></span>
                         </div>
                         <div class="col-2 col-md-12 col-lg-3">
                             <label asp-for="MaterialReceiveds.VendorID" class="form-label fw-bold">Vendor Name</label>
                             <select asp-for="MaterialReceiveds.VendorID" asp-items="@(new SelectList(ViewBag.VendorList, "Value", "Text", Model.MaterialReceiveds.VendorID))" class="form-control form-control-lg">
-                                <option>Please select</option>
+                                <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
                             <span asp-validation-for="MaterialReceiveds.VendorID" class="text-danger"></span>
                         </div>
@@ -93,8 +94,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">Close</button>
-                <button type="button" class="btn btn-success" id="saveNewMaterialReceived">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">@Localizer["lbl_Close"]</button>
+                <button type="button" class="btn btn-success" id="saveNewMaterialReceived">@Localizer["lbl_Save"] </button>
             </div>
         </div>
     </div>

@@ -1,4 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.HR_Applicant>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     var GenderList = (List<SelectListItem>)ViewBag.GenderList;
     var MaritalStatusList = (List<SelectListItem>)ViewBag.MaritalStatusList;
@@ -40,10 +42,10 @@
                 <th>Gender</th>
                 <th>Marital Status</th>
                 <th>Religion</th>
-                <th>Phone</th>
-                <th>Mobile</th>
+                <th>@Localizer["lbl_Phone"] </th>
+                <th>@Localizer["lbl_Mobile"] </th>
                 <th>Whatsapp</th>
-                <th>Branch</th>
+                <th>@Localizer["lbl_Branch"]</th>
             </tr>
         </thead>
         <tbody>
