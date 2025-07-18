@@ -284,9 +284,9 @@ namespace Exampler_ERP.Controllers.Setup
       {
         var worksheet = package.Workbook.Worksheets.Add("ProcessTypeApprovalSetups");
         worksheet.Cells["A1"].Value = "ProcessType SetupID";
-        worksheet.Cells["B1"].Value = "ProcessType Name";
-        worksheet.Cells["C1"].Value = "Rank";
-        worksheet.Cells["D1"].Value = "Role";
+        worksheet.Cells["B1"].Value = _localizer["lbl_ProcessTypeName"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_Rank"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_RoleType"];
 
 
         for (int i = 0; i < ProcessTypeApprovalSetups.Count; i++)

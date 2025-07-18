@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addAddionalAllowanceTypeModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add New Addional Allowance Type
+					@Localizer["lbl_AddNewAdditionalAllowanceType"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -16,7 +16,7 @@
                 <form id="addAddionalAllowanceTypeForm">
                     <div class="row">
                         <div class="col-12">
-                            <label for="AddionalAllowanceTypeName" class="form-label fw-bold">Addional Allowance Type Name</label>
+							<label for="AddionalAllowanceTypeName" class="form-label fw-bold">@Localizer["lbl_AdditionalAllowanceTypeName"]</label>
                             <input type="text" class="form-control form-control-lg" id="AddionalAllowanceTypeName" name="AddionalAllowanceTypeName" value="@Model.AddionalAllowanceTypeName" />
                         </div>
                         <div class="col-6">

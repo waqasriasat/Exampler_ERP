@@ -8,10 +8,10 @@
 			<div class="col-10 col-md-10 col-lg-10">
 				<div class="row">
 					<div class="col-12 col-md-12 col-lg-4">
-						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Branch"] @Localizer["lbl_Name"]  : </span>@(item.BranchType?.BranchTypeName ?? "N/A")  </p>
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_BranchName"]  : </span>@(item.BranchType?.BranchTypeName ?? "N/A")  </p>
 					</div>
 					<div class="col-12 col-md-12 col-lg-4">
-						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Department"] @Localizer["lbl_Name"] : </span>@Html.DisplayFor(modelItem => item.DepartmentTypeName)</p>
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_DepartmentName"] : </span>@Html.DisplayFor(modelItem => item.DepartmentTypeName)</p>
 					</div>
 					<div class="col-12 col-md-12 col-lg-4">
 						<p class="text-nowrap">

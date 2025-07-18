@@ -131,9 +131,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("AddionalAllowanceTypees");
-        worksheet.Cells["A1"].Value = "AddionalAllowanceType ID";
-        worksheet.Cells["B1"].Value = "AddionalAllowanceType Name";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_AdditionalAllowanceType"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_AdditionalAllowanceTypeID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_AdditionalAllowanceTypeName"];
         worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
@@ -141,7 +141,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         {
           worksheet.Cells[i + 2, 1].Value = AddionalAllowanceTypees[i].AddionalAllowanceTypeID;
           worksheet.Cells[i + 2, 2].Value = AddionalAllowanceTypees[i].AddionalAllowanceTypeName;
-          worksheet.Cells[i + 2, 3].Value = AddionalAllowanceTypees[i].ActiveYNID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 3].Value = AddionalAllowanceTypees[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
         }
 
         worksheet.Cells["A1:C1"].Style.Font.Bold = true;
@@ -150,7 +150,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"AddionalAllowanceTypees-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_AdditionalAllowanceType"] + $"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }
@@ -160,7 +160,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       var AddionalAllowanceTypees = await _appDBContext.Settings_AddionalAllowanceTypes
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
-      return View("~/Views/HR/MasterInfo/AddionalAllowanceType/PrintAddionalAllowanceTypes.cshtml", AddionalAllowanceTypees);
+      return View("~/Views/HR/MasterInfo/AddionalAllowanceType/PrintAddionalAllowanceType.cshtml", AddionalAllowanceTypees);
     }
 
   }

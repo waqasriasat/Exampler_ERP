@@ -146,7 +146,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
         {
           worksheet.Cells[i + 2, 1].Value = CashAgainstSales[i].BranchType.BranchTypeName;
           worksheet.Cells[i + 2, 2].Value = CashAgainstSales[i].HeadofAccount_Five.HeadofAccount_FiveName;
-          worksheet.Cells[i + 2, 3].Value = CashAgainstSales[i].ActiveYNID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 3].Value = CashAgainstSales[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
         }
 
         worksheet.Cells["A1:l1"].Style.Font.Bold = true;

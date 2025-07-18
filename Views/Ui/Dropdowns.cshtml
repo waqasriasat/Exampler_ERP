@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
   ViewData["Title"] = "Dropdowns - UI elements";
 }
@@ -591,7 +593,7 @@
                   <input type="email" class="form-control form-control-lg" id="exampleDropdownFormEmail1" placeholder="email&#64;example.com">
                 </div>
                 <div class="mb-3">
-                  <label for="exampleDropdownFormPassword1" class="form-label">Password</label>
+                  <label for="exampleDropdownFormPassword1" class="form-label">@Localizer["lbl_Password"]</label>
                   <input type="password" class="form-control form-control-lg" id="exampleDropdownFormPassword1" placeholder="Password">
                 </div>
                 <div class="mb-3">

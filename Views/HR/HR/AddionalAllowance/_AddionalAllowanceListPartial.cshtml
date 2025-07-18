@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.HR_AddionalAllowance>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
  @foreach (var item in Model)
                 {
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
@@ -7,10 +8,10 @@
                             <div class="col-10 col-md-11 col-lg-10">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-6">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.Family@Localizer["lbl_Name"]</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Type Count : </span>@item.MonthType?.MonthType@Localizer["lbl_Name"]</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Type Count : </span>@item.MonthType?.MonthTypeName</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
                                         <p class="text-nowrap"><span class="smallAdd">Type Count : </span>@Html.DisplayFor(modelItem => item.Year)</p>

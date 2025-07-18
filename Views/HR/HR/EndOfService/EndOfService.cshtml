@@ -158,26 +158,26 @@
                     <div class="row mb-4">
                         <!-- From Date Field -->
                         <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">From Date</label>
+                            <label class="form-label fw-bold">From @Localizer["lbl_Date"]</label>
                             <input class="form-control" type="date" name="FromDate" value="@ViewBag.FromDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
                         <!-- To Date Field -->
                         <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">To Date</label>
+                            <label class="form-label fw-bold">To @Localizer["lbl_Date"]</label>
                             <input class="form-control" type="date" name="ToDate" value="@ViewBag.ToDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
                         <!-- Employee Name Search Field -->
                         <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
                             <input type="text" class="form-control" id="searchEmployeeInput" placeholder="@Localizer["lbl_Search"] Employee" name="EmployeeName" value="@ViewBag.EmployeeName" />
                             <input type="hidden" class="form-control" id="EmployeeID" placeholder="@Localizer["lbl_Search"] Employee" name="EmployeeID" value="@ViewBag.EmployeeID" />
                         </div>
 
                         <!-- EndOfServiceReason Type Dropdown -->
                         <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">Reason Type</label>
+                            <label class="form-label fw-bold">Reason @Localizer["lbl_Type"]</label>
                             <select name="EndOfServiceReasonTypeID" class="form-control">
                                 @foreach (var item in ViewBag.EndOfServiceReasonTypeList)
                                 {
@@ -222,7 +222,7 @@
                         <div class="col-10 col-md-11 col-lg-9">
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="text-nowrap">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</p>
+                                    <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                                 </div>
                                 <div class="col-4">
                                     <p class="text-nowrap">Date of Completion of Work</p>
@@ -238,7 +238,7 @@
                                     <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                                 <div class="col-12 col-md-12 col-lg-4">
-                                    <p class="text-nowrap">Print</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Print"] </p>
                                 </div>
                                 <div class="col-12 col-md-12 col-lg-4">
                                     <p class="text-nowrap">@Localizer["lbl_Delete"]</p>

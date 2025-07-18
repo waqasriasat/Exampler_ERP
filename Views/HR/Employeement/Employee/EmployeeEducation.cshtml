@@ -17,7 +17,7 @@
 
                     <div class="form-group row">
                         <div class="col-6">
-                            <label asp-for="NewEducation.QualificationTypeID" class="form-label">Qualification</label>
+                            <label asp-for="NewEducation.QualificationTypeID" class="form-label">@Localizer["lbl_Qualification"]</label>
                             <select asp-for="NewEducation.QualificationTypeID" asp-items="@(new SelectList(ViewBag.QualificationTypes, "Value", "Text"))" class="form-control"></select>
                             <span asp-validation-for="NewEducation.QualificationTypeID" class="text-danger"></span>
                         </div>

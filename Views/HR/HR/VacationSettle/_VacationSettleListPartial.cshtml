@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.HR_VacationSettle>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @foreach (var item in Model)
                 {
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
@@ -7,10 +8,10 @@
                             <div class="col-10 col-md-11 col-lg-9">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Vacation?.Employee?.FirstName @item.Vacation?.Employee?.FatherName @item.Vacation?.Employee?.Family@Localizer["lbl_Name"]</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.Vacation?.Employee?.FirstName @item.Vacation?.Employee?.FatherName @item.Vacation?.Employee?.FamilyName</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Vacation Type : </span>@item.Vacation?.Settings_VacationType?.VacationType@Localizer["lbl_Name"]</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_VacationType"] : </span>@item.Vacation?.Settings_VacationType?.VacationTypeName</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
                                         <p class="text-nowrap"><span class="smallAdd">Settle Days : </span>@item.SettleDays</p>

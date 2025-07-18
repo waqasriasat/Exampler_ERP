@@ -14,7 +14,7 @@
                 <form id="editThumbEnrollmentForm" method="post">
                     <input type="hidden" asp-for="ThumbID" />
                     <div class="form-group">
-                        <label for="EmployeeID">Employee</label>
+                        <label for="EmployeeID">@Localizer["lbl_SelectEmployee"]</label>
                         <select asp-for="EmployeeID" class="form-control" asp-items="ViewBag.Employees"></select>
                     </div>
                     <div class="form-group">
@@ -26,7 +26,7 @@
                         <input type="file" class="form-control" asp-for="ThumbImpression" />
                     </div>
                     <div class="form-group">
-                        <label for="EnrollmentDate">Enrollment Date</label>
+                        <label for="EnrollmentDate">Enrollment @Localizer["lbl_Date"]</label>
                         <input type="date" class="form-control" asp-for="EnrollmentDate" />
                     </div>
                     <button type="button" id="saveThumbEnrollmentChanges" class="btn btn-primary">@Localizer["lbl_Save"] </button>

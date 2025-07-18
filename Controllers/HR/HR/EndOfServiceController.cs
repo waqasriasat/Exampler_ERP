@@ -296,7 +296,7 @@ namespace Exampler_ERP.Controllers.HR.HR
         var worksheet = package.Workbook.Worksheets.Add("EndOfServices");
 
         worksheet.Cells["A1"].Value = "EndOfService ID";
-        worksheet.Cells["B1"].Value = "Employee Name";
+        worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
         worksheet.Cells["C1"].Value = "Reason Type";
         worksheet.Cells["D1"].Value = "Total Salary";
         worksheet.Cells["E1"].Value = "Total Day Of Absent";

@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 <div class="row">
-        <h5 class="modal-title" style="padding-top:10px">Company Information</h5>
+        <h5 class="modal-title" style="padding-top:10px">@Localizer["lbl_CompanyInformation"]</h5>
         <hr />
         <input type="hidden" asp-for="ActiveYNID" class="form-control form-control-lg" />
         <input type="hidden" asp-for="DeleteYNID" class="form-control form-control-lg" />
@@ -12,7 +12,7 @@
     <div class="col-12 col-md-12 col-lg-9">
         <div class="row">
             <div class="col-4">
-                <label asp-for="HireDate" class="form-label fw-bold">Hire Date</label>
+                <label asp-for="HireDate" class="form-label fw-bold">Hire @Localizer["lbl_Date"]</label>
                 <input asp-for="HireDate" class="form-control form-control-lg" type="date" />
                 <span asp-validation-for="HireDate" class="text-danger"></span>
             </div>
@@ -24,12 +24,12 @@
         </div>
         <div class="row">
             <div class="col-4">
-                <label asp-for="UserName" class="form-label fw-bold">User Name</label>
+                <label asp-for="UserName" class="form-label fw-bold">@Localizer["lbl_UserName"]</label>
                 <input asp-for="UserName" class="form-control form-control-lg" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="col-4">
-                <label asp-for="Password" class="form-label fw-bold">Password</label>
+                <label asp-for="Password" class="form-label fw-bold">@Localizer["lbl_Password"]</label>
                 <input asp-for="Password" class="form-control form-control-lg" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
@@ -63,7 +63,7 @@
                 <span asp-validation-for="DepartmentTypeID" class="text-danger"></span>
             </div>
             <div class="col-4">
-                <label asp-for="DesignationTypeID" class="form-label fw-bold">Designation</label>
+                <label asp-for="DesignationTypeID" class="form-label fw-bold">@Localizer["lbl_Designation"]</label>
                 <select asp-for="DesignationTypeID" asp-items="@(new SelectList(ViewBag.DesignationsList, "Value", "Text"))" class="form-control form-control-lg">
                 </select>
                 <span asp-validation-for="DesignationTypeID" class="text-danger"></span>
@@ -98,53 +98,53 @@
 <div class="row">
 
     <div class="col-3">
-        <label asp-for="FirstName" class="form-label fw-bold">First Name</label>
+        <label asp-for="FirstName" class="form-label fw-bold">@Localizer["lbl_FirstName"]</label>
         <input asp-for="FirstName" class="form-control form-control-lg" />
         <span asp-validation-for="FirstName" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="FatherName" class="form-label fw-bold">Father Name</label>
+        <label asp-for="FatherName" class="form-label fw-bold">@Localizer["lbl_FatherName"]</label>
         <input asp-for="FatherName" class="form-control form-control-lg" />
         <span asp-validation-for="FatherName" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="FamilyName" class="form-label fw-bold">Family Name</label>
+        <label asp-for="FamilyName" class="form-label fw-bold">@Localizer["lbl_FamilyName"]</label>
         <input asp-for="FamilyName" class="form-control form-control-lg" />
         <span asp-validation-for="FamilyName" class="text-danger"></span>
     </div>
 </div>
 <div class="row">
     <div class="col-3">
-        <label asp-for="Sex" class="form-label fw-bold">Gender</label>
+        <label asp-for="Sex" class="form-label fw-bold">@Localizer["lbl_Gender"]</label>
         <select asp-for="Sex" asp-items="@(new SelectList(ViewBag.GenderList, "Value", "Text"))" class="form-control form-control-lg">
         </select>
         <span asp-validation-for="Sex" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="DOB" class="form-label fw-bold">Date of Birth</label>
+        <label asp-for="DOB" class="form-label fw-bold">@Localizer["lbl_DOB"]</label>
         <input asp-for="DOB" class="form-control form-control-lg" type="date" />
         <span asp-validation-for="DOB" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="MaritalStatus" class="form-label fw-bold">Marital Status</label>
+        <label asp-for="MaritalStatus" class="form-label fw-bold">@Localizer["lbl_MaritalStatus"]</label>
         <select asp-for="MaritalStatus" asp-items="@(new SelectList(ViewBag.MaritalStatusList, "Value", "Text"))" class="form-control form-control-lg">
         </select>
         <span asp-validation-for="MaritalStatus" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="NoOfChildren" class="form-label fw-bold">Number of Children</label>
+        <label asp-for="NoOfChildren" class="form-label fw-bold">@Localizer["lbl_NoofChildren"]</label>
         <input asp-for="NoOfChildren" class="form-control form-control-lg" />
         <span asp-validation-for="NoOfChildren" class="text-danger"></span>
     </div>
 </div>
 <div class="row">
     <div class="col-3">
-        <label asp-for="Phone1" class="form-label fw-bold">Phone 1</label>
+        <label asp-for="Phone1" class="form-label fw-bold">@Localizer["lbl_Phone1"]</label>
         <input asp-for="Phone1" class="form-control form-control-lg" />
         <span asp-validation-for="Phone1" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="Phone2" class="form-label fw-bold">Phone 2</label>
+        <label asp-for="Phone2" class="form-label fw-bold">@Localizer["lbl_Phone2"]</label>
         <input asp-for="Phone2" class="form-control form-control-lg" />
         <span asp-validation-for="Phone2" class="text-danger"></span>
     </div>
@@ -154,7 +154,7 @@
         <span asp-validation-for="Mobile" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="Whatsapp" class="form-label fw-bold">Whatsapp</label>
+        <label asp-for="Whatsapp" class="form-label fw-bold">@Localizer["lbl_Whatsapp"]</label>
         <input asp-for="Whatsapp" class="form-control form-control-lg" />
         <span asp-validation-for="Whatsapp" class="text-danger"></span>
     </div>
@@ -162,13 +162,13 @@
 <div class="row">
 
     <div class="col-3">
-        <label asp-for="Religion" class="form-label fw-bold">Religion</label>
+        <label asp-for="Religion" class="form-label fw-bold">@Localizer["lbl_Religion"]</label>
         <select asp-for="Religion" asp-items="@(new SelectList(ViewBag.ReligionList, "Value", "Text"))" class="form-control form-control-lg">
         </select>
         <span asp-validation-for="Religion" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="PlaceOfBirth" class="form-label fw-bold">Place of Birth</label>
+        <label asp-for="PlaceOfBirth" class="form-label fw-bold">@Localizer["lbl_PlaceofBirth"]</label>
         <input asp-for="PlaceOfBirth" class="form-control form-control-lg" />
         <span asp-validation-for="PlaceOfBirth" class="text-danger"></span>
     </div>
@@ -186,12 +186,12 @@
         <span asp-validation-for="Fax" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="Email" class="form-label fw-bold">Email</label>
+        <label asp-for="Email" class="form-label fw-bold">@Localizer["lbl_Email"]</label>
         <input asp-for="Email" class="form-control form-control-lg" type="email" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="POBox" class="form-label fw-bold">POBox</label>
+        <label asp-for="POBox" class="form-label fw-bold">@Localizer["lbl_POBox"]</label>
         <input asp-for="POBox" class="form-control form-control-lg" />
         <span asp-validation-for="POBox" class="text-danger"></span>
     </div>
@@ -205,50 +205,50 @@
 </div>
 <br />
 <div class="row">
-    <h5 class="modal-title" style="padding-top:10px">ID Infomation</h5>
+    <h5 class="modal-title" style="padding-top:10px">@Localizer["lbl_IDInfomation"]</h5>
     <hr />
     <div class="col-3">
-        <label asp-for="IDNumber" class="form-label fw-bold">Number</label>
+        <label asp-for="IDNumber" class="form-label fw-bold">@Localizer["lbl_IDNumber"]</label>
         <input asp-for="IDNumber" class="form-control form-control-lg" />
         <span asp-validation-for="IDNumber" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="IDPlaceOfIssue" class="form-label fw-bold">Place of Issue</label>
+        <label asp-for="IDPlaceOfIssue" class="form-label fw-bold">@Localizer["lbl_IDPlaceofIssue"]</label>
         <input asp-for="IDPlaceOfIssue" class="form-control form-control-lg" />
         <span asp-validation-for="IDPlaceOfIssue" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="IDExpiryDate" class="form-label fw-bold">Expiry Date</label>
+        <label asp-for="IDExpiryDate" class="form-label fw-bold">Expiry @Localizer["lbl_Date"]</label>
         <input asp-for="IDExpiryDate" class="form-control form-control-lg" type="date" />
         <span asp-validation-for="IDExpiryDate" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="IDIssueDate" class="form-label fw-bold">Issue Date</label>
+        <label asp-for="IDIssueDate" class="form-label fw-bold">Issue @Localizer["lbl_Date"]</label>
         <input asp-for="IDIssueDate" class="form-control form-control-lg" type="date" />
         <span asp-validation-for="IDIssueDate" class="text-danger"></span>
     </div>
 </div>
 <br />
 <div class="row">
-    <h5 class="modal-title" style="padding-top:10px">Passport Infomation</h5>
+    <h5 class="modal-title" style="padding-top:10px">@Localizer["lbl_PassportInfomation"]</h5>
     <hr />
     <div class="col-3">
-        <label asp-for="PassportNumber" class="form-label fw-bold">Number</label>
+        <label asp-for="PassportNumber" class="form-label fw-bold">@Localizer["lbl_IDNumber"]</label>
         <input asp-for="PassportNumber" class="form-control form-control-lg" />
         <span asp-validation-for="PassportNumber" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="PassportPlaceOfIssue" class="form-label fw-bold">Place of Issue</label>
+        <label asp-for="PassportPlaceOfIssue" class="form-label fw-bold">@Localizer["lbl_IDPlaceofIssue"]</label>
         <input asp-for="PassportPlaceOfIssue" class="form-control form-control-lg" />
         <span asp-validation-for="PassportPlaceOfIssue" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="PassportExpiryDate" class="form-label fw-bold">Expiry Date</label>
+        <label asp-for="PassportExpiryDate" class="form-label fw-bold">Expiry @Localizer["lbl_Date"]</label>
         <input asp-for="PassportExpiryDate" class="form-control form-control-lg" type="date" />
         <span asp-validation-for="PassportExpiryDate" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <label asp-for="PassportIssueDate" class="form-label fw-bold">Issue Date</label>
+        <label asp-for="PassportIssueDate" class="form-label fw-bold">Issue @Localizer["lbl_Date"]</label>
         <input asp-for="PassportIssueDate" class="form-control form-control-lg" type="date" />
         <span asp-validation-for="PassportIssueDate" class="text-danger"></span>
     </div>

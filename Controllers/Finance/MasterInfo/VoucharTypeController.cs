@@ -150,7 +150,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
         {
           worksheet.Cells[i + 2, 1].Value = VoucherTypes[i].VoucherTypeID;
           worksheet.Cells[i + 2, 2].Value = VoucherTypes[i].VoucherTypeName;
-          worksheet.Cells[i + 2, 3].Value = VoucherTypes[i].ActiveYNID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 3].Value = VoucherTypes[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
           worksheet.Cells[i + 2, 4].Value = VoucherTypes[i].VoucherNature;
           worksheet.Cells[i + 2, 5].Value = VoucherTypes[i].VoucherPrefix;
         }

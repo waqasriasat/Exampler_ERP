@@ -78,7 +78,7 @@
                     <div class="row mb-4">
                         <!-- From Date Field -->
                         <div class="col-md-4 mb-4">
-                            <label class="form-label fw-bold">Month Type</label>
+                            <label class="form-label fw-bold">Month @Localizer["lbl_Type"]</label>
                             <select name="MonthsTypeID" class="form-control">
                                 @foreach (var item in ViewBag.MonthsTypeList)
 
@@ -130,7 +130,7 @@
 
                         <!-- Employee Name Search Field -->
                         <div class="col-md-4 mb-4">
-                            <label class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
                             <input type="text" class="form-control" id="searchEmployeeInput" placeholder="@Localizer["lbl_Search"] Employee" name="EmployeeName" value="@ViewBag.EmployeeName" />
                             <input type="hidden" class="form-control" id="EmployeeID" placeholder="@Localizer["lbl_Search"] Employee" name="EmployeeID" value="@ViewBag.EmployeeID" />
                         </div>
@@ -162,7 +162,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                                 <div class="col-2">
-                                    <p class="text-nowrap">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</p>
+                                    <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">@Localizer["lbl_Date"] /p>
@@ -187,10 +187,10 @@
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
                         <div class="row">
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.Family@Localizer["lbl_Name"]</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Date : </span>@item.MarkDate.ToString("dd/MMM/yyyy")</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Date"] : </span>@item.MarkDate.ToString("dd/MMM/yyyy")</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap"><span class="smallAdd">In Time : </span>@item.InTime.ToString("hh:mm:ss")</p>

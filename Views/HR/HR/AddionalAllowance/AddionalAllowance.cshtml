@@ -153,7 +153,7 @@
                     <div class="row mb-4">
                         <!-- From Date Field -->
                         <div class="col-md-4 mb-4">
-                            <label class="form-label fw-bold">Month Type</label>
+                            <label class="form-label fw-bold">Month @Localizer["lbl_Type"]</label>
                             <select name="MonthsTypeID" class="form-control">
                                 @foreach (var item in ViewBag.MonthsTypeList)
                                 {
@@ -192,7 +192,7 @@
 
                         <!-- Employee Name Search Field -->
                         <div class="col-md-4 mb-4">
-                            <label class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
                             <input type="text" class="form-control" id="searchEmployeeInput" placeholder="@Localizer["lbl_Search"] Employee" name="EmployeeName" value="@ViewBag.EmployeeName" />
                             <input type="hidden" class="form-control" id="EmployeeID" placeholder="@Localizer["lbl_Search"] Employee" name="EmployeeID" value="@ViewBag.EmployeeID" />
                         </div>
@@ -226,7 +226,7 @@
                         <div class="col-10 col-md-11 col-lg-10">
                             <div class="row">
                                 <div class="col-6">
-                                    <p class="text-nowrap">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</p>
+                                    <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                                 </div>
                                 <div class="col-3">
                                     <p class="text-nowrap">Month</p>
@@ -242,7 +242,7 @@
                                     <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="text-nowrap">Print</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Print"] </p>
                                 </div>
                             </div>
                         </div>

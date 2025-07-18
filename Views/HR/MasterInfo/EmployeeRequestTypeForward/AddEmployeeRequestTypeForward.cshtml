@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addNewEmployeeRequestTypeForwardModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add New Employee Request Type Forward
+					@Localizer["lbl_AddNewEmployeeRequestTypeForward"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -17,13 +17,13 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                     <div class="form-group">
-                        <label for="EmployeeRequestTypeID" class="form-label fw-bold">Employee Request Type</label>
+						<label for="EmployeeRequestTypeID" class="form-label fw-bold">@Localizer["lbl_EmployeeRequestType"]</label>
                         <select asp-for="EmployeeRequestTypeID" asp-items="@(new SelectList(ViewBag.EmployeeRequestTypes, "EmployeeRequestTypeID", "EmployeeRequestTypeName"))" class="form-control form-control-lg"></select>
                         <span asp-validation-for="EmployeeRequestTypeID" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
-                        <label>Roles</label>
+                        <label>@Localizer["lbl_RoleType"]</label>
                         @foreach (var role in ViewBag.Roles)
                         {
                             <div class="form-check">

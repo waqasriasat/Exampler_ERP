@@ -95,7 +95,7 @@
                             <div class="row">
                              
                                 <div class="col-4">
-                                    <p class="text-nowrap">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</p>
+                                    <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Contract Start Date</p>
@@ -107,7 +107,7 @@
                                     <p class="text-nowrap">Total Vacation</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Vacation Balance</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Vacation"] Balance</p>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +121,7 @@
                             <div class="col-10 col-md-10 col-lg-12">
                                 <div class="row">
                                     <div class="col-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name: </span>@item.Employee@Localizer["lbl_Name"]</p>
+                                        <p class="text-nowrap"><span class="smallAdd">Employee Name: </span>@item.EmployeeName</p>
                                     </div>
                                     <div class="col-2">
                                         <p class="text-nowrap"><span class="smallAdd">Start Date: </span>@item.StartDate?.ToString("dd-MMM-yyyy")</p>
@@ -133,7 +133,7 @@
                                         <p class="text-nowrap"><span class="smallAdd">Total Vacation: </span>@item.TotalVacation</p>
                                     </div>
                                     <div class="col-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Vacation Balance: </span>@item.VacationBalance</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Vacation"] Balance: </span>@item.VacationBalance</p>
                                     </div>
                                 </div>
                             </div>

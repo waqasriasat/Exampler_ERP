@@ -131,9 +131,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("Qualificationes");
-        worksheet.Cells["A1"].Value = "Qualification ID";
-        worksheet.Cells["B1"].Value = "Qualification Name";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Qualification"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_QualificationID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_QualificationName"];
         worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
@@ -141,7 +141,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         {
           worksheet.Cells[i + 2, 1].Value = Qualificationes[i].QualificationTypeID;
           worksheet.Cells[i + 2, 2].Value = Qualificationes[i].QualificationTypeName;
-          worksheet.Cells[i + 2, 3].Value = Qualificationes[i].ActiveYNID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 3].Value = Qualificationes[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
         }
 
         worksheet.Cells["A1:C1"].Style.Font.Bold = true;
@@ -150,7 +150,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"Qualificationes-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_Qualification"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

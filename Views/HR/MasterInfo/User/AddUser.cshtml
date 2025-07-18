@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addUserModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add New User
+					@Localizer["lbl_AddNewUser"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -16,23 +16,23 @@
                 <form id="addUserForm">
                     <div class="row">
                         <div class="col-6">
-                            <label asp-for="RoleTypeID" class="form-label fw-bold">Select Role</label>
+                            <label asp-for="RoleTypeID" class="form-label fw-bold">@Localizer["lbl_SelectRoleType"]</label>
                             <select asp-for="RoleTypeID" asp-items="@(new SelectList(ViewBag.RoleList, "Value", "Text", Model.RoleTypeID))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="RoleTypeID" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                           <label asp-for="EmployeeID" class="form-label fw-bold">Employee</label>
+                           <label asp-for="EmployeeID" class="form-label fw-bold">@Localizer["lbl_SelectEmployee"]</label>
                             <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeeList, "Value", "Text"))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="EmployeeID" class="text-danger"></span>
                         </div>
                         <div class="col-12">
-                            <label for="UserName" class="form-label fw-bold">User Name</label>
+                            <label for="UserName" class="form-label fw-bold">@Localizer["lbl_UserName"]</label>
                             <input type="text" class="form-control form-control-lg" id="UserName" name="UserName" value="@Model.UserName" />
                         </div>
                         <div class="col-12">
-                            <label for="Password" class="form-label fw-bold">Password</label>
+                            <label for="Password" class="form-label fw-bold">@Localizer["lbl_Password"]</label>
                             <input type="text" class="form-control form-control-lg" id="Password" name="Password" value="@Model.Password" />
                         </div>
                     </div>

@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Employeement - Card Print";
+    ViewData["Title"] = @Localizer["lbl_Employeement"] +" - Card Print";
 }
 
 @section PageScripts {
@@ -84,10 +84,10 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                         <div class="col-10 col-md-11 col-lg-11">
-                            <p class="text-nowrap">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</p>
+                            <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                         </div>
                         <div class="col-2 col-md-1 col-lg-1">
-                            <p class="text-nowrap">Print</p>
+                            <p class="text-nowrap">@Localizer["lbl_Print"] </p>
                         </div>
                     </div>
                 </div>
@@ -96,7 +96,7 @@
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
                         <div class="row">
                             <div class="col-10 col-md-11 col-lg-11">
-                                <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@Html.DisplayFor(modelItem => item.EmployeeName)</p>
+                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@Html.DisplayFor(modelItem => item.EmployeeName)</p>
                             </div>
                             <div class="col-2 col-md-1 col-lg-1">
                                 <div class="btn-group" role="group" aria-label="Actions">

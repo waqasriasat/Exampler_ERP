@@ -252,7 +252,7 @@ namespace Exampler_ERP.Controllers.HR.HR
       {
         var worksheet = package.Workbook.Worksheets.Add("OverTime");
         worksheet.Cells["A1"].Value = "OverTime ID";
-        worksheet.Cells["B1"].Value = "Employee Name";
+        worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
         worksheet.Cells["C1"].Value = "OverTime Type";
         worksheet.Cells["D1"].Value = "Month";
         worksheet.Cells["E1"].Value = "Year";

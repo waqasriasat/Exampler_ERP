@@ -191,10 +191,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("EmployeeRequestTypeForwards");
-        worksheet.Cells["A1"].Value = "EmployeeRequestType ApprovalID";
-        worksheet.Cells["B1"].Value = "EmployeeRequestType Name";
-        worksheet.Cells["C1"].Value = "Role";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_EmployeeRequestTypeForward"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_EmployeeRequestTypeApprovalID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeRequestTypeName"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_RoleType"];
 
 
         for (int i = 0; i < EmployeeRequestTypeForwards.Count; i++)
@@ -210,7 +210,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"EmployeeRequestTypeForwards-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_EmployeeRequestTypeForward"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }
@@ -221,112 +221,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       .Distinct()
       .Include(d => d.EmployeeRequestType) // Eagerly load the related Branch data
       .ToListAsync();
-      return View("~/Views/HR/MasterInfo/EmployeeRequestTypeForward/PrintEmployeeRequestTypeForwards.cshtml", EmployeeRequestTypeForwards);
+      return View("~/Views/HR/MasterInfo/EmployeeRequestTypeForward/PrintEmployeeRequestTypeForward.cshtml", EmployeeRequestTypeForwards);
     }
 
-    //public async Task<IActionResult> Create()
-    //{
-    //  ViewBag.EmployeeRequestTypes = await _appDBContext.Settings_EmployeeRequestTypes.ToListAsync();
-    //  ViewBag.Roles = await _appDBContext.Settings_RoleTypes.ToListAsync();
-    //  return PartialView("~/Views/HR/MasterInfo/EmployeeRequestTypeForward/AddEmployeeRequestTypeForward.cshtml");
-    //}
-
-    //[HttpPost]
-    //public async Task<IActionResult> Create(EmployeeRequestTypeForwardViewModel model)
-    //{
-    //  if (ModelState.IsValid)
-    //  {
-    //    foreach (var roleId in model.SelectedRoleIds)
-    //    {
-    //      var EmployeeRequestTypeForward = new HR_EmployeeRequestTypeForward
-    //      {
-    //        EmployeeRequestTypeID = model.EmployeeRequestTypeID,
-    //        RoleTypeID = roleId
-    //      };
-    //      _appDBContext.HR_EmployeeRequestTypeForwards.Add(EmployeeRequestTypeForward);
-    //    }
-    //    await _appDBContext.SaveChangesAsync();
-    //    return RedirectToAction(nameof(Index));
-    //  }
-
-    //  // Log the validation errors
-    //  foreach (var key in ModelState.Keys)
-    //  {
-    //    var state = ModelState[key];
-    //    foreach (var error in state.Errors)
-    //    {
-    //      // Use your logging mechanism here
-    //      Console.WriteLine($"Validation error in {key}: {error.ErrorMessage}");
-    //    }
-    //  }
-
-    //  ViewBag.EmployeeRequestTypes = await _appDBContext.Settings_EmployeeRequestTypes.ToListAsync();
-    //  ViewBag.Roles = await _appDBContext.Settings_RoleTypes.ToListAsync();
-    //  return PartialView("~/Views/HR/MasterInfo/EmployeeRequestTypeForward/AddEmployeeRequestTypeForward.cshtml", model);
-    //}
-
-    //public async Task<IActionResult> Edit(int id)
-    //{
-    //  var EmployeeRequestType = await _appDBContext.Settings_EmployeeRequestTypes.FindAsync(id);
-    //  if (EmployeeRequestType == null)
-    //  {
-    //    return NotFound();
-    //  }
-
-    //  var selectedRoleIds = await _appDBContext.HR_EmployeeRequestTypeForwards
-    //      .Where(ptf => ptf.EmployeeRequestTypeID == id)
-    //      .Select(ptf => ptf.RoleTypeID)
-    //      .ToListAsync();
-
-    //  var viewModel = new EmployeeRequestTypeForwardViewModel
-    //  {
-    //    EmployeeRequestTypeID = id,
-    //    SelectedRoleIds = selectedRoleIds
-    //  };
-
-    //  ViewBag.EmployeeRequestTypes = await _appDBContext.Settings_EmployeeRequestTypes.ToListAsync();
-    //  ViewBag.Roles = await _appDBContext.Settings_RoleTypes.ToListAsync();
-    //  return PartialView("~/Views/HR/MasterInfo/EmployeeRequestTypeForward/EditEmployeeRequestTypeForward.cshtml", viewModel);
-    //}
-
-
-    //[HttpPost]
-    //public async Task<IActionResult> Edit(EmployeeRequestTypeForwardViewModel model)
-    //{
-    //  if (ModelState.IsValid)
-    //  {
-    //    // Remove existing entries
-    //    var existingEntries = _appDBContext.HR_EmployeeRequestTypeForwards.Where(ptf => ptf.EmployeeRequestTypeID == model.EmployeeRequestTypeID);
-    //    _appDBContext.HR_EmployeeRequestTypeForwards.RemoveRange(existingEntries);
-
-    //    // Add new entries
-    //    foreach (var roleId in model.SelectedRoleIds)
-    //    {
-    //      var EmployeeRequestTypeForward = new HR_EmployeeRequestTypeForward
-    //      {
-    //        EmployeeRequestTypeID = model.EmployeeRequestTypeID,
-    //        RoleTypeID = roleId
-    //      };
-    //      _appDBContext.HR_EmployeeRequestTypeForwards.Add(EmployeeRequestTypeForward);
-    //    }
-
-    //    await _appDBContext.SaveChangesAsync();
-    //    return RedirectToAction(nameof(Index));
-    //  }
-
-    //  // Log the validation errors
-    //  foreach (var key in ModelState.Keys)
-    //  {
-    //    var state = ModelState[key];
-    //    foreach (var error in state.Errors)
-    //    {
-    //      _logger.LogError($"Validation error in {key}: {error.ErrorMessage}");
-    //    }
-    //  }
-
-    //  ViewBag.EmployeeRequestTypes = await _appDBContext.Settings_EmployeeRequestTypes.ToListAsync();
-    //  ViewBag.Roles = await _appDBContext.Settings_RoleTypes.ToListAsync();
-    //  return PartialView("~/Views/HR/MasterInfo/EmployeeRequestTypeForward/EditEmployeeRequestTypeForward.cshtml", model);
-    //}
   }
 }

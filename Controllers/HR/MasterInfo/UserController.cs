@@ -243,10 +243,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("decryptedUsers");
-        worksheet.Cells["A1"].Value = "User ID";
-        worksheet.Cells["B1"].Value = "User Name";
-        worksheet.Cells["C1"].Value = "Role Name";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_User"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_UserID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_UserName"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_RoleName"];
         worksheet.Cells["D1"].Value = _localizer["lbl_Active"];
 
 
@@ -255,7 +255,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           worksheet.Cells[i + 2, 1].Value = decryptedUsers[i].UserID;
           worksheet.Cells[i + 2, 2].Value = decryptedUsers[i].UserName;
           worksheet.Cells[i + 2, 3].Value = decryptedUsers[i].RoleType?.RoleTypeName;
-          worksheet.Cells[i + 2, 4].Value = decryptedUsers[i].ActiveYNID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 4].Value = decryptedUsers[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
         }
 
         worksheet.Cells["A1:l1"].Style.Font.Bold = true;
@@ -264,7 +264,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"Users-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_User"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

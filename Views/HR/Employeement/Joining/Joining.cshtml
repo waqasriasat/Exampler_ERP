@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Employeement - Joining";
+    ViewData["Title"] = @Localizer["lbl_Employeement"] +" - Joining";
 }
 
 @section PageScripts {
@@ -138,7 +138,7 @@
                         <div class="col-11 col-md-11 col-lg-11">
                             <div class="row">
                                 <div class="col-6">
-                                    <p class="text-nowrap">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</p>
+                                    <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                                 </div>
                                 <div class="col-6">
                                     <p class="text-nowrap">Joining Date</p>

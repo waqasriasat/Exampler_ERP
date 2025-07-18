@@ -2,6 +2,8 @@
     Layout = "_BlankLayout";
     ViewData["Title"] = "Employee Login - Pages";
 }
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @section PageStyles {
     <link rel="stylesheet" href="~/vendor/css/pages/page-auth.css">
     <style>
@@ -81,7 +83,7 @@
                                 </div>
                                 <div class="mb-3 form-password-toggle">
                                     <div class="d-flex justify-content-between">
-                                        <label class="form-label" for="password">Password</label>
+                                        <label class="form-label" for="password">@Localizer["lbl_Password"]</label>
                                         <a href="/Auth/ForgotPassword">
                                             <small>Forgot Password?</small>
                                         </a>

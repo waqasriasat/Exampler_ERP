@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editDeductionSetupModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit Deduction Setup
+					@Localizer["lbl_EditDeductionSetup"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -16,16 +16,16 @@
                 <form id="editDeductionSetupForm" method="post" asp-action="SaveChanges">
                     <input type="hidden" asp-for="DeductionTypeID" />
                     <div class="form-group">
-                        <label for="DeductionTypeID" class="form-label fw-bold">Deduction Type</label>
+						<label for="DeductionTypeID" class="form-label fw-bold">@Localizer["lbl_DeductionType"]</label>
                         <select asp-for="DeductionTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypes, "DeductionTypeID", "DeductionTypeName"))" class="form-control form-control-lg" disabled></select>
                     </div>
                     <div class="form-group">
-                        <label for="ClassID" class="form-label fw-bold">Class</label>
+						<label for="ClassID" class="form-label fw-bold">@Localizer["lbl_Class"]</label>
                         <select asp-for="ClassID" asp-items="@(new SelectList(ViewBag.ClassIDList, "Value", "Text"))" class="form-control form-control-lg"></select>
                     </div>
                     <div class="form-group">
                         <label class ="form-label fw-bold">
-                            Salary Type</labe>
+							@Localizer["lbl_SalaryType"]</labe>
                         @for (var i = 0; i < Model.SalaryTypeDeductions.Count; i++)
                         {
                             <div class="row">

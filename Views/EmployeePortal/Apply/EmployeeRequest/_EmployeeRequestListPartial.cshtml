@@ -1,48 +1,49 @@
 @model IEnumerable<Exampler_ERP.Models.HR_EmployeeRequestTypeApproval>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-8 col-md-10 col-lg-8">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.Family@Localizer["lbl_Name"]</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">EmployeeRequest Type : </span>@item.EmployeeRequestType?.EmployeeRequestType@Localizer["lbl_Name"]</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Date : </span>@item.Date.ToString("dd/MM/yyyy")</p>
-                                    </div>
-                             
-                                </div>
-                            </div>
-                            <div class="col-4 col-md-2 col-lg-4">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editEmployeeRequestLink" data-id="@item.EmployeeRequestTypeApprovalID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="printEmployeeRequestLink" data-id="@item.EmployeeRequestTypeApprovalID">
-                                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteEmployeeRequestLink" data-id="@item.EmployeeRequestTypeApprovalID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+{
+	<div class="col-12 col-md-12 col-lg-12 GVDetail">
+		<div class="row">
+			<div class="col-8 col-md-10 col-lg-8">
+				<div class="row">
+					<div class="col-12 col-md-12 col-lg-4">
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+					</div>
+					<div class="col-12 col-md-12 col-lg-4">
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeRequestType"] : </span>@item.EmployeeRequestType?.EmployeeRequestTypeName</p>
+					</div>
+					<div class="col-12 col-md-12 col-lg-4">
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Date"] : </span>@item.Date.ToString("dd/MM/yyyy")</p>
+					</div>
+
+				</div>
+			</div>
+			<div class="col-4 col-md-2 col-lg-4">
+				<div class="row">
+					<div class="col-12 col-md-12 col-lg-4">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="editEmployeeRequestLink" data-id="@item.EmployeeRequestTypeApprovalID">
+								<i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-12 col-lg-4">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="printEmployeeRequestLink" data-id="@item.EmployeeRequestTypeApprovalID">
+								<i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-12 col-lg-4">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="deleteEmployeeRequestLink" data-id="@item.EmployeeRequestTypeApprovalID">
+								<i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}

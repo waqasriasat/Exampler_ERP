@@ -1,8 +1,9 @@
 @model IEnumerable<Exampler_ERP.Models.HR_Applicant>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+
 @{
-    ViewData["Title"] = "HR - Applicant";
+	ViewData["Title"] = @Localizer["lbl_Employeement"] + " - " + @Localizer["lbl_Applicant"];
 }
 
 @section PageScripts {
@@ -164,7 +165,7 @@
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Employeement /</span> Applicant
+	<span class="text-muted fw-light">@Localizer["lbl_Employeement"] /</span> @Localizer["lbl_Applicant"]
 </h4>
 <div class="row">
     <div class="col-md-12">
@@ -176,7 +177,7 @@
                     <div class="col-md-8" style="padding-bottom: 15px;">
                         <!-- Search Field and Button -->
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="@Localizer["lbl_Search"] Applicant" id="searchApplicantInput">
+							<input type="text" class="form-control" placeholder="@Localizer["lbl_Search"] @Localizer["lbl_Applicant"]" id="searchApplicantInput">
                             <button class="btn btn-outline-secondary" type="button" id="searchApplicantButton">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -199,17 +200,17 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Applicant @Localizer["lbl_List"]</h5>
+            <h5 class="card-header">@Localizer["lbl_ApplicantList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                         <div class="col-10 col-md-10 col-lg-10">
                             <div class="row">
                                 <div class="col-3">
-                                    <p class="text-nowrap">Picture</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Picture"]</p>
                                 </div>
                                 <div class="col-9">
-                                    <p class="text-nowrap">Applicant @Localizer["lbl_Name"]</p>
+                                    <p class="text-nowrap">@Localizer["lbl_ApplicantName"]</p>
                                 </div>
                             </div>
                         </div>
@@ -219,7 +220,7 @@
                                     <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                                 <div class="col-12 col-md-12 col-lg-6">
-                                    <p class="text-nowrap">Print</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Print"] </p>
                                 </div>
                             </div>
                         </div>

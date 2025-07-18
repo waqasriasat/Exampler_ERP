@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addSectionModalLabel">
                     <i class="fas fa-key me-2"></i>
-					@Localizer["lbl_AddNew"] @Localizer["lbl_Section"]
+					@Localizer["lbl_AddNewSection"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -29,7 +29,7 @@
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                         </div>
                         <div class="col-12">
-                            <label for="SectionTypeName" class="form-label fw-bold">@Localizer["lbl_Section"] @Localizer["lbl_Name"]</label>
+                            <label for="SectionTypeName" class="form-label fw-bold">@Localizer["lbl_SectionName"]</label>
                             <input type="text" class="form-control form-control-lg" id="SectionTypeName" name="SectionTypeName" value="@Model.SectionTypeName" />
                         </div>
 

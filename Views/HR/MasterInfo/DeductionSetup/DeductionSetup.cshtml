@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-	ViewData["Title"] = @Localizer["lbl_MasterInformation"] + " - Deduction Setup";
+	ViewData["Title"] = @Localizer["lbl_MasterInformation"] + " - " + @Localizer["lbl_DeductionSetup"];
 }
 
 @section PageScripts {
@@ -72,7 +72,7 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> Deduction Setup
+	<span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> @Localizer["lbl_DeductionSetup"]
 </h4>
 <div class="row">
     <div class="col-md-12">
@@ -84,7 +84,7 @@
                     <div class="col-md-8" style="padding-bottom: 15px;">
                         <!-- Search Field and Button -->
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="@Localizer["lbl_Search"] Deduction Type @Localizer["lbl_Name"]" id="searchDeductionTypeInput">
+                            <input type="text" class="form-control" placeholder="@Localizer["lbl_SearchDeductionTypeName"]" id="searchDeductionTypeInput">
                             <button class="btn btn-outline-secondary" type="button" id="searchDeductionTypeButton">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -104,20 +104,20 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Deduction Setup @Localizer["lbl_List"]</h5>
+			<h5 class="card-header">@Localizer["lbl_DeductionSetupList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                        <div class="col-10 col-md-10 col-lg-10">
                             <div class="row">
                                 <div class="col-6">
-                                    <p class="text-nowrap">Deduction Type @Localizer["lbl_Name"]</p>
+									<p class="text-nowrap">@Localizer["lbl_DeductionTypeName"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Class</p>
+									<p class="text-nowrap">@Localizer["lbl_Class"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Total</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Total"]</p>
                                 </div>
                             </div>
                         </div>

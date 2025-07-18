@@ -12,7 +12,8 @@
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="addEmployeeRequestModalLabel"><i class="fas fa-key me-2"></i>@Localizer["lbl_Add"] @Localizer["lbl_EmployeeRequest"]
+                <h5 class="modal-title" id="addEmployeeRequestModalLabel">
+					<i class="fas fa-key me-2"></i>@Localizer["lbl_AddEmployeeRequest"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -24,12 +25,12 @@
                     <div class="row">
                         <div class="col-12">
                             <input type="hidden" asp-for="EmployeeID" value="@EmployeeID" class="form-control form-control-lg" />
-							<label class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
+							<label class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
                             <input type="text" class="form-control form-control-lg" value="@EmployeeName" readonly />
                         </div>
 
                         <div class="col-12">
-                            <label asp-for="EmployeeRequestTypeID" class="form-label fw-bold">@Localizer["lbl_EmployeeRequest"] @Localizer["lbl_Type"]</label>
+                            <label asp-for="EmployeeRequestTypeID" class="form-label fw-bold">@Localizer["lbl_EmployeeRequestType"]</label>
                             <select asp-for="EmployeeRequestTypeID" asp-items="@(new SelectList(ViewBag.EmployeeRequestTypeList, "Value", "Text"))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="EmployeeRequestTypeID" class="text-danger small"></span>
@@ -39,7 +40,7 @@
                         <!-- Notes Field -->
                         <div class="col-12">
                             <label asp-for="Notes" class="form-label fw-bold">@Localizer["lbl_Note"]</label>
-                            <textarea asp-for="Notes" class="form-control form-control-lg" rows="4" placeholder="Enter Notes here..."></textarea>
+                            <textarea asp-for="Notes" class="form-control form-control-lg" rows="4" placeholder="@Localizer["lbl_EnterRessonHere"]"></textarea>
                             <span asp-validation-for="Notes" class="text-danger small"></span>
                         </div>
                     </div>
@@ -52,10 +53,10 @@
             <!-- Modal Footer -->
             <div class="modal-footer border-0">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-times-circle"></i> Close
+                    <i class="fas fa-times-circle"></i> @Localizer["lbl_Close"]
                 </button>
                 <button type="submit" id="saveNewEmployeeRequest" class="btn btn-success">
-                    <i class="fas fa-check-circle"></i> Save Changes
+                    <i class="fas fa-check-circle"></i> @Localizer["lbl_SaveChanges"]
                 </button>
             </div>
         </div>

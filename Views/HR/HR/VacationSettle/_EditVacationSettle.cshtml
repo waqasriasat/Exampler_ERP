@@ -1,18 +1,19 @@
 @model Exampler_ERP.Models.Temp.VacationSettleViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     var EmployeeName = Context.Session.GetString("EmployeeName");
 }
 <div class="row">
     <div class="col-12">
-        <label asp-for="EmployeeID" class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
+        <label asp-for="EmployeeID" class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
         <select id="EmployeeID" asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control form-control-lg" disabled>
         </select>
         <span asp-validation-for="EmployeeID" class="text-danger"></span>
     </div>
 
     <div class="col-12">
-        <label asp-for="VacationID" class="form-label fw-bold">Vacation Date</label>
+        <label asp-for="VacationID" class="form-label fw-bold">@Localizer["lbl_Vacation"] @Localizer["lbl_Date"]</label>
         <select id="VacationID" asp-for="VacationID" class="form-control form-control-lg">
           
         </select>
@@ -20,21 +21,21 @@
     </div>
 
     <div class="col-6">
-        <label asp-for="StartDate" class="form-label fw-bold">Start Date</label>
+        <label asp-for="StartDate" class="form-label fw-bold">@Localizer["lbl_StartDate"]</label>
         <input asp-for="StartDate" class="form-control form-control-lg" type="date" disabled />
         <span class="text-muted">MM/DD/YYYY</span> <!-- To show dd/MM/yyyy format -->
         <span asp-validation-for="StartDate" class="text-danger small"></span>
     </div>
 
     <div class="col-6">
-        <label asp-for="EndDate" class="form-label fw-bold">End Date</label>
+        <label asp-for="EndDate" class="form-label fw-bold">@Localizer["lbl_EndDate"]</label>
         <input asp-for="EndDate" class="form-control form-control-lg" type="date" disabled />
         <span class="text-muted">MM/DD/YYYY</span> <!-- To show dd/MM/yyyy format -->
         <span asp-validation-for="EndDate" class="text-danger small"></span>
     </div>
 
     <div class="col-6">
-        <label asp-for="TotalDays" class="form-label fw-bold">Total Days</label>
+        <label asp-for="TotalDays" class="form-label fw-bold">@Localizer["lbl_TotalDays"] </label>
         <input asp-for="TotalDays" class="form-control form-control-lg" placeholder="Enter Total Days here..." disabled />
         <span asp-validation-for="TotalDays" class="text-danger small"></span>
     </div>

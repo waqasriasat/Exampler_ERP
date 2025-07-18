@@ -145,9 +145,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       using (var package = new ExcelPackage())
       {
         var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Department"]);
-        worksheet.Cells["A1"].Value = _localizer["lbl_Department"] + " " + _localizer["lbl_ID"];
-        worksheet.Cells["B1"].Value = _localizer["lbl_Branch"] + " " + _localizer["lbl_Name"];
-        worksheet.Cells["C1"].Value = _localizer["lbl_Department"] + " " + _localizer["lbl_Name"];
+        worksheet.Cells["A1"].Value = _localizer["lbl_DepartmentID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_BranchName"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_DepartmentName"];
         worksheet.Cells["D1"].Value = _localizer["lbl_Active"];
 
 
@@ -156,7 +156,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           worksheet.Cells[i + 2, 1].Value = Departments[i].DepartmentTypeID;
           worksheet.Cells[i + 2, 2].Value = Departments[i].BranchType?.BranchTypeName;
           worksheet.Cells[i + 2, 3].Value = Departments[i].DepartmentTypeName;
-          worksheet.Cells[i + 2, 4].Value = Departments[i].ActiveYNID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 4].Value = Departments[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
         }
 
         worksheet.Cells["A1:l1"].Style.Font.Bold = true;

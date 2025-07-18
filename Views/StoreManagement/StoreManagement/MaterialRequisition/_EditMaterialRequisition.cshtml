@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.MaterialRequisitionsIndexViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 <input type="hidden" asp-for="MaterialRequisitions.RequisitionID" />
 <input type="hidden" asp-for="MaterialRequisitions.FinalApprovalID" />
@@ -37,7 +38,7 @@
                 </th>
                 <th class="headercontrol">
                     <div class="col-md-12">
-                        <label for="RequiredDate" class="form-label fw-bold">Required Date</label>
+                        <label for="RequiredDate" class="form-label fw-bold">Required @Localizer["lbl_Date"]</label>
                         <input type="date" id="RequiredDate" name="RequiredDate" class="form-control" />
                     </div>
                 </th>
@@ -52,7 +53,7 @@
                 <th>Item Name</th>
                 <th>Quantity</th>
                 <th>Balance Quantity</th>
-                <th>Required Date</th>
+                <th>Required @Localizer["lbl_Date"]</th>
                 <th>Actions</th>
             </tr>
         </thead>

@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addSubQualificationModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add New SubQualification
+                    @Localizer["lbl_AddNewSubQualification"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -16,7 +16,7 @@
                 <form id="addSubQualificationForm">
                     <div class="row">
                         <div class="col-6">
-                            <label asp-for="QualificationTypeID" class="form-label fw-bold">Select Qualification</label>
+							<label asp-for="QualificationTypeID" class="form-label fw-bold">@Localizer["lbl_Select"] @Localizer["lbl_Qualification"]</label>
                             <select asp-for="QualificationTypeID" asp-items="@(new SelectList(ViewBag.QualificationList, "Value", "Text", Model.QualificationTypeID))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="QualificationTypeID" class="text-danger"></span>
@@ -29,7 +29,7 @@
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                         </div>
                         <div class="col-12">
-                            <label for="SubQualificationTypeName" class="form-label fw-bold">SubQualification Name</label>
+                            <label for="SubQualificationTypeName" class="form-label fw-bold">@Localizer["lbl_SubQualificationName"]</label>
                             <input type="text" class="form-control form-control-lg" id="SubQualificationTypeName" name="SubQualificationTypeName" value="@Model.SubQualificationTypeName" />
                         </div>
 

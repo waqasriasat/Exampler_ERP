@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addDesignationModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add New Designation
+					@Localizer["lbl_AddNewDesignation"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -16,7 +16,7 @@
                 <form id="addDesignationForm">
                     <div class="row">
                         <div class="col-12">
-                            <label for="DesignationTypeName" class="form-label fw-bold">Designation Name</label>
+                            <label for="DesignationTypeName" class="form-label fw-bold">@Localizer["lbl_DesignationName"]</label>
                             <input type="text" class="form-control form-control-lg" id="DesignationTypeName" name="DesignationTypeName" value="@Model.DesignationTypeName" />
                         </div>
                         <div class="col-6">

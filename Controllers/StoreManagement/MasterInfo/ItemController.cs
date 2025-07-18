@@ -161,7 +161,7 @@ namespace Exampler_ERP.Controllers.MasterInfo.StoreManagement
           worksheet.Cells[i + 2, 1].Value = Itemes[i].ItemID;
           worksheet.Cells[i + 2, 2].Value = Itemes[i].ItemCode;
           worksheet.Cells[i + 2, 3].Value = Itemes[i].ItemName;
-          worksheet.Cells[i + 2, 4].Value = Itemes[i].ActiveYNID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 4].Value = Itemes[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
           worksheet.Cells[i + 2, 5].Value = Itemes[i].UnitType.UnitTypeName;
           worksheet.Cells[i + 2, 6].Value = Itemes[i].ItemCategoryType.ItemCategoryTypeName;
           worksheet.Cells[i + 2, 7].Value = Itemes[i].ManufacturerType.ManufacturerTypeName;

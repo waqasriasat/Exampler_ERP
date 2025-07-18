@@ -2,14 +2,14 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-	ViewData["Title"] = @Localizer["lbl_MasterInformation"] + " - SubQualification";
+	ViewData["Title"] = @Localizer["lbl_MasterInformation"] + " - " + @Localizer["lbl_SubQualification"];
 }
 
 @section PageScripts {
 
     <script>
         $(document).ready(function () {
-            // Edit SubQualification modal popup
+            // @Localizer["lbl_EditSubQualification"] modal popup
 			  $('#SubQualificationListContainer').on('click', '.editSubQualificationLink', function (e) {
                 e.preventDefault();
                 var SubQualificationId = $(this).data('id');
@@ -34,7 +34,7 @@
                 });
             });
 
-            // Add new SubQualification modal popup
+            // @Localizer["lbl_AddNewSubQualification"] modal popup
             $('.addSubQualificationLink').click(function () {
                 $.get('@Url.Action("Create", "SubQualification")', function (data) {
                     $('#addSubQualificationModalContainer').html(data);
@@ -102,7 +102,7 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> SubQualification
+	<span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> @Localizer["lbl_SubQualification"]
 </h4>
 <div class="row">
     <div class="col-md-12">
@@ -114,7 +114,7 @@
                     <div class="col-md-8" style="padding-bottom: 15px;">
                         <!-- Search Field and Button -->
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="@Localizer["lbl_Search"] SubQualification @Localizer["lbl_Name"]" id="searchSubQualificationInput">
+							<input type="text" class="form-control" placeholder="@Localizer["lbl_SearchSubQualificationName"]" id="searchSubQualificationInput">
                             <button class="btn btn-outline-secondary" type="button" id="searchSubQualificationButton">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -135,17 +135,17 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">SubQualification @Localizer["lbl_List"]</h5>
+			<h5 class="card-header">@Localizer["lbl_SubQualificationList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                        <div class="col-10 col-md-10 col-lg-10">
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="text-nowrap">Qualification @Localizer["lbl_Name"]</p>
+                                    <p class="text-nowrap">@Localizer["lbl_QualificationName"]</p>
                                 </div>
                                 <div class="col-4">
-                                    <p class="text-nowrap">SubQualification @Localizer["lbl_Name"]</p>
+									<p class="text-nowrap">@Localizer["lbl_SubQualificationName"]</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">@Localizer["lbl_Active"]</p>

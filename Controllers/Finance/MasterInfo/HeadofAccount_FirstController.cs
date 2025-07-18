@@ -148,7 +148,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
         {
           worksheet.Cells[i + 2, 1].Value = HeadofAccount_Firsts[i].HeadofAccount_FirstID;
           worksheet.Cells[i + 2, 2].Value = HeadofAccount_Firsts[i].HeadofAccount_FirstName;
-          worksheet.Cells[i + 2, 3].Value = HeadofAccount_Firsts[i].ActiveYNID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 3].Value = HeadofAccount_Firsts[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
         }
 
         worksheet.Cells["A1:l1"].Style.Font.Bold = true;

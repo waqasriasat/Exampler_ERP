@@ -20,7 +20,7 @@
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label asp-for="Vouchers.VoucherTypeID" class="form-label fw-bold">Voucher Type</label>
+                            <label asp-for="Vouchers.VoucherTypeID" class="form-label fw-bold">Voucher @Localizer["lbl_Type"]</label>
                             <select asp-for="Vouchers.VoucherTypeID" class="form-select form-select-lg">
                                 <option value="">Select Voucher Type</option>
                                 @foreach (var type in ViewBag.VoucherTypeList)
@@ -33,7 +33,7 @@
 
                     <div class="row mb-3">
                         <div class="col-md-12">
-                            <label asp-for="Vouchers.Description" class="form-label fw-bold">Description</label>
+                            <label asp-for="Vouchers.Description" class="form-label fw-bold">@Localizer["lbl_Description"]</label>
                             <textarea asp-for="Vouchers.Description" class="form-control form-control-lg" rows="3"></textarea>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                         <table class="table table-bordered" id="TransferVoucherTable">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Transaction Type</th>
+                                    <th>Transaction @Localizer["lbl_Type"]</th>
                                     <th>Transaction Account</th>
                                     <th>Debit Amount</th>
                                     <th>Credit Amount</th>

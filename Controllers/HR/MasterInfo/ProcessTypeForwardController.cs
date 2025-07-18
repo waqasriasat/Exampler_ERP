@@ -192,10 +192,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("ProcessTypeForwards");
-        worksheet.Cells["A1"].Value = "ProcessType ApprovalID";
-        worksheet.Cells["B1"].Value = "ProcessType Name";
-        worksheet.Cells["C1"].Value = "Role";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_ProcessTypeForward"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_ProcessTypeForwardID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_ProcessTypeName"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_RoleType"];
 
 
         for (int i = 0; i < ProcessTypeForwards.Count; i++)
@@ -211,7 +211,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"ProcessTypeForwards-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_ProcessTypeForward"] +$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

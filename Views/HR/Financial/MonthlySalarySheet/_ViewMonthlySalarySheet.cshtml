@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.Temp.MonthlySalarySheetViewModel>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 
 <div class="row">
@@ -13,7 +14,7 @@
                             <p class="text-nowrap">Employee ID</p>
                         </div>
                         <div class="col-12 col-md-2 col-lg-2">
-                            <p class="text-nowrap">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</p>
+                            <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1">
                             <p class="text-nowrap">Month</p>
@@ -74,7 +75,7 @@
                             </div>
                             <div class="col-12 col-md-2 col-lg-2">
                                 <p class="text-nowrap">
-                                    <span class="smallAdd">Employee Name : </span>
+                                    <span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>
                                     @(model.EmployeeName)
                                 </p>
                             </div>

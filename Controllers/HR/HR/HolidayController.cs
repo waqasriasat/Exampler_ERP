@@ -225,7 +225,7 @@ namespace Exampler_ERP.Controllers.HR.HR
     //    var worksheet = package.Workbook.Worksheets.Add("Holidays");
 
     //    worksheet.Cells["A1"].Value = "Holiday ID";
-    //    worksheet.Cells["B1"].Value = "Employee Name";
+    //    worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
     //    worksheet.Cells["C1"].Value = "Issue Date";
     //    worksheet.Cells["D1"].Value = "Salary Type";
     //    worksheet.Cells["E1"].Value = "Holiday Type";

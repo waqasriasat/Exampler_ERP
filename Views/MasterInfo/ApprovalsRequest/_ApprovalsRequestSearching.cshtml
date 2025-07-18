@@ -11,26 +11,26 @@
                     <div class="row mb-4">
                         <!-- From Date Field -->
                         <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">From Date</label>
+                            <label class="form-label fw-bold">From @Localizer["lbl_Date"]</label>
                             <input class="form-control" type="date" name="FromDate" value="@ViewBag.FromDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
                         <!-- To Date Field -->
                         <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">To Date</label>
+                            <label class="form-label fw-bold">To @Localizer["lbl_Date"]</label>
                             <input class="form-control" type="date" name="ToDate" value="@ViewBag.ToDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
                         <!-- Employee Name Search Field -->
                         <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
                             <input type="text" class="form-control" id="searchEmployeeInput" placeholder="@Localizer["lbl_Search"] Employee" name="EmployeeName" value="@ViewBag.EmployeeName" />
                             <input type="hidden" class="form-control" id="EmployeeID" placeholder="@Localizer["lbl_Search"] Employee" name="EmployeeID" value="@ViewBag.EmployeeID" />
                         </div>
 
                         <!-- Process Type Dropdown -->
                         <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">Process Type</label>
+                            <label class="form-label fw-bold">Process @Localizer["lbl_Type"]</label>
                             <select name="ProcessTypeID" class="form-control">
                                 @foreach (var item in ViewBag.ProcessTypeList)
                                 {

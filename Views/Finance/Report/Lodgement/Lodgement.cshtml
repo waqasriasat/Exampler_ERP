@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Report - Lodgement";
 }
@@ -78,11 +80,11 @@
                         <form id="lodgementForm">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">From Date</label>
+                                    <label class="form-label fw-bold">From @Localizer["lbl_Date"]</label>
                                     <input id="FromDate" name="FromDate" class="form-control form-control-lg" type="date" />
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">To Date</label>
+                                    <label class="form-label fw-bold">To @Localizer["lbl_Date"]</label>
                                     <input id="ToDate" name="ToDate" class="form-control form-control-lg" type="date" />
                                 </div>
                             </div>

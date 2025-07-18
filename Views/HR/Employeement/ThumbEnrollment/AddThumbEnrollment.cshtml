@@ -13,7 +13,7 @@
             <div class="modal-body">
                 <form id="addThumbEnrollmentForm" method="post" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="EmployeeID">Employee</label>
+                        <label for="EmployeeID">@Localizer["lbl_SelectEmployee"]</label>
                         <select asp-for="EmployeeID" class="form-control" asp-items="ViewBag.EmployeesList"></select>
                     </div>
                     <div class="form-group">
@@ -31,7 +31,7 @@
                         <span asp-validation-for="ThumbImpression" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label for="EnrollmentDate">Enrollment Date</label>
+                        <label for="EnrollmentDate">Enrollment @Localizer["lbl_Date"]</label>
                         <input type="date" class="form-control" asp-for="EnrollmentDate" />
                     </div>
                     <button type="button" id="saveNewThumbEnrollment" class="btn btn-primary">@Localizer["lbl_Save"] </button>

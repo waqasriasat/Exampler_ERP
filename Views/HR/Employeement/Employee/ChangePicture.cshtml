@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.ChangePictureModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="modal fade" id="changePictureModal" tabindex="-1" role="dialog" aria-labelledby="changePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content shadow-lg border-0">
@@ -25,10 +26,10 @@
             <!-- Modal Footer -->
             <div class="modal-footer border-0">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-times-circle"></i> Close
+                    <i class="fas fa-times-circle"></i> @Localizer["lbl_Close"]
                 </button>
                 <button type="submit" form="changePictureForm" class="btn btn-success">
-                    <i class="fas fa-check-circle"></i> Save Changes
+                    <i class="fas fa-check-circle"></i> @Localizer["lbl_SaveChanges"]
                 </button>
             </div>
         </div>

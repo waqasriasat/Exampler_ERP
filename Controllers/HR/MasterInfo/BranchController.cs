@@ -151,9 +151,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       using (var package = new ExcelPackage())
       {
         var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Branch"]);
-        worksheet.Cells["A1"].Value = _localizer["lbl_Branch"] +" "+ _localizer["lbl_ID"];
+        worksheet.Cells["A1"].Value = _localizer["lbl_BranchID"];
         worksheet.Cells["B1"].Value = _localizer["lbl_Date"];
-        worksheet.Cells["C1"].Value = _localizer["lbl_Name"] + " " + _localizer["lbl_Name"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_BranchName"];
         worksheet.Cells["D1"].Value = _localizer["lbl_Active"];
         worksheet.Cells["E1"].Value = _localizer["lbl_POBox"];
         worksheet.Cells["F1"].Value = _localizer["lbl_Country"];
@@ -170,7 +170,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           worksheet.Cells[i + 2, 1].Value = branches[i].BranchTypeID;
           worksheet.Cells[i + 2, 2].Value = branches[i].Date;
           worksheet.Cells[i + 2, 3].Value = branches[i].BranchTypeName;
-          worksheet.Cells[i + 2, 4].Value = branches[i].ActiveYNID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 4].Value = branches[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
           worksheet.Cells[i + 2, 5].Value = branches[i].POBox;
           worksheet.Cells[i + 2, 6].Value = branches[i].Country;
           worksheet.Cells[i + 2, 7].Value = branches[i].City;

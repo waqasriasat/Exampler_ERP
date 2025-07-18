@@ -188,13 +188,13 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
       var EmployeeRequestsList = await _utils.GetEmployeeRequestTypes();
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("EmployeeRequests");
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_EmployeeRequest"]);
 
-        worksheet.Cells["A1"].Value = "EmployeeRequest ID";
-        worksheet.Cells["B1"].Value = "Employee Name";
-        worksheet.Cells["C1"].Value = "EmployeeRequest Type";
-        worksheet.Cells["D1"].Value = "Apply Date";
-        worksheet.Cells["E1"].Value = "Notes";
+        worksheet.Cells["A1"].Value = _localizer["lbl_EmployeeRequest"]  + " " + _localizer["lbl_ID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_EmployeeRequest"]  + " " + _localizer["lbl_Type"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_ApplyDate"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_Note"];
 
 
         for (int i = 0; i < EmployeeRequests.Count; i++)
@@ -216,7 +216,7 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"EmployeeRequests-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_EmployeeRequest"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

@@ -1,50 +1,51 @@
 @model Exampler_ERP.Models.Temp.DeductionSetupListViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @foreach (var item in Model.DeductionTypeWithRowCount)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-10 col-lg-10">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <p class="text-nowrap"><span class="smallAdd">Deduction Type Name : </span>@Html.DisplayFor(modelItem => item.DeductionTypeName)</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Class : </span>
-                                            @if (item.Class == 1)
-                                            {
-                                                <span>Absent</span>
-                                            }
-                                            else if (item.Class == 2)
-                                            {
-                                                <span>Late</span>
-                                            }
-                                        </p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Total : </span>@Html.DisplayFor(modelItem => item.RowCount)</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-2 col-lg-2">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editDeductionSetupLink" data-id="@item.DeductionTypeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteDeductionSetupLink" data-id="@item.DeductionTypeID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+{
+	<div class="col-12 col-md-12 col-lg-12 GVDetail">
+		<div class="row">
+			<div class="col-10 col-md-10 col-lg-10">
+				<div class="row">
+					<div class="col-12 col-md-12 col-lg-6">
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_DeductionTypeName"] : </span>@Html.DisplayFor(modelItem => item.DeductionTypeName)</p>
+					</div>
+					<div class="col-12 col-md-12 col-lg-2">
+						<p class="text-nowrap">
+							<span class="smallAdd">@Localizer["lbl_Class"] : </span>
+							@if (item.Class == 1)
+							{
+								<span>@Localizer["lbl_Absent"]</span>
+							}
+							else if (item.Class == 2)
+							{
+								<span>@Localizer["lbl_Late"]</span>
+							}
+						</p>
+					</div>
+					<div class="col-12 col-md-12 col-lg-2">
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Total"] : </span>@Html.DisplayFor(modelItem => item.RowCount)</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-2 col-md-2 col-lg-2">
+				<div class="row">
+					<div class="col-12 col-md-12 col-lg-6">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="editDeductionSetupLink" data-id="@item.DeductionTypeID">
+								<i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-12 col-lg-6">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="deleteDeductionSetupLink" data-id="@item.DeductionTypeID">
+								<i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}

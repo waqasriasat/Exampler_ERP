@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addVacationTypeModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add New Vacation Type
+					@Localizer["lbl_AddNewVacationType"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -16,7 +16,7 @@
                 <form id="addVacationTypeForm">
                     <div class="row">
                         <div class="col-12">
-                            <label for="VacationTypeName" class="form-label fw-bold">Vacation Type Name</label>
+                            <label for="VacationTypeName" class="form-label fw-bold">@Localizer["lbl_VacationTypeName"]</label>
                             <input type="text" class="form-control form-control-lg" id="VacationTypeName" name="VacationTypeName" value="@Model.VacationTypeName" />
                         </div>
                         <div class="col-6">

@@ -23,7 +23,7 @@
                     <div class="row g-3">
                         <!-- Password Dynamic Field -->
                         <div class="col-md-6">
-                            <label for="Password" class="form-label">Password</label>
+                            <label for="Password" class="form-label">@Localizer["lbl_Password"]</label>
                             <input type="password" class="form-control form-control-lg" id="Password" name="Password" placeholder="Enter Password" />
                         </div>
 
@@ -39,7 +39,7 @@
                         <!-- Notes Field -->
                         <div class="col-12 mt-4">
                             <label for="Notes" class="form-label">@Localizer["lbl_Note"]</label>
-                            <textarea id="Notes" name="Notes"  class="form-control form-control-lg" rows="4" placeholder="Enter notes here..."></textarea>
+                            <textarea id="Notes" name="Notes"  class="form-control form-control-lg" rows="4" placeholder="@Localizer["lbl_EnterRessonHere"]"></textarea>
                         </div>
 
                         <!-- Hidden Fields -->
@@ -58,7 +58,7 @@
             <!-- Modal Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                  <i class="fas fa-times-circle"></i> Close
+                  <i class="fas fa-times-circle"></i> @Localizer["lbl_Close"]
                   </button>
                 <div>
                     <button type="button" class="btn btn-danger me-2" id="Reject">Reject</button>

@@ -154,7 +154,7 @@ namespace Exampler_ERP.Controllers.HR.Reports
       {
         var worksheet = package.Workbook.Worksheets.Add("FaceAttendance");
         worksheet.Cells["A1"].Value = "FaceAttendance ID";
-        worksheet.Cells["B1"].Value = "Employee Name";
+        worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
         worksheet.Cells["C1"].Value = _localizer["lbl_Date"];
         worksheet.Cells["D1"].Value = "In Time";
         worksheet.Cells["E1"].Value = "Out Time";

@@ -1,7 +1,8 @@
 @{
   ViewData["Title"] = "Vertical Form - Form Layouts";
 }
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @* ************** Content ************** *@
 <h4 class="py-3 mb-4"><span class="text-muted fw-light">Forms/</span> Vertical Layouts</h4>
 
@@ -15,7 +16,7 @@
       <div class="card-body">
         <form>
           <div class="mb-3">
-            <label class="form-label" for="basic-default-fullname">Full Name</label>
+            <label class="form-label" for="basic-default-fullname">@Localizer["lbl_FullName"]</label>
             <input type="text" class="form-control form-control-lg" id="basic-default-fullname" placeholder="John Doe" />
           </div>
           <div class="mb-3">
@@ -23,7 +24,7 @@
             <input type="text" class="form-control form-control-lg" id="basic-default-company" placeholder="ACME Inc." />
           </div>
           <div class="mb-3">
-            <label class="form-label" for="basic-default-email">Email</label>
+            <label class="form-label" for="basic-default-email">@Localizer["lbl_Email"]</label>
             <div class="input-group input-group-merge">
               <input type="text" id="basic-default-email" class="form-control form-control-lg" placeholder="john.doe" aria-label="john.doe" aria-describedby="basic-default-email2" />
               <span class="input-group-text" id="basic-default-email2">&#64;example.com</span>
@@ -52,7 +53,7 @@
       <div class="card-body">
         <form>
           <div class="mb-3">
-            <label class="form-label" for="basic-icon-default-fullname">Full Name</label>
+            <label class="form-label" for="basic-icon-default-fullname">@Localizer["lbl_FullName"]</label>
             <div class="input-group input-group-merge">
               <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
               <input type="text" class="form-control form-control-lg" id="basic-icon-default-fullname" placeholder="John Doe" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2" />
@@ -66,7 +67,7 @@
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-label" for="basic-icon-default-email">Email</label>
+            <label class="form-label" for="basic-icon-default-email">@Localizer["lbl_Email"]</label>
             <div class="input-group input-group-merge">
               <span class="input-group-text"><i class="bx bx-envelope"></i></span>
               <input type="text" id="basic-icon-default-email" class="form-control form-control-lg" placeholder="john.doe" aria-label="john.doe" aria-describedby="basic-icon-default-email2" />

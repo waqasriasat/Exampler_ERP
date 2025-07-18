@@ -77,7 +77,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         if (string.IsNullOrEmpty(SubQualification.SubQualificationTypeName))
         {
-          return Json(new { success = false, message = "SubQualification Name field is required. Please enter a valid text value." });
+          return Json(new { success = false, message = "SubQualificationName field is required. Please enter a valid text value." });
         }
         _appDBContext.Update(SubQualification);
         await _appDBContext.SaveChangesAsync();
@@ -101,7 +101,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       {
         if (string.IsNullOrEmpty(SubQualification.SubQualificationTypeName))
         {
-          return Json(new { success = false, message = "SubQualification Name field is required. Please enter a valid text value." });
+          return Json(new { success = false, message = "SubQualificationName field is required. Please enter a valid text value." });
         }
         SubQualification.DeleteYNID = 0;
         _appDBContext.Settings_SubQualificationTypes.Add(SubQualification);
@@ -139,10 +139,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("SubQualification");
-        worksheet.Cells["A1"].Value = "SubQualification ID";
-        worksheet.Cells["B1"].Value = "Qualification Name";
-        worksheet.Cells["C1"].Value = "SubQualification Name";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_SubQualification"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_SubQualificationID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_QualificationName"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_SubQualificationName"];
         worksheet.Cells["D1"].Value = _localizer["lbl_Active"];
 
 
@@ -151,7 +151,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           worksheet.Cells[i + 2, 1].Value = SubQualification[i].SubQualificationTypeID;
           worksheet.Cells[i + 2, 2].Value = SubQualification[i].QualificationType?.QualificationTypeName;
           worksheet.Cells[i + 2, 3].Value = SubQualification[i].SubQualificationTypeName;
-          worksheet.Cells[i + 2, 4].Value = SubQualification[i].ActiveYNID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 4].Value = SubQualification[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
         }
 
         worksheet.Cells["A1:l1"].Style.Font.Bold = true;
@@ -160,7 +160,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"SubQualification-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_SubQualification"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

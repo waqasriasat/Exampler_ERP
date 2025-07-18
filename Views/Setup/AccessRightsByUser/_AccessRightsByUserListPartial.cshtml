@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.AccessRightsByUserListViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @foreach (var item in Model.AccessRightsWithUserCount)
                 {
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
@@ -7,7 +8,7 @@
                             <div class="col-10 col-md-10 col-lg-10">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-8">
-                                        <p class="text-nowrap"><span class="smallAdd">User Name : </span>@Html.DisplayFor(modelItem => item.UserName)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_UserName"] : </span>@Html.DisplayFor(modelItem => item.UserName)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap"><span class="smallAdd">Total Access Count : </span>@Html.DisplayFor(modelItem => item.TotalAccessCount)</p>

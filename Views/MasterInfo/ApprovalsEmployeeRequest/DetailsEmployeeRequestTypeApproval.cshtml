@@ -1,5 +1,6 @@
 @model dynamic
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     var EmployeeRequestTypeID = ViewBag.EmployeeRequestTypeID;
     var TransactionID = ViewBag.TransactionID;
@@ -29,7 +30,7 @@
             <!-- Footer with redesigned close button -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-times-circle"></i> Close
+                    <i class="fas fa-times-circle"></i> @Localizer["lbl_Close"]
                 </button>
             </div>
         </div>

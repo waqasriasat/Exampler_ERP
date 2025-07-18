@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editHolidayTypeModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit Holiday Type
+					@Localizer["lbl_EditHolidayType"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -18,7 +18,7 @@
                         <div class="col-2 col-md-12 col-lg-12">
                             <div class="row">
                                 <div class="col-12 col-md-12 col-lg-12">
-                                    <label for="HolidayTypeName" class="form-label fw-bold">Holiday Type Name</label>
+									<label for="HolidayTypeName" class="form-label fw-bold">@Localizer["lbl_HolidayTypeName"]</label>
                                     <input type="text" class="form-control form-control-lg" id="HolidayTypeName" name="HolidayTypeName" value="@Model.HolidayTypeName" />
                                 </div>
                                 <div class="col-12 col-md-6 col-lg-6">

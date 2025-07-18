@@ -1,4 +1,6 @@
 @model Exampler_ERP.Models.HR_Vacation
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     var EmployeeID = Context.Session.GetInt32("EmployeeID");
     var EmployeeName = Context.Session.GetString("EmployeeName");
@@ -11,7 +13,7 @@
             <!-- Modal Header -->
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addVacationModalLabel">
-                    <i class="fas fa-key me-2"></i>@Localizer["lbl_Add"] Vacation
+					<i class="fas fa-key me-2"></i>@Localizer["lbl_AddVacation"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -23,32 +25,32 @@
                   <div class="row">
                     <div class="col-12">
                             <input type="hidden" asp-for="EmployeeID" value="@EmployeeID" class="form-control form-control-lg" />
-                            <label class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
                             <input type="text" class="form-control form-control-lg" value="@EmployeeName" readonly />
                     </div>
 
                     <div class="col-12">
-                        <label asp-for="VacationTypeID" class="form-label fw-bold">Vacation Type</label>
+                        <label asp-for="VacationTypeID" class="form-label fw-bold">@Localizer["lbl_VacationType"]</label>
                         <select asp-for="VacationTypeID" asp-items="@(new SelectList(ViewBag.VacationTypeList, "Value", "Text"))" class="form-control form-control-lg">
                         </select>
                         <span asp-validation-for="VacationTypeID" class="text-danger small"></span>
                     </div>
 
                     <div class="col-6">
-                        <label asp-for="StartDate" class="form-label fw-bold">Start Date</label>
+                        <label asp-for="StartDate" class="form-label fw-bold">@Localizer["lbl_StartDate"]</label>
                         <input asp-for="StartDate" class="form-control form-control-lg" type="date" placeholder="Enter new password" />
                         <span asp-validation-for="StartDate" class="text-danger small"></span>
                     </div>
 
                     <div class="col-6">
-                        <label asp-for="EndDate" class="form-label fw-bold">End Date</label>
+                        <label asp-for="EndDate" class="form-label fw-bold">@Localizer["lbl_EndDate"]</label>
                         <input asp-for="EndDate" class="form-control form-control-lg" type="date" placeholder="Confirm new password" />
                         <span asp-validation-for="EndDate" class="text-danger small"></span>
                     </div>
                     <!-- Notes Field -->
                     <div class="col-12">
-                        <label asp-for="Reason" class="form-label fw-bold">Reason</label>
-                        <textarea asp-for="Reason" class="form-control form-control-lg" rows="4" placeholder="Enter Reason here..."></textarea>
+                        <label asp-for="Reason" class="form-label fw-bold">@Localizer["lbl_Reason"]</label>
+							<textarea asp-for="Reason" class="form-control form-control-lg" rows="4" placeholder="@Localizer["lbl_EnterRessonHere"]"></textarea>
                         <span asp-validation-for="Reason" class="text-danger small"></span>
                     </div>
                     </div>
@@ -61,10 +63,10 @@
             <!-- Modal Footer -->
             <div class="modal-footer border-0">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-times-circle"></i> Close
+                    <i class="fas fa-times-circle"></i> @Localizer["lbl_Close"]
                 </button>
                 <button type="submit" id="saveNewVacation" class="btn btn-success">
-                    <i class="fas fa-check-circle"></i> Save Changes
+                    <i class="fas fa-check-circle"></i> @Localizer["lbl_SaveChanges"]
                 </button>
             </div>
         </div>

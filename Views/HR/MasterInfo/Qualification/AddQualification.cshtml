@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addQualificationModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add New Qualification
+                    @Localizer["lbl_AddNewQualification"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -16,7 +16,7 @@
                 <form id="addQualificationForm">
                     <div class="row">
                         <div class="col-12">
-                            <label for="QualificationTypeName" class="form-label fw-bold">Qualification Name</label>
+                            <label for="QualificationTypeName" class="form-label fw-bold">@Localizer["lbl_QualificationName"]</label>
                             <input type="text" class="form-control form-control-lg" id="QualificationTypeName" name="QualificationTypeName" value="@Model.QualificationTypeName" />
                         </div>
                         <div class="col-6">

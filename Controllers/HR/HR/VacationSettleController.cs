@@ -367,7 +367,7 @@ namespace Exampler_ERP.Controllers.HR.HR
         var worksheet = package.Workbook.Worksheets.Add("Vacations");
 
         worksheet.Cells["A1"].Value = "Vacation ID";
-        worksheet.Cells["B1"].Value = "Employee Name";
+        worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
         worksheet.Cells["C1"].Value = "Vacation Type";
         worksheet.Cells["D1"].Value = "HR Date";
         worksheet.Cells["E1"].Value = "Start Date";

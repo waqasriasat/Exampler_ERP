@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     var UserID = Context.Session.GetInt32("UserID");
 
@@ -64,20 +66,20 @@
                 <li>
                     <a class="dropdown-item" href="javascript:void(0);">
                         <i class="bx bx-user me-2"></i>
-                        <span class="align-middle">My Profile</span>
+                        <span class="align-middle">@Localizer["lbl_MyProfile"]</span>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item" href="javascript:void(0);">
                         <i class="bx bx-cog me-2"></i>
-                        <span class="align-middle">Settings</span>
+                        <span class="align-middle">@Localizer["lbl_Setting"]</span>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item" href="javascript:void(0);">
                         <span class="d-flex align-items-center align-middle">
                             <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">Billing</span>
+                            <span class="flex-grow-1 align-middle ms-1">@Localizer["lbl_Billing"]</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
                         </span>
                     </a>
@@ -88,7 +90,7 @@
                 <li>
                     <a class="dropdown-item" asp-area="" asp-controller="Auth" asp-action="Logout">
                         <i class="bx bx-power-off me-2"></i>
-                        <span class="align-middle">Log Out</span>
+                        <span class="align-middle">@Localizer["lbl_LogOut"]</span>
                     </a>
                 </li>
             </ul>
@@ -111,7 +113,7 @@
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="1">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">New User Approval</span>
+                            <span class="flex-grow-1 align-middle ms-1">@Localizer["lbl_NewUserApproval"]</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countUser"></label></span>
                         </span>
                     </a>
@@ -120,7 +122,7 @@
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="2">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">New Employee Approval</span>
+                            <span class="flex-grow-1 align-middle ms-1">@Localizer["lbl_NewEmployeeApproval"]</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countEmployee"></label></span>
                         </span>
                     </a>
@@ -129,7 +131,7 @@
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="3">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">New Contract Approval</span>
+                            <span class="flex-grow-1 align-middle ms-1">@Localizer["lbl_NewContractApproval"]</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countContract"></label></span>
                         </span>
                     </a>
@@ -138,7 +140,7 @@
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="4">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">Contract Renewal Approval</span>
+                            <span class="flex-grow-1 align-middle ms-1">@Localizer["lbl_ContractRenewalApproval"]</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countContractRenewal"></label></span>
                         </span>
                     </a>
@@ -147,7 +149,7 @@
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="5">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">End of Service Approval</span>
+                            <span class="flex-grow-1 align-middle ms-1">@Localizer["lbl_EndofServiceApproval"]</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countEndofService"></label></span>
                         </span>
                     </a>
@@ -156,7 +158,7 @@
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="6">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">New Salary Approval</span>
+                            <span class="flex-grow-1 align-middle ms-1">@Localizer["lbl_NewSalaryApproval"]</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countSalary"></label></span>
                         </span>
                     </a>
@@ -165,7 +167,7 @@
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="7">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">Overtime Approval</span>
+                            <span class="flex-grow-1 align-middle ms-1">@Localizer["lbl_OvertimeApproval"]</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countOvertime"></label></span>
                         </span>
                     </a>
@@ -174,7 +176,7 @@
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="8">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">Allowance Approval</span>
+                            <span class="flex-grow-1 align-middle ms-1">@Localizer["lbl_AllowanceApproval"]</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countAllowance"></label></span>
                         </span>
                     </a>
@@ -183,7 +185,7 @@
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="9">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">Deduction Approval</span>
+                            <span class="flex-grow-1 align-middle ms-1">@Localizer["lbl_DeductionApproval"]</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countDeduction"></label></span>
                         </span>
                     </a>
@@ -192,7 +194,7 @@
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="10">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">Fixed Deduction Approval</span>
+                            <span class="flex-grow-1 align-middle ms-1">@Localizer["lbl_FixedDeductionApproval"]</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countFixedDeduction"></label></span>
                         </span>
                     </a>
@@ -201,7 +203,7 @@
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="11">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">Vacation Approval</span>
+                            <span class="flex-grow-1 align-middle ms-1">@Localizer["lbl_VacationApproval"]</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countVacation"></label></span>
                         </span>
                     </a>
@@ -210,7 +212,7 @@
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="12">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">Vacation Settle Approval</span>
+                            <span class="flex-grow-1 align-middle ms-1">@Localizer["lbl_VacationSettleApproval"]</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countVacationSettle"></label></span>
                         </span>
                     </a>
@@ -219,7 +221,7 @@
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="SelectedIndex" asp-route-id="13">
                         <span class="d-flex align-items-center align-middle">
                             <i class="bx bx-fast-forward-circle me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">PayRoll Approval</span>
+                            <span class="flex-grow-1 align-middle ms-1">@Localizer["lbl_PayRollApproval"]</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"><label id="countPayRoll"></label></span>
                         </span>
                     </a>
@@ -873,12 +875,12 @@
                 </li>
                 <li id="liApprovalsRequest">
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsRequest" asp-action="Index" asp-route-id="" style="text-align-last: center;">
-                        <span class="align-middle">Show all Process Approval</span>
+                        <span class="align-middle">@Localizer["lbl_ShowAllProcessApproval"]</span>
                     </a>
                 </li>
                 <li id="liApprovalsRequest">
                     <a class="dropdown-item" asp-area="" asp-controller="ApprovalsEmployeeRequest" asp-action="Index" asp-route-id="" style="text-align-last: center;">
-                        <span class="align-middle">Show all Employee Request</span>
+                        <span class="align-middle">@Localizer["lbl_ShowAllEmployeeRequest"]</span>
                     </a>
                 </li>
             </ul>
@@ -913,20 +915,20 @@
                 <li>
                     <a class="dropdown-item" href="javascript:void(0);">
                         <i class="bx bx-user me-2"></i>
-                        <span class="align-middle">My Profile</span>
+                        <span class="align-middle">@Localizer["lbl_MyProfile"]</span>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item" href="javascript:void(0);">
                         <i class="bx bx-cog me-2"></i>
-                        <span class="align-middle">Settings</span>
+                        <span class="align-middle">@Localizer["lbl_Setting"]</span>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item" href="javascript:void(0);">
                         <span class="d-flex align-items-center align-middle">
                             <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                            <span class="flex-grow-1 align-middle ms-1">Billing</span>
+                            <span class="flex-grow-1 align-middle ms-1">@Localizer["lbl_Billing"]</span>
                             <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
                         </span>
                     </a>
@@ -937,7 +939,7 @@
                 <li>
                     <a class="dropdown-item" asp-area="" asp-controller="Auth" asp-action="Logout">
                         <i class="bx bx-power-off me-2"></i>
-                        <span class="align-middle">Log Out</span>
+                        <span class="align-middle">@Localizer["lbl_LogOut"]</span>
                     </a>
                 </li>
             </ul>

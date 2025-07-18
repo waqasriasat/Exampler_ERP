@@ -139,7 +139,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
         {
           worksheet.Cells[i + 2, 1].Value = UnitTypees[i].UnitTypeID;
           worksheet.Cells[i + 2, 2].Value = UnitTypees[i].UnitTypeName;
-          worksheet.Cells[i + 2, 3].Value = UnitTypees[i].ActiveYNID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 3].Value = UnitTypees[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
         }
 
         worksheet.Cells["A1:C1"].Style.Font.Bold = true;

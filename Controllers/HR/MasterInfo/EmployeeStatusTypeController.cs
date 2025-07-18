@@ -131,9 +131,9 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("EmployeeStatusTypees");
-        worksheet.Cells["A1"].Value = "EmployeeStatusType ID";
-        worksheet.Cells["B1"].Value = "EmployeeStatusType Name";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_EmployeeStatusType"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_EmployeeStatusTypeID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeStatusTypeName"];
         worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
@@ -141,7 +141,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         {
           worksheet.Cells[i + 2, 1].Value = EmployeeStatusTypees[i].EmployeeStatusTypeID;
           worksheet.Cells[i + 2, 2].Value = EmployeeStatusTypees[i].EmployeeStatusTypeName;
-          worksheet.Cells[i + 2, 3].Value = EmployeeStatusTypees[i].ActiveYNID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 3].Value = EmployeeStatusTypees[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
         }
 
         worksheet.Cells["A1:C1"].Style.Font.Bold = true;
@@ -150,7 +150,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"EmployeeStatusTypees-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_EmployeeStatusType"] +$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

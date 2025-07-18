@@ -327,34 +327,34 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       {
         var worksheet = package.Workbook.Worksheets.Add("Employees");
         worksheet.Cells["A1"].Value = "Hire Date";
-        worksheet.Cells["B1"].Value = "Branch";
+        worksheet.Cells["B1"].Value = _localizer["lbl_SelectBranch"];
         worksheet.Cells["C1"].Value = "Department";
         worksheet.Cells["D1"].Value = "Designation";
         worksheet.Cells["E1"].Value = "Employee ID";
         worksheet.Cells["F1"].Value = "Employee Code";
-        worksheet.Cells["G1"].Value = "Employee Name";
+        worksheet.Cells["G1"].Value = _localizer["lbl_EmployeeName"];
         worksheet.Cells["H1"].Value = _localizer["lbl_Active"];
-        worksheet.Cells["I1"].Value = "Gender";
-        worksheet.Cells["J1"].Value = "DOB";
-        worksheet.Cells["K1"].Value = "Marital Status";
-        worksheet.Cells["L1"].Value = "No of Children";
-        worksheet.Cells["M1"].Value = "Phone1";
-        worksheet.Cells["N1"].Value = "Phone2";
+        worksheet.Cells["I1"].Value = _localizer["lbl_Gender"];
+        worksheet.Cells["J1"].Value = _localizer["lbl_DOB"];
+        worksheet.Cells["K1"].Value = _localizer["lbl_MaritalStatus"];
+        worksheet.Cells["L1"].Value = _localizer["lbl_NoofChildren"];
+        worksheet.Cells["M1"].Value = _localizer["lbl_Phone1"];
+        worksheet.Cells["N1"].Value = _localizer["lbl_Phone2"];
         worksheet.Cells["O1"].Value = _localizer["lbl_Mobile"];
-        worksheet.Cells["P1"].Value = "WhatsApp";
+        worksheet.Cells["P1"].Value = _localizer["lbl_WhatsApp"];
         worksheet.Cells["Q1"].Value = "Religen";
         worksheet.Cells["R1"].Value = "Place of Birth";
         worksheet.Cells["S1"].Value = _localizer["lbl_Country"];
         worksheet.Cells["T1"].Value = _localizer["lbl_Fax"];
-        worksheet.Cells["U1"].Value = "Email";
+        worksheet.Cells["U1"].Value = _localizer["lbl_Email"];
         worksheet.Cells["V1"].Value = _localizer["lbl_POBox"];
         worksheet.Cells["W1"].Value = _localizer["lbl_Address"];
-        worksheet.Cells["X1"].Value = "ID Number";
-        worksheet.Cells["Y1"].Value = "ID Place of Issue";
+        worksheet.Cells["X1"].Value = _localizer["lbl_IDNumber"];
+        worksheet.Cells["Y1"].Value = _localizer["lbl_IDPlaceofIssue"];
         worksheet.Cells["Z1"].Value = "ID Issue Date";
         worksheet.Cells["AA1"].Value = "ID Expiry Date";
-        worksheet.Cells["AB1"].Value = "Passport Number";
-        worksheet.Cells["AC1"].Value = "Passport Place of Issue";
+        worksheet.Cells["AB1"].Value = _localizer["lbl_PassportNumber"];
+        worksheet.Cells["AC1"].Value = _localizer["lbl_PassportPlaceofIssue"];
         worksheet.Cells["AD1"].Value = "Passport Issue Date";
         worksheet.Cells["AE1"].Value = "Passport Expiry Date";
         for (int i = 0; i < employees.Count; i++)
@@ -366,7 +366,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           worksheet.Cells[i + 2, 5].Value = employees[i].EmployeeID;
           worksheet.Cells[i + 2, 6].Value = employees[i].EmployeeCode;
           worksheet.Cells[i + 2, 7].Value = employees[i].FirstName + ' ' + employees[i].FatherName + ' ' + employees[i].FamilyName;
-          worksheet.Cells[i + 2, 8].Value = employees[i].ActiveYNID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 8].Value = employees[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
           worksheet.Cells[i + 2, 9].Value = employees[i].Sex == 0 || employees[i].Sex == null
           ? ""
           : GenderList.FirstOrDefault(g => g.Value == employees[i].Sex.ToString())?.Text;

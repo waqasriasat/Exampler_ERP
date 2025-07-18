@@ -167,7 +167,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
         {
           worksheet.Cells[i + 2, 1].Value = Banks[i].BankID;
           worksheet.Cells[i + 2, 2].Value = Banks[i].BankName;
-          worksheet.Cells[i + 2, 3].Value = Banks[i].ActiveYNID == 1 ? "Yes" : "No";
+          worksheet.Cells[i + 2, 3].Value = Banks[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
           worksheet.Cells[i + 2, 4].Value = Banks[i].AccountNo;
           worksheet.Cells[i + 2, 5].Value = Banks[i].Address;
         }

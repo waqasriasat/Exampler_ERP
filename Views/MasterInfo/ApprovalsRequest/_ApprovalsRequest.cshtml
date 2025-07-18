@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.CR_ProcessTypeApprovalDetail>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <div class="row">
     <div class="col-md-12">
@@ -11,13 +12,13 @@
                         <div class="col-11 col-md-11 col-lg-8">
                             <div class="row">
                                 <div class="col-3">
-                                    <p class="text-nowrap">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</p>
+                                    <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                                 </div>
                                 <div class="col-3">
                                     <p class="text-nowrap">Process @Localizer["lbl_Name"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Rank</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Rank"]</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Pending Date</p>
@@ -27,10 +28,10 @@
                         <div class="col-1 col-md-1 col-lg-4">
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="text-nowrap">Approval</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Approval"]</p>
                                 </div>
                                 <div class="col-4">
-                                    <p class="text-nowrap">Detail</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Details"]</p>
                                 </div>
                                 <div class="col-4">
                                     <p class="text-nowrap">Action</p>
@@ -46,13 +47,13 @@
                             <div class="col-11 col-md-11 col-lg-8">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.CR_ProcessTypeApproval?.Employee?.FirstName @item.CR_ProcessTypeApproval?.Employee?.FatherName @item.CR_ProcessTypeApproval?.Employee?.Family@Localizer["lbl_Name"]</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.CR_ProcessTypeApproval?.Employee?.FirstName @item.CR_ProcessTypeApproval?.Employee?.FatherName @item.CR_ProcessTypeApproval?.Employee?.FamilyName</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
                                         <p class="text-nowrap"><span class="smallAdd">Process Name : </span>@(item.CR_ProcessTypeApproval?.ProcessType?.ProcessTypeName ?? "N/A")  </p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Rank : </span>@Html.DisplayFor(modelItem => item.Rank)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Rank"] : </span>@Html.DisplayFor(modelItem => item.Rank)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap"><span class="smallAdd">Pending Date : </span>@item.Date.ToString("dd-MM-yyyy HH:mm:ss")</p>

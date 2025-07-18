@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.HR_EndOfService
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <h5 class="modal-title" style="padding-top:10px">End Of Service Details</h5>
 <input type="hidden" asp-for="EndOfServiceID" class="form-control form-control-lg" />
 <hr />
@@ -7,7 +8,7 @@
     <div class="col-12">
         <div class="row">
             <div class="col-12">
-                <label asp-for="EmployeeID" class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
+                <label asp-for="EmployeeID" class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
                 <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control form-control-lg" disabled>
                 </select>
                 <span asp-validation-for="EmployeeID" class="text-danger"></span>
@@ -15,11 +16,11 @@
         </div>
         <div class="row">
             <div class="col-6">
-                <label class ="form-label fw-bold">Contract Type</label>
+                <label class ="form-label fw-bold">Contract @Localizer["lbl_Type"]</label>
                 <input type="text" id="ContractType" class="form-control form-control-lg readonly-background" readonly />
             </div>
             <div class="col-6">
-                <label asp-for="EndOfSerivceReasonTypeId" class="form-label fw-bold">Reason Type</label>
+                <label asp-for="EndOfSerivceReasonTypeId" class="form-label fw-bold">Reason @Localizer["lbl_Type"]</label>
                 <select asp-for="EndOfSerivceReasonTypeId" asp-items="@(new SelectList(ViewBag.EndOfServiceReasonTypesList, "Value", "Text"))" class="form-control form-control-lg" id="EndOfSerivceReasonTypeId">
                 </select>
                 <span asp-validation-for="EndOfSerivceReasonTypeId" class="text-danger"></span>
@@ -71,7 +72,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <label asp-for="TotalDays" class="form-label fw-bold">Total Days</label>
+                        <label asp-for="TotalDays" class="form-label fw-bold">@Localizer["lbl_TotalDays"] </label>
                         <input asp-for="TotalDays" class="form-control form-control-lg readonly-background" type="number" />
                         <span asp-validation-for="TotalDays" class="text-danger"></span>
                     </div>
@@ -80,7 +81,7 @@
             <div class="col-6 colcliedgroup">
                 <div class="row">
                     <div class="col-12">
-                        <label asp-for="EndofServiceBenefit" class="form-label fw-bold">End of Service Benefit</label>
+                        <label asp-for="EndofServiceBenefit" class="form-label fw-bold">@Localizer["lbl_End"] of Service Benefit</label>
                         <input asp-for="EndofServiceBenefit" class="form-control form-control-lg readonly-background" type="number" />
                         <span asp-validation-for="EndofServiceBenefit" class="text-danger"></span>
                     </div>

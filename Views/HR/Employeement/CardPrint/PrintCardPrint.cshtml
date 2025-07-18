@@ -64,16 +64,16 @@
             }
 
             <!-- Employee Name -->
-            <p><span class="field-label">Name:</span> @Model.FirstName @Model.FatherName @Model.Family@Localizer["lbl_Name"]</p>
+            <p><span class="field-label">Name:</span> @Model.FirstName @Model.FatherName @Model.FamilyName</p>
 
             <!-- Employee Code -->
             <p><span class="field-label">Employee Code:</span> @Model.EmployeeCode</p>
 
             <!-- Designation -->
-            <p><span class="field-label">Designation:</span> @Model.DesignationType?.DesignationType@Localizer["lbl_Name"]</p>
+            <p><span class="field-label">Designation:</span> @Model.DesignationType?.DesignationTypeName</p>
 
             <!-- Department -->
-            <p><span class="field-label">Department:</span> @Model.DepartmentType?.DepartmentType@Localizer["lbl_Name"]</p>
+            <p><span class="field-label">Department:</span> @Model.DepartmentType?.DepartmentTypeName</p>
 
             <!-- Phone Number -->
             <p><span class="field-label">Phone:</span> @Model.Phone1</p>

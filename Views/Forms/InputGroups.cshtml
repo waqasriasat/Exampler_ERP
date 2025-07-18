@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
   ViewData["Title"] = "Input groups - Forms";
 }
@@ -19,7 +21,7 @@
         </div>
 
         <div class="form-password-toggle">
-          <label class="form-label" for="basic-default-password12">Password</label>
+          <label class="form-label" for="basic-default-password12">@Localizer["lbl_Password"]</label>
           <div class="input-group">
             <input type="password" class="form-control form-control-lg" id="basic-default-password12" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="basic-default-password2" />
             <span id="basic-default-password2" class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
@@ -63,7 +65,7 @@
         </div>
 
         <div class="form-password-toggle">
-          <label class="form-label" for="basic-default-password32">Password</label>
+          <label class="form-label" for="basic-default-password32">@Localizer["lbl_Password"]</label>
           <div class="input-group input-group-merge">
             <input type="password" class="form-control form-control-lg" id="basic-default-password32" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="basic-default-password" />
             <span class="input-group-text cursor-pointer" id="basic-default-password"><i class="bx bx-hide"></i></span>

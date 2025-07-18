@@ -1,59 +1,60 @@
 @model IEnumerable<Exampler_ERP.Models.HR_DocumentUpload>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-8 col-md-10 col-lg-8">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.Family@Localizer["lbl_Name"]</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Document Name : </span>@item.Document@Localizer["lbl_Name"]</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Date : </span>@item.Date.ToString("dd/MM/yyyy")</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Description : </span>@item.Description</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-4 col-md-2 col-lg-4">
-                                <div class="row">
-                                <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editDocumentUploadLink" data-id="@item.DocumentUploadID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="@Url.Action("DownloadDocument", "DocumentUpload", new { id = @item.DocumentUploadID })" class="btn btn-sm me-2" title="Download Document">
-                                                <i class="fa fa-download" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="@Url.Action("ViewDocument", "DocumentUpload", new { id = @item.DocumentUploadID })" target="_blank" class="btn btn-sm" title="View Document">
-                                                <i class="fa fa-eye" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
+{
+	<div class="col-12 col-md-12 col-lg-12 GVDetail">
+		<div class="row">
+			<div class="col-8 col-md-10 col-lg-8">
+				<div class="row">
+					<div class="col-12 col-md-12 col-lg-3">
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+					</div>
+					<div class="col-12 col-md-12 col-lg-3">
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_DocumentName"] : </span>@item.DocumentName</p>
+					</div>
+					<div class="col-12 col-md-12 col-lg-3">
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Date"] : </span>@item.Date.ToString("dd/MM/yyyy")</p>
+					</div>
+					<div class="col-12 col-md-12 col-lg-3">
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Description"] : </span>@item.Description</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-4 col-md-2 col-lg-4">
+				<div class="row">
+					<div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="editDocumentUploadLink" data-id="@item.DocumentUploadID">
+								<i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="@Url.Action("DownloadDocument", "DocumentUpload", new { id = @item.DocumentUploadID })" class="btn btn-sm me-2" title="Download Document">
+								<i class="fa fa-download" style="font-size: large; color:steelblue; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="@Url.Action("ViewDocument", "DocumentUpload", new { id = @item.DocumentUploadID })" target="_blank" class="btn btn-sm" title="View Document">
+								<i class="fa fa-eye" style="font-size: large; color:steelblue; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
 
-                                <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteDocumentUploadLink" data-id="@item.DocumentUploadID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-     
+					<div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="deleteDocumentUploadLink" data-id="@item.DocumentUploadID">
+								<i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+

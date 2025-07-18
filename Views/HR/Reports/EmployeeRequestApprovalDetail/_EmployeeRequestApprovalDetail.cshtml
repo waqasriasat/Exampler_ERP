@@ -1,11 +1,12 @@
 @model IEnumerable<Exampler_ERP.Models.HR_EmployeeRequestTypeApprovalDetail>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <h5 class="card-header">
-                Employee Request Approvals List
+				@Localizer["lbl_EmployeeRequestTypeApprovalList"]
 
                 @{
                     var status = ViewBag.Status != null ? ViewBag.Status.ToString() : "";
@@ -35,13 +36,13 @@
                         <div class="col-11 col-md-11 col-lg-10">
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="text-nowrap">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</p>
+                                    <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                                 </div>
                                 <div class="col-3">
                                     <p class="text-nowrap">Request Type @Localizer["lbl_Name"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Rank</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Rank"]</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">Pending Date</p>
@@ -51,10 +52,10 @@
                         <div class="col-1 col-md-1 col-lg-2">
                             <div class="row">
                                 <div class="col-6">
-                                    <p class="text-nowrap">Approval</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Approval"]</p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="text-nowrap">Detail</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Details"]</p>
                                 </div>
                             </div>
                         </div>
@@ -67,13 +68,13 @@
                             <div class="col-11 col-md-11 col-lg-10">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name : </span>@item.HR_EmployeeRequestTypeApproval?.Employee?.FirstName @item.HR_EmployeeRequestTypeApproval?.Employee?.FatherName @item.HR_EmployeeRequestTypeApproval?.Employee?.Family@Localizer["lbl_Name"]</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.HR_EmployeeRequestTypeApproval?.Employee?.FirstName @item.HR_EmployeeRequestTypeApproval?.Employee?.FatherName @item.HR_EmployeeRequestTypeApproval?.Employee?.FamilyName</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
                                         <p class="text-nowrap"><span class="smallAdd">Request Type Name : </span>@(item.HR_EmployeeRequestTypeApproval?.EmployeeRequestType?.EmployeeRequestTypeName ?? "N/A")  </p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Rank : </span>@Html.DisplayFor(modelItem => item.Rank)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Rank"] : </span>@Html.DisplayFor(modelItem => item.Rank)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap"><span class="smallAdd">Pending Date : </span>@item.Date.ToString("dd-MM-yyyy HH:mm:ss")</p>

@@ -162,7 +162,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
       {
         var worksheet = package.Workbook.Worksheets.Add("WorkDay");
         worksheet.Cells["A1"].Value = "WorkDay ID";
-        worksheet.Cells["B1"].Value = "Employee Name";
+        worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
         worksheet.Cells["C1"].Value = "Month";
         worksheet.Cells["D1"].Value = "Year";
         worksheet.Cells["E1"].Value = "Days";

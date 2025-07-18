@@ -3,7 +3,7 @@
 @inject IViewLocalizer Localizer
 @{
     Layout = "_EmployeeContentNavbarLayout";
-    ViewData["Title"] = "Apply - DocumentUploads";
+	ViewData["Title"] = @Localizer["lbl_Apply"] + " - " + @Localizer["lbl_Document"] + " - " + @Localizer["lbl_Upload"];
 }
 
 @section PageScripts {
@@ -144,16 +144,16 @@
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Apply /</span> DocumentUploads
+	<span class="text-muted fw-light">@Localizer["lbl_Apply"] /</span> @Localizer["lbl_Document"] @Localizer["lbl_Upload"]
 </h4>
 
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Document Upload @Localizer["lbl_List"]</h5>
+				<h5 class="mb-0">@Localizer["lbl_DocumentUploadList"]</h5>
                 <button type="button" class="btn btn-primary addDocumentUploadLink">
-                    <i class="fa fa-plus me-1"></i> Add New
+					<i class="fa fa-plus me-1"></i> @Localizer["lbl_AddNew"]
                 </button>
         </div>
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader" >
@@ -161,16 +161,16 @@
                         <div class="col-10 col-md-10 col-lg-8">
                             <div class="row">
                                 <div class="col-3">
-                                    <p class="text-nowrap">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</p>
+                                    <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                                 </div>
                                 <div class="col-3">
-                                    <p class="text-nowrap">Document @Localizer["lbl_Name"]</p>
+								<p class="text-nowrap">@Localizer["lbl_DocumentName"]</p>
                                 </div>
                                 <div class="col-3">
                                     <p class="text-nowrap">@Localizer["lbl_Date"] /p>
                                 </div>
                                 <div class="col-3">
-                                    <p class="text-nowrap">Description</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Description"]</p>
                                 </div>
                             </div>
                         </div>
@@ -180,10 +180,10 @@
                                     <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                                 <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
-                                    <p class="text-nowrap">Download</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Download"] </p>
                                 </div>
                                 <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
-                                    <p class="text-nowrap">Print</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Print"] </p>
                                 </div>
                             <div class="col-12 col-md-12 col-lg-3" style="text-align-last: center;">
                                     <p class="text-nowrap">@Localizer["lbl_Delete"]</p>

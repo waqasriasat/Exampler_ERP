@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.HR_OverTime
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <h5 class="modal-title" style="padding-top:10px">OverTime Details</h5>
 <hr />
@@ -8,7 +9,7 @@
         <!-- Employee Selection -->
         <div class="row">
             <div class="col-12">
-                <label asp-for="EmployeeID" class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
+                <label asp-for="EmployeeID" class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
                 <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control form-control-lg" disabled></select>
                 <span asp-validation-for="EmployeeID" class="text-danger"></span>
             </div>
@@ -17,7 +18,7 @@
         <!-- OverTime Type Selection -->
         <div class="row">
             <div class="col-12">
-                <label asp-for="OverTimeTypeID" class="form-label fw-bold">Over Time Type</label>
+                <label asp-for="OverTimeTypeID" class="form-label fw-bold">Over Time @Localizer["lbl_Type"]</label>
                 <select asp-for="OverTimeTypeID" asp-items="@(new SelectList(ViewBag.OverTimeTypesList, "Value", "Text"))" class="form-control form-control-lg"></select>
                 <span asp-validation-for="OverTimeTypeID" class="text-danger"></span>
             </div>
@@ -47,7 +48,7 @@
         <!-- New Fields: Hours, Overtime Rate, Amount -->
         <div class="row">
             <div class="col-6">
-                <label asp-for="Days" class="form-label fw-bold">Total Days</label>
+                <label asp-for="Days" class="form-label fw-bold">@Localizer["lbl_TotalDays"] </label>
                 <input asp-for="Days" class="form-control form-control-lg" type="number" placeholder="Enter overtime Days" />
                 <span asp-validation-for="Days" class="text-danger"></span>
             </div>
@@ -57,7 +58,7 @@
                 <span asp-validation-for="Hours" class="text-danger"></span>
             </div>
             <div class="col-6">
-                <label asp-for="OvertimeRateID" class="form-label fw-bold">Overtime Rate</label>
+                <label asp-for="OvertimeRateID" class="form-label fw-bold">@Localizer["lbl_OverTimeRate"]</label>
                 <select asp-for="OvertimeRateID" asp-items="@(new SelectList(ViewBag.OvertimeRatesList, "Value", "Text"))" class="form-control form-control-lg"></select>
                 <span asp-validation-for="OvertimeRateID" class="text-danger"></span>
             </div>

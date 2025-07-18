@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.MonthlyPayrollPrintViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <style>
     .text-nowrap {
         font-weight: 700;
@@ -66,30 +67,30 @@
                     <div class="col-12">
                         <div class="row bleft bright btop bbottom">
                             <div class="col-3">
-                                <p>Employee Name: @empPayroll.Employee.FirstName @empPayroll.Employee.FatherName @empPayroll.Employee.Family@Localizer["lbl_Name"]</p>
+                                <p>Employee Name: @empPayroll.Employee.FirstName @empPayroll.Employee.FatherName @empPayroll.Employee.FamilyName</p>
                             </div>
                             <div class="col-3">
-                                <p>Branch: @empPayroll.Employee.BranchType.BranchType@Localizer["lbl_Name"]</p>
+                                <p>Branch: @empPayroll.Employee.BranchType.BranchTypeName</p>
                             </div>
                             <div class="col-3">
-                                <p>Department: @empPayroll.Employee.DepartmentType.DepartmentType@Localizer["lbl_Name"]</p>
+                                <p>Department: @empPayroll.Employee.DepartmentType.DepartmentTypeName</p>
                             </div>
                             <div class="col-3">
-                                <p>Designation: @empPayroll.Employee.DesignationType.DesignationType@Localizer["lbl_Name"]</p>
+                                <p>Designation: @empPayroll.Employee.DesignationType.DesignationTypeName</p>
                             </div>
                             @if (empPayroll.BankDetails != null)
                             {
                                 <div class="col-3">
-                                    <p>Bank Name: @empPayroll.BankDetails.Bank@Localizer["lbl_Name"]</p>
+                                    <p>Bank Name: @empPayroll.BankDetails.BankName</p>
                                 </div>
                                 <div class="col-3">
-                                    <p>Bank Branch: @empPayroll.BankDetails.Branch@Localizer["lbl_Name"]</p>
+                                    <p>Bank Branch: @empPayroll.BankDetails.BranchName</p>
                                 </div>
                                 <div class="col-3">
                                     <p>Account #: @empPayroll.BankDetails.AccountNumber</p>
                                 </div>
                                 <div class="col-3">
-                                    <p>Account Title: @empPayroll.BankDetails.AccountHolder@Localizer["lbl_Name"]</p>
+                                    <p>Account Title: @empPayroll.BankDetails.AccountHolderName</p>
                                 </div>
                             }
 
@@ -100,7 +101,7 @@
                     <div class="col-4">
                         <div class="row bleft bright bbottom" style="height:189px; align-content: flex-start;">
                             <div class="col-9 bbottom headercolor">
-                                <p class="text-nowrap ">Salary</p>
+                                <p class="text-nowrap ">@Localizer["lbl_Salary"]</p>
                             </div>
                             <div class="col-3 bbottom headercolor" style="justify-items:center">
                                 <p class="text-nowrap">Amount</p>

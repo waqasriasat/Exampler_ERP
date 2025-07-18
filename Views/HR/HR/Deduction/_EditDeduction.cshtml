@@ -1,12 +1,13 @@
 @model Exampler_ERP.Models.HR_Deduction
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <h5 class="modal-title" style="padding-top:10px">Deduction Details</h5>
 <hr />
 <div class="row">
     <div class="col-12">
         <div class="row">
             <div class="col-12">
-                <label asp-for="EmployeeID" class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
+                <label asp-for="EmployeeID" class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
                 <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control form-control-lg" disabled>
                 </select>
                 <span asp-validation-for="EmployeeID" class="text-danger"></span>
@@ -14,7 +15,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <label asp-for="DeductionTypeID" class="form-label fw-bold">Deduction Type</label>
+                <label asp-for="DeductionTypeID" class="form-label fw-bold">Deduction @Localizer["lbl_Type"]</label>
                 <select asp-for="DeductionTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypesList, "Value", "Text"))" class="form-control form-control-lg" id="DeductionTypeSelect">
                 </select>
                 <span asp-validation-for="DeductionTypeID" class="text-danger"></span>
@@ -22,12 +23,12 @@
         </div>
         <div class="row">
             <div class="col-6">
-                <label asp-for="FromDate" class="form-label fw-bold">From Date</label>
+                <label asp-for="FromDate" class="form-label fw-bold">From @Localizer["lbl_Date"]</label>
                 <input asp-for="FromDate" class="form-control date-placeholder" type="date" id="FromDateInput" placeholder="mm/dd/yyyy" />
                 <span asp-validation-for="FromDate" class="text-danger"></span>
             </div>
             <div class="col-6">
-                <label asp-for="ToDate" class="form-label fw-bold">To Date</label>
+                <label asp-for="ToDate" class="form-label fw-bold">To @Localizer["lbl_Date"]</label>
                 <input asp-for="ToDate" class="form-control date-placeholder" type="date" id="ToDateInput" placeholder="mm/dd/yyyy" />
                 <span asp-validation-for="ToDate" class="text-danger"></span>
             </div>

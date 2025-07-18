@@ -1,12 +1,13 @@
 @model Exampler_ERP.Models.HR_Contract
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <input type="hidden" asp-for="ContractID" class="form-control form-control-lg" />
 
 <h5 class="modal-title" style="padding-top:10px">Contract Details</h5>
 <hr />
 <div class="row">
     <div class="col-12">
-        <label asp-for="EmployeeID" class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
+        <label asp-for="EmployeeID" class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
         <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control form-control-lg" disabled>
         </select>
         <span asp-validation-for="EmployeeID" class="text-danger"></span>
@@ -15,12 +16,12 @@
 </div>
 <div class="row">
     <div class="col-6">
-        <label asp-for="IssueDate" class="form-label fw-bold">Issue Date</label>
+        <label asp-for="IssueDate" class="form-label fw-bold">Issue @Localizer["lbl_Date"]</label>
         <input asp-for="IssueDate" class="form-control form-control-lg" type="date" />
         <span asp-validation-for="IssueDate" class="text-danger"></span>
     </div>
     <div class="col-6">
-        <label asp-for="ContractTypeID" class="form-label fw-bold">Contract Type</label>
+        <label asp-for="ContractTypeID" class="form-label fw-bold">Contract @Localizer["lbl_Type"]</label>
         <select asp-for="ContractTypeID" asp-items="@(new SelectList(ViewBag.ContractTypesList, "Value", "Text"))" class="form-control form-control-lg" id="contractTypeSelect">
         </select>
         <span asp-validation-for="ContractTypeID" class="text-danger"></span>
@@ -28,25 +29,25 @@
 </div>
 <div class="row">
     <div class="col-6">
-        <label asp-for="StartDate" class="form-label fw-bold">Start Date</label>
+        <label asp-for="StartDate" class="form-label fw-bold">@Localizer["lbl_StartDate"]</label>
         <input asp-for="StartDate" class="form-control form-control-lg" type="date" />
         <span asp-validation-for="StartDate" class="text-danger"></span>
     </div>
     <div class="col-6" id="dateSection" style="display: none;">
-        <label asp-for="EndDate" class="form-label fw-bold">End Date</label>
+        <label asp-for="EndDate" class="form-label fw-bold">@Localizer["lbl_EndDate"]</label>
         <input asp-for="EndDate" class="form-control form-control-lg" type="date" />
         <span asp-validation-for="EndDate" class="text-danger"></span>
     </div>
 </div>
 <div class="row">
     <div class="col-6">
-        <label asp-for="SalaryTypeID" class="form-label fw-bold">Salary Type</label>
+        <label asp-for="SalaryTypeID" class="form-label fw-bold">Salary @Localizer["lbl_Type"]</label>
         <select asp-for="SalaryTypeID" asp-items="@(new SelectList(ViewBag.SalaryTypesList, "Value", "Text"))" class="form-control form-control-lg">
         </select>
         <span asp-validation-for="SalaryTypeID" class="text-danger"></span>
     </div>
     <div class="col-6">
-        <label asp-for="VacationDays" class="form-label fw-bold">Vacation Days</label>
+        <label asp-for="VacationDays" class="form-label fw-bold">@Localizer["lbl_Vacation"] Days</label>
         <input asp-for="VacationDays" class="form-control form-control-lg" type="number" />
         <span asp-validation-for="VacationDays" class="text-danger"></span>
     </div>

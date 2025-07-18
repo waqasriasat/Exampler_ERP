@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.HR_Vacation
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     var EmployeeName = Context.Session.GetString("EmployeeName");
 }
@@ -8,33 +9,33 @@
         <input type="hidden" asp-for="VacationID" class="form-control form-control-lg" />
         <input type="hidden" asp-for="EmployeeID" class="form-control form-control-lg" />
         <input type="hidden" asp-for="Date" class="form-control form-control-lg" />
-        <label class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
+        <label class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
         <input type="text" class="form-control form-control-lg" value="@EmployeeName" readonly />
     </div>
 
     <div class="col-12">
-        <label asp-for="VacationTypeID" class="form-label fw-bold">Vacation Type</label>
+        <label asp-for="VacationTypeID" class="form-label fw-bold">@Localizer["lbl_VacationType"]</label>
         <select asp-for="VacationTypeID" asp-items="@(new SelectList(ViewBag.VacationTypeList, "Value", "Text"))" class="form-control form-control-lg">
         </select>
         <span asp-validation-for="VacationTypeID" class="text-danger small"></span>
     </div>
 
     <div class="col-6">
-        <label asp-for="StartDate" class="form-label fw-bold">Start Date</label>
+        <label asp-for="StartDate" class="form-label fw-bold">@Localizer["lbl_StartDate"]</label>
         <input asp-for="StartDate" class="form-control form-control-lg" type="date" />
         <span asp-validation-for="StartDate" class="text-danger small"></span>
     </div>
 
     <div class="col-6">
-        <label asp-for="EndDate" class="form-label fw-bold">End Date</label>
+        <label asp-for="EndDate" class="form-label fw-bold">@Localizer["lbl_EndDate"]</label>
         <input asp-for="EndDate" class="form-control form-control-lg" type="date" />
         <span asp-validation-for="EndDate" class="text-danger small"></span>
     </div>
 
     <!-- Reason Field -->
     <div class="col-12">
-        <label asp-for="Reason" class="form-label fw-bold">Reason</label>
-        <textarea asp-for="Reason" class="form-control form-control-lg" rows="4" placeholder="Enter reason here..."></textarea>
+        <label asp-for="Reason" class="form-label fw-bold">@Localizer["lbl_Reason"]</label>
+		<textarea asp-for="Reason" class="form-control form-control-lg" rows="4" placeholder="@Localizer["lbl_EnterRessonHere"]"></textarea>
         <span asp-validation-for="Reason" class="text-danger small"></span>
     </div>
 </div>

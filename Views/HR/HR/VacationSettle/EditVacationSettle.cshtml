@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.VacationSettleViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     var EmployeeName = Context.Session.GetString("EmployeeName");
 }
@@ -10,7 +11,7 @@
             <!-- Modal Header -->
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editVacationSettleModalLabel">
-                    <i class="fas fa-edit me-2"></i>Edit Vacation Settle
+                    <i class="fas fa-edit me-2"></i>@Localizer["lbl_Edit"] Vacation Settle
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -29,10 +30,10 @@
             <!-- Modal Footer -->
             <div class="modal-footer border-0">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-times-circle"></i> Close
+                    <i class="fas fa-times-circle"></i> @Localizer["lbl_Close"]
                 </button>
                 <button type="submit" id="saveVacationSettleChanges" class="btn btn-success">
-                    <i class="fas fa-check-circle"></i> Save Changes
+                    <i class="fas fa-check-circle"></i> @Localizer["lbl_SaveChanges"]
                 </button>
             </div>
         </div>

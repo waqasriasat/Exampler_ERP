@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     Layout = "_BlankLayout";
     ViewData["Title"] = "Supplier Login - Pages";
@@ -81,7 +83,7 @@
                                 </div>
                                 <div class="mb-3 form-password-toggle">
                                     <div class="d-flex justify-content-between">
-                                        <label class="form-label" for="password">Password</label>
+                                        <label class="form-label" for="password">@Localizer["lbl_Password"]</label>
                                         <a href="/Auth/ForgotPassword">
                                             <small>Forgot Password?</small>
                                         </a>

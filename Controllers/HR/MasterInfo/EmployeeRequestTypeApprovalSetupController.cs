@@ -200,11 +200,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("EmployeeRequestTypeApprovalSetups");
-        worksheet.Cells["A1"].Value = "EmployeeRequestType SetupID";
-        worksheet.Cells["B1"].Value = "EmployeeRequestType Name";
-        worksheet.Cells["C1"].Value = "Rank";
-        worksheet.Cells["D1"].Value = "Role";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_EmployeeRequestTypeApprovalSetup"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_EmployeeRequestTypeApprovalSetupID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeRequestTypeName"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_Rank"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_RoleType"];
 
 
         for (int i = 0; i < EmployeeRequestTypeApprovalSetups.Count; i++)
@@ -221,7 +221,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"EmployeeRequestTypeApprovalSetups-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_EmployeeRequestTypeApprovalSetup"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }
@@ -232,7 +232,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       .Distinct()
       .Include(d => d.EmployeeRequestType) // Eagerly load the related Branch data
       .ToListAsync();
-      return View("~/Views/HR/MasterInfo/EmployeeRequestTypeApprovalSetup/PrintEmployeeRequestTypeApprovalSetups.cshtml", EmployeeRequestTypeApprovalSetups);
+      return View("~/Views/HR/MasterInfo/EmployeeRequestTypeApprovalSetup/PrintEmployeeRequestTypeApprovalSetup.cshtml", EmployeeRequestTypeApprovalSetups);
     }
 
   }

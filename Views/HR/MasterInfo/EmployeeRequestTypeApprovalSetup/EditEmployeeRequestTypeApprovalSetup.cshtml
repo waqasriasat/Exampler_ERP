@@ -80,7 +80,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editEmployeeRequestTypeApprovalSetupModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit Employee Request Type Approva lSetup
+					@Localizer["lbl_EditEmployeeRequestTypeApprovalSetup"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -90,7 +90,7 @@
                     <div class="row">
                         <div class="col-12 mb-2">
                             <div class="form-group">
-                                <label for="EmployeeRequestTypeName" class="form-label fw-bold">Employee Request Type Name</label>
+                                <label for="EmployeeRequestTypeName" class="form-label fw-bold">@Localizer["lbl_EmployeeRequestTypeName"]</label>
                                 <input type="text" class="form-control form-control-lg" id="EmployeeRequestTypeName" value="@Model.FirstOrDefault()?.EmployeeRequestType?.EmployeeRequestTypeName" disabled />
                                 <input type="hidden" id="EmployeeRequestTypeId" value="@Model.FirstOrDefault()?.EmployeeRequestTypeID" />
                             </div>

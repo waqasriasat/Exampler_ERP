@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
   ViewData["Title"] = "List Groups - UI elements";
 }
@@ -216,7 +218,7 @@
                 <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home">Home</a>
                 <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#list-profile">Profile</a>
                 <a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" href="#list-messages">Messages</a>
-                <a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" href="#list-settings">Settings</a>
+                <a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" href="#list-settings">@Localizer["lbl_Setting"]</a>
               </div>
             </div>
             <div class="col-md-8 col-12">
@@ -261,7 +263,7 @@
             <a class="list-group-item list-group-item-action active" id="home-list-item" data-bs-toggle="list" href="#horizontal-home">Home</a>
             <a class="list-group-item list-group-item-action" id="profile-list-item" data-bs-toggle="list" href="#horizontal-profile">Profile</a>
             <a class="list-group-item list-group-item-action" id="messages-list-item" data-bs-toggle="list" href="#horizontal-messages">Messages</a>
-            <a class="list-group-item list-group-item-action" id="settings-list-item" data-bs-toggle="list" href="#horizontal-settings">Settings</a>
+            <a class="list-group-item list-group-item-action" id="settings-list-item" data-bs-toggle="list" href="#horizontal-settings">@Localizer["lbl_Setting"]</a>
           </div>
           <div class="tab-content px-0 mt-0">
             <div class="tab-pane fade show active" id="horizontal-home">

@@ -197,14 +197,14 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("DeductionSetups");
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_DeductionSetup"]);
 
         // Add headers
-        worksheet.Cells["A1"].Value = "DeductionSetup ID";
-        worksheet.Cells["B1"].Value = "Deduction Type Name";
-        worksheet.Cells["C1"].Value = "Class";
-        worksheet.Cells["D1"].Value = "Salary Type";
-        worksheet.Cells["E1"].Value = "Deduction Value";
+        worksheet.Cells["A1"].Value = _localizer["lbl_DeductionSetupID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_DeductionTypeName"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_Class"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_SalaryTypeName"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_DeductionValue"];
 
         // Add data
         for (int i = 0; i < deductionSetups.Count; i++)
@@ -238,7 +238,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"DeductionSetups-{DateTime.Now:yyyyMMddHHmmssfff}.xlsx";
+        string excelName = _localizer["lbl_DeductionSetup"]+$"-{DateTime.Now:yyyyMMddHHmmssfff}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

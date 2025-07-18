@@ -9,12 +9,12 @@
         <input type="hidden" asp-for="EmployeeRequestTypeApprovalID" class="form-control form-control-lg" />
         <input type="hidden" asp-for="EmployeeID" class="form-control form-control-lg" />
         <input type="hidden" asp-for="Date" class="form-control form-control-lg" />
-        <label class="form-label fw-bold">@Localizer["lbl_Employee"] @Localizer["lbl_Name"]</label>
+        <label class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
         <input type="text" class="form-control form-control-lg" value="@EmployeeName" readonly />
     </div>
 
     <div class="col-12">
-        <label asp-for="EmployeeRequestTypeID" class="form-label fw-bold">@Localizer["lbl_EmployeeRequest"] @Localizer["lbl_Type"]</label>
+        <label asp-for="EmployeeRequestTypeID" class="form-label fw-bold">@Localizer["lbl_EmployeeRequestType"]</label>
         <select asp-for="EmployeeRequestTypeID" asp-items="@(new SelectList(ViewBag.EmployeeRequestTypeList, "Value", "Text"))" class="form-control form-control-lg">
         </select>
         <span asp-validation-for="EmployeeRequestTypeID" class="text-danger small"></span>
@@ -25,7 +25,7 @@
     <!-- Reason Field -->
     <div class="col-12">
         <label asp-for="Notes" class="form-label fw-bold">@Localizer["lbl_Note"]</label>
-        <textarea asp-for="Notes" class="form-control form-control-lg" rows="4" placeholder="Enter Notes here..."></textarea>
+        <textarea asp-for="Notes" class="form-control form-control-lg" rows="4" placeholder="@Localizer["lbl_EnterRessonHere"]"></textarea>
         <span asp-validation-for="Notes" class="text-danger small"></span>
     </div>
 </div>

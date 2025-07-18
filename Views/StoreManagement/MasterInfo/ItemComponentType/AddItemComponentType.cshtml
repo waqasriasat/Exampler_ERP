@@ -26,7 +26,7 @@
                             <input type="text" class="form-control form-control-lg" id="ItemComponentTypeName" name="ItemComponentTypeName" value="@Model.ItemComponentTypeName" />
                         </div>
                         <div class="col-6">
-                            <label asp-for="ItemComponentDataType" class="form-label fw-bold">Select Data Type</label>
+                            <label asp-for="ItemComponentDataType" class="form-label fw-bold">Select Data @Localizer["lbl_Type"]</label>
                             <select asp-for="ItemComponentDataType" asp-items="@(new SelectList(ViewBag.DataTypeList, "Value", "Text", Model.ItemComponentDataType))" class="form-control form-control-lg">
                                 <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>

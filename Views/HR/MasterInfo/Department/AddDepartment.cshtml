@@ -6,7 +6,7 @@
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
 				<h5 class="modal-title" id="addEmployeeRequestModalLabel">
-					<i class="fas fa-key me-2"></i>@Localizer["lbl_AddNew"] @Localizer["lbl_Department"]
+					<i class="fas fa-key me-2"></i>@Localizer["lbl_AddNewDepartment"]
 				</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -27,7 +27,7 @@
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                         </div>
                         <div class="col-12">
-							<label for="DepartmentTypeName" class="form-label fw-bold">@Localizer["lbl_Department"] @Localizer["lbl_Name"]</label>
+							<label for="DepartmentTypeName" class="form-label fw-bold">@Localizer["lbl_DepartmentName"]</label>
                             <input type="text" class="form-control form-control-lg" id="DepartmentTypeName" name="DepartmentTypeName" value="@Model.DepartmentTypeName" />
                         </div>
                         

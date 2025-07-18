@@ -77,7 +77,7 @@
                             <input type="text" class="form-control form-control-lg" id="OpeningBalance" name="OpeningBalance" value="@Model.OpeningBalance" />
                         </div>
                         <div class="col-12">
-                            <label for="HasLotNumberAndExpiryDate" class="form-label fw-bold">Has Lot Number and Expiry Date</label>
+                            <label for="HasLotNumberAndExpiryDate" class="form-label fw-bold">Has Lot Number and Expiry @Localizer["lbl_Date"]</label>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="HasLotNumberAndExpiryDate" name="HasLotNumberAndExpiryDate" value="true" @(Model.HasLotNumberAndExpiryDate ? "checked" : "") />
                                 <label class="form-check-label" for="HasLotNumberAndExpiryDate">

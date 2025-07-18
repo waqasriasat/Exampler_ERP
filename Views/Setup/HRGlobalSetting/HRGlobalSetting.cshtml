@@ -36,7 +36,7 @@
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="LateTypeID" class="form-label">Deduction Type</label>
+                            <label for="LateTypeID" class="form-label">Deduction @Localizer["lbl_Type"]</label>
                             <select asp-for="LateTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypesList, "Value", "Text"))" class="form-control form-control-lg" id="LateTypeID">
                             </select>
                         </div>
@@ -64,7 +64,7 @@
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="EarlyGoingTypeID" class="form-label">Deduction Type</label>
+                            <label for="EarlyGoingTypeID" class="form-label">Deduction @Localizer["lbl_Type"]</label>
                             <select asp-for="EarlyGoingTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypesList, "Value", "Text"))" class="form-control form-control-lg" id="EarlyGoingTypeID">
                             </select>
                         </div>
@@ -92,7 +92,7 @@
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="EarlyComingGraceMinute" class="form-label">Overtime Type</label>
+                            <label for="EarlyComingGraceMinute" class="form-label">Overtime @Localizer["lbl_Type"]</label>
                             <select asp-for="EarlyComingGraceMinute" asp-items="@(new SelectList(ViewBag.OvertimeTypeList, "Value", "Text"))" class="form-control form-control-lg" id="EarlyComingGraceMinute">
                             </select>
                         </div>
@@ -114,7 +114,7 @@
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="LateSeatingGraceMinute" class="form-label">Overtime Type</label>
+                            <label for="LateSeatingGraceMinute" class="form-label">Overtime @Localizer["lbl_Type"]</label>
                             <select asp-for="LateSeatingGraceMinute" asp-items="@(new SelectList(ViewBag.OvertimeTypeList, "Value", "Text"))" class="form-control form-control-lg" id="LateSeatingGraceMinute">
                             </select>
                         </div>
@@ -136,7 +136,7 @@
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="AbsentTypeID" class="form-label">Deduction Type</label>
+                            <label for="AbsentTypeID" class="form-label">Deduction @Localizer["lbl_Type"]</label>
                             <select asp-for="AbsentTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypesList, "Value", "Text"))" class="form-control form-control-lg" id="AbsentTypeID">
                             </select>
                         </div>
