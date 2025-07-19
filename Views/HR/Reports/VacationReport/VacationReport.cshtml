@@ -86,8 +86,8 @@
                         <!-- Employee Name Search Field -->
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
-                            <input type="text" class="form-control" id="searchEmployeeInput" placeholder="@Localizer["lbl_Search"] Employee" name="EmployeeName" value="@ViewBag.EmployeeName" />
-                            <input type="hidden" class="form-control" id="EmployeeID" placeholder="@Localizer["lbl_Search"] Employee" name="EmployeeID" value="@ViewBag.EmployeeID" />
+                            <input type="text" class="form-control" id="searchEmployeeInput" placeholder="@Localizer["lbl_SearchEmployee"]" name="EmployeeName" value="@ViewBag.EmployeeName" />
+                            <input type="hidden" class="form-control" id="EmployeeID" placeholder="@Localizer["lbl_SearchEmployee"]" name="EmployeeID" value="@ViewBag.EmployeeID" />
                         </div>
 
                         <!-- Vacation Type Dropdown -->
@@ -162,7 +162,7 @@
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
                                 <div class="row">
                                     <div class="col-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name: </span>@item.EmployeeName</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.EmployeeName</p>
                                     </div>
                                     <div class="col-2">
                                         <p class="text-nowrap"><span class="smallAdd">Start Date: </span>@item.StartDate?.ToString("dd-MMM-yyyy")</p>

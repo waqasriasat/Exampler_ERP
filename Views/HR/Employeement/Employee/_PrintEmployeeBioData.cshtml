@@ -2,8 +2,8 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Employee Bio Data";
-    var genderList = ViewBag.GenderList as List<SelectListItem>;
+	ViewData["Title"] = Localizer["lbl_EmployeementBiodata"];
+	var genderList = ViewBag.GenderList as List<SelectListItem>;
     var maritalStatusList = ViewBag.MaritalStatusList as List<SelectListItem>;
     var religionList = ViewBag.ReligionList as List<SelectListItem>;
     var qualificationTypes = ViewBag.QualificationTypes as List<SelectListItem>;
@@ -15,7 +15,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Print Card</title>
+	<title>@Localizer["lbl_EmployeementBiodata"]</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/super-ui@latest/dist/super-ui.min.css">
     <style>
         body {
@@ -110,14 +110,14 @@
 
     <div class="card">
         <div class="card-header">
-            <h4>Employee Bio Data</h4>
+            <h4>@Localizer["lbl_EmployeementBiodata"]</h4>
         </div>
 
         <div class="card-body">
             <div class="section">
                 <h5>Personal Information</h5>
                 <div class="info-row">
-                    <div class="info-label">Picture:</div>
+                    <div class="info-label">@Localizer["lbl_Picture"]: </div>
                     <div>
                         @if (Model.Employee.Picture != null)
 
@@ -135,19 +135,19 @@
                 <div class="row">
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Hire Date:</div>
+                            <div class="info-label">>@Localizer["lbl_HireDate"]: </div>
                             <div>@Model.Employee.HireDate?.ToString("dd/MM/yyyy")</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Employee ID:</div>
+                            <div class="info-label">@Localizer["lbl_EmployeeID"]: </div>
                             <div>@Model.Employee.EmployeeID</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Employee Code:</div>
+                            <div class="info-label">@Localizer["lbl_EmployeeCode"]: </div>
                             <div>@Model.Employee.EmployeeCode</div>
                         </div>
                     </div>
@@ -155,19 +155,19 @@
                 <div class="row">
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">First Name:</div>
+                            <div class="info-label">@Localizer["lbl_FirstName"]: </div>
                             <div>@Model.Employee.FirstName</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Father Name:</div>
+                            <div class="info-label">@Localizer["lbl_FatherName"]: </div>
                             <div>@Model.Employee.FatherName</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Family Name:</div>
+                            <div class="info-label">@Localizer["lbl_FamilyName"]: </div>
                             <div>@Model.Employee.FamilyName</div>
                         </div>
                     </div>
@@ -175,7 +175,7 @@
                 <div class="row">
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Sex:</div>
+                            <div class="info-label">@Localizer["lbl_Gender"]: </div>
                             <div>
                                 @if (Model.Employee.Sex.HasValue)
 
@@ -197,7 +197,7 @@
                     </div>
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Marital Status:</div>
+                            <div class="info-label">@Localizer["lbl_MaritalStatus"]: </div>
                             <div>
                                 @if (Model.Employee.MaritalStatus.HasValue)
 
@@ -219,7 +219,7 @@
                     </div>
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">No of Children:</div>
+                            <div class="info-label">@Localizer["lbl_NoofChildren"]: </div>
                             <div>@Model.Employee.NoOfChildren</div>
                         </div>
                     </div>
@@ -227,7 +227,7 @@
                 <div class="row">
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Religion:</div>
+                            <div class="info-label">@Localizer["lbl_Religion"]: </div>
                             <div>
                                 @if (Model.Employee.Religion.HasValue)
 
@@ -249,13 +249,13 @@
                     </div>
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Date of Birth:</div>
+                            <div class="info-label">@Localizer["lbl_DOB"]: </div>
                             <div>@Model.Employee.DOB?.ToString("dd/MM/yyyy")</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Place of Birth:</div>
+                            <div class="info-label">@Localizer["lbl_PlaceofBirth"]: </div>
                             <div>@Model.Employee.PlaceOfBirth</div>
                         </div>
                     </div>
@@ -263,20 +263,20 @@
                 <div class="row">
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Phone 1:</div>
+                            <div class="info-label">@Localizer["lbl_Phone1"]: </div>
                             <div>@Model.Employee.Phone1</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Phone 2:</div>
+                            <div class="info-label">@Localizer["lbl_Phone2"]: </div>
                             <div>@Model.Employee.Phone2</div>
                         </div>
                     </div>
 
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Mobile:</div>
+                            <div class="info-label">@Localizer["lbl_Mobile"]: </div>
                             <div>@Model.Employee.Mobile</div>
                         </div>
                     </div>
@@ -284,20 +284,20 @@
                 <div class="row">
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Whatsapp:</div>
+                            <div class="info-label">@Localizer["lbl_Whatsapp"]: </div>
                             <div>@Model.Employee.Whatsapp</div>
                         </div>
                     </div>
 
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Email:</div>
+                            <div class="info-label">@Localizer["lbl_Email"]: </div>
                             <div>@Model.Employee.Email</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="info-row">
-                            <div class="info-label">Fax:</div>
+                            <div class="info-label">@Localizer["lbl_Fax"]: </div>
                             <div>@Model.Employee.Fax</div>
                         </div>
                     </div>
@@ -305,7 +305,7 @@
                 <div class="row">
                     <div class="col-12 col-md-12 col-lg-12">
                         <div class="info-row">
-                            <div class="info-label">Address:</div>
+                            <div class="info-label">@Localizer["lbl_Address"]: </div>
                             <div>@Model.Employee.Address</div>
                         </div>
                     </div>
@@ -314,25 +314,25 @@
                 <div class="row">
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">ID Number:</div>
+                            <div class="info-label">@Localizer["lbl_IDNumber"]: </div>
                             <div>@Model.Employee.IDNumber</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">ID Place of Issue:</div>
+                            <div class="info-label">@Localizer["lbl_IDPlaceofIssue"]: </div>
                             <div>@Model.Employee.IDPlaceOfIssue</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">ID Issue Date:</div>
+                            <div class="info-label">@Localizer["lbl_IDIssueDate"]: </div>
                             <div>@Model.Employee.IDIssueDate?.ToString("dd/MM/yyyy")</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">ID Expiry Date:</div>
+                            <div class="info-label">@Localizer["lbl_IDExpiryDate"]: </div>
                             <div>@Model.Employee.IDExpiryDate?.ToString("dd/MM/yyyy")</div>
                         </div>
                     </div>
@@ -340,25 +340,25 @@
                 <div class="row">
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">Passport Number:</div>
+                            <div class="info-label">@Localizer["lbl_PassportNumber"]: </div>
                             <div>@Model.Employee.PassportNumber</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">Passport Place of Issue:</div>
+                            <div class="info-label">@Localizer["lbl_PassportPlaceOfIssue"]: </div>
                             <div>@Model.Employee.PassportPlaceOfIssue</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">Passport Issue Date:</div>
+                            <div class="info-label">@Localizer["lbl_PassportIssueDate"]: </div>
                             <div>@Model.Employee.PassportIssueDate?.ToString("dd/MM/yyyy")</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">Passport Expiry Date:</div>
+                            <div class="info-label">@Localizer["lbl_PassportExpiryDate"]: </div>
                             <div>@Model.Employee.PassportExpiryDate?.ToString("dd/MM/yyyy")</div>
                         </div>
                     </div>
@@ -370,13 +370,13 @@
             @if (Model.Educations != null && Model.Educations.Any())
             {
                 <div class="section">
-                    <h5>Education</h5>
+                    <h5>@Localizer["lbl_Education"]</h5>
                     @foreach (var education in Model.Educations)
                     {
                         <div class="row">
                             <div class="col-12 col-md-2 col-lg-2">
                                 <div class="info-row">
-                                    <div class="info-label">Qualification:</div>
+                                    <div class="info-label">@Localizer["lbl_Qualification"]: </div>
                                     <div>
                                         @if (education.QualificationTypeID.HasValue)
 
@@ -398,19 +398,19 @@
                             </div>
                             <div class="col-12 col-md-3 col-lg-3">
                                 <div class="info-row">
-                                    <div class="info-label">Institute Name:</div>
+                                    <div class="info-label">@Localizer["lbl_Institute"]: </div>
                                     <div>@education.InstituteName</div>
                                 </div>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1">
                                 <div class="info-row">
-                                    <div class="info-label">City:</div>
+                                    <div class="info-label">@Localizer["lbl_City"]: </div>
                                     <div>@education.City</div>
                                 </div>
                             </div>
                             <div class="col-12 col-md-2 col-lg-2">
                                 <div class="info-row">
-                                    <div class="info-label">Country:</div>
+                                    <div class="info-label">@Localizer["lbl_Country"]: </div>
                                     <div>
                                         @if (education.CountryTypeID.HasValue)
 
@@ -433,13 +433,13 @@
 
                             <div class="col-12 col-md-2 col-lg-2">
                                 <div class="info-row">
-                                    <div class="info-label">Start Date:</div>
+                                    <div class="info-label">@Localizer["lbl_StartDate"]: </div>
                                     <div>@education.StartMonth/@education.StartYear</div>
                                 </div>
                             </div>
                             <div class="col-12 col-md-2 col-lg-2">
                                 <div class="info-row">
-                                    <div class="info-label">End Date:</div>
+                                    <div class="info-label">@Localizer["lbl_EndDate"]: </div>
                                     <div>@education.EndMonth/@education.EndYear</div>
                                 </div>
                             </div>
@@ -452,32 +452,32 @@
             @if (Model.Experiences != null && Model.Experiences.Any())
             {
                 <div class="section">
-                    <h5>Work Experience</h5>
+                    <h5>@Localizer["lbl_WorkExperience"]</h5>
                     @foreach (var experience in Model.Experiences)
                     {
 
                         <div class="row">
                             <div class="col-12 col-md-2 col-lg-2">
                                 <div class="info-row">
-                                    <div class="info-label">Job Title:</div>
+                                    <div class="info-label">@Localizer["lbl_Tittle"]: </div>
                                     <div>@experience.ExperienceTittle</div>
                                 </div>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3">
                                 <div class="info-row">
-                                    <div class="info-label">Company:</div>
+                                    <div class="info-label">@Localizer["lbl_CompanyName"]: </div>
                                     <div>@experience.CompanyName</div>
                                 </div>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1">
                                 <div class="info-row">
-                                    <div class="info-label">City:</div>
+                                    <div class="info-label">@Localizer["lbl_City"]: </div>
                                     <div>@experience.City</div>
                                 </div>
                             </div>
                             <div class="col-12 col-md-2 col-lg-2">
                                 <div class="info-row">
-                                    <div class="info-label">Country:</div>
+                                    <div class="info-label">@Localizer["lbl_Country"]: </div>
                                     <div>
                                         @if (experience.CountryTypeID.HasValue)
 
@@ -499,13 +499,13 @@
                             </div>
                             <div class="col-12 col-md-2 col-lg-2">
                                 <div class="info-row">
-                                    <div class="info-label">Start Date:</div>
+                                    <div class="info-label">@Localizer["lbl_StartDate"]: </div>
                                     <div>@experience.StartMonth/@experience.StartYear</div>
                                 </div>
                             </div>
                             <div class="col-12 col-md-2 col-lg-2">
                                 <div class="info-row">
-                                    <div class="info-label">End Date:</div>
+                                    <div class="info-label">@Localizer["lbl_EndDate"]: </div>
                                     <div>@experience.EndMonth/@experience.EndYear</div>
                                 </div>
                             </div>

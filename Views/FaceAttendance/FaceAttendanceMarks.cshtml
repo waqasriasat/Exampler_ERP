@@ -3,6 +3,8 @@
 
     ViewData["Title"] = "Mark Attendance via Webcam";
 }
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @section PageStyles {
     <style>
         /* .glass-btn {
@@ -88,7 +90,7 @@
 
                             <!-- Employee ID Input -->
                             <div class="form-group mt-2" style="padding-top: 37px;">
-                                <label for="EmployeeID">Employee ID:</label>
+                                <label for="EmployeeID">@Localizer["lbl_EmployeeID"]: </label>
                                 <input type="text" id="EmployeeID" name="employeeID" class="form-control" placeholder="Enter Employee ID" />
                                 <button id="fetchEmployee" class="btn btn-primary mt-3 w-100" style="display:none">Fetch Employee</button>
                             </div>

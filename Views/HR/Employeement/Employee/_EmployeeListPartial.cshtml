@@ -2,88 +2,88 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-11 col-md-10 col-lg-6">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap">
-                                            @if (item.Picture != null)
-                                            {
-                                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.Picture)" style="width: 50px; height: 50px; border-radius:50%" alt="Profile Picture" />
-                                            }
-                                            else
-                                            {
-                                                <img src="~/img/icons/noimage.jpg" style="width: 50px; height: 50px; border-radius:50%" alt="No Image Available" />
-                                            }
-                                        </p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <p class="text-nowrap"><span class="smallAdd">Employee Name: </span>@Html.Raw($"{item.FirstName} {item.FatherName} {item.FamilyName}")</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-3">
+{
+	<div class="col-12 col-md-12 col-lg-12 GVDetail">
+		<div class="row">
+			<div class="col-11 col-md-10 col-lg-6">
+				<div class="row">
+					<div class="col-12 col-md-12 col-lg-3">
+						<p class="text-nowrap">
+							@if (item.Picture != null)
+							{
+								<img src="data:image/jpeg;base64,@Convert.ToBase64String(item.Picture)" style="width: 50px; height: 50px; border-radius:50%" alt="Profile Picture" />
+							}
+							else
+							{
+								<img src="~/img/icons/noimage.jpg" style="width: 50px; height: 50px; border-radius:50%" alt="No Image Available" />
+							}
+						</p>
+					</div>
+					<div class="col-12 col-md-12 col-lg-6">
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@Html.Raw($"{item.FirstName} {item.FatherName} {item.FamilyName}")</p>
+					</div>
+					<div class="col-12 col-md-12 col-lg-3">
 
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">@Localizer["lbl_Active"] : </span>
-                                            @if (item.ActiveYNID == 1)
-                                            {
-                                                <span>@Localizer["lbl_Yes"]</span>
-                                            }
-                                            else if (item.ActiveYNID == 2)
-                                            {
-                                                <span>@Localizer["lbl_No"]</span>
-                                            }
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-1 col-md-2 col-lg-6">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editEmployeeLink" data-id="@item.EmployeeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="directManagerEmployeeLink" data-id="@item.EmployeeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="employeeEducationLink" data-id="@item.EmployeeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="employeeExperienceLink" data-id="@item.EmployeeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="PrintEmployeeBioDataLink" data-id="@item.EmployeeID">
-                                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteEmployeeLink" data-id="@item.EmployeeID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+						<p class="text-nowrap">
+							<span class="smallAdd">@Localizer["lbl_Active"] : </span>
+							@if (item.ActiveYNID == 1)
+							{
+								<span>@Localizer["lbl_Yes"]</span>
+							}
+							else if (item.ActiveYNID == 2)
+							{
+								<span>@Localizer["lbl_No"]</span>
+							}
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-1 col-md-2 col-lg-6">
+				<div class="row">
+					<div class="col-12 col-md-12 col-lg-2">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="editEmployeeLink" data-id="@item.EmployeeID">
+								<i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-12 col-lg-2">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="directManagerEmployeeLink" data-id="@item.EmployeeID">
+								<i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-12 col-lg-2">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="employeeEducationLink" data-id="@item.EmployeeID">
+								<i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-12 col-lg-2">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="employeeExperienceLink" data-id="@item.EmployeeID">
+								<i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-12 col-lg-2">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="PrintEmployeeBioDataLink" data-id="@item.EmployeeID">
+								<i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-12 col-lg-2">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="deleteEmployeeLink" data-id="@item.EmployeeID">
+								<i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}

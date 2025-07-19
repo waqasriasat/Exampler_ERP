@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="employeeEducationModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Education Employee
+             		@Localizer["lbl_EmployeeEducation"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -22,7 +22,7 @@
                             <span asp-validation-for="NewEducation.QualificationTypeID" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="NewEducation.InstituteName" class="form-label">Institute Name</label>
+                            <label asp-for="NewEducation.InstituteName" class="form-label">@Localizer["lbl_Institute"]</label>
                             <input asp-for="NewEducation.InstituteName" class="form-control" />
                             <span asp-validation-for="NewEducation.InstituteName" class="text-danger"></span>
                         </div>
@@ -41,28 +41,28 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-3">
-                            <label asp-for="NewEducation.StartMonth" class="form-label">Start Month</label>
+                            <label asp-for="NewEducation.StartMonth" class="form-label">@Localizer["lbl_StartMonth"]</label>
                             <select asp-for="NewEducation.StartMonth" asp-items="@(new SelectList(ViewBag.MonthTypes, "Value", "Text"))" class="form-control"></select>
                             <span asp-validation-for="NewEducation.StartMonth" class="text-danger"></span>
                         </div>
                         <div class="col-3">
-                            <label asp-for="NewEducation.StartYear" class="form-label">Start Year</label>
+                            <label asp-for="NewEducation.StartYear" class="form-label">@Localizer["lbl_StartYear"]</label>
                             <input asp-for="NewEducation.StartYear" class="form-control" />
                             <span asp-validation-for="NewEducation.StartYear" class="text-danger"></span>
                         </div>
                         <div class="col-3">
-                            <label asp-for="NewEducation.EndMonth" class="form-label">End Month</label>
+                            <label asp-for="NewEducation.EndMonth" class="form-label">@Localizer["lbl_EndMonth"]</label>
                             <select asp-for="NewEducation.EndMonth" asp-items="@(new SelectList(ViewBag.MonthTypes, "Value", "Text"))" class="form-control"></select>
                             <span asp-validation-for="NewEducation.EndMonth" class="text-danger"></span>
                         </div>
                         <div class="col-3">
-                            <label asp-for="NewEducation.EndYear" class="form-label">End Year</label>
+                            <label asp-for="NewEducation.EndYear" class="form-label">@Localizer["lbl_EndYear"]</label>
                             <input asp-for="NewEducation.EndYear" class="form-control" />
                             <span asp-validation-for="NewEducation.EndYear" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Document (PDF)</label>
+                        <label class="form-label">@Localizer["lbl_Document "] PDF</label>
                         <input type="file" name="pdfFile" accept=".pdf" class="form-control" />
                     </div>
                    

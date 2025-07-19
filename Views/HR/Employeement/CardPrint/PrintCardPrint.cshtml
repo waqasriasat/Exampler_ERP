@@ -1,7 +1,6 @@
 @model Exampler_ERP.Models.HR_Employee
-@{
-   
-}
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,7 +66,7 @@
             <p><span class="field-label">Name:</span> @Model.FirstName @Model.FatherName @Model.FamilyName</p>
 
             <!-- Employee Code -->
-            <p><span class="field-label">Employee Code:</span> @Model.EmployeeCode</p>
+            <p><span class="field-label">@Localizer["lbl_EmployeeCode"]: </span> @Model.EmployeeCode</p>
 
             <!-- Designation -->
             <p><span class="field-label">Designation:</span> @Model.DesignationType?.DesignationTypeName</p>
@@ -79,13 +78,13 @@
             <p><span class="field-label">Phone:</span> @Model.Phone1</p>
 
             <!-- Email -->
-            <p><span class="field-label">Email:</span> @Model.Email</p>
+            <p><span class="field-label">@Localizer["lbl_Email"]: </span> @Model.Email</p>
 
             <!-- ID Number -->
-            <p><span class="field-label">ID Number:</span> @Model.IDNumber</p>
+            <p><span class="field-label">@Localizer["lbl_IDNumber"]: </span> @Model.IDNumber</p>
 
             <!-- Date of Birth -->
-            <p><span class="field-label">Date of Birth:</span> @Model.DOB?.ToString("dd/MM/yyyy")</p>
+            <p><span class="field-label">@Localizer["lbl_DOB"]: </span> @Model.DOB?.ToString("dd/MM/yyyy")</p>
 
            
         </div>

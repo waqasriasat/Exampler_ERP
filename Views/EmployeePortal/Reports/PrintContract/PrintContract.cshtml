@@ -127,8 +127,8 @@
 
         <div class="contract-section">
             <h3>Contract Information</h3>
-            <p><strong>Start Date:</strong> @Model.StartDate.ToString("dd/MM/yyyy")</p>
-            <p><strong>End Date:</strong> @Model.EndDate?.ToString("dd/MM/yyyy")</p>
+            <p><strong>@Localizer["lbl_StartDate"]: </strong> @Model.StartDate.ToString("dd/MM/yyyy")</p>
+            <p><strong>@Localizer["lbl_EndDate"]: </strong> @Model.EndDate?.ToString("dd/MM/yyyy")</p>
             <p><strong>Contract Type:</strong> @Model.Settings_ContractType?.ContractTypeName</p>
         </div>
 

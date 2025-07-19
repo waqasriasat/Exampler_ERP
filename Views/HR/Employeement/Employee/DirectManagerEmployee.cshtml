@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="directManagerEmployeeModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    DirectManager Employee
+					@Localizer["lbl_DirectManagerforEmployee"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -16,7 +16,7 @@
                 <form id="DirectManagerEmployeeForm" method="post" >
                     <input type="hidden" asp-for="EmployeeID" class="form-control form-control-lg" />
                     <div class="col-12">
-                        <label asp-for="ReportToID" class="form-label fw-bold">Direct Manager</label>
+                        <label asp-for="ReportToID" class="form-label fw-bold">@Localizer["lbl_DirectManager"]</label>
                         <select asp-for="ReportToID" asp-items="@(new SelectList(ViewBag.DirectManagerList, "Value", "Text"))" class="form-control form-control-lg">
                         </select>
                         <span asp-validation-for="ReportToID" class="text-danger"></span>

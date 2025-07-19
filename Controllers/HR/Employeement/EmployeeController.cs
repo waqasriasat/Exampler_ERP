@@ -325,13 +325,13 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       var CountriesList = await _utils.GetCountries();
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("Employees");
-        worksheet.Cells["A1"].Value = "Hire Date";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Employee"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_HireDate"];
         worksheet.Cells["B1"].Value = _localizer["lbl_SelectBranch"];
-        worksheet.Cells["C1"].Value = "Department";
-        worksheet.Cells["D1"].Value = "Designation";
-        worksheet.Cells["E1"].Value = "Employee ID";
-        worksheet.Cells["F1"].Value = "Employee Code";
+        worksheet.Cells["C1"].Value = _localizer["lbl_Department"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_Designation"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_EmployeeID"];
+        worksheet.Cells["F1"].Value = _localizer["lbl_EmployeeCode"];
         worksheet.Cells["G1"].Value = _localizer["lbl_EmployeeName"];
         worksheet.Cells["H1"].Value = _localizer["lbl_Active"];
         worksheet.Cells["I1"].Value = _localizer["lbl_Gender"];
@@ -342,8 +342,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         worksheet.Cells["N1"].Value = _localizer["lbl_Phone2"];
         worksheet.Cells["O1"].Value = _localizer["lbl_Mobile"];
         worksheet.Cells["P1"].Value = _localizer["lbl_WhatsApp"];
-        worksheet.Cells["Q1"].Value = "Religen";
-        worksheet.Cells["R1"].Value = "Place of Birth";
+        worksheet.Cells["Q1"].Value = _localizer["lbl_Religion"];
+        worksheet.Cells["R1"].Value = _localizer["lbl_PlaceofBirth"];
         worksheet.Cells["S1"].Value = _localizer["lbl_Country"];
         worksheet.Cells["T1"].Value = _localizer["lbl_Fax"];
         worksheet.Cells["U1"].Value = _localizer["lbl_Email"];
@@ -351,12 +351,12 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         worksheet.Cells["W1"].Value = _localizer["lbl_Address"];
         worksheet.Cells["X1"].Value = _localizer["lbl_IDNumber"];
         worksheet.Cells["Y1"].Value = _localizer["lbl_IDPlaceofIssue"];
-        worksheet.Cells["Z1"].Value = "ID Issue Date";
-        worksheet.Cells["AA1"].Value = "ID Expiry Date";
+        worksheet.Cells["Z1"].Value = _localizer["lbl_IDIssueDate"];
+        worksheet.Cells["AA1"].Value = _localizer["lbl_IDExpiryDate"];
         worksheet.Cells["AB1"].Value = _localizer["lbl_PassportNumber"];
         worksheet.Cells["AC1"].Value = _localizer["lbl_PassportPlaceofIssue"];
-        worksheet.Cells["AD1"].Value = "Passport Issue Date";
-        worksheet.Cells["AE1"].Value = "Passport Expiry Date";
+        worksheet.Cells["AD1"].Value = _localizer["lbl_PassportIssueDate"];
+        worksheet.Cells["AE1"].Value = _localizer["lbl_PassportExpiryDate"];
         for (int i = 0; i < employees.Count; i++)
         {
           worksheet.Cells[i + 2, 1].Value = employees[i].HireDate?.ToString("dd-MMM-yyyy");
@@ -413,7 +413,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"Employees-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_Employee"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

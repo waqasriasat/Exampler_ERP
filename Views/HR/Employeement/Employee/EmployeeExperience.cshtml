@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="employeeExperienceModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Experience Employee
+					@Localizer["Employee Experience"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -17,12 +17,12 @@
 
                     <div class="form-group row">
                         <div class="col-6">
-                            <label asp-for="NewExperience.ExperienceTittle" class="form-label">Tittle</label>
+                            <label asp-for="NewExperience.ExperienceTittle" class="form-label">@Localizer["lbl_Tittle"] </label>
                             <input asp-for="NewExperience.ExperienceTittle" class="form-control" />
                             <span asp-validation-for="NewExperience.ExperienceTittle" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="NewExperience.CompanyName" class="form-label">Company Name</label>
+                            <label asp-for="NewExperience.CompanyName" class="form-label">@Localizer["lbl_CompanyName"]</label>
                             <input asp-for="NewExperience.CompanyName" class="form-control" />
                             <span asp-validation-for="NewExperience.CompanyName" class="text-danger"></span>
                         </div>
@@ -41,28 +41,28 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-3">
-                            <label asp-for="NewExperience.StartMonth" class="form-label">Start Month</label>
+                            <label asp-for="NewExperience.StartMonth" class="form-label">@Localizer["lbl_StartMonth"]</label>
                             <select asp-for="NewExperience.StartMonth" asp-items="@(new SelectList(ViewBag.MonthTypes, "Value", "Text"))" class="form-control"></select>
                             <span asp-validation-for="NewExperience.StartMonth" class="text-danger"></span>
                         </div>
                         <div class="col-3">
-                            <label asp-for="NewExperience.StartYear" class="form-label">Start Year</label>
+                            <label asp-for="NewExperience.StartYear" class="form-label">@Localizer["lbl_StartYear"]</label>
                             <input asp-for="NewExperience.StartYear" class="form-control" />
                             <span asp-validation-for="NewExperience.StartYear" class="text-danger"></span>
                         </div>
                         <div class="col-3">
-                            <label asp-for="NewExperience.EndMonth" class="form-label">End Month</label>
+                            <label asp-for="NewExperience.EndMonth" class="form-label">@Localizer["lbl_EndMonth"]</label>
                             <select asp-for="NewExperience.EndMonth" asp-items="@(new SelectList(ViewBag.MonthTypes, "Value", "Text"))" class="form-control"></select>
                             <span asp-validation-for="NewExperience.EndMonth" class="text-danger"></span>
                         </div>
                         <div class="col-3">
-                            <label asp-for="NewExperience.EndYear" class="form-label">End Year</label>
+                            <label asp-for="NewExperience.EndYear" class="form-label">@Localizer["lbl_EndYear"]</label>
                             <input asp-for="NewExperience.EndYear" class="form-control" />
                             <span asp-validation-for="NewExperience.EndYear" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Document (PDF)</label>
+                        <label class="form-label">@Localizer["lbl_Document "] (PDF)</label>
                         <input type="file" name="pdfFile" accept=".pdf" class="form-control" />
                     </div>
 
