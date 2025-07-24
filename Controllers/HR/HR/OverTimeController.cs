@@ -210,10 +210,10 @@ namespace Exampler_ERP.Controllers.HR.HR
             OverTime.FinalApprovalID = 1;
             _appDBContext.HR_OverTimes.Update(OverTime);
             await _appDBContext.SaveChangesAsync();
-            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Addional Allowance Created successfully. No process setup found, Addional Allowance activated.");
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "OverTime Created successfully. No process setup found, OverTime activated.");
           }
         }
-        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Addional Allowance Created successfully. Continue to the Approval Process Setup for Addional Allowance Activation.");
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "OverTime Created successfully. Continue to the Approval Process Setup for OverTime Activation.");
 
         return Json(new { success = true });
       }
@@ -250,16 +250,16 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("OverTime");
-        worksheet.Cells["A1"].Value = "OverTime ID";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_OverTime"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_OverTimeID"];
         worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
-        worksheet.Cells["C1"].Value = "OverTime Type";
-        worksheet.Cells["D1"].Value = "Month";
-        worksheet.Cells["E1"].Value = "Year";
-        worksheet.Cells["F1"].Value = "Total Days";
-        worksheet.Cells["G1"].Value = "Total Hours";
-        worksheet.Cells["H1"].Value = "Rate";
-        worksheet.Cells["I1"].Value = "Amount";
+        worksheet.Cells["C1"].Value = _localizer["lbl_OverTimeType"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_Month"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_Year"];
+        worksheet.Cells["F1"].Value = _localizer["lbl_TotalDays"];
+        worksheet.Cells["G1"].Value = _localizer["lbl_TotalHours"];
+        worksheet.Cells["H1"].Value = _localizer["lbl_OverTimeRate"];
+        worksheet.Cells["I1"].Value = _localizer["lbl_Amount"];
 
 
         for (int i = 0; i < OverTime.Count; i++)
@@ -281,7 +281,7 @@ namespace Exampler_ERP.Controllers.HR.HR
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"OverTime-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_OverTime"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

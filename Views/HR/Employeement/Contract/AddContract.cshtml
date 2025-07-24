@@ -7,14 +7,14 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addContractModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add Contract
+					@Localizer["lbl_AddContract"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
             </div>
             <div class="modal-body">
                 <form id="addContractForm" method="post" asp-action="Create" asp-controller="Contract" enctype="multipart/form-data">
-                    <h5 class="modal-title" style="padding-top:10px">Contract Details</h5>
+                    <h5 class="modal-title" style="padding-top:10px">@Localizer["lbl_ContractDetail"]</h5>
                     <hr />
                     <div class="row">
                         <div class="col-12">
@@ -28,12 +28,12 @@
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <label asp-for="IssueDate" class="form-label fw-bold">@Localizer["lbl_PassportIssueDate"]</label>
+                                    <label asp-for="IssueDate" class="form-label fw-bold">@Localizer["lbl_IssueDate"]</label>
                                     <input asp-for="IssueDate" class="form-control form-control-lg" type="date" />
                                     <span asp-validation-for="IssueDate" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="ContractTypeID" class="form-label fw-bold">Contract @Localizer["lbl_Type"]</label>
+                                    <label asp-for="ContractTypeID" class="form-label fw-bold">@Localizer["lbl_ContractType"]</label>
                                     <select asp-for="ContractTypeID" asp-items="@(new SelectList(ViewBag.ContractTypesList, "Value", "Text"))" class="form-control form-control-lg" id="contractTypeSelect">
                                     </select>
                                     <span asp-validation-for="ContractTypeID" class="text-danger"></span>
@@ -53,25 +53,25 @@
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <label asp-for="SalaryTypeID" class="form-label fw-bold">Salary @Localizer["lbl_Type"]</label>
+                                    <label asp-for="SalaryTypeID" class="form-label fw-bold">@Localizer["lbl_SalaryType"]</label>
                                     <select asp-for="SalaryTypeID" asp-items="@(new SelectList(ViewBag.SalaryTypesList, "Value", "Text"))" class="form-control form-control-lg">
                                     </select>
                                     <span asp-validation-for="SalaryTypeID" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="VacationDays" class="form-label fw-bold">@Localizer["lbl_Vacation"] Days</label>
+                                    <label asp-for="VacationDays" class="form-label fw-bold">@Localizer["lbl_VacationDays"]</label>
                                     <input asp-for="VacationDays" class="form-control form-control-lg" type="number" />
                                     <span asp-validation-for="VacationDays" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <label asp-for="DHours" class="form-label fw-bold">Duty Hours</label>
+                                    <label asp-for="DHours" class="form-label fw-bold">@Localizer["lbl_DutyHours"]</label>
                                     <input asp-for="DHours" class="form-control form-control-lg" type="number" />
                                     <span asp-validation-for="DHours" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="DMinutes" class="form-label fw-bold">Duty Minutes</label>
+                                    <label asp-for="DMinutes" class="form-label fw-bold">@Localizer["lbl_DutyMinutes"]</label>
                                     <input asp-for="DMinutes" class="form-control form-control-lg" type="number" />
                                     <span asp-validation-for="DMinutes" class="text-danger"></span>
                                 </div>

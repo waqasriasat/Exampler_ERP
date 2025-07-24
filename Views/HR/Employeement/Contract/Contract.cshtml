@@ -2,24 +2,24 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = @Localizer["lbl_Employeement"] +" - Contracts";
+	ViewData["Title"] = @Localizer["lbl_Employeement"] + " - " + @Localizer["lbl_Contract"];
 }
 
 @section PageScripts {
-    <script>
-        $(document).ready(function () {
-            // Edit contract modal popup
+	<script>
+		$(document).ready(function () {
+			// Edit contract modal popup
 			$('#ContractListContainer').on('click', '.editContractLink', function (e) {
-                e.preventDefault();
-                var contractId = $(this).data('id');
-                $.get('@Url.Action("Edit", "Contract")', { id: contractId }, function (data) {
-                    $('#editContractModalContainer').html(data);
-                    $('#editContractModal').modal('show');
-                });
-            });
-            $('#editContractModalContainer').on('click', '#saveContractChanges', function () {
-                var formData = $('#editContractForm').serialize();
-                $.post('@Url.Action("Edit", "Contract")', formData, function (response) {
+				e.preventDefault();
+				var contractId = $(this).data('id');
+				$.get('@Url.Action("Edit", "Contract")', { id: contractId }, function (data) {
+					$('#editContractModalContainer').html(data);
+					$('#editContractModal').modal('show');
+				});
+			});
+			$('#editContractModalContainer').on('click', '#saveContractChanges', function () {
+				var formData = $('#editContractForm').serialize();
+				$.post('@Url.Action("Edit", "Contract")', formData, function (response) {
 					if (response.success) {
 							$('#editContractModal').modal('hide');
 
@@ -29,22 +29,22 @@
 								$('#ContractListContainer').html(html);
 							});
 						}
-                });
-            });
-          
+				});
+			});
 
-            // Add new contract modal popup
-            $('.addContractLink').click(function () {
-                $.get('@Url.Action("Create", "Contract")', function (data) {
-                    $('#addContractModalContainer').html(data);
-                    $('#addContractModal').modal('show');
-                });
-            });
 
-            // Save new contract form
-             $('#addContractModalContainer').on('click', '#saveNewContract', function () {
-                var formData = $('#addContractForm').serialize();
-                $.post('@Url.Action("Create", "Contract")', formData, function (response) {
+			// Add new contract modal popup
+			$('.addContractLink').click(function () {
+				$.get('@Url.Action("Create", "Contract")', function (data) {
+					$('#addContractModalContainer').html(data);
+					$('#addContractModal').modal('show');
+				});
+			});
+
+			// Save new contract form
+			 $('#addContractModalContainer').on('click', '#saveNewContract', function () {
+				var formData = $('#addContractForm').serialize();
+				$.post('@Url.Action("Create", "Contract")', formData, function (response) {
 				   if (response.success) {
 							$('#addContractModal').modal('hide');
 
@@ -54,175 +54,175 @@
 								$('#ContractListContainer').html(html);
 							});
 						}
-                });
-            });
+				});
+			});
 
-            // Close Modal Add Contrainer
-            $('#addContractModalContainer').on('click', '#Close', function () {
-                $('#addContractModal').modal('hide'); // Close the modal directly
-                // Additional logic if needed
-            });
+			// Close Modal Add Contrainer
+			$('#addContractModalContainer').on('click', '#Close', function () {
+				$('#addContractModal').modal('hide'); // Close the modal directly
+				// Additional logic if needed
+			});
 
-            // Close Modal Edit Contrainer
-            $('#editContractModalContainer').on('click', '#Close', function () {
-                $('#editContractModal').modal('hide'); // Close the modal directly
-                // Additional logic if needed
-            });
+			// Close Modal Edit Contrainer
+			$('#editContractModalContainer').on('click', '#Close', function () {
+				$('#editContractModal').modal('hide'); // Close the modal directly
+				// Additional logic if needed
+			});
 
-            // Delete contract
+			// Delete contract
 			 $('#ContractListContainer').on('click', '.deleteContractLink', function (e) {
-                e.preventDefault();
-                var contractId = $(this).data('id');
+				e.preventDefault();
+				var contractId = $(this).data('id');
 
-                // Show confirmation dialog
-                if (confirm('Are you sure you want to delete this contract?')) {
-                    $.post('@Url.Action("Delete", "Contract")', { id: contractId }, function (response) {
+				// Show confirmation dialog
+				if (confirm('Are you sure you want to delete this contract?')) {
+					$.post('@Url.Action("Delete", "Contract")', { id: contractId }, function (response) {
 						if (response.success) {
 					$.get('@Url.Action("Index", "Contract")', function (partialHtml) {
 					  var html = $(partialHtml).find('#ContractListContainer').html();
 					  $('#ContractListContainer').html(html);
 					});
 				  }
-                    });
-                } else {
-                    // If user clicks 'No', do nothing
-                }
-            });
+					});
+				} else {
+					// If user clicks 'No', do nothing
+				}
+			});
 
-            // Print functionality
-            $('#printButton').click(function () {
-                window.print();
-            });
-            $.widget("custom.autocomplete", $.ui.autocomplete, {
-                _renderItem: function (ul, item) {
-                    return $("<li>")
-                        .append(item.label)  // Render the HTML content in `label`
-                        .appendTo(ul);
-                }
-            });
+			// Print functionality
+			$('#printButton').click(function () {
+				window.print();
+			});
+			$.widget("custom.autocomplete", $.ui.autocomplete, {
+				_renderItem: function (ul, item) {
+					return $("<li>")
+						.append(item.label)  // Render the HTML content in `label`
+						.appendTo(ul);
+				}
+			});
 
-            $("#searchEmployeeInput").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: '@Url.Action("GetEmployeeSuggestions", "Employee")',
-                        type: 'GET',
-                        data: { term: request.term },
-                        success: function (data) {
-                            response($.map(data, function (item) {
-                                return {
-                                    label: item.label,  // HTML content
-                                    value: item.id      // Employee ID
-                                };
-                            }));
-                        }
-                    });
-                },
-                minLength: 2,
-                select: function (event, ui) {
-                    // Do something when an employee is selected
-                    console.log(ui.item.value); // Employee ID
-                    window.location.href = '@Url.Action("Index", "Contract")?id=' + ui.item.value;
-                }
-            });
+			$("#searchEmployeeInput").autocomplete({
+				source: function (request, response) {
+					$.ajax({
+						url: '@Url.Action("GetEmployeeSuggestions", "Employee")',
+						type: 'GET',
+						data: { term: request.term },
+						success: function (data) {
+							response($.map(data, function (item) {
+								return {
+									label: item.label,  // HTML content
+									value: item.id      // Employee ID
+								};
+							}));
+						}
+					});
+				},
+				minLength: 2,
+				select: function (event, ui) {
+					// Do something when an employee is selected
+					console.log(ui.item.value); // Employee ID
+					window.location.href = '@Url.Action("Index", "Contract")?id=' + ui.item.value;
+				}
+			});
 
-          
-        });
-    </script>
-    <script>
-        function printContracts() {
-            var printWindow = window.open('@Url.Action("Print", "Contract")', '_blank');
-            printWindow.focus();
-        }
 
-        function closeModal() {
-            $('.close').click(function () {
-                $('#addContractModal').modal('hide');
-                $('#editContractModal').modal('hide');
-            });
-        }
+		});
+	</script>
+	<script>
+		function printContracts() {
+			var printWindow = window.open('@Url.Action("Print", "Contract")', '_blank');
+			printWindow.focus();
+		}
 
-        $('#searchEmployeeButton').click(function () {
-            var searchValue = $('#searchEmployeeInput').val();
-            window.location.href = '@Url.Action("Index", "Contract")?id=' + searchValue;
-        });
-    </script>
-   
+		function closeModal() {
+			$('.close').click(function () {
+				$('#addContractModal').modal('hide');
+				$('#editContractModal').modal('hide');
+			});
+		}
+
+		$('#searchEmployeeButton').click(function () {
+			var searchValue = $('#searchEmployeeInput').val();
+			window.location.href = '@Url.Action("Index", "Contract")?id=' + searchValue;
+		});
+	</script>
+
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">@Localizer["lbl_Employeement"] /</span> Contracts
+	<span class="text-muted fw-light">@Localizer["lbl_Employeement"] /</span> @Localizer["lbl_Contract"]
 </h4>
 <div class="row">
-    <div class="col-md-12">
+	<div class="col-md-12">
 
-        <div class="card">
-            <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
-            <div class="Searching-Box-padding">
-                <div class="row mb-4">
-                    <div class="col-md-8" style="padding-bottom: 15px;">
-                        <!-- Search Field and Button -->
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="@Localizer["lbl_SearchEmployee"]" id="searchEmployeeInput">
-                            <button class="btn btn-outline-secondary" type="button" id="searchEmployeeButton">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
+		<div class="card">
+			<h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
+			<div class="Searching-Box-padding">
+				<div class="row mb-4">
+					<div class="col-md-8" style="padding-bottom: 15px;">
+						<!-- Search Field and Button -->
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="@Localizer["lbl_SearchEmployee"]" id="searchEmployeeInput">
+							<button class="btn btn-outline-secondary" type="button" id="searchEmployeeButton">
+								<i class="fa fa-search"></i>
+							</button>
+						</div>
 
-                    </div>
-                    <div class="col-md-4 text-end">
-                        <!-- Action Buttons -->
-                        <button type="button" class="btn btn-primary addContractLink">@Localizer["lbl_AddNew"]</button>
-                        <!-- Example: Add buttons for exporting to Excel and printing -->
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Contract")'">@Localizer["lbl_Excel"]</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="printContracts()">@Localizer["lbl_Print"]</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+					</div>
+					<div class="col-md-4 text-end">
+						<!-- Action Buttons -->
+						<button type="button" class="btn btn-primary addContractLink">@Localizer["lbl_AddNew"]</button>
+						<!-- Example: Add buttons for exporting to Excel and printing -->
+						<button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Contract")'">@Localizer["lbl_Excel"]</button>
+						<button type="button" class="btn btn-outline-secondary" onclick="printContracts()">@Localizer["lbl_Print"]</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <br />
 <div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <h5 class="card-header">Contract @Localizer["lbl_List"]</h5>
-            <div class="">
-                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
-                    <div class="row">
-                        <div class="col-10 col-md-10 col-lg-9">
-                            <div class="row">
-                                <div class="col-6">
-                                    <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">Issue Date</p>
-                                </div>
-                                <div class="col-4">
-                                    <p class="text-nowrap">Contract @Localizer["lbl_Type"]</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-2 col-md-2 col-lg-3">
-                            <div class="row">
-                                <div class="col-12 col-md-12 col-lg-4">
-                                    <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
-                                </div>
-                                <div class="col-12 col-md-12 col-lg-4">
-                                    <p class="text-nowrap">@Localizer["lbl_Print"] </p>
-                                </div>
-                                <div class="col-12 col-md-12 col-lg-4">
-                                    <p class="text-nowrap">@Localizer["lbl_Delete"]</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+	<div class="col-md-12">
+		<div class="card">
+			<h5 class="card-header">@Localizer["lbl_ContractList"]</h5>
+			<div class="">
+				<div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+					<div class="row">
+						<div class="col-10 col-md-10 col-lg-9">
+							<div class="row">
+								<div class="col-6">
+									<p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
+								</div>
+								<div class="col-2">
+									<p class="text-nowrap">@Localizer["lbl_IssueDate"]</p>
+								</div>
+								<div class="col-4">
+									<p class="text-nowrap">@Localizer["lbl_ContractType"]</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-2 col-md-2 col-lg-3">
+							<div class="row">
+								<div class="col-12 col-md-12 col-lg-4">
+									<p class="text-nowrap">@Localizer["lbl_Edit"]</p>
+								</div>
+								<div class="col-12 col-md-12 col-lg-4">
+									<p class="text-nowrap">@Localizer["lbl_Print"] </p>
+								</div>
+								<div class="col-12 col-md-12 col-lg-4">
+									<p class="text-nowrap">@Localizer["lbl_Delete"]</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div id="ContractListContainer">
 					@Html.Partial("~/Views/HR/Employeement/Contract/_ContractListPartial.cshtml", Model)
 				</div>
-            </div>
-        </div>
-    </div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <!-- Include the modal partial -->

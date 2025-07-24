@@ -14,7 +14,7 @@ namespace Exampler_ERP.Models.Temp
     public HR_BankAccount BankDetails { get; set; }
     public HR_MonthlyPayroll? PayslipDetails { get; set; }
     public List<HR_MonthlyPayroll_SalaryDetail> SalaryDetails { get; set; }
-    public List<HR_AddionalAllowanceDetail> AdditionalAllowances { get; set; }
+    public List<HR_AdditionalAllowanceDetail> AdditionalAllowances { get; set; }
     public List<HR_OverTimeTemp> OvertimeData { get; set; }
     public List<HR_DeductionTemp> Deductions { get; set; }
     public List<HR_MonthlyPayroll_FixedDeductionDetail> FixedDeductions { get; set; }

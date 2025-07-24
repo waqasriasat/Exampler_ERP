@@ -103,10 +103,10 @@ namespace Exampler_ERP.Controllers.HR.Reports
             .Include(sd => sd.SalaryType)
             .ToListAsync();
 
-        var additionalAllowances = await _appDBContext.HR_AddionalAllowanceDetails
-            .Where(a => a.AddionalAllowance.EmployeeID == employeeSalary.EmployeeID && a.AddionalAllowance.PayRollID == payrollID)
-            .Include(a => a.AddionalAllowance)
-            .Include(a => a.AddionalAllowanceType)
+        var additionalAllowances = await _appDBContext.HR_AdditionalAllowanceDetails
+            .Where(a => a.AdditionalAllowance.EmployeeID == employeeSalary.EmployeeID && a.AdditionalAllowance.PayRollID == payrollID)
+            .Include(a => a.AdditionalAllowance)
+            .Include(a => a.AdditionalAllowanceType)
             .ToListAsync();
 
         var overtimeData = await _appDBContext.HR_OverTimes
@@ -248,10 +248,10 @@ namespace Exampler_ERP.Controllers.HR.Reports
             .Include(sd => sd.SalaryType)
             .ToListAsync();
 
-        var additionalAllowances = await _appDBContext.HR_AddionalAllowanceDetails
-            .Where(a => a.AddionalAllowance.EmployeeID == employeeSalary.EmployeeID && a.AddionalAllowance.PayRollID == payrollID)
-            .Include(a => a.AddionalAllowance)
-             .Include(a => a.AddionalAllowanceType)
+        var additionalAllowances = await _appDBContext.HR_AdditionalAllowanceDetails
+            .Where(a => a.AdditionalAllowance.EmployeeID == employeeSalary.EmployeeID && a.AdditionalAllowance.PayRollID == payrollID)
+            .Include(a => a.AdditionalAllowance)
+             .Include(a => a.AdditionalAllowanceType)
             .ToListAsync();
 
         var overtimeData = await _appDBContext.HR_OverTimes

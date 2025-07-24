@@ -8,12 +8,12 @@
 
 <div class="row">
     <div class="col-6">
-        <label asp-for="PStartDate" class="form-label fw-bold">Previous Start @Localizer["lbl_Date"]</label>
+        <label asp-for="PStartDate" class="form-label fw-bold">@Localizer["lbl_PreviousStartDate"]</label>
         <input type="date" class="form-control form-control-lg" id="PStartDate" name="PStartDate" value="@ViewBag.PStartDate?.ToString("yyyy-MM-dd")" readonly style="background-color:#eceef1" />
         <span asp-validation-for="PStartDate" class="text-danger"></span>
     </div>
     <div class="col-6">
-        <label asp-for="PEndDate" class="form-label fw-bold">Previous End @Localizer["lbl_Date"]</label>
+		<label asp-for="PEndDate" class="form-label fw-bold">@Localizer["lbl_PreviousEndDate"]</label>
         <input type="date" class="form-control form-control-lg" id="PEndDate" name="PEndDate" value="@ViewBag.PEndDate?.ToString("yyyy-MM-dd")" readonly style="background-color:#eceef1" />
         <span asp-validation-for="PEndDate" class="text-danger"></span>
     </div>
@@ -22,7 +22,7 @@
 <!-- Additional Fields -->
 <div class="row">
     <div class="col-6">
-        <label for="Month" class="form-label fw-bold">Month</label>
+        <label for="Month" class="form-label fw-bold">@Localizer["lbl_Month"]</label>
         <select id="Month" class="form-control form-control-lg">
             @for (int i = 0; i <= 12; i++)
             {
@@ -31,7 +31,7 @@
         </select>
     </div>
     <div class="col-6">
-        <label for="Year" class="form-label fw-bold">Year</label>
+        <label for="Year" class="form-label fw-bold">@Localizer["lbl_Year"]</label>
         <select id="Year" class="form-control form-control-lg">
             @for (int i = 0; i <= 9; i++)
             {
@@ -43,12 +43,12 @@
 
 <div class="row">
     <div class="col-6">
-        <label asp-for="NStartDate" class="form-label fw-bold">New Start @Localizer["lbl_Date"]</label>
+        <label asp-for="NStartDate" class="form-label fw-bold">@Localizer["lbl_NewStartDate"]</label>
         <input asp-for="NStartDate" nameNStartDate class="form-control form-control-lg" type="date" readonly style="background-color:#eceef1" />
         <span asp-validation-for="NStartDate" class="text-danger"></span>
     </div>
     <div class="col-6">
-        <label asp-for="NEndDate" class="form-label fw-bold">New End @Localizer["lbl_Date"]</label>
+        <label asp-for="NEndDate" class="form-label fw-bold">@Localizer["lbl_NewEndDate"]</label>
         <input asp-for="NEndDate" name="NEndDate" class="form-control form-control-lg" type="date" readonly style="background-color:#eceef1" />
         <span asp-validation-for="NEndDate" class="text-danger"></span>
     </div>

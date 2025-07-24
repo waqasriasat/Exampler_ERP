@@ -2,13 +2,14 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 <div class="modal fade" id="editThumbEnrollmentModal" tabindex="-1" role="dialog" aria-labelledby="editThumbEnrollmentModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editThumbEnrollmentModalLabel">Edit Thumb Enrollment</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+			<div class="modal-header bg-warning text-white">
+				<h5 class="modal-title" id="editThumbEnrollmentModalLabel">
+					<i class="fas fa-key me-2"></i>
+					@Localizer["lbl_EditThumbEnrollment"]
+				</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="editThumbEnrollmentForm" method="post">
@@ -18,15 +19,15 @@
                         <select asp-for="EmployeeID" class="form-control" asp-items="ViewBag.Employees"></select>
                     </div>
                     <div class="form-group">
-                        <label for="ThumbFormat">Thumb Format</label>
+						<label for="ThumbFormat">@Localizer["lbl_ThumbFormat"]</label>
                         <input type="text" class="form-control" asp-for="ThumbFormat" />
                     </div>
                     <div class="form-group">
-                        <label for="ThumbImpression">Thumb Impression (Binary)</label>
+						<label for="ThumbImpression">@Localizer["lbl_ThumbImpression"]</label>
                         <input type="file" class="form-control" asp-for="ThumbImpression" />
                     </div>
                     <div class="form-group">
-                        <label for="EnrollmentDate">Enrollment @Localizer["lbl_Date"]</label>
+						<label for="EnrollmentDate">@Localizer["lbl_EnrollmentDate"]</label>
                         <input type="date" class="form-control" asp-for="EnrollmentDate" />
                     </div>
                     <button type="button" id="saveThumbEnrollmentChanges" class="btn btn-primary">@Localizer["lbl_Save"] </button>

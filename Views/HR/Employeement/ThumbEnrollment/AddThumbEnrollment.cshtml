@@ -2,13 +2,14 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 <div class="modal fade" id="addThumbEnrollmentModal" tabindex="-1" role="dialog" aria-labelledby="addThumbEnrollmentModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addThumbEnrollmentModalLabel">Add Thumb Enrollment</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+			<div class="modal-header bg-warning text-white">
+				<h5 class="modal-title" id="addThumbEnrollmentModalLabel">
+					<i class="fas fa-key me-2"></i>
+					@Localizer["lbl_AddThumbEnrollment"]
+					</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="addThumbEnrollmentForm" method="post" enctype="multipart/form-data">
@@ -17,21 +18,21 @@
                         <select asp-for="EmployeeID" class="form-control" asp-items="ViewBag.EmployeesList"></select>
                     </div>
                     <div class="form-group">
-                        <label for="ThumbFormat">Thumb Format</label>
+                        <label for="ThumbFormat">@Localizer["lbl_ThumbFormat"]</label>
                         <input type="text" class="form-control" asp-for="ThumbFormat" placeholder="Format (ISO, ANSI, etc.)" />
                     </div>
                     <div class="form-group">
-                        <label>Thumb Impression</label>
+                        <label>@Localizer["lbl_ThumbImpression"]</label>
                         <div>
                             <video id="video" width="320" height="240" autoplay></video>
-                            <button type="button" id="capture" class="btn btn-primary">Capture</button>
+                            <button type="button" id="capture" class="btn btn-primary">@Localizer["lbl_Capture"]</button>
                         </div>
                         <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
                         <input type="hidden" name="ThumbImpression" id="thumbImpression" />
                         <span asp-validation-for="ThumbImpression" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label for="EnrollmentDate">Enrollment @Localizer["lbl_Date"]</label>
+						<label for="EnrollmentDate">@Localizer["lbl_EnrollmentDate"]</label>
                         <input type="date" class="form-control" asp-for="EnrollmentDate" />
                     </div>
                     <button type="button" id="saveNewThumbEnrollment" class="btn btn-primary">@Localizer["lbl_Save"] </button>

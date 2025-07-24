@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "HR - Face Attendance Report";
+    ViewData["Title"] = Localizer["lbl_HumanResources"] + " - Face Attendance Report";
 }
 
 @section PageScripts {
@@ -67,18 +67,18 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">HR /</span> Face Attendance Report
+    <span class="text-muted fw-light">@Localizer["lbl_HumanResources"] /</span> Face Attendance Report
 </h4>
 <form method="get" action="@Url.Action("Index", "FaceAttendanceReport")">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <h5 class="card-header">Search Box</h5>
+                <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
                 <div class="Searching-Box-padding" style="padding-bottom: 15px;">
                     <div class="row mb-4">
                         <!-- From Date Field -->
                         <div class="col-md-4 mb-4">
-                            <label class="form-label fw-bold">Month @Localizer["lbl_Type"]</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_Month"]</label>
                             <select name="MonthsTypeID" class="form-control">
                                 @foreach (var item in ViewBag.MonthsTypeList)
 
@@ -103,7 +103,7 @@
 
                         <!-- To Date Field -->
                         <div class="col-md-4 mb-4">
-                            <label for="YearsTypeID" class="form-label fw-bold">Year</label>
+                            <label for="YearsTypeID" class="form-label fw-bold">@Localizer["lbl_Year"]</label>
                             <select name="YearsTypeID" class="form-control">
                                 @for (int year = DateTime.Now.Year; year >= 1900; year--)
 
@@ -142,7 +142,7 @@
                     <!-- Action Buttons -->
                     <div class="row">
                         <div class="col-md-12 text-end">
-                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
                             <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "FaceAttendanceReport")'">@Localizer["lbl_Excel"]</button>
                             <button type="button" class="btn btn-outline-secondary" onclick="printFaceAttendanceReports()">@Localizer["lbl_Print"]</button>
                         </div>

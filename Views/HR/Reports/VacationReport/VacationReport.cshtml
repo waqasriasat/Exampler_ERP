@@ -68,18 +68,18 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <h5 class="card-header">Search Box</h5>
+                <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
                 <div class="Searching-Box-padding" style="padding-bottom: 15px;">
                     <div class="row mb-4">
                         <!-- From Date Field -->
                         <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">From @Localizer["lbl_Date"]</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_FromDate"]</label>
                             <input class="form-control" type="date" name="FromDate" value="@ViewBag.FromDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
                         <!-- To Date Field -->
                         <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">To @Localizer["lbl_Date"]</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_ToDate"]</label>
                             <input class="form-control" type="date" name="ToDate" value="@ViewBag.ToDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
@@ -119,7 +119,7 @@
                     <!-- Action Buttons -->
                     <div class="row">
                         <div class="col-md-12 text-end">
-                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
                             <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Vacation")'">@Localizer["lbl_Excel"]</button>
                             <button type="button" class="btn btn-outline-secondary" onclick="printVacations()">@Localizer["lbl_Print"]</button>
                         </div>
@@ -146,7 +146,7 @@
                                     <p class="text-nowrap">Start Date</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">End Date</p>
+                                    <p class="text-nowrap">@Localizer["lbl_EndDate"]</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">@Localizer["lbl_TotalDays"] </p>

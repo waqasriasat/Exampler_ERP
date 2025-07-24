@@ -1,11 +1,11 @@
-@model Exampler_ERP.Models.Settings_AddionalAllowanceType
+@model Exampler_ERP.Models.Settings_AdditionalAllowanceType
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-<div class="modal fade" id="editAddionalAllowanceTypeModal" tabindex="-1" role="dialog" aria-labelledby="editAddionalAllowanceTypeModalLabel" aria-hidden="true">
+<div class="modal fade" id="editAdditionalAllowanceTypeModal" tabindex="-1" role="dialog" aria-labelledby="editAdditionalAllowanceTypeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="editAddionalAllowanceTypeModalLabel">
+                <h5 class="modal-title" id="editAdditionalAllowanceTypeModalLabel">
                     <i class="fas fa-key me-2"></i>
 					@Localizer["lbl_EditAdditionalAllowanceType"]
                 </h5>
@@ -13,13 +13,13 @@
 
             </div>
             <div class="modal-body">
-                <form id="editAddionalAllowanceTypeForm">
+                <form id="editAdditionalAllowanceTypeForm">
                     <div class="row">
                         <div class="col-2 col-md-12 col-lg-12">
                             <div class="row">
                                 <div class="col-12 col-md-12 col-lg-12">
-									<label for="AddionalAllowanceTypeName" class="form-label fw-bold">@Localizer["lbl_AdditionalAllowanceTypeName"]</label>
-                                    <input type="text" class="form-control form-control-lg" id="AddionalAllowanceTypeName" name="AddionalAllowanceTypeName" value="@Model.AddionalAllowanceTypeName" />
+									<label for="AdditionalAllowanceTypeName" class="form-label fw-bold">@Localizer["lbl_AdditionalAllowanceTypeName"]</label>
+                                    <input type="text" class="form-control form-control-lg" id="AdditionalAllowanceTypeName" name="AdditionalAllowanceTypeName" value="@Model.AdditionalAllowanceTypeName" />
                                 </div>
                                 <div class="col-12 col-md-6 col-lg-6">
                                     <label asp-for="ActiveYNID" class="form-label fw-bold">@Localizer["lbl_Active"]</label>
@@ -31,7 +31,7 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" id="AddionalAllowanceTypeID" name="AddionalAllowanceTypeID" value="@Model.AddionalAllowanceTypeID" />
+                    <input type="hidden" id="AdditionalAllowanceTypeID" name="AdditionalAllowanceTypeID" value="@Model.AdditionalAllowanceTypeID" />
                 </form>
             </div>
             <div class="modal-footer">

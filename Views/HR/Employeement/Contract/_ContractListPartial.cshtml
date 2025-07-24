@@ -1,62 +1,62 @@
 @model IEnumerable<Exampler_ERP.Models.HR_Contract>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
- @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-10 col-lg-9">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Issue Date : </span>@item.IssueDate.ToString("dd/MM/yyyy")</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">Contract @Localizer["lbl_Type"] : </span>
-                                            @if (item.ContractTypeID == 1)
-                                            {
-                                                <span>Limited</span>
-                                            }
-                                            else if (item.ContractTypeID == 2)
-                                            {
-                                                <span>Unlimited</span>
-                                            }
-                                            else
-                                            {
-                                                 <span></span>
-                                            }
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-2 col-lg-3">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editContractLink" data-id="@item.ContractID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="printContractLink" data-id="@item.ContractID">
-                                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteContractLink" data-id="@item.ContractID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+@foreach (var item in Model)
+{
+	<div class="col-12 col-md-12 col-lg-12 GVDetail">
+		<div class="row">
+			<div class="col-10 col-md-10 col-lg-9">
+				<div class="row">
+					<div class="col-12 col-md-12 col-lg-6">
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+					</div>
+					<div class="col-12 col-md-12 col-lg-2">
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_IssueDate"] : </span>@item.IssueDate.ToString("dd/MM/yyyy")</p>
+					</div>
+					<div class="col-12 col-md-12 col-lg-4">
+						<p class="text-nowrap">
+							<span class="smallAdd">@Localizer["lbl_ContractType"] : </span>
+							@if (item.ContractTypeID == 1)
+							{
+								<span>Limited</span>
+							}
+							else if (item.ContractTypeID == 2)
+							{
+								<span>Unlimited</span>
+							}
+							else
+							{
+								<span></span>
+							}
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-2 col-md-2 col-lg-3">
+				<div class="row">
+					<div class="col-12 col-md-12 col-lg-4">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="editContractLink" data-id="@item.ContractID">
+								<i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-12 col-lg-4">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="printContractLink" data-id="@item.ContractID">
+								<i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-12 col-lg-4">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="deleteContractLink" data-id="@item.ContractID">
+								<i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}

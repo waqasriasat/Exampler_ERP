@@ -222,18 +222,18 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       var SalaryTypesList = await _utils.GetSalaryOptions();
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("Contracts");
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Contract"]);
 
-        worksheet.Cells["A1"].Value = "Contract ID";
+        worksheet.Cells["A1"].Value = _localizer["lbl_ContractID"];
         worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
-        worksheet.Cells["C1"].Value = "Issue Date";
-        worksheet.Cells["D1"].Value = "Salary Type";
-        worksheet.Cells["E1"].Value = "Contract Type";
-        worksheet.Cells["F1"].Value = "Vacation Days";
-        worksheet.Cells["G1"].Value = "Daily Hours";
-        worksheet.Cells["H1"].Value = "Daily Minutes";
-        worksheet.Cells["I1"].Value = "Final Approval ID";
-        worksheet.Cells["J1"].Value = "Approval Process ID";
+        worksheet.Cells["C1"].Value = _localizer["lbl_IssueDate"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_SalaryType"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_ContractType"];
+        worksheet.Cells["F1"].Value = _localizer["lbl_VacationDays"];
+        worksheet.Cells["G1"].Value = _localizer["lbl_DutyHours"];
+        worksheet.Cells["H1"].Value = _localizer["lbl_DutyMinutes"];
+        worksheet.Cells["I1"].Value = _localizer["lbl_FinalApprovalID"];
+        worksheet.Cells["J1"].Value = _localizer["lbl_ApprovalProcessID"];
 
         for (int i = 0; i < contracts.Count; i++)
         {
@@ -257,7 +257,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"Contracts-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_Contract"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

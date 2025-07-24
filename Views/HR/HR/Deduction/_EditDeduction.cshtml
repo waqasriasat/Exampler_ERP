@@ -1,7 +1,7 @@
 @model Exampler_ERP.Models.HR_Deduction
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-<h5 class="modal-title" style="padding-top:10px">Deduction Details</h5>
+<h5 class="modal-title" style="padding-top:10px">@Localizer["lbl_DeductionDetail"]</h5>
 <hr />
 <div class="row">
     <div class="col-12">
@@ -15,7 +15,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <label asp-for="DeductionTypeID" class="form-label fw-bold">Deduction @Localizer["lbl_Type"]</label>
+                <label asp-for="DeductionTypeID" class="form-label fw-bold">@Localizer["lbl_DeductionType"]</label>
                 <select asp-for="DeductionTypeID" asp-items="@(new SelectList(ViewBag.DeductionTypesList, "Value", "Text"))" class="form-control form-control-lg" id="DeductionTypeSelect">
                 </select>
                 <span asp-validation-for="DeductionTypeID" class="text-danger"></span>
@@ -23,31 +23,31 @@
         </div>
         <div class="row">
             <div class="col-6">
-                <label asp-for="FromDate" class="form-label fw-bold">From @Localizer["lbl_Date"]</label>
+                <label asp-for="FromDate" class="form-label fw-bold">@Localizer["lbl_FromDate"]</label>
                 <input asp-for="FromDate" class="form-control date-placeholder" type="date" id="FromDateInput" placeholder="mm/dd/yyyy" />
                 <span asp-validation-for="FromDate" class="text-danger"></span>
             </div>
             <div class="col-6">
-                <label asp-for="ToDate" class="form-label fw-bold">To @Localizer["lbl_Date"]</label>
+                <label asp-for="ToDate" class="form-label fw-bold">@Localizer["lbl_ToDate"]</label>
                 <input asp-for="ToDate" class="form-control date-placeholder" type="date" id="ToDateInput" placeholder="mm/dd/yyyy" />
                 <span asp-validation-for="ToDate" class="text-danger"></span>
             </div>
         </div>
         <div class="row">
             <div class="col-6">
-                <label asp-for="Month" class="form-label fw-bold">Month</label>
+                <label asp-for="Month" class="form-label fw-bold">@Localizer["lbl_Month"]</label>
                 <input asp-for="Month" class="form-control form-control-lg readonly-background" type="number" readonly id="MonthInput" />
                 <span asp-validation-for="Month" class="text-danger"></span>
             </div>
             <div class="col-6">
-                <label asp-for="Year" class="form-label fw-bold">Year</label>
+                <label asp-for="Year" class="form-label fw-bold">@Localizer["lbl_Year"]</label>
                 <input asp-for="Year" class="form-control form-control-lg readonly-background" type="number" readonly id="YearInput" />
                 <span asp-validation-for="Year" class="text-danger"></span>
             </div>
         </div>
         <div class="row">
             <div class="col-6">
-                <label asp-for="Days" class="form-label fw-bold">Days</label>
+                <label asp-for="Days" class="form-label fw-bold">@Localizer["lbl_DeducationDay"]</label>
                 <input asp-for="Days" class="form-control form-control-lg readonly-background" type="number" readonly id="DaysInput" />
                 <span asp-validation-for="Days" class="text-danger"></span>
             </div>

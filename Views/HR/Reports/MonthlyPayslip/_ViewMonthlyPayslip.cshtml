@@ -104,7 +104,7 @@
                                 <p class="text-nowrap ">@Localizer["lbl_Salary"]</p>
                             </div>
                             <div class="col-3 bbottom headercolor" style="justify-items:center">
-                                <p class="text-nowrap">Amount</p>
+                                <p class="text-nowrap">@Localizer["lbl_Amount"]</p>
                             </div>
                             @{
                                 decimal totalSalaryAmount = 0;
@@ -159,10 +159,10 @@
                                 <p class="text-nowrap">Other Allowance</p>
                             </div>
                             <div class="col-3 bbottom headercolor" style="justify-items:center">
-                                <p class="text-nowrap">Amount</p>
+                                <p class="text-nowrap">@Localizer["lbl_Amount"]</p>
                             </div>
                             @{
-                                decimal totalAddionalAllowanceAmount = 0;
+                                decimal totalAdditionalAllowanceAmount = 0;
                             }
 
                             @if (empPayroll?.AdditionalAllowances != null)
@@ -172,13 +172,13 @@
 
                                 {
                                     <div class="col-9">
-                                        <span>@(allowance?.AddionalAllowanceType?.AddionalAllowanceTypeName ?? "N/A")</span>
+                                        <span>@(allowance?.AdditionalAllowanceType?.AdditionalAllowanceTypeName ?? "N/A")</span>
                                     </div>
                                     <div class="col-3" style="text-align-last: center;">
-                                        <span>@(allowance?.AddionalAllowanceAmount?.ToString("F2") ?? "0.00")</span>
+                                        <span>@(allowance?.AdditionalAllowanceAmount?.ToString("F2") ?? "0.00")</span>
                                     </div>
 
-                                    totalAddionalAllowanceAmount += (decimal)(allowance?.AddionalAllowanceAmount ?? 0);
+                                    totalAdditionalAllowanceAmount += (decimal)(allowance?.AdditionalAllowanceAmount ?? 0);
 
                                 }
                             }
@@ -199,7 +199,7 @@
                                         <p class="text-nowrap">Total :</p>
                                     </div>
                                     <div class="col-3 bbottom" style="justify-items:center">
-                                        <p class="text-nowrap">@totalAddionalAllowanceAmount.ToString("F2")</p>
+                                        <p class="text-nowrap">@totalAdditionalAllowanceAmount.ToString("F2")</p>
                                     </div>
                                 </div>
                             </div>
@@ -211,7 +211,7 @@
                                 <p class="text-nowrap">Overtime</p>
                             </div>
                             <div class="col-3 bbottom headercolor" style="justify-items:center">
-                                <p class="text-nowrap">Amount</p>
+                                <p class="text-nowrap">@Localizer["lbl_Amount"]</p>
                             </div>
                             @{
                                 decimal totalovertimeAmount = 0;
@@ -266,7 +266,7 @@
                                 <p class="text-nowrap">Deduction</p>
                             </div>
                             <div class="col-3 bbottom headercolor" style="justify-items:center">
-                                <p class="text-nowrap">Amount</p>
+                                <p class="text-nowrap">@Localizer["lbl_Amount"]</p>
                             </div>
                             @{
                                 decimal totaldeductionDaysamount = 0;
@@ -318,7 +318,7 @@
                                 <p class="text-nowrap">Fixed Deduction</p>
                             </div>
                             <div class="col-3 bbottom headercolor" style="justify-items:center">
-                                <p class="text-nowrap">Amount</p>
+                                <p class="text-nowrap">@Localizer["lbl_Amount"]</p>
                             </div>
                             @{
                                 decimal totalFixedDeductionAmount = 0;
@@ -371,7 +371,7 @@
                             <div class="col-1 bright bbottom" style="justify-items:center">
                                 <p class="text-nowrap">
                                     @(Math.Round((decimal)(totalSalaryAmount) +
-                                        (decimal)(totalAddionalAllowanceAmount) +
+                                        (decimal)(totalAdditionalAllowanceAmount) +
                                         (decimal)(totalovertimeAmount) -
                                         ((decimal)(totaldeductionDaysamount) +
                                         (decimal)(totalFixedDeductionAmount)), 2))

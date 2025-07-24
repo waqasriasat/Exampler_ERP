@@ -1,0 +1,111 @@
+@model Exampler_ERP.Models.HR_AdditionalAllowance
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+<script>
+    $(document).ready(function () {
+        console.log('Document is ready.');
+
+        function updateHiddenFields() {
+            $('#hiddenFieldsContainer').empty(); // Clear existing hidden fields
+
+            var AdditionalAllowanceID = $('#AdditionalAllowanceID').val(); // Get the AdditionalAllowanceID from the form
+
+            var checkedRoles = $('.AdditionalAllowancetype-checkbox:checked');
+            checkedRoles.each(function (index) {
+                var AdditionalAllowanceTypeID = $(this).val();
+                var AdditionalAllowanceAmountInput = $('#AdditionalAllowanceAmount_' + AdditionalAllowanceTypeID);
+                var AdditionalAllowanceAmount = AdditionalAllowanceAmountInput.val();
+
+                $('#hiddenFieldsContainer').append(
+                    `<div class="row">
+                                        <input type="hidden" name="AdditionalAllowanceDetails[${index}].AdditionalAllowanceID" value="${AdditionalAllowanceID}" id="hidden_AdditionalAllowanceID_${AdditionalAllowanceTypeID}" />
+                                        <input type="hidden" name="AdditionalAllowanceDetails[${index}].AdditionalAllowanceTypeID" value="${AdditionalAllowanceTypeID}" id="hidden_AdditionalAllowanceTypeID_${AdditionalAllowanceTypeID}" />
+                                        <input type="hidden" name="AdditionalAllowanceDetails[${index}].AdditionalAllowanceAmount" value="${AdditionalAllowanceAmount}" id="hidden_AdditionalAllowanceAmount_${AdditionalAllowanceTypeID}" />
+                            </div>`
+                );
+            });
+        }
+
+        // Event handler for AdditionalAllowancetype checkbox change
+        $(document).on('change', '.AdditionalAllowancetype-checkbox', function () {
+            var AdditionalAllowanceTypeID = $(this).val();
+            var AdditionalAllowanceAmountInput = $('#AdditionalAllowanceAmount_' + AdditionalAllowanceTypeID);
+
+            if ($(this).is(':checked')) {
+                AdditionalAllowanceAmountInput.removeAttr('readonly');
+            } else {
+                AdditionalAllowanceAmountInput.val('').attr('readonly', true);
+            }
+
+            // Update hidden fields after checkbox change
+            updateHiddenFields();
+        });
+
+        // Event handler for AdditionalAllowance amount input change
+        $(document).on('input', '.AdditionalAllowanceAmount', function () {
+            // Update hidden fields after AdditionalAllowance amount change
+            updateHiddenFields();
+        });
+
+        // Initial call to update hidden fields on page load
+        updateHiddenFields();
+    });
+</script>
+<!-- Employee selection -->
+<div class="row">
+    <div class="col-12 mb-2">
+        <label asp-for="EmployeeID" class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
+        <select asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control form-control-lg"></select>
+        <span asp-validation-for="EmployeeID" class="text-danger"></span>
+    </div>
+
+    <!-- Month and Year selection -->
+    <div class="col-6">
+        <div class="form-group">
+            <label asp-for="MonthTypeID" class="form-label fw-bold">@Localizer["lbl_Month"]</label>
+            <select asp-for="MonthTypeID" asp-items="@(new SelectList(ViewBag.MonthsList, "Value", "Text"))" class="form-control form-control-lg"></select>
+            <span asp-validation-for="MonthTypeID" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="form-group">
+            <label asp-for="Year" class="form-label fw-bold">@Localizer["lbl_Year"]</label>
+            <select asp-for="Year" class="form-control form-control-lg">
+                @for (int year = DateTime.Now.Year; year >= 1900; year--)
+
+                {
+                    <option value="@year">@year</option>
+                }
+            </select>
+            <span asp-validation-for="Year" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+
+<!-- Additional Allowance Types with Amounts -->
+<div class="row AdditionalAllowancetype-container">
+
+
+    <div class="col-9">
+        @foreach (var AdditionalAllowancetype in (IEnumerable<dynamic>)ViewBag.AdditionalAllowanceTypeList)
+        {
+            <div class="form-check">
+                <input class="form-check-input AdditionalAllowancetype-checkbox" type="checkbox" name="AdditionalAllowanceTypes" value="@AdditionalAllowancetype.Value" id="AdditionalAllowancetype_@AdditionalAllowancetype.Value" @(Model.AdditionalAllowanceDetails.Any(m => m.AdditionalAllowanceTypeID == AdditionalAllowancetype.Value) ? "checked" : "") />
+                <label class="form-control form-check-label" for="AdditionalAllowancetype_@AdditionalAllowancetype.Value">@AdditionalAllowancetype.Text</label>
+                <input type="hidden" class="form-control form-control-lg" id="AdditionalAllowanceID" name="AdditionalAllowanceID" value="@Model.AdditionalAllowanceID" />
+            </div>
+        }
+        </div>
+        <div class="col-3">
+        @foreach (var AdditionalAllowancetype in (IEnumerable<dynamic>)ViewBag.AdditionalAllowanceTypeList)
+        {
+            double? AdditionalAllowanceAmount = Model.AdditionalAllowanceDetails.FirstOrDefault(m => m.AdditionalAllowanceTypeID == AdditionalAllowancetype.Value)?.AdditionalAllowanceAmount;
+            string formattedAdditionalAllowanceAmount = AdditionalAllowanceAmount.HasValue ? AdditionalAllowanceAmount.Value.ToString("0.00") : string.Empty;
+            <input type="text" class="form-control AdditionalAllowanceAmount" id="AdditionalAllowanceAmount_@AdditionalAllowancetype.Value" value="@formattedAdditionalAllowanceAmount" @(Model.AdditionalAllowanceDetails.Any(m => m.AdditionalAllowanceTypeID == AdditionalAllowancetype.Value) ? "" : "readonly") />
+        }
+    </div>
+ 
+</div>
+
+<!-- Hidden fields for storing selected allowances and amounts -->
+<div id="hiddenFieldsContainer"></div>

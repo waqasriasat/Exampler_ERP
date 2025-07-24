@@ -1,11 +1,11 @@
-@model Exampler_ERP.Models.Settings_AddionalAllowanceType
+@model Exampler_ERP.Models.Settings_AdditionalAllowanceType
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-<div class="modal fade" id="addAddionalAllowanceTypeModal" tabindex="-1" role="dialog" aria-labelledby="addAddionalAllowanceTypeModalLabel" aria-hidden="true">
+<div class="modal fade" id="addAdditionalAllowanceTypeModal" tabindex="-1" role="dialog" aria-labelledby="addAdditionalAllowanceTypeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="addAddionalAllowanceTypeModalLabel">
+                <h5 class="modal-title" id="addAdditionalAllowanceTypeModalLabel">
                     <i class="fas fa-key me-2"></i>
 					@Localizer["lbl_AddNewAdditionalAllowanceType"]
                 </h5>
@@ -13,11 +13,11 @@
 
             </div>
             <div class="modal-body">
-                <form id="addAddionalAllowanceTypeForm">
+                <form id="addAdditionalAllowanceTypeForm">
                     <div class="row">
                         <div class="col-12">
-							<label for="AddionalAllowanceTypeName" class="form-label fw-bold">@Localizer["lbl_AdditionalAllowanceTypeName"]</label>
-                            <input type="text" class="form-control form-control-lg" id="AddionalAllowanceTypeName" name="AddionalAllowanceTypeName" value="@Model.AddionalAllowanceTypeName" />
+							<label for="AdditionalAllowanceTypeName" class="form-label fw-bold">@Localizer["lbl_AdditionalAllowanceTypeName"]</label>
+                            <input type="text" class="form-control form-control-lg" id="AdditionalAllowanceTypeName" name="AdditionalAllowanceTypeName" value="@Model.AdditionalAllowanceTypeName" />
                         </div>
                         <div class="col-6">
                             <label asp-for="ActiveYNID" class="form-label fw-bold">@Localizer["lbl_Active"]</label>
@@ -32,7 +32,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="Close">@Localizer["lbl_Close"]</button>
-                <button type="button" class="btn btn-success" id="saveNewAddionalAllowanceType">@Localizer["lbl_Save"] </button>
+                <button type="button" class="btn btn-success" id="saveNewAdditionalAllowanceType">@Localizer["lbl_Save"] </button>
             </div>
         </div>
     </div>

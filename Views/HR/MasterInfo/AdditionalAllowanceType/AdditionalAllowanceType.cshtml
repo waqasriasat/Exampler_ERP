@@ -1,0 +1,173 @@
+@model IEnumerable<Exampler_ERP.Models.Settings_AdditionalAllowanceType>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+	ViewData["Title"] = @Localizer["lbl_MasterInformation"] + " - " + @Localizer["lbl_AdditionalAllowanceType"];
+}
+
+@section PageScripts {
+
+    <script>
+        $(document).ready(function () {
+            $('#AdditionalAllowanceTypeListContainer').on('click', '.editAdditionalAllowanceTypeLink', function (e) {
+              e.preventDefault();
+              var AdditionalAllowanceTypeId = $(this).data('id');
+              $.get('@Url.Action("Edit", "AdditionalAllowanceType")', { id: AdditionalAllowanceTypeId }, function (data) {
+                $('#editAdditionalAllowanceTypeModalContainer').html(data);
+                $('#editAdditionalAllowanceTypeModal').modal('show');
+              });
+            });
+
+            $('#editAdditionalAllowanceTypeModalContainer').on('click', '#saveChanges', function () {
+                var formData = $('#editAdditionalAllowanceTypeForm').serialize();
+                $.post('@Url.Action("Edit", "AdditionalAllowanceType")', formData, function (response) {
+                    if (response.success) {
+                            $('#editAdditionalAllowanceTypeModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "AdditionalAllowanceType")', function (partialHtml) {
+                                var html = $(partialHtml).find('#AdditionalAllowanceTypeListContainer').html();
+                                $('#AdditionalAllowanceTypeListContainer').html(html);
+                            });
+                        }
+                });
+            });
+
+            // Add new AdditionalAllowanceType modal popup
+            $('.addAdditionalAllowanceTypeLink').click(function () {
+                $.get('@Url.Action("Create", "AdditionalAllowanceType")', function (data) {
+                    $('#addAdditionalAllowanceTypeModalContainer').html(data);
+                    $('#addAdditionalAllowanceTypeModal').modal('show');
+                });
+            });
+
+            // Save new AdditionalAllowanceType form
+            $('#addAdditionalAllowanceTypeModalContainer').on('click', '#saveNewAdditionalAllowanceType', function () {
+                var formData = $('#addAdditionalAllowanceTypeForm').serialize();
+                $.post('@Url.Action("Create", "AdditionalAllowanceType")', formData, function (response) {
+                    if (response.success) {
+                            $('#addAdditionalAllowanceTypeModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "AdditionalAllowanceType")', function (partialHtml) {
+                                var html = $(partialHtml).find('#AdditionalAllowanceTypeListContainer').html();
+                                $('#AdditionalAllowanceTypeListContainer').html(html);
+                            });
+                        }
+                });
+            });
+
+            // Close Modal Add Contrainer
+            $('#addAdditionalAllowanceTypeModalContainer').on('click', '#Close', function () {
+                $('#addAdditionalAllowanceTypeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Close Modal Edit Contrainer
+            $('#editAdditionalAllowanceTypeModalContainer').on('click', '#Close', function () {
+                $('#editAdditionalAllowanceTypeModal').modal('hide'); // Close the modal directly
+                // Additional logic if needed
+            });
+
+            // Delete AdditionalAllowanceType
+            $('#AdditionalAllowanceTypeListContainer').on('click', '.deleteAdditionalAllowanceTypeLink', function (e) {
+                e.preventDefault();
+                var AdditionalAllowanceTypeId = $(this).data('id');
+                $.post('@Url.Action("Delete", "AdditionalAllowanceType")', { id: AdditionalAllowanceTypeId }, function (response) {
+                    if (response.success) {
+                    $.get('@Url.Action("Index", "AdditionalAllowanceType")', function (partialHtml) {
+                      var html = $(partialHtml).find('#AdditionalAllowanceTypeListContainer').html();
+                      $('#AdditionalAllowanceTypeListContainer').html(html);
+                    });
+                  }
+                });
+            });
+
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+        });
+    </script>
+    <script>
+        function printAdditionalAllowanceTypes() {
+            var printWindow = window.open('@Url.Action("Print", "AdditionalAllowanceType")', '_blank');
+            printWindow.focus();
+        }
+        $('#searchAdditionalAllowanceTypeButton').click(function () {
+            var searchValue = $('#searchAdditionalAllowanceTypeInput').val();
+            window.location.href = '@Url.Action("Index", "AdditionalAllowanceType")?searchAdditionalAllowanceTypeName=' + searchValue;
+        });
+    </script>
+}
+<h4 class="py-3 mb-4">
+		<span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> @Localizer["lbl_AdditionalAllowanceType"]
+</h4>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
+            <div class="Searching-Box-padding">
+                <div class="row mb-4">
+                    <div class="col-md-8" style="padding-bottom: 15px;">
+                        <!-- Search Field and Button -->
+                        <div class="input-group">
+								<input type="text" class="form-control" placeholder="@Localizer["lbl_SearchAdditionalAllowanceTypeName"]" id="searchAdditionalAllowanceTypeInput">
+                            <button class="btn btn-outline-secondary" type="button" id="searchAdditionalAllowanceTypeButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <!-- Action Buttons -->
+                        <button type="button" class="btn btn-primary addAdditionalAllowanceTypeLink">@Localizer["lbl_AddNew"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "AdditionalAllowanceType")'">@Localizer["lbl_Excel"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printAdditionalAllowanceTypes()">@Localizer["lbl_Print"]</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+				<h5 class="card-header">@Localizer["lbl_AdditionalAllowanceTypeList"]</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                       <div class="col-10 col-md-10 col-lg-10">
+                            <div class="row">
+                                <div class="col-8">
+										<p class="text-nowrap">@Localizer["lbl_AdditionalAllowanceTypeName"]</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">@Localizer["lbl_Active"]</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">@Localizer["lbl_Delete"]</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="AdditionalAllowanceTypeListContainer">
+                    @Html.Partial("~/Views/HR/MasterInfo/AdditionalAllowanceType/_AdditionalAllowanceTypeListPartial.cshtml", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include the modal partial -->
+<div id="editAdditionalAllowanceTypeModalContainer"></div>
+<div id="addAdditionalAllowanceTypeModalContainer"></div>

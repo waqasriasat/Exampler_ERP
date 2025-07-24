@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editJoiningModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit Joining
+                    @Localizer["lbl_EditJoining"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -24,7 +24,7 @@
                         </div>
                         <div class="col-12 mb-2">
                             <div class="form-group">
-                                <label for="JoiningDate" class="form-label fw-bold">Joining @Localizer["lbl_Date"]</label>
+								<label for="JoiningDate" class="form-label fw-bold">@Localizer["lbl_JoiningDate"]</label>
                                 <input type="date" class="form-control form-control-lg" id="JoiningDate" name="JoiningDate" value="@Model.FirstOrDefault()?.JoiningDate.ToString("yyyy-MM-dd")" />
                             </div>
                         </div>

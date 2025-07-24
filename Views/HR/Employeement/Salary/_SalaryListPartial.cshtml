@@ -1,31 +1,31 @@
 @model Exampler_ERP.Models.Temp.EmployeeListViewModel
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
- @foreach (var item in Model.EmployeeCount)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-11 col-md-11 col-lg-11">
-                                <div class="row">
-                                        <div class="col-12 col-md-12 col-lg-6">
-                                            <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@Html.DisplayFor(modelItem => item.EmployeeName)</p>
-                                        </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <p class="text-nowrap"><span class="smallAdd">Type Count : </span>@Html.DisplayFor(modelItem => item.TypeCount)</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-1 col-md-1 col-lg-1">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-12">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editSalaryLink" data-id="@item.EmployeeID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+@foreach (var item in Model.EmployeeCount)
+{
+	<div class="col-12 col-md-12 col-lg-12 GVDetail">
+		<div class="row">
+			<div class="col-11 col-md-11 col-lg-11">
+				<div class="row">
+					<div class="col-12 col-md-12 col-lg-6">
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@Html.DisplayFor(modelItem => item.EmployeeName)</p>
+					</div>
+					<div class="col-12 col-md-12 col-lg-6">
+						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Type Count"] : </span>@Html.DisplayFor(modelItem => item.TypeCount)</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-1 col-md-1 col-lg-1">
+				<div class="row">
+					<div class="col-12 col-md-12 col-lg-12">
+						<div class="btn-group" role="group" aria-label="Actions">
+							<a href="javascript:void(0)" class="editSalaryLink" data-id="@item.EmployeeID">
+								<i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}

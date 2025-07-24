@@ -226,14 +226,14 @@ namespace Exampler_ERP.Controllers.HR.HR
 
     //    worksheet.Cells["A1"].Value = "Holiday ID";
     //    worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
-    //    worksheet.Cells["C1"].Value = "Issue Date";
-    //    worksheet.Cells["D1"].Value = "Salary Type";
+    //    worksheet.Cells["C1"].Value = _localizer["lbl_IssueDate"];
+    //    worksheet.Cells["D1"].Value = _localizer["lbl_SalaryType"];
     //    worksheet.Cells["E1"].Value = "Holiday Type";
-    //    worksheet.Cells["F1"].Value = "Vacation Days";
-    //    worksheet.Cells["G1"].Value = "Daily Hours";
-    //    worksheet.Cells["H1"].Value = "Daily Minutes";
-    //    worksheet.Cells["I1"].Value = "Final Approval ID";
-    //    worksheet.Cells["J1"].Value = "Approval Process ID";
+    //    worksheet.Cells["F1"].Value = _localizer["lbl_VacationDays"];
+    //    worksheet.Cells["G1"].Value = _localizer["lbl_DutyHours"];
+    //    worksheet.Cells["H1"].Value = _localizer["lbl_DutyMinutes"];
+    //    worksheet.Cells["I1"].Value = _localizer["lbl_FinalApprovalID"];
+    //    worksheet.Cells["J1"].Value = _localizer["lbl_ApprovalProcessID"];
 
     //    for (int i = 0; i < Holidays.Count; i++)
     //    {

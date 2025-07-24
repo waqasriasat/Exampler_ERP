@@ -396,17 +396,17 @@ namespace Exampler_ERP.Controllers.MasterInfo
                 }
                 if (ProcessTypeID == 8)
                 {
-                  var addionalAllowance = await _appDBContext.HR_AddionalAllowances
-                                                           .Where(u => u.AddionalAllowanceID == transactionID)
+                  var AdditionalAllowance = await _appDBContext.HR_AdditionalAllowances
+                                                           .Where(u => u.AdditionalAllowanceID == transactionID)
                                                            .FirstOrDefaultAsync();
 
 
-                  if (addionalAllowance != null)
+                  if (AdditionalAllowance != null)
                   {
-                    addionalAllowance.FinalApprovalID = 1;
-                    addionalAllowance.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+                    AdditionalAllowance.FinalApprovalID = 1;
+                    AdditionalAllowance.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
-                    _appDBContext.Update(addionalAllowance);
+                    _appDBContext.Update(AdditionalAllowance);
                     await _appDBContext.SaveChangesAsync();
                   }
                 }
@@ -492,7 +492,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
                     _appDBContext.HR_MonthlyPayrolls.Add(monthlyPayroll);
                     await _appDBContext.SaveChangesAsync();
-                    var additionalAllowances = await _appDBContext.HR_AddionalAllowances
+                    var additionalAllowances = await _appDBContext.HR_AdditionalAllowances
                     .Where(a => a.MonthTypeID == monthlyPayrollPosted.MonthTypeID && a.Year == monthlyPayrollPosted.Year)
                     .ToListAsync();
 
@@ -919,17 +919,17 @@ namespace Exampler_ERP.Controllers.MasterInfo
           }
           if (ProcessTypeID == 8)
           {
-            var addionalAllowance = await _appDBContext.HR_AddionalAllowances
-                                                     .Where(u => u.AddionalAllowanceID == transactionID)
+            var AdditionalAllowance = await _appDBContext.HR_AdditionalAllowances
+                                                     .Where(u => u.AdditionalAllowanceID == transactionID)
                                                      .FirstOrDefaultAsync();
 
 
-            if (addionalAllowance != null)
+            if (AdditionalAllowance != null)
             {
-              addionalAllowance.FinalApprovalID = 2;
-              addionalAllowance.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
+              AdditionalAllowance.FinalApprovalID = 2;
+              AdditionalAllowance.ProcessTypeApprovalID = processTypeApprovalDetail.ProcessTypeApprovalID;
 
-              _appDBContext.Update(addionalAllowance);
+              _appDBContext.Update(AdditionalAllowance);
               await _appDBContext.SaveChangesAsync();
             }
           }
@@ -1304,9 +1304,9 @@ namespace Exampler_ERP.Controllers.MasterInfo
       }
       if (processTypeID == 8)
       {
-        var allowance = await _appDBContext.HR_AddionalAllowances
-         .Include(a => a.AddionalAllowanceDetails) // Include the details for editing
-         .FirstOrDefaultAsync(a => a.AddionalAllowanceID == transactionID);
+        var allowance = await _appDBContext.HR_AdditionalAllowances
+         .Include(a => a.AdditionalAllowanceDetails) // Include the details for editing
+         .FirstOrDefaultAsync(a => a.AdditionalAllowanceID == transactionID);
 
         if (allowance == null)
         {
@@ -1314,8 +1314,8 @@ namespace Exampler_ERP.Controllers.MasterInfo
         }
 
         // Prepare necessary ViewBag data for the edit view
-        ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
-            .Select(r => new { Value = r.AddionalAllowanceTypeID, Text = r.AddionalAllowanceTypeName })
+        ViewBag.AdditionalAllowanceTypeList = await _appDBContext.Settings_AdditionalAllowanceTypes
+            .Select(r => new { Value = r.AdditionalAllowanceTypeID, Text = r.AdditionalAllowanceTypeName })
             .ToListAsync();
 
         ViewBag.EmployeesList = await _utils.GetEmployee();

@@ -7,13 +7,13 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addOverTimeModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add Over Time
+					@Localizer["lbl_AddOverTime"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="addOverTimeForm" method="post" asp-action="Create" asp-controller="OverTime" enctype="multipart/form-data">
-                    <h5 class="modal-title" style="padding-top:10px">OverTime Details</h5>
+                    <h5 class="modal-title" style="padding-top:10px">@Localizer["lbl_OverTimeDetail"]</h5>
                     <hr />
                     <div class="row">
                         <div class="col-12">
@@ -29,7 +29,7 @@
                             <!-- OverTime Type Selection -->
                             <div class="row">
                                 <div class="col-12">
-                                    <label asp-for="OverTimeTypeID" class="form-label fw-bold">Over Time @Localizer["lbl_Type"]</label>
+                                    <label asp-for="OverTimeTypeID" class="form-label fw-bold">@Localizer["lbl_OverTimeType"]</label>
                                     <select asp-for="OverTimeTypeID" asp-items="@(new SelectList(ViewBag.OverTimeTypesList, "Value", "Text"))" class="form-control form-control-lg"></select>
                                     <span asp-validation-for="OverTimeTypeID" class="text-danger"></span>
                                 </div>
@@ -39,12 +39,12 @@
                             <!-- Calculated Month, Year, Days -->
                             <div class="row">
                                 <div class="col-6">
-                                    <label asp-for="MonthTypeID" class="form-label fw-bold">Month</label>
+                                    <label asp-for="MonthTypeID" class="form-label fw-bold">@Localizer["lbl_Month"]</label>
                                     <select asp-for="MonthTypeID" asp-items="@(new SelectList(ViewBag.MonthsList, "Value", "Text"))" class="form-control form-control-lg"></select>
                                     <span asp-validation-for="MonthTypeID" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="Year" class="form-label fw-bold">Year</label>
+                                    <label asp-for="Year" class="form-label fw-bold">@Localizer["lbl_Year"]</label>
                                     <select asp-for="Year" class="form-control form-control-lg">
                                         @for (int year = DateTime.Now.Year; year >= 1900; year--)
                                         {
@@ -64,7 +64,7 @@
                                     <span asp-validation-for="Days" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="Hours" class="form-label fw-bold"> Total Hours</label>
+                                    <label asp-for="Hours" class="form-label fw-bold">@Localizer["lbl_TotalHours"]</label>
                                     <input asp-for="Hours" class="form-control form-control-lg" type="number" placeholder="Enter overtime hours" />
                                     <span asp-validation-for="Hours" class="text-danger"></span>
                                 </div>
@@ -74,7 +74,7 @@
                                     <span asp-validation-for="OvertimeRateID" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="Amount" class="form-label fw-bold">Amount</label>
+                                    <label asp-for="Amount" class="form-label fw-bold">@Localizer["lbl_Amount"]</label>
                                     <input asp-for="Amount" class="form-control form-control-lg" type="number" placeholder="Enter overtime amount" />
                                     <span asp-validation-for="Amount" class="text-danger"></span>
                                 </div>

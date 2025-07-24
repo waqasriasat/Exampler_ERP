@@ -1,4 +1,4 @@
-@model IEnumerable<Exampler_ERP.Models.Settings_AddionalAllowanceType>
+@model IEnumerable<Exampler_ERP.Models.Settings_AdditionalAllowanceType>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 <!DOCTYPE html>
@@ -37,12 +37,12 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var AddionalAllowanceType in Model)
+            @foreach (var AdditionalAllowanceType in Model)
             {
                 <tr>
-                    <td>@AddionalAllowanceType.AddionalAllowanceTypeID</td>
-                    <td>@AddionalAllowanceType.AddionalAllowanceTypeName</td>
-                    <td>@(AddionalAllowanceType.ActiveYNID == 1 ? "Yes" : "No")</td>
+                    <td>@AdditionalAllowanceType.AdditionalAllowanceTypeID</td>
+                    <td>@AdditionalAllowanceType.AdditionalAllowanceTypeName</td>
+                    <td>@(AdditionalAllowanceType.ActiveYNID == 1 ? "Yes" : "No")</td>
                 </tr>
             }
         </tbody>

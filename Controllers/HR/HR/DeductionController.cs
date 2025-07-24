@@ -244,13 +244,13 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("Deduction");
-        worksheet.Cells["A1"].Value = "Deduction ID";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Deduction"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_DeductionID"];
         worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
-        worksheet.Cells["C1"].Value = "Deduction Type";
-        worksheet.Cells["D1"].Value = "Month";
-        worksheet.Cells["E1"].Value = "Year";
-        worksheet.Cells["F1"].Value = "Days";
+        worksheet.Cells["C1"].Value = _localizer["lbl_DeductionType"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_Month"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_Year"];
+        worksheet.Cells["F1"].Value = _localizer["lbl_DeducationDay"];
 
 
         for (int i = 0; i < Deduction.Count; i++)
@@ -269,7 +269,7 @@ namespace Exampler_ERP.Controllers.HR.HR
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"Deduction-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_Deduction"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

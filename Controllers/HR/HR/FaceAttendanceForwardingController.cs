@@ -208,25 +208,25 @@ namespace Exampler_ERP.Controllers.HR.HR
           }
           if (absentDays < 0)
           {
-            var addionalAllowance = _appDBContext.HR_AddionalAllowances
+            var AdditionalAllowance = _appDBContext.HR_AdditionalAllowances
                 .Where(a => a.EmployeeID == employeeID && a.MonthTypeID == monthID && a.Year == year)
                 .FirstOrDefault();
 
-            if (addionalAllowance != null)
+            if (AdditionalAllowance != null)
             {
               var allowanceAmount = Math.Abs(absentDays) * perDaySalarys;
-              var allowanceDetail = new HR_AddionalAllowanceDetail
+              var allowanceDetail = new HR_AdditionalAllowanceDetail
               {
-                AddionalAllowanceID = addionalAllowance.AddionalAllowanceID,
-                AddionalAllowanceTypeID = 1,
-                AddionalAllowanceAmount = allowanceAmount
+                AdditionalAllowanceID = AdditionalAllowance.AdditionalAllowanceID,
+                AdditionalAllowanceTypeID = 1,
+                AdditionalAllowanceAmount = allowanceAmount
               };
 
-              _appDBContext.HR_AddionalAllowanceDetails.Add(allowanceDetail);
+              _appDBContext.HR_AdditionalAllowanceDetails.Add(allowanceDetail);
             }
             else
             {
-              var newAllowance = new HR_AddionalAllowance
+              var newAllowance = new HR_AdditionalAllowance
               {
                 EmployeeID = employeeID,
                 MonthTypeID = monthID,
@@ -237,18 +237,18 @@ namespace Exampler_ERP.Controllers.HR.HR
                 PayRollID = 0
               };
 
-              _appDBContext.HR_AddionalAllowances.Add(newAllowance);
+              _appDBContext.HR_AdditionalAllowances.Add(newAllowance);
               _appDBContext.SaveChanges();
 
               var allowanceAmount = Math.Abs(absentDays) * perDaySalarys;
-              var allowanceDetail = new HR_AddionalAllowanceDetail
+              var allowanceDetail = new HR_AdditionalAllowanceDetail
               {
-                AddionalAllowanceID = newAllowance.AddionalAllowanceID,
-                AddionalAllowanceTypeID = 3,
-                AddionalAllowanceAmount = allowanceAmount
+                AdditionalAllowanceID = newAllowance.AdditionalAllowanceID,
+                AdditionalAllowanceTypeID = 3,
+                AdditionalAllowanceAmount = allowanceAmount
               };
 
-              _appDBContext.HR_AddionalAllowanceDetails.Add(allowanceDetail);
+              _appDBContext.HR_AdditionalAllowanceDetails.Add(allowanceDetail);
             }
           }
         }

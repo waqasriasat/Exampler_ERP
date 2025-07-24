@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Exampler_ERP.Models
 {
-  public class HR_AddionalAllowance
+  public class HR_AdditionalAllowance
   {
     [Key]
-    public int AddionalAllowanceID { get; set; }
+    public int AdditionalAllowanceID { get; set; }
     [Required]
     public int EmployeeID { get; set; }
     [ForeignKey("EmployeeID")]
@@ -20,6 +20,6 @@ namespace Exampler_ERP.Models
     public int? PostedID { get; set; }
     public int? PayRollID { get; set; }
 
-    public List<HR_AddionalAllowanceDetail> AddionalAllowanceDetails { get; set; } = new List<HR_AddionalAllowanceDetail>();
+    public List<HR_AdditionalAllowanceDetail> AdditionalAllowanceDetails { get; set; } = new List<HR_AdditionalAllowanceDetail>();
   }
 }

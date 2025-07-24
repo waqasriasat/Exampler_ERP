@@ -17,10 +17,10 @@
                             <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1">
-                            <p class="text-nowrap">Month</p>
+                            <p class="text-nowrap">@Localizer["lbl_Month"]</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1">
-                            <p class="text-nowrap">Year</p>
+                            <p class="text-nowrap">@Localizer["lbl_Year"]</p>
                         </div>
                         @foreach (var model in Model)
                         {
@@ -90,20 +90,20 @@
                             <div class="col-12 col-md-1 col-lg-1" style="display:none">
                                 @*  *@
                                 <p class="text-nowrap">
-                                    <span class="smallAdd">Month : </span>
+                                    <span class="smallAdd">@Localizer["lbl_Month"] : </span>
                                     <input type="hidden" id="MonthID" value="@(model.MonthID)" />
                                     @(model.MonthID)
                                 </p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1">
                                 <p class="text-nowrap">
-                                    <span class="smallAdd">Month : </span>
+                                    <span class="smallAdd">@Localizer["lbl_Month"] : </span>
                                     @(model.MonthName)
                                 </p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1">
                                 <p class="text-nowrap">
-                                    <span class="smallAdd">Year : </span>
+                                    <span class="smallAdd">@Localizer["lbl_Year"] : </span>
                                     <input type="hidden" id="Year" value="@(model.Year)" />
                                     @(model.Year)
                                 </p>

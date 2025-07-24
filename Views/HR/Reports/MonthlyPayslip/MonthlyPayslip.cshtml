@@ -35,12 +35,12 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <h5 class="card-header">Search Box</h5>
+                <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
                 <div class="Searching-Box-padding" style="padding-bottom: 15px;">
                     <div class="row mb-4">
                         <!-- From Date Field -->
                         <div class="col-md-4 mb-4">
-                            <label class="form-label fw-bold">Month @Localizer["lbl_Type"]</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_Month"]</label>
                             <select id="MonthID" name="MonthsTypeID" class="form-control">
                                 @foreach (var item in ViewBag.MonthsTypeList)
                                 {
@@ -57,7 +57,7 @@
                         </div>
                         <!-- To Date Field -->
                         <div class="col-md-4 mb-4">
-                            <label for="YearsTypeID" class="form-label fw-bold">Year</label>
+                            <label for="YearsTypeID" class="form-label fw-bold">@Localizer["lbl_Year"]</label>
                             <select id="Year" name="YearsTypeID" class="form-control">
                                 @for (int year = DateTime.Now.Year; year >= 1900; year--)
                                 {
@@ -92,7 +92,7 @@
                     <!-- Action Buttons -->
                     <div class="row">
                         <div class="col-md-12 text-end">
-                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
                             <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "OverTime")'">@Localizer["lbl_Excel"]</button>
                             <button type="button" class="btn btn-outline-secondary" onclick="printMonthlyPayslips()">@Localizer["lbl_Print"]</button>
 

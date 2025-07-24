@@ -18,12 +18,12 @@ namespace Exampler_ERP.Controllers.HR.Financial
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<FixedDeductionController> _localizer;
     private readonly IConfiguration _configuration;
-    private readonly ILogger<AddionalAllowanceController> _logger;
+    private readonly ILogger<AdditionalAllowanceController> _logger;
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public FixedDeductionController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AddionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<FixedDeductionController> localizer)
+    public FixedDeductionController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AdditionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<FixedDeductionController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

@@ -1,7 +1,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Human Resources - HR";
+    ViewData["Title"] = Localizer["lbl_HumanResources"] + " - HR";
 
 
     var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
@@ -87,13 +87,13 @@
                 }
                 @if (accessRightByRoleList.Contains(153) || accessRightByUsertList.Contains(153))
                 {
-                    @*AddionalAllowance*@
+                    @*AdditionalAllowance*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="AddionalAllowance" asp-action="Index">
+                        <a asp-controller="AdditionalAllowance" asp-action="Index">
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Addional Allowance</strong>
+                                        <strong class="text-primary">Additional Allowance</strong>
                                         <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">

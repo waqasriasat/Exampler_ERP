@@ -11,17 +11,17 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
-  public class AddionalAllowanceController : Controller
+  public class AdditionalAllowanceController : Controller
   {
     private readonly AppDBContext _appDBContext;
-    private readonly IStringLocalizer<AddionalAllowanceController> _localizer;
+    private readonly IStringLocalizer<AdditionalAllowanceController> _localizer;
     private readonly IConfiguration _configuration;
-    private readonly ILogger<AddionalAllowanceController> _logger;
+    private readonly ILogger<AdditionalAllowanceController> _logger;
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public AddionalAllowanceController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AddionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<AddionalAllowanceController> localizer)
+    public AdditionalAllowanceController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AdditionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<AdditionalAllowanceController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
@@ -34,7 +34,7 @@ namespace Exampler_ERP.Controllers.HR.HR
     }
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
     {
-      var query = _appDBContext.HR_AddionalAllowances
+      var query = _appDBContext.HR_AdditionalAllowances
         .Include(d => d.Employee)
         .Include(d => d.MonthType)
         .AsQueryable();
@@ -60,7 +60,7 @@ namespace Exampler_ERP.Controllers.HR.HR
             (d.Employee.FirstName + " " + d.Employee.FatherName + " " + d.Employee.FamilyName)
             .Contains(EmployeeName));
       }
-      var addionalAllowances = await query.ToListAsync();
+      var AdditionalAllowances = await query.ToListAsync();
 
       ViewBag.MonthsTypeID = MonthsTypeID;
       ViewBag.YearsTypeID = YearsTypeID;
@@ -69,15 +69,15 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
 
-      return View("~/Views/HR/HR/AddionalAllowance/AddionalAllowance.cshtml", addionalAllowances);
+      return View("~/Views/HR/HR/AdditionalAllowance/AdditionalAllowance.cshtml", AdditionalAllowances);
     }
 
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
-      var allowance = await _appDBContext.HR_AddionalAllowances
-          .Include(a => a.AddionalAllowanceDetails)
-          .FirstOrDefaultAsync(a => a.AddionalAllowanceID == id);
+      var allowance = await _appDBContext.HR_AdditionalAllowances
+          .Include(a => a.AdditionalAllowanceDetails)
+          .FirstOrDefaultAsync(a => a.AdditionalAllowanceID == id);
 
       if (allowance == null)
       {
@@ -88,23 +88,23 @@ namespace Exampler_ERP.Controllers.HR.HR
         //await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "This deduction has already been posted to the Payroll Department and cannot be edited..");
         return NotFound();
       }
-      ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
-         .Select(r => new { Value = r.AddionalAllowanceTypeID, Text = r.AddionalAllowanceTypeName })
+      ViewBag.AdditionalAllowanceTypeList = await _appDBContext.Settings_AdditionalAllowanceTypes
+         .Select(r => new { Value = r.AdditionalAllowanceTypeID, Text = r.AdditionalAllowanceTypeName })
          .ToListAsync();
 
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.MonthsList = await _utils.GetMonthsTypes();
 
-      return PartialView("~/Views/HR/HR/AddionalAllowance/EditAddionalAllowance.cshtml", allowance);
+      return PartialView("~/Views/HR/HR/AdditionalAllowance/EditAdditionalAllowance.cshtml", allowance);
     }
     [HttpPost]
-    public async Task<IActionResult> Edit(HR_AddionalAllowance model)
+    public async Task<IActionResult> Edit(HR_AdditionalAllowance model)
     {
       if (ModelState.IsValid)
       {
-        var existingAllowance = await _appDBContext.HR_AddionalAllowances
-            .Include(a => a.AddionalAllowanceDetails)
-            .FirstOrDefaultAsync(a => a.AddionalAllowanceID == model.AddionalAllowanceID);
+        var existingAllowance = await _appDBContext.HR_AdditionalAllowances
+            .Include(a => a.AdditionalAllowanceDetails)
+            .FirstOrDefaultAsync(a => a.AdditionalAllowanceID == model.AdditionalAllowanceID);
 
         if (existingAllowance == null)
         {
@@ -115,43 +115,43 @@ namespace Exampler_ERP.Controllers.HR.HR
         existingAllowance.MonthTypeID = model.MonthTypeID;
         existingAllowance.Year = model.Year;
 
-        foreach (var existingDetail in existingAllowance.AddionalAllowanceDetails.ToList())
+        foreach (var existingDetail in existingAllowance.AdditionalAllowanceDetails.ToList())
         {
-          var updatedDetail = model.AddionalAllowanceDetails
-               .FirstOrDefault(d => d.AddionalAllowanceDetailID == existingDetail.AddionalAllowanceDetailID);
+          var updatedDetail = model.AdditionalAllowanceDetails
+               .FirstOrDefault(d => d.AdditionalAllowanceDetailID == existingDetail.AdditionalAllowanceDetailID);
 
           if (updatedDetail == null)
           {
-            _appDBContext.HR_AddionalAllowanceDetails.Remove(existingDetail);
+            _appDBContext.HR_AdditionalAllowanceDetails.Remove(existingDetail);
           }
           else
           {
-            existingDetail.AddionalAllowanceTypeID = updatedDetail.AddionalAllowanceTypeID;
-            existingDetail.AddionalAllowanceAmount = updatedDetail.AddionalAllowanceAmount;
+            existingDetail.AdditionalAllowanceTypeID = updatedDetail.AdditionalAllowanceTypeID;
+            existingDetail.AdditionalAllowanceAmount = updatedDetail.AdditionalAllowanceAmount;
           }
         }
 
-        foreach (var newDetail in model.AddionalAllowanceDetails)
+        foreach (var newDetail in model.AdditionalAllowanceDetails)
         {
-          if (newDetail.AddionalAllowanceDetailID == 0)
+          if (newDetail.AdditionalAllowanceDetailID == 0)
           {
-            existingAllowance.AddionalAllowanceDetails.Add(newDetail);
+            existingAllowance.AdditionalAllowanceDetails.Add(newDetail);
           }
         }
 
         await _appDBContext.SaveChangesAsync();
-        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Addional Allowance updated successfully.");
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Additional Allowance updated successfully.");
         return Json(new { success = true });
       }
 
-      ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
-          .Select(r => new { Value = r.AddionalAllowanceTypeID, Text = r.AddionalAllowanceTypeName })
+      ViewBag.AdditionalAllowanceTypeList = await _appDBContext.Settings_AdditionalAllowanceTypes
+          .Select(r => new { Value = r.AdditionalAllowanceTypeID, Text = r.AdditionalAllowanceTypeName })
           .ToListAsync();
 
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.MonthsList = await _utils.GetMonthsTypes();
-      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error updating Addional Allowance. Please check the inputs.");
-      return PartialView("~/Views/HR/HR/AddionalAllowance/EditAddionalAllowance.cshtml", model);
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error updating Additional Allowance. Please check the inputs.");
+      return PartialView("~/Views/HR/HR/AdditionalAllowance/EditAdditionalAllowance.cshtml", model);
     }
 
 
@@ -159,44 +159,44 @@ namespace Exampler_ERP.Controllers.HR.HR
     [HttpGet]
     public async Task<IActionResult> Create()
     {
-      ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
-          .Select(r => new { Value = r.AddionalAllowanceTypeID, Text = r.AddionalAllowanceTypeName })
+      ViewBag.AdditionalAllowanceTypeList = await _appDBContext.Settings_AdditionalAllowanceTypes
+          .Select(r => new { Value = r.AdditionalAllowanceTypeID, Text = r.AdditionalAllowanceTypeName })
           .ToListAsync();
 
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.MonthsList = await _utils.GetMonthsTypes();
 
-      return PartialView("~/Views/HR/HR/AddionalAllowance/AddAddionalAllowance.cshtml", new HR_AddionalAllowance());
+      return PartialView("~/Views/HR/HR/AdditionalAllowance/AddAdditionalAllowance.cshtml", new HR_AdditionalAllowance());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(HR_AddionalAllowance model)
+    public async Task<IActionResult> Create(HR_AdditionalAllowance model)
     {
 
       if (ModelState.IsValid)
       {
-        _appDBContext.HR_AddionalAllowances.Add(model);
+        _appDBContext.HR_AdditionalAllowances.Add(model);
         await _appDBContext.SaveChangesAsync();
 
-        int generatedAddionalAllowanceID = model.AddionalAllowanceID;
-        if (generatedAddionalAllowanceID > 0)
+        int generatedAdditionalAllowanceID = model.AdditionalAllowanceID;
+        if (generatedAdditionalAllowanceID > 0)
         {
           var processCount = await _appDBContext.CR_ProcessTypeApprovalSetups
                               .Where(pta => pta.ProcessTypeID > 0 && pta.ProcessTypeID == 8)
                               .CountAsync();
-          var getEmployeeID = await _appDBContext.HR_AddionalAllowances
-                            .Where(pta => pta.AddionalAllowanceID == generatedAddionalAllowanceID)
+          var getEmployeeID = await _appDBContext.HR_AdditionalAllowances
+                            .Where(pta => pta.AdditionalAllowanceID == generatedAdditionalAllowanceID)
                             .FirstOrDefaultAsync();
           if (processCount > 0)
           {
             var newProcessTypeApproval = new CR_ProcessTypeApproval
             {
               ProcessTypeID = 8,
-              Notes = "Addional Allowance",
+              Notes = "Additional Allowance",
               Date = DateTime.Now,
               EmployeeID = getEmployeeID.EmployeeID,
               UserID = HttpContext.Session.GetInt32("UserID") ?? default(int),
-              TransactionID = generatedAddionalAllowanceID
+              TransactionID = generatedAdditionalAllowanceID
             };
 
             _appDBContext.CR_ProcessTypeApprovals.Add(newProcessTypeApproval);
@@ -231,22 +231,22 @@ namespace Exampler_ERP.Controllers.HR.HR
           else
           {
             model.FinalApprovalID = 1;
-            _appDBContext.HR_AddionalAllowances.Update(model);
+            _appDBContext.HR_AdditionalAllowances.Update(model);
             await _appDBContext.SaveChangesAsync();
-            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Addional Allowance Created successfully. No process setup found, Addional Allowance activated.");
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Additional Allowance Created successfully. No process setup found, Additional Allowance activated.");
           }
         }
-        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Addional Allowance Created successfully. Continue to the Approval Process Setup for Addional Allowance Activation.");
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Additional Allowance Created successfully. Continue to the Approval Process Setup for Additional Allowance Activation.");
         return Json(new { success = true });
       }
 
-      ViewBag.AddionalAllowanceTypeList = await _appDBContext.Settings_AddionalAllowanceTypes
-          .Select(r => new { Value = r.AddionalAllowanceTypeID, Text = r.AddionalAllowanceTypeName })
+      ViewBag.AdditionalAllowanceTypeList = await _appDBContext.Settings_AdditionalAllowanceTypes
+          .Select(r => new { Value = r.AdditionalAllowanceTypeID, Text = r.AdditionalAllowanceTypeName })
           .ToListAsync();
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.MonthsList = await _utils.GetMonthsTypes();
-      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating Addional Allowance. Please check the inputs.");
-      return PartialView("~/Views/HR/HR/AddionalAllowance/AddAddionalAllowance.cshtml", model);
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating Additional Allowance. Please check the inputs.");
+      return PartialView("~/Views/HR/HR/AdditionalAllowance/AddAdditionalAllowance.cshtml", model);
     }
 
 

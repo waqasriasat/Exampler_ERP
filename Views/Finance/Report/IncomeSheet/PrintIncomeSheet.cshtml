@@ -1,4 +1,6 @@
 @model Exampler_ERP.Models.Temp.IncomeSheetViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     Layout = "_BlankLayout"; // Use the appropriate layout
 }
@@ -112,7 +114,7 @@
         <thead>
             <tr>
                 <th>Account Name</th>
-                <th>Amount</th>
+                <th>@Localizer["lbl_Amount"]</th>
             </tr>
         </thead>
         <tbody>
@@ -140,7 +142,7 @@
         <thead>
             <tr>
                 <th>Account Name</th>
-                <th>Amount</th>
+                <th>@Localizer["lbl_Amount"]</th>
             </tr>
         </thead>
         <tbody>

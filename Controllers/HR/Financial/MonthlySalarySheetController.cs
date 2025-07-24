@@ -20,13 +20,13 @@ namespace Exampler_ERP.Controllers.HR.Financial
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<MonthlySalarySheetController> _localizer;
     private readonly IConfiguration _configuration;
-    private readonly ILogger<AddionalAllowanceController> _logger;
+    private readonly ILogger<AdditionalAllowanceController> _logger;
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
 
-    public MonthlySalarySheetController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AddionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<MonthlySalarySheetController> localizer)
+    public MonthlySalarySheetController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AdditionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<MonthlySalarySheetController> localizer)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
@@ -283,7 +283,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
             _appDBContext.HR_MonthlyPayrolls.Add(monthlyPayroll);
             await _appDBContext.SaveChangesAsync();
 
-            var additionalAllowances = await _appDBContext.HR_AddionalAllowances
+            var additionalAllowances = await _appDBContext.HR_AdditionalAllowances
               .Where(a => a.MonthTypeID == MonthID && a.Year == Year)
               .ToListAsync();
 

@@ -24,12 +24,12 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <h5 class="card-header">Search Box</h5>
+                <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
                 <div class="Searching-Box-padding" style="padding-bottom: 15px;">
                     <div class="row mb-4">
                         <!-- From Date Field -->
                         <div class="col-md-4 mb-4">
-                            <label class="form-label fw-bold">Month @Localizer["lbl_Type"]</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_Month"]</label>
                             <select name="MonthsTypeID" class="form-control">
                                 @foreach (var item in ViewBag.MonthsTypeList)
                                 {
@@ -46,7 +46,7 @@
                         </div>
                         <!-- To Date Field -->
                         <div class="col-md-4 mb-4">
-                            <label for="YearsTypeID" class="form-label fw-bold">Year</label>
+                            <label for="YearsTypeID" class="form-label fw-bold">@Localizer["lbl_Year"]</label>
                             <select name="YearsTypeID" class="form-control">
                                 @for (int year = DateTime.Now.Year; year >= 1900; year--)
                                 {
@@ -82,7 +82,7 @@
                     <!-- Action Buttons -->
                     <div class="row">
                         <div class="col-md-12 text-end">
-                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
                             <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "OverTime")'">@Localizer["lbl_Excel"]</button>
                             <button type="button" class="btn btn-outline-secondary" onclick="printMonthlySalarySheets()">@Localizer["lbl_Print"]</button>
                         </div>
@@ -106,7 +106,7 @@
                                     <p class="text-nowrap">@Localizer["lbl_BranchName"]</p>
                                 </div>
                                 <div class="col-4">
-                                    <p class="text-nowrap">Month</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Month"]</p>
                                 </div>
                                 <div class="col-4">
                                     <p class="text-nowrap">Years</p>
@@ -132,10 +132,10 @@
                                         <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_BranchName"]  : </span>@(item.BranchType?.BranchTypeName ?? "N/A")  </p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Month : </span>@(item.MonthType?.MonthTypeName ?? "N/A") </p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Month"] : </span>@(item.MonthType?.MonthTypeName ?? "N/A") </p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Year : </span>@Html.DisplayFor(modelItem => item.Year)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Year"] : </span>@Html.DisplayFor(modelItem => item.Year)</p>
                                     </div>
                                 </div>
                             </div>

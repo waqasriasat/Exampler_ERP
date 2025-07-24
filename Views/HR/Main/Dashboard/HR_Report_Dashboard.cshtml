@@ -1,10 +1,10 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Human Resources - Reports";
+	ViewData["Title"] = Localizer["lbl_HumanResources"] + " - Reports";
 
 
-    var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
+	var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
     var accessRightByUsertList = string.IsNullOrEmpty(accessRightsByUserJson)
         ? new List<int>()
         : System.Text.Json.JsonSerializer.Deserialize<List<int>>(accessRightsByUserJson);
