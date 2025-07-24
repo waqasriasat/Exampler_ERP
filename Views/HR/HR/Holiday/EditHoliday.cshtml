@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editHolidayModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit Holiday
+					@Localizer["lbl_EditHoliday"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="col-12 mb-2">
                             <div class="form-group">
-                                <label asp-for="HolidayTypeID" class="form-label fw-bold">Holiday Name</label>
+                                <label asp-for="HolidayTypeID" class="form-label fw-bold">@Localizer["lbl_HolidayTypeName"]</label>
                                 <select asp-for="HolidayTypeID" asp-items="@(new SelectList(ViewBag.HolidayTypesList, "Value", "Text"))" class="form-control form-control-lg">
                                 </select>
                                 <span asp-validation-for="HolidayTypeID" class="text-danger"></span>
@@ -25,7 +25,7 @@
                         </div>
                         <div class="col-12 mb-2">
                             <div class="form-group">
-                                <label asp-for="HolidayDate" class="form-label fw-bold">@Localizer["lbl_StartDate"]</label>
+								<label asp-for="HolidayDate" class="form-label fw-bold">@Localizer["lbl_HolidayDate"]</label>
                                 <input asp-for="HolidayDate" class="form-control form-control-lg" type="date" />
                                 <span asp-validation-for="HolidayDate" class="text-danger"></span>
                             </div>

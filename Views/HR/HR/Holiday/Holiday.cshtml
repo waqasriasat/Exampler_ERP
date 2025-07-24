@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Localizer["lbl_HumanResources"] + " - Holiday";
+    ViewData["Title"] = Localizer["lbl_HumanResources"] + " - " + Localizer["lbl_Holiday"];
 }
 
 @section PageScripts {
@@ -135,7 +135,7 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">@Localizer["lbl_HumanResources"] /</span> Holiday
+	<span class="text-muted fw-light">@Localizer["lbl_HumanResources"] /</span> @Localizer["lbl_Holiday"]
 </h4>
 <form method="get" action="@Url.Action("Index", "Holiday")">
     <div class="row">
@@ -186,7 +186,7 @@
 
                         <!-- Process Type Dropdown -->
                         <div class="col-md-4 mb-4">
-                            <label class="form-label fw-bold">Holiday @Localizer["lbl_Type"]</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_HolidayType"]</label>
                             <select name="HolidayTypeID" class="form-control">
                                 @foreach (var item in ViewBag.HolidayTypeList)
                                 {
@@ -223,20 +223,20 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Holiday @Localizer["lbl_List"]</h5>
+            <h5 class="card-header">@Localizer["lbl_HolidayList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                         <div class="col-10 col-md-11 col-lg-10">
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="text-nowrap">Holiday @Localizer["lbl_Type"]</p>
+                                    <p class="text-nowrap">@Localizer["lbl_HolidayType"]</p>
                                 </div>
                                 <div class="col-4">
-                                    <p class="text-nowrap">@Localizer["lbl_Date"] /p>
+                                    <p class="text-nowrap">@Localizer["lbl_Date"]</p>
                                 </div>
                                 <div class="col-4">
-                                    <p class="text-nowrap">Approved</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Approval"]</p>
                                 </div>
                             </div>
                         </div>
