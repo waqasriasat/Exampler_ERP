@@ -9,7 +9,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
-  public class JoiningController : Controller
+  public class JoiningController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<JoiningController> _localizer;
@@ -18,7 +18,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public JoiningController(AppDBContext appDBContext, IConfiguration configuration, ILogger<JoiningController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<JoiningController> localizer)
+    public JoiningController(AppDBContext appDBContext, IConfiguration configuration, ILogger<JoiningController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<JoiningController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

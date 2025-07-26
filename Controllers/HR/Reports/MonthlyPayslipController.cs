@@ -12,7 +12,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Reports
 {
-  public class MonthlyPayslip : Controller
+  public class MonthlyPayslip : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<MonthlyPayslip> _localizer;
@@ -22,7 +22,8 @@ namespace Exampler_ERP.Controllers.HR.Reports
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public MonthlyPayslip(AppDBContext appDBContext, IConfiguration configuration, ILogger<MonthlyPayslip> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<MonthlyPayslip> localizer)
+    public MonthlyPayslip(AppDBContext appDBContext, IConfiguration configuration, ILogger<MonthlyPayslip> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<MonthlyPayslip> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

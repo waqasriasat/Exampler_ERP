@@ -12,7 +12,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Finance.Transaction
 {
-  public class ReceivedVoucherController : Controller
+  public class ReceivedVoucherController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<ReceivedVoucherController> _localizer;
@@ -21,7 +21,8 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public ReceivedVoucherController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ReceivedVoucherController> localizer)
+    public ReceivedVoucherController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ReceivedVoucherController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
@@ -329,13 +330,13 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("ReceivedVoucher");
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_ReceivedVoucher"]);
 
         // Adding header row
-        worksheet.Cells["A1"].Value = "Voucher #";
+        worksheet.Cells["A1"].Value = _localizer["lbl_VoucherID"];
         worksheet.Cells["B1"].Value = _localizer["lbl_Date"];
-        worksheet.Cells["C1"].Value = "Head of Account";
-        worksheet.Cells["D1"].Value = "debit Amount";
+        worksheet.Cells["C1"].Value = _localizer["lbl_HeadofAccount"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_DebitAmount"];
 
         worksheet.Cells["A1:D1"].Style.Font.Bold = true; // Bold header
 
@@ -373,7 +374,7 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
         package.SaveAs(stream);
         stream.Position = 0;
 
-        string excelName = $"ReceivedVouchers-{DateTime.Now:yyyyMMddHHmmssfff}.xlsx";
+        string excelName = _localizer["lbl_ReceivedVoucher"]+$"-{DateTime.Now:yyyyMMddHHmmssfff}.xlsx";
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }
     }

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
-  public class SalaryTypeController : Controller
+  public class SalaryTypeController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<SalaryTypeController> _localizer;
@@ -19,7 +19,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public SalaryTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<SalaryTypeController> localizer)
+    public SalaryTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<SalaryTypeController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

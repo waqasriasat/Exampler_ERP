@@ -9,14 +9,15 @@ using Exampler_ERP.Controllers.MasterInfo;
 
 namespace Exampler_ERP.Controllers
 {
-  public class NotificationsController : Controller
+  public class NotificationsController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<NotificationsController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public NotificationsController(AppDBContext appDBContext, IConfiguration configuration, IHubContext<NotificationHub> hubContext, IStringLocalizer<NotificationsController> localizer)
+    public NotificationsController(AppDBContext appDBContext, IConfiguration configuration, IHubContext<NotificationHub> hubContext, IStringLocalizer<NotificationsController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

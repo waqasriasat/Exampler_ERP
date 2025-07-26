@@ -12,7 +12,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
-  public class ContractController : Controller
+  public class ContractController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<ContractController> _localizer;
@@ -22,7 +22,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
 
 
-    public ContractController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ContractController> localizer)
+    public ContractController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ContractController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

@@ -70,6 +70,20 @@ body {
   margin-left: 1rem !important;
   margin-right: 0rem !important;
 }
+.Card1I {
+  text-align: left !important;
+  right: 72% !important;
+  Color: #696cff !important;
+}
+.small-box .icon > i {
+  font-size: 90px;
+  position: absolute;
+  left: 15px; 
+  top: 15px;
+  transition: -webkit-transform .3s linear;
+  transition: transform .3s linear;
+  transition: transform .3s linear, -webkit-transform .3s linear;
+}
 @media (max-width: 1199.98px) {
   .layout-menu {
     right: 0 !important;

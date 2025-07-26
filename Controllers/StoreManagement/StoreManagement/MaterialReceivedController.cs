@@ -10,7 +10,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 {
-  public class MaterialReceivedController : Controller
+  public class MaterialReceivedController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<MaterialReceivedController> _localizer;
@@ -19,7 +19,8 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public MaterialReceivedController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<MaterialReceivedController> localizer)
+    public MaterialReceivedController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<MaterialReceivedController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _conSTguration = conSTguration;

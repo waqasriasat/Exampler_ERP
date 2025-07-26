@@ -10,7 +10,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
-  public class DesignationController : Controller
+  public class DesignationController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<DesignationController> _localizer;
@@ -19,7 +19,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public DesignationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<DesignationController> localizer)
+    public DesignationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<DesignationController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

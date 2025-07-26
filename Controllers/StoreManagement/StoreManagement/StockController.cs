@@ -11,7 +11,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 {
-  public class StockController : Controller
+  public class StockController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<StockController> _localizer;
@@ -20,7 +20,8 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public StockController(AppDBContext appDBContext, IConfiguration configuration, ILogger<StockController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<StockController> localizer)
+    public StockController(AppDBContext appDBContext, IConfiguration configuration, ILogger<StockController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<StockController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

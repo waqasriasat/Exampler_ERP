@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@Localizer["lbl_Print"]  Lodgement</title>
+    <title>@Localizer["lbl_LodgementPrint"]</title>
     <style>
         table {
             width: 100%;
@@ -48,14 +48,14 @@
         </div>
         <div class="col-6">
             <h5 style="text-align: center; padding-top: 35px; font-size: x-large;">
-                Lodgement Report
+                @Localizer["lbl_LodgementReport"]
             </h5>
         </div>
     </div>
-    <p><h6><span class="field-label">Head of Account : @ViewBag.HeadofAccountName</span></h6></p>
-    <p><h6><span class="field-label">From Date : @ViewBag.FromDate To : @ViewBag.ToDate</span></h6></p>
+    <p><h6><span class="field-label">@Localizer["lbl_HeadofAccount"] : @ViewBag.HeadofAccountName</span></h6></p>
+    <p><h6><span class="field-label">@Localizer["lbl_FromDate"] : @ViewBag.FromDate @Localizer["lbl_ToDate"] : @ViewBag.ToDate</span></h6></p>
     <div class="labeltxtTop">
-        <strong>Opening Balance:</strong>
+        <strong>@Localizer["lbl_OpeningBalance"]:</strong>
         <span>
             @{
                 decimal openingBalance = ViewBag.OpeningBalance;
@@ -68,13 +68,13 @@
     <table>
         <thead>
             <tr>
-                <th>Voucher #</th>
+                <th>@Localizer["lbl_VoucherID"]</th>
                 <th>@Localizer["lbl_Date"] /th>
                 <th>@Localizer["lbl_VendorPayee"]</th>
-                <th>Instrument Number</th>
-                <th>Debit Amount</th>
-                <th>Credit Amount</th>
-                <th>Current Balance</th>
+                <th>@Localizer["lbl_InstrumentNumber"]</th>
+                <th>@Localizer["lbl_DebitAmount"]</th>
+                <th>@Localizer["lbl_CreditAmount"]</th>
+                <th>@Localizer["lbl_CurrentBalance"]</th>
             </tr>
         </thead>
         <tbody>
@@ -102,7 +102,7 @@
         </tbody>
     </table>
     <div class="labeltxtTop">
-        <strong>Closing Balance:</strong>
+        <strong>@Localizer["lbl_ClosingBalance"]:</strong>
         <span>@currentBalance.ToString("N2")</span>
     </div>
 

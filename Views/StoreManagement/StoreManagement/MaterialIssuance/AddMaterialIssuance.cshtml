@@ -78,7 +78,7 @@
                                     <th>Requisition Quantity</th>
                                     <th>Issuance Quantity</th>
                                     <th>Available Stock Quantity</th>
-                                    <th>Action</th>
+                                    <th>@Localizer["lbl_Action"]</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -157,7 +157,7 @@
                             <input type="text" class="form-control inputcontrol" name="MaterialIssuances.MaterialIssuanceDetails[${rowIndex}].BalanceQuantity" value="${balanceQuantity}" readonly />
                         </td>
                         <td>
-                            <button type="button" class="btn btn-sm btn-danger remove-row width-button">Remove</button>
+                            <button type="button" class="btn btn-sm btn-danger remove-row width-button">@Localizer["lbl_Remove"]</button>
                             ${moveToPurchaseButton}
                         </td>
                     </tr>`;

@@ -3,7 +3,7 @@
 @inject IViewLocalizer Localizer
 @{
     Layout = "_EmployeeContentNavbarLayout";
-    ViewData["Title"] = "Report - Print Contract";
+    ViewData["Title"] = @Localizer["lbl_Reports"] + " - Print Contract";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -114,7 +114,7 @@
             <img src="~/img/favicon/SideLogoWithName.png" alt="Company Logo" />
             <h1>Contract Agreement</h1>
             <p><strong>Contract Number:</strong> @Model.ContractID</p>
-            <p><strong>Date:</strong> @Model.StartDate.ToString("dd/MM/yyyy")</p>
+            <p><strong>@Localizer["lbl_Date"]:</strong> @Model.StartDate.ToString("dd/MM/yyyy")</p>
         </div>
 
         <!-- Contract Details -->

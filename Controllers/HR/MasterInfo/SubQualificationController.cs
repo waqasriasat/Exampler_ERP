@@ -13,7 +13,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
-  public class SubQualificationController : Controller
+  public class SubQualificationController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<SubQualificationController> _localizer;
@@ -22,7 +22,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public SubQualificationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<SubQualificationController> localizer)
+    public SubQualificationController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<SubQualificationController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

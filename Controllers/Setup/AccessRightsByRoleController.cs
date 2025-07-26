@@ -12,7 +12,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Setup
 {
-  public class AccessRightsByRoleController : Controller
+  public class AccessRightsByRoleController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<AccessRightsByRoleController> _localizer;
@@ -21,7 +21,8 @@ namespace Exampler_ERP.Controllers.Setup
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public AccessRightsByRoleController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AccessRightsByRoleController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<AccessRightsByRoleController> localizer)
+    public AccessRightsByRoleController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AccessRightsByRoleController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<AccessRightsByRoleController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

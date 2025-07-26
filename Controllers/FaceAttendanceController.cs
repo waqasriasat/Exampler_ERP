@@ -7,13 +7,14 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers
 {
-  public class FaceAttendanceController : Controller
+  public class FaceAttendanceController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<FaceAttendanceController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly IHubContext<NotificationHub> _hubContext;
-    public FaceAttendanceController(AppDBContext appDBContext, IConfiguration configuration, IHubContext<NotificationHub> hubContext, IStringLocalizer<FaceAttendanceController> localizer)
+    public FaceAttendanceController(AppDBContext appDBContext, IConfiguration configuration, IHubContext<NotificationHub> hubContext, IStringLocalizer<FaceAttendanceController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

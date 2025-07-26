@@ -10,7 +10,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
-  public class EmployeeRequestTypeForwardController : Controller
+  public class EmployeeRequestTypeForwardController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<EmployeeRequestTypeForwardController> _localizer;
@@ -19,7 +19,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public EmployeeRequestTypeForwardController(AppDBContext appDBContext, IConfiguration configuration, ILogger<EmployeeRequestTypeForwardController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeRequestTypeForwardController> localizer)
+    public EmployeeRequestTypeForwardController(AppDBContext appDBContext, IConfiguration configuration, ILogger<EmployeeRequestTypeForwardController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeRequestTypeForwardController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

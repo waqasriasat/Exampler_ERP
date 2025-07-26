@@ -9,7 +9,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Financial
 {
-  public class WorkDayController : Controller
+  public class WorkDayController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<WorkDayController> _localizer;
@@ -18,7 +18,8 @@ namespace Exampler_ERP.Controllers.HR.Financial
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public WorkDayController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<WorkDayController> localizer)
+    public WorkDayController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<WorkDayController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

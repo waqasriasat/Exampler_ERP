@@ -9,7 +9,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Finance.MasterInfo
 {
-  public class HeadofAccount_SecondController : Controller
+  public class HeadofAccount_SecondController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<HeadofAccount_SecondController> _localizer;
@@ -18,7 +18,8 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public HeadofAccount_SecondController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<HeadofAccount_SecondController> localizer)
+    public HeadofAccount_SecondController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<HeadofAccount_SecondController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

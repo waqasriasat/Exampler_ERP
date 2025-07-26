@@ -9,7 +9,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
-  public class BankAccountController : Controller
+  public class BankAccountController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<BankAccountController> _localizer;
@@ -18,7 +18,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public BankAccountController(AppDBContext appDBContext, IConfiguration configuration, ILogger<BankAccountController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<BankAccountController> localizer)
+    public BankAccountController(AppDBContext appDBContext, IConfiguration configuration, ILogger<BankAccountController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<BankAccountController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

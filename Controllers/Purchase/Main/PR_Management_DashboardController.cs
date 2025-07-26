@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Purchase.Main
 {
-  public class PR_Management_DashboardController : Controller
+  public class PR_Management_DashboardController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<PR_Management_DashboardController> _localizer;
@@ -18,7 +18,8 @@ namespace Exampler_ERP.Controllers.Purchase.Main
 
 
 
-    public PR_Management_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<PR_Management_DashboardController> localizer)
+    public PR_Management_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<PR_Management_DashboardController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

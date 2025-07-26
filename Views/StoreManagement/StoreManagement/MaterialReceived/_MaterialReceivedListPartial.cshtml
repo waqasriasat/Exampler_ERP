@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.ST_MaterialReceived>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @foreach (var item in Model)
 
 
@@ -16,7 +17,7 @@
                                     </div>
                                     <div class="col-3">
                                         <p class="text-nowrap">
-                                            <span class="smallAdd">Date :</span> @(item.MaterialReceivedDate.ToString("dd/MM/yyyy") ?? "00/00/0000")
+                                            <span class="smallAdd">@Localizer["lbl_Date"] :</span> @(item.MaterialReceivedDate.ToString("dd/MM/yyyy") ?? "00/00/0000")
                                         </p>
                                     </div>
                                     <div class="col-5">

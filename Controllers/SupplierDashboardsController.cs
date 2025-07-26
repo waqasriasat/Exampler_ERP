@@ -10,7 +10,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers
 {
-  public class SupplierDashboardsController : Controller
+  public class SupplierDashboardsController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<SupplierDashboardsController> _localizer;
@@ -19,7 +19,8 @@ namespace Exampler_ERP.Controllers
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public SupplierDashboardsController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<SupplierDashboardsController> localizer)
+    public SupplierDashboardsController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<SupplierDashboardsController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

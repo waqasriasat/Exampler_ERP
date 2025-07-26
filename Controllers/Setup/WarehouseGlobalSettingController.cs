@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Setup
 {
-  public class StoreManagementGlobalSettingController : Controller
+  public class StoreManagementGlobalSettingController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<StoreManagementGlobalSettingController> _localizer;
@@ -19,6 +19,7 @@ namespace Exampler_ERP.Controllers.Setup
     private readonly ILogger<StoreManagementGlobalSettingController> _logger;
 
     public StoreManagementGlobalSettingController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<StoreManagementGlobalSettingController> localizer, ILogger<StoreManagementGlobalSettingController> logger)
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

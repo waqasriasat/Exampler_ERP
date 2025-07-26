@@ -15,7 +15,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
-  public class FaceAttendanceForwardingController : Controller
+  public class FaceAttendanceForwardingController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<FaceAttendanceForwardingController> _localizer;
@@ -24,7 +24,8 @@ namespace Exampler_ERP.Controllers.HR.HR
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public FaceAttendanceForwardingController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<FaceAttendanceForwardingController> localizer)
+    public FaceAttendanceForwardingController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<FaceAttendanceForwardingController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

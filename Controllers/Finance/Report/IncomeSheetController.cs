@@ -11,7 +11,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Finance.Report
 {
-  public class IncomeSheetController : Controller
+  public class IncomeSheetController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<IncomeSheetController> _localizer;
@@ -19,7 +19,8 @@ namespace Exampler_ERP.Controllers.Finance.Report
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public IncomeSheetController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<IncomeSheetController> localizer)
+    public IncomeSheetController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<IncomeSheetController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

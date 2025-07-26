@@ -9,7 +9,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Finance.Management
 {
-  public class ChequeBookController : Controller
+  public class ChequeBookController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<ChequeBookController> _localizer;
@@ -18,7 +18,8 @@ namespace Exampler_ERP.Controllers.Finance.Management
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public ChequeBookController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ChequeBookController> localizer)
+    public ChequeBookController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ChequeBookController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

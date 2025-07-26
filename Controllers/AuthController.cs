@@ -11,13 +11,14 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers
 {
-  public class AuthController : Controller
+  public class AuthController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<AuthController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly IHubContext<NotificationHub> _hubContext;
-    public AuthController(AppDBContext appDBContext, IConfiguration configuration, IHubContext<NotificationHub> hubContext, IStringLocalizer<AuthController> localizer)
+    public AuthController(AppDBContext appDBContext, IConfiguration configuration, IHubContext<NotificationHub> hubContext, IStringLocalizer<AuthController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Income Sheet</title>
+    <title>@Localizer["lbl_IncomeSheetPrint"]</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -81,7 +81,7 @@
         </div>
         <div class="col-6">
             <h5 style="text-align: center; padding-top: 35px; font-size: x-large;">
-                Income Sheet Report
+                @Localizer["lbl_IncomeSheetReport"]
             </h5>
             <h6 style="text-align: center; padding-top: 35px; font-size: x-large;">
                 <span class="field-label">
@@ -96,24 +96,24 @@
                     "July", "August", "September", "October", "November", "December"
 
                         };
-                        <text>For the Month of @months[ViewBag.Month - 1] (@ViewBag.Year)</text>
+                        <text> @Localizer["lbl_FortheMonthof"] @months[ViewBag.Month - 1] (@ViewBag.Year)</text>
                     }
 
                     else
 
                     {
-                        <text>For the Year of @ViewBag.Year</text>
+                        <text> @Localizer["lbl_FortheYearof"] @ViewBag.Year</text>
                     }
                 </span>
             </h6>
         </div>
     </div>
 
-    <h3>Revenues</h3>
+    <h3>@Localizer["lbl_Revenues"]</h3>
     <table>
         <thead>
             <tr>
-                <th>Account Name</th>
+                <th>@Localizer["lbl_HeadofAccount"]</th>
                 <th>@Localizer["lbl_Amount"]</th>
             </tr>
         </thead>
@@ -131,17 +131,17 @@
         </tbody>
         <tfoot>
             <tr>
-                <td><strong>@Localizer["lbl_Total"] Revenues</strong></td>
+                <td><strong>@Localizer["lbl_TotalRevenues"]</strong></td>
                 <td><strong>@Model.TotalRevenues.ToString("N2")</strong></td>
             </tr>
         </tfoot>
     </table>
 
-    <h3>Expenses</h3>
+    <h3>@Localizer["lbl_Expenses"]</h3>
     <table>
         <thead>
             <tr>
-                <th>Account Name</th>
+                <th>@Localizer["lbl_HeadofAccount"]</th>
                 <th>@Localizer["lbl_Amount"]</th>
             </tr>
         </thead>
@@ -159,13 +159,13 @@
         </tbody>
         <tfoot>
             <tr>
-                <td><strong>@Localizer["lbl_Total"] Expenses</strong></td>
+                <td><strong>@Localizer["lbl_TotalExpenses"]</strong></td>
                 <td><strong>@Model.TotalExpenses.ToString("N2")</strong></td>
             </tr>
         </tfoot>
     </table>
 
-    <h3 style="text-align: center;">Net Income: @Model.NetIncome.ToString("C")</h3>
+    <h3 style="text-align: center;">@Localizer["lbl_NetIncome"]: @Model.NetIncome.ToString("C")</h3>
     <script>
         window.print();
     </script>

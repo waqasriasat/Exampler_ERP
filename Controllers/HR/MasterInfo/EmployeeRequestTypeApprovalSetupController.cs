@@ -10,7 +10,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
-  public class EmployeeRequestTypeApprovalSetupController : Controller
+  public class EmployeeRequestTypeApprovalSetupController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<EmployeeRequestTypeApprovalSetupController> _localizer;
@@ -19,7 +19,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public EmployeeRequestTypeApprovalSetupController(AppDBContext appDBContext, IConfiguration configuration, ILogger<EmployeeRequestTypeApprovalSetupController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeRequestTypeApprovalSetupController> localizer)
+    public EmployeeRequestTypeApprovalSetupController(AppDBContext appDBContext, IConfiguration configuration, ILogger<EmployeeRequestTypeApprovalSetupController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeRequestTypeApprovalSetupController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

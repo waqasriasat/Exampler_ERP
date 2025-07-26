@@ -10,7 +10,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
-  public class DeductionTypeController : Controller
+  public class DeductionTypeController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<DeductionTypeController> _localizer;
@@ -19,7 +19,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public DeductionTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<DeductionTypeController> localizer)
+    public DeductionTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<DeductionTypeController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

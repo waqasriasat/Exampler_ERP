@@ -15,7 +15,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Financial
 {
-  public class MonthlySalarySheetController : Controller
+  public class MonthlySalarySheetController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<MonthlySalarySheetController> _localizer;
@@ -26,7 +26,8 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
 
 
-    public MonthlySalarySheetController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AdditionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<MonthlySalarySheetController> localizer)
+    public MonthlySalarySheetController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AdditionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<MonthlySalarySheetController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

@@ -12,7 +12,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.EmployeePortal.Apply
 {
-  public class EmployeeRequestController : Controller
+  public class EmployeeRequestController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<EmployeeRequestController> _localizer;
@@ -20,7 +20,8 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public EmployeeRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeRequestController> localizer)
+    public EmployeeRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeRequestController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

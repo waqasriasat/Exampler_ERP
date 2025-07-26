@@ -11,7 +11,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.MasterInfo
 {
-  public class ApprovalsRequestController : Controller
+  public class ApprovalsRequestController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<ApprovalsRequestController> _localizer;
@@ -19,7 +19,8 @@ namespace Exampler_ERP.Controllers.MasterInfo
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ApprovalsRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ApprovalsRequestController> localizer)
+    public ApprovalsRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ApprovalsRequestController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

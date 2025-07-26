@@ -1,5 +1,6 @@
 @model List<Exampler_ERP.Models.Temp.PurchaseRequestwithPurchaseOrderViewModel>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @foreach (var row in Model)
             {
                 <div class="col-12 col-md-12 col-lg-12 GVDetail">
@@ -17,7 +18,7 @@
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">
-                                        <span class="smallAdd">Date :</span>
+                                        <span class="smallAdd">@Localizer["lbl_Date"] :</span>
                                         @(row.PurchaseRequests.PurchaseRequestDate.ToString("dd/MM/yyyy") ?? "00/00/0000")
                                     </p>
                                 </div>

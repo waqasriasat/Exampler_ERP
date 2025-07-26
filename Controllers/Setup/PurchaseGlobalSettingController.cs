@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Setup
 {
-  public class PurchaseGlobalSettingController : Controller
+  public class PurchaseGlobalSettingController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<PurchaseGlobalSettingController> _localizer;
@@ -19,6 +19,7 @@ namespace Exampler_ERP.Controllers.Setup
     private readonly ILogger<PurchaseGlobalSettingController> _logger;
 
     public PurchaseGlobalSettingController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<PurchaseGlobalSettingController> localizer, ILogger<PurchaseGlobalSettingController> logger)
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
 {
-  public class ItemCategoryTypeController : Controller
+  public class ItemCategoryTypeController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<ItemCategoryTypeController> _localizer;
@@ -18,7 +18,8 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public ItemCategoryTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ItemCategoryTypeController> localizer)
+    public ItemCategoryTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ItemCategoryTypeController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

@@ -13,7 +13,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
-  public class ProcessTypeApprovalSetupController : Controller
+  public class ProcessTypeApprovalSetupController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<ProcessTypeApprovalSetupController> _localizer;
@@ -22,7 +22,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ProcessTypeApprovalSetupController(AppDBContext appDBContext, IConfiguration configuration, ILogger<ProcessTypeApprovalSetupController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ProcessTypeApprovalSetupController> localizer)
+    public ProcessTypeApprovalSetupController(AppDBContext appDBContext, IConfiguration configuration, ILogger<ProcessTypeApprovalSetupController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ProcessTypeApprovalSetupController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Reports
 {
-  public class ProcessApprovalDetailController : Controller
+  public class ProcessApprovalDetailController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<ProcessApprovalDetailController> _localizer;
@@ -17,7 +17,8 @@ namespace Exampler_ERP.Controllers.HR.Reports
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ProcessApprovalDetailController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ProcessApprovalDetailController> localizer)
+    public ProcessApprovalDetailController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ProcessApprovalDetailController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

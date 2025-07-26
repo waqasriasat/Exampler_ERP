@@ -1,5 +1,7 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Report - TrialBalance";
+    ViewData["Title"] = @Localizer["lbl_Reports"] + " - " + @Localizer["lbl_TrialBalance"];
 }
 
 @section PageScripts {
@@ -53,12 +55,12 @@
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Report /</span> TrialBalance
+    <span class="text-muted fw-light">@Localizer["lbl_Reports"] /</span> @Localizer["lbl_TrialBalance"]
 </h4>
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Trial Balance Print</h5>
+            <h5 class="card-header">@Localizer["lbl_TrialBalancePrint"]</h5>
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="p-4">
@@ -67,19 +69,19 @@
                         <form id="TrialBalanceForm">
                             <div class="row mb-3">
                                 <div class="col-md-12 text-center">
-                                    <label class="form-label fw-bold me-3">Select Option:</label>
+                                    <label class="form-label fw-bold me-3">@Localizer["lbl_SelectOption"]:</label>
                                     <input type="radio" id="byMonth" name="selectionType" value="month" class="form-check-input" checked />
-                                    <label for="byMonth" class="form-label me-4">By Month</label>
+                                    <label for="byMonth" class="form-label me-4">@Localizer["lbl_ByMonth"]</label>
                                     <input type="radio" id="byYear" name="selectionType" value="year" class="form-check-input" />
-                                    <label for="byYear" class="form-label">By Year</label>
+                                    <label for="byYear" class="form-label">@Localizer["lbl_ByYear"]</label>
                                 </div>
                             </div>
 
                             <div class="row" id="monthYearFields">
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">Select Month</label>
+                                    <label class="form-label fw-bold">@Localizer["lbl_SelectMonth"]</label>
                                     <select id="Month" name="Month" class="form-select form-select-lg">
-                                        <option value="">Select Month</option>
+                                        <option value="">@Localizer["lbl_SelectMonth"]</option>
                                         <option value="1">January</option>
                                         <option value="2">February</option>
                                         <option value="3">March</option>
@@ -95,9 +97,9 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">Select Year</label>
+                                    <label class="form-label fw-bold">@Localizer["lbl_SelectYear"]</label>
                                     <select id="Year" name="Year" class="form-select form-select-lg">
-                                        <option value="">Select Year</option>
+                                        <option value="">@Localizer["lbl_SelectYear"]</option>
                                         @for (int i = DateTime.Now.Year - 10; i <= DateTime.Now.Year; i++)
                                         {
                                             <option value="@i">@i</option>
@@ -108,9 +110,9 @@
 
                             <div class="row d-none" id="yearField">
                                 <div class="col-md-12">
-                                    <label class="form-label fw-bold">Select Year</label>
+                                    <label class="form-label fw-bold">@Localizer["lbl_SelectYear"]</label>
                                     <select id="YearOnly" name="YearOnly" class="form-select form-select-lg">
-                                        <option value="">Select Year</option>
+                                        <option value="">@Localizer["lbl_SelectYear"]</option>
                                         @for (int i = DateTime.Now.Year - 10; i <= DateTime.Now.Year; i++)
                                         {
                                             <option value="@i">@i</option>
@@ -121,7 +123,7 @@
 
                             <div class="row justify-content-center mt-3">
                                 <div class="mt-2 text-center">
-                                    <button type="button" id="showReportBtn" class="btn btn-primary me-2">Show Report</button>
+                                    <button type="button" id="showReportBtn" class="btn btn-primary me-2">@Localizer["lbl_ShowReport"]</button>
                                 </div>
                             </div>
                         </form>

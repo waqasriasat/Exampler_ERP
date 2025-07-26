@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.MaterialIssuancesIndexViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 <input type="hidden" asp-for="MaterialIssuances.RequisitionID" />
 <input type="hidden" asp-for="MaterialIssuances.FinalApprovalID" />
@@ -24,7 +25,7 @@
                     <th>Requisition Quantity</th>
                     <th>Issuance Quantity</th>
                     <th>Blance Quantity</th>
-                    <th>Action</th>
+                    <th>@Localizer["lbl_Action"]</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,7 +75,7 @@
                                         <input type="text" class="form-control" name="MaterialIssuances.MaterialIssuanceDetails[${rowIndex}].BalanceQuantity" value="${row.balanceQuantity}" readonly />
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-sm btn-danger remove-row">Remove</button>
+                                        <button type="button" class="btn btn-sm btn-danger remove-row">@Localizer["lbl_Remove"]</button>
                                     </td>
                                 </tr>`;
                             tableBody.append(dynamicRow);

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
-  public class ProcessTypeForwardController : Controller
+  public class ProcessTypeForwardController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<ProcessTypeForwardController> _localizer;
@@ -20,7 +20,8 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ProcessTypeForwardController(AppDBContext appDBContext, IConfiguration configuration, ILogger<ProcessTypeForwardController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ProcessTypeForwardController> localizer)
+    public ProcessTypeForwardController(AppDBContext appDBContext, IConfiguration configuration, ILogger<ProcessTypeForwardController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ProcessTypeForwardController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

@@ -91,7 +91,7 @@
                                 <option value="@vendor.Value">@vendor.Text</option>
                             }
                         </select>
-                        <span class="ms-auto" style="">Dated : @today</span>
+                        <span class="ms-auto" style="">@Localizer["lbl_Date"]d : @today</span>
                         </div>
                         <table class="table table-bordered" id="purchaseOrderTable">
                             <thead class="table-light">
@@ -220,7 +220,7 @@
                         </select>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-danger removeRow">Remove</button>
+                        <button type="button" class="btn btn-danger removeRow">@Localizer["lbl_Remove"]</button>
                     </td>
                 </tr>
             `;

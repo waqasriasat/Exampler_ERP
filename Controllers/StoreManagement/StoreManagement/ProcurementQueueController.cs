@@ -10,7 +10,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 {
-  public class ProcurementQueueController : Controller
+  public class ProcurementQueueController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<ProcurementQueueController> _localizer;
@@ -19,7 +19,8 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public ProcurementQueueController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ProcurementQueueController> localizer)
+    public ProcurementQueueController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ProcurementQueueController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _conSTguration = conSTguration;

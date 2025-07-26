@@ -11,7 +11,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
-  public class OverTimeController : Controller
+  public class OverTimeController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<OverTimeController> _localizer;
@@ -21,7 +21,8 @@ namespace Exampler_ERP.Controllers.HR.HR
 
 
 
-    public OverTimeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<OverTimeController> localizer)
+    public OverTimeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<OverTimeController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

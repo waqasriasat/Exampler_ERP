@@ -9,7 +9,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Reports
 {
-  public class ContractExpiryController : Controller
+  public class ContractExpiryController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<ContractExpiryController> _localizer;
@@ -17,7 +17,8 @@ namespace Exampler_ERP.Controllers.HR.Reports
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ContractExpiryController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ContractExpiryController> localizer)
+    public ContractExpiryController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ContractExpiryController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

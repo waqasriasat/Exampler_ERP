@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Finance.Main
 {
-  public class FI_Main_DashboardController : Controller
+  public class FI_Main_DashboardController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<FI_Main_DashboardController> _localizer;
@@ -18,7 +18,8 @@ namespace Exampler_ERP.Controllers.Finance.Main
 
 
 
-    public FI_Main_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<FI_Main_DashboardController> localizer)
+    public FI_Main_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<FI_Main_DashboardController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

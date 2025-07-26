@@ -11,7 +11,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
-  public class EndOfServiceController : Controller
+  public class EndOfServiceController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<EndOfServiceController> _localizer;
@@ -21,7 +21,8 @@ namespace Exampler_ERP.Controllers.HR.HR
 
 
 
-    public EndOfServiceController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EndOfServiceController> localizer)
+    public EndOfServiceController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EndOfServiceController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

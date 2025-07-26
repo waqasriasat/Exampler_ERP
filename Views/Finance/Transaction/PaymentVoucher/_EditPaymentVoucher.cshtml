@@ -7,9 +7,9 @@
 <input type="hidden" asp-for="Vouchers.ProcessTypeApprovalID" />
 <div class="row mb-3">
     <div class="col-md-6">
-        <label asp-for="Vouchers.VoucherTypeID" class="form-label fw-bold">Voucher @Localizer["lbl_Type"]</label>
+        <label asp-for="Vouchers.VoucherTypeID" class="form-label fw-bold">@Localizer["lbl_VoucherType"]</label>
         <select asp-for="Vouchers.VoucherTypeID" class="form-select form-select-lg">
-            <option value="">Select Voucher Type</option>
+            <option value="">@Localizer["lbl_SelectVoucherType"]</option>
             @foreach (var type in ViewBag.VoucherTypeList)
             {
                 <option value="@type.Value">@type.Text</option>
@@ -19,9 +19,9 @@
 </div>
 <div class="row mb-3">
     <div class="col-md-6">
-        <label for="HeadofAccountid_Credit" class="form-label fw-bold">Head of Account (Credit)</label>
+        <label for="HeadofAccountid_Credit" class="form-label fw-bold">@Localizer["lbl_HeadofAccount(Credit)"]</label>
         <select id="HeadofAccountid_Credit" name="HeadofAccountid_Credit" class="form-select form-select-lg">
-            <option value="">Select Head of Account</option>
+            <option value="">@Localizer["lbl_SelectHeadofAccount"]</option>
             @foreach (var type in ViewBag.HeadofAccount_CreditList)
             {
                 <option value="@type.Value">@type.Text</option>
@@ -29,7 +29,7 @@
         </select>
     </div>
     <div class="col-md-6">
-        <label asp-for="Vouchers.PayeeName" class="form-label fw-bold">Payment Name</label>
+        <label asp-for="Vouchers.PayeeName" class="form-label fw-bold">@Localizer["lbl_VendorPayee"]</label>
         <input asp-for="Vouchers.PayeeName" type="text" class="form-control form-control-lg" />
     </div>
 </div>
@@ -38,7 +38,7 @@
     <div class="col-md-6">
         <label for="HeadofAccountid_IncomeTaxID" class="form-label fw-bold">@Localizer["lbl_IncomeTax(Withholding)"]</label>
         <select id="HeadofAccountid_IncomeTaxID" name="HeadofAccountid_IncomeTaxID" class="form-select form-select-lg">
-            <option value="">Select Head of Account</option>
+            <option value="">@Localizer["lbl_SelectHeadofAccount"]</option>
             @foreach (var type in ViewBag.HeadofAccount_IncomeTaxPayableList)
             {
                 <option value="@type.Value">@type.Text</option>
@@ -46,20 +46,20 @@
         </select>
     </div>
     <div class="col-md-3">
-        <label class="form-label fw-bold">Value of Tax</label>
+        <label class="form-label fw-bold">@Localizer["lbl_ValueofTax"]</label>
         <input id="IncomeTaxValue" class="form-control form-control-lg" />
     </div>
     <div class="col-md-3">
-        <label class="form-label fw-bold">@Localizer["lbl_Total"] Amount</label>
+        <label class="form-label fw-bold">@Localizer["lbl_TotalAmount"]</label>
         <input id="IncomeTaxAmount" class="form-control form-control-lg" />
     </div>
 </div>
 <hr />
 <div class="row mb-3">
     <div class="col-md-6">
-        <label for="HeadofAccountid_SaleTaxID" class="form-label fw-bold">Sale Tax</label>
+        <label for="HeadofAccountid_SaleTaxID" class="form-label fw-bold">@Localizer["lbl_SaleTax"]</label>
         <select id="HeadofAccountid_SaleTaxID" name="HeadofAccountid_SaleTaxID" class="form-select form-select-lg">
-            <option value="">Select Head of Account</option>
+            <option value="">@Localizer["lbl_SelectHeadofAccount"]</option>
             @foreach (var type in ViewBag.HeadofAccount_SaleTaxPayableList)
             {
                 <option value="@type.Value">@type.Text</option>
@@ -67,20 +67,20 @@
         </select>
     </div>
     <div class="col-md-3">
-        <label class="form-label fw-bold">Value of Tax</label>
+        <label class="form-label fw-bold">@Localizer["lbl_ValueofTax"]</label>
         <input id="SaleTaxValue" class="form-control form-control-lg" />
     </div>
     <div class="col-md-3">
-        <label class="form-label fw-bold">@Localizer["lbl_Total"] Amount</label>
+        <label class="form-label fw-bold">@Localizer["lbl_TotalAmount"]</label>
         <input id="SaleTaxAmount" class="form-control form-control-lg" />
     </div>
 </div>
 <hr />
 <div class="row mb-3">
     <div class="col-md-6">
-        <label for="HeadofAccountid_Debit" class="form-label fw-bold">Head of Account (Debit)</label>
+        <label for="HeadofAccountid_Debit" class="form-label fw-bold">@Localizer["lbl_HeadofAccount(Debit)"]</label>
         <select id="HeadofAccountid_Debit" name="HeadofAccountid_Debit" class="form-select form-select-lg">
-            <option value="">Select Head of Account</option>
+            <option value="">@Localizer["lbl_SelectHeadofAccount"]</option>
             @foreach (var type in ViewBag.HeadofAccount_DebitList)
             {
                 <option value="@type.Value">@type.Text</option>
@@ -88,9 +88,9 @@
         </select>
     </div>
     <div class="col-md-3">
-        <label asp-for="Vouchers.InstruType" class="form-label fw-bold">Instrument @Localizer["lbl_Type"]</label>
+        <label asp-for="Vouchers.InstruType" class="form-label fw-bold">@Localizer["lbl_InstrumentType"]</label>
         <select asp-for="Vouchers.InstruType" class="form-select form-select-lg">
-            <option value="">Select Type</option>
+            <option value="">@Localizer["lbl_SelectTransactionType"]</option>
             @foreach (var type in ViewBag.IntrumentTypeList)
             {
                 <option value="@type.Value">@type.Text</option>
@@ -98,19 +98,19 @@
         </select>
     </div>
     <div class="col-md-3">
-        <label asp-for="Vouchers.InstruNumber" class="form-label fw-bold">Instrument Number</label>
+        <label asp-for="Vouchers.InstruNumber" class="form-label fw-bold">@Localizer["lbl_InstrumentNumber"]</label>
         <input asp-for="Vouchers.InstruNumber" type="text" class="form-control form-control-lg" />
     </div>
     <div class="col-md-6">
-        <label asp-for="Vouchers.InstruDetail" class="form-label fw-bold">Instrument Detail</label>
+        <label asp-for="Vouchers.InstruDetail" class="form-label fw-bold">@Localizer["lbl_InstrumentDetail"]</label>
         <input asp-for="Vouchers.InstruDetail" type="text" class="form-control form-control-lg" />
     </div>
     <div class="col-md-3">
-        <label asp-for="Vouchers.InstruDate" class="form-label fw-bold">Instrument @Localizer["lbl_Date"]</label>
+        <label asp-for="Vouchers.InstruDate" class="form-label fw-bold">@Localizer["lbl_InstrumentDate"]</label>
         <input asp-for="Vouchers.InstruDate" type="date" class="form-control form-control-lg" />
     </div>
     <div class="col-md-3">
-        <label class="form-label fw-bold">Instrument Amount</label>
+        <label class="form-label fw-bold">@Localizer["lbl_InstrumentAmount"]</label>
         <input id="InstrumentAmount" class="form-control form-control-lg" />
     </div>
     <div class="col-md-12">
@@ -119,16 +119,16 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-info update-row">Update</button>
+    <button type="button" class="btn btn-info update-row">@Localizer["lbl_Update"]</button>
 </div>
 <div class="table-responsive">
     <table class="table table-bordered" id="PaymentVoucherTable">
         <thead class="table-light">
             <tr>
-                <th>Transaction @Localizer["lbl_Type"]</th>
-                <th>Transaction Account</th>
-                <th>Debit Amount</th>
-                <th>Credit Amount</th>
+                <th>@Localizer["lbl_TransactionType"]</th>
+                <th>@Localizer["lbl_TransactionAccount"]</th>
+                <th>@Localizer["lbl_DebitAmount"]</th>
+                <th>@Localizer["lbl_CreditAmount"]</th>
             </tr>
         </thead>
         <tbody>
@@ -139,7 +139,7 @@
                     <tr>
                         <td>
                             <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[@i].DRCR">
-                                <option value="">Select Type</option>
+                                <option value="">@Localizer["lbl_SelectTransactionType"]</option>
                                 @foreach (var type in ViewBag.TransactionTypeList)
                                 {
                                     @if (type.Value == Model.Vouchers.VoucherDetails[i].DRCR.ToString())
@@ -155,7 +155,7 @@
                         </td>
                         <td>
                             <select class="form-select transaction-account" name="Vouchers.VoucherDetails[@i].HeadofAccount_FiveID">
-                                <option value="">Select Account</option>
+                                <option value="">@Localizer["lbl_SelectHeadofAccount"]</option>
                                 @foreach (var type in ViewBag.HeadofAccount_FiveList)
                                 {
                                     @if (type.Value == Model.Vouchers.VoucherDetails[i].HeadofAccount_FiveID.ToString())
@@ -186,11 +186,11 @@
 
 <div class="row mt-4">
     <div class="col-md-6">
-        <label class="form-label fw-bold">@Localizer["lbl_Total"] Debit Amount</label>
+        <label class="form-label fw-bold">@Localizer["lbl_TotalDebitAmount"]</label>
         <input id="TotalDrAmt" class="form-control form-control-lg" readonly />
     </div>
     <div class="col-md-6">
-        <label class="form-label fw-bold">@Localizer["lbl_Total"] Credit Amount</label>
+        <label class="form-label fw-bold">@Localizer["lbl_TotalCreditAmount"]</label>
         <input id="TotalCrAmt" class="form-control form-control-lg" readonly />
     </div>
 </div>

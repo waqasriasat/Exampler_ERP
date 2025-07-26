@@ -12,7 +12,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Purchase.Management
 {
-  public class CostComparisonController : Controller
+  public class CostComparisonController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<CostComparisonController> _localizer;
@@ -21,7 +21,8 @@ namespace Exampler_ERP.Controllers.Purchase.Management
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public CostComparisonController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<CostComparisonController> localizer)
+    public CostComparisonController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<CostComparisonController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _conSTguration = conSTguration;

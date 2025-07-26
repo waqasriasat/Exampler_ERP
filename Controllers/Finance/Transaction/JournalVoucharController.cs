@@ -13,7 +13,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Finance.Transaction
 {
-  public class JournalVoucherController : Controller
+  public class JournalVoucherController : PositionController
   {
     private readonly AppDBContext _appDBContext; 
  private readonly IStringLocalizer<JournalVoucherController> _localizer;
@@ -22,7 +22,8 @@ namespace Exampler_ERP.Controllers.Finance.Transaction
 private readonly IHubContext<NotificationHub> _hubContext;
     
 
-    public JournalVoucherController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext ,IStringLocalizer<JournalVoucherController> localizer)
+    public JournalVoucherController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext ,IStringLocalizer<JournalVoucherController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
@@ -321,10 +322,10 @@ _hubContext = hubContext;
         var worksheet = package.Workbook.Worksheets.Add("JournalVoucher");
 
         // Adding header row
-        worksheet.Cells["A1"].Value = "Voucher #";
+        worksheet.Cells["A1"].Value = _localizer["lbl_VoucherID"];
         worksheet.Cells["B1"].Value = _localizer["lbl_Date"];
-        worksheet.Cells["C1"].Value = "Head of Account";
-        worksheet.Cells["D1"].Value = "Credit Amount";
+        worksheet.Cells["C1"].Value = _localizer["lbl_HeadofAccount"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_CreditAmount"];
 
         worksheet.Cells["A1:D1"].Style.Font.Bold = true; // Bold header
 

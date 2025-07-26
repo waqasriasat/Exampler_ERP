@@ -8,9 +8,10 @@ using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Localization;
 
+
 namespace Exampler_ERP.Controllers
 {
-  public class EmployeeDashboardsController : Controller
+  public class EmployeeDashboardsController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<EmployeeDashboardsController> _localizer;
@@ -18,7 +19,9 @@ namespace Exampler_ERP.Controllers
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public EmployeeDashboardsController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeDashboardsController> localizer)
+    public EmployeeDashboardsController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeDashboardsController> localizer) 
+    : base(appDBContext) 
+
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

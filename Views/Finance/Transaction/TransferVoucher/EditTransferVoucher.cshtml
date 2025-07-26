@@ -11,7 +11,7 @@
     <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="editVoucherModalLabel"><i class="fas fa-key me-2"></i>@Localizer["lbl_Edit"] Transfer Voucher</h5>
+                <h5 class="modal-title" id="editVoucherModalLabel"><i class="fas fa-key me-2"></i>@Localizer["lbl_EditTransferVoucher"]</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -21,7 +21,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
-                <button type="button" id="saveChanges" class="btn btn-success">Save Voucher</button>
+                <button type="button" id="saveChanges" class="btn btn-success">@Localizer["lbl_SaveVoucher"]</button>
             </div>
         </div>
     </div>
@@ -62,9 +62,9 @@
                 const isLastRow = index === rows.length - 1;
                 const actionCell = $(this).find('td:last-child');
                 if (isLastRow) {
-                    actionCell.append('<button type="button" class="btn btn-sm btn-secondary add-row">Add</button>');
+                    actionCell.append('<button type="button" class="btn btn-sm btn-secondary add-row">@Localizer["lbl_Add"]</button>');
                 } else {
-                    actionCell.append('<button type="button" class="btn btn-sm btn-danger remove-row">Remove</button>');
+                    actionCell.append('<button type="button" class="btn btn-sm btn-danger remove-row">@Localizer["lbl_Remove"]</button>');
                 }
             });
         }
@@ -78,7 +78,7 @@
             const newRow = `<tr>
                     <td>
                             <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount}].DRCR">
-                            <option value="">Select Type</option>
+                            <option value="">@Localizer["lbl_SelectTransactionType"]</option>
     @foreach (var type in ViewBag.TransactionTypeList)
     {
                                             <option value="@type.Value">@type.Text</option>
@@ -87,7 +87,7 @@
                     </td>
                     <td>
                         <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount}].HeadofAccount_FiveID">
-                            <option value="">Select Account</option>
+                            <option value="">@Localizer["lbl_SelectHeadofAccount"]</option>
     @foreach (var type in ViewBag.HeadofAccount_FiveList)
     {
                                             <option value="@type.Value">@type.Text</option>

@@ -13,7 +13,7 @@ namespace Exampler_ERP.Utilities
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<Utils> _localizer;
-    public Utils(AppDBContext appDBContext, IStringLocalizer<Utils> localizer)
+    public Utils(AppDBContext appDBContext, IStringLocalizer<Utils> localizer) 
     {
       _appDBContext = appDBContext;
       _localizer = localizer;

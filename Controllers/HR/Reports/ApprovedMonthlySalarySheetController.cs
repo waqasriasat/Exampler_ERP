@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Reports
 {
-  public class ApprovedMonthlySalarySheetController : Controller
+  public class ApprovedMonthlySalarySheetController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<ApprovedMonthlySalarySheetController> _localizer;
@@ -16,7 +16,8 @@ namespace Exampler_ERP.Controllers.HR.Reports
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ApprovedMonthlySalarySheetController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ApprovedMonthlySalarySheetController> localizer)
+    public ApprovedMonthlySalarySheetController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ApprovedMonthlySalarySheetController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

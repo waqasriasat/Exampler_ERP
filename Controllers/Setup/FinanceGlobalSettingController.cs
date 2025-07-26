@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Setup
 {
-  public class FinanceGlobalSettingController : Controller
+  public class FinanceGlobalSettingController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<FinanceGlobalSettingController> _localizer;
@@ -19,6 +19,7 @@ namespace Exampler_ERP.Controllers.Setup
     private readonly ILogger<FinanceGlobalSettingController> _logger;
 
     public FinanceGlobalSettingController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<FinanceGlobalSettingController> localizer, ILogger<FinanceGlobalSettingController> logger)
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

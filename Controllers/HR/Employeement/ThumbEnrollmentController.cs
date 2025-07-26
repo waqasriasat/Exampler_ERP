@@ -11,7 +11,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
-  public class ThumbEnrollmentController : Controller
+  public class ThumbEnrollmentController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<ThumbEnrollmentController> _localizer;
@@ -19,7 +19,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public ThumbEnrollmentController(AppDBContext appDBContext, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ThumbEnrollmentController> localizer)
+    public ThumbEnrollmentController(AppDBContext appDBContext, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<ThumbEnrollmentController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _utils = utils;

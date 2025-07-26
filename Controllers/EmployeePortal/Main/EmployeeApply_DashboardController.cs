@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.EmployeePortal.Main
 {
-  public class EmployeeApply_DashboardController : Controller
+  public class EmployeeApply_DashboardController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<EmployeeApply_DashboardController> _localizer;
@@ -18,7 +18,8 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Main
 
 
 
-    public EmployeeApply_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeApply_DashboardController> localizer)
+    public EmployeeApply_DashboardController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeApply_DashboardController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

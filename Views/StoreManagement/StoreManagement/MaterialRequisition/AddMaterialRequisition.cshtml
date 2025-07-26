@@ -96,7 +96,7 @@
                                     </th>
                                     <th class="headercontrol">
                                         <div class="col-md-12" style="text-align-last: center;">
-                                            <button type="button" class="btn btn-primary add-row width-button">Add</button>
+                                            <button type="button" class="btn btn-primary add-row width-button">@Localizer["lbl_Add"]</button>
                                         </div>
                                     </th>
                                 </tr>
@@ -138,7 +138,7 @@
                                                 <input type="date" class="form-control" name="MaterialRequisitions.MaterialRequisitionDetails[@i].RequiredDate" value="@Model.MaterialRequisitions.MaterialRequisitionDetails[i].RequiredDate" />
                                     </td>
                                             <td style="text-align-last: center;">
-                                        <button type="button" class="btn btn-sm btn-danger remove-row width-button">Remove</button>
+                                        <button type="button" class="btn btn-sm btn-danger remove-row width-button">@Localizer["lbl_Remove"]</button>
                                     </td>
                                 </tr>
                                     }
@@ -209,7 +209,7 @@
                         <input type="date" class="form-control inputcontrol" name="MaterialRequisitions.MaterialRequisitionDetails[${rowCount}].RequiredDate" value="${requiredDate}" readonly />
                     </td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-danger remove-row width-button">Remove</button>
+                        <button type="button" class="btn btn-sm btn-danger remove-row width-button">@Localizer["lbl_Remove"]</button>
                     </td>
                 </tr>`;
 

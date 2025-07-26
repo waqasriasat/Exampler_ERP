@@ -11,7 +11,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
-  public class AdditionalAllowanceController : Controller
+  public class AdditionalAllowanceController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<AdditionalAllowanceController> _localizer;
@@ -21,7 +21,8 @@ namespace Exampler_ERP.Controllers.HR.HR
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public AdditionalAllowanceController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AdditionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<AdditionalAllowanceController> localizer)
+    public AdditionalAllowanceController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AdditionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<AdditionalAllowanceController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

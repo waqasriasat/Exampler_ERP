@@ -9,7 +9,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
-  public class CardPrintController : Controller
+  public class CardPrintController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<CardPrintController> _localizer;
@@ -18,7 +18,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public CardPrintController(AppDBContext appDBContext, IConfiguration configuration, ILogger<CardPrintController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<CardPrintController> localizer)
+    public CardPrintController(AppDBContext appDBContext, IConfiguration configuration, ILogger<CardPrintController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<CardPrintController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

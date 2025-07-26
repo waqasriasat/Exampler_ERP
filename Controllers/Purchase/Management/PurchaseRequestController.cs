@@ -13,7 +13,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Purchase.Management
 {
-  public class PurchaseRequestController : Controller
+  public class PurchaseRequestController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<PurchaseRequestController> _localizer;
@@ -23,7 +23,8 @@ namespace Exampler_ERP.Controllers.Purchase.Management
 
 
 
-    public PurchaseRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<PurchaseRequestController> localizer)
+    public PurchaseRequestController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<PurchaseRequestController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

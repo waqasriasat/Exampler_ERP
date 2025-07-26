@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.EmployeePortal.Reports
 {
-  public class PrintContractController : Controller
+  public class PrintContractController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<PrintContractController> _localizer;
@@ -16,7 +16,8 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Reports
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public PrintContractController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<PrintContractController> localizer)
+    public PrintContractController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<PrintContractController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

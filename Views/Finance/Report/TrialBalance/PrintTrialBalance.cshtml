@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>@Localizer["lbl_Print"]  Trial Balance</title>
+    <title>@Localizer["lbl_TrialBalancePrint"]</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -69,7 +69,7 @@
         </div>
         <div class="col-6">
             <h5 style="text-align: center; padding-top: 35px; font-size: x-large;">
-                Trial Balance Report
+                @Localizer["lbl_TrialBalanceReport"]
             </h5>
             <h6 style="text-align: center; padding-top: 35px; font-size: x-large;">
                 <span class="field-label">
@@ -80,11 +80,11 @@
                     "January", "February", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"
                         };
-                        <text>For the Month of @months[ViewBag.Month - 1] (@ViewBag.Year)</text>
+                        <text> @Localizer["lbl_FortheMonthof"] @months[ViewBag.Month - 1] (@ViewBag.Year)</text>
                     }
                     else
                     {
-                        <text>For the Year of @ViewBag.Year</text>
+                        <text> @Localizer["lbl_FortheYearof"] @ViewBag.Year</text>
                     }
                 </span>
             </h6>
@@ -93,10 +93,10 @@
       <table>
         <thead>
             <tr>
-                <th>Count</th>
-                <th>Account</th>
-                <th>Debit</th>
-                <th>Credit</th>
+                <th>@Localizer["lbl_Count"]</th>
+                <th>@Localizer["lbl_Account"]</th>
+                <th>@Localizer["lbl_Debit"]</th>
+                <th>@Localizer["lbl_Credit"]</th>
             </tr>
         </thead>
         <tbody>

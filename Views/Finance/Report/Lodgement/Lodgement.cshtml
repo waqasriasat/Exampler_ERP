@@ -1,8 +1,8 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Report - Lodgement";
-}
+    ViewData["Title"] = @Localizer["lbl_Reports"] + " - " + @Localizer["lbl_Lodgement"];
+        }
 
 @section PageScripts {
     <script>
@@ -66,12 +66,12 @@
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Report /</span> Lodgement
+    <span class="text-muted fw-light">@Localizer["lbl_Reports"] /</span> @Localizer["lbl_Lodgement"]
 </h4>
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Lodgement Print</h5>
+            <h5 class="card-header">@Localizer["lbl_LodgementPrint"]</h5>
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="p-4">
@@ -90,9 +90,9 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label for="HeadofAccount_ID" class="form-label fw-bold">Head Of Account</label>
+                                    <label for="HeadofAccount_ID" class="form-label fw-bold">@Localizer["lbl_HeadofAccount"]</label>
                                     <select id="HeadofAccount_ID" name="HeadofAccount_ID" class="form-select form-select-lg">
-                                        <option value="">Select Head Of Account</option>
+                                        <option value="">@Localizer["lbl_SelectHeadofAccount"]</option>
                                         @if (ViewBag.HeadofAccount_FiveList != null)
                                         {
                                             foreach (var type in ViewBag.HeadofAccount_FiveList)
@@ -107,7 +107,7 @@
                             </div>
                             <div class="row justify-content-center mt-3">
                                 <div class="mt-2 text-center">
-                                    <button type="button" id="showReportBtn" class="btn btn-primary me-2">Show Report</button>
+                                    <button type="button" id="showReportBtn" class="btn btn-primary me-2">@Localizer["lbl_ShowReport"]</button>
                                 </div>
                             </div>
                         </form>

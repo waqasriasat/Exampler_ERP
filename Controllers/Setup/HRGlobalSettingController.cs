@@ -10,7 +10,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Setup
 {
-  public class HRGlobalSettingController : Controller
+  public class HRGlobalSettingController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<HRGlobalSettingController> _localizer;
@@ -21,6 +21,7 @@ namespace Exampler_ERP.Controllers.Setup
     private readonly ILogger<HRGlobalSettingController> _logger;
 
     public HRGlobalSettingController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<HRGlobalSettingController> localizer, ILogger<HRGlobalSettingController> logger)
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

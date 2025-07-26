@@ -11,7 +11,7 @@
     <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="addVoucherModalLabel"><i class="fas fa-key me-2"></i>@Localizer["lbl_Add"] Journal Voucher</h5>
+                <h5 class="modal-title" id="addVoucherModalLabel"><i class="fas fa-key me-2"></i>@Localizer["lbl_AddJournalVoucher"]  </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -20,9 +20,9 @@
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label asp-for="Vouchers.VoucherTypeID" class="form-label fw-bold">Voucher @Localizer["lbl_Type"]</label>
+                            <label asp-for="Vouchers.VoucherTypeID" class="form-label fw-bold">@Localizer["lbl_VoucherType"]</label>
                             <select asp-for="Vouchers.VoucherTypeID" class="form-select form-select-lg">
-                                <option value="">Select Voucher Type</option>
+                                <option value="">@Localizer["lbl_SelectVoucherType"]</option>
                                 @foreach (var type in ViewBag.VoucherTypeList)
                                 {
                                     <option value="@type.Value">@type.Text</option>
@@ -33,19 +33,19 @@
 
                     <div class="row mb-3">
                         <div class="col-md-3">
-                            <label asp-for="Vouchers.PONo" class="form-label fw-bold">PO No</label>
+                            <label asp-for="Vouchers.PONo" class="form-label fw-bold">@Localizer["lbl_PONo"]</label>
                             <input asp-for="Vouchers.PONo" type="text" class="form-control form-control-lg" />
                         </div>
                         <div class="col-md-3">
-                            <label asp-for="Vouchers.GRNNo" class="form-label fw-bold">GRN No</label>
+                            <label asp-for="Vouchers.GRNNo" class="form-label fw-bold">@Localizer["lbl_GRNNo"]</label>
                             <input asp-for="Vouchers.GRNNo" type="text" class="form-control form-control-lg" />
                         </div>
                         <div class="col-md-3">
-                            <label asp-for="Vouchers.DCNo" class="form-label fw-bold">DC No</label>
+                            <label asp-for="Vouchers.DCNo" class="form-label fw-bold">@Localizer["lbl_DCNo"]</label>
                             <input asp-for="Vouchers.DCNo" type="text" class="form-control form-control-lg" />
                         </div>
                         <div class="col-md-3">
-                            <label asp-for="Vouchers.InvoiceNo" class="form-label fw-bold">Invoice No</label>
+                            <label asp-for="Vouchers.InvoiceNo" class="form-label fw-bold">@Localizer["lbl_InvoiceNo"]</label>
                             <input asp-for="Vouchers.InvoiceNo" type="text" class="form-control form-control-lg" />
                         </div>
                         <div class="col-md-12">
@@ -58,11 +58,11 @@
                         <table class="table table-bordered" id="JournalVoucherTable">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Transaction @Localizer["lbl_Type"]</th>
-                                    <th>Transaction Account</th>
-                                    <th>Debit Amount</th>
-                                    <th>Credit Amount</th>
-                                    <th>Action</th>
+                                    <th>@Localizer["lbl_TransactionType"]</th>
+                                    <th>@Localizer["lbl_TransactionAccount"]</th>
+                                    <th>@Localizer["lbl_DebitAmount"]</th>
+                                    <th>@Localizer["lbl_CreditAmount"]</th>
+                                    <th>@Localizer["lbl_Action"]</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -73,7 +73,7 @@
                                         <tr>
                                             <td>
                                                 <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[@i].DRCR">
-                                                    <option value="">Select Type</option>
+                                                    <option value="">@Localizer["lbl_SelectTransactionType"]</option>
                                                     @foreach (var type in ViewBag.TransactionTypeList)
                                                     {
                                                         <option value="@type.Value">@type.Text</option>
@@ -82,7 +82,7 @@
                                             </td>
                                             <td>
                                                 <select class="form-select transaction-account" name="Vouchers.VoucherDetails[@i].HeadofAccount_FiveID">
-                                                    <option value="">Select Account</option>
+                                                    <option value="">@Localizer["lbl_SelectHeadofAccount"]</option>
                                                     @foreach (var type in ViewBag.HeadofAccount_FiveList)
                                                     {
                                                         <option value="@type.Value">@type.Text</option>
@@ -98,11 +98,11 @@
                                             <td style="text-align: center;">
                                                 @if (i == 0)
                                                 {
-                                                    <button type="button" class="btn btn-sm btn-secondary add-row">Add</button>
+                                                    <button type="button" class="btn btn-sm btn-secondary add-row">@Localizer["lbl_Add"]</button>
                                                 }
                                                 else
                                                 {
-                                                    <button type="button" class="btn btn-sm btn-danger remove-row">Remove</button>
+                                                    <button type="button" class="btn btn-sm btn-danger remove-row">@Localizer["lbl_Remove"]</button>
                                                 }
                                             </td>
                                         </tr>
@@ -113,7 +113,7 @@
                                     <tr>
                                         <td>
                                             <select class="form-select transaction-Type" name="Vouchers.VoucherDetails[0].TransactionTypeID">
-                                                <option value="">Select Type</option>
+                                                <option value="">@Localizer["lbl_SelectTransactionType"]</option>
                                                 @foreach (var type in ViewBag.TransactionTypeList)
                                                 {
                                                     <option value="@type.Value">@type.Text</option>
@@ -122,7 +122,7 @@
                                         </td>
                                         <td>
                                             <select class="form-select transaction-account" name="Vouchers.VoucherDetails[0].HeadofAccount_FiveID">
-                                                <option value="">Select Account</option>
+                                                <option value="">@Localizer["lbl_SelectHeadofAccount"]</option>
                                                 @foreach (var type in ViewBag.HeadofAccount_FiveList)
                                                 {
                                                     <option value="@type.Value">@type.Text</option>
@@ -136,7 +136,7 @@
                                             <input type="text" class="form-control credit" name="Vouchers.VoucherDetails[0].CrAmt" />
                                         </td>
                                         <td style="text-align: center;">
-                                            <button type="button" class="btn btn-sm btn-secondary add-row">Add</button>
+                                            <button type="button" class="btn btn-sm btn-secondary add-row">@Localizer["lbl_Add"]</button>
                                         </td>
                                     </tr>
                                 }
@@ -147,11 +147,11 @@
 
                     <div class="row mt-4">
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">@Localizer["lbl_Total"] Debit Amount</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_TotalDebitAmount"]</label>
                             <input id="TotalDrAmt" class="form-control form-control-lg" readonly />
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">@Localizer["lbl_Total"] Credit Amount</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_TotalCreditAmount"]</label>
                             <input id="TotalCrAmt" class="form-control form-control-lg" readonly />
                         </div>
                     </div>
@@ -159,7 +159,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["lbl_Close"]</button>
-                <button type="button" id="saveNewVoucher" class="btn btn-success">Save Voucher</button>
+                <button type="button" id="saveNewVoucher" class="btn btn-success">@Localizer["lbl_SaveVoucher"]</button>
             </div>
         </div>
     </div>
@@ -198,9 +198,9 @@
                 const isLastRow = index === rows.length - 1;
                 const actionCell = $(this).find('td:last-child');
                 if (isLastRow) {
-                    actionCell.append('<button type="button" class="btn btn-sm btn-secondary add-row">Add</button>');
+                    actionCell.append('<button type="button" class="btn btn-sm btn-secondary add-row">@Localizer["lbl_Add"]</button>');
                 } else {
-                    actionCell.append('<button type="button" class="btn btn-sm btn-danger remove-row">Remove</button>');
+                    actionCell.append('<button type="button" class="btn btn-sm btn-danger remove-row">@Localizer["lbl_Remove"]</button>');
                 }
             });
         }
@@ -214,7 +214,7 @@
             const newRow = `<tr>
                 <td>
                         <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount}].DRCR">
-                        <option value="">Select Type</option>
+                        <option value="">@Localizer["lbl_SelectTransactionType"]</option>
     @foreach (var type in ViewBag.TransactionTypeList)
     {
                                 <option value="@type.Value">@type.Text</option>
@@ -223,7 +223,7 @@
                 </td>
                 <td>
                     <select class="form-select transaction-account" name="Vouchers.VoucherDetails[${rowCount}].HeadofAccount_FiveID">
-                        <option value="">Select Account</option>
+                        <option value="">@Localizer["lbl_SelectHeadofAccount"]</option>
     @foreach (var type in ViewBag.HeadofAccount_FiveList)
     {
                                 <option value="@type.Value">@type.Text</option>

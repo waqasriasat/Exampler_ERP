@@ -10,23 +10,23 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Finance.Report
 {
-  public class LodgementController : Controller
+  public class LodgementController : PositionController
   {
-    private readonly AppDBContext _appDBContext; 
- private readonly IStringLocalizer<LodgementController> _localizer;
+    private readonly AppDBContext _appDBContext;
+    private readonly IStringLocalizer<LodgementController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
-private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
     private readonly ILogger<HRGlobalSettingController> _logger;
-    public LodgementController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext ,IStringLocalizer<LodgementController> localizer, ILogger<HRGlobalSettingController> logger)
+    public LodgementController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<LodgementController> localizer, ILogger<HRGlobalSettingController> logger)
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
       _utils = utils;
-_hubContext = hubContext; 
- _localizer = localizer;
- 
+      _hubContext = hubContext;
+      _localizer = localizer;
       _logger = logger;
     }
     public async Task<IActionResult> Index()

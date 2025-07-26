@@ -1,4 +1,6 @@
 @model List<Exampler_ERP.Models.PR_PurchaseRequest>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     var today = DateTime.Now.ToString("dd-MM-yyyy");
 }
@@ -10,7 +12,7 @@
                 <option value="@vendor.Value">@vendor.Text</option>
             }
         </select>
-        <span class="ms-auto" style="">Dated : @today</span>
+        <span class="ms-auto" style="">@Localizer["lbl_Date"]d : @today</span>
     </div>
     <table class="table table-bordered" id="purchaseOrderTable">
         <thead class="table-light">

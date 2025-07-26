@@ -19,8 +19,9 @@ public class DashboardsController : PositionController
   private readonly Utils _utils;
   private readonly IHubContext<NotificationHub> _hubContext;
 
-  public DashboardsController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<DashboardsController> localizer)
-  : base(appDBContext)
+  public DashboardsController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<DashboardsController> localizer) 
+    : base(appDBContext)
+  
   {
     _appDBContext = appDBContext;
     _configuration = configuration;

@@ -13,7 +13,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Financial
 {
-  public class FixedDeductionController : Controller
+  public class FixedDeductionController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<FixedDeductionController> _localizer;
@@ -23,7 +23,8 @@ namespace Exampler_ERP.Controllers.HR.Financial
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public FixedDeductionController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AdditionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<FixedDeductionController> localizer)
+    public FixedDeductionController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AdditionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<FixedDeductionController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

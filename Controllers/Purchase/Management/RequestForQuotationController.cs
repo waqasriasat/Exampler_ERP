@@ -10,7 +10,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.Purchase.Management
 {
-  public class RequestForQuotationController : Controller
+  public class RequestForQuotationController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<RequestForQuotationController> _localizer;
@@ -19,7 +19,8 @@ namespace Exampler_ERP.Controllers.Purchase.Management
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public RequestForQuotationController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<RequestForQuotationController> localizer)
+    public RequestForQuotationController(AppDBContext appDBContext, IConfiguration conSTguration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<RequestForQuotationController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _conSTguration = conSTguration;

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.EmployeePortal.Apply
 {
-  public class DocumentUploadController : Controller
+  public class DocumentUploadController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<DocumentUploadController> _localizer;
@@ -18,7 +18,8 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
-    public DocumentUploadController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<DocumentUploadController> localizer)
+    public DocumentUploadController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<DocumentUploadController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

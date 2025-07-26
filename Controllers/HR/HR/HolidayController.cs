@@ -12,7 +12,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
-  public class HolidayController : Controller
+  public class HolidayController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<HolidayController> _localizer;
@@ -22,7 +22,8 @@ namespace Exampler_ERP.Controllers.HR.HR
 
 
 
-    public HolidayController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<HolidayController> localizer)
+    public HolidayController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<HolidayController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;

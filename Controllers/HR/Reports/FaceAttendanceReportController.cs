@@ -9,7 +9,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.Reports
 {
-  public class FaceAttendanceReportController : Controller
+  public class FaceAttendanceReportController : PositionController
   {
     private readonly AppDBContext _appDBContext;
     private readonly IStringLocalizer<FaceAttendanceReportController> _localizer;
@@ -18,7 +18,8 @@ namespace Exampler_ERP.Controllers.HR.Reports
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public FaceAttendanceReportController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<FaceAttendanceReportController> localizer)
+    public FaceAttendanceReportController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<FaceAttendanceReportController> localizer) 
+    : base(appDBContext)
     {
       _appDBContext = appDBContext;
       _configuration = configuration;
