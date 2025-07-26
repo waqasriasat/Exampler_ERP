@@ -58,8 +58,8 @@ namespace Exampler_ERP.Models
     public DbSet<Settings_ItemComponentType> Settings_ItemComponentTypes { get; set; }
     public DbSet<Settings_RequisitionStatusType> Settings_RequisitionStatusTypes { get; set; }
     public DbSet<Settings_IssuanceStatusType> Settings_IssuanceStatusTypes { get; set; }
-
     public DbSet<Settings_RequestStatusType> Settings_RequestStatusTypes { get; set; }
+    public DbSet<Settings_LanguageSetup> Settings_LanguageSetups { get; set; }
 
     public DbSet<CR_ProcessTypeApproval> CR_ProcessTypeApprovals { get; set; }
     public DbSet<CR_ProcessTypeApprovalDetail> CR_ProcessTypeApprovalDetails { get; set; }
@@ -73,6 +73,7 @@ namespace Exampler_ERP.Models
     public DbSet<CR_AccessRightsByUser> CR_AccessRightsByUsers { get; set; }
     public DbSet<CR_User> CR_Users { get; set; }
     public DbSet<CR_LanguageRecord> CR_LanguageRecords { get; set; }
+    public DbSet<CR_GlobalSetting> CR_GlobalSettings { get; set; }
 
     public DbSet<HR_ThumbEnrollment> HR_ThumbEnrollments { get; set; }
     public DbSet<HR_DeductionSetup> HR_DeductionSetups { get; set; }
@@ -143,6 +144,14 @@ namespace Exampler_ERP.Models
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      modelBuilder.Entity<Settings_LanguageSetup>().HasData(
+     new Settings_LanguageSetup() { LanguageSetupID = 1, CultureCode = "en-US", CultureName = "English", Position = "LTR" },
+     new Settings_LanguageSetup() { LanguageSetupID = 2, CultureCode = "ur-PK", CultureName = "Urdu", Position = "RTL" }
+
+  );
+      modelBuilder.Entity<CR_GlobalSetting>().HasData(
+      new CR_GlobalSetting() { GlobalSettingID = 1, CultureSetting = "en-US"}
+   );
       modelBuilder.Entity<CR_LanguageRecord>().HasData(
       new CR_LanguageRecord() { LanguageRecordId = 1, LabelName = "", LabelValue = "", Culture = "" },
       new CR_LanguageRecord() { LanguageRecordId = 2, LabelName = "", LabelValue = "", Culture = "" },

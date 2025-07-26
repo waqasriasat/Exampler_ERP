@@ -22,8 +22,8 @@ namespace Exampler_ERP.Language
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDBContext>();
 
-        var getculture = context.HR_GlobalSettings
-       .OrderBy(x => x.HR_GlobalSettingID) // OrderBy optional, par Top(1) ki tarah kaam karega
+        var getculture = context.CR_GlobalSettings
+       .OrderBy(x => x.GlobalSettingID) // OrderBy optional, par Top(1) ki tarah kaam karega
        .Select(x => x.CultureSetting)
        .FirstOrDefault() ?? "en-US";
 

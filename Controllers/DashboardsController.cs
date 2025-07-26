@@ -7,10 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Localization;
+using Exampler_ERP.Controllers;
 
 namespace AspnetCoreMvcFull.Controllers;
 
-public class DashboardsController : Controller
+public class DashboardsController : PositionController
 {
   private readonly AppDBContext _appDBContext;
   private readonly IStringLocalizer<DashboardsController> _localizer;
@@ -19,6 +20,7 @@ public class DashboardsController : Controller
   private readonly IHubContext<NotificationHub> _hubContext;
 
   public DashboardsController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<DashboardsController> localizer)
+  : base(appDBContext)
   {
     _appDBContext = appDBContext;
     _configuration = configuration;

@@ -1,7 +1,8 @@
 @inject IHttpContextAccessor httpContextAccessor
 
 <!DOCTYPE html>
-<html lang="en"
+
+<html lang="@System.Threading.Thread.CurrentThread.CurrentCulture.Name" dir="@ViewBag.PositionDirection"
       class='light-style layout-menu-fixed'
       data-theme="theme-default" data-assets-path='@((httpContextAccessor.HttpContext?.Request.PathBase ?? "") + "/")'
       data-framework="aspnetcore-mvc"

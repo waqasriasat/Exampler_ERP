@@ -31,6 +31,7 @@ namespace Exampler_ERP.Models
 
     public int? WorkingDayInWeek { get; set; } = 5;
 
-    public string? CultureSetting { get; set; }
+    
+
   }
 }
