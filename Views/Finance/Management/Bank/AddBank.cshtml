@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addBankModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add New Bank
+                    @Localizer["lbl_AddNewBank"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -16,7 +16,7 @@
                 <form id="addBankForm">
                     <div class="row">
                         <div class="col-12 col-md-12 col-lg-12">
-                            <label for="BankName" class="form-label fw-bold">Bank Name</label>
+                            <label for="BankName" class="form-label fw-bold">@Localizer["lbl_BankName"]</label>
                             <input type="text" class="form-control form-control-lg" id="BankName" name="BankName" value="@Model.BankName" />
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
@@ -26,7 +26,7 @@
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label for="AccountNo" class="form-label fw-bold">Account No</label>
+                            <label for="AccountNo" class="form-label fw-bold">@Localizer["lbl_BankAccount"]</label>
                             <input type="text" class="form-control form-control-lg" id="AccountNo" name="AccountNo" value="@Model.AccountNo" />
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">

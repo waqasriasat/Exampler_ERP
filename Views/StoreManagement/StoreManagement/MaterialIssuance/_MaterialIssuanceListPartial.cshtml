@@ -1,5 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.ST_MaterialIssuance>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @foreach (var item in Model)
      {
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
@@ -18,7 +19,7 @@
                                     </div>
                                     <div class="col-6">
                                         <p class="text-nowrap">
-                                            <span class="smallAdd">Status :</span> @item.IssuanceStatusTypes?.IssuanceStatusTypeName
+                                            <span class="smallAdd">@Localizer["lbl_Status"] :</span> @item.IssuanceStatusTypes?.IssuanceStatusTypeName
                                         </p>
                                     </div>
                                 </div>

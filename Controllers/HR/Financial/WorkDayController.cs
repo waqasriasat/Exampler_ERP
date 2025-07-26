@@ -160,12 +160,12 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("WorkDay");
-        worksheet.Cells["A1"].Value = "WorkDay ID";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_WorkDay"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_WorkDay ID"];
         worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
-        worksheet.Cells["C1"].Value = "Month";
-        worksheet.Cells["D1"].Value = "Year";
-        worksheet.Cells["E1"].Value = "Days";
+        worksheet.Cells["C1"].Value = _localizer["lbl_Month"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_Year"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_DeducationDay"];
 
 
         for (int i = 0; i < WorkDay.Count; i++)
@@ -183,7 +183,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"WorkDay-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_WorkDay"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

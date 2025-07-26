@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Finance - Fixed Deduction";
+    ViewData["Title"] = Localizer["lbl_Finance"] + "  - " + @Localizer["lbl_FixedDeduction"];
 }
 
 @section PageScripts {
@@ -105,7 +105,7 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Finance /</span> Fixed Deduction
+    <span class="text-muted fw-light">@Localizer["lbl_Finance"] /</span> @Localizer["lbl_FixedDeduction"]
 </h4>
 
 <div class="row">
@@ -135,7 +135,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Fixed Deduction @Localizer["lbl_List"]</h5>
+            <h5 class="card-header">@Localizer["lbl_FixedDeductionList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
@@ -159,7 +159,7 @@
                     </div>
                 </div>
                 <div id="FixedDeductionListContainer">
-                    @Html.Partial("~/Views/HR/FixedDeduction/FixedDeduction/_FixedDeductionListPartial.cshtml", Model)
+                    @Html.Partial("~/Views/HR/Financial/FixedDeduction/_FixedDeductionListPartial.cshtml", Model)
                 </div>
             </div>
         </div>

@@ -293,23 +293,23 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("EndOfServices");
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_EndOfService"]);
 
-        worksheet.Cells["A1"].Value = "EndOfService ID";
+        worksheet.Cells["A1"].Value = _localizer["lbl_EndOfServiceID"];
         worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
-        worksheet.Cells["C1"].Value = "Reason Type";
-        worksheet.Cells["D1"].Value = "Total Salary";
-        worksheet.Cells["E1"].Value = "Total Day Of Absent";
-        worksheet.Cells["F1"].Value = "Date Of Commencement";
-        worksheet.Cells["G1"].Value = "Date Of Completion Of Work";
-        worksheet.Cells["H1"].Value = "Number of Years";
-        worksheet.Cells["I1"].Value = "Number of Months";
-        worksheet.Cells["J1"].Value = "Number of Days";
-        worksheet.Cells["K1"].Value = "Total Days";
-        worksheet.Cells["L1"].Value = "End of Service Benefit";
-        worksheet.Cells["M1"].Value = "Balance Of The Annual Leave";
-        worksheet.Cells["N1"].Value = "Amount Dues For The Leave";
-        worksheet.Cells["O1"].Value = "Total End Of Service Dues";
+        worksheet.Cells["C1"].Value = _localizer["lbl_ReasonType"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_TotalSalary"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_TotalDayOfAbsent"];
+        worksheet.Cells["F1"].Value = _localizer["lbl_DateOfCommencement"];
+        worksheet.Cells["G1"].Value = _localizer["lbl_DateOfCompletionOfWork"];
+        worksheet.Cells["H1"].Value = _localizer["lbl_NumberofYears"];
+        worksheet.Cells["I1"].Value = _localizer["lbl_NumberofMonths"];
+        worksheet.Cells["J1"].Value = _localizer["lbl_NumberofDays"];
+        worksheet.Cells["K1"].Value = _localizer["lbl_TotalDays"];
+        worksheet.Cells["L1"].Value = _localizer["lbl_EndofServiceBenefit"];
+        worksheet.Cells["M1"].Value = _localizer["lbl_BalanceOfTheAnnualLeave"];
+        worksheet.Cells["N1"].Value = _localizer["lbl_AmountDuesForTheLeave"];
+        worksheet.Cells["O1"].Value = _localizer["lbl_TotalEndOfServiceDues"];
 
         for (int i = 0; i < EndOfService.Count; i++)
         {
@@ -354,7 +354,7 @@ namespace Exampler_ERP.Controllers.HR.HR
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"EndOfService-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_EndOfService"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

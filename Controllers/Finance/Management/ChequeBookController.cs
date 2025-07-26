@@ -152,14 +152,14 @@ namespace Exampler_ERP.Controllers.Finance.Management
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("ChequeBooks");
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_ChequeBook"]);
 
         // Adding column headers
-        worksheet.Cells["A1"].Value = "ChequeBook ID";
-        worksheet.Cells["B1"].Value = "BankName";
-        worksheet.Cells["C1"].Value = "ChequeFrom";
-        worksheet.Cells["D1"].Value = "ChequeTo";
-        worksheet.Cells["E1"].Value = "TotalPages";
+        worksheet.Cells["A1"].Value = _localizer["lbl_ChequeBookID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_BankName"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_FromChequeNo"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_ToChequeNo"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_TotalPages"];
 
         // Adding data rows
         for (int i = 0; i < ChequeBooks.Count; i++)
@@ -179,7 +179,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"ChequeBooks-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_ChequeBook"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

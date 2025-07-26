@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editVoucherTypeModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit Voucher Type
+                    @Localizer["lbl_EditVoucherType"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -15,7 +15,7 @@
                 <form id="editVoucherTypeForm">
                     <div class="row">
                         <div class="col-12 col-md-12 col-lg-12">
-                            <label for="VoucherTypeName" class="form-label fw-bold">Voucher Type Name</label>
+                            <label for="VoucherTypeName" class="form-label fw-bold">@Localizer["lbl_VoucherTypeName"]</label>
                             <input type="text" class="form-control form-control-lg" id="VoucherTypeName" name="VoucherTypeName" value="@Model.VoucherTypeName" />
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
@@ -25,11 +25,11 @@
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label for="VoucherNature" class="form-label fw-bold">Nature</label>
+                            <label for="VoucherNature" class="form-label fw-bold"> @Localizer["lbl_Nature"]</label>
                             <input type="text" class="form-control form-control-lg" id="VoucherNature" name="VoucherNature" value="@Model.VoucherNature" />
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label for="VoucherPrefix" class="form-label fw-bold">Prefix</label>
+                            <label for="VoucherPrefix" class="form-label fw-bold"> @Localizer["lbl_Prefix"]</label>
                             <input type="text" class="form-control form-control-lg" id="VoucherPrefix" name="VoucherPrefix" value="@Model.VoucherPrefix" />
                         </div>
                     </div>

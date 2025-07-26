@@ -152,14 +152,14 @@ namespace Exampler_ERP.Controllers.HR.Reports
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("FaceAttendance");
-        worksheet.Cells["A1"].Value = "FaceAttendance ID";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_FaceAttendance"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_FaceAttendance ID"];
         worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
         worksheet.Cells["C1"].Value = _localizer["lbl_Date"];
-        worksheet.Cells["D1"].Value = "In Time";
-        worksheet.Cells["E1"].Value = "Out Time";
-        worksheet.Cells["F1"].Value = "D-Hours";
-        worksheet.Cells["G1"].Value = "D-Minute";
+        worksheet.Cells["D1"].Value = _localizer["lbl_InTime"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_OutTime"];
+        worksheet.Cells["F1"].Value = _localizer["lbl_DutyHours"];
+        worksheet.Cells["G1"].Value = _localizer["lbl_DutyMinute"];
 
 
         for (int i = 0; i < FaceAttendance.Count; i++)
@@ -179,7 +179,7 @@ namespace Exampler_ERP.Controllers.HR.Reports
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"FaceAttendance-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_FaceAttendance"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

@@ -149,26 +149,26 @@ namespace Exampler_ERP.Controllers.Finance.Management
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("Vendors");
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Vendor"]);
 
         // Adding column headers
-        worksheet.Cells["A1"].Value = "Vendor ID";
-        worksheet.Cells["B1"].Value = "Vendor Name";
-        worksheet.Cells["C1"].Value = "Payee Name";
-        worksheet.Cells["D1"].Value = "Cell";
-        worksheet.Cells["E1"].Value = _localizer["lbl_Phone"];
-        worksheet.Cells["F1"].Value = "Person Name";
-        worksheet.Cells["G1"].Value = _localizer["lbl_Fax"];
-        worksheet.Cells["H1"].Value = "Filer";
-        worksheet.Cells["I1"].Value = "STN";
-        worksheet.Cells["J1"].Value = "STN Rate";
-        worksheet.Cells["K1"].Value = "NTN";
-        worksheet.Cells["L1"].Value = "NTN Rate";
-        worksheet.Cells["M1"].Value = "Income Tax Withholding ID";
-        worksheet.Cells["N1"].Value = "Sale Tax ID";
-        worksheet.Cells["O1"].Value = "Province";
-        worksheet.Cells["P1"].Value = "Federal";
-        worksheet.Cells["Q1"].Value = "Payment Section";
+        worksheet.Cells["A1"].Value = _localizer["lbl_VendorID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_VendorName"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_VendorPayee"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_Cell"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_Phone"]; 
+        worksheet.Cells["F1"].Value = _localizer["lbl_PersonName"];
+        worksheet.Cells["G1"].Value = _localizer["lbl_Fax"]; 
+        worksheet.Cells["H1"].Value = _localizer["lbl_Filer"];
+        worksheet.Cells["I1"].Value = _localizer["lbl_STN"];
+        worksheet.Cells["J1"].Value = _localizer["lbl_STNRate"];
+        worksheet.Cells["K1"].Value = _localizer["lbl_NTN"];
+        worksheet.Cells["L1"].Value = _localizer["lbl_NTNRate"];
+        worksheet.Cells["M1"].Value = _localizer["lbl_IncomeTax(Withholding)"];
+        worksheet.Cells["N1"].Value = _localizer["lbl_SaleTaxAccount"];
+        worksheet.Cells["O1"].Value = _localizer["lbl_Province"];
+        worksheet.Cells["P1"].Value = _localizer["lbl_Federal"];
+        worksheet.Cells["Q1"].Value = _localizer["lbl_PaymentSection"];
         worksheet.Cells["R1"].Value = _localizer["lbl_Address"];
 
         // Adding data rows
@@ -202,7 +202,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"Vendors-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_Vendor"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

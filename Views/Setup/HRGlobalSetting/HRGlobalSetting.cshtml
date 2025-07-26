@@ -92,12 +92,12 @@
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="EarlyComingGraceMinute" class="form-label">Overtime @Localizer["lbl_Type"]</label>
+                            <label for="EarlyComingGraceMinute" class="form-label">@Localizer["lbl_Overtime"] @Localizer["lbl_Type"]</label>
                             <select asp-for="EarlyComingGraceMinute" asp-items="@(new SelectList(ViewBag.OvertimeTypeList, "Value", "Text"))" class="form-control form-control-lg" id="EarlyComingGraceMinute">
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="EarlyComingValueofHours" class="form-label">Overtime Percentage of Daily Pay</label>
+                            <label for="EarlyComingValueofHours" class="form-label">@Localizer["lbl_Overtime"] Percentage of Daily Pay</label>
                             <input type="number" class="form-control form-control-lg"
                                    id="EarlyComingValueofHours" name="EarlyComingValueofHours"
                                    value="@Model.EarlyComingValueofHours" min="1" max="100" />
@@ -114,12 +114,12 @@
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="LateSeatingGraceMinute" class="form-label">Overtime @Localizer["lbl_Type"]</label>
+                            <label for="LateSeatingGraceMinute" class="form-label">@Localizer["lbl_Overtime"] @Localizer["lbl_Type"]</label>
                             <select asp-for="LateSeatingGraceMinute" asp-items="@(new SelectList(ViewBag.OvertimeTypeList, "Value", "Text"))" class="form-control form-control-lg" id="LateSeatingGraceMinute">
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="LateSeatingValueofHours" class="form-label">Overtime Percentage of Daily Pay</label>
+                            <label for="LateSeatingValueofHours" class="form-label">@Localizer["lbl_Overtime"] Percentage of Daily Pay</label>
                             <input type="number" class="form-control form-control-lg"
                                    id="LateSeatingValueofHours" name="LateSeatingValueofHours"
                                    value="@Model.LateSeatingValueofHours" min="1" max="100" />

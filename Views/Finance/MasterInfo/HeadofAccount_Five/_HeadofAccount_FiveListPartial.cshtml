@@ -2,50 +2,50 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-10 col-lg-10">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-5">
-                                        <p class="text-nowrap"><span class="smallAdd">HeadofAccount_Five Name : </span>@Html.DisplayFor(modelItem => item.HeadofAccount_FiveName)</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-5">
-                                        <p class="text-nowrap"><span class="smallAdd">Head Account : </span>@Html.DisplayFor(modelItem => item.HeadofAccount_Four.HeadofAccount_FourName)</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap">
-                                            <span class="smallAdd">@Localizer["lbl_Active"]  : </span>
-                                            @if (item.ActiveYNID == 1)
-                                            {
-                                                <span>@Localizer["lbl_Yes"]</span>
-                                            }
-                                            else if (item.ActiveYNID == 2)
-                                            {
-                                                <span>@Localizer["lbl_No"]</span>
-                                            }
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-2 col-lg-2">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editHeadofAccount_FiveLink" data-id="@item.HeadofAccount_FiveID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteHeadofAccount_FiveLink" data-id="@item.HeadofAccount_FiveID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+{
+    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+        <div class="row">
+            <div class="col-10 col-md-10 col-lg-10">
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-5">
+                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_HeadofAccountFiveName"] : </span>@Html.DisplayFor(modelItem => item.HeadofAccount_FiveName)</p>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-5">
+                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_HeadofAccount"] : </span>@Html.DisplayFor(modelItem => item.HeadofAccount_Four.HeadofAccount_FourName)</p>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-2">
+                        <p class="text-nowrap">
+                            <span class="smallAdd">@Localizer["lbl_Active"]  : </span>
+                            @if (item.ActiveYNID == 1)
+                            {
+                                <span>@Localizer["lbl_Yes"]</span>
+                            }
+                            else if (item.ActiveYNID == 2)
+                            {
+                                <span>@Localizer["lbl_No"]</span>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 col-md-2 col-lg-2">
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-6">
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a href="javascript:void(0)" class="editHeadofAccount_FiveLink" data-id="@item.HeadofAccount_FiveID">
+                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                            </a>
                         </div>
                     </div>
-                }
+                    <div class="col-12 col-md-12 col-lg-6">
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a href="javascript:void(0)" class="deleteHeadofAccount_FiveLink" data-id="@item.HeadofAccount_FiveID">
+                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

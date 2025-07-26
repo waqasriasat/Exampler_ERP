@@ -2,51 +2,51 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-11 col-lg-9">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.Vacation?.Employee?.FirstName @item.Vacation?.Employee?.FatherName @item.Vacation?.Employee?.FamilyName</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_VacationType"] : </span>@item.Vacation?.Settings_VacationType?.VacationTypeName</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Settle Days : </span>@item.SettleDays</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Settle Amount : </span>@item.SettleAmount</p>
-                                    </div>
+{
+    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+        <div class="row">
+            <div class="col-10 col-md-11 col-lg-9">
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-4">
+                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.Vacation?.Employee?.FirstName @item.Vacation?.Employee?.FatherName @item.Vacation?.Employee?.FamilyName</p>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-3">
+                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_VacationType"] : </span>@item.Vacation?.Settings_VacationType?.VacationTypeName</p>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-3">
+                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_SettleDays"] : </span>@item.SettleDays</p>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-2">
+                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_SettleAmount"] : </span>@item.SettleAmount</p>
+                    </div>
 
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-1 col-lg-3">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editVacationSettleLink" data-id="@item.VacationSettleID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="printVacationSettleLink" data-id="@item.VacationSettleID">
-                                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteVacationSettleLink" data-id="@item.VacationSettleID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                </div>
+            </div>
+            <div class="col-2 col-md-1 col-lg-3">
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-4">
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a href="javascript:void(0)" class="editVacationSettleLink" data-id="@item.VacationSettleID">
+                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                            </a>
                         </div>
                     </div>
-                }
+                    <div class="col-12 col-md-12 col-lg-4">
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a href="javascript:void(0)" class="printVacationSettleLink" data-id="@item.VacationSettleID">
+                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-4">
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a href="javascript:void(0)" class="deleteVacationSettleLink" data-id="@item.VacationSettleID">
+                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

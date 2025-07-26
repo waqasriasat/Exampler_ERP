@@ -138,9 +138,9 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("HeadofAccount_CategoryTypes");
-        worksheet.Cells["A1"].Value = "Category Type ID";
-        worksheet.Cells["B1"].Value = "Category Type Name";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_CategoryType"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_CategoryTypeID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_CategoryTypeName"];
         worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
@@ -157,7 +157,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"HeadofAccount_CategoryTypes-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_CategoryType"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

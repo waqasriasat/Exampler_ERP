@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-	ViewData["Title"] = @Localizer["lbl_MasterInformation"] + " - " + @Localizer["lbl_HeadofAccount"] + "-" + @Localizer["lbl_Third"];
+	ViewData["Title"] = @Localizer["lbl_MasterInformation"] + " - " + @Localizer["lbl_HeadofAccountThird"];
 }
 }
 
@@ -108,7 +108,7 @@
 
 
 <h4 class="py-3 mb-4">
-	<span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> @Localizer["lbl_HeadofAccount"]_@Localizer["lbl_Third"]
+	<span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> @Localizer["lbl_HeadofAccountThird"]
 </h4>
 <div class="row">
     <div class="col-md-12">
@@ -120,7 +120,7 @@
                     <div class="col-md-8" style="padding-bottom: 15px;">
                         <!-- Search Field and Button -->
                         <div class="input-group">
-							<input type="text" class="form-control" placeholder="@Localizer["lbl_Search"]  @Localizer["lbl_HeadofAccount"]_@Localizer["lbl_Third"]  @Localizer["lbl_Name"]" id="searchHeadofAccount_ThirdInput">
+							<input type="text" class="form-control" placeholder="@Localizer["lbl_SearchHeadofAccountThirdName"]" id="searchHeadofAccount_ThirdInput">
                             <button class="btn btn-outline-secondary" type="button" id="searchHeadofAccount_ThirdButton">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -141,14 +141,14 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-			<h5 class="card-header">@Localizer["lbl_HeadofAccount"]_@Localizer["lbl_Third"]  @Localizer["lbl_List"]</h5>
+			<h5 class="card-header">@Localizer["lbl_HeadofAccountThirdList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                         <div class="col-10 col-md-10 col-lg-10">
                             <div class="row">
                                 <div class="col-5">
-		                            <p class="text-nowrap">@Localizer["lbl_HeadofAccount"]_@Localizer["lbl_Third"]  @Localizer["lbl_Name"]</p>
+		                            <p class="text-nowrap">@Localizer["lbl_HeadofAccountThirdName"]</p>
                                 </div>
                                 <div class="col-5">
                                     <p class="text-nowrap">@Localizer["lbl_HeadofAccount"]</p>

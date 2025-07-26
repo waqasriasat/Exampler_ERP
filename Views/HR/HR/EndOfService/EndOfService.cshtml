@@ -2,8 +2,8 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Localizer["lbl_HumanResources"] + " -  End Of Service";
-}
+    ViewData["Title"] = Localizer["lbl_HumanResources"] + " -  " + Localizer["lbl_EndOfService"];
+        }
 
 @section PageScripts {
     <script>
@@ -147,7 +147,7 @@
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">@Localizer["lbl_HumanResources"] /</span>  End Of Service
+    <span class="text-muted fw-light">@Localizer["lbl_HumanResources"] /</span>  @Localizer["lbl_EndOfService"]
 </h4>
 <form method="get" action="@Url.Action("Index", "EndOfService")">
     <div class="row">
@@ -177,7 +177,7 @@
 
                         <!-- EndOfServiceReason Type Dropdown -->
                         <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">Reason @Localizer["lbl_Type"]</label>
+                            <label class="form-label fw-bold">@Localizer["lbl_ReasonType"]</label>
                             <select name="EndOfServiceReasonTypeID" class="form-control">
                                 @foreach (var item in ViewBag.EndOfServiceReasonTypeList)
                                 {
@@ -215,7 +215,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header"> End Of Service @Localizer["lbl_List"]</h5>
+            <h5 class="card-header">@Localizer["lbl_EndOfServiceList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
@@ -225,10 +225,10 @@
                                     <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                                 </div>
                                 <div class="col-4">
-                                    <p class="text-nowrap">Date of Completion of Work</p>
+                                    <p class="text-nowrap">@Localizer["lbl_DateOfCompletionOfWork"]</p>
                                 </div>
                                 <div class="col-4">
-                                    <p class="text-nowrap">Total End Of Service Dues</p>
+                                    <p class="text-nowrap">@Localizer["lbl_TotalEndOfServiceDues"]</p>
                                 </div>
                             </div>
                         </div>

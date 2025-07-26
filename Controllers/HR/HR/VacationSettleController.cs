@@ -364,15 +364,15 @@ namespace Exampler_ERP.Controllers.HR.HR
       var vacationTypesList = await _utils.GetVacationTypes();
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("Vacations");
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_VacationSettle"]);
 
-        worksheet.Cells["A1"].Value = "Vacation ID";
+        worksheet.Cells["A1"].Value = _localizer["lbl_VacationSettleID"];
         worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
-        worksheet.Cells["C1"].Value = "Vacation Type";
-        worksheet.Cells["D1"].Value = "HR Date";
-        worksheet.Cells["E1"].Value = "Start Date";
-        worksheet.Cells["F1"].Value = "End Date";
-        worksheet.Cells["G1"].Value = "Total Days";
+        worksheet.Cells["C1"].Value = _localizer["lbl_VacationTypeName"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_ApplyDate"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_StartDate"];
+        worksheet.Cells["F1"].Value = _localizer["lbl_EndDate"];
+        worksheet.Cells["G1"].Value = _localizer["lbl_TotalDays"];
 
         for (int i = 0; i < vacations.Count; i++)
         {
@@ -394,7 +394,7 @@ namespace Exampler_ERP.Controllers.HR.HR
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"vacations-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_VacationSettle"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

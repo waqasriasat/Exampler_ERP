@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editHeadofAccount_ThirdModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit HeadofAccount_Third
+                    @Localizer["lbl_EditHeadofAccountThird"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -15,7 +15,7 @@
                 <form id="editHeadofAccount_ThirdForm">
                     <div class="row">
                         <div class="col-6">
-                            <label asp-for="HeadofAccount_SecondID" class="form-label fw-bold">Select Head Account</label>
+                            <label asp-for="HeadofAccount_SecondID" class="form-label fw-bold">@Localizer["lbl_SelectHeadofAccount"]</label>
                             <select asp-for="HeadofAccount_SecondID" asp-items="@(new SelectList(ViewBag.SecondList, "Value", "Text", Model.HeadofAccount_SecondID))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="HeadofAccount_SecondID" class="text-danger"></span>
@@ -27,7 +27,7 @@
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                         </div>
                         <div class="col-12 col-md-12 col-lg-12">
-                            <label for="HeadofAccount_ThirdName" class="form-label fw-bold">@Localizer["lbl_HeadofAccount"]_@Localizer["lbl_Third"]  @Localizer["lbl_Name"]</label>
+                            <label for="HeadofAccount_ThirdName" class="form-label fw-bold">@Localizer["lbl_HeadofAccountThirdName"]</label>
                             <input type="text" class="form-control form-control-lg" id="HeadofAccount_ThirdName" name="HeadofAccount_ThirdName" value="@Model.HeadofAccount_ThirdName" />
                         </div>
 

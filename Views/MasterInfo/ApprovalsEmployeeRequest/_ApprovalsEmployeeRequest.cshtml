@@ -21,7 +21,7 @@
                                     <p class="text-nowrap">@Localizer["lbl_Rank"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Pending Date</p>
+                                    <p class="text-nowrap">@Localizer["lbl_PendingDate"]</p>
                                 </div>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                                         <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Rank"] : </span>@Html.DisplayFor(modelItem => item.Rank)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Pending Date : </span>@item.Date.ToString("dd-MM-yyyy HH:mm:ss")</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_PendingDate"] : </span>@item.Date.ToString("dd-MM-yyyy HH:mm:ss")</p>
                                     </div>
                                 </div>
                             </div>

@@ -53,7 +53,7 @@
                     </div>
                     <div class="col-6">
                         <h5 style="text-align: center; padding-top: 35px; font-size: x-large;">
-                            Salary Slip
+                            @Localizer["lbl_SalarySlip"]"
                         </h5>
                     </div>
                     <div class="col-3">
@@ -67,30 +67,30 @@
                     <div class="col-12">
                         <div class="row bleft bright btop bbottom">
                             <div class="col-3">
-                                <p>Employee Name: @empPayroll.Employee.FirstName @empPayroll.Employee.FatherName @empPayroll.Employee.FamilyName</p>
+                                <p>@Localizer["lbl_FullName"]: @empPayroll.Employee.FirstName @empPayroll.Employee.FatherName @empPayroll.Employee.FamilyName</p>
                             </div>
                             <div class="col-3">
-                                <p>Branch: @empPayroll.Employee.BranchType.BranchTypeName</p>
+                                <p>@Localizer["lbl_Branch"]: @empPayroll.Employee.BranchType.BranchTypeName</p>
                             </div>
                             <div class="col-3">
-                                <p>Department: @empPayroll.Employee.DepartmentType.DepartmentTypeName</p>
+                                <p>@Localizer["lbl_Department"]: @empPayroll.Employee.DepartmentType.DepartmentTypeName</p>
                             </div>
                             <div class="col-3">
-                                <p>Designation: @empPayroll.Employee.DesignationType.DesignationTypeName</p>
+                                <p>@Localizer["lbl_Designation"]: @empPayroll.Employee.DesignationType.DesignationTypeName</p>
                             </div>
                             @if (empPayroll.BankDetails != null)
                             {
                                 <div class="col-3">
-                                    <p>Bank Name: @empPayroll.BankDetails.BankName</p>
+                                    <p>@Localizer["lbl_BankName"]: @empPayroll.BankDetails.BankName</p>
                                 </div>
                                 <div class="col-3">
-                                    <p>Bank Branch: @empPayroll.BankDetails.BranchName</p>
+                                    <p>@Localizer["lbl_BankBranch"]: @empPayroll.BankDetails.BranchName</p>
                                 </div>
                                 <div class="col-3">
-                                    <p>Account #: @empPayroll.BankDetails.AccountNumber</p>
+                                    <p>@Localizer["lbl_BankAccount"]: @empPayroll.BankDetails.AccountNumber</p>
                                 </div>
                                 <div class="col-3">
-                                    <p>Account Title: @empPayroll.BankDetails.AccountHolderName</p>
+                                    <p>@Localizer["lbl_AccountTitle"]: @empPayroll.BankDetails.AccountHolderName</p>
                                 </div>
                             }
 
@@ -141,7 +141,7 @@
                             <div class="col-12">
                                 <div class="row" style="top: 0px; position: relative;">
                                     <div class="col-9 bleft bbottom txtRight">
-                                        <p class="text-nowrap">Total :</p>
+                                        <p class="text-nowrap">@Localizer["lbl_Total"] :</p>
                                     </div>
                                     <div class="col-3 bright bbottom" style="justify-items:center">
                                         <p class="text-nowrap">@totalSalaryAmount.ToString("F2")</p>
@@ -187,7 +187,7 @@
 
                             {
                                 <div class="col-12">
-                                    <p>No additional allowance data available.</p>
+                                    <p>@Localizer["lbl_Noadditionalallowancedataavailable."]</p>
                                 </div>
                             }
                         </div>
@@ -196,7 +196,7 @@
                             <div class="col-12">
                                 <div class="row" style="top: 0px; position: relative;">
                                     <div class="col-9 bbottom txtRight">
-                                        <p class="text-nowrap">Total :</p>
+                                        <p class="text-nowrap">@Localizer["lbl_Total"] :</p>
                                     </div>
                                     <div class="col-3 bbottom" style="justify-items:center">
                                         <p class="text-nowrap">@totalAdditionalAllowanceAmount.ToString("F2")</p>
@@ -208,7 +208,7 @@
                         <!-- Overtime Section -->
                         <div class="row bbottom" style="height:83px; align-content: flex-start;">
                             <div class="col-9 bbottom headercolor">
-                                <p class="text-nowrap">Overtime</p>
+                                <p class="text-nowrap">@Localizer["lbl_Overtime"]</p>
                             </div>
                             <div class="col-3 bbottom headercolor" style="justify-items:center">
                                 <p class="text-nowrap">@Localizer["lbl_Amount"]</p>
@@ -239,7 +239,7 @@
 
                             {
                                 <div class="col-12">
-                                    <p>No overtime data available.</p>
+                                    <p>>@Localizer["lbl_Noovertimedataavailable."]</p>
                                 </div>
                             }
                         </div>
@@ -248,7 +248,7 @@
                             <div class="col-12">
                                 <div class="row" style="top: 0px; position: relative;">
                                     <div class="col-9 bbottom txtRight">
-                                        <p class="text-nowrap">Total :</p>
+                                        <p class="text-nowrap">@Localizer["lbl_Total"] :</p>
                                     </div>
                                     <div class="col-3 bbottom" style="justify-items:center">
                                         <p class="text-nowrap">@totalovertimeAmount.ToString("F2")</p>
@@ -294,7 +294,7 @@
 
                             {
                                 <div class="col-12">
-                                    <p>No deduction data available.</p>
+                                    <p>@Localizer["lbl_Nodeductiondataavailable."]</p>
                                 </div>
                             }
                         </div>
@@ -303,7 +303,7 @@
                             <div class="col-12">
                                 <div class="row" style="top: 0px; position: relative;">
                                     <div class="col-9 bleft bbottom txtRight">
-                                        <p class="text-nowrap">Total :</p>
+                                        <p class="text-nowrap">@Localizer["lbl_Total"] :</p>
                                     </div>
                                     <div class="col-3 bright bbottom" style="justify-items:center">
                                         <p class="text-nowrap">@totaldeductionDaysamount.ToString("F2")</p>
@@ -315,7 +315,7 @@
                         <!-- Fixed Deduction Section -->
                         <div class="row bleft bright bbottom" style="height:83px; align-content: flex-start;">
                             <div class="col-9 bbottom headercolor">
-                                <p class="text-nowrap">Fixed Deduction</p>
+                                <p class="text-nowrap">@Localizer["lbl_FixedDeduction"]</p>
                             </div>
                             <div class="col-3 bbottom headercolor" style="justify-items:center">
                                 <p class="text-nowrap">@Localizer["lbl_Amount"]</p>
@@ -353,7 +353,7 @@
                             <div class="col-12">
                                 <div class="row" style="top: 0px; position: relative;">
                                     <div class="col-9 bleft bbottom txtRight">
-                                        <p class="text-nowrap">Total :</p>
+                                        <p class="text-nowrap">@Localizer["lbl_Total"] :</p>
                                     </div>
                                     <div class="col-3 bright bbottom" style="justify-items:center">
                                         <p class="text-nowrap">@totalFixedDeductionAmount.ToString("F2")</p>
@@ -366,7 +366,7 @@
                     <div class="col-12">
                         <div class="row" style="top: 0px; position: relative;">
                             <div class="col-11 bleft bbottom txtRight">
-                                <p class="text-nowrap">Gross Salary :</p>
+                                <p class="text-nowrap">@Localizer["lbl_GrossSalary"] :</p>
                             </div>
                             <div class="col-1 bright bbottom" style="justify-items:center">
                                 <p class="text-nowrap">

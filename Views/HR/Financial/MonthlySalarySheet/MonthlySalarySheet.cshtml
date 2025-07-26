@@ -47,7 +47,7 @@
 </script>
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Financial /</span> Monthly Salary Sheet
+    <span class="text-muted fw-light">@Localizer["lbl_Finance"] /</span> @Localizer["lbl_MonthlySalarySheet"]
 </h4>
 <form method="get" action="@Url.Action("GeneratePayroll", "MonthlySalarySheet")">
     <div class="row">
@@ -73,82 +73,37 @@
                                 }
                             </select>
                         </div>
-
-
                         <!-- To Date Field -->
                         <div class="col-md-4 mb-4">
                             <label for="YearsTypeID" class="form-label fw-bold">@Localizer["lbl_Year"]</label>
                             <select name="YearsTypeID" class="form-control">
                                 @for (int year = DateTime.Now.Year; year >= 1900; year--)
-
-
-
                                 {
-
-
-
-                                    // Corrected to compare with ViewBag.YearsTypeID
-
-
-
                                     if (year == (ViewBag.YearsTypeID ?? 0))
-
-
-
                                     {
                                         <option value="@year" selected>@year</option>
                                     }
-
-
-
                                     else
-
-
-
                                     {
                                         <option value="@year">@year</option>
                                     }
-
-
-
                                 }
                             </select>
                         </div>
-
-
-
                         <!-- Branch Dropdown -->
                         <div class="col-md-4 mb-4">
                             <label class="form-label fw-bold">@Localizer["lbl_Branch"]</label>
                             <select name="Branch" class="form-control">
                                 @foreach (var item in ViewBag.BranchList)
-
                                 {
-
                                     if (item.Value == ViewBag.BranchID?.ToString())
-
-
-
-
-
-
-
                                     {
                                         <option value="@item.Value" selected>@item.Text</option>
                                     }
-
-
-
                                     else
-
-
-
                                     {
                                         <option value="@item.Value">@item.Text</option>
                                     }
-
-
-
                                 }
                             </select>
                         </div>
@@ -160,7 +115,7 @@
                         <div class="col-md-12 text-end">
                             <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
 
-                            <button type="button" class="btn btn-primary" id="postedButton">Posted</button>
+                            <button type="button" class="btn btn-primary" id="postedButton">@Localizer["lbl_Post"]</button>
                             <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "OverTime")'">@Localizer["lbl_Excel"]</button>
                             <button type="button" class="btn btn-outline-secondary" onclick="printMonthlySalarySheets()">@Localizer["lbl_Print"]</button>
 

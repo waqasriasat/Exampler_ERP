@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editCashAgainstSaleModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit Cash Against Sale
+                    @Localizer["lbl_EditCashAgainstSale"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -15,13 +15,13 @@
                 <form id="editCashAgainstSaleForm">
                     <div class="row">
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label asp-for="BranchTypeID" class="form-label fw-bold">@Localizer["lbl_Select"] @Localizer["lbl_Branch"]</label>
+                            <label asp-for="BranchTypeID" class="form-label fw-bold">@Localizer["lbl_SelectBranch"]</label>
                             <select asp-for="BranchTypeID" asp-items="@(new SelectList(ViewBag.BranchList, "Value", "Text", Model.BranchTypeID))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="BranchTypeID" class="text-danger"></span>
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label asp-for="HeadofAccount_FiveID" class="form-label fw-bold">Select Cash Agianst Sale Account</label>
+                            <label asp-for="HeadofAccount_FiveID" class="form-label fw-bold">@Localizer["lbl_SelectCashAgianstSaleAccount"]</label>
                             <select asp-for="HeadofAccount_FiveID" asp-items="@(new SelectList(ViewBag.FiveList, "Value", "Text", Model.HeadofAccount_FiveID))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="HeadofAccount_FiveID" class="text-danger"></span>

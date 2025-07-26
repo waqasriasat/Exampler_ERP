@@ -155,11 +155,11 @@ namespace Exampler_ERP.Controllers.Finance.Management
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("Banks");
-        worksheet.Cells["A1"].Value = "Bank ID";
-        worksheet.Cells["B1"].Value = "Bank Name";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Bank"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_BankID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_BankName"];
         worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
-        worksheet.Cells["D1"].Value = "Account No";
+        worksheet.Cells["D1"].Value = _localizer["lbl_BankAccount"];
         worksheet.Cells["E1"].Value = _localizer["lbl_Address"];
 
 
@@ -178,7 +178,7 @@ namespace Exampler_ERP.Controllers.Finance.Management
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"Banks-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_Bank"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editHeadofAccount_FiveModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit HeadofAccount_Five
+                    @Localizer["lbl_EditHeadofAccountFive"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -15,7 +15,7 @@
                 <form id="editHeadofAccount_FiveForm">
                     <div class="row">
                         <div class="col-6">
-                            <label asp-for="HeadofAccount_FourID" class="form-label fw-bold">Select Head Account</label>
+                            <label asp-for="HeadofAccount_FourID" class="form-label fw-bold">@Localizer["lbl_SelectHeadofAccount"]</label>
                             <select asp-for="HeadofAccount_FourID" asp-items="@(new SelectList(ViewBag.FourList, "Value", "Text", Model.HeadofAccount_FourID))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="HeadofAccount_FourID" class="text-danger"></span>
@@ -27,23 +27,23 @@
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="CategoryTypeID" class="form-label fw-bold">Select Category</label>
+                            <label asp-for="CategoryTypeID" class="form-label fw-bold">@Localizer["lbl_SelectCategoryType"]</label>
                             <select asp-for="CategoryTypeID" asp-items="@(new SelectList(ViewBag.categoryTypeList, "Value", "Text", Model.CategoryTypeID))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="CategoryTypeID" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="GroupTypeID" class="form-label fw-bold">Select Group</label>
+                            <label asp-for="GroupTypeID" class="form-label fw-bold">@Localizer["lbl_SelectGroup"]</label>
                             <select asp-for="GroupTypeID" asp-items="@(new SelectList(ViewBag.GroupList, "Value", "Text", Model.GroupTypeID))" class="form-control form-control-lg">
                             </select>
                             <span asp-validation-for="GroupTypeID" class="text-danger"></span>
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label for="OpeningBalance" class="form-label fw-bold">Type Opening Balance</label>
+                            <label for="OpeningBalance" class="form-label fw-bold">@Localizer["lbl_OpeningBalance"]</label>
                             <input type="text" class="form-control form-control-lg" id="OpeningBalance" name="OpeningBalance" value="@Model.OpeningBalance" />
                         </div>
                         <div class="col-12 col-md-12 col-lg-12">
-                            <label for="HeadofAccount_FiveName" class="form-label fw-bold">@Localizer["lbl_HeadofAccount"]_@Localizer["lbl_Five"] @Localizer["lbl_Name"]</label>
+                            <label for="HeadofAccount_FiveName" class="form-label fw-bold">@Localizer["lbl_HeadofAccountFiveName"]</label>
                             <input type="text" class="form-control form-control-lg" id="HeadofAccount_FiveName" name="HeadofAccount_FiveName" value="@Model.HeadofAccount_FiveName" />
                         </div>
 

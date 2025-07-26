@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editVendorModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit Vendor
+                    @Localizer["lbl_EditVendor"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -15,7 +15,7 @@
                 <form id="editVendorForm">
                     <div class="row">
                         <div class="col-12 col-md-12 col-lg-12">
-                            <label asp-for="HeadofAccount_FiveID" class="form-label fw-bold">Vendor Name</label>
+                            <label asp-for="HeadofAccount_FiveID" class="form-label fw-bold">@Localizer["lbl_VendorName"]</label>
                             <select asp-for="HeadofAccount_FiveID" class="form-select form-select-lg">
                                 <option value="">Select Vendor Name</option>
                                 @foreach (var type in ViewBag.VendorList)
@@ -25,7 +25,7 @@
                             </select>
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
-                            <label for="UserName" class="form-label fw-bold">UserName</label>
+                            <label for="UserName" class="form-label fw-bold">@Localizer["lbl_UserName"]</label>
                             <input type="text" class="form-control form-control-lg" id="UserName" name="UserName" value="@Model.UserName" />
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
@@ -39,15 +39,15 @@
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
-                            <label for="PayeeName" class="form-label fw-bold">Payee Name</label>
+                            <label for="PayeeName" class="form-label fw-bold">@Localizer["lbl_VendorPayee"]</label>
                             <input type="text" class="form-control form-control-lg" id="PayeeName" name="PayeeName" value="@Model.PayeeName" />
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
-                            <label for="PersonName" class="form-label fw-bold">Person Name</label>
+                            <label for="PersonName" class="form-label fw-bold">@Localizer["lbl_PersonName"]</label>
                             <input type="text" class="form-control form-control-lg" id="PersonName" name="PersonName" value="@Model.PersonName" />
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
-                            <label for="Cell" class="form-label fw-bold">Cell</label>
+                            <label for="Cell" class="form-label fw-bold">@Localizer["lbl_Cell"]</label>
                             <input type="text" class="form-control form-control-lg" id="Cell" name="Cell" value="@Model.Cell" />
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
@@ -59,7 +59,7 @@
                             <input type="text" class="form-control form-control-lg" id="Fax" name="Fax" value="@Model.Fax" />
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
-                            <label for="Filer" class="form-label fw-bold">Filer</label>
+                            <label for="Filer" class="form-label fw-bold">@Localizer["lbl_Filer"]</label>
                             <input type="number" class="form-control form-control-lg" id="Filer" name="Filer" value="@Model.Filer" />
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
@@ -69,11 +69,11 @@
                         <div class="col-12 col-md-4 col-lg-4">
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
-                            <label for="STN" class="form-label fw-bold">STN</label>
+                            <label for="STN" class="form-label fw-bold">@Localizer["lbl_STN"]</label>
                             <input type="text" class="form-control form-control-lg" id="STN" name="STN" value="@Model.STN" />
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
-                            <label asp-for="SaleTax_ID" class="form-label fw-bold">Sale Tax Account</label>
+                            <label asp-for="SaleTax_ID" class="form-label fw-bold">@Localizer["lbl_SaleTaxAccount"]</label>
                             <select asp-for="SaleTax_ID" class="form-select form-select-lg">
                                 <option value="">Select Sale Tax Account</option>
                                 @foreach (var type in ViewBag.SaleTaxList)
@@ -83,15 +83,15 @@
                             </select>
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
-                            <label for="STNRate" class="form-label fw-bold">STN Rate</label>
+                            <label for="STNRate" class="form-label fw-bold">@Localizer["lbl_STNRate"]</label>
                             <input type="number" step="0.01" class="form-control form-control-lg" id="STNRate" name="STNRate" value="@Model.STNRate" />
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
-                            <label for="NTN" class="form-label fw-bold">NTN</label>
+                            <label for="NTN" class="form-label fw-bold">@Localizer["lbl_NTN"]</label>
                             <input type="text" class="form-control form-control-lg" id="NTN" name="NTN" value="@Model.NTN" />
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
-                            <label asp-for="IncomTaxWithHoding_ID" class="form-label fw-bold">Income Tax (Withholding)</label>
+                            <label asp-for="IncomTaxWithHoding_ID" class="form-label fw-bold">@Localizer["lbl_IncomeTax(Withholding)"]</label>
                             <select asp-for="IncomTaxWithHoding_ID" class="form-select form-select-lg">
                                 <option value="">Select Income Tax (Withholding) Account</option>
                                 @foreach (var type in ViewBag.IncomeTaxList)
@@ -101,19 +101,19 @@
                             </select>
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
-                            <label for="NTNRate" class="form-label fw-bold">NTN Rate</label>
+                            <label for="NTNRate" class="form-label fw-bold">@Localizer["lbl_NTNRate"]</label>
                             <input type="number" step="0.01" class="form-control form-control-lg" id="NTNRate" name="NTNRate" value="@Model.NTNRate" />
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
-                            <label for="Province" class="form-label fw-bold">Province</label>
+                            <label for="Province" class="form-label fw-bold">@Localizer["lbl_Province"]</label>
                             <input type="text" class="form-control form-control-lg" id="Province" name="Province" value="@Model.Province" />
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
-                            <label for="Federal" class="form-label fw-bold">Federal</label>
+                            <label for="Federal" class="form-label fw-bold">@Localizer["lbl_Federal"]</label>
                             <input type="text" class="form-control form-control-lg" id="Federal" name="Federal" value="@Model.Federal" />
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">
-                            <label for="PaymentSec" class="form-label fw-bold">Payment Section</label>
+                            <label for="PaymentSec" class="form-label fw-bold">@Localizer["lbl_PaymentSection"]</label>
                             <input type="text" class="form-control form-control-lg" id="PaymentSec" name="PaymentSec" value="@Model.PaymentSec" />
                         </div>
                         <div class="col-12 col-md-12 col-lg-12">

@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Localizer["lbl_HumanResources"] + " - Face Attendance Forwarding";
+    ViewData["Title"] = @Localizer["lbl_HumanResources"] + " - " + @Localizer["lbl_FaceAttendanceForwarding"];
 }
 
 @section PageScripts {
@@ -64,7 +64,7 @@
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">@Localizer["lbl_HumanResources"] /</span> Face Attendance Forwarding
+    <span class="text-muted fw-light">@Localizer["lbl_HumanResources"] /</span> @Localizer["lbl_FaceAttendanceForwarding"]
 </h4>
 <form method="get" action="@Url.Action("Index", "FaceAttendanceForwarding")">
     <div class="row">
@@ -129,7 +129,7 @@
                     <div class="row">
                         <div class="col-md-12 text-end">
                             <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
-                            <button type="button" id="postedButton" class="btn btn-primary">Posted</button>
+                            <button type="button" id="postedButton" class="btn btn-primary">@Localizer["lbl_Post"]</button>
                             <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "FaceAttendanceForwarding")'">@Localizer["lbl_Excel"]</button>
                             <button type="button" class="btn btn-outline-secondary" onclick="printFaceAttendanceForwardings()">@Localizer["lbl_Print"]</button>
                         </div>
@@ -144,7 +144,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Face Attendance Forwarding @Localizer["lbl_List"]</h5>
+            <h5 class="card-header">@Localizer["lbl_FaceAttendanceForwardingList"]</h5>
             <div class="row" style="overflow-y: Overlay; padding: 15px;">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row" style="display: flex; flex-wrap: nowrap;">
@@ -152,43 +152,43 @@
                             <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-2">
-                            <p class="text-nowrap">Mark Date</p>
+                            <p class="text-nowrap">@Localizer["lbl_MarkDate"]/p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1">
-                            <p class="text-nowrap">Present Timing</p>
+                            <p class="text-nowrap">@Localizer["lbl_PresentTiming"]</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1">
-                            <p class="text-nowrap">Attendance Duration</p>
+                            <p class="text-nowrap">@Localizer["lbl_AttendanceDuration"]</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1">
-                            <p class="text-nowrap">Working Slot</p>
+                            <p class="text-nowrap">@Localizer["lbl_WorkingSlot"]</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                            <p class="text-nowrap">Late Coming Hours</p>
+                            <p class="text-nowrap">@Localizer["lbl_LateComingHours"]</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1">
-                            <p class="text-nowrap">Late Coming Deduction (Hours)</p>
+                            <p class="text-nowrap">@Localizer["lbl_LateComingDeduction(Hours)"]</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                            <p class="text-nowrap">Early Going Hours</p>
+                            <p class="text-nowrap">@Localizer["lbl_EarlyGoingHours"]</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1">
-                            <p class="text-nowrap">Early Going Deduction (Hours)</p>
+                            <p class="text-nowrap">@Localizer["lbl_EarlyGoingDeduction(Hours)"]</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                            <p class="text-nowrap">Per Day Salary</p>
+                            <p class="text-nowrap">@Localizer["lbl_PerDaySalary"]</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                            <p class="text-nowrap">Early Coming Hours</p>
+                            <p class="text-nowrap">@Localizer["lbl_EarlyComingHours"]</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1">
-                            <p class="text-nowrap">Early Coming Amount (Hours)</p>
+                            <p class="text-nowrap">@Localizer["lbl_EarlyComingAmount(Hours)"]</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                            <p class="text-nowrap">Late Going Hours</p>
+                            <p class="text-nowrap">@Localizer["lbl_LateGoingHours"]</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1">
-                            <p class="text-nowrap">Late Going Amount (Hours) </p>
+                            <p class="text-nowrap">@Localizer["lbl_LateGoingAmount(Hours)"] </p>
                         </div>
                     </div>
                 </div>
@@ -210,45 +210,45 @@
                                 <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-2">
-                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Date"] : </span>@item.MarkDate.ToString("dd/MMM/yyyy")</p>
+                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_MarkDate"] : </span>@item.MarkDate.ToString("dd/MMM/yyyy")</p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap"><span class="smallAdd">Present Timing : </span>@item.InTime - @item.OutTime</p>
+                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_PresentTiming"] : </span>@item.InTime - @item.OutTime</p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap"><span class="smallAdd">Attendance Duration : </span>@item.DHours:@item.DMinutes</p>
+                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_AttendanceDuration"] : </span>@item.DHours:@item.DMinutes</p>
                             </div>
                              <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap"><span class="smallAdd">Working Slot : </span>@item.FromDutyTime - @item.ToDutyTime</p>
+                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_WorkingSlot"] : </span>@item.FromDutyTime - @item.ToDutyTime</p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                                <p class="text-nowrap"><span class="smallAdd">Late Coming Hours : </span>@item.LateComingGraceTime</p>
+                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_LateComingHours"] : </span>@item.LateComingGraceTime</p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap"><span class="smallAdd">Late Coming Deduction (Hours) : </span>@item.LateComingDeduction (@item.LateComingGraceTime)</p>
+                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_LateComingDeduction(Hours)"] : </span>@item.LateComingDeduction (@item.LateComingGraceTime)</p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                                <p class="text-nowrap"><span class="smallAdd">Early Going Hours : </span>@item.EarlyGoingGraceTime</p>
+                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EarlyGoingHours"] : </span>@item.EarlyGoingGraceTime</p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap"><span class="smallAdd">Early Going Deduction (Hours) : </span>@item.EarlyGoingDeduction (@item.EarlyGoingGraceTime)</p>
+                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EarlyGoingDeduction(Hours)"] : </span>@item.EarlyGoingDeduction (@item.EarlyGoingGraceTime)</p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                                <p class="text-nowrap"><span class="smallAdd">Per Day Salary : </span>@item.PerDaySalary</p>
+                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_PerDaySalary"] : </span>@item.PerDaySalary</p>
                             </div>
 
 
                             <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                                <p class="text-nowrap"><span class="smallAdd">Early Coming Hours : </span>@item.EarlyComingGraceTime</p>
+                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EarlyComingHours"] : </span>@item.EarlyComingGraceTime</p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap"><span class="smallAdd">Early Coming Amount (Hours) : </span>@item.EarlyComingAmount (@item.EarlyComingGraceTime)</p>
+                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EarlyComingAmount(Hours)"] : </span>@item.EarlyComingAmount (@item.EarlyComingGraceTime)</p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                                <p class="text-nowrap"><span class="smallAdd">Late Going Hours : </span>@item.LateGoingGraceTime</p>
+                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_LateGoingHours"] : </span>@item.LateGoingGraceTime</p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap"><span class="smallAdd">Late Going Amount (Hours) : </span>@item.LateGoingAmount (@item.LateGoingGraceTime)</p>
+                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_LateGoingAmount(Hours)"] : </span>@item.LateGoingAmount (@item.LateGoingGraceTime)</p>
                             </div>
                         </div>
                     </div>

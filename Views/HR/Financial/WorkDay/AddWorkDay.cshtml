@@ -7,14 +7,14 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addWorkDayModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add WorkDay
+                    @Localizer["lbl_AddNewWorkDay"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
             </div>
             <div class="modal-body">
                 <form id="addWorkDayForm" method="post" asp-action="Create" asp-controller="WorkDay" enctype="multipart/form-data">
-                    <h5 class="modal-title" style="padding-top:10px">WorkDay Details</h5>
+                    <h5 class="modal-title" style="padding-top:10px">@Localizer["lbl_WorkDayDetails"]</h5>
                     <hr />
                     <div class="row">
                         <div class="col-12">

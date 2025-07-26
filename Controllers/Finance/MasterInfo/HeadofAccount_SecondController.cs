@@ -142,9 +142,9 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("HeadofAccount_Seconds");
-        worksheet.Cells["A1"].Value = "HeadofAccount_Second ID";
-        worksheet.Cells["B1"].Value = "HeadofAccount_Second Name";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_HeadofAccountSecond"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_HeadofAccountSecondID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_HeadofAccountSecondName"];
         worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
@@ -161,7 +161,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"HeadofAccount_Seconds-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_HeadofAccountSecond"] + $"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

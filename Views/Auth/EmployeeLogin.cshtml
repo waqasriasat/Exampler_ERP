@@ -1,6 +1,6 @@
 @{
     Layout = "_BlankLayout";
-    ViewData["Title"] = "Employee Login - Pages";
+    ViewData["Title"] = @Localizer["lbl_EmployeeLogin-Pages"];
 }
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
@@ -34,9 +34,9 @@
                             <div class="card shadow-lg border-secondary">
                                 <div class="card-body">
                                     <i class="fas fa-user-shield fa-3x text-secondary mb-3"></i>
-                                    <h5 class="card-title">Supplier Login</h5>
-                                    <p class="card-text">Sign in to manage your supplier account.</p>
-                                    <a href="/Auth/SupplierLogin" class="btn btn-secondary w-100">Go to Supplier Login</a>
+                                    <h5 class="card-title">@Localizer["lbl_SupplierLogin"]</h5>
+                                    <p class="card-text">@Localizer["lbl_Signintomanageyoursupplieraccount."]</p>
+                                    <a href="/Auth/SupplierLogin" class="btn btn-secondary w-100">@Localizer["lbl_GotoSupplierLogin"]</a>
                                 </div>
                             </div>
                         </div>
@@ -44,9 +44,9 @@
                             <div class="card shadow-lg boarder-warning">
                                 <div class="card-body">
                                     <i class="fas fa-user-tie fa-3x text-warning mb-3"></i>
-                                    <h5 class="card-title">User Login</h5>
-                                    <p class="card-text">Sign in to access your User portal.</p>
-                                    <a href="/Auth/Login" class="btn btn-warning w-100">Go to User Login</a>
+                                    <h5 class="card-title">@Localizer["lbl_UserLogin"]</h5>
+                                    <p class="card-text">@Localizer["lbl_SignintoaccessyourUserportal."]</p>
+                                    <a href="/Auth/Login" class="btn btn-warning w-100">@Localizer["lbl_GotoUserLogin"]</a>
                                 </div>
                             </div>
                         </div>
@@ -54,9 +54,9 @@
                             <div class="card shadow-lg border-success">
                                 <div class="card-body">
                                     <i class="fas fa-calendar-check fa-3x text-success mb-3"></i>
-                                    <h5 class="card-title">Attendance</h5>
-                                    <p class="card-text">Check your attendance records here.</p>
-                                    <a href="/FaceAttendance/FaceAttendanceMarks" class="btn btn-success w-100">Go to Attendance</a>
+                                    <h5 class="card-title">@Localizer["lbl_Attendance"]</h5>
+                                    <p class="card-text">@Localizer["lbl_Checkyourattendancerecordshere."]</p>
+                                    <a href="/FaceAttendance/FaceAttendanceMarks" class="btn btn-success w-100">@Localizer["lbl_GotoAttendance"]</a>
                                 </div>
                             </div>
                         </div>
@@ -73,19 +73,19 @@
                                     <img src="~/img/favicon/Logo.png" width="50%" />
                                 </a>
                             </div>
-                            <h4 class="mb-2">Welcome to Employee Login! 👋</h4>
-                            <p class="mb-4">Please sign-in to your employee account.</p>
+                            <h4 class="mb-2">@Localizer["lbl_WelcometoEmployeeLogin!"] 👋</h4>
+                            <p class="mb-4">@Localizer["lbl_Pleasesign-intoyouremployeeaccount."]</p>
 
                             <form id="formAuthentication" class="mb-3" asp-action="EmployeeLogin" asp-controller="Auth" method="post">
                                 <div class="mb-3">
-                                    <label for="username" class="form-label">Username</label>
+                                    <label for="username" class="form-label">@Localizer["lbl_UserName"]</label>
                                     <input type="text" class="form-control form-control-lg" id="username" name="Username" placeholder="Enter your employee username" value="ibs" autofocus>
                                 </div>
                                 <div class="mb-3 form-password-toggle">
                                     <div class="d-flex justify-content-between">
                                         <label class="form-label" for="password">@Localizer["lbl_Password"]</label>
                                         <a href="/Auth/ForgotPassword">
-                                            <small>Forgot Password?</small>
+                                            <small>@Localizer["lbl_ForgotPassword"]?</small>
                                         </a>
                                     </div>
                                     <div class="input-group input-group-merge">
@@ -97,12 +97,12 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="remember-me">
                                         <label class="form-check-label" for="remember-me">
-                                            Remember Me
+                                            @Localizer["lbl_RememberMe"]
                                         </label>
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <button class="btn btn-primary d-grid w-100" type="submit">Login</button>
+                                    <button class="btn btn-primary d-grid w-100" type="submit">@Localizer["lbl_Login"]</button>
                                 </div>
                             </form>
                         </div>

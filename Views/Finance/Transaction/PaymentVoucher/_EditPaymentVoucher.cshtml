@@ -36,7 +36,7 @@
 <hr />
 <div class="row mb-3">
     <div class="col-md-6">
-        <label for="HeadofAccountid_IncomeTaxID" class="form-label fw-bold">Income Tax (WithHolding)</label>
+        <label for="HeadofAccountid_IncomeTaxID" class="form-label fw-bold">@Localizer["lbl_IncomeTax(Withholding)"]</label>
         <select id="HeadofAccountid_IncomeTaxID" name="HeadofAccountid_IncomeTaxID" class="form-select form-select-lg">
             <option value="">Select Head of Account</option>
             @foreach (var type in ViewBag.HeadofAccount_IncomeTaxPayableList)
@@ -50,7 +50,7 @@
         <input id="IncomeTaxValue" class="form-control form-control-lg" />
     </div>
     <div class="col-md-3">
-        <label class="form-label fw-bold">Total Amount</label>
+        <label class="form-label fw-bold">@Localizer["lbl_Total"] Amount</label>
         <input id="IncomeTaxAmount" class="form-control form-control-lg" />
     </div>
 </div>
@@ -71,7 +71,7 @@
         <input id="SaleTaxValue" class="form-control form-control-lg" />
     </div>
     <div class="col-md-3">
-        <label class="form-label fw-bold">Total Amount</label>
+        <label class="form-label fw-bold">@Localizer["lbl_Total"] Amount</label>
         <input id="SaleTaxAmount" class="form-control form-control-lg" />
     </div>
 </div>
@@ -186,11 +186,11 @@
 
 <div class="row mt-4">
     <div class="col-md-6">
-        <label class="form-label fw-bold">Total Debit Amount</label>
+        <label class="form-label fw-bold">@Localizer["lbl_Total"] Debit Amount</label>
         <input id="TotalDrAmt" class="form-control form-control-lg" readonly />
     </div>
     <div class="col-md-6">
-        <label class="form-label fw-bold">Total Credit Amount</label>
+        <label class="form-label fw-bold">@Localizer["lbl_Total"] Credit Amount</label>
         <input id="TotalCrAmt" class="form-control form-control-lg" readonly />
     </div>
 </div>

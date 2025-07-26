@@ -131,7 +131,7 @@
                     currentPage.StartsWith("/FaceAttendanceReport/Index") ? " active open" : "")'>
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-group"></i>
-                    <div>Human Resources</div>
+                    <div>@Localizer["lbl_HumanResources"]</div>
                 </a>
 
                 <ul class="menu-sub">
@@ -160,7 +160,7 @@
                                       currentPage == "/Employee/Index" || currentPage == "/Joining/Index" ||
                                       currentPage == "/Salary/Index"  ? " active" : "")'>
                         <a asp-controller="HR_Employeement_Dashboard" asp-action="Index" class="menu-link">
-                            <div>Employeement</div>
+                            <div>@Localizer["lbl_Employeement"]</div>
                         </a>
                     </li>
 
@@ -171,7 +171,7 @@
                                       currentPage == "/FaceAttendanceTimeAdjust/Index" || currentPage == "/FaceAttendanceForwarding/Index"||
                                       currentPage == "/Holiday/Index"? " active" : "")'>
                         <a asp-controller="HR_HR_Dashboard" asp-action="Index" class="menu-link">
-                            <div>HR</div>
+                            <div>@Localizer["lbl_HumanResources"]</div>
                         </a>
                     </li>
 
@@ -179,7 +179,7 @@
                     <li class='menu-item@(currentPage == "/HR_Finance_Dashboard/Index" || currentPage == "/FixedDeduction/Index" ||
                                       currentPage == "/WorkDay/Index" || currentPage == "/MonthlySalarySheet/Index"  ? " active" : "")'>
                         <a asp-controller="HR_Finance_Dashboard" asp-action="Index" class="menu-link">
-                            <div>Finance</div>
+                            <div>@Localizer["lbl_Finance"]</div>
                         </a>
                     </li>
 
@@ -191,7 +191,7 @@
                                       currentPage == "/EmployeeRequestApprovalDetail/Index"|| currentPage == "/FaceAttendanceReport/Index"||
                                       currentPage == "/MonthlyPayslip/Index"|| currentPage == "/ApprovedMonthlySalarySheet/Index"  ? " active" : "")'>
                         <a asp-controller="HR_Report_Dashboard" asp-action="Index" class="menu-link">
-                            <div>Report</div>
+                            <div>@Localizer["lbl_Reports"]</div>
                         </a>
                     </li>
                 </ul>
@@ -213,7 +213,7 @@
                                    currentPage.StartsWith("/ReceivedVoucher/Index")? " active open" : "")'>
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-dollar"></i>
-                    <div>Finance</div>
+                    <div>@Localizer["lbl_Finance"]</div>
                 </a>
                 <ul class="menu-sub">
                     <li class='menu-item@(currentPage == "/FI_Main_Dashboard/Index"|| currentPage == "/CashAgainstSale/Index" ||
@@ -228,19 +228,19 @@
                     <li class='menu-item@(currentPage == "/FI_Management_Dashboard/Index"|| currentPage == "/Bank/Index" ||
                                       currentPage == "/ChequeBook/Index" || currentPage == "/Vendor/Index" ? " active" : "")'>
                         <a asp-controller="FI_Management_Dashboard" asp-action="Index" class="menu-link">
-                            <div>Management</div>
+                            <div>@Localizer["lbl_Management"]</div>
                         </a>
                     </li>
                     <li class='menu-item@(currentPage == "/FI_Transaction_Dashboard/Index"|| currentPage == "/JournalVoucher/Index" ||
                                       currentPage == "/TransferVoucher/Index" || currentPage == "/PaymentVoucher/Index"||
                                       currentPage == "/ReceivedVoucher/Index" ? " active" : "")'>
                         <a asp-controller="FI_Transaction_Dashboard" asp-action="Index" class="menu-link">
-                            <div>Transaction</div>
+                            <div>@Localizer["lbl_Transaction"]</div>
                         </a>
                     </li>
                     <li class='menu-item@(currentPage == "/FI_Report_Dashboard/Index" ? " active" : "")'>
                         <a asp-controller="FI_Report_Dashboard" asp-action="Index" class="menu-link">
-                            <div>@Localizer["lbl_Report"]</div>
+                            <div>@Localizer["lbl_Reports"]</div>
                         </a>
                     </li>
                 </ul>
@@ -277,7 +277,7 @@
                     </li>
                     <li class='menu-item@(currentPage == "/ST_Report_Dashboard/Index" ? " active" : "")'>
                         <a asp-controller="ST_Report_Dashboard" asp-action="Index" class="menu-link">
-                            <div>@Localizer["lbl_Report"]</div>
+                            <div>@Localizer["lbl_Reports"]</div>
                         </a>
                     </li>
                 </ul>
@@ -303,12 +303,12 @@
                     <li class='menu-item@(currentPage == "/PR_Management_Dashboard/Index"|| currentPage == "/PurchaseRequest/Index" ||
                                       currentPage == "/PurchaseOrder/Index"  ? " active" : "")'>
                         <a asp-controller="PR_Management_Dashboard" asp-action="Index" class="menu-link">
-                            <div>Management</div>
+                            <div>@Localizer["lbl_Management"]</div>
                         </a>
                     </li>
                     <li class='menu-item@(currentPage == "/PR_Report_Dashboard/Index" ? " active" : "")'>
                         <a asp-controller="PR_Report_Dashboard" asp-action="Index" class="menu-link">
-                            <div>Report</div>
+                            <div>@Localizer["lbl_Reports"]</div>
                         </a>
                     </li>
                 </ul>
@@ -330,12 +330,12 @@
                     <li class="menu-header small text-uppercase"><span class="menu-header-text">Global Settings</span></li>
                     <li class='menu-item@(currentPage == "/HRGlobalSetting/Index" ? " active" : "")'>
                         <a asp-controller="HRGlobalSetting" asp-action="Index" class="menu-link">
-                            <div>Human Resources</div>
+                            <div>@Localizer["lbl_HumanResources"]</div>
                         </a>
                     </li>
                     <li class='menu-item@(currentPage == "/FinanceGlobalSetting/Index" ? " active" : "")'>
                         <a asp-controller="FinanceGlobalSetting" asp-action="Index" class="menu-link">
-                            <div>Finance</div>
+                            <div>@Localizer["lbl_Finance"]</div>
                         </a>
                     </li>
                     <li class='menu-item@(currentPage == "/StoreManagementGlobalSetting/Index" ? " active" : "")'>

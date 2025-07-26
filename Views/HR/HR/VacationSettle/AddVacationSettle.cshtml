@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Localizer["lbl_HumanResources"] + " - Vacation Settle";
+    ViewData["Title"] = Localizer["lbl_HumanResources"] + " - " + @Localizer["lbl_VacationSettle"];
 }
 
 <div class="modal fade" id="addVacationSettleModal" tabindex="-1" role="dialog" aria-labelledby="addVacationSettleModalLabel" aria-hidden="true">
@@ -11,7 +11,8 @@
             <!-- Modal Header -->
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addVacationSettleModalLabel">
-                    <i class="fas fa-key me-2"></i>@Localizer["lbl_Add"] Vacation Settle
+                    <i class="fas fa-key me-2"></i>
+                    @Localizer["lbl_AddNewVacationSettle"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -29,7 +30,7 @@
                         </div>
 
                         <div class="col-12">
-                            <label asp-for="VacationID" class="form-label fw-bold">@Localizer["lbl_Vacation"] @Localizer["lbl_Date"]</label>
+                            <label asp-for="VacationID" class="form-label fw-bold">@Localizer["lbl_VacationDate"]</label>
                             <select id="VacationID" asp-for="VacationID" class="form-control form-control-lg">
                                 <option value="0">Please Select</option>
                             </select>
@@ -60,12 +61,12 @@
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <label asp-for="SettleDays" class="form-label fw-bold">Settle Days</label>
+                            <label asp-for="SettleDays" class="form-label fw-bold">@Localizer["lbl_SettleDays"]</label>
                             <input asp-for="SettleDays" class="form-control form-control-lg readonly-background" placeholder="Enter Settle Days here..." readonly>
                             <span asp-validation-for="SettleDays" class="text-danger small"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="SettleAmount" class="form-label fw-bold">Settle Amount</label>
+                            <label asp-for="SettleAmount" class="form-label fw-bold">@Localizer["lbl_SettleAmount"]</label>
                             <input asp-for="SettleAmount" class="form-control form-control-lg readonly-background" placeholder="Enter Settle Amount here..." readonly>
                             <span asp-validation-for="SettleAmount" class="text-danger small"></span>
                         </div>

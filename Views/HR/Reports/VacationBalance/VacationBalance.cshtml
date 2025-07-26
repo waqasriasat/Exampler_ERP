@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Reports - Vacation Balance";
+    ViewData["Title"] = Localizer["lbl_Reports"] + " - " + Localizer["lbl_VacationBalance"];
 }
 
 @section PageScripts {
@@ -59,7 +59,7 @@
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Reports /</span> Vacation Balance
+    <span class="text-muted fw-light">@Localizer["lbl_Reports"]  /</span> @Localizer["lbl_VacationBalance"]
 </h4>
 <div class="row">
     <div class="col-md-12">
@@ -87,7 +87,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Vacation Balance @Localizer["lbl_List"]</h5>
+            <h5 class="card-header">@Localizer["lbl_VacationBalanceList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
@@ -98,16 +98,16 @@
                                     <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Contract Start Date</p>
+                                    <p class="text-nowrap">@Localizer["lbl_ContractStartDate"]/p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Contract End Date</p>
+                                    <p class="text-nowrap">@Localizer["lbl_ContractEndDate"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Total Vacation</p>
+                                    <p class="text-nowrap">@Localizer["lbl_lbl_TotalVacation"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">@Localizer["lbl_Vacation"] Balance</p>
+                                    <p class="text-nowrap">@Localizer["lbl_VacationBalance"] </p>
                                 </div>
                             </div>
                         </div>
@@ -124,16 +124,16 @@
                                         <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.EmployeeName</p>
                                     </div>
                                     <div class="col-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Start Date: </span>@item.StartDate?.ToString("dd-MMM-yyyy")</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_ContractStartDate"]: </span>@item.StartDate?.ToString("dd-MMM-yyyy")</p>
                                     </div>
                                     <div class="col-2">
-                                        <p class="text-nowrap"><span class="smallAdd">End Date: </span>@item.EndDate?.ToString("dd-MMM-yyyy")</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_ContractEndDate"]: </span>@item.EndDate?.ToString("dd-MMM-yyyy")</p>
                                     </div>
                                     <div class="col-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Total Vacation: </span>@item.TotalVacation</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_lbl_TotalVacation"]: </span>@item.TotalVacation</p>
                                     </div>
                                     <div class="col-2">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Vacation"] Balance: </span>@item.VacationBalance</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_VacationBalance"] : </span>@item.VacationBalance</p>
                                     </div>
                                 </div>
                             </div>

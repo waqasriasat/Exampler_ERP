@@ -136,9 +136,9 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("CashAgainstSales");
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_CashAgainstSale"]);
         worksheet.Cells["A1"].Value = _localizer["lbl_BranchName"];
-        worksheet.Cells["B1"].Value = "CashAgainstSale Account";
+        worksheet.Cells["B1"].Value = _localizer["lbl_CashAgainstSaleAccount"];
         worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
@@ -155,7 +155,7 @@ namespace Exampler_ERP.Controllers.Finance.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"CashAgainstSales-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_CashAgainstSale"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

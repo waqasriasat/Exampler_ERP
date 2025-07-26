@@ -5,14 +5,16 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="addEndOfServiceModalLabel">Add End Of Service</h5>
+                <h5 class="modal-title" id="addEndOfServiceModalLabel">
+                    @Localizer["lbl_AddNewEndOfService"]
+                  </h5>
                 <button type="button" class="btn btn-danger CloseButton" data-dismiss="modal" id="Close">
                     x
                 </button>
             </div>
             <div class="modal-body">
                 <form id="addEndOfServiceForm" method="post" asp-action="Create" asp-controller="EndOfService" enctype="multipart/form-data">
-                    <h5 class="modal-title" style="padding-top:10px">EndOfService Details</h5>
+                    <h5 class="modal-title" style="padding-top:10px">@Localizer["lbl_EndOfServiceDetails"]</h5>
                     <hr />
                     <div class="row">
                         <div class="col-12">
@@ -30,7 +32,7 @@
                                     <input type="text" id="ContractType" class="form-control form-control-lg readonly-background" readonly />
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="EndOfSerivceReasonTypeId" class="form-label fw-bold">Reason @Localizer["lbl_Type"]</label>
+                                    <label asp-for="EndOfSerivceReasonTypeId" class="form-label fw-bold">@Localizer["lbl_ReasonType"]</label>
                                     <select asp-for="EndOfSerivceReasonTypeId" asp-items="@(new SelectList(ViewBag.EndOfServiceReasonTypesList, "Value", "Text"))" class="form-control form-control-lg">
                                     </select>
                                     <span asp-validation-for="EndOfSerivceReasonTypeId" class="text-danger"></span>
@@ -38,21 +40,21 @@
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <label class="form-label fw-bold">Total Salary</label>
+                                    <label class="form-label fw-bold">@Localizer["lbl_TotalSalary"]</label>
                                     <input type="text" id="Salary" class="form-control form-control-lg readonly-background" readonly />
                                 </div>
                                 <div class="col-6">
-                                    <label class="form-label fw-bold">Total Day Of Absent</label>
+                                    <label class="form-label fw-bold">@Localizer["lbl_TotalDayOfAbsent"]</label>
                                         <input type="text" id="TotalDayOfAbsent" class="form-control form-control-lg readonly-background" readonly />
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <label class="form-label fw-bold">Date Of Commencement</label>
+                                    <label class="form-label fw-bold">@Localizer["lbl_DateOfCommencement"]</label>
                                     <input type="text" id="DateOfCommencement" class="form-control form-control-lg readonly-background" readonly />
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="DateOfCompletionOfWork" class="form-label fw-bold">Date Of Completion Of Work</label>
+                                    <label asp-for="DateOfCompletionOfWork" class="form-label fw-bold">@Localizer["lbl_DateOfCompletionOfWork"]</label>
                                     <input asp-for="DateOfCompletionOfWork" class="form-control form-control-lg" type="date" />
                                     <span asp-validation-for="DateOfCompletionOfWork" class="text-danger"></span>
                                 </div>
@@ -61,21 +63,21 @@
                                 <div class="col-6 colcliedgroup">
                                     <div class="row">
                                         <div class="col-12">
-                                            <label asp-for="NumberofYears" class="form-label fw-bold">Number of Years</label>
+                                            <label asp-for="NumberofYears" class="form-label fw-bold">@Localizer["lbl_NumberofYears"]</label>
                                             <input asp-for="NumberofYears" class="form-control form-control-lg readonly-background" type="number" />
                                             <span asp-validation-for="NumberofYears" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
-                                            <label asp-for="NumberofMonths" class="form-label fw-bold">Number of Months</label>
+                                            <label asp-for="NumberofMonths" class="form-label fw-bold">@Localizer["lbl_NumberofMonths"]</label>
                                             <input asp-for="NumberofMonths" class="form-control form-control-lg readonly-background" type="number" />
                                             <span asp-validation-for="NumberofMonths" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
-                                            <label asp-for="NumberofDays" class="form-label fw-bold">Number of Days</label>
+                                            <label asp-for="NumberofDays" class="form-label fw-bold">@Localizer["lbl_NumberofDays"]</label>
                                             <input asp-for="NumberofDays" class="form-control form-control-lg readonly-background" type="number" />
                                             <span asp-validation-for="NumberofDays" class="text-danger"></span>
                                         </div>
@@ -91,28 +93,28 @@
                                 <div class="col-6 colcliedgroup">
                                     <div class="row">
                                         <div class="col-12">
-                                            <label asp-for="EndofServiceBenefit" class="form-label fw-bold">@Localizer["lbl_End"] of Service Benefit</label>
+                                            <label asp-for="EndofServiceBenefit" class="form-label fw-bold">@Localizer["lbl_EndofServiceBenefit"]</label>
                                             <input asp-for="EndofServiceBenefit" class="form-control form-control-lg readonly-background" type="number" />
                                             <span asp-validation-for="EndofServiceBenefit" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
-                                            <label asp-for="BalanceOfTheAnnualLeave" class="form-label fw-bold">Balance Of The Annual Leave</label>
+                                            <label asp-for="BalanceOfTheAnnualLeave" class="form-label fw-bold">@Localizer["lbl_BalanceOfTheAnnualLeave"]</label>
                                             <input asp-for="BalanceOfTheAnnualLeave" class="form-control form-control-lg readonly-background" type="number" />
                                             <span asp-validation-for="BalanceOfTheAnnualLeave" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
-                                            <label asp-for="AmountDueForTheLeave" class="form-label fw-bold">Amount Dues For The Leave</label>
+                                            <label asp-for="AmountDueForTheLeave" class="form-label fw-bold">@Localizer["lbl_AmountDuesForTheLeave"]</label>
                                             <input asp-for="AmountDueForTheLeave" class="form-control form-control-lg readonly-background" type="number" />
                                             <span asp-validation-for="AmountDueForTheLeave" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
-                                            <label asp-for="TotalEndOfServiceDues" class="form-label fw-bold">Total End Of Service Dues</label>
+                                            <label asp-for="TotalEndOfServiceDues" class="form-label fw-bold">@Localizer["lbl_TotalEndOfServiceDues"]</label>
                                             <input asp-for="TotalEndOfServiceDues" class="form-control form-control-lg readonly-background" type="number" />
                                             <span asp-validation-for="TotalEndOfServiceDues" class="text-danger"></span>
                                         </div>

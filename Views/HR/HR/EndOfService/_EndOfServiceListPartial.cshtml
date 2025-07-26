@@ -1,48 +1,48 @@
 @model IEnumerable<Exampler_ERP.Models.HR_EndOfService>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
- @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-10 col-md-11 col-lg-9">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_IssueDate"] : </span>@item.DateOfCompletionOfWork.ToString("dd/MM/yyyy")</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">Total End Of Service Dues : </span>@item.TotalEndOfServiceDues</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-4 col-md-1 col-lg-3">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="editEndOfServiceLink" data-id="@item.EndOfServiceID">
-                                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="printEndOfServiceLink" data-id="@item.EndOfServiceID">
-                                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="deleteEndOfServiceLink" data-id="@item.EndOfServiceID">
-                                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+@foreach (var item in Model)
+{
+    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+        <div class="row">
+            <div class="col-10 col-md-11 col-lg-9">
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-4">
+                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-4">
+                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_IssueDate"] : </span>@item.DateOfCompletionOfWork.ToString("dd/MM/yyyy")</p>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-4">
+                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_TotalEndOfServiceDues"] : </span>@item.TotalEndOfServiceDues</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 col-md-1 col-lg-3">
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-4">
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a href="javascript:void(0)" class="editEndOfServiceLink" data-id="@item.EndOfServiceID">
+                                <i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                            </a>
                         </div>
                     </div>
-                }
+                    <div class="col-12 col-md-12 col-lg-4">
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a href="javascript:void(0)" class="printEndOfServiceLink" data-id="@item.EndOfServiceID">
+                                <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-4">
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a href="javascript:void(0)" class="deleteEndOfServiceLink" data-id="@item.EndOfServiceID">
+                                <i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

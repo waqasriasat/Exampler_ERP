@@ -2,7 +2,8 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Finance - WorkDay";
+
+    ViewData["Title"] = Localizer["lbl_Finance"] + "  - " + @Localizer["lbl_WorkDay"];
 }
 
 @section PageScripts {
@@ -134,7 +135,7 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Finance /</span> WorkDay
+    <span class="text-muted fw-light">@Localizer["lbl_Finance"] /</span> @Localizer["lbl_WorkDay"]
 </h4>
 <form method="get" action="@Url.Action("Index", "WorkDay")">
     <div class="row">
@@ -223,7 +224,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">WorkDay @Localizer["lbl_List"]</h5>
+            <h5 class="card-header">@Localizer["lbl_WorkDayList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
@@ -256,7 +257,7 @@
                     </div>
                 </div>
                 <div id="WorkDayListContainer">
-                    @Html.Partial("~/Views/HR/FixedDeduction/WorkDay/_WorkDayListPartial.cshtml", Model)
+                    @Html.Partial("~/Views/HR/Financial/WorkDay/_WorkDayListPartial.cshtml", Model)
                 </div>
             </div>
         </div>

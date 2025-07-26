@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Reports - Approved Monthly Salary Sheet";
+    ViewData["Title"] = Localizer["lbl_Reports"] + " - " + @Localizer["lbl_ApprovedMonthlySalarySheet"];
 }
 <script>
     $(document).on('click', '.PrintApprovedMonthlySalarySheetLink', function (e) {
@@ -18,7 +18,7 @@
 
 </script>
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Reports /</span> Approved Monthly Salary Sheet
+    <span class="text-muted fw-light">@Localizer["lbl_Reports"]  /</span> @Localizer["lbl_ApprovedMonthlySalarySheet"]
 </h4>
 <form method="get" action="@Url.Action("Index", "ApprovedMonthlySalarySheet")">
     <div class="row">
@@ -96,7 +96,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Approved Monthly Salary Sheet @Localizer["lbl_List"]</h5>
+            <h5 class="card-header">@Localizer["lbl_ApprovedMonthlySalarySheetList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
@@ -109,7 +109,7 @@
                                     <p class="text-nowrap">@Localizer["lbl_Month"]</p>
                                 </div>
                                 <div class="col-4">
-                                    <p class="text-nowrap">Years</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Year"]</p>
                                 </div>
                             </div>
                         </div>

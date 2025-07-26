@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Localizer["lbl_HumanResources"] + " - Vacation Settle";
+    ViewData["Title"] = Localizer["lbl_HumanResources"] + " - " + @Localizer["lbl_VacationSettle"];
 }
 
 @section PageScripts {
@@ -148,7 +148,7 @@
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">@Localizer["lbl_HumanResources"] /</span> Vacation Settle
+    <span class="text-muted fw-light">@Localizer["lbl_HumanResources"] /</span> @Localizer["lbl_VacationSettle"]
 </h4>
 
 <form method="get" action="@Url.Action("Index", "VacationSettle")">
@@ -217,7 +217,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Vacation Settle @Localizer["lbl_List"]</h5>
+            <h5 class="card-header">@Localizer["lbl_VacationSettleList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
@@ -230,10 +230,10 @@
                                     <p class="text-nowrap">@Localizer["lbl_VacationType"]</p>
                                 </div>
                                 <div class="col-3">
-                                    <p class="text-nowrap">Settle Days</p>
+                                    <p class="text-nowrap">@Localizer["lbl_SettleDays"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Settle Amount</p>
+                                    <p class="text-nowrap">@Localizer["lbl_SettleAmount"]</p>
                                 </div>
                             </div>
                         </div>

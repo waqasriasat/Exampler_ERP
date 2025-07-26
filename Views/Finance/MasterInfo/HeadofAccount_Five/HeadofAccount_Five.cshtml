@@ -3,7 +3,7 @@
 @inject IViewLocalizer Localizer
 
 @{
-	ViewData["Title"] = @Localizer["lbl_MasterInformation"] + " - " + @Localizer["lbl_HeadofAccount"] + "-" + @Localizer["lbl_Five"];
+	ViewData["Title"] = @Localizer["lbl_MasterInformation"] + " - " + @Localizer["lbl_HeadofAccountFive"];
 }
 
 @section PageScripts {
@@ -108,7 +108,7 @@
 
 
 <h4 class="py-3 mb-4">
-	<span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> @Localizer["lbl_HeadofAccount"]_@Localizer["lbl_Five"]
+	<span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> @Localizer["lbl_HeadofAccountFive"]
 </h4>
 <div class="row">
     <div class="col-md-12">
@@ -120,7 +120,7 @@
                     <div class="col-md-8" style="padding-bottom: 15px;">
                         <!-- Search Field and Button -->
                         <div class="input-group">
-							<input type="text" class="form-control" placeholder="@Localizer["lbl_Search"] @Localizer["lbl_HeadofAccount"]_@Localizer["lbl_Five"] @Localizer["lbl_Name"]" id="searchHeadofAccount_FiveInput">
+							<input type="text" class="form-control" placeholder="@Localizer["lbl_SearchHeadofAccountFiveName"]" id="searchHeadofAccount_FiveInput">
                             <button class="btn btn-outline-secondary" type="button" id="searchHeadofAccount_FiveButton">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -141,14 +141,14 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-			<h5 class="card-header">@Localizer["lbl_HeadofAccount"]_@Localizer["lbl_Five"] @Localizer["lbl_List"]</h5>
+			<h5 class="card-header">@Localizer["lbl_HeadofAccountFiveList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                         <div class="col-10 col-md-10 col-lg-10">
                             <div class="row">
                                 <div class="col-5">
-									<p class="text-nowrap">@Localizer["lbl_HeadofAccount"]_@Localizer["lbl_Five"] @Localizer["lbl_Name"]</p>
+									<p class="text-nowrap">@Localizer["lbl_HeadofAccountFiveName"]</p>
                                 </div>
                                 <div class="col-5">
                                     <p class="text-nowrap">@Localizer["lbl_HeadofAccount"]</p>

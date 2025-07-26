@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Reports - Employee Bio Data";
+    ViewData["Title"] = Localizer["lbl_Reports"] + " - " + Localizer["lbl_EmployeeBioData"];
 }
 
 @section PageScripts {
@@ -68,7 +68,7 @@
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Reports /</span> Employee Bio Data
+    <span class="text-muted fw-light">@Localizer["lbl_Reports"]  /</span> @Localizer["lbl_EmployeeBioData"]
 </h4>
 <div class="row">
     <div class="col-md-12">
@@ -96,7 +96,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Employee Bio Data @Localizer["lbl_List"]</h5>
+            <h5 class="card-header">@Localizer["lbl_EmployeeBioDataList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
@@ -110,7 +110,7 @@
                                     <p class="text-nowrap">@Localizer["lbl_Branch"]</p>
                                 </div>
                                 <div class="col-3">
-                                    <p class="text-nowrap"> @Localizer["lbl_Department"]</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Department"]</p>
                                 </div>
                             </div>
                         </div>
@@ -134,10 +134,10 @@
                                         <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@Html.Raw($"{item.FirstName} {item.FatherName} {item.FamilyName}")</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Branch: </span>@item.BranchType?.BranchTypeName</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_BranchName"]: </span>@item.BranchType?.BranchTypeName</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">Department: </span>@item.DepartmentType?.DepartmentTypeName</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Department"]: </span>@item.DepartmentType?.DepartmentTypeName</p>
                                     </div>
                                 </div>
                             </div>

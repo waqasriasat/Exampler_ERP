@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editChequeBookModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit Cheque Book
+                    @Localizer["lbl_EditChequeBook"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -15,7 +15,7 @@
                 <form id="editChequeBookForm">
                     <div class="row">
                         <div class="col-12 col-md-12 col-lg-12">
-                            <label asp-for="BankAccountID" class="form-label fw-bold">Bank Name</label>
+                            <label asp-for="BankAccountID" class="form-label fw-bold">@Localizer["lbl_BankName"]</label>
                             <select asp-for="BankAccountID" asp-items="@(new SelectList(ViewBag.bankList, "Value", "Text", Model.BankAccountID))" class="form-control form-control-lg" disabled>
                             </select>
                             <span asp-validation-for="BankAccountID" class="text-danger"></span>
@@ -27,15 +27,15 @@
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label for="TotalPages" class="form-label fw-bold">TotalPages</label>
+                            <label for="TotalPages" class="form-label fw-bold">@Localizer["lbl_TotalPages"]</label>
                             <input type="text" class="form-control form-control-lg" id="TotalPages" name="TotalPages" value="@Model.TotalPages" disabled />
                         </div>
                         <div class="col-12 col-md-6 col-lg-6">
-                            <label for="ChequeFrom" class="form-label fw-bold">ChequeFrom</label>
+                            <label for="ChequeFrom" class="form-label fw-bold">@Localizer["lbl_FromChequeNo"]</label>
                             <input type="text" class="form-control form-control-lg" id="ChequeFrom" name="ChequeFrom" value="@Model.ChequeFrom" disabled />
                         </div>
                         <div class="col-12 col-md-12 col-lg-6">
-                            <label for="ChequeTo" class="form-label fw-bold">ChequeTo</label>
+                            <label for="ChequeTo" class="form-label fw-bold">@Localizer["lbl_ToChequeNo"]</label>
                             <input type="text" class="form-control form-control-lg" id="ChequeTo" name="ChequeTo" value="@Model.ChequeTo" disabled />
                         </div>
                     </div>

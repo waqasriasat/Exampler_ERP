@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Dashboards - Analytics";
 }
@@ -87,7 +89,7 @@
         <div class="card">
             <div class="row row-bordered g-0">
                 <div class="col-md-8" style="padding-bottom: 15px;">
-                    <h5 class="card-header m-0 me-2 pb-3">Total Revenue</h5>
+                    <h5 class="card-header m-0 me-2 pb-3">@Localizer["lbl_Total"] Revenue</h5>
                     <div id="totalRevenueChart" class="px-2"></div>
                 </div>
                 <div class="col-md-4">
@@ -229,7 +231,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div class="d-flex flex-column align-items-center gap-1">
                         <h2 class="mb-2">8,258</h2>
-                        <span>Total Orders</span>
+                        <span>@Localizer["lbl_Total"] Orders</span>
                     </div>
                     <div id="orderStatisticsChart"></div>
                 </div>
@@ -319,7 +321,7 @@
                                 <img src="~/img/icons/unicons/wallet.png" alt="User">
                             </div>
                             <div>
-                                <small class="text-muted d-block">Total Balance</small>
+                                <small class="text-muted d-block">@Localizer["lbl_Total"] Balance</small>
                                 <div class="d-flex align-items-center">
                                     <h6 class="mb-0 me-1">$459.10</h6>
                                     <small class="text-success fw-medium">

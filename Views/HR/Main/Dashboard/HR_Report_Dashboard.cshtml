@@ -1,7 +1,8 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-	ViewData["Title"] = Localizer["lbl_HumanResources"] + " - Reports";
+
+    ViewData["Title"] = Localizer["lbl_HumanResources"] + " - " + @Localizer["lbl_Reports"];
 
 
 	var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
@@ -25,7 +26,7 @@
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">@Localizer["lbl_HumanResources"]  /</span> @Localizer["lbl_Report"]s
+    <span class="text-muted fw-light">@Localizer["lbl_HumanResources"]  /</span> @Localizer["lbl_Reports"]
 </h4>
 
 <div class="row">
@@ -35,7 +36,7 @@
             <li class="nav-item"><a class="nav-link" href="~/HR_Employeement_Dashboard/Index"><i class="bx bx-briefcase me-1"></i> @Localizer["lbl_Employeement"]</a></li>
             <li class="nav-item"><a class="nav-link" href="~/HR_HR_Dashboard/Index"><i class="bx bx-group me-1"></i> @Localizer["lbl_HR"]</a></li>
             <li class="nav-item"><a class="nav-link" href="~/HR_Finance_Dashboard/Index"><i class="bx bx-dollar me-1"></i> @Localizer["lbl_Finance"]</a></li>
-            <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-bar-chart-alt me-1"></i> @Localizer["lbl_Report"]</a></li>
+            <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-bar-chart-alt me-1"></i> @Localizer["lbl_Reports"]</a></li>
         </ul>
         <div class="card mb-4">
             <h5 class="card-header"> @Localizer["lbl_Details"]</h5>
@@ -48,7 +49,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Employee BioData</strong>
+                                        <strong class="text-primary">@Localizer["lbl_EmployeeBioData"]</strong>
                                         <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
@@ -70,7 +71,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Vacation Report</strong>
+                                        <strong class="text-primary">@Localizer["lbl_VacationReport"]</strong>
                                         <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
@@ -92,7 +93,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Vacation Balance</strong>
+                                        <strong class="text-primary">@Localizer["lbl_VacationBalance"]</strong>
                                         <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
@@ -114,7 +115,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Contract Expiry</strong>
+                                        <strong class="text-primary">@Localizer["lbl_ContractExpiry"]</strong>
                                         <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
@@ -136,7 +137,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">User Monitor</strong>
+                                        <strong class="text-primary">@Localizer["lbl_UserMonitor"]</strong>
                                         <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
@@ -158,7 +159,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Experience Certificate</strong>
+                                        <strong class="text-primary">@Localizer["lbl_ExperienceCertificate"]</strong>
                                         <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
@@ -180,7 +181,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Education Document</strong>
+                                        <strong class="text-primary">@Localizer["lbl_EducationDocument"]</strong>
                                         <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
@@ -202,7 +203,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Evaluation</strong>
+                                        <strong class="text-primary">@Localizer["lbl_Evaluation"]</strong>
                                         <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
@@ -224,7 +225,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Process Approval Detail</strong>
+                                        <strong class="text-primary">@Localizer["lbl_ProcessApprovalDetail"]</strong>
                                         <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
@@ -246,7 +247,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Employee Request Approval Detail</strong>
+                                        <strong class="text-primary">@Localizer["lbl_EmployeeRequestApprovalDetail"]</strong>
                                         <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
@@ -268,7 +269,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Approved Monthly Salary Sheet</strong>
+                                        <strong class="text-primary">@Localizer["lbl_ApprovedMonthlySalarySheet"]</strong>
                                         <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
@@ -290,7 +291,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Monthly Payslip</strong>
+                                        <strong class="text-primary">@Localizer["lbl_MonthlyPayslip"]</strong>
                                         <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
@@ -312,7 +313,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Face Attendance Report</strong>
+                                        <strong class="text-primary">@Localizer["lbl_FaceAttendanceReport"]</strong>
                                         <h4 class="font-weight-bold text-dark">0</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">

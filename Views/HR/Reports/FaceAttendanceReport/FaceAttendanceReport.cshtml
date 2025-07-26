@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Localizer["lbl_HumanResources"] + " - Face Attendance Report";
+    ViewData["Title"] = Localizer["lbl_Reports"] + " - " + Localizer["lbl_FaceAttendanceReport"];
 }
 
 @section PageScripts {
@@ -67,7 +67,7 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">@Localizer["lbl_HumanResources"] /</span> Face Attendance Report
+    <span class="text-muted fw-light">@Localizer["lbl_Reports"] /</span> @Localizer["lbl_FaceAttendanceReport"]
 </h4>
 <form method="get" action="@Url.Action("Index", "FaceAttendanceReport")">
     <div class="row">
@@ -157,7 +157,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Face Attendance Report @Localizer["lbl_List"]</h5>
+            <h5 class="card-header">@Localizer["lbl_FaceAttendanceList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
@@ -165,19 +165,19 @@
                                     <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">@Localizer["lbl_Date"] /p>
+                                    <p class="text-nowrap">@Localizer["lbl_Date"] </p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">In Time</p>
+                                    <p class="text-nowrap">@Localizer["lbl_InTime"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Out Times</p>
+                                    <p class="text-nowrap">@Localizer["lbl_OutTimes"]s</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">D-Hours</p>
+                                    <p class="text-nowrap">@Localizer["lbl_DutyHours"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">D-Minute</p>
+                                    <p class="text-nowrap">@Localizer["lbl_DutyMinutes"]</p>
                                 </div>
                             </div>
                 </div>
@@ -193,16 +193,16 @@
                                         <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Date"] : </span>@item.MarkDate.ToString("dd/MMM/yyyy")</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">In Time : </span>@item.InTime.ToString("hh:mm:ss")</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_InTime"] : </span>@item.InTime.ToString("hh:mm:ss")</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">Out Time : </span>@item.OutTime.ToString("hh:mm:ss")</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_OutTimes"] : </span>@item.OutTime.ToString("hh:mm:ss")</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">D-Hours : </span>@item.DHours</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_DutyHours"] : </span>@item.DHours</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">D-Minute : </span>@item.DMinutes</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_DutyMinutes"] : </span>@item.DMinutes</p>
                                     </div>
                                 </div>
                             </div>

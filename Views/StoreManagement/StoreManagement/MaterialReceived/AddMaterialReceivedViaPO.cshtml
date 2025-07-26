@@ -41,7 +41,7 @@
                             <span asp-validation-for="MaterialReceiveds.UnitTypeID" class="text-danger"></span>
                         </div>
                         <div class="col-2 col-md-12 col-lg-3">
-                            <label asp-for="MaterialReceiveds.VendorID" class="form-label fw-bold">Vendor Name</label>
+                            <label asp-for="MaterialReceiveds.VendorID" class="form-label fw-bold">@Localizer["lbl_VendorName"]</label>
                             <select id="VendorID" asp-for="MaterialReceiveds.VendorID" asp-items="@(new SelectList(ViewBag.VendorList, "Value", "Text", Model.MaterialReceiveds.VendorID))" class="form-control form-control-lg readonly-select">
                                 <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
