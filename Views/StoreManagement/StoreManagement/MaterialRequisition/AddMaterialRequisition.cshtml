@@ -63,7 +63,7 @@
                                 <tr>
                                     <th class="headercontrol headerwidth">
                                         <div class="col-md-12">
-                                            <label for="ItemName" class="form-label fw-bold">Item Name</label>
+                                            <label for="ItemName" class="form-label fw-bold">@Localizer["lbl_ItemName"]</label>
                                             <select id="ItemName" name="ItemName" class="form-select">
                                                 <option value="">Select Item</option>
                                                 @foreach (var type in ViewBag.ItemList)
@@ -102,7 +102,7 @@
                                 </tr>
                                 <tr><th style="border: none;"></th></tr>
                                 <tr>
-                                    <th>Item Name</th>
+                                    <th>@Localizer["lbl_ItemName"]</th>
                                     <th>Quantity</th>
                                     <th>Balance Quantity</th>
                                     <th>Required @Localizer["lbl_Date"]</th>

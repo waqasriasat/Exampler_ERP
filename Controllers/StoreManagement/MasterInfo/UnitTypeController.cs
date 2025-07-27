@@ -130,9 +130,9 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("UnitTypees");
-        worksheet.Cells["A1"].Value = "UnitType ID";
-        worksheet.Cells["B1"].Value = "UnitType Name";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_ItemUnitType"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_ItemUnitTypeID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_ItemUnitTypeName"];
         worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
@@ -149,7 +149,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"UnitTypees-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_ItemUnitType"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

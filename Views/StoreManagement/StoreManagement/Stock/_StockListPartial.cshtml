@@ -1,5 +1,6 @@
 @model Exampler_ERP.Models.Temp.StockListViewModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @foreach (var item in Model.ItemsWithStockQuantity)
                 {
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
@@ -7,7 +8,7 @@
                             <div class="col-10 col-md-10 col-lg-11">
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-6">
-                                        <p class="text-nowrap"><span class="smallAdd">Item Name : </span>@Html.DisplayFor(modelItem => item.ItemName)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_ItemName"] : </span>@Html.DisplayFor(modelItem => item.ItemName)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap"><span class="smallAdd">Stock Quantity : </span>@Html.DisplayFor(modelItem => item.StockQuantity)</p>

@@ -16,7 +16,7 @@
                 <form id="editMaterialReceivedForm">
                     <div class="row">
                         <div class="col-md-6">
-                            <label asp-for="MaterialReceiveds.ItemID" class="form-label fw-bold">Item Name</label>
+                            <label asp-for="MaterialReceiveds.ItemID" class="form-label fw-bold">@Localizer["lbl_ItemName"]</label>
                             <select asp-for="MaterialReceiveds.ItemID" asp-items="@(new SelectList(ViewBag.ItemList, "Value", "Text", Model.MaterialReceiveds.ItemID))" class="form-control form-control-lg">
                                 <option value="">Please select</option>
                             </select>
@@ -24,7 +24,7 @@
                         </div>
 
                         <div class="col-md-3">
-                            <label asp-for="MaterialReceiveds.UnitTypeID" class="form-label fw-bold">Unit</label>
+                            <label asp-for="MaterialReceiveds.UnitTypeID" class="form-label fw-bold">@Localizer["lbl_Unit"]</label>
                             <select asp-for="MaterialReceiveds.UnitTypeID" asp-items="@(new SelectList(ViewBag.UnitList, "Value", "Text", Model.MaterialReceiveds.UnitTypeID))" class="form-control form-control-lg">
                                 <option value="">Please select</option>
                             </select>

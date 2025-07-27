@@ -1,13 +1,13 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = @Localizer["lbl_Finance"] + " - Report";
+	ViewData["Title"] = @Localizer["lbl_Finance"] + " - " + @Localizer["lbl_Reports"];
 
 
 
 
 
-    var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
+	var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
 
     var accessRightByUsertList = string.IsNullOrEmpty(accessRightsByUserJson)
 
@@ -67,7 +67,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Lodgement</strong>
+                                        <strong class="text-primary">@Localizer["lbl_Lodgement"]</strong>
                                         <h4 class="font-weight-bold text-dark">
                                             @ViewBag.Lodgement
                                         </h4>
@@ -92,7 +92,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">TrialBalance</strong>
+										<strong class="text-primary">@Localizer["lbl_TrialBalance"]</strong>
                                         <h4 class="font-weight-bold text-dark">
                                             @ViewBag.TrialBalance
                                         </h4>
@@ -117,7 +117,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">IncomeSheet</strong>
+										<strong class="text-primary">@Localizer["lbl_IncomeSheet"]</strong>
                                         <h4 class="font-weight-bold text-dark">
                                             @ViewBag.IncomeSheet
                                         </h4>

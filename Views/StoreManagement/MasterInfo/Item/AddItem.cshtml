@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addItemModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add New Item
+					@Localizer["lbl_AddNewItem"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -17,11 +17,11 @@
                     <div class="row">
                         
                         <div class="col-12">
-                            <label for="ItemName" class="form-label fw-bold">Item Name</label>
+                            <label for="ItemName" class="form-label fw-bold">@Localizer["lbl_ItemName"]</label>
                             <input type="text" class="form-control form-control-lg" id="ItemName" name="ItemName" value="@Model.ItemName" />
                         </div>
                         <div class="col-6">
-                            <label for="ItemCode" class="form-label fw-bold">Item Code</label>
+                            <label for="ItemCode" class="form-label fw-bold">@Localizer["lbl_ItemCode"]</label>
                             <input type="text" class="form-control form-control-lg" id="ItemCode" name="ItemCode" value="@Model.ItemCode" />
                         </div>
                         <div class="col-6">
@@ -32,56 +32,56 @@
                             <span asp-validation-for="ActiveYNID" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="UnitTypeID" class="form-label fw-bold">Unit</label>
+                            <label asp-for="UnitTypeID" class="form-label fw-bold">@Localizer["lbl_Unit"]</label>
                             <select asp-for="UnitTypeID" asp-items="@(new SelectList(ViewBag.UnitTypeIDList, "Value", "Text"))" class="form-control form-control-lg">
                                 <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
                             <span asp-validation-for="UnitTypeID" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="ItemCategoryTypeID" class="form-label fw-bold">Category</label>
+                            <label asp-for="ItemCategoryTypeID" class="form-label fw-bold">@Localizer["lbl_Category"]</label>
                             <select asp-for="ItemCategoryTypeID" asp-items="@(new SelectList(ViewBag.ItemCategoryTypeIDList, "Value", "Text"))" class="form-control form-control-lg">
                                 <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
                             <span asp-validation-for="ItemCategoryTypeID" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="ManufacturerTypeID" class="form-label fw-bold">Manufacturer</label>
+                            <label asp-for="ManufacturerTypeID" class="form-label fw-bold">@Localizer["lbl_Manufacturer"]</label>
                             <select asp-for="ManufacturerTypeID" asp-items="@(new SelectList(ViewBag.ManufacturerTypeIDList, "Value", "Text"))" class="form-control form-control-lg">
                                 <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
                             <span asp-validation-for="ManufacturerTypeID" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label for="ReorderLevelMin" class="form-label fw-bold">Reorder Level Min</label>
+                            <label for="ReorderLevelMin" class="form-label fw-bold">@Localizer["lbl_RecorderLevelMin"]</label>
                             <input type="text" class="form-control form-control-lg" id="ReorderLevelMin" name="ReorderLevelMin" value="@Model.ReorderLevelMin" />
                         </div>
                         <div class="col-6">
-                            <label for="ReorderLevelMax" class="form-label fw-bold">Reorder Level Max</label>
+                            <label for="ReorderLevelMax" class="form-label fw-bold">@Localizer["lbl_RecorderLevelMax"]</label>
                             <input type="text" class="form-control form-control-lg" id="ReorderLevelMax" name="ReorderLevelMax" value="@Model.ReorderLevelMax" />
                         </div>
                         <div class="col-6">
-                            <label for="BinLocation" class="form-label fw-bold">BinLocation</label>
+                            <label for="BinLocation" class="form-label fw-bold">@Localizer["lbl_BinLocation"]</label>
                             <input type="text" class="form-control form-control-lg" id="BinLocation" name="BinLocation" value="@Model.BinLocation" />
                         </div>
                         <div class="col-12">
-                            <label for="Specification" class="form-label fw-bold">Specification</label>
+                            <label for="Specification" class="form-label fw-bold">@Localizer["lbl_Specification"]</label>
                             <input type="text" class="form-control form-control-lg" id="Specification" name="Specification" value="@Model.Specification" />
                         </div>
                         <div class="col-6">
-                            <label for="BarCode" class="form-label fw-bold">BarCode</label>
+                            <label for="BarCode" class="form-label fw-bold">@Localizer["lbl_BarCode"]</label>
                             <input type="text" class="form-control form-control-lg" id="BarCode" name="BarCode" value="@Model.BarCode" />
                         </div>
                         <div class="col-6">
-                            <label for="OpeningBalance" class="form-label fw-bold">OpeningBalance</label>
+                            <label for="OpeningBalance" class="form-label fw-bold">@Localizer["lbl_OpeningBalance"]</label>
                             <input type="text" class="form-control form-control-lg" id="OpeningBalance" name="OpeningBalance" value="@Model.OpeningBalance" />
                         </div>
                         <div class="col-12">
-                            <label for="HasLotNumberAndExpiryDate" class="form-label fw-bold">Has Lot Number and Expiry @Localizer["lbl_Date"]</label>
+							<label for="HasLotNumberAndExpiryDate" class="form-label fw-bold">@Localizer["lbl_HasLotNumberandExpiryDate"]</label>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="HasLotNumberAndExpiryDate" name="HasLotNumberAndExpiryDate" value="true" @(Model.HasLotNumberAndExpiryDate ? "checked" : "") />
                                 <label class="form-check-label" for="HasLotNumberAndExpiryDate">
-                                    Check if this item has a lot number and expiry date
+									@Localizer["lbl_Checkifthisitemhasalotnumberandexpirydate"]
                                 </label>
                             </div>
                         </div>

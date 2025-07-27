@@ -1,13 +1,14 @@
 @model List<Exampler_ERP.Models.PR_PurchaseRequest>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <div class="table-responsive mb-3">
     <table class="table table-bordered" id="purchaseRequestTable">
         <thead class="table-light">
             
             <tr>
-                <th>Item Name</th>
-                <th>Unit</th>
+                <th>@Localizer["lbl_ItemName"]</th>
+                <th>@Localizer["lbl_Unit"]</th>
                 <th>Quantity</th>
                 <th>Priority Level</th>
             </tr>

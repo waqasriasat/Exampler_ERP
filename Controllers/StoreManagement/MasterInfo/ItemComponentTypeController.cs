@@ -136,9 +136,9 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("ItemComponentTypees");
-        worksheet.Cells["A1"].Value = "ItemComponentType ID";
-        worksheet.Cells["B1"].Value = "ItemComponentType Name";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_ItemComponentType"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_ItemComponentTypeID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_ItemComponentTypeName"];
         worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
@@ -155,7 +155,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"ItemComponentTypees-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_ItemComponentType"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

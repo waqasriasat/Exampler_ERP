@@ -1,4 +1,6 @@
 @model Exampler_ERP.Models.Temp.PurchaseRequestwithCostComparisonViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     var QuotationVendorID1 = ViewBag.QuotationVendorID1 ?? 0;
     var QuotationVendorID2 = ViewBag.QuotationVendorID2 ?? 0;
@@ -17,8 +19,8 @@
                     <table class="table table-bordered" id="purchaseRequestTable">
                         <thead class="table-light">
                             <tr>
-                                <th>Item Name</th>
-                                <th>Unit</th>
+                                <th>@Localizer["lbl_ItemName"]</th>
+                                <th>@Localizer["lbl_Unit"]</th>
                                 <th>Quantity</th>
                                 <th>Priority Level</th>
                             </tr>

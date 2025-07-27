@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editItemComponentTypeModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit Item Component Type
+					@Localizer["lbl_EditItemComponentType"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -18,17 +18,17 @@
                         <div class="col-2 col-md-12 col-lg-12">
                             <div class="row">
                                 <div class="col-6">
-                                    <label asp-for="ItemCategoryTypeID" class="form-label fw-bold">Select ItemCategory</label>
+                                    <label asp-for="ItemCategoryTypeID" class="form-label fw-bold">@Localizer["lbl_SelectItemCategoryTypeName"]</label>
                                     <select asp-for="ItemCategoryTypeID" asp-items="@(new SelectList(ViewBag.ItemCategoryList, "Value", "Text", Model.ItemCategoryTypeID))" class="form-control form-control-lg">
                                     </select>
                                     <span asp-validation-for="ItemCategoryTypeID" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
-                                    <label for="ItemComponentTypeName" class="form-label fw-bold">Item Component Type Name</label>
+                                    <label for="ItemComponentTypeName" class="form-label fw-bold">@Localizer["lbl_ItemComponentTypeName"]</label>
                                     <input type="text" class="form-control form-control-lg" id="ItemComponentTypeName" name="ItemComponentTypeName" value="@Model.ItemComponentTypeName" />
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="ItemComponentDataType" class="form-label fw-bold">Select Data @Localizer["lbl_Type"]</label>
+                                    <label asp-for="ItemComponentDataType" class="form-label fw-bold">@Localizer["lbl_SelectItemComponentDataType"]</label>
                                     <select asp-for="ItemComponentDataType" asp-items="@(new SelectList(ViewBag.DataTypeList, "Value", "Text", Model.ItemComponentDataType))" class="form-control form-control-lg">
                                         <option>@Localizer["lbl_Pleaseselect"]</option>
                                     </select>

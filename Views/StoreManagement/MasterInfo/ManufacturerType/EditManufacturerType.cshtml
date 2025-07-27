@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editManufacturerTypeModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Edit Item Manufacturer Type
+					@Localizer["lbl_EditManufacturerType"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -18,7 +18,7 @@
                         <div class="col-2 col-md-12 col-lg-12">
                             <div class="row">
                                 <div class="col-12 col-md-12 col-lg-12">
-                                    <label for="ManufacturerTypeName" class="form-label fw-bold">Item Manufacturer Type Name</label>
+                                    <label for="ManufacturerTypeName" class="form-label fw-bold">@Localizer["lbl_ManufacturerTypeName"]</label>
                                     <input type="text" class="form-control form-control-lg" id="ManufacturerTypeName" name="ManufacturerTypeName" value="@Model.ManufacturerTypeName" />
                                 </div>
                                 <div class="col-12 col-md-6 col-lg-6">

@@ -142,19 +142,19 @@ namespace Exampler_ERP.Controllers.MasterInfo.StoreManagement
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("Itemes");
-        worksheet.Cells["A1"].Value = "Item ID";
-        worksheet.Cells["B1"].Value = "Item Code";
-        worksheet.Cells["C1"].Value = "Item Name";
-        worksheet.Cells["D1"].Value = "Status";
-        worksheet.Cells["E1"].Value = "Unit";
-        worksheet.Cells["F1"].Value = "Category";
-        worksheet.Cells["G1"].Value = "Manufacturer";
-        worksheet.Cells["H1"].Value = "Reorder Level Min";
-        worksheet.Cells["I1"].Value = "Reorder Level Max";
-        worksheet.Cells["J1"].Value = "BinLocation";
-        worksheet.Cells["K1"].Value = "BarCode";
-        worksheet.Cells["L1"].Value = "OpeningBalance";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Item"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_ItemID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_ItemCode"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_ItemName"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_Status"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_Unit"];
+        worksheet.Cells["F1"].Value = _localizer["lbl_Category"];
+        worksheet.Cells["G1"].Value = _localizer["lbl_Manufacturer"];
+        worksheet.Cells["H1"].Value = _localizer["lbl_RecorderLevelMin"];
+        worksheet.Cells["I1"].Value = _localizer["lbl_RecorderLevelMax"];
+        worksheet.Cells["J1"].Value = _localizer["lbl_BinLocation"];
+        worksheet.Cells["K1"].Value = _localizer["lbl_BarCode"];
+        worksheet.Cells["L1"].Value = _localizer["lbl_OpeningBalance"];
 
 
         for (int i = 0; i < Itemes.Count; i++)
@@ -180,7 +180,7 @@ namespace Exampler_ERP.Controllers.MasterInfo.StoreManagement
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"Itemes-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_Item"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

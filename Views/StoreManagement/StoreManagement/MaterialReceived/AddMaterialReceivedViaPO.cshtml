@@ -27,14 +27,14 @@
                     <div class="row">
 
                         <div class="col-2 col-md-12 col-lg-6">
-                            <label asp-for="MaterialReceiveds.ItemID" class="form-label fw-bold">Item Name</label>
+                            <label asp-for="MaterialReceiveds.ItemID" class="form-label fw-bold">@Localizer["lbl_ItemName"]</label>
                             <select id="ItemID" asp-for="MaterialReceiveds.ItemID" asp-items="@(new SelectList(ViewBag.ItemList, "Value", "Text", Model.MaterialReceiveds.ItemID))" class="form-control form-control-lg">
                                 <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
                             <span asp-validation-for="MaterialReceiveds.ItemID" class="text-danger"></span>
                         </div>
                         <div class="col-2 col-md-12 col-lg-3">
-                            <label asp-for="MaterialReceiveds.UnitTypeID" class="form-label fw-bold">Unit</label>
+                            <label asp-for="MaterialReceiveds.UnitTypeID" class="form-label fw-bold">@Localizer["lbl_Unit"]</label>
                             <select id="UnitTypeID" asp-for="MaterialReceiveds.UnitTypeID" asp-items="@(new SelectList(ViewBag.UnitList, "Value", "Text", Model.MaterialReceiveds.UnitTypeID))" class="form-control form-control-lg readonly-select">
                                 <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>

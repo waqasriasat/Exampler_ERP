@@ -130,9 +130,9 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("ItemCategoryTypees");
-        worksheet.Cells["A1"].Value = "ItemCategoryType ID";
-        worksheet.Cells["B1"].Value = "ItemCategoryType Name";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_ItemCategoryType"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_ItemCategoryTypeID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_ItemCategoryTypeName"];
         worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
@@ -149,7 +149,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.MasterInfo
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"ItemCategoryTypees-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_ItemCategoryType"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

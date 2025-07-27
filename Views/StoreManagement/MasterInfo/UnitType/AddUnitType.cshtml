@@ -7,7 +7,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addUnitTypeModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add New Item Unit Type
+					@Localizer["lbl_AddNewItemUnitType"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -16,11 +16,11 @@
                 <form id="addUnitTypeForm">
                     <div class="row">
                         <div class="col-6">
-                            <label for="UnitTypeName" class="form-label fw-bold">Item Unit Type Name</label>
+							<label for="UnitTypeName" class="form-label fw-bold">@Localizer["lbl_ItemUnitTypeName"]</label>
                             <input type="text" class="form-control form-control-lg" id="UnitTypeName" name="UnitTypeName" value="@Model.UnitTypeName" />
                         </div>
                         <div class="col-6">
-                            <label for="UnitTypeCode" class="form-label fw-bold">Item Unit Type Code</label>
+							<label for="UnitTypeCode" class="form-label fw-bold">@Localizer["lbl_ItemUnitTypeCode"]</label>
                             <input type="text" class="form-control form-control-lg" id="UnitTypeCode" name="UnitTypeCode" value="@Model.UnitTypeCode" />
                         </div>
                         <div class="col-6">

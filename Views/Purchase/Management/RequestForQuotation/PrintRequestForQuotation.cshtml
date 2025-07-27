@@ -151,8 +151,8 @@
                     <thead class="table-light">
                         <tr><th style="border: none;"></th></tr>
                         <tr>
-                            <th>Item Name</th>
-                            <th>Unit @Localizer["lbl_Type"]</th>
+                            <th>@Localizer["lbl_ItemName"]</th>
+                            <th>@Localizer["lbl_Unit"] @Localizer["lbl_Type"]</th>
                             <th>Quantity</th>
                             <th>Priority Level</th>
                         </tr>
@@ -172,7 +172,7 @@
                             </td>
                             <td>
                                 <select class="form-select inputcontrol" disabled>
-                                    <option value="">Unit</option>
+                                    <option value="">@Localizer["lbl_Unit"]</option>
                                     @foreach (var type in ViewBag.ItemUnitList)
                                     {
                                                                 <option value="@type.Value" selected="@(type.Value == Model.PurchaseRequests[i].UnitTypeID.ToString())">@type.Text</option>
@@ -184,7 +184,7 @@
                             </td>
                             <td>
                                 <select class="form-select inputcontrol" disabled>
-                                    <option value="">Unit</option>
+                                    <option value="">@Localizer["lbl_Unit"]</option>
                                     @foreach (var type in ViewBag.PriorityLevelList)
                                     {
                                                                 <option value="@type.Value" selected="@(type.Value == Model.PurchaseRequests[i].PriorityLevel.ToString())">@type.Text</option>

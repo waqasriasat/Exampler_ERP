@@ -89,7 +89,7 @@
                                 <tr>
                                      <th class="headercontrol headerwidth">
                                         <div class="col-md-12">
-                                            <label for="ItemName" class="form-label fw-bold">Item Name</label>
+                                            <label for="ItemName" class="form-label fw-bold">@Localizer["lbl_ItemName"]</label>
                                             <select id="ItemName" class="form-select" disabled>
                                                 <option value="">Select Item</option>
                                                 @foreach (var type in ViewBag.ItemList)
@@ -102,7 +102,7 @@
                                     </th>
                                     <th class="headercontrol headerwidthRow">
                                         <div class="col-md-12">
-                                            <label for="UnitTypeID" class="form-label fw-bold">Unit</label>
+                                            <label for="UnitTypeID" class="form-label fw-bold">@Localizer["lbl_Unit"]</label>
                                             <select id="UnitTypeID" class="form-select">
                                                 <option value="">Select Unit</option>
                                                 @foreach (var type in ViewBag.ItemUnitList)
@@ -145,8 +145,8 @@
                                 </tr>
                                 <tr><th colspan="5" style="border: none;"></th></tr>
                                 <tr>
-                                    <th>Item Name</th>
-                                    <th>Unit</th>
+                                    <th>@Localizer["lbl_ItemName"]</th>
+                                    <th>@Localizer["lbl_Unit"]</th>
                                     <th>Quantity</th>
                                     <th>Priority Level</th>
                                     <th>Actions</th>
