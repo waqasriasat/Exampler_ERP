@@ -1,4 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.HR_EmployeeRequestTypeApprovalDetail>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     var EmployeeList = (List<SelectListItem>)ViewBag.EmployeesList;
     var RoleList = (List<SelectListItem>)ViewBag.RolesList;
@@ -38,7 +40,7 @@
                                     <span><strong>EmployeeRequest Type:</strong> @(firstItem.HR_EmployeeRequestTypeApproval?.EmployeeRequestType?.EmployeeRequestTypeName ?? "N/A")</span>
                                 </div>
                                 <div class="col-md-6">
-                                    <span><strong>Request Date:</strong> @(firstItem.HR_EmployeeRequestTypeApproval?.Date.ToString("dd-MM-yyyy"))</span>
+                                    <span><strong>@Localizer["lbl_RequestDate"]:</strong> @(firstItem.HR_EmployeeRequestTypeApproval?.Date.ToString("dd-MM-yyyy"))</span>
                                 </div>
                             </div>
                         </div>

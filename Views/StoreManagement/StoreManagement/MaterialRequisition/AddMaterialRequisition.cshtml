@@ -48,7 +48,7 @@
     <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="addMaterialRequisitionModalLabel"><i class="fas fa-key me-2"></i>@Localizer["lbl_Add"] Material Requisition</h5>
+                <h5 class="modal-title" id="addMaterialRequisitionModalLabel"><i class="fas fa-key me-2"></i>@Localizer["lbl_AddMaterialRequisition"]</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -65,7 +65,7 @@
                                         <div class="col-md-12">
                                             <label for="ItemName" class="form-label fw-bold">@Localizer["lbl_ItemName"]</label>
                                             <select id="ItemName" name="ItemName" class="form-select">
-                                                <option value="">Select Item</option>
+                                                <option value="">@Localizer["lbl_SelectItem"]</option>
                                                 @foreach (var type in ViewBag.ItemList)
 
 
@@ -78,19 +78,19 @@
                                     </th>
                                     <th class="headercontrol">
                                         <div class="col-md-12">
-                                            <label for="Quantity" class="form-label fw-bold">Quantity</label>
+                                            <label for="Quantity" class="form-label fw-bold">@Localizer["lbl_Quantity"]</label>
                                             <input type="text" id="Quantity" name="Quantity" class="form-control" />
                                         </div>
                                     </th>
                                     <th class="headercontrol">
                                         <div class="col-md-12">
-                                            <label for="BalanceQuantity" class="form-label fw-bold">Balance Quantity</label>
+                                            <label for="BalanceQuantity" class="form-label fw-bold">@Localizer["lbl_BalanceQuantity"]</label>
                                             <input type="text" id="BalanceQuantity" name="BalanceQuantity" class="form-control" />
                                         </div>
                                     </th>
                                     <th class="headercontrol">
                                         <div class="col-md-12">
-                                            <label for="RequiredDate" class="form-label fw-bold">Required @Localizer["lbl_Date"]</label>
+                                            <label for="RequiredDate" class="form-label fw-bold">@Localizer["lbl_RequiredDate"]</label>
                                             <input type="date" id="RequiredDate" name="RequiredDate" class="form-control" />
                                         </div>
                                     </th>
@@ -103,10 +103,10 @@
                                 <tr><th style="border: none;"></th></tr>
                                 <tr>
                                     <th>@Localizer["lbl_ItemName"]</th>
-                                    <th>Quantity</th>
-                                    <th>Balance Quantity</th>
-                                    <th>Required @Localizer["lbl_Date"]</th>
-                                    <th>Actions</th>
+                                    <th>@Localizer["lbl_Quantity"]</th>
+                                    <th>@Localizer["lbl_BalanceQuantity"]</th>
+                                    <th>@Localizer["lbl_RequiredDate"]</th>
+                                    <th>@Localizer["lbl_Action"]</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -120,7 +120,7 @@
                                 <tr>
                                     <td >
                                                 <select class="form-select" name="MaterialRequisitions.MaterialRequisitionDetails[@i].ItemID">
-                                            <option value="">Select Item</option>
+                                            <option value="">@Localizer["lbl_SelectItem"]</option>
                                             @foreach (var type in ViewBag.ItemNameList)
 
                                             {
@@ -152,7 +152,7 @@
                     <!-- Remarks Section -->
                     <div class="row mb-3">
                         <div class="col-md-12">
-                            <label asp-for="MaterialRequisitions.Remarks" class="form-label fw-bold">Remarks</label>
+                            <label asp-for="MaterialRequisitions.Remarks" class="form-label fw-bold">@Localizer["lbl_Remarks"]</label>
         <textarea asp-for="MaterialRequisitions.Remarks" class="form-control" rows="3"></textarea>
                         </div>
                     </div>

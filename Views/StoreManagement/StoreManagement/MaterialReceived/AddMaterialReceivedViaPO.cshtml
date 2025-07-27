@@ -17,7 +17,7 @@
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="addMaterialReceivedViaPOModalLabel">
                     <i class="fas fa-key me-2"></i>
-                    Add New Material Received
+                    @Localizer["lbl_AddNewMaterialReceived"]"
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -55,15 +55,15 @@
                                 <div class="col-6">
                                     <input id="PurchaseRequestID" asp-for="MaterialReceiveds.PurchaseRequestID" type="hidden" class="form-control form-control-lg readonly-input" readonly />
 
-                                    <label asp-for="MaterialReceiveds.Quantity" class="form-label fw-bold">Quantity</label>
+                                    <label asp-for="MaterialReceiveds.Quantity" class="form-label fw-bold">@Localizer["lbl_Quantity"]</label>
                                     <input id="Quantity" asp-for="MaterialReceiveds.Quantity" type="text" class="form-control form-control-lg readonly-input" readonly />
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="MaterialReceiveds.LotNumber" class="form-label fw-bold">Lot Number</label>
+                                    <label asp-for="MaterialReceiveds.LotNumber" class="form-label fw-bold">@Localizer["lbl_LotNumber"]</label>
                                     <input asp-for="MaterialReceiveds.LotNumber" type="text" class="form-control form-control-lg" />
                                 </div>
                                 <div class="col-6">
-                                    <label asp-for="MaterialReceiveds.ExpiryDate" class="form-label fw-bold">@Localizer["lbl_PassportExpiryDate"]</label>
+                                    <label asp-for="MaterialReceiveds.ExpiryDate" class="form-label fw-bold">@Localizer["lbl_ExpiryDate"]</label>
                                     <input asp-for="MaterialReceiveds.ExpiryDate" type="date" class="form-control form-control-lg" />
                                 </div>
                                 <div class="col-6">

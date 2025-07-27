@@ -12,7 +12,7 @@
                 <option value="@vendor.Value">@vendor.Text</option>
             }
         </select>
-        <span class="ms-auto" style="">@Localizer["lbl_Date"]d : @today</span>
+        <span class="ms-auto" style="">@Localizer["lbl_Date"] : @today</span>
     </div>
     <table class="table table-bordered" id="purchaseOrderTable">
         <thead class="table-light">
@@ -20,8 +20,8 @@
             <tr>
                 <th>@Localizer["lbl_ItemName"]</th>
                 <th>@Localizer["lbl_Unit"]</th>
-                <th>Quantity</th>
-                <th>Priority Level</th>
+                <th>@Localizer["lbl_Quantity"]</th>
+                <th>@Localizer["lbl_PriorityLevel"]</th>
             </tr>
         </thead>
         <tbody id="purchaseRequestBody">
@@ -30,7 +30,7 @@
                 <tr>
                     <td>
                         <select name="[@i].ItemID" class="form-select" disabled>
-                            <option value="">Select Item</option>
+                            <option value="">@Localizer["lbl_SelectItem"]</option>
                             @foreach (var type in ViewBag.ItemList)
                             {
                                 var isSelected = type.Value == Model[i].ItemID.ToString();
@@ -42,7 +42,7 @@
                     </td>
                     <td>
                         <select name="[@i].UnitTypeID" class="form-select" disabled>
-                            <option value="">Select Unit Type</option>
+                            <option value="">@Localizer["lbl_SelectUnit"]</option>
                             @foreach (var type in ViewBag.ItemUnitList)
                             {
                                 var isSelected = type.Value == Model[i].UnitTypeID.ToString();
@@ -57,7 +57,7 @@
                     </td>
                     <td>
                         <select name="[@i].PriorityLevel" class="form-select" disabled>
-                            <option value="">Select Priority Level</option>
+                            <option value="">@Localizer["lbl_SelectPriorityLevel"]</option>
                             @foreach (var type in ViewBag.PriorityLevelList)
                             {
                                 var isSelected = type.Value == Model[i].PriorityLevel.ToString();
@@ -72,7 +72,7 @@
 
     </table>
     <div class="mt-3">
-        <label for="Remarks" class="form-label fw-bold">Remarks</label>
+        <label for="Remarks" class="form-label fw-bold">@Localizer["lbl_Remarks"]</label>
         <textarea name="Remarks" id="Remarks" class="form-control" rows="6" readonly>@{
                 var index = 1;
                 foreach (var item in Model)

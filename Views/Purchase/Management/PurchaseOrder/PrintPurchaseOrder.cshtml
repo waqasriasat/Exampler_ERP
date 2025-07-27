@@ -120,25 +120,25 @@
                     <div class="row">
                         <div class="col-12 col-md-3 col-lg-3">
                             <div class="info-row">
-                                <div class="info-label">Request #:</div>
+                                <div class="info-label">@Localizer["lbl_RequestNo"]:</div>
                                 <div>@Model.PurchaseRequests[i].PurchaseRequestID</div>
                             </div>
                         </div>
                         <div class="col-12 col-md-3 col-lg-3">
                             <div class="info-row">
-                                <div class="info-label">Request Date:</div>
+                                <div class="info-label">@Localizer["lbl_RequestDate"]:</div>
                                 <div>@Model.PurchaseRequests[i].PurchaseRequestDate.ToString("dd/MM/yyyy")</div>
                             </div>
                         </div>
                         <div class="col-12 col-md-3 col-lg-3">
                             <div class="info-row">
-                                <div class="info-label">Request Status:</div>
+                                <div class="info-label">@Localizer["lbl_PurchaseRequestStatus"]:</div>
                                 <div>@Model.PurchaseRequests[i].RequestStatusType?.RequestStatusTypeName</div>
                             </div>
                         </div>
                         <div class="col-12 col-md-3 col-lg-3">
                             <div class="info-row">
-                                <div class="info-label">Deaprtment:</div>
+                                <div class="info-label">@Localizer["lbl_Department"]:</div>
                                 <div>@ViewBag.DepartmentTypeName</div>
                             </div>
                         </div>
@@ -150,7 +150,7 @@
                 <div class="col-md-12">
 
                     <div class="card">
-                        <h5 class="card-header">Order Detail</h5>
+                        <h5 class="card-header">@Localizer["lbl_OrderDetail"]</h5>
                         <div class="Searching-Box-padding">
                             <div class="row mb-4">
                                 <div class="table-responsive mb-3">
@@ -159,9 +159,9 @@
                                             <tr><th style="border: none;"></th></tr>
                                             <tr>
                                                 <th>@Localizer["lbl_ItemName"]</th>
-                                                <th>@Localizer["lbl_Unit"] @Localizer["lbl_Type"]</th>
-                                                <th>Quantity</th>
-                                                <th>Priority Level</th>
+                                                <th>@Localizer["lbl_ItemUnitType"]</th>
+                                                <th>@Localizer["lbl_Quantity"]</th>
+                                                <th>@Localizer["lbl_PriorityLevel"]</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -170,7 +170,7 @@
                                                 <tr>
                                                     <td class="col-md-4">
                                                         <select class="form-select inputcontrol" disabled>
-                                                            <option value="">Select Item</option>
+                                                            <option value="">@Localizer["lbl_SelectItem"]</option>
                                                             @foreach (var type in ViewBag.ItemNameList)
                                                             {
                                                                 <option value="@type.Value" selected="@(type.Value == Model.PurchaseRequests[i].ItemID.ToString())">@type.Text</option>
@@ -214,14 +214,14 @@
                 <div class="col-md-12">
 
                     <div class="card">
-                        <h5 class="card-header">Vendor Detail</h5>
+                        <h5 class="card-header">@Localizer["lbl_VendorOption"]</h5>
                         <div class="Searching-Box-padding">
                             <div class="row mb-4">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>First Vendor</label>
+                                        <label>@Localizer["lbl_FirstVendor"]</label>
                                         <select name="QuotationVendorID1" class="form-select" disabled>
-                                            <option value="">Select First Vendor</option>
+                                            <option value="">@Localizer["lbl_SelectFirstVendor"]</option>
                                             @foreach (var type in ViewBag.VendorList)
                                             {
                                                 var isSelected = type.Value == QuotationVendorID1.ToString();
@@ -232,9 +232,9 @@
                                         </select>
                                     </div>
                                     <div class="col-md-4">
-                                        <label>Second Vendor</label>
+                                        <label>@Localizer["lbl_SecondVendor"]</label>
                                         <select name="QuotationVendorID2" class="form-select" disabled>
-                                            <option value="">Select Second Vendor</option>
+                                            <option value="">@Localizer["lbl_SelectSecondVendor"]</option>
                                             @foreach (var type in ViewBag.VendorList)
                                             {
                                                 var isSelected = type.Value == QuotationVendorID2.ToString();
@@ -244,9 +244,9 @@
                                         </select>
                                     </div>
                                     <div class="col-md-4">
-                                        <label>Third Vendor</label>
+                                        <label>@Localizer["lbl_ThirdVendor"]</label>
                                         <select name="QuotationVendorID3" class="form-select" disabled>
-                                            <option value="">Select Third Vendor</option>
+                                            <option value="">@Localizer["lbl_SelectThirdVendor"]</option>
                                             @foreach (var type in ViewBag.VendorList)
                                             {
                                                 var isSelected = type.Value == QuotationVendorID3.ToString();
@@ -258,43 +258,43 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>First Quotation ID</label>
+                                        <label>@Localizer["lbl_FirstQuotationID"]</label>
                                         <input name="QuotationID1" class="form-control" disabled />
                                     </div>
                                     <div class="col-md-4">
-                                        <label>Second Quotation ID</label>
+                                        <label>@Localizer["lbl_SecondQuotationID"]</label>
                                         <input name="QuotationID2" class="form-control" disabled />
                                     </div>
                                     <div class="col-md-4">
-                                        <label>Third Quotation ID</label>
+                                        <label>@Localizer["lbl_ThirdQuotationID"]</label>
                                         <input name="QuotationID3" class="form-control" disabled />
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>First Quotation Price</label>
+                                        <label>@Localizer["lbl_FirstQuotationPrice"]</label>
                                         <input name="QuotationPrice1" class="form-control" disabled />
                                     </div>
                                     <div class="col-md-4">
-                                        <label>Second Quotation Price</label>
+                                        <label>@Localizer["lbl_SecondQuotationPrice"]</label>
                                         <input name="QuotationPrice2" class="form-control" disabled />
                                     </div>
                                     <div class="col-md-4">
-                                        <label>Third Quotation Price</label>
+                                        <label>@Localizer["lbl_ThirdQuotationPrice"]</label>
                                         <input name="QuotationPrice3" class="form-control" disabled />
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>First Quotation Amount</label>
+                                        <label>@Localizer["lbl_FirstQuotationAmount"]</label>
                                         <input name="QuotationAmount1" class="form-control" disabled />
                                     </div>
                                     <div class="col-md-4">
-                                        <label>Second Quotation Amount</label>
+                                        <label>@Localizer["lbl_SecondQuotationAmount"]</label>
                                         <input name="QuotationAmount2" class="form-control" disabled />
                                     </div>
                                     <div class="col-md-4">
-                                        <label>Third Quotation Amount</label>
+                                        <label>@Localizer["lbl_ThirdQuotationAmount"]</label>
                                         <input name="QuotationAmount3" class="form-control" disabled />
                                     </div>
                                 </div>
@@ -310,13 +310,13 @@
                 <div class="col-md-12">
 
                     <div class="card">
-                        <h5 class="card-header">Comparison Passed Vendor</h5>
+                        <h5 class="card-header">@Localizer["lbl_ComparisonPassedVendor"]</h5>
                         <div class="Searching-Box-padding">
                             <div class="row mb-4">
                                 <table class="table table-bordered" id="purchaseRequestTable">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>Comfirmed Vendor</th>
+                                            <th>@Localizer["lbl_ComfirmedVendor"]</th>
                                         </tr>
                                     </thead>
                                     <tbody id="purchaseRequestBody">
@@ -325,7 +325,7 @@
                                             <tr>
                                                 <td>
                                                     <select class="form-select" disabled>
-                                                        <option value="">Select Comparison Passed Vendor</option>
+                                                        <option value="">@Localizer["lbl_SelectComparisonPassedVendor"]</option>
                                                         @foreach (var type in ViewBag.VendorListbyComparison)
                                                         {
                                                             bool isSelected = false;
@@ -355,7 +355,7 @@
                 <div class="col-md-12">
                     @for (int i = 0; i < Model.PurchaseRequests.Count; i++)
                     {
-                        <label asp-for="PurchaseRequests[i].Remarks" class="form-label fw-bold">Remarks</label>
+                        <label asp-for="PurchaseRequests[i].Remarks" class="form-label fw-bold">@Localizer["lbl_Remarks"]</label>
                         <textarea asp-for="PurchaseRequests[i].Remarks" class="form-control" rows="3" readonly></textarea>
                     }
                 </div>

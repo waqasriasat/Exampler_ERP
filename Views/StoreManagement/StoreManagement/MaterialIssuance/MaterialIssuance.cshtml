@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Store Management - Material Issuance";
+    ViewData["Title"] = Localizer["lbl_StoreManagement"] + " - " + @Localizer["lbl_MaterialIssuance"];
 }
 
 
@@ -128,7 +128,7 @@
 
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Store Management /</span> Material Issuance
+    <span class="text-muted fw-light">@Localizer["lbl_StoreManagement"] /</span> @Localizer["lbl_MaterialIssuance"]
 </h4>
 <div class="row">
     <div class="col-md-12">
@@ -140,7 +140,7 @@
                     <div class="col-md-8" style="padding-bottom: 15px;">
                         <!-- Search Field and Button -->
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="@Localizer["lbl_Search"] @Localizer["lbl_ItemName"]" id="searchItemNameInput">
+                            <input type="text" class="form-control" placeholder="@Localizer["lbl_SearchItemName"]" id="searchItemNameInput">
                             <button class="btn btn-outline-secondary" type="button" id="searchItemNameButton">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -161,20 +161,20 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Material Issuance @Localizer["lbl_List"]</h5>
+            <h5 class="card-header">@Localizer["lbl_MaterialIssuanceList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                         <div class="col-10 col-md-10 col-lg-10">
                             <div class="row">
                                 <div class="col-2">
-                                    <p class="text-nowrap">Material Issuance #</p>
+                                    <p class="text-nowrap">@Localizer["lbl_IssuanceNo"]</p>
                                 </div>
                                 <div class="col-4">
-                                    <p class="text-nowrap">@Localizer["lbl_Date"] </p>
+                                    <p class="text-nowrap">@Localizer["lbl_IssuanceDate"] </p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="text-nowrap">@Localizer["lbl_Status"]</p>
+                                    <p class="text-nowrap">@Localizer["lbl_IssuanceStatus"]</p>
                                 </div>
                             </div>
                         </div>

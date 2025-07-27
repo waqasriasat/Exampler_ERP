@@ -7,7 +7,7 @@
     <div class="col-md-12">
 
         <div class="card">
-            <h5 class="card-header">Order Detail</h5>
+            <h5 class="card-header">@Localizer["lbl_OrderDetail"]</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
                     <table class="table table-bordered" id="purchaseRequestTable">
@@ -15,8 +15,8 @@
                             <tr>
                                 <th>@Localizer["lbl_ItemName"]</th>
                                 <th>@Localizer["lbl_Unit"]</th>
-                                <th>Quantity</th>
-                                <th>Priority Level</th>
+                                <th>@Localizer["lbl_Quantity"]</th>
+                                <th>@Localizer["lbl_PriorityLevel"]</th>
                             </tr>
                         </thead>
                         <tbody id="purchaseRequestBody">
@@ -25,7 +25,7 @@
                                 <tr>
                                     <td>
                                         <select name="PurchaseRequests[@i].ItemID" class="form-select" disabled>
-                                            <option value="">Select Item</option>
+                                            <option value="">@Localizer["lbl_SelectItem"]</option>
                                             @foreach (var type in ViewBag.ItemList)
                                             {
                                                 var isSelected = type.Value == Model.PurchaseRequests[i].ItemID.ToString();
@@ -37,7 +37,7 @@
                                     </td>
                                     <td>
                                         <select name="PurchaseRequests[@i].UnitTypeID" class="form-select" disabled>
-                                            <option value="">Select Unit Type</option>
+                                            <option value="">@Localizer["lbl_SelectUnit"]</option>
                                             @foreach (var type in ViewBag.ItemUnitList)
                                             {
                                                 var isSelected = type.Value == Model.PurchaseRequests[i].UnitTypeID.ToString();
@@ -52,7 +52,7 @@
                                     </td>
                                     <td>
                                         <select name="PurchaseRequests[@i].PriorityLevel" class="form-select" disabled>
-                                            <option value="">Select Priority Level</option>
+                                            <option value="">@Localizer["lbl_SelectPriorityLevel"]</option>
                                             @foreach (var type in ViewBag.PriorityLevelList)
                                             {
                                                 var isSelected = type.Value == Model.PurchaseRequests[i].PriorityLevel.ToString();
@@ -77,15 +77,15 @@
     <div class="col-md-12">
 
         <div class="card">
-            <h5 class="card-header">Vendor Option</h5>
+            <h5 class="card-header">@Localizer["lbl_VendorOption"]</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
                     <table class="table table-bordered" id="requestForQuotationTable">
                         <thead class="table-light">
                             <tr>
-                                <th>First Vendor</th>
-                                <th>Second Vendor</th>
-                                <th>Third Vendor</th>
+                                <th>@Localizer["lbl_FirstVendor"]</th>
+                                <th>@Localizer["lbl_SecondVendor"]</th>
+                                <th>@Localizer["lbl_ThirdVendor"]</th>
                             </tr>
                         </thead>
                         <tbody id="purchaseRequestBody">
@@ -94,7 +94,7 @@
                                 <tr>
                                     <td>
                                         <select name="RequestForQuotations[@i].QuotationVendorID1" class="form-select" required>
-                                            <option value="">Select First Vendor</option>
+                                            <option value="">@Localizer["lbl_SelectFirstVendor"]</option>
                                             @foreach (var type in ViewBag.VendorList)
                                             {
                                                 bool isSelected = false;
@@ -109,7 +109,7 @@
                                     </td>
                                     <td>
                                         <select name="RequestForQuotations[@i].QuotationVendorID2" class="form-select" required>
-                                            <option value="">Select Second Vendor</option>
+                                            <option value="">@Localizer["lbl_SelectSecondVendor"]</option>
                                             @foreach (var type in ViewBag.VendorList)
                                             {
                                                 bool isSelected = false;
@@ -124,7 +124,7 @@
                                     </td>
                                     <td>
                                         <select name="RequestForQuotations[@i].QuotationVendorID3" class="form-select" required>
-                                            <option value="">Select Third Vendor</option>
+                                            <option value="">@Localizer["lbl_SelectThirdVendor"]</option>
                                             @foreach (var type in ViewBag.VendorList)
                                             {
                                                 bool isSelected = false;

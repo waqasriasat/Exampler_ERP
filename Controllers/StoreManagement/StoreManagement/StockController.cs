@@ -150,13 +150,13 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("Stocks");
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Stock"]);
 
         // **Header Row**
-        worksheet.Cells["A1"].Value = "ItemID #";
-        worksheet.Cells["B1"].Value = "Item Name";
-        worksheet.Cells["C1"].Value = "Stock Quantity";
-        worksheet.Cells["D1"].Value = "Stock Count";
+        worksheet.Cells["A1"].Value = _localizer["lbl_ItemID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_ItemName"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_StockQuantity"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_StockCount"];
 
         // **Apply Bold to Headers**
         using (var range = worksheet.Cells["A1:D1"])
@@ -183,7 +183,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"Stocks-{DateTime.Now:yyyyMMddHHmmssfff}.xlsx";
+        string excelName = _localizer["lbl_Stock"]+$"-{DateTime.Now:yyyyMMddHHmmssfff}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

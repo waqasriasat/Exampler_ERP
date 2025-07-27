@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Purchase - Purchase Order";
+    ViewData["Title"] = Localizer["lbl_Purchase"] + " - " + Localizer["lbl_PurchaseOrder"];
 }
 
 @section PageScripts {
@@ -124,7 +124,7 @@
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light"> @Localizer["lbl_Purchase"] /</span> Purchase Order
+    <span class="text-muted fw-light"> @Localizer["lbl_Purchase"] /</span> @Localizer["lbl_PurchaseOrder"]
 </h4>
 
 <!-- 🔍 Search & Action buttons -->
@@ -136,14 +136,14 @@
                 <div class="row mb-4">
                     <div class="col-md-8" style="padding-bottom: 15px;">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="@Localizer["lbl_Search"] @Localizer["lbl_ItemName"]" id="searchItemNameInput">
+                            <input type="text" class="form-control" placeholder="@Localizer["lbl_SearchItemName"]" id="searchItemNameInput">
                             <button class="btn btn-outline-secondary" type="button" id="searchItemNameButton">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
                     </div>
                     <div class="col-md-4 text-end">
-                        <button type="button" class="btn btn-primary makePurchaseOrderLink">Make Purchase Order</button>
+                        <button type="button" class="btn btn-primary makePurchaseOrderLink">@Localizer["lbl_MakePurchaseOrder"]</button>
                         <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "PurchaseOrder")'">@Localizer["lbl_Excel"]</button>
                         <button type="button" class="btn btn-outline-secondary" onclick="printListPurchaseOrderes()">@Localizer["lbl_Print"]</button>
                     </div>
@@ -161,10 +161,10 @@
         <div class="card">
            
             <h5 class="card-header d-flex align-items-center gap-3">
-                Purchase Order List
+                @Localizer["lbl_PurchaseOrderList"]
                 <select id="vendorSelect" class="form-select" style="width: auto;">
-                    <option value="">-- Select Vendor --</option>
-                    <option value="none">Select None</option>
+                    <option value="">-- @Localizer["lbl_SelectVendor"] --</option>
+                    <option value="none">@Localizer["lbl_SelectNone"]</option>
                     @foreach (var vendor in ViewBag.VendorList)
                     {
                         <option value="@vendor.Value">@vendor.Text</option>
@@ -178,22 +178,22 @@
                         <div class="col-10 col-md-11 col-lg-11">
                             <div class="row">
                                 <div class="col-1">
-                                    <p class="text-nowrap">Select</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Select"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Purchase Request #</p>
+                                    <p class="text-nowrap">@Localizer["lbl_RequestNo"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">@Localizer["lbl_Date"] </p>
+                                    <p class="text-nowrap">@Localizer["lbl_RequestDate"] </p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">@Localizer["lbl_ItemName"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Quantity</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Quantity"]</p>
                                 </div>
                                 <div class="col-3">
-                                    <p class="text-nowrap">Recommended Vendor</p>
+                                    <p class="text-nowrap">@Localizer["lbl_RecommendedVendor"]</p>
                                 </div>
                             </div>
                         </div>

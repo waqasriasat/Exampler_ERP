@@ -2,7 +2,8 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Store Management - Stock";
+
+    ViewData["Title"] = Localizer["lbl_StoreManagement"] + " - " + @Localizer["lbl_Stock"];
 }
 
 @section PageScripts {
@@ -104,7 +105,7 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Store Management /</span> Stock
+    <span class="text-muted fw-light">@Localizer["lbl_StoreManagement"] /</span> @Localizer["lbl_Stock"]
 </h4>
 <div class="row">
     <div class="col-md-12">
@@ -116,7 +117,7 @@
                     <div class="col-md-8" style="padding-bottom: 15px;">
                         <!-- Search Field and Button -->
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="@Localizer["lbl_Search"] @Localizer["lbl_ItemName"]" id="searchItemInput">
+                            <input type="text" class="form-control" placeholder="@Localizer["lbl_SearchItemName"]" id="searchItemInput">
                             <button class="btn btn-outline-secondary" type="button" id="searchItemButton">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -137,7 +138,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Stock @Localizer["lbl_List"]</h5>
+            <h5 class="card-header">@Localizer["lbl_StockList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
@@ -147,10 +148,10 @@
                                     <p class="text-nowrap">@Localizer["lbl_ItemName"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Stock Quantity</p>
+                                    <p class="text-nowrap">@Localizer["lbl_StockQuantity"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Stock Count</p>
+                                    <p class="text-nowrap">@Localizer["lbl_StockCount"]</p>
                                 </div>
                             </div>
                         </div>

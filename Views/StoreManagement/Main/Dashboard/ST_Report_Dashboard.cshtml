@@ -1,7 +1,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Store Management - Report";
+    ViewData["Title"] = Localizer["lbl_StoreManagement"] + " - " + @Localizer["lbl_Reports"];
 
 
     var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
@@ -25,107 +25,20 @@
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Store Management /</span> @Localizer["lbl_Reports"]
+    <span class="text-muted fw-light">@Localizer["lbl_StoreManagement"] /</span> @Localizer["lbl_Reports"]
 </h4>
 
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-pills flex-column flex-md-row mb-3">
             <li class="nav-item"><a class="nav-link" href="~/ST_Main_Dashboard/Index"><i class="bx bx-home me-1"></i> @Localizer["lbl_Main"]</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/ST_StoreManagement_Dashboard/Index"><i class="bx bx-briefcase me-1"></i> Store Management</a></li>
+            <li class="nav-item"><a class="nav-link" href="~/ST_StoreManagement_Dashboard/Index"><i class="bx bx-briefcase me-1"></i> @Localizer["lbl_StoreManagement"]</a></li>
             <li class="nav-item"><a class="nav-link active" href="~/ST_Report_Dashboard/Index"><i class="bx bx-bar-chart-alt me-1"></i> @Localizer["lbl_Reports"]</a></li>
         </ul>
         <div class="card mb-4">
             <h5 class="card-header"> @Localizer["lbl_Details"]</h5>
             <div class="row" style="padding: 30px 30px 0px 30px;">
-                @if (accessRightByRoleList.Contains(201) || accessRightByUsertList.Contains(201))
-                {
-                    @*WorkDay*@
-                    <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="WorkDay" asp-action="Index">
-                            <div class="modern-card shadow mb-4">
-                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                    <div class="card-details">
-                                        <strong class="text-primary">Work Days</strong>
-                                        <h4 class="font-weight-bold text-dark">0</h4>
-                                    </div>
-                                    <div class="icon bg-primary text-white">
-                                        <i class="fa fa-calendar-alt Card1I" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                                <div class="card-footer bg-white text-muted text-center">
-                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                }
-                @if (accessRightByRoleList.Contains(202) || accessRightByUsertList.Contains(202))
-                {
-                    @*FixedDeduction*@
-                    <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="FixedDeduction" asp-action="Index">
-                            <div class="modern-card shadow mb-4">
-                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                    <div class="card-details">
-                                        <strong class="text-primary">@Localizer["lbl_FixedDeduction"]</strong>
-                                        <h4 class="font-weight-bold text-dark">0</h4>
-                                    </div>
-                                    <div class="icon bg-primary text-white">
-                                        <i class="fa fa-minus-square Card1I" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                                <div class="card-footer bg-white text-muted text-center">
-                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                }
-                @if (accessRightByRoleList.Contains(203) || accessRightByUsertList.Contains(203))
-                {
-                    @*HourlySalarySheet*@
-                    <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a href="javascript:void(0)">
-                            <div class="modern-card shadow mb-4">
-                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                    <div class="card-details">
-                                        <strong class="text-primary">Hourly Salary Sheet</strong>
-                                        <h4 class="font-weight-bold text-dark">0</h4>
-                                    </div>
-                                    <div class="icon bg-primary text-white">
-                                        <i class="fa fa-hourglass-half Card1I" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                                <div class="card-footer bg-white text-muted text-center">
-                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                }
-                @if (accessRightByRoleList.Contains(204) || accessRightByUsertList.Contains(204))
-                {
-                    @*MonthlySalarySheet*@
-                    <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="MonthlySalarySheet" asp-action="Index">
-                            <div class="modern-card shadow mb-4">
-                                <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
-                                    <div class="card-details">
-                                        <strong class="text-primary">Monthly Salary Sheet</strong>
-                                        <h4 class="font-weight-bold text-dark">0</h4>
-                                    </div>
-                                    <div class="icon bg-primary text-white">
-                                        <i class="fa fa-file-invoice-dollar Card1I" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                                <div class="card-footer bg-white text-muted text-center">
-                                    @Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                }
+                
             </div>
 
         </div>

@@ -258,7 +258,7 @@
                                    currentPage.StartsWith("/MaterialReceived/Index") || currentPage.StartsWith("/MaterialIssuance/Index") ? " active open" : "")'>
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-store"></i>
-                    <div>Store Management</div>
+                    <div>@Localizer["lbl_StoreManagement"]</div>
                 </a>
                 <ul class="menu-sub">
                     <li class='menu-item@(currentPage == "/ST_Main_Dashboard/Index"|| currentPage == "/ItemCategoryType/Index" ||
@@ -272,7 +272,7 @@
                                           currentPage == "/Stock/Index"|| currentPage == "/MaterialReceived/Index" ||
                                           currentPage == "/MaterialIssuance/Index"? " active" : "")'>
                         <a asp-controller="ST_StoreManagement_Dashboard" asp-action="Index" class="menu-link">
-                            <div>Store Management</div>
+                            <div>@Localizer["lbl_StoreManagement"]</div>
                         </a>
                     </li>
                     <li class='menu-item@(currentPage == "/ST_Report_Dashboard/Index" ? " active" : "")'>
@@ -292,7 +292,7 @@
                                    currentPage.StartsWith("/PurchaseOrder/Index") ? " active open" : "")'>
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-cart"></i>
-                    <div>Purchase</div>
+                    <div>@Localizer["lbl_Purchase"]</div>
                 </a>
                 <ul class="menu-sub">
                     <li class='menu-item@(currentPage == "/PR_Main_Dashboard/Index" ? " active" : "")'>
@@ -317,13 +317,13 @@
         @if (accessRightByRoleList.Contains(5) || accessRightByUsertList.Contains(6))
 
         {
-            <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
+            <li class="menu-header small text-uppercase"><span class="menu-header-text">@Localizer["lbl_Components"]</span></li>
             <li class='menu-item@(currentPage == "/HRGlobalSetting/Index" || currentPage == "/FinanceGlobalSetting/Index" ||
                               currentPage == "/StoreManagementGlobalSetting/Index" || currentPage == "/PurchaseGlobalSetting/Index" ||
                               currentPage == "/AccessRightsByRole/Index" || currentPage == "/AccessRightsByUser/Index"? " active open" : "")'>
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon fas fa-toolbox"></i>
-                    <div>Setup</div>
+                    <div>@Localizer["lbl_Setup"]</div>
                 </a>
 
                 <ul class="menu-sub">

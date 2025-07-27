@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Store Management - Material Received";
+    ViewData["Title"] = Localizer["lbl_StoreManagement"] + " - " + Localizer["lbl_MaterialReceived"];
 }
 
 
@@ -144,7 +144,7 @@
 
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Store Management /</span> Material Received
+    <span class="text-muted fw-light">@Localizer["lbl_StoreManagement"] /</span> @Localizer["lbl_MaterialReceived"]
 </h4>
 <div class="row">
     <div class="col-md-12">
@@ -156,7 +156,7 @@
                     <div class="col-md-8" style="padding-bottom: 15px;">
                         <!-- Search Field and Button -->
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="@Localizer["lbl_Search"] @Localizer["lbl_ItemName"]" id="searchItemNameInput">
+                            <input type="text" class="form-control" placeholder="@Localizer["lbl_SearchItemName"]" id="searchItemNameInput">
                             <button class="btn btn-outline-secondary" type="button" id="searchItemNameButton">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -164,7 +164,7 @@
                     </div>
                     <div class="col-md-4 text-end">
                         <!-- Action Buttons -->
-                        <button type="button" class="btn btn-primary addMaterialReceivedViaPOLink">Add Via PO</button>
+                        <button type="button" class="btn btn-primary addMaterialReceivedViaPOLink">@Localizer["lbl_AddViaPO"]</button>
                         <button type="button" class="btn btn-primary addMaterialReceivedLink">@Localizer["lbl_AddNew"]</button>
                         <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "MaterialReceived")'">@Localizer["lbl_Excel"]</button>
                         <button type="button" class="btn btn-outline-secondary" onclick="printMaterialReceivedes()">@Localizer["lbl_Print"]</button>
@@ -178,23 +178,23 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Material Received @Localizer["lbl_List"]</h5>
+            <h5 class="card-header">@Localizer["lbl_MaterialReceivedList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
                         <div class="col-10 col-md-11 col-lg-11">
                             <div class="row">
                                 <div class="col-2">
-                                    <p class="text-nowrap">Material Received #</p>
+                                    <p class="text-nowrap">@Localizer["lbl_ReceivedNo"]</p>
                                 </div>
                                 <div class="col-3">
-                                    <p class="text-nowrap">@Localizer["lbl_Date"] </p>
+                                    <p class="text-nowrap">@Localizer["lbl_ReceivedDate"] </p>
                                 </div>
                                 <div class="col-5">
                                     <p class="text-nowrap">@Localizer["lbl_ItemName"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">Quantity</p>
+                                    <p class="text-nowrap">@Localizer["lbl_Quantity"]</p>
                                 </div>
                             </div>
                         </div>

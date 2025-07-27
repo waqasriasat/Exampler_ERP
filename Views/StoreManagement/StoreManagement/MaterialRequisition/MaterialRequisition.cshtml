@@ -2,7 +2,8 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Store Management - Material Requisition";
+
+    ViewData["Title"] = Localizer["lbl_StoreManagement"] + " - " + @Localizer["lbl_MaterialRequisition"];
 }
 
 
@@ -128,7 +129,7 @@
 
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Store Management /</span> Material Requisition
+    <span class="text-muted fw-light">@Localizer["lbl_StoreManagement"] /</span> @Localizer["lbl_MaterialRequisition"]
 </h4>
 <div class="row">
     <div class="col-md-12">
@@ -140,7 +141,7 @@
                     <div class="col-md-8" style="padding-bottom: 15px;">
                         <!-- Search Field and Button -->
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="@Localizer["lbl_Search"] @Localizer["lbl_ItemName"]" id="searchItemNameInput">
+                            <input type="text" class="form-control" placeholder="@Localizer["lbl_SearchItemName"]" id="searchItemNameInput">
                             <button class="btn btn-outline-secondary" type="button" id="searchItemNameButton">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -168,7 +169,7 @@
                         <div class="col-10 col-md-10 col-lg-10">
                             <div class="row">
                                 <div class="col-2">
-                                    <p class="text-nowrap">Material Requisition #</p>
+                                    <p class="text-nowrap">@Localizer["lbl_RequisitionNo"]</p>
                                 </div>
                                 <div class="col-4">
                                     <p class="text-nowrap">@Localizer["lbl_Date"] </p>

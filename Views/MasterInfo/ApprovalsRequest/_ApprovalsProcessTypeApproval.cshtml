@@ -1,4 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.CR_ProcessTypeApprovalDetail>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     var EmployeeList = (List<SelectListItem>)ViewBag.EmployeesList;
     var RoleList = (List<SelectListItem>)ViewBag.RolesList;
@@ -38,7 +40,7 @@
                                     <span><strong>Process Type:</strong> @(firstItem.CR_ProcessTypeApproval?.ProcessType?.ProcessTypeName ?? "N/A")</span>
                                 </div>
                                 <div class="col-md-6">
-                                    <span><strong>Request Date:</strong> @(firstItem.CR_ProcessTypeApproval?.Date.ToString("dd-MM-yyyy"))</span>
+                                    <span><strong>@Localizer["lbl_RequestDate"]:</strong> @(firstItem.CR_ProcessTypeApproval?.Date.ToString("dd-MM-yyyy"))</span>
                                 </div>
                             </div>
                         </div>

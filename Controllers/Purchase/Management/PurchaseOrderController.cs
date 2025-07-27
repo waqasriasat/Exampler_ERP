@@ -380,12 +380,12 @@ namespace Exampler_ERP.Controllers.Purchase.Management
 
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("PurchaseOrder");
-        worksheet.Cells["A1"].Value = "Request #";
-        worksheet.Cells["B1"].Value = "Request Date";
-        worksheet.Cells["C1"].Value = "Item Name";
-        worksheet.Cells["D1"].Value = "Quantity";
-        worksheet.Cells["E1"].Value = "Request Status";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_PurchaseOrder"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_RequestNo"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_RequestDate"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_ItemName"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_Quantity"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_PurchaseRequestStatus"];
 
         for (int i = 0; i < PurchaseRequests.Count; i++)
         {
@@ -403,7 +403,7 @@ namespace Exampler_ERP.Controllers.Purchase.Management
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"PurchaseOrder-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_PurchaseOrder"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

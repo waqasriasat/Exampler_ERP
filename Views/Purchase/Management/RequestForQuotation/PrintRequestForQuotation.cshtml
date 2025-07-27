@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Request For Quotation Print</title>
+    <title>@Localizer["lbl_PrintRequestForQuotation"]</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/super-ui@latest/dist/super-ui.min.css">
     <style>
         body {
@@ -101,7 +101,7 @@
 
     <div class="card">
         <div class="card-header">
-            <h4>Request For Quotations Form</h4>
+            <h4>@Localizer["lbl_RequestForQuotationsForm"]</h4>
         </div>
         <div class="card-body">
 
@@ -113,25 +113,25 @@
                 <div class="row">
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">Request #:</div>
+                            <div class="info-label">@Localizer["lbl_RequestNo"]:</div>
                                 <div>@Model.PurchaseRequests[i].PurchaseRequestID</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">Request Date:</div>
+                            <div class="info-label">@Localizer["lbl_RequestDate"]:</div>
                                 <div>@Model.PurchaseRequests[i].PurchaseRequestDate.ToString("dd/MM/yyyy")</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">Request Status:</div>
+                            <div class="info-label">@Localizer["lbl_PurchaseRequestStatus"]:</div>
                                 <div>@Model.PurchaseRequests[i].RequestStatusType?.RequestStatusTypeName</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">Deaprtment:</div>
+                            <div class="info-label">@Localizer["lbl_Department"]:</div>
                             <div>@ViewBag.DepartmentTypeName</div>
                         </div>
                     </div>
@@ -143,7 +143,7 @@
                 <div class="col-md-12">
 
                     <div class="card">
-                        <h5 class="card-header">Order Detail</h5>
+                        <h5 class="card-header">@Localizer["lbl_OrderDetail"]</h5>
                         <div class="Searching-Box-padding">
                             <div class="row mb-4">
             <div class="table-responsive mb-3">
@@ -152,9 +152,9 @@
                         <tr><th style="border: none;"></th></tr>
                         <tr>
                             <th>@Localizer["lbl_ItemName"]</th>
-                            <th>@Localizer["lbl_Unit"] @Localizer["lbl_Type"]</th>
-                            <th>Quantity</th>
-                            <th>Priority Level</th>
+                            <th>@Localizer["lbl_ItemUnitType"]</th>
+                            <th>@Localizer["lbl_Quantity"]</th>
+                            <th>@Localizer["lbl_PriorityLevel"]</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -163,7 +163,7 @@
                         <tr>
                             <td class="col-md-4">
                                 <select class="form-select inputcontrol" disabled>
-                                    <option value="">Select Item</option>
+                                    <option value="">@Localizer["lbl_SelectItem"]</option>
                                     @foreach (var type in ViewBag.ItemNameList)
                                     {
                                         <option value="@type.Value" selected="@(type.Value == Model.PurchaseRequests[i].ItemID.ToString())">@type.Text</option>
@@ -184,7 +184,7 @@
                             </td>
                             <td>
                                 <select class="form-select inputcontrol" disabled>
-                                    <option value="">@Localizer["lbl_Unit"]</option>
+                                                            <option value="">@Localizer["lbl_PriorityLeve"]</option>
                                     @foreach (var type in ViewBag.PriorityLevelList)
                                     {
                                                                 <option value="@type.Value" selected="@(type.Value == Model.PurchaseRequests[i].PriorityLevel.ToString())">@type.Text</option>
@@ -207,15 +207,15 @@
                 <div class="col-md-12">
 
                     <div class="card">
-                        <h5 class="card-header">Vendor Option</h5>
+                        <h5 class="card-header">@Localizer["lbl_VendorOption"]</h5>
                         <div class="Searching-Box-padding">
                             <div class="row mb-4">
                                 <table class="table table-bordered" id="purchaseRequestTable">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>First Vendor</th>
-                                            <th>Second Vendor</th>
-                                            <th>Third Vendor</th>
+                                            <th>@Localizer["lbl_FirstVendor"]</th>
+                                            <th>@Localizer["lbl_SecondVendor"]</th>
+                                            <th>@Localizer["lbl_ThirdVendor"]</th>
                                         </tr>
                                     </thead>
                                     <tbody id="purchaseRequestBody">
@@ -224,7 +224,7 @@
                                             <tr>
                                                 <td>
                                                 <select class="form-select" disabled>
-                                                        <option value="">Select First Vendor</option>
+                                                        <option value="">@Localizer["lbl_SelectFirstVendor"]</option>
                                                         @foreach (var type in ViewBag.VendorList)
                                                         {
                                                                   bool isSelected = false;
@@ -239,7 +239,7 @@
                                                 </td>
                                                 <td>
                                                 <select class="form-select" disabled>
-                                                        <option value="">Select Second Vendor</option>
+                                                        <option value="">@Localizer["lbl_SelectSecondVendor"]</option>
                                                         @foreach (var type in ViewBag.VendorList)
                                                         {
                                                             bool isSelected = false;
@@ -254,7 +254,7 @@
                                                 </td>
                                                 <td>
                                                 <select class="form-select" disabled>
-                                                        <option value="">Select Third Vendor</option>
+                                                        <option value="">@Localizer["lbl_SelectThirdVendor"]</option>
                                                         @foreach (var type in ViewBag.VendorList)
                                                         {
                                                             bool isSelected = false;
@@ -283,7 +283,7 @@
                 <div class="col-md-12">
                   @for (int i = 0; i < Model.PurchaseRequests.Count; i++)
                                 {
-                    <label asp-for="PurchaseRequests[i].Remarks" class="form-label fw-bold">Remarks</label>
+                    <label asp-for="PurchaseRequests[i].Remarks" class="form-label fw-bold">@Localizer["lbl_Remarks"]</label>
                         <textarea asp-for="PurchaseRequests[i].Remarks" class="form-control" rows="3" readonly></textarea>
                     }
                 </div>

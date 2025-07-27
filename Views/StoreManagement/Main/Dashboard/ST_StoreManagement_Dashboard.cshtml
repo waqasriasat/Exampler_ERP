@@ -1,7 +1,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Store - Management";
+    ViewData["Title"] = @Localizer["lbl_StoreManagement"];
 
 
     var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");
@@ -25,14 +25,14 @@
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Store Management /</span> Store Management
+    <span class="text-muted fw-light">@Localizer["lbl_StoreManagement"] /</span> @Localizer["lbl_StoreManagement"]
 </h4>
 
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-pills flex-column flex-md-row mb-3">
             <li class="nav-item"><a class="nav-link" href="~/ST_Main_Dashboard/Index"><i class="bx bx-home me-1"></i> @Localizer["lbl_Main"]</a></li>
-            <li class="nav-item"><a class="nav-link active" href="~/ST_StoreManagement_Dashboard/Index"><i class="bx bx-briefcase me-1"></i> Store Management</a></li>
+            <li class="nav-item"><a class="nav-link active" href="~/ST_StoreManagement_Dashboard/Index"><i class="bx bx-briefcase me-1"></i> @Localizer["lbl_StoreManagement"]</a></li>
             <li class="nav-item"><a class="nav-link" href="~/ST_Report_Dashboard/Index"><i class="bx bx-bar-chart-alt me-1"></i> @Localizer["lbl_Reports"]</a></li>
         </ul>
         <div class="card mb-4">
@@ -46,7 +46,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Stock</strong>
+                                        <strong class="text-primary">@Localizer["lbl_Stock"]</strong>
                                         <h4 class="font-weight-bold text-dark">
                                             @ViewBag.StockCount
                                         </h4>
@@ -70,7 +70,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Material Requisition</strong>
+                                        <strong class="text-primary">@Localizer["lbl_MaterialRequisition"]</strong>
                                         <h4 class="font-weight-bold text-dark">
                                             @ViewBag.MaterialRequisitionCount
                                         </h4>
@@ -97,7 +97,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Material Issuance</strong>
+                                        <strong class="text-primary">@Localizer["lbl_MaterialIssuance"]</strong>
                                         <h4 class="font-weight-bold text-dark">
                                             @ViewBag.MaterialIssuanceCount
                                         </h4>
@@ -122,7 +122,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Procurement Queue</strong>
+                                        <strong class="text-primary">@Localizer["lbl_ProcurementQueue"]</strong>
                                         <h4 class="font-weight-bold text-dark">
                                             @ViewBag.ProcurementQueueCount
                                         </h4>
@@ -146,7 +146,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Material Received</strong>
+                                        <strong class="text-primary">@Localizer["lbl_MaterialReceived"]</strong>
                                         <h4 class="font-weight-bold text-dark">
                                             @ViewBag.MaterialReceivedCount
                                         </h4>

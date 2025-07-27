@@ -790,11 +790,11 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       var MaterialReceiveds = await MaterialReceivedsQuery.ToListAsync();
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("MaterialReceiveds");
-        worksheet.Cells["A1"].Value = "Received #";
-        worksheet.Cells["B1"].Value = "Received Date";
-        worksheet.Cells["C1"].Value = "Item Name";
-        worksheet.Cells["D1"].Value = "Quantity";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["MaterialReceived"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_ReceivedNo"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_ReceivedDate"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_ItemName"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_Quantity"];
 
         for (int i = 0; i < MaterialReceiveds.Count; i++)
         {
@@ -812,7 +812,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"MaterialReceiveds-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["MaterialReceived"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

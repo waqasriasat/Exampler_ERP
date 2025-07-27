@@ -9,8 +9,8 @@
             <tr>
                 <th>@Localizer["lbl_ItemName"]</th>
                 <th>@Localizer["lbl_Unit"]</th>
-                <th>Quantity</th>
-                <th>Priority Level</th>
+                <th>@Localizer["lbl_Quantity"]</th>
+                <th>@Localizer["lbl_PriorityLevel"]</th>
             </tr>
         </thead>
         <tbody id="purchaseRequestBody">
@@ -19,7 +19,7 @@
                 <tr>
                     <td>
                         <select name="[@i].ItemID" class="form-select" required>
-                            <option value="">Select Item</option>
+                            <option value="">@Localizer["lbl_SelectItem"]</option>
                             @foreach (var type in ViewBag.ItemList)
                             {
                                 var isSelected = type.Value == Model[i].ItemID.ToString();
@@ -31,7 +31,7 @@
                     </td>
                     <td>
                         <select name="[@i].UnitTypeID" class="form-select" required>
-                            <option value="">Select Unit Type</option>
+                            <option value="">@Localizer["lbl_SelectUnit"]</option>
                             @foreach (var type in ViewBag.ItemUnitList)
                             {
                                 var isSelected = type.Value == Model[i].UnitTypeID.ToString();
@@ -46,7 +46,7 @@
                     </td>
                     <td>
                         <select name="[@i].PriorityLevel" class="form-select" required>
-                            <option value="">Select Priority Level</option>
+                            <option value="">@Localizer["lbl_SelectPriorityLevel"]</option>
                             @foreach (var type in ViewBag.PriorityLevelList)
                             {
                                 var isSelected = type.Value == Model[i].PriorityLevel.ToString();

@@ -1,7 +1,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Purchase - Management";
+    ViewData["Title"] = Localizer["lbl_Purchase"] + " - " + Localizer["lbl_Management"];
 
 
 
@@ -43,7 +43,7 @@
 
 @* ************** Content ************** *@
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light"> @Localizer["lbl_Purchase"] /</span> Management
+    <span class="text-muted fw-light"> @Localizer["lbl_Purchase"] /</span> @Localizer["lbl_Management"]
 </h4>
 
 <div class="row">
@@ -66,7 +66,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Purchase Request</strong>
+                                        <strong class="text-primary">@Localizer["lbl_PurchaseRequest"]</strong>
                                         <h4 class="font-weight-bold text-dark">
                                             @ViewBag.PurchaseRequestCount
                                         </h4>
@@ -92,7 +92,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Request For Quotation</strong>
+                                        <strong class="text-primary">@Localizer["lbl_RequestForQuotation"]</strong>
                                         <h4 class="font-weight-bold text-dark">
                                             @ViewBag.RequestForQuotationCount
                                         </h4>
@@ -118,7 +118,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Cost Comparison</strong>
+                                        <strong class="text-primary">@Localizer["lbl_CostComparison"]</strong>
                                         <h4 class="font-weight-bold text-dark">
                                             @ViewBag.CostComparisonCount
                                         </h4>
@@ -144,7 +144,7 @@
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
-                                        <strong class="text-primary">Purchase Order</strong>
+                                        <strong class="text-primary">@Localizer["lbl_PurchaseOrder"]</strong>
                                         <h4 class="font-weight-bold text-dark">
                                             @ViewBag.PurchaseOrderCount
                                         </h4>

@@ -52,7 +52,7 @@
     <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="addMaterialIssuanceModalLabel"><i class="fas fa-key me-2"></i>@Localizer["lbl_Add"] Material Issuance</h5>
+                <h5 class="modal-title" id="addMaterialIssuanceModalLabel"><i class="fas fa-key me-2"></i>@Localizer["lbl_AddNewMaterialIssuance"]</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -62,7 +62,7 @@
                     <div class="row">
 
                         <div class="col-2 col-md-12 col-lg-6">
-                            <label asp-for="MaterialIssuances.RequisitionID" class="form-label fw-bold">Pending Requisitions List</label>
+                            <label asp-for="MaterialIssuances.RequisitionID" class="form-label fw-bold">@Localizer["lbl_PendingRequisitionsList"]</label>
                             <select asp-for="MaterialIssuances.RequisitionID" asp-items="@(new SelectList(ViewBag.PendingRequisitionsList, "Value", "Text", Model.MaterialIssuances.RequisitionID))" class="form-control form-control-lg custom-dropdown" id="requisitionId">
                                 <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
@@ -74,10 +74,10 @@
                         <table id="MaterialIssuanceTable" class="table">
                             <thead>
                                 <tr>
-                                    <th>Item</th>
-                                    <th>Requisition Quantity</th>
-                                    <th>Issuance Quantity</th>
-                                    <th>Available Stock Quantity</th>
+                                    <th>@Localizer["lbl_Item"]</th>
+                                    <th>@Localizer["lbl_RequisitionQuantity"]</th>
+                                    <th>@Localizer["lbl_IssuanceQuantity"]</th>
+                                    <th>@Localizer["lbl_AvailableStockQuantity"]</th>
                                     <th>@Localizer["lbl_Action"]</th>
                                 </tr>
                             </thead>
@@ -91,7 +91,7 @@
                     <!-- Remarks Section -->
                     <div class="row mb-3">
                         <div class="col-md-12">
-                            <label asp-for="MaterialIssuances.Remarks" class="form-label fw-bold">Remarks</label>
+                            <label asp-for="MaterialIssuances.Remarks" class="form-label fw-bold">@Localizer["lbl_Remarks"]</label>
                             <textarea asp-for="MaterialIssuances.Remarks" class="form-control" rows="3"></textarea>
                         </div>
                     </div>

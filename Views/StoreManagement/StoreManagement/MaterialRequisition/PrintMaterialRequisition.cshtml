@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Material Requisitions Print</title>
+    <title>@Localizer["lbl_PrintMaterialRequisition"]</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/super-ui@latest/dist/super-ui.min.css">
     <style>
         body {
@@ -101,7 +101,7 @@
 
     <div class="card">
         <div class="card-header">
-            <h4>Material Requisitions Form</h4>
+            <h4>@Localizer["lbl_MaterialRequisitionForm"]</h4>
         </div>
         <div class="card-body">
 
@@ -112,25 +112,25 @@
                 <div class="row">
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">Requisitions #:</div>
+                            <div class="info-label">@Localizer["lbl_RequisitionNo"]:</div>
                             <div>@Model.MaterialRequisitions.RequisitionID</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">Requisitions Date:</div>
+                            <div class="info-label">@Localizer["lbl_RequisitionDate"]:</div>
                             <div>@Model.MaterialRequisitions.RequisitionDate.ToString("dd/MM/yyyy")</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">Requisitions Status:</div>
+                            <div class="info-label">@Localizer["lbl_RequisitionStatus"]:</div>
                             <div>@Model.MaterialRequisitions.RequisitionStatusTypes?.RequisitionStatusTypeName</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-3 col-lg-3">
                         <div class="info-row">
-                            <div class="info-label">Deaprtment:</div>
+                            <div class="info-label">@Localizer["lbl_Department"]:</div>
                             <div>@ViewBag.DepartmentTypeName</div>
                         </div>
                     </div>
@@ -143,9 +143,9 @@
                         <tr><th style="border: none;"></th></tr>
                         <tr>
                             <th>@Localizer["lbl_ItemName"]</th>
-                            <th>Quantity</th>
-                            <th>Balance Quantity</th>
-                            <th>Required @Localizer["lbl_Date"]</th>
+                            <th>@Localizer["lbl_Quantity"]</th>
+                            <th>@Localizer["lbl_BalanceQuantity"]</th>
+                            <th>@Localizer["lbl_RequiredDate"]</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -158,7 +158,7 @@
                                     <tr>
                                         <td class="col-md-4">
                                             <select class="form-select inputcontrol" name="MaterialRequisitions.MaterialRequisitionDetails[@i].ItemID" disabled>
-                                                <option value="">Select Item</option>
+                                                <option value="">@Localizer["lbl_SelectItem"]</option>
                                                 @foreach (var type in ViewBag.ItemNameList)
                                                 {
                                                     <option value="@type.Value" selected="@(type.Value == Model.MaterialRequisitions.MaterialRequisitionDetails[i].ItemID.ToString())">@type.Text</option>
@@ -187,7 +187,7 @@
             <!-- Remarks Section -->
             <div class="row mb-3">
                 <div class="col-md-12">
-                    <label asp-for="MaterialRequisitions.Remarks" class="form-label fw-bold">Remarks</label>
+                    <label asp-for="MaterialRequisitions.Remarks" class="form-label fw-bold">@Localizer["lbl_Remarks"]</label>
                     <textarea asp-for="MaterialRequisitions.Remarks" class="form-control" rows="3" readonly></textarea>
                 </div>
             </div>

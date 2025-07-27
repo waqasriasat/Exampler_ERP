@@ -363,10 +363,10 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
       var MaterialRequisitions = await MaterialRequisitionsQuery.ToListAsync();
       using (var package = new ExcelPackage())
       {
-        var worksheet = package.Workbook.Worksheets.Add("MaterialRequisitions");
-        worksheet.Cells["A1"].Value = "Requisition #";
-        worksheet.Cells["B1"].Value = "Requisition Date";
-        worksheet.Cells["C1"].Value = "Requisition Status";
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_MaterialRequisition"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_RequisitionNo"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_RequisitionDate"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_RequisitionStatus"];
 
         for (int i = 0; i < MaterialRequisitions.Count; i++)
         {
@@ -383,7 +383,7 @@ namespace Exampler_ERP.Controllers.StoreManagement.StoreManagement
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = $"MaterialRequisitions-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_MaterialRequisition"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }

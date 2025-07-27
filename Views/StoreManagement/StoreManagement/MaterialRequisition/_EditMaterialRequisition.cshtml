@@ -16,7 +16,7 @@
                     <div class="col-md-12">
                         <label for="ItemName" class="form-label fw-bold">@Localizer["lbl_ItemName"]</label>
                         <select id="ItemName" name="ItemName" class="form-select">
-                            <option value="">Select Item</option>
+                            <option value="">@Localizer["lbl_SelectItem"]</option>
                             @foreach (var type in ViewBag.ItemList)
                             {
                                 <option value="@type.Value">@type.Text</option>
@@ -26,19 +26,19 @@
                 </th>
                 <th class="headercontrol">
                     <div class="col-md-12">
-                        <label for="Quantity" class="form-label fw-bold">Quantity</label>
+                        <label for="Quantity" class="form-label fw-bold">@Localizer["lbl_Quantity"]</label>
                         <input type="text" id="Quantity" name="Quantity" class="form-control" />
                     </div>
                 </th>
                 <th class="headercontrol">
                     <div class="col-md-12">
-                        <label for="BalanceQuantity" class="form-label fw-bold">Balance Quantity</label>
+                        <label for="BalanceQuantity" class="form-label fw-bold">@Localizer["lbl_BalanceQuantity"]</label>
                         <input type="text" id="BalanceQuantity" name="BalanceQuantity" class="form-control" />
                     </div>
                 </th>
                 <th class="headercontrol">
                     <div class="col-md-12">
-                        <label for="RequiredDate" class="form-label fw-bold">Required @Localizer["lbl_Date"]</label>
+                        <label for="RequiredDate" class="form-label fw-bold">@Localizer["lbl_RequiredDate"]</label>
                         <input type="date" id="RequiredDate" name="RequiredDate" class="form-control" />
                     </div>
                 </th>
@@ -51,10 +51,10 @@
             <tr><th style="border: none;"></th></tr>
             <tr>
                 <th>@Localizer["lbl_ItemName"]</th>
-                <th>Quantity</th>
-                <th>Balance Quantity</th>
-                <th>Required @Localizer["lbl_Date"]</th>
-                <th>Actions</th>
+                <th>@Localizer["lbl_Quantity"]</th>
+                <th>@Localizer["lbl_BalanceQuantity"]</th>
+                <th>@Localizer["lbl_RequiredDate"]</th>
+                <th>@Localizer["lbl_Action"]</th>
             </tr>
         </thead>
         <tbody>
@@ -65,7 +65,7 @@
                     <tr>
                         <td class="col-md-4">
                             <select class="form-select inputcontrol" name="MaterialRequisitions.MaterialRequisitionDetails[@i].ItemID" value="MaterialRequisitions.MaterialRequisitionDetails[@i].ItemID">
-                                <option value="">Select Item</option>
+                                <option value="">@Localizer["lbl_SelectItem"]</option>
                                 @foreach (var type in ViewBag.ItemNameList)
                                 {
                                     if (type.Value == Model.MaterialRequisitions.MaterialRequisitionDetails[i].ItemID.ToString())
@@ -104,7 +104,7 @@
 <!-- Remarks Section -->
 <div class="row mb-3">
     <div class="col-md-12">
-        <label asp-for="MaterialRequisitions.Remarks" class="form-label fw-bold">Remarks</label>
+        <label asp-for="MaterialRequisitions.Remarks" class="form-label fw-bold">@Localizer["lbl_Remarks"]</label>
         <textarea asp-for="MaterialRequisitions.Remarks" class="form-control" rows="3"></textarea>
     </div>
 </div>

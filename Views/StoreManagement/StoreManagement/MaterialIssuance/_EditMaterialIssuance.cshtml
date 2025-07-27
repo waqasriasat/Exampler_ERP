@@ -21,10 +21,10 @@
         <table id="MaterialIssuanceTable" class="table">
             <thead>
                 <tr>
-                    <th>Item</th>
-                    <th>Requisition Quantity</th>
-                    <th>Issuance Quantity</th>
-                    <th>Blance Quantity</th>
+                    <th>@Localizer["lbl_Item"]</th>
+                    <th>@Localizer["lbl_RequisitionQuantity"]</th>
+                    <th>@Localizer["lbl_IssuanceQuantity"]</th>
+                    <th>@Localizer["lbl_BalanceQuantity"]</th>
                     <th>@Localizer["lbl_Action"]</th>
                 </tr>
             </thead>
@@ -38,7 +38,7 @@
     <!-- Remarks Section -->
     <div class="row mb-3">
         <div class="col-md-12">
-            <label asp-for="MaterialIssuances.Remarks" class="form-label fw-bold">Remarks</label>
+            <label asp-for="MaterialIssuances.Remarks" class="form-label fw-bold">@Localizer["lbl_Remarks"]</label>
             <textarea asp-for="MaterialIssuances.Remarks" class="form-control" rows="3"></textarea>
         </div>
     </div>

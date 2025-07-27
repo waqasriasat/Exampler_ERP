@@ -2,53 +2,53 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @foreach (var item in Model)
-            {
-                <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                    <div class="row">
-                        <div class="col-10 col-md-10 col-lg-10">
-                            <div class="row align-items-center">
-                                <div class="col-2">
-                                    <p class="text-nowrap">
-                                        <span class="smallAdd">Purchase Request # :</span> @item.PurchaseRequestID
-                                    </p>
-                                </div>
-                                <div class="col-3">
-                                    <p class="text-nowrap">
-                                        <span class="smallAdd">@Localizer["lbl_Date"] :</span> @(item.PurchaseRequestDate.ToString("dd/MM/yyyy") ?? "00/00/0000")
-                                    </p>
-                                </div>
-                                <div class="col-3">
-                                    <p class="text-nowrap">
-                                        <span class="smallAdd">@Localizer["lbl_ItemName"] :</span> @item.Item?.ItemName
-                                    </p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">
-                                        <span class="smallAdd">Quantuty :</span> @item.Quantity
-                                    </p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">
-                                        <span class="smallAdd">@Localizer["lbl_Status"] :</span> @item.RequestStatusType?.RequestStatusTypeName
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-1 col-md-1 col-lg-1">
-                            <div class="btn-group" role="group" aria-label="Actions">
-                                <a href="javascript:void(0)" class="forwordCostComparisonLink me-2" data-id="@item.PurchaseRequestID">
-                                    <i class="fa fa-forward-step" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-1 col-md-1 col-lg-1">
-                            <div class="btn-group" role="group" aria-label="Actions">
-                                <a href="javascript:void(0)" class="printCostComparisonLink me-2" data-id="@item.PurchaseRequestID">
-                                    <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                </a>
-                            </div>
-                        </div>
+{
+    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+        <div class="row">
+            <div class="col-10 col-md-10 col-lg-10">
+                <div class="row align-items-center">
+                    <div class="col-2">
+                        <p class="text-nowrap">
+                            <span class="smallAdd">@Localizer["lbl_RequestNo"] :</span> @item.PurchaseRequestID
+                        </p>
+                    </div>
+                    <div class="col-3">
+                        <p class="text-nowrap">
+                            <span class="smallAdd">@Localizer["lbl_RequestDate"] :</span> @(item.PurchaseRequestDate.ToString("dd/MM/yyyy") ?? "00/00/0000")
+                        </p>
+                    </div>
+                    <div class="col-3">
+                        <p class="text-nowrap">
+                            <span class="smallAdd">@Localizer["lbl_ItemName"] :</span> @item.Item?.ItemName
+                        </p>
+                    </div>
+                    <div class="col-2">
+                        <p class="text-nowrap">
+                            <span class="smallAdd">@Localizer["lbl_Quantuty"] :</span> @item.Quantity
+                        </p>
+                    </div>
+                    <div class="col-2">
+                        <p class="text-nowrap">
+                            <span class="smallAdd">@Localizer["lbl_PurchaseRequestStatus"] :</span> @item.RequestStatusType?.RequestStatusTypeName
+                        </p>
                     </div>
                 </div>
+            </div>
+            <div class="col-1 col-md-1 col-lg-1">
+                <div class="btn-group" role="group" aria-label="Actions">
+                    <a href="javascript:void(0)" class="forwordCostComparisonLink me-2" data-id="@item.PurchaseRequestID">
+                        <i class="fa fa-forward-step" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-1 col-md-1 col-lg-1">
+                <div class="btn-group" role="group" aria-label="Actions">
+                    <a href="javascript:void(0)" class="printCostComparisonLink me-2" data-id="@item.PurchaseRequestID">
+                        <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            }
+}

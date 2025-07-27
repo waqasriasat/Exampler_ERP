@@ -1,7 +1,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Purchase - Report";
+    ViewData["Title"] = Localizer["lbl_Purchase"] + " - Report";
 
 
     var accessRightsByUserJson = Context.Session.GetString("AccessRightsByUserActionSORs");

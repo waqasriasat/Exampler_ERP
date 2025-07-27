@@ -54,7 +54,7 @@
     <div class="modal-dialog modal-lg" role="document" style="--bs-modal-width: 80rem;">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="addFromStorePurchaseRequestModalLabel"><i class="fas fa-key me-2"></i>@Localizer["lbl_Add"] Purchase Request</h5>
+                <h5 class="modal-title" id="addFromStorePurchaseRequestModalLabel"><i class="fas fa-key me-2"></i>@Localizer["lbl_AddNewPurchaseRequest"]</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -69,9 +69,9 @@
                                 <tr>
                                     <th class="headercontrol headerwidth">
                                         <div class="col-md-12">
-                                            <label for="ItemFromStore" class="form-label fw-bold">Select Item From Procurement Queue</label>
+                                            <label for="ItemFromStore" class="form-label fw-bold">@Localizer["lbl_SelectItemFromProcurementQueue"]</label>
                                             <select id="ItemFromStore" class="form-select">
-                                                <option value="">Select Item From Procurement Queue</option>
+                                                <option value="">@Localizer["lbl_SelectItemFromProcurementQueue"]</option>
                                                 @foreach (var type in ViewBag.ItemFromProcurementQueueList)
                                                 {
                                                     <option value="@type.Value">@type.Text</option>
@@ -91,7 +91,7 @@
                                         <div class="col-md-12">
                                             <label for="ItemName" class="form-label fw-bold">@Localizer["lbl_ItemName"]</label>
                                             <select id="ItemName" class="form-select" disabled>
-                                                <option value="">Select Item</option>
+                                                <option value="">@Localizer["lbl_SelectItem"]</option>
                                                 @foreach (var type in ViewBag.ItemList)
                                                 {
                                                     <option value="@type.Value">@type.Text</option>
@@ -104,7 +104,7 @@
                                         <div class="col-md-12">
                                             <label for="UnitTypeID" class="form-label fw-bold">@Localizer["lbl_Unit"]</label>
                                             <select id="UnitTypeID" class="form-select">
-                                                <option value="">Select Unit</option>
+                                                <option value="">@Localizer["lbl_SelectUnit"]</option>
                                                 @foreach (var type in ViewBag.ItemUnitList)
                                                 {
                                                     <option value="@type.Value">@type.Text</option>
@@ -115,7 +115,7 @@
                                     </th>
                                     <th class="headercontrol headerwidthRow">
                                         <div class="col-md-12">
-                                            <label for="Quantity" class="form-label fw-bold">Quantity</label>
+                                            <label for="Quantity" class="form-label fw-bold">@Localizer["lbl_Quantity"]</label>
                                             <input type="number" id="Quantity" class="form-control" />
                                         </div>
                                     </th>
@@ -127,9 +127,9 @@
                                     </th>
                                     <th class="headercontrol headerwidthRow">
                                         <div class="col-md-12">
-                                            <label for="PriorityLevel" class="form-label fw-bold">Priority Level</label>
+                                            <label for="PriorityLevel" class="form-label fw-bold">@Localizer["lbl_PriorityLevel"]</label>
                                             <select id="PriorityLevel" class="form-select">
-                                                <option value="">Select Priority Level</option>
+                                                <option value="">@Localizer["lbl_SelectPriorityLevel"]</option>
                                                 @foreach (var type in ViewBag.PriorityLevelList)
                                                 {
                                                     <option value="@type.Value">@type.Text</option>
@@ -147,9 +147,9 @@
                                 <tr>
                                     <th>@Localizer["lbl_ItemName"]</th>
                                     <th>@Localizer["lbl_Unit"]</th>
-                                    <th>Quantity</th>
-                                    <th>Priority Level</th>
-                                    <th>Actions</th>
+                                    <th>@Localizer["lbl_Quantity"]</th>
+                                    <th>@Localizer["lbl_PriorityLevel"]</th>
+                                    <th>@Localizer["lbl_Action"]</th>
                                 </tr>
                             </thead>
                             <tbody id="purchaseRequestBody">
