@@ -3,7 +3,8 @@
 }
 
 @* ************** Content ************** *@
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <h4 class="py-3 mb-4">
   <span class="text-muted fw-light">UI elements /</span> Footer
 </h4>
@@ -18,10 +19,10 @@
         <a href='@TempData.Peek("appUrl")' target="_blank" class="footer-text fw-bold">@TempData.Peek("appName")</a> ©
       </div>
       <div>
-        <a href='@TempData.Peek("licenseUrl")' class="footer-link me-4" target="_blank">License</a>
-        <a href="javascript:void(0)" class="footer-link me-4">Help</a>
-        <a href="javascript:void(0)" class="footer-link me-4">Contact</a>
-        <a href="javascript:void(0)" class="footer-link">Terms &amp; Conditions</a>
+        <a href='@TempData.Peek("licenseUrl")' class="footer-link me-4" target="_blank">@Localizer["lbl_License"]</a>
+        <a href="javascript:void(0)" class="footer-link me-4">@Localizer["lbl_Help"]</a>
+        <a href="javascript:void(0)" class="footer-link me-4">@Localizer["lbl_Contact"]</a>
+        <a href="javascript:void(0)" class="footer-link">@Localizer["lbl_TermsConditions"]</a>
       </div>
     </div>
   </footer>

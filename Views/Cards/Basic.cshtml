@@ -1,7 +1,8 @@
 @{
   ViewData["Title"] = "Cards basic - UI elements";
 }
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @section VendorScripts {
 <script src="~/vendor/libs/masonry/masonry.js"></script>
 }
@@ -28,7 +29,7 @@
     <div class="card h-100">
       <div class="card-body">
         <h5 class="card-title">Card title</h5>
-        <h6 class="card-subtitle text-muted">Support card subtitle</h6>
+        <h6 class="card-subtitle text-muted">@Localizer["lbl_Support"] card subtitle</h6>
       </div>
       <img class="img-fluid" src="~/img/elements/13.jpg" alt="Card image cap" />
       <div class="card-body">
@@ -42,7 +43,7 @@
     <div class="card h-100">
       <div class="card-body">
         <h5 class="card-title">Card title</h5>
-        <h6 class="card-subtitle text-muted">Support card subtitle</h6>
+        <h6 class="card-subtitle text-muted">@Localizer["lbl_Support"] card subtitle</h6>
         <img class="img-fluid d-flex mx-auto my-4 rounded" src="~/img/elements/4.jpg" alt="Card image cap" />
         <p class="card-text">Bear claw sesame snaps gummies chocolate.</p>
         <a href="javascript:void(0);" class="card-link">Card link</a>

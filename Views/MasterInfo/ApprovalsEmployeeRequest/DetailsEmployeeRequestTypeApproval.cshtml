@@ -13,7 +13,7 @@
         <div class="modal-content shadow-lg border-0 rounded-lg">
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="detailsEmployeeRequestTypeApprovalModalLabel">
-                    <i class="fas fa-info-circle"></i> Approval EmployeeRequest Details
+					<i class="fas fa-info-circle"></i> @Localizer["lbl_EmployeeRequestApprovalDetail"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -21,7 +21,7 @@
             <!-- Modal body with improved layout and spacing -->
             <div class="modal-body">
                 <form>
-                    <h5><i class="fas fa-user"></i> Employee Request Details</h5>
+                    <h5><i class="fas fa-user"></i>@Localizer["lbl_EmployeeRequestDetails"]</h5>
                     @Html.Partial("~/Views/EmployeePortal/Apply/EmployeeRequest/_EditEmployeeRequest.cshtml", (Exampler_ERP.Models.HR_EmployeeRequestTypeApproval)Model)
 
                 </form>

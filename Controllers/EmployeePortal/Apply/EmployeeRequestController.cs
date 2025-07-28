@@ -191,10 +191,10 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
       {
         var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_EmployeeRequest"]);
 
-        worksheet.Cells["A1"].Value = _localizer["lbl_EmployeeRequest"]  + " " + _localizer["lbl_ID"];
+        worksheet.Cells["A1"].Value = _localizer["lbl_EmployeeRequestID"];
         worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
-        worksheet.Cells["C1"].Value = _localizer["lbl_EmployeeRequest"]  + " " + _localizer["lbl_Type"];
-        worksheet.Cells["D1"].Value = _localizer["lbl_ApplyDate"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_EmployeeRequestType"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_RequestDate"];
         worksheet.Cells["E1"].Value = _localizer["lbl_Note"];
 
 

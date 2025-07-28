@@ -1,7 +1,8 @@
 @model IEnumerable<Exampler_ERP.Models.HR_EmployeeRequestTypeApprovalDetail>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Master Info - EmployeeRequest Approvals";
+	ViewData["Title"] = Localizer["lbl_MasterInformation"] + " - " + Localizer["lbl_EmployeeRequestApprovals"];
 }
 
 @section PageScripts {
@@ -157,7 +158,7 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Master Info /</span> EmployeeRequest Approvals
+	<span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> @Localizer["lbl_EmployeeRequestApprovals"]
 </h4>
 @Html.Partial("~/Views/MasterInfo/ApprovalsEmployeeRequest/_ApprovalsEmployeeRequestSearching.cshtml", Model)
 <br />

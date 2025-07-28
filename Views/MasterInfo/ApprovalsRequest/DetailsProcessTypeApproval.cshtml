@@ -13,7 +13,7 @@
         <div class="modal-content shadow-lg border-0 rounded-lg">
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="detailsProcessTypeApprovalModalLabel">
-                    <i class="fas fa-info-circle"></i> Approval Process Details
+                    <i class="fas fa-info-circle"></i>@Localizer["lbl_ApprovalProcessDetails"]
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -23,22 +23,22 @@
                 <form>
                     @if (ProcessTypeID == 1)
                     {
-                        <h5><i class="fas fa-user"></i> User Details</h5>
+                        <h5><i class="fas fa-user"></i>@Localizer["lbl_UserDetails"]</h5>
                         @Html.Partial("~/Views/HR/MasterInfo/User/_EditUser.cshtml", (Exampler_ERP.Models.CR_User)Model)
                     }
                     else if (ProcessTypeID == 2)
                     {
-                        <h5><i class="fas fa-id-badge"></i> Employee Details</h5>
+                        <h5><i class="fas fa-id-badge"></i>@Localizer["lbl_EmployeeDetails"]</h5>
                         @Html.Partial("~/Views/HR/Employeement/Employee/_EditEmployee.cshtml", (Exampler_ERP.Models.HR_Employee)Model)
                     }
                     else if (ProcessTypeID == 3)
                     {
-                        <h5><i class="fas fa-file-contract"></i> Contract Details</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_ContractDetail"]</h5>
                         @Html.Partial("~/Views/HR/Employeement/Contract/_EditContract.cshtml", (Exampler_ERP.Models.HR_Contract)Model)
                     }
                     else if (ProcessTypeID == 4)
                     {
-                        <h5><i class="fas fa-file-contract"></i> Contract Renewal Details</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_ContractRenewalDetails"]</h5>
                         @Html.Partial("~/Views/HR/Employeement/ContractRenewal/_EditContractRenewal.cshtml", (Exampler_ERP.Models.HR_ContractRenewal)Model)
                     }
                     else if (ProcessTypeID == 5)
@@ -48,73 +48,73 @@
                     }
                     else if (ProcessTypeID == 6)
                     {
-                        <h5><i class="fas fa-file-contract"></i> Salary Details</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_SalaryDetails"]</h5>
                         @Html.Partial("~/Views/HR/Employeement/Salary/_EditSalary.cshtml", (List<Exampler_ERP.Models.HR_SalaryDetail>)Model)
                     }
                     else if (ProcessTypeID == 7)
                     {
-                        <h5><i class="fas fa-file-contract"></i> OverTime Details</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_OverTimeDetail"]</h5>
                         @Html.Partial("~/Views/HR/HR/OverTime/_EditOverTime.cshtml", (Exampler_ERP.Models.HR_OverTime)Model)
                     }
                     else if (ProcessTypeID == 8)
                     {
-                        <h5><i class="fas fa-file-contract"></i> Additional Allowance Details</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_AdditionalAllowanceDetails"]</h5>
                         @Html.Partial("~/Views/HR/HR/AdditionalAllowance/_EditAdditionalAllowance.cshtml", (Exampler_ERP.Models.HR_AdditionalAllowance)Model)
                     }
                     else if (ProcessTypeID == 9)
                     {
-                        <h5><i class="fas fa-file-contract"></i> Deducation Details</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_DeductionDetail"]</h5>
                         @Html.Partial("~/Views/HR/HR/Deduction/_EditDeduction.cshtml", (Exampler_ERP.Models.HR_Deduction)Model)
                     }
                     else if (ProcessTypeID == 10)
                     {
-                        <h5><i class="fas fa-file-contract"></i> Fixed Deducation Details</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_FixedDeducationDetails"]</h5>
                         @Html.Partial("~/Views/HR/Financial/FixedDeduction/_EditFixedDeduction.cshtml", (Exampler_ERP.Models.HR_FixedDeductionDetail)Model)
                     }
                     else if (ProcessTypeID == 11)
                     {
-                        <h5><i class="fas fa-file-contract"></i> Vacation Details</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_VacationDetails"]</h5>
                         @Html.Partial("~/Views/EmployeePortal/Apply/Vacation/_EditVacation.cshtml", (Exampler_ERP.Models.HR_Vacation)Model)
                     }
                     else if (ProcessTypeID == 12)
                     {
-                        <h5><i class="fas fa-file-contract"></i> Vacation Settle Details</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_VacationSettleDetails"]</h5>
                         @Html.Partial("~/Views/HR/HR/VacationSettle/_EditVacationSettle.cshtml", (Exampler_ERP.Models.Temp.VacationSettleViewModel)Model)
                     }
                     else if (ProcessTypeID == 13)
                     {
-                        <h5><i class="fas fa-file-contract"></i> Monthly PayRoll Details</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_ MonthlyPayRollDetails"]</h5>
                         @Html.Partial("~/Views/HR/Financial/MonthlySalarySheet/_ViewMonthlySalarySheet.cshtml", (Exampler_ERP.Models.Temp.MonthlySalarySheetViewModel)Model)
                     }
                     else if (ProcessTypeID == 14)
                     {
-                        <h5><i class="fas fa-file-contract"></i> Employee Request Details</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_EmployeeRequestDetails"]</h5>
                         @Html.Partial("~/Views/EmployeePortal/Apply/EmployeeRequest/_EditEmployeeRequest.cshtml", (Exampler_ERP.Models.HR_EmployeeRequestTypeApproval)Model)
                     }
                     else if (ProcessTypeID == 15)
                     {
-                        <h5><i class="fas fa-file-contract"></i> Employee Request Details</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_EmployeeRequestDetails"]</h5>
                         @Html.Partial("~/Views/EmployeePortal/Apply/EmployeeRequest/_EditEmployeeRequest.cshtml", (Exampler_ERP.Models.HR_EmployeeRequestTypeApproval)Model)
                     }
                     else if (ProcessTypeID == 16)
                     {
-                        <h5><i class="fas fa-file-contract"></i> Journal Voucher</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_JournalVoucher"]</h5>
                         @Html.Partial("~/Views/Finance/Transaction/JournalVoucher/_EditJournalVoucher.cshtml", (Exampler_ERP.Models.Temp.JournalVoucherIndexViewModel)Model)
                     }
                     else if (ProcessTypeID == 17)
                     {
-                        <h5><i class="fas fa-file-contract"></i> Transfer Voucher</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_TransferVoucher"]</h5>
                         @Html.Partial("~/Views/Finance/Transaction/TransferVoucher/_EditTransferVoucher.cshtml", (Exampler_ERP.Models.Temp.TransferVoucherIndexViewModel)Model)
                     }
                     else if (ProcessTypeID == 18)
                     {
-                        <h5><i class="fas fa-file-contract"></i> Payment Voucher</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_PaymentVoucher"]</h5>
                         @Html.Partial("~/Views/Finance/Transaction/PaymentVoucher/_EditPaymentVoucher.cshtml", (Exampler_ERP.Models.Temp.PaymentVoucherIndexViewModel)Model)
                     }
                     else if (ProcessTypeID == 19)
 
                     {
-                        <h5><i class="fas fa-file-contract"></i> Received Voucher</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_ReceivedVoucher"]</h5>
                         @Html.Partial("~/Views/Finance/Transaction/ReceivedVoucher/_EditReceivedVoucher.cshtml", (Exampler_ERP.Models.Temp.ReceivedVoucherIndexViewModel)Model)
                     }
                     else if (ProcessTypeID == 20)
@@ -126,19 +126,19 @@
                     else if (ProcessTypeID == 21)
 
                     {
-                        <h5><i class="fas fa-file-contract"></i> New Purchase Request</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_NewPurchaseRequest"]</h5>
                         @Html.Partial("~/Views/Finance/Transaction/PurchaseRequest/_EditPurchaseRequest.cshtml", (Exampler_ERP.Models.Temp.ReceivedVoucherIndexViewModel)Model)
                     }
                     else if (ProcessTypeID == 22)
 
                     {
-                        <h5><i class="fas fa-file-contract"></i> Edited Purchase Request</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_EditedPurchaseRequest"]</h5>
                         @Html.Partial("~/Views/Finance/Transaction/PurchaseRequest/_EditPurchaseRequest.cshtml", (Exampler_ERP.Models.Temp.ReceivedVoucherIndexViewModel)Model)
                     }
                     else if (ProcessTypeID == 23)
 
                     {
-                        <h5><i class="fas fa-file-contract"></i> Approval For Purchase Order</h5>
+                        <h5><i class="fas fa-file-contract"></i>@Localizer["lbl_ApprovalForPurchaseOrder"]</h5>
                         @Html.Partial("~/Views/Finance/Transaction/PurchaseOrder/_EditPurchaseOrder.cshtml", (Exampler_ERP.Models.Temp.ReceivedVoucherIndexViewModel)Model)
                     }
                 </form>

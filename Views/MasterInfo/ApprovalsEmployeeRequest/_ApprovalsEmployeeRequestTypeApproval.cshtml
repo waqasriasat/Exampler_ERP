@@ -2,42 +2,46 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    var EmployeeList = (List<SelectListItem>)ViewBag.EmployeesList;
-    var RoleList = (List<SelectListItem>)ViewBag.RolesList;
+	var EmployeeList = (List<SelectListItem>)ViewBag.EmployeesList;
+	var RoleList = (List<SelectListItem>)ViewBag.RolesList;
 }
 
 <div class="modal fade" id="approvalsEmployeeRequestTypeApprovalModal" tabindex="-1" role="dialog" aria-labelledby="approvalsEmployeeRequestTypeApprovalModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <!-- Modal with increased size for better layout -->
-        <div class="modal-content shadow-lg border-0 rounded-lg">
-            <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="approvalsEmployeeRequestTypeApprovalModalLabel">
-                    <i class="fas fa-clipboard-check me-2"></i> Approval EmployeeRequest Details
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+	<div class="modal-dialog modal-lg" role="document">
+		<!-- Modal with increased size for better layout -->
+		<div class="modal-content shadow-lg border-0 rounded-lg">
+			<div class="modal-header bg-warning text-white">
+				<h5 class="modal-title" id="approvalsEmployeeRequestTypeApprovalModalLabel">
+					<i class="fas fa-clipboard-check me-2"></i> @Localizer["lbl_EmployeeRequestApprovalDetail"]
+				</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
 
-            <div class="modal-body bg-light">
-                @if (Model.Any())
-                {
-                    var firstItem = Model.FirstOrDefault(); // Get the first item to display common details
+			<div class="modal-body bg-light">
+				@if (Model.Any())
 
-                    <div class="card border-0 mb-4 shadow-sm">
-                        <div class="card-header text-white">
-                            <h6 class="mb-0">Approval EmployeeRequest Overview</h6>
+				{
+
+					var firstItem = Model.FirstOrDefault(); // Get the first item to display common details
+
+
+
+					<div class="card border-0 mb-4 shadow-sm">
+						<div class="card-header text-white">
+							<h6 class="mb-0">@Localizer["lbl_EmployeeRequestApprovalOverview"]</h6>
                         </div>
                         <div class="card-body">
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <span><strong>Approval EmployeeRequest ID:</strong> @firstItem.HR_EmployeeRequestTypeApproval?.EmployeeRequestTypeApprovalID</span>
+									<span><strong>@Localizer["lbl_EmployeeRequestApprovalID"]:</strong> @firstItem.HR_EmployeeRequestTypeApproval?.EmployeeRequestTypeApprovalID</span>
                                 </div>
                                 <div class="col-md-6">
-                                    <span><strong>Employee Name:</strong> @firstItem.HR_EmployeeRequestTypeApproval?.Employee?.FirstName @firstItem.HR_EmployeeRequestTypeApproval?.Employee?.FatherName @firstItem.HR_EmployeeRequestTypeApproval?.Employee?.FamilyName</span>
+                                    <span><strong>@Localizer["lbl_EmployeeName"]:</strong> @firstItem.HR_EmployeeRequestTypeApproval?.Employee?.FirstName @firstItem.HR_EmployeeRequestTypeApproval?.Employee?.FatherName @firstItem.HR_EmployeeRequestTypeApproval?.Employee?.FamilyName</span>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <span><strong>EmployeeRequest Type:</strong> @(firstItem.HR_EmployeeRequestTypeApproval?.EmployeeRequestType?.EmployeeRequestTypeName ?? "N/A")</span>
+                                    <span><strong>@Localizer["lbl_EmployeeRequestType"]:</strong> @(firstItem.HR_EmployeeRequestTypeApproval?.EmployeeRequestType?.EmployeeRequestTypeName ?? "N/A")</span>
                                 </div>
                                 <div class="col-md-6">
                                     <span><strong>@Localizer["lbl_RequestDate"]:</strong> @(firstItem.HR_EmployeeRequestTypeApproval?.Date.ToString("dd-MM-yyyy"))</span>
@@ -53,28 +57,28 @@
                         {
                             <div class="card mb-4 border-0 shadow-sm">
                                 <div class="card-body">
-                                    <h6 class="card-title"><i class="fas fa-user-check me-2"></i> Approval Details</h6>
+                                    <h6 class="card-title"><i class="fas fa-user-check me-2"></i>@Localizer["lbl_ApprovalDetails"]</h6>
 
                                     <div class="row mb-3">
                                         <div class="col-md-6">
-                                            <span><strong>Approved by:</strong> @(item.RoleID == 0 || item.RoleID == null ? "N/A" : RoleList.FirstOrDefault(g => g.Value == item.RoleID.ToString())?.Text)</span>
+                                            <span><strong>@Localizer["lbl_Approvedby"]:</strong> @(item.RoleID == 0 || item.RoleID == null ? "N/A" : RoleList.FirstOrDefault(g => g.Value == item.RoleID.ToString())?.Text)</span>
                                         </div>
                                         <div class="col-md-6">
-                                            <span><strong>Approved Name:</strong> @(item.AppUserID == 0 || item.AppUserID == null ? "N/A" : EmployeeList.FirstOrDefault(g => g.Value == item.AppUserID.ToString())?.Text)</span>
+                                            <span><strong>@Localizer["lbl_ApprovedName"]:</strong> @(item.AppUserID == 0 || item.AppUserID == null ? "N/A" : EmployeeList.FirstOrDefault(g => g.Value == item.AppUserID.ToString())?.Text)</span>
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
                                         <div class="col-md-6">
-                                            <span><strong>Approved Date:</strong> @item.Date.ToString("dd-MM-yyyy HH:mm:ss")</span>
+											<span><strong>@Localizer["lbl_ApprovedDate"]:</strong> @item.Date.ToString("dd-MM-yyyy HH:mm:ss")</span>
                                         </div>
                                         <div class="col-md-6">
-                                            <span><strong>Comment:</strong> @item.Notes</span>
+                                            <span><strong>@Localizer["lbl_Comment"]:</strong> @item.Notes</span>
                                         </div>
                                     </div>
 
                                     <!-- Documents Section with Enhanced UI -->
-                                    <h6 class="mt-3"><i class="fas fa-folder-open me-2"></i> Attached Documents</h6>
+                                    <h6 class="mt-3"><i class="fas fa-folder-open me-2"></i>@Localizer["lbl_AttachedDocuments"]</h6>
                                     @foreach (var doc in item.EmployeeRequestTypeApprovalDetailDoc)
                                     {
                                         <div class="row align-items-center mb-3">
@@ -94,7 +98,7 @@
                                             </div>
 
                                             <div class="col">
-                                                <span class="fw-bold">Document: @doc.DocName (@doc.DocExt)</span>
+                                                <span class="fw-bold">@Localizer["lbl_Document"]: @doc.DocName (@doc.DocExt)</span>
                                                 <div class="mt-1">
                                                     @if (doc.Doc != null && doc.Doc.Length > 0)
                                                     {
@@ -111,7 +115,7 @@
                                                     }
                                                     else
                                                     {
-                                                        <span class="text-muted">No Document Available</span>
+                                                        <span class="text-muted">@Localizer["lbl_NoDocumentAvailable"]</span>
                                                     }
                                                 </div>
                                             </div>
@@ -126,7 +130,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-times-circle"></i>  Close
+                    <i class="fas fa-times-circle"></i>@Localizer["lbl_Close"]
                 </button>
             </div>
         </div>

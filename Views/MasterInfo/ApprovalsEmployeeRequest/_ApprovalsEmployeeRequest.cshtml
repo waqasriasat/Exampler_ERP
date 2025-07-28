@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">EmployeeRequest Approvals @Localizer["lbl_List"]</h5>
+            <h5 class="card-header">@Localizer["lbl_EmployeeRequestTypeApprovalList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
@@ -15,7 +15,7 @@
                                     <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                                 </div>
                                 <div class="col-3">
-                                    <p class="text-nowrap">EmployeeRequest @Localizer["lbl_Name"]</p>
+                                    <p class="text-nowrap">@Localizer["lbl_EmployeeRequestTypeName"]</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="text-nowrap">@Localizer["lbl_Rank"]</p>
@@ -50,7 +50,7 @@
                                         <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.HR_EmployeeRequestTypeApproval?.Employee?.FirstName @item.HR_EmployeeRequestTypeApproval?.Employee?.FatherName @item.HR_EmployeeRequestTypeApproval?.Employee?.FamilyName</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeRequest"] Name : </span>@(item.HR_EmployeeRequestTypeApproval?.EmployeeRequestType?.EmployeeRequestTypeName ?? "N/A")  </p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeRequestTypeName"] : </span>@(item.HR_EmployeeRequestTypeApproval?.EmployeeRequestType?.EmployeeRequestTypeName ?? "N/A")  </p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
                                         <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Rank"] : </span>@Html.DisplayFor(modelItem => item.Rank)</p>
