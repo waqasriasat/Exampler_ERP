@@ -91,12 +91,16 @@ body {
 .menu-vertical .menu-item .menu-toggle::after {
   right: 13rem !important;
 }
-.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
-  margin-right: calc(var(--bs-border-width) * -1) !important;
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-  padding-right: 4% !important;
-}
+
+
+
+
+  /*.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    margin-right: calc(var(--bs-border-width) * -1) !important;
+    padding-right: 4% !important;
+  }*/
 
 .input-group-merge .input-group-text:last-child {
   border-right: 0 !important;
@@ -110,7 +114,10 @@ body {
 .input-group:not(.has-validation) > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating), .input-group:not(.has-validation) > .dropdown-toggle:nth-last-child(n+3), .input-group:not(.has-validation) > .form-floating:not(:last-child) > .form-control, .input-group:not(.has-validation) > .form-floating:not(:last-child) > .form-select {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
-  margin-right: calc(var(--bs-border-width) * -1) !important;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-right: ridge;
+  margin-left: calc(var(--bs-border-width) * -1) !important;
   padding-right: 4% !important;
 }
 
@@ -118,6 +125,7 @@ body {
   padding-left: 0 !important;
   border-left: 0 !important;
 }
+
 
 @media (max-width: 1199.98px) {
   .layout-menu {

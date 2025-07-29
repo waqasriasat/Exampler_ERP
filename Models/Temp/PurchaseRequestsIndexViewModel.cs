@@ -15,7 +15,7 @@ namespace Exampler_ERP.Models.Temp
   {
     
     public PR_PurchaseRequest PurchaseRequests { get; set; } = new();
-    //public virtual List<PR_PurchaseRequestDetail> PurchaseRequestDetails { get; set; } = new List<PR_PurchaseRequestDetail>();
+    //public virtual List<PR_PurchaseRequestDetail> @Localizer["lbl_Purchase"]RequestDetails { get; set; } = new List<PR_PurchaseRequestDetail>();
   }
   //public class MaterialReceivedListViewModel
   //{

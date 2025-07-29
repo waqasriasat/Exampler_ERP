@@ -1,86 +1,94 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    Layout = "_EmployeeContentNavbarLayout";
-	ViewData["Title"] = @Localizer["lbl_Employee"] + " " + @Localizer["lbl_Portal"] + " " + @Localizer["lbl_Apply"];
+	Layout = "_EmployeeContentNavbarLayout";
+	ViewData["Title"] = @Localizer["lbl_EmployeePortal"] + " - " + @Localizer["lbl_Apply"];
 }
 
 @section PageScripts {
-    <script src="~/js/pages-account-settings-account.js"></script>
-    <link href="~/css/custom.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+	<script src="~/js/pages-account-settings-account.js"></script>
+	<link href="~/css/custom.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+	<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
 }
 
 @* ************** Content ************** *@
 <h4 class="py-3 mb-4">
-	<span class="text-muted fw-light">@Localizer["lbl_Employee"] @Localizer["lbl_Portal"] /</span> @Localizer["lbl_Apply"]
+	<span class="text-muted fw-light">@Localizer["lbl_EmployeePortal"] /</span> @Localizer["lbl_Apply"]
 </h4>
 
 <div class="row">
-    <div class="col-md-12">
-        <ul class="nav nav-pills flex-column flex-md-row mb-3">
-            <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i>@Localizer["lbl_Apply"]</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/EmployeeHR_Report_Dashboard/Index"><i class="bx bx-bell me-1"></i> @Localizer["lbl_Reports"]</a></li>
-        </ul>
-        <div class="card mb-4">
-            <h5 class="card-header"> @Localizer["lbl_Details"]</h5>
-            <div class="row" style="padding: 30px 30px 0px 30px;">
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    <a asp-controller="Vacation" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">@Localizer["lbl_Vacation"]</strong>
-                                    <h4 class="CardCountFontColor">
-                                        @ViewBag.VacationCount
-                                    </h4>
-                                </div>
-                                <div class="icon">
-                                    <i class="fa fa-print Card1I" aria-hidden="true"></i>
-                                </div>
-                                <div class="small-box-footer Card1A"></div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    <a asp-controller="EmployeeRequest" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">@Localizer["lbl_EmployeeRequest"]</strong>
-                                    <h4 class="CardCountFontColor">
-                                        @ViewBag.EmployeeRequestCount
-                                    </h4>
-                                </div>
-                                <div class="icon">
-                                    <i class="fa fa fa-file Card1I" aria-hidden="true"></i>
-                                </div>
-                                <div class="small-box-footer Card1A"></div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    <a asp-controller="DocumentUpload" asp-action="Index">
-                        <div class="shadow mb-4">
-                            <div class="small-box bg-white">
-                                <div class="inner Card1div">
-                                    <strong class="CardFontColor">@Localizer["lbl_Document"] @Localizer["lbl_Upload"]</strong>
-                                    <h4 class="CardCountFontColor">
-                                        @ViewBag.DocumentsUploadCount
-                                    </h4>
-                                </div>
-                                <div class="icon">
-                                    <i class="fa fa fa-file Card1I" aria-hidden="true"></i>
-                                </div>
-                                <div class="small-box-footer Card1A"></div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="col-md-12">
+		<ul class="nav nav-pills flex-column flex-md-row mb-3">
+			<li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i>@Localizer["lbl_Apply"]</a></li>
+			<li class="nav-item"><a class="nav-link" href="~/EmployeeHR_Report_Dashboard/Index"><i class="bx bx-bell me-1"></i> @Localizer["lbl_Reports"]</a></li>
+		</ul>
+		<div class="card mb-4">
+			<h5 class="card-header"> @Localizer["lbl_Details"]</h5>
+			<div class="row" style="padding: 30px 30px 0px 30px;">
+				<div class="col-lg-4 col-md-6 col-sm-12">
+					<a asp-controller="Vacation" asp-action="Index">
+						<div class="modern-card shadow mb-4">
+							<div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+								<div class="card-details">
+									<strong class="text-primary">@Localizer["lbl_Vacation"]</strong>
+									<h4 class="font-weight-bold text-dark">
+										@ViewBag.VacationCount
+									</h4>
+								</div>
+								<div class="icon bg-primary text-white">
+									<i class="fa fa-print Card1I" aria-hidden="true"></i>
+								</div>
+							</div>
+							<div class="card-footer bg-white text-muted text-center">
+								@Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
+							</div>
+						</div>
+					</a>
+				</div>
+
+				<div class="col-lg-4 col-md-6 col-sm-12">
+					<a asp-controller="EmployeeRequest" asp-action="Index">
+						<div class="modern-card shadow mb-4">
+							<div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+								<div class="card-details">
+									<strong class="text-primary">@Localizer["lbl_EmployeeRequest"]</strong>
+									<h4 class="font-weight-bold text-dark">
+										@ViewBag.EmployeeRequestCount
+									</h4>
+								</div>
+								<div class="icon bg-primary text-white">
+									<i class="fa fa-print Card1I" aria-hidden="true"></i>
+								</div>
+							</div>
+							<div class="card-footer bg-white text-muted text-center">
+								@Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
+							</div>
+						</div>
+					</a>
+				</div>
+
+				<div class="col-lg-4 col-md-6 col-sm-12">
+					<a asp-controller="DocumentUpload" asp-action="Index">
+						<div class="modern-card shadow mb-4">
+							<div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
+								<div class="card-details">
+									<strong class="text-primary">@Localizer["lbl_UploadDocument"]</strong>
+									<h4 class="font-weight-bold text-dark">
+										@ViewBag.DocumentsUploadCount
+									</h4>
+								</div>
+								<div class="icon bg-primary text-white">
+									<i class="fa fa-print Card1I" aria-hidden="true"></i>
+								</div>
+							</div>
+							<div class="card-footer bg-white text-muted text-center">
+								@Localizer["lbl_ViewDetails"] <i class="fa fa-arrow-right"></i>
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

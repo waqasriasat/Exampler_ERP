@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Setup - Access Rights By User Setup";
+	ViewData["Title"] = @Localizer["lbl_Setup"] + " - Access Rights By User Setup";
 }
 
 @section PageScripts {
@@ -71,7 +71,7 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Setup /</span> Access Rights By User Setup
+    <span class="text-muted fw-light">@Localizer["lbl_Setup"] /</span> Access Rights By User Setup
 </h4>
 <div class="row">
     <div class="col-md-12">

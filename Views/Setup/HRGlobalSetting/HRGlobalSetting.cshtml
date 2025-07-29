@@ -1,8 +1,9 @@
 @model Exampler_ERP.Models.HR_GlobalSetting
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+
 @{
-    ViewData["Title"] = "Setup - Human Resources";
+	ViewData["Title"] = @Localizer["lbl_Setup"]+" - "+ @Localizer["lbl_HumanResources"];
 }
 
 @section PageScripts {
@@ -10,27 +11,27 @@
 }
 
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Setup /</span> Human Resources
+    <span class="text-muted fw-light">@Localizer["lbl_Setup"] /</span> @Localizer["lbl_HumanResources"]
 </h4>
 
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-pills flex-column flex-md-row mb-3">
-            <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="menu-icon tf-icons bx bx-group"></i> Human Resources</a></li>
+            <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="menu-icon tf-icons bx bx-group"></i> @Localizer["lbl_HumanResources"]</a></li>
             <li class="nav-item"><a class="nav-link" href="~/FinanceGlobalSetting/Index"><i class="menu-icon tf-icons bx bx-dollar"></i> @Localizer["lbl_Finance"]</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/StoreManagementGlobalSetting/Index"><i class="menu-icon tf-icons bx bx-store"></i> StoreManagement</a></li>
-            <li class="nav-item"><a class="nav-link" href="~/PurchaseGlobalSetting/Index"><i class="menu-icon tf-icons bx bx-cart"></i> Purchase</a></li>
+			<li class="nav-item"><a class="nav-link" href="~/StoreManagementGlobalSetting/Index"><i class="menu-icon tf-icons bx bx-store"></i> @Localizer["lbl_StoreManagement"]</a></li>
+			<li class="nav-item"><a class="nav-link" href="~/PurchaseGlobalSetting/Index"><i class="menu-icon tf-icons bx bx-cart"></i> @Localizer["lbl_Purchase"]</a></li>
         </ul>
         <div class="card mb-4">
-            <h5 class="card-header">Configuration Details</h5>
+            <h5 class="card-header">@Localizer["lbl_ConfigurationDetails"]</h5>
             <div class="card-body">
                 <form id="formAccountSettings" method="POST">
                     <div class="row">
                         <h4 class="mb-4 mb-3">
-                            <h6 class="mb-3 text-primary">Late Arrival Management</h6>
+                            <h6 class="mb-3 text-primary">@Localizer["lbl_LateArrivalManagement"]</h6>
                         </h4>
                         <div class="mb-3 col-md-6">
-                            <label for="LateAppID" class="form-label">Automatic Deduction for Late Arrivals</label>
+                            <label for="LateAppID" class="form-label">@Localizer["lbl_AutomaticDeductionforLateArrivals"]</label>
                             <select asp-for="LateAppID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
                                 <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
@@ -41,13 +42,13 @@
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="LateGraceMinute" class="form-label">Allowed Grace Period (Minutes)</label>
+                            <label for="LateGraceMinute" class="form-label">@Localizer["lbl_AllowedGracePeriod(Minutes)"]</label>
                             <input type="number" class="form-control form-control-lg"
                                    id="LateGraceMinute" name="LateGraceMinute"
                                    value="@Model.LateGraceMinute" min="1" max="60" />
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="LateValueofHours" class="form-label">Deduction Percentage of Daily Pay</label>
+                            <label for="LateValueofHours" class="form-label">@Localizer["lbl_DeductionPercentageofDailyPay"]</label>
                             <input type="number" class="form-control form-control-lg"
                                    id="LateValueofHours" name="LateValueofHours"
                                    value="@Model.LateValueofHours" min="1" max="100" />
@@ -55,10 +56,10 @@
 
                         <hr class="my-0">
                         <h4 class="mb-4 mb-3">
-                            <h6 class="mb-3 text-primary">Early Departure Management</h6>
+                            <h6 class="mb-3 text-primary">@Localizer["lbl_EarlyDepartureManagement"]</h6>
                         </h4>
                         <div class="mb-3 col-md-6">
-                            <label for="EarlyGoingAppID" class="form-label">Automatic Deduction for Early Departures</label>
+                            <label for="EarlyGoingAppID" class="form-label">@Localizer["lbl_AutomaticDeductionforEarlyDepartures"]</label>
                             <select asp-for="EarlyGoingAppID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
                                 <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
@@ -69,13 +70,13 @@
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="EarlyGoingGraceMinute" class="form-label">Allowed Grace Period (Minutes)</label>
+                            <label for="EarlyGoingGraceMinute" class="form-label">@Localizer["lbl_AllowedGracePeriod(Minutes)"]</label>
                             <input type="number" class="form-control form-control-lg"
                                    id="EarlyGoingGraceMinute" name="EarlyGoingGraceMinute"
                                    value="@Model.EarlyGoingGraceMinute" min="1" max="60" />
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="EarlyGoingValueofHours" class="form-label">Deduction Percentage of Daily Pay</label>
+                            <label for="EarlyGoingValueofHours" class="form-label">@Localizer["lbl_DeductionPercentageofDailyPay"]</label>
                             <input type="number" class="form-control form-control-lg"
                                    id="EarlyGoingValueofHours" name="EarlyGoingValueofHours"
                                    value="@Model.EarlyGoingValueofHours" min="1" max="100" />
@@ -83,21 +84,21 @@
 
                         <hr class="my-0">
                         <h4 class="mb-4 mb-3">
-                            <h6 class="mb-3 text-primary">Early Arrival Overtime Management</h6>
+                            <h6 class="mb-3 text-primary">@Localizer["lbl_EarlyArrivalOvertimeManagement"]</h6>
                         </h4>
                         <div class="mb-3 col-md-6">
-                            <label for="EarlyComingAppID" class="form-label">Automatic Overtime for Early Arrivals</label>
+                            <label for="EarlyComingAppID" class="form-label">@Localizer["lbl_AutomaticOvertimeforEarlyArrivals"]</label>
                             <select asp-for="EarlyComingAppID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
                                 <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="EarlyComingGraceMinute" class="form-label">@Localizer["lbl_Overtime"] @Localizer["lbl_Type"]</label>
+                            <label for="EarlyComingGraceMinute" class="form-label">@Localizer["lbl_OvertimeType"]</label>
                             <select asp-for="EarlyComingGraceMinute" asp-items="@(new SelectList(ViewBag.OvertimeTypeList, "Value", "Text"))" class="form-control form-control-lg" id="EarlyComingGraceMinute">
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="EarlyComingValueofHours" class="form-label">@Localizer["lbl_Overtime"] Percentage of Daily Pay</label>
+                            <label for="EarlyComingValueofHours" class="form-label">@Localizer["lbl_OverTimePercentageofDailyPay"]</label>
                             <input type="number" class="form-control form-control-lg"
                                    id="EarlyComingValueofHours" name="EarlyComingValueofHours"
                                    value="@Model.EarlyComingValueofHours" min="1" max="100" />
@@ -105,21 +106,21 @@
 
                         <hr class="my-0">
                         <h4 class="mb-4 mb-3">
-                            <h6 class="mb-3 text-primary">Late Stay Overtime Management</h6>
+                            <h6 class="mb-3 text-primary">@Localizer["lbl_LateStayOvertimeManagement"]</h6>
                         </h4>
                         <div class="mb-3 col-md-6">
-                            <label for="LateSeatingAppID" class="form-label">Automatic Overtime for Late Stays</label>
+                            <label for="LateSeatingAppID" class="form-label">@Localizer["lbl_AutomaticOvertimeforLateStays"]</label>
                             <select asp-for="LateSeatingAppID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
                                 <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="LateSeatingGraceMinute" class="form-label">@Localizer["lbl_Overtime"] @Localizer["lbl_Type"]</label>
+                            <label for="LateSeatingGraceMinute" class="form-label">@Localizer["lbl_OvertimeType"]</label>
                             <select asp-for="LateSeatingGraceMinute" asp-items="@(new SelectList(ViewBag.OvertimeTypeList, "Value", "Text"))" class="form-control form-control-lg" id="LateSeatingGraceMinute">
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="LateSeatingValueofHours" class="form-label">@Localizer["lbl_Overtime"] Percentage of Daily Pay</label>
+                            <label for="LateSeatingValueofHours" class="form-label">@Localizer["lbl_OverTimePercentageofDailyPay"]</label>
                             <input type="number" class="form-control form-control-lg"
                                    id="LateSeatingValueofHours" name="LateSeatingValueofHours"
                                    value="@Model.LateSeatingValueofHours" min="1" max="100" />
@@ -127,10 +128,10 @@
 
                         <hr class="my-0">
                         <h4 class="mb-4 mb-3">
-                            <h6 class="mb-3 text-primary">Absence Management</h6>
+                            <h6 class="mb-3 text-primary">@Localizer["lbl_AbsenceManagement"]</h6>
                         </h4>
                         <div class="mb-3 col-md-6">
-                            <label for="AbsentAppID" class="form-label">Automatic Deduction for Absences</label>
+                            <label for="AbsentAppID" class="form-label">@Localizer["lbl_AutomaticDeductionforAbsences"]/label>
                             <select asp-for="AbsentAppID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
                                 <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
@@ -143,20 +144,20 @@
 
                         <hr class="my-0">
                         <h4 class="mb-4 mb-3">
-                            <h6 class="mb-3 text-primary">Flexible Duty Management</h6>
+                            <h6 class="mb-3 text-primary">@Localizer["lbl_FlexibleDutyManagement"]</h6>
                         </h4>
                         <div class="mb-3 col-md-6">
-                            <label for="FlexibleDutyHourID" class="form-label">Flexible Duty Hours Allowed</label>
+                            <label for="FlexibleDutyHourID" class="form-label">@Localizer["lbl_FlexibleDutyHoursAllowed"]</label>
                             <select asp-for="FlexibleDutyHourID" asp-items="@(new SelectList(ViewBag.ActiveYNIDList, "Value", "Text"))" class="form-control form-control-lg">
                                 <option>@Localizer["lbl_Pleaseselect"]</option>
                             </select>
                         </div>
                         <hr class="my-0">
                             <h4 class="mb-4 mb-3">
-                            <h6 class="mb-3 text-primary">Working Day Management</h6>
+                            <h6 class="mb-3 text-primary">@Localizer["lbl_WorkingDayManagement"]</h6>
                         </h4>
                         <div class="mb-3 col-md-6">
-                            <label for="WorkingDayInWeek" class="form-label">Number of Working Days in a Week</label>
+                            <label for="WorkingDayInWeek" class="form-label">@Localizer["lbl_NumberofWorkingDaysinaWeek"]</label>
                             <input type="number" class="form-control form-control-lg"
                                    id="WorkingDayInWeek" name="WorkingDayInWeek"
                                    value="@Model.WorkingDayInWeek" min="5" max="6" />
@@ -165,7 +166,7 @@
                     </div>
                     <div class="mt-2">
                         <button type="submit" class="btn btn-primary me-2">@Localizer["lbl_SaveChanges"]</button>
-                        <button type="reset" class="btn btn-outline-secondary">Cancel</button>
+                        <button type="reset" class="btn btn-outline-secondary">@Localizer["lbl_Cancel"]</button>
                     </div>
                 </form>
             </div>
