@@ -2,10 +2,10 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-	ViewData["Title"] = @Localizer["lbl_Setup"] + " - Access Rights By User Setup";
-}
+    ViewData["Title"] = @Localizer["lbl_Setup"] + " - " + @Localizer["lbl_AccessRightsByUserSetup"];
+    }
 
-@section PageScripts {
+        @section PageScripts {
 
     <script>
         $(document).ready(function () {
@@ -71,7 +71,7 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">@Localizer["lbl_Setup"] /</span> Access Rights By User Setup
+        <span class="text-muted fw-light">@Localizer["lbl_Setup"] /</span> @Localizer["lbl_AccessRightsByUserSetup"]
 </h4>
 <div class="row">
     <div class="col-md-12">
@@ -83,7 +83,7 @@
                     <div class="col-md-8" style="padding-bottom: 15px;">
                         <!-- Search Field and Button -->
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="@Localizer["lbl_Search"] @Localizer["lbl_UserName"]" id="searchUserNameInput">
+                            <input type="text" class="form-control" placeholder="@Localizer["lbl_SearchUserName"]" id="searchUserNameInput">
                             <button class="btn btn-outline-secondary" type="button" id="searchUserNameButton">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -103,7 +103,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Access Rights By @Localizer["lbl_UserList"]</h5>
+            <h5 class="card-header">Access Rights By @Localizer["lbl_AccessRightsByUserSetupList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
@@ -113,7 +113,7 @@
                                     <p class="text-nowrap">@Localizer["lbl_UserName"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">@Localizer["lbl_Total"] Access Count</p>
+                                    <p class="text-nowrap">@Localizer["lbl_TotalAccessCount"]</p>
                                 </div>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
                                         <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_UserName"] : </span>@Html.DisplayFor(modelItem => item.UserName)</p>
                                     </div>
                                     <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Total"] Access Count : </span>@Html.DisplayFor(modelItem => item.TotalAccessCount)</p>
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_TotalAccessCount"] : </span>@Html.DisplayFor(modelItem => item.TotalAccessCount)</p>
                                     </div>
                                 </div>
                             </div>

@@ -1,6 +1,9 @@
 @model IEnumerable<Exampler_ERP.Models.FI_Voucher>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@{
+    Layout = "_PrintLayout";
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,7 +35,7 @@
         <thead>
             <tr>
                 <th>@Localizer["lbl_VoucherID"]</th>
-                <th>@Localizer["lbl_Date"] /th>
+                <th>@Localizer["lbl_Date"] </th>
                 <th>@Localizer["lbl_HeadofAccount"]</th>
                 <th>@Localizer["lbl_CreditAmount"]</th>
             </tr>

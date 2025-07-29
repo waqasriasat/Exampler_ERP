@@ -1,6 +1,9 @@
 @model IEnumerable<Exampler_ERP.Models.CR_FaceAttendance>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@{
+    Layout = "_PrintLayout";
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,7 +36,7 @@
             <tr>
                 <th>Localizer["lbl_FaceAttendanceID"]</th>
                 <th>@Localizer["lbl_EmployeeName"]</th>
-                <th>@Localizer["lbl_Date"] /th>
+                <th>@Localizer["lbl_Date"] </th>
                 <th>@Localizer["lbl_InTime"]</th>
                 <th>@Localizer["lbl_OutTimes"]</th>
                 <th>@Localizer["lbl_DutyHours"] Days</th>

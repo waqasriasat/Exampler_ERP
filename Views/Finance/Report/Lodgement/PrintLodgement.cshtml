@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    Layout = "_BlankLayout";
+    Layout = "_PrintLayout";
 }
 <!DOCTYPE html>
 <html>
@@ -69,7 +69,7 @@
         <thead>
             <tr>
                 <th>@Localizer["lbl_VoucherID"]</th>
-                <th>@Localizer["lbl_Date"] /th>
+                <th>@Localizer["lbl_Date"] </th>
                 <th>@Localizer["lbl_VendorPayee"]</th>
                 <th>@Localizer["lbl_InstrumentNumber"]</th>
                 <th>@Localizer["lbl_DebitAmount"]</th>

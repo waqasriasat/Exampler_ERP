@@ -1,6 +1,7 @@
 @model Exampler_ERP.Models.Temp.EmployeeBioDataViewModel
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+
 @{
 	ViewData["Title"] = Localizer["lbl_EmployeementBiodata"];
 	var genderList = ViewBag.GenderList as List<SelectListItem>;

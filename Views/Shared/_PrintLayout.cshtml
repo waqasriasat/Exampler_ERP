@@ -1,0 +1,78 @@
+@await Html.PartialAsync("Sections/_Variables")
+@{
+    TempData.Keep();
+    Layout = "_CommonMasterLayout";
+    ViewData["contentNavbar"] = true;
+
+    @* Display elements *@
+    ViewData["isNavbar"] = (ViewData["isNavbar"] ??= true);
+    ViewData["isMenu"] = (ViewData["isMenu"] ??= true);
+    ViewData["isFlex"] = (ViewData["isFlex"] ??= false);
+    ViewData["isFooter"] = (ViewData["isFooter"] ??= true);
+    @* ViewData["customizerHidden"] = (ViewData["customizerHidden"] ??= "customizer-hide"); *@
+
+
+    @*HTML Classes *@
+    ViewData["navbarDetached"] = (ViewData["navbarDetached"] ?? "navbar-detached");
+
+    @*Content classes *@
+    ViewData["container"] = (ViewData["container"] ?? "container-xxl");
+    ViewData["containerNav"] = (ViewData["containerNav"] ?? "container-xxl");
+}
+@section VendorStyles {
+    @RenderSection("VendorStyles", required: false)
+}
+
+@section PageStyles {
+    @RenderSection("PageStyles", required: false)
+}
+
+@section VendorScripts {
+    @RenderSection("VendorScripts", required: false)
+}
+
+@section PageScripts {
+    @RenderSection("PageScripts", required: false)
+}
+
+
+
+<div class='layout-wrapper layout-content-navbar layout-without-menu'>
+    <div class='layout-container'>
+        <style>
+            .watermark {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                opacity: 0.1; /* transparency */
+                z-index: 0;
+                width: 50%;
+                pointer-events: none; /* so user can't click it */
+            }
+
+            h2 {
+                text-align: center;
+                padding-top: 35px;
+                font-size: x-large;
+            }
+        </style>
+
+        <div class="" style="width: 100%;">
+            <div class="content-wrapper">
+
+                <div class='@ViewData["container"] @(Convert.ToBoolean(@ViewData["isFlex"]) ? "d-flex align-items-stretch flex-grow-1 p-0" : "flex-grow-1 container-p-y")'>
+                    <img src="~/img/favicon/SideLogoWithName.png" width="25%" />
+                    <img src="~/img/favicon/SideLogoWithName.png" class="watermark" />
+                    @RenderBody()
+                </div>
+                <div class="content-backdrop fade"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="drag-target"></div>
+</div>
+
+

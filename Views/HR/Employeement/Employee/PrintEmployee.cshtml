@@ -2,6 +2,9 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
+    Layout = "_PrintLayout";
+}
+@{
     var GenderList = (List<SelectListItem>)ViewBag.GenderList;
     var MaritalStatusList = (List<SelectListItem>)ViewBag.MaritalStatusList;
     var ReligionList = (List<SelectListItem>)ViewBag.ReligionList;

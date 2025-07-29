@@ -1,10 +1,13 @@
 @model IEnumerable<Exampler_ERP.Models.CR_AccessRightsByRole>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@{
+    Layout = "_PrintLayout";
+}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@Localizer["lbl_Print"]  Access Rights By Role Setup</title>
+    <title>@Localizer["lbl_PrintAccessRightsByRoleSetup "]</title>
     <style>
         table {
             width: 100%;
@@ -27,11 +30,11 @@
     </style>
 </head>
 <body style="background-color:white">
-    <h2>Access Rights By Role Setup List</h2>
+    <h2>@Localizer["lbl_AccessRightsByRoleSetupList"]</h2>
     <table>
         <thead>
             <tr>
-                <th>Role @Localizer["lbl_ID"]</th>
+                <th>@Localizer["lbl_RoleID"]</th>
                 <th>@Localizer["lbl_RoleTypeName"]</th>
                 <th>@Localizer["lbl_Rank"]</th>
                 <th>@Localizer["lbl_RoleType"]</th>
