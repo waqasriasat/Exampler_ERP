@@ -8,7 +8,7 @@ body {
 }
 
 .layout-menu-fixed .layout-page {
-  margin-left: -260px;
+  margin-left: 0px;
   margin-right: 260px; /* Adjust based on menu width */
 }
 
@@ -84,6 +84,41 @@ body {
   transition: transform .3s linear;
   transition: transform .3s linear, -webkit-transform .3s linear;
 }
+.modal .modal-header .btn-close {
+  margin-top: -1.25rem;
+  margin-left: -8%;
+}
+.menu-vertical .menu-item .menu-toggle::after {
+  right: 13rem !important;
+}
+.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+  margin-right: calc(var(--bs-border-width) * -1) !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  padding-right: 4% !important;
+}
+
+.input-group-merge .input-group-text:last-child {
+  border-right: 0 !important;
+}
+
+.input-group-text {
+  background-color: #007bff !important;
+  color: white !important;
+  border-radius: 0.5rem 0 0 0.5rem !important;
+}
+.input-group:not(.has-validation) > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating), .input-group:not(.has-validation) > .dropdown-toggle:nth-last-child(n+3), .input-group:not(.has-validation) > .form-floating:not(:last-child) > .form-control, .input-group:not(.has-validation) > .form-floating:not(:last-child) > .form-select {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  margin-right: calc(var(--bs-border-width) * -1) !important;
+  padding-right: 4% !important;
+}
+
+.input-group-merge .form-control:not(:last-child) {
+  padding-left: 0 !important;
+  border-left: 0 !important;
+}
+
 @media (max-width: 1199.98px) {
   .layout-menu {
     right: 0 !important;
@@ -95,5 +130,10 @@ body {
   .layout-menu-fixed .layout-page {
     margin-left: 0px;
     margin-right: 0px; /* Adjust based on menu width */
+  }
+}
+@media (min-width: 1200px) {
+  .layout-menu-fixed:not(.layout-menu-collapsed) .layout-page, .layout-menu-fixed-offcanvas:not(.layout-menu-collapsed) .layout-page {
+    padding-left: 0rem;
   }
 }
