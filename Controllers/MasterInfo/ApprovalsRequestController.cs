@@ -1298,7 +1298,7 @@ namespace Exampler_ERP.Controllers.MasterInfo
 
         ViewBag.EmployeesList = await _utils.GetEmployee();
         ViewBag.OverTimeTypesList = await _utils.GetOverTimeTypes();
-        ViewBag.OvertimeRatesList = await _utils.GetOverTimeRates();
+        ViewBag.OverTimeRatesList = await _utils.GetOverTimeRates();
         ViewBag.MonthsList = await _utils.GetMonthsTypes();
 
         return PartialView("~/Views/MasterInfo/ApprovalsRequest/DetailsProcessTypeApproval.cshtml", OverTime);

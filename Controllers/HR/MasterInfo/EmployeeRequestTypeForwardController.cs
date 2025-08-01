@@ -193,7 +193,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       using (var package = new ExcelPackage())
       {
         var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_EmployeeRequestTypeForward"]);
-        worksheet.Cells["A1"].Value = _localizer["lbl_EmployeeRequestTypeApprovalID"];
+        worksheet.Cells["A1"].Value = _localizer["lbl_EmployeeRequestTypeForwardID"];
         worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeRequestTypeName"];
         worksheet.Cells["C1"].Value = _localizer["lbl_RoleType"];
 

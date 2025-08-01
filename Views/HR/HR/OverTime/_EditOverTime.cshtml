@@ -58,9 +58,9 @@
                 <span asp-validation-for="Hours" class="text-danger"></span>
             </div>
             <div class="col-6">
-                <label asp-for="OvertimeRateID" class="form-label fw-bold">@Localizer["lbl_OverTimeRate"]</label>
-                <select asp-for="OvertimeRateID" asp-items="@(new SelectList(ViewBag.OvertimeRatesList, "Value", "Text"))" class="form-control form-control-lg"></select>
-                <span asp-validation-for="OvertimeRateID" class="text-danger"></span>
+                <label asp-for="OverTimeRateID" class="form-label fw-bold">@Localizer["lbl_OverTimeRate"]</label>
+                <select asp-for="OverTimeRateID" asp-items="@(new SelectList(ViewBag.OverTimeRatesList, "Value", "Text"))" class="form-control form-control-lg"></select>
+                <span asp-validation-for="OverTimeRateID" class="text-danger"></span>
             </div>
             <div class="col-6">
                 <label asp-for="Amount" class="form-label fw-bold">@Localizer["lbl_Amount"]</label>

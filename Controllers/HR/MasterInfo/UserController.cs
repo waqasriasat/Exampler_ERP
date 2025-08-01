@@ -247,7 +247,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_User"]);
         worksheet.Cells["A1"].Value = _localizer["lbl_UserID"];
         worksheet.Cells["B1"].Value = _localizer["lbl_UserName"];
-        worksheet.Cells["C1"].Value = _localizer["lbl_RoleName"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_RoleTypeName"];
         worksheet.Cells["D1"].Value = _localizer["lbl_Active"];
 
 

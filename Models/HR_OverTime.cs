@@ -19,8 +19,8 @@ namespace Exampler_ERP.Models
     public int? Year { get; set; }
     public int? Days { get; set; }
     public int? Hours { get; set; }
-    public int? OvertimeRateID { get; set; }
-    [ForeignKey("OvertimeRateID")]
+    public int? OverTimeRateID { get; set; }
+    [ForeignKey("OverTimeRateID")]
     public virtual Settings_OverTimeRate? OverTimeRate { get; set; }
     public float? Amount { get; set; }
     public int? DeleteYNID { get; set; }

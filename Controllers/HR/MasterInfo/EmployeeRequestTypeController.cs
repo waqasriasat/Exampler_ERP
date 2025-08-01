@@ -161,7 +161,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       var EmployeeRequestTypees = await _appDBContext.Settings_EmployeeRequestTypes
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
-      return View("~/Views/HR/MasterInfo/EmployeeRequestType/PrintEmployeeRequestTypes.cshtml", EmployeeRequestTypees);
+      return View("~/Views/HR/MasterInfo/EmployeeRequestType/PrintEmployeeRequestType.cshtml", EmployeeRequestTypees);
     }
 
   }

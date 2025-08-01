@@ -314,15 +314,15 @@
                 }
                 @if (accessRightByRoleList.Contains(62) || accessRightByUsertList.Contains(62))
                 {
-                    @*OvertimeRate*@
+                    @*OverTimeRate*@
                     <div class="col-lg-3 col-md-6 col-sm-12">
-                        <a asp-controller="OvertimeRate" asp-action="Index">
+                        <a asp-controller="OverTimeRate" asp-action="Index">
                             <div class="modern-card shadow mb-4">
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
                                         <strong class="text-primary">@Localizer["lbl_OverTimeRate"]</strong>
                                         <h4 class="font-weight-bold text-dark">
-                                            @ViewBag.OvertimeRateCount
+                                            @ViewBag.OverTimeRateCount
                                         </h4>
                                     </div>
                                     <div class="icon bg-primary text-white">

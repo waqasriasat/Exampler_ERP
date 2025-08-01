@@ -47,7 +47,7 @@ namespace Exampler_ERP.Controllers.HR.Main
       ViewBag.RolesCount = await _appDBContext.Settings_RoleTypes.CountAsync();
       ViewBag.UsersCount = await _appDBContext.CR_Users.CountAsync();
       ViewBag.AdditionalAllowanceTypeCount = await _appDBContext.Settings_AdditionalAllowanceTypes.CountAsync();
-      ViewBag.OvertimeRateCount = await _appDBContext.Settings_OverTimeRates.CountAsync();
+      ViewBag.OverTimeRateCount = await _appDBContext.Settings_OverTimeRates.CountAsync();
       ViewBag.EmployeeRequestTypeCount = await _appDBContext.Settings_EmployeeRequestTypes.CountAsync();
       ViewBag.EmployeeRequestSetupCount = await _appDBContext.HR_EmployeeRequestTypeApprovalSetups.CountAsync();
       ViewBag.EmployeeRequestForwordCount = await _appDBContext.HR_EmployeeRequestTypeForwards.CountAsync();

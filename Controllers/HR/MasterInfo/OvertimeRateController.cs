@@ -9,16 +9,16 @@ using Microsoft.Extensions.Localization;
 
 namespace Exampler_ERP.Controllers.HR.MasterInfo
 {
-  public class OvertimeRateController : PositionController
+  public class OverTimeRateController : PositionController
   {
     private readonly AppDBContext _appDBContext;
-    private readonly IStringLocalizer<OvertimeRateController> _localizer;
+    private readonly IStringLocalizer<OverTimeRateController> _localizer;
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
 
 
-    public OvertimeRateController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<OvertimeRateController> localizer) 
+    public OverTimeRateController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<OverTimeRateController> localizer) 
     : base(appDBContext)
     {
       _appDBContext = appDBContext;
@@ -50,74 +50,74 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       return View("~/Views/HR/MasterInfo/OverTimeRate/OverTimeRate.cshtml", OverTimeRates);
     }
 
-    public async Task<IActionResult> OvertimeRate()
+    public async Task<IActionResult> OverTimeRate()
     {
-      var OvertimeRates = await _appDBContext.Settings_OverTimeRates.ToListAsync();
-      return Ok(OvertimeRates);
+      var OverTimeRates = await _appDBContext.Settings_OverTimeRates.ToListAsync();
+      return Ok(OverTimeRates);
     }// Add the Edit action
     public async Task<IActionResult> Edit(int id)
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      var OvertimeRate = await _appDBContext.Settings_OverTimeRates.FindAsync(id);
-      if (OvertimeRate == null)
+      var OverTimeRate = await _appDBContext.Settings_OverTimeRates.FindAsync(id);
+      if (OverTimeRate == null)
       {
         return NotFound();
       }
-      return PartialView("~/Views/HR/MasterInfo/OvertimeRate/EditOvertimeRate.cshtml", OvertimeRate);
+      return PartialView("~/Views/HR/MasterInfo/OverTimeRate/EditOverTimeRate.cshtml", OverTimeRate);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(Settings_OverTimeRate OvertimeRate)
+    public async Task<IActionResult> Edit(Settings_OverTimeRate OverTimeRate)
     {
       if (ModelState.IsValid)
       {
-        if (OvertimeRate.OverTimeRateValue == null && OvertimeRate.OverTimeRateValue == 0)
+        if (OverTimeRate.OverTimeRateValue == null && OverTimeRate.OverTimeRateValue == 0)
         {
-          return Json(new { success = false, message = "OvertimeRate Value field is required. Please enter a valid text value." });
+          return Json(new { success = false, message = "OverTimeRate Value field is required. Please enter a valid text value." });
         }
-        _appDBContext.Update(OvertimeRate);
+        _appDBContext.Update(OverTimeRate);
         await _appDBContext.SaveChangesAsync();
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Overtime Rate Updated successfully.");
         return Json(new { success = true });
       }
-      return Json(new { success = false, message = "Error creating OvertimeRate Value. Please check the inputs." });
+      return Json(new { success = false, message = "Error creating OverTimeRate Value. Please check the inputs." });
     }
     [HttpGet]
     public async Task<IActionResult> Create()
     {
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
-      return PartialView("~/Views/HR/MasterInfo/OvertimeRate/AddOvertimeRate.cshtml", new Settings_OverTimeRate());
+      return PartialView("~/Views/HR/MasterInfo/OverTimeRate/AddOverTimeRate.cshtml", new Settings_OverTimeRate());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Settings_OverTimeRate OvertimeRate)
+    public async Task<IActionResult> Create(Settings_OverTimeRate OverTimeRate)
     {
       if (ModelState.IsValid)
       {
-        if (OvertimeRate.OverTimeRateValue == null && OvertimeRate.OverTimeRateValue == 0)
+        if (OverTimeRate.OverTimeRateValue == null && OverTimeRate.OverTimeRateValue == 0)
         {
-          return Json(new { success = false, message = "OvertimeRate Value field is required. Please enter a valid text value." });
+          return Json(new { success = false, message = "OverTimeRate Value field is required. Please enter a valid text value." });
         }
-        OvertimeRate.DeleteYNID = 0;
-        _appDBContext.Settings_OverTimeRates.Add(OvertimeRate);
+        OverTimeRate.DeleteYNID = 0;
+        _appDBContext.Settings_OverTimeRates.Add(OverTimeRate);
         await _appDBContext.SaveChangesAsync();
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Overtime Rate Created successfully.");
         return Json(new { success = true });
       }
-      return Json(new { success = false, message = "Error creating OvertimeRate Value. Please check the inputs." });
+      return Json(new { success = false, message = "Error creating OverTimeRate Value. Please check the inputs." });
     }
     public async Task<IActionResult> Delete(int id)
     {
-      var OvertimeRate = await _appDBContext.Settings_OverTimeRates.FindAsync(id);
-      if (OvertimeRate == null)
+      var OverTimeRate = await _appDBContext.Settings_OverTimeRates.FindAsync(id);
+      if (OverTimeRate == null)
       {
         return NotFound();
       }
 
-      OvertimeRate.ActiveYNID = 2;
-      OvertimeRate.DeleteYNID = 1;
+      OverTimeRate.ActiveYNID = 2;
+      OverTimeRate.DeleteYNID = 1;
 
-      _appDBContext.Settings_OverTimeRates.Update(OvertimeRate);
+      _appDBContext.Settings_OverTimeRates.Update(OverTimeRate);
       await _appDBContext.SaveChangesAsync();
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Overtime Rate Deleted successfully.");
       return Json(new { success = true });
@@ -126,7 +126,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var OvertimeRatees = await _appDBContext.Settings_OverTimeRates
+      var OverTimeRatees = await _appDBContext.Settings_OverTimeRates
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
 
@@ -138,11 +138,11 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
         worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
 
 
-        for (int i = 0; i < OvertimeRatees.Count; i++)
+        for (int i = 0; i < OverTimeRatees.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = OvertimeRatees[i].OverTimeRateTypeID;
-          worksheet.Cells[i + 2, 2].Value = OvertimeRatees[i].OverTimeRateValue;
-          worksheet.Cells[i + 2, 3].Value = OvertimeRatees[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
+          worksheet.Cells[i + 2, 1].Value = OverTimeRatees[i].OverTimeRateTypeID;
+          worksheet.Cells[i + 2, 2].Value = OverTimeRatees[i].OverTimeRateValue;
+          worksheet.Cells[i + 2, 3].Value = OverTimeRatees[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
         }
 
         worksheet.Cells["A1:C1"].Style.Font.Bold = true;
@@ -158,10 +158,10 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     }
     public async Task<IActionResult> Print()
     {
-      var OvertimeRatees = await _appDBContext.Settings_OverTimeRates
+      var OverTimeRatees = await _appDBContext.Settings_OverTimeRates
           .Where(b => b.DeleteYNID != 1)
           .ToListAsync();
-      return View("~/Views/HR/MasterInfo/OvertimeRate/PrintOvertimeRate.cshtml", OvertimeRatees);
+      return View("~/Views/HR/MasterInfo/OverTimeRate/PrintOverTimeRate.cshtml", OverTimeRatees);
     }
 
   }

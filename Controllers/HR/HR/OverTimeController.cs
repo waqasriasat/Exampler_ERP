@@ -88,7 +88,7 @@ namespace Exampler_ERP.Controllers.HR.HR
       // Load necessary data for dropdowns or lists
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.OverTimeTypesList = await _utils.GetOverTimeTypes();
-      ViewBag.OvertimeRatesList = await _utils.GetOverTimeRates();
+      ViewBag.OverTimeRatesList = await _utils.GetOverTimeRates();
       ViewBag.MonthsList = await _utils.GetMonthsTypes();
 
       // Find the OverTime by ID
@@ -131,7 +131,7 @@ namespace Exampler_ERP.Controllers.HR.HR
       // If model state is invalid, reload dropdowns or lists
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.OverTimeTypesList = await _utils.GetOverTimeTypes();
-      ViewBag.OvertimeRatesList = await _utils.GetOverTimeRates();
+      ViewBag.OverTimeRatesList = await _utils.GetOverTimeRates();
       ViewBag.MonthsList = await _utils.GetMonthsTypes();
 
       // Return the partial view with validation errors
@@ -143,7 +143,7 @@ namespace Exampler_ERP.Controllers.HR.HR
     {
       ViewBag.EmployeesList = await _utils.GetEmployee();
       ViewBag.OverTimeTypesList = await _utils.GetOverTimeTypes();
-      ViewBag.OvertimeRatesList = await _utils.GetOverTimeRates();
+      ViewBag.OverTimeRatesList = await _utils.GetOverTimeRates();
       ViewBag.MonthsList = await _utils.GetMonthsTypes();
       return PartialView("~/Views/HR/HR/OverTime/AddOverTime.cshtml", new HR_OverTime());
     }

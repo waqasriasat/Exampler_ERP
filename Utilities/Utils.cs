@@ -322,18 +322,18 @@ namespace Exampler_ERP.Utilities
     }
     public async Task<List<SelectListItem>> GetOverTimeRates()
     {
-      var overTimeRateList = await _appDBContext.Settings_OverTimeRates
+      var OverTimeRateList = await _appDBContext.Settings_OverTimeRates
           .Select(c => new SelectListItem
           {
-            Value = c.OverTimeRateTypeID.ToString(), // Use OvertimeRateTypeID here
-            Text = c.OverTimeRateValue.ToString() // Ensure OvertimeRateValue is a string
+            Value = c.OverTimeRateTypeID.ToString(), // Use OverTimeRateTypeID here
+            Text = c.OverTimeRateValue.ToString() // Ensure OverTimeRateValue is a string
           })
           .ToListAsync();
 
       // Add the default "0" item
-      overTimeRateList.Insert(0, new SelectListItem { Value = "0", Text = "0" });
+      OverTimeRateList.Insert(0, new SelectListItem { Value = "0", Text = "0" });
 
-      return overTimeRateList;
+      return OverTimeRateList;
     }
     public async Task<List<SelectListItem>> GetVacationTypes()
     {

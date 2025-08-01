@@ -25,7 +25,7 @@
                 console.log("Serialized form data:", formData); // Log serialized data for debugging
                 $.post('@Url.Action("Edit", "EmployeeRequestTypeApprovalSetup")', formData, function (response) {
 				   if (response.success) {
-							$('#addEmployeeRequestTypeApprovalSetupModal').modal('hide');
+							$('#editEmployeeRequestTypeApprovalSetupModal').modal('hide');
 
 							// ✅ Ab poora list AJAX se reload karo
 							$.get('@Url.Action("Index", "EmployeeRequestTypeApprovalSetup")', function (partialHtml) {

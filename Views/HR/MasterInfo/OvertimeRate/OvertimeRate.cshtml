@@ -23,7 +23,7 @@
                 var formData = $('#editOverTimeRateForm').serialize();
                 $.post('@Url.Action("Edit", "OverTimeRate")', formData, function (response) {
 					if (response.success) {
-							$('#addOverTimeRateModal').modal('hide');
+							$('#editOverTimeRateModal').modal('hide');
 
 							// ✅ Ab poora list AJAX se reload karo
 							$.get('@Url.Action("Index", "OverTimeRate")', function (partialHtml) {
@@ -43,10 +43,11 @@
             });
 
             // Save new OverTimeRate form
-			$('#OverTimeRateListContainer').on('click', '.deleteOverTimeRateLink', function (e) {
-                var formData = $('#addOverTimeRateForm').serialize();
-                $.post('@Url.Action("Create", "OverTimeRate")', formData, function (response) {
+			$('#addOverTimeRateModalContainer').on('click', '#saveNewOverTimeRate', function (e) {
+			    var formData = $('#addOverTimeRateForm').serialize();
+				$.post('@Url.Action("Create", "OverTimeRate")', formData, function (response) {
 				   if (response.success) {
+					   $('#addOverTimeRateModal').modal('hide');
 					$.get('@Url.Action("Index", "OverTimeRate")', function (partialHtml) {
 					  var html = $(partialHtml).find('#OverTimeRateListContainer').html();
 					  $('#OverTimeRateListContainer').html(html);
@@ -68,18 +69,19 @@
             });
 
             // Delete OverTimeRate
-            $('.deleteOverTimeRateLink').click(function (e) {
+			$('#OverTimeRateListContainer').on('click', '.deleteOverTimeRateLink', function (e) {
                 e.preventDefault();
                 var OverTimeRateId = $(this).data('id');
                 $.post('@Url.Action("Delete", "OverTimeRate")', { id: OverTimeRateId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
+					if (response.success) {
+					$.get('@Url.Action("Index", "OverTimeRate")', function (partialHtml) {
+					  var html = $(partialHtml).find('#OverTimeRateListContainer').html();
+					  $('#OverTimeRateListContainer').html(html);
+					});
+				  }
                 });
             });
-
+			
             // Print functionality
             $('#printButton').click(function () {
                 window.print();
