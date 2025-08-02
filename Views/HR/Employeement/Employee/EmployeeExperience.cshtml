@@ -1,6 +1,34 @@
 @model Exampler_ERP.Models.Temp.EmployeeExperienceViewModel
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+<script>
+    $(document).ready(function () {
+        $('.deleteEmployeeExperienceLink').click(function (e) {
+            e.preventDefault();
+            var experienceId = $(this).data('id');
+
+            if (confirm('Are you sure you want to delete this Experience PDF?')) {
+                $.post('@Url.Action("DeleteEmployeeExperience", "Employee")', { id: experienceId })
+                    .done(function (response) {
+                        if (response.success) {
+                            $('#employeeExperienceModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "Employee")', function (partialHtml) {
+                                var html = $(partialHtml).find('#EmployeeListContainer').html();
+                                $('#EmployeeListContainer').html(html);
+                            });
+                        } else {
+                            alert("Deletion failed. Please try again.");
+                        }
+                    })
+                    .fail(function () {
+                        alert("An error occurred while deleting. Please contact support.");
+                    });
+            }
+        });
+    });
+</script>
 <div class="modal fade" id="employeeExperienceModal" tabindex="-1" role="dialog" aria-labelledby="employeeExperienceModalLabel" aria-hidden="true" style="--bs-modal-width: 60rem;">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">

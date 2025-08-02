@@ -1,28 +1,6 @@
 @model IEnumerable<Exampler_ERP.Models.HR_EmployeeExperience>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-<script>
-    $(document).ready(function () {
-        $('.deleteEmployeeExperienceLink').click(function (e) {
-            e.preventDefault();
-            var experienceId = $(this).data('id');
-
-            // Show confirmation dialog
-            if (confirm('Are you sure you want to delete this Experience PDF?')) {
-                // If user clicks 'Yes', proceed with the deletion
-                $.post('@Url.Action("DeleteEmployeeExperience", "Employee")', { id: experienceId }, function (response) {
-                    if (response.success) {
-                        
-                    } else {
-                        showError
-                    }
-                });
-            } else {
-                // If user clicks 'No', do nothing
-            }
-        });
-    });
-</script>
 
 <div class="row">
     <div class="col-md-12">

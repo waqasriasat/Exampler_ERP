@@ -24,7 +24,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
 
 
-    public EmployeeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeController> localizer) 
+    public EmployeeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<EmployeeController> localizer)
     : base(appDBContext)
     {
       _appDBContext = appDBContext;
@@ -53,8 +53,6 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       }
       return View("~/Views/HR/Employeement/Employee/Employee.cshtml", employees);
     }
-
-
     public async Task<IActionResult> GetEmployeeSuggestions(string term)
     {
       var result = await _utils.GetSearchingEmployee(term);
@@ -64,7 +62,6 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       }
       return Json(result);
     }
-
     public async Task<IActionResult> Employee()
     {
       var employees = await _appDBContext.HR_Employees.ToListAsync();
@@ -92,6 +89,20 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     [HttpPost]
     public async Task<IActionResult> Edit(HR_Employee employee, IFormFile profilePicture, string? ExistingPicture)
     {
+      if (profilePicture != null && profilePicture.Length > 0)
+      {
+        using (var memoryStream = new MemoryStream())
+        {
+          await profilePicture.CopyToAsync(memoryStream);
+          employee.Picture = memoryStream.ToArray();
+        }
+      }
+      else if (!string.IsNullOrEmpty(ExistingPicture))
+      {
+        employee.Picture = Convert.FromBase64String(ExistingPicture);
+        // Remove ModelState error since we're restoring image
+        ModelState.Remove("profilePicture");
+      }
       if (ModelState.IsValid)
       {
         if (string.IsNullOrEmpty(employee.FirstName))
@@ -111,18 +122,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           return Json(new { success = false, message = "Password field is required. Please enter a valid text value." });
         }
 
-        if (profilePicture != null && profilePicture.Length > 0)
-        {
-          using (var memoryStream = new MemoryStream())
-          {
-            await profilePicture.CopyToAsync(memoryStream);
-            employee.Picture = memoryStream.ToArray();
-          }
-        }
-        else if (!string.IsNullOrEmpty(ExistingPicture))
-        {
-          employee.Picture = Convert.FromBase64String(ExistingPicture);
-        }
+
         employee.UserName = CR_CipherKey.Encrypt(employee.UserName);
         employee.Password = CR_CipherKey.Encrypt(employee.Password);
         _appDBContext.Update(employee);
@@ -414,7 +414,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         var stream = new MemoryStream();
         package.SaveAs(stream);
         stream.Position = 0;
-        string excelName = _localizer["lbl_Employee"]+$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        string excelName = _localizer["lbl_Employee"] + $"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }
@@ -547,7 +547,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       await _appDBContext.SaveChangesAsync();
 
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Profile picture updated successfully!");
-      return Json(new { success = true, message = "Profile picture updated successfully!" });
+      return Json(new { success = true });
 
     }
     public async Task<IActionResult> DirectManager(int id)
@@ -587,15 +587,15 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       if (model.ReportToID == model.EmployeeID)
       {
-        ModelState.AddModelError("", "An employee cannot report to themselves.");
-        return View(model); // Return with validation error
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "An employee cannot report to themselves.");
+        return Json(new { success = false });
       }
 
       employee.ReportToID = model.ReportToID;
 
       await _appDBContext.SaveChangesAsync();
-
-      return Json(new { success = true, message = "Direct Manager updated successfully!" });
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Direct Manager updated successfully!");
+      return Json(new { success = true });
     }
     public async Task<IActionResult> Education(int id)
     {
@@ -640,8 +640,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           }
           else
           {
-            ModelState.AddModelError("", "Only PDF files are allowed.");
-            return PartialView("~/Views/HR/Employeement/Employee/EmployeeEducation.cshtml", model);
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Only PDF files are allowed.");
+            return Json(new { success = false });
           }
         }
 
@@ -655,7 +655,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         }
 
         await _appDBContext.SaveChangesAsync();
-
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Education updated successfully!");
         return Json(new { success = true });
       }
       model.EmployeeEducations = await _appDBContext.HR_EmployeeEducations
@@ -719,13 +719,9 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       _appDBContext.HR_EmployeeEducations.Remove(education);
       await _appDBContext.SaveChangesAsync();
-
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Deleted Successfully!");
       return Json(new { success = true });
     }
-
-    //////
-    ///
-
     public async Task<IActionResult> Experience(int id)
     {
       // Create a new Experience form (empty form)
@@ -769,8 +765,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           }
           else
           {
-            ModelState.AddModelError("", "Only PDF files are allowed.");
-            return PartialView("~/Views/HR/Employeement/Employee/EmployeeExperience.cshtml", model);
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Only PDF files are allowed.");
+            return Json(new { success = false });
           }
         }
 
@@ -784,7 +780,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         }
 
         await _appDBContext.SaveChangesAsync();
-
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Experience updated successfully!");
         return Json(new { success = true });
       }
       model.EmployeeExperiences = await _appDBContext.HR_EmployeeExperiences
@@ -846,7 +842,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       _appDBContext.HR_EmployeeExperiences.Remove(Experience);
       await _appDBContext.SaveChangesAsync();
-
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Deleted Successfully!");
       return Json(new { success = true });
     }
   }

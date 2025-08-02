@@ -117,27 +117,31 @@ namespace Exampler_ERP.Controllers.HR.Employeement
     [HttpPost]
     public async Task<IActionResult> Edit(HR_Applicant Applicant, IFormFile profilePicture, string ExistingPicture)
     {
+      if (profilePicture != null && profilePicture.Length > 0)
+      {
+        using (var memoryStream = new MemoryStream())
+        {
+          await profilePicture.CopyToAsync(memoryStream);
+          Applicant.Picture = memoryStream.ToArray();
+        }
+      }
+      else if (!string.IsNullOrEmpty(ExistingPicture))
+      {
+        Applicant.Picture = Convert.FromBase64String(ExistingPicture);
+        // Remove ModelState error since we're restoring image
+        ModelState.Remove("profilePicture");
+      }
+      
       if (ModelState.IsValid)
       {
-        if (profilePicture != null && profilePicture.Length > 0)
-        {
-          using (var memoryStream = new MemoryStream())
-          {
-            await profilePicture.CopyToAsync(memoryStream);
-            Applicant.Picture = memoryStream.ToArray();
-          }
-        }
-        else if (!string.IsNullOrEmpty(ExistingPicture))
-        {
-          Applicant.Picture = Convert.FromBase64String(ExistingPicture);
-        }
         _appDBContext.Update(Applicant);
         await _appDBContext.SaveChangesAsync();
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Applicant updated successfully.");
         return Json(new { success = true });
       }
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error updating Applicant. Please check the inputs.");
-      return PartialView("~/Views/HR/Employeement/Applicant/EditApplicant.cshtml", Applicant);
+      return Json(new { success = false });
+      //return PartialView("~/Views/HR/Employeement/Applicant/EditApplicant.cshtml", Applicant);
     }
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -171,8 +175,8 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         return Json(new { success = true });
       }
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Error creating Applicant. Please check the inputs.");
-
-      return PartialView("~/Views/HR/Employeement/Applicant/AddApplicant.cshtml", Applicant);
+      return Json(new { success = false });
+      //return PartialView("~/Views/HR/Employeement/Applicant/AddApplicant.cshtml", Applicant);
     }
     public async Task<IActionResult> Delete(int id)
     {
@@ -194,9 +198,9 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           .Include(b => b.BranchType)
           .ToListAsync();
 
-      ViewBag.GenderList = _utils.GetGender();
-      ViewBag.MaritalStatusList = _utils.GetMaritalStatus();
-      ViewBag.ReligionList = _utils.GetReligion();
+      ViewBag.GenderList = await _utils.GetGender();
+      ViewBag.MaritalStatusList = await _utils.GetMaritalStatus();
+      ViewBag.ReligionList = await _utils.GetReligion();
 
 
       return View("~/Views/HR/Employeement/Applicant/PrintApplicant.cshtml", Applicants);
@@ -217,70 +221,65 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       using (var package = new ExcelPackage())
       {
         var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Applicant"]);
-        worksheet.Cells["B1"].Value = _localizer["lbl_SelectBranch"];
-        worksheet.Cells["E1"].Value = _localizer["lbl_ApplicantID"];
-        worksheet.Cells["G1"].Value = _localizer["lbl_ApplicantName"];
-        worksheet.Cells["I1"].Value = _localizer["lbl_Gender"];
-        worksheet.Cells["J1"].Value = _localizer["lbl_DOB"];
-        worksheet.Cells["K1"].Value = _localizer["lbl_MaritalStatus"];
-        worksheet.Cells["L1"].Value = _localizer["lbl_NoofChildren"];
-        worksheet.Cells["M1"].Value = _localizer["lbl_Phone1"];
-        worksheet.Cells["N1"].Value = _localizer["lbl_Phone2"];
-        worksheet.Cells["O1"].Value = _localizer["lbl_Mobile"];
-        worksheet.Cells["P1"].Value = _localizer["lbl_WhatsApp"];
-        worksheet.Cells["Q1"].Value = _localizer["lbl_Religion"];
-        worksheet.Cells["R1"].Value = _localizer["lbl_Religion"];
-        worksheet.Cells["S1"].Value = _localizer["lbl_Country"];
-        worksheet.Cells["T1"].Value = _localizer["lbl_Fax"];
-        worksheet.Cells["U1"].Value = _localizer["lbl_Email"];
-        worksheet.Cells["V1"].Value = _localizer["lbl_POBox"];
-        worksheet.Cells["W1"].Value = _localizer["lbl_Address"];
-        worksheet.Cells["X1"].Value = _localizer["lbl_IDNumber"];
-        worksheet.Cells["Y1"].Value = _localizer["lbl_IDPlaceofIssue"];
-        worksheet.Cells["AB1"].Value = _localizer["lbl_PassportNumber"];
-        worksheet.Cells["AC1"].Value = _localizer["lbl_PassportPlaceofIssue"];
+        worksheet.Cells["A1"].Value = _localizer["lbl_SelectBranch"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_ApplicantID"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_ApplicantName"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_Gender"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_DOB"];
+        worksheet.Cells["F1"].Value = _localizer["lbl_MaritalStatus"];
+        worksheet.Cells["G1"].Value = _localizer["lbl_NoofChildren"];
+        worksheet.Cells["H1"].Value = _localizer["lbl_Phone1"];
+        worksheet.Cells["I1"].Value = _localizer["lbl_Phone2"];
+        worksheet.Cells["J1"].Value = _localizer["lbl_Mobile"];
+        worksheet.Cells["K1"].Value = _localizer["lbl_WhatsApp"];
+        worksheet.Cells["L1"].Value = _localizer["lbl_Religion"];
+        worksheet.Cells["M1"].Value = _localizer["lbl_Religion"];
+        worksheet.Cells["N1"].Value = _localizer["lbl_Country"];
+        worksheet.Cells["O1"].Value = _localizer["lbl_Fax"];
+        worksheet.Cells["P1"].Value = _localizer["lbl_Email"];
+        worksheet.Cells["Q1"].Value = _localizer["lbl_POBox"];
+        worksheet.Cells["R1"].Value = _localizer["lbl_Address"];
+        worksheet.Cells["S1"].Value = _localizer["lbl_IDNumber"];
+        worksheet.Cells["T1"].Value = _localizer["lbl_IDPlaceofIssue"];
+        worksheet.Cells["U1"].Value = _localizer["lbl_PassportNumber"];
+        worksheet.Cells["V1"].Value = _localizer["lbl_PassportPlaceofIssue"];
 
         for (int i = 0; i < Applicants.Count; i++)
         {
-          worksheet.Cells[i + 2, 2].Value = Applicants[i].BranchType?.BranchTypeName;
-          worksheet.Cells[i + 2, 5].Value = Applicants[i].ApplicantID;
-          worksheet.Cells[i + 2, 7].Value = Applicants[i].FirstName + ' ' + Applicants[i].FatherName + ' ' + Applicants[i].FamilyName;
-          worksheet.Cells[i + 2, 9].Value = Applicants[i].Sex == 0 || Applicants[i].Sex == null
+          worksheet.Cells[i + 2, 1].Value = Applicants[i].BranchType?.BranchTypeName;
+          worksheet.Cells[i + 2, 2].Value = Applicants[i].ApplicantID;
+          worksheet.Cells[i + 2, 3].Value = Applicants[i].FirstName + ' ' + Applicants[i].FatherName + ' ' + Applicants[i].FamilyName;
+          worksheet.Cells[i + 2, 4].Value = Applicants[i].Sex == 0 || Applicants[i].Sex == null
               ? ""
               : GenderList.FirstOrDefault(g => g.Value == Applicants[i].Sex.ToString())?.Text;
-          worksheet.Cells[i + 2, 10].Value = Applicants[i].DOB?.ToString("dd-MMM-yyyy");
-          worksheet.Cells[i + 2, 11].Value = Applicants[i].MaritalStatus == 0 || Applicants[i].MaritalStatus == null
+          worksheet.Cells[i + 2, 5].Value = Applicants[i].DOB?.ToString("dd-MMM-yyyy");
+          worksheet.Cells[i + 2, 6].Value = Applicants[i].MaritalStatus == 0 || Applicants[i].MaritalStatus == null
               ? ""
               : MaritalStatusList.FirstOrDefault(m => m.Value == Applicants[i].MaritalStatus.ToString())?.Text;
-          worksheet.Cells[i + 2, 12].Value = Applicants[i].NoOfChildren;
-          worksheet.Cells[i + 2, 13].Value = Applicants[i].Phone1;
-          worksheet.Cells[i + 2, 14].Value = Applicants[i].Phone2;
-          worksheet.Cells[i + 2, 15].Value = Applicants[i].Mobile;
-          worksheet.Cells[i + 2, 16].Value = Applicants[i].Whatsapp;
-          worksheet.Cells[i + 2, 17].Value = Applicants[i].Religion == 0 || Applicants[i].Religion == null
+          worksheet.Cells[i + 2, 7].Value = Applicants[i].NoOfChildren;
+          worksheet.Cells[i + 2, 8].Value = Applicants[i].Phone1;
+          worksheet.Cells[i + 2, 9].Value = Applicants[i].Phone2;
+          worksheet.Cells[i + 2, 10].Value = Applicants[i].Mobile;
+          worksheet.Cells[i + 2, 11].Value = Applicants[i].Whatsapp;
+          worksheet.Cells[i + 2, 12].Value = Applicants[i].Religion == 0 || Applicants[i].Religion == null
               ? ""
               : ReligionList.FirstOrDefault(r => r.Value == Applicants[i].Religion.ToString())?.Text;
-          worksheet.Cells[i + 2, 18].Value = Applicants[i].PlaceOfBirth;
-          worksheet.Cells[i + 2, 19].Value = Applicants[i].CountryID == 0 || Applicants[i].CountryID == null
+          worksheet.Cells[i + 2, 13].Value = Applicants[i].PlaceOfBirth;
+          worksheet.Cells[i + 2, 14].Value = Applicants[i].CountryID == 0 || Applicants[i].CountryID == null
               ? ""
               : CountriesList.FirstOrDefault(c => c.Value == Applicants[i].CountryID.ToString())?.Text;
-          worksheet.Cells[i + 2, 20].Value = Applicants[i].Fax;
-          worksheet.Cells[i + 2, 21].Value = Applicants[i].Email;
-          worksheet.Cells[i + 2, 22].Value = Applicants[i].POBox;
-          worksheet.Cells[i + 2, 23].Value = Applicants[i].Address;
-          worksheet.Cells[i + 2, 24].Value = Applicants[i].IDNumber;
-          worksheet.Cells[i + 2, 25].Value = Applicants[i].IDPlaceOfIssue;
-          worksheet.Cells[i + 2, 28].Value = Applicants[i].PassportNumber;
-          worksheet.Cells[i + 2, 29].Value = Applicants[i].PassportPlaceOfIssue;
+          worksheet.Cells[i + 2, 15].Value = Applicants[i].Fax;
+          worksheet.Cells[i + 2, 16].Value = Applicants[i].Email;
+          worksheet.Cells[i + 2, 17].Value = Applicants[i].POBox;
+          worksheet.Cells[i + 2, 18].Value = Applicants[i].Address;
+          worksheet.Cells[i + 2, 19].Value = Applicants[i].IDNumber;
+          worksheet.Cells[i + 2, 20].Value = Applicants[i].IDPlaceOfIssue;
+          worksheet.Cells[i + 2, 21].Value = Applicants[i].PassportNumber;
+          worksheet.Cells[i + 2, 22].Value = Applicants[i].PassportPlaceOfIssue;
         }
 
-        worksheet.Cells["G1"].Style.Font.Bold = true;
-        worksheet.Cells["A1"].Style.Numberformat.Format = "dd-mmm-yyyy";
-        worksheet.Cells["J1"].Style.Numberformat.Format = "dd-mmm-yyyy";
-        worksheet.Cells["Z1"].Style.Numberformat.Format = "dd-mmm-yyyy";
-        worksheet.Cells["AA1"].Style.Numberformat.Format = "dd-mmm-yyyy";
-        worksheet.Cells["AD1"].Style.Numberformat.Format = "dd-mmm-yyyy";
-        worksheet.Cells["AE1"].Style.Numberformat.Format = "dd-mmm-yyyy";
+        worksheet.Cells["C1"].Style.Font.Bold = true;
+        worksheet.Cells["F1"].Style.Numberformat.Format = "dd-mmm-yyyy";
         worksheet.Cells.AutoFitColumns();
 
         var stream = new MemoryStream();

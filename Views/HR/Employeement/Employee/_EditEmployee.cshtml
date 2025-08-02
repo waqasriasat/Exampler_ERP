@@ -51,7 +51,7 @@
 
         <div class="row">
             <div class="col-4">
-				<label asp-for="BranchTypeID" class="form-label fw-bold">@Localizer["lbl_SearchDesignationName"]</label>
+				<label asp-for="BranchTypeID" class="form-label fw-bold">@Localizer["lbl_SearchBranchName"]</label>
                 <select asp-for="BranchTypeID" asp-items="@(new SelectList(ViewBag.BranchsList, "Value", "Text", Model.BranchTypeID))" class="form-control form-control-lg">
                 </select>
                 <span asp-validation-for="BranchTypeID" class="text-danger"></span>
@@ -77,7 +77,7 @@
                     <img src="@(Model.Picture != null ? "data:image/jpeg;base64," + Convert.ToBase64String(Model.Picture) : "~/img/icons/NoImage.jpg")"
                          id="PreviewPhoto" alt="Profile Picture" width="125" height="125"
                          style="border:1px; margin-top:0px;border-radius: 50%;" />
-                    <input asp-for="Picture" class="custom-file-input" id="profilePictureInput" type="file" name="profilePicture"
+                    <input asp-for="Picture" class="custom-file-input" id="profilePictureInput" type="file" name="profilePicture" value="@Convert.ToBase64String(Model.Picture)"
                            class="form-control form-control-lg" style="display:none;" onchange="document.getElementById('PreviewPhoto').src=window.URL.createObjectURL(this.files[0])" />
                     <a href="javascript:void(0)" onclick="document.getElementById('profilePictureInput').click()">
                         <i class="fa fa-pencil" style="font-size: large; color:darkslategray; line-height: 2;position: relative;bottom: -55px;right: 16px;"></i>

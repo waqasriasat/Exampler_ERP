@@ -209,7 +209,7 @@ namespace Exampler_ERP.Controllers.HR.HR
           .Include(c => c.HolidayType)
           .ToListAsync();
 
-      return View("~/Views/HR/HR/Holiday/PrintHolidays.cshtml", Holidays);
+      return View("~/Views/HR/HR/Holiday/PrintHoliday.cshtml", Holidays);
     }
 
     //public async Task<IActionResult> ExportToExcel()
@@ -232,7 +232,7 @@ namespace Exampler_ERP.Controllers.HR.HR
     //    worksheet.Cells["E1"].Value = "Holiday Type";
     //    worksheet.Cells["F1"].Value = _localizer["lbl_VacationDays"];
     //    worksheet.Cells["G1"].Value = _localizer["lbl_DutyHours"];
-    //    worksheet.Cells["H1"].Value = _localizer["lbl_DutyMinutes"];
+    //    worksheet.Cells["H1"].Value = _localizer["lbl_DutyMinutess"];
     //    worksheet.Cells["I1"].Value = _localizer["lbl_FinalApprovalID"];
     //    worksheet.Cells["J1"].Value = _localizer["lbl_ApprovalProcessID"];
 

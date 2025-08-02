@@ -208,7 +208,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           .Include(c => c.Employee)
           .ToListAsync();
 
-      return View("~/Views/HR/Employeement/Contract/PrintContracts.cshtml", contracts);
+      return View("~/Views/HR/Employeement/Contract/PrintContract.cshtml", contracts);
     }
 
     public async Task<IActionResult> ExportToExcel()
@@ -232,7 +232,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
         worksheet.Cells["E1"].Value = _localizer["lbl_ContractType"];
         worksheet.Cells["F1"].Value = _localizer["lbl_VacationDays"];
         worksheet.Cells["G1"].Value = _localizer["lbl_DutyHours"];
-        worksheet.Cells["H1"].Value = _localizer["lbl_DutyMinutes"];
+        worksheet.Cells["H1"].Value = _localizer["lbl_DutyMinutess"];
         worksheet.Cells["I1"].Value = _localizer["lbl_FinalApprovalID"];
         worksheet.Cells["J1"].Value = _localizer["lbl_ApprovalProcessID"];
 

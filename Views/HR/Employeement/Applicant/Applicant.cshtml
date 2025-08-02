@@ -20,9 +20,9 @@
                     $('#editApplicantModal').modal('show');
                 });
             });
-
+            
             $('#editApplicantModalContainer').on('click', '#saveApplicantChanges', function () {
-                var form = document.getElementById('editApplicantForm');
+                var form = $('#editApplicantForm')[0]; 
                 var formData = new FormData(form);
 
                 $.ajax({

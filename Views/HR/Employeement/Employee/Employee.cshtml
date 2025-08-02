@@ -54,8 +54,6 @@
                 });
             });
 
-            
-
             $('#addEmployeeModalContainer').on('click', '#saveNewEmployee', function () {
                 var form = document.getElementById('addEmployeeForm');
                 var formData = new FormData(form);
@@ -82,7 +80,7 @@
                 });
             });
 
-            $('.directManagerEmployeeLink').click(function (e) {
+            $('#EmployeeListContainer').on('click', '.directManagerEmployeeLink', function (e) {
                 e.preventDefault();
                 var employeeId = $(this).data('id');
                 $.get('@Url.Action("DirectManager", "Employee")', { id: employeeId }, function (data) {
@@ -90,19 +88,21 @@
                     $('#directManagerEmployeeModal').modal('show');
                 });
             });
+
             $('#directManagerEmployeeModalContainer').on('click', '#saveEmployeeChanges', function () {
                 var formData = $('#DirectManagerEmployeeForm').serialize();
                 $.post('@Url.Action("DirectManager", "Employee")', formData, function (response) {
                     if (response.success) {
                         $('#directManagerEmployeeModal').modal('hide');
-                        
-                    } else {
-                        showError
+                        $.get('@Url.Action("Index", "Employee")', function (partialHtml) {
+                                var html = $(partialHtml).find('#EmployeeListContainer').html();
+                                $('#EmployeeListContainer').html(html);
+                            });
                     }
                 });
             });
 
-            $('.employeeEducationLink').click(function (e) {
+             $('#EmployeeListContainer').on('click', '.employeeEducationLink', function (e) {
                 e.preventDefault();
                 var educationId = $(this).data('id');
 
@@ -125,24 +125,26 @@
                     contentType: false,
                     success: function (response) {
                         if (response.success) {
-                             
-                        } else {
+                            $('#employeeEducationModal').modal('hide');
 
-                            showError
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "Employee")', function (partialHtml) {
+                                var html = $(partialHtml).find('#EmployeeListContainer').html();
+                                $('#EmployeeListContainer').html(html);
+                            });
                         }
                     },
-                    error: function (xhr, status, error) {
-                        console.error('AJAX Error: ' + error);
-                        alert('An unexpected error occurred. Please try again later.');
+                    error: function () {
+                        showError
                     }
                 });
             });
 
-            $('.employeeExperienceLink').click(function (e) {
+            $('#EmployeeListContainer').on('click', '.employeeExperienceLink', function (e) {
                 e.preventDefault();
-                var educationId = $(this).data('id');
+                var experienceId = $(this).data('id');
 
-                $.get('@Url.Action("Experience", "Employee")', { id: educationId }, function (data) {
+                $.get('@Url.Action("Experience", "Employee")', { id: experienceId }, function (data) {
                     $('#employeeExperienceModalContainer').html(data);
                     $('#employeeExperienceModal').modal('show');
                 });
@@ -162,17 +164,20 @@
                     contentType: false,
                     success: function (response) {
                         if (response.success) {
-                             
-                        } else {
-                            showError
+                            $('#employeeExperienceModal').modal('hide');
+
+                            // ✅ Ab poora list AJAX se reload karo
+                            $.get('@Url.Action("Index", "Employee")', function (partialHtml) {
+                                var html = $(partialHtml).find('#EmployeeListContainer').html();
+                                $('#EmployeeListContainer').html(html);
+                            });
                         }
                     },
-                    error: function (xhr, status, error) {
+                    error: function () {
                         showError
                     }
                 });
             });
-
 
             $('#addEmployeeModalContainer').on('click', '#Close', function () {
                 $('#addEmployeeModal').modal('hide'); 
@@ -182,6 +187,17 @@
                 $('#editEmployeeModal').modal('hide'); 
             });
 
+            $('#directManagerEmployeeModalContainer').on('click', '#Close', function () {
+                $('#directManagerEmployeeModal').modal('hide');
+            });
+
+            $('#employeeEducationModalContainer').on('click', '#Close', function () {
+                $('#employeeEducationModal').modal('hide');
+            });
+
+            $('#employeeExperienceModalContainer').on('click', '#Close', function () {
+                $('#employeeExperienceModal').modal('hide');
+            });
 
 			$('#EmployeeListContainer').on('click', '.deleteEmployeeLink', function (e) {
                 e.preventDefault();
@@ -196,15 +212,13 @@
 					});
 				  }
                     });
-                } else {
-                    showError
-                }
+                } 
             });
-
 
             $('#printButton').click(function () {
                 window.print();
             });
+
             $.widget("custom.autocomplete", $.ui.autocomplete, {
                 _renderItem: function (ul, item) {
                     return $("<li>")

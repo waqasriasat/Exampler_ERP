@@ -3,8 +3,8 @@
 @inject IViewLocalizer Localizer
 
 @{
-	ViewData["Title"] = Localizer["lbl_EmployeementBiodata"];
-	var genderList = ViewBag.GenderList as List<SelectListItem>;
+    ViewData["Title"] = Localizer["lbl_EmployeementBiodata"];
+    var genderList = ViewBag.GenderList as List<SelectListItem>;
     var maritalStatusList = ViewBag.MaritalStatusList as List<SelectListItem>;
     var religionList = ViewBag.ReligionList as List<SelectListItem>;
     var qualificationTypes = ViewBag.QualificationTypes as List<SelectListItem>;
@@ -16,7 +16,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>@Localizer["lbl_EmployeementBiodata"]</title>
+    <title>@Localizer["lbl_EmployeementBiodata"]</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/super-ui@latest/dist/super-ui.min.css">
     <style>
         body {
@@ -60,7 +60,7 @@
 
         .info-row {
             /* display: flex;
-                            justify-content: flex-start; */
+                                    justify-content: flex-start; */
             padding: 10px 0;
             border-bottom: 1px solid #eee;
         }
@@ -78,7 +78,7 @@
             color: #555;
         }
 
-        img {
+        .imgs {
             border-radius: 50%;
             width: 120px; /* Set a fixed width for the profile picture */
             height: 120px; /* Set a fixed height for the profile picture */
@@ -107,421 +107,414 @@
             }
     </style>
 </head>
-<body>
+<body style="background-color:white">
+    <h5 style="text-align: center; padding-top: 35px; font-size: x-large;">
+        @Localizer["lbl_EmployeementBiodata"]
+    </h5>
 
-    <div class="card">
-        <div class="card-header">
-            <h4>@Localizer["lbl_EmployeementBiodata"]</h4>
+    <h5>Personal Information</h5>
+    <div class="info-row">
+        <div class="info-label">@Localizer["lbl_Picture"]: </div>
+        <div>
+            @if (Model.Employee.Picture != null)
+
+            {
+                <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Employee.Picture))" alt="Employee Picture" class="imgs" />
+            }
+
+            else
+
+            {
+                <img src="~/images/default-profile.png" alt="Default Profile Picture" class="imgs" />
+            }
         </div>
-
-        <div class="card-body">
-            <div class="section">
-                <h5>Personal Information</h5>
-                <div class="info-row">
-                    <div class="info-label">@Localizer["lbl_Picture"]: </div>
-                    <div>
-                        @if (Model.Employee.Picture != null)
-
-                        {
-                            <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Employee.Picture))" alt="Employee Picture" />
-                        }
-
-                        else
-
-                        {
-                            <img src="~/images/default-profile.png" alt="Default Profile Picture" />
-                        }
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">>@Localizer["lbl_HireDate"]: </div>
-                            <div>@Model.Employee.HireDate?.ToString("dd/MM/yyyy")</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_EmployeeID"]: </div>
-                            <div>@Model.Employee.EmployeeID</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_EmployeeCode"]: </div>
-                            <div>@Model.Employee.EmployeeCode</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_FirstName"]: </div>
-                            <div>@Model.Employee.FirstName</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_FatherName"]: </div>
-                            <div>@Model.Employee.FatherName</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_FamilyName"]: </div>
-                            <div>@Model.Employee.FamilyName</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_Gender"]: </div>
-                            <div>
-                                @if (Model.Employee.Sex.HasValue)
-
-                                {
-
-                                    var genderValue = Model.Employee.Sex.Value.ToString();
-
-                                    var genderText = genderList?.FirstOrDefault(g => g.Value == genderValue)?.Text;
-                                    @genderText
-                                }
-
-                                else
-
-                                {
-                                    @:N/A
-                                }
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_MaritalStatus"]: </div>
-                            <div>
-                                @if (Model.Employee.MaritalStatus.HasValue)
-
-                                {
-
-                                    var maritalValue = Model.Employee.MaritalStatus.Value.ToString();
-
-                                    var maritalText = maritalStatusList?.FirstOrDefault(m => m.Value == maritalValue)?.Text;
-                                    @maritalText
-                                }
-
-                                else
-
-                                {
-                                    @:N/A
-                                }
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_NoofChildren"]: </div>
-                            <div>@Model.Employee.NoOfChildren</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_Religion"]: </div>
-                            <div>
-                                @if (Model.Employee.Religion.HasValue)
-
-                                {
-
-                                    var religionValue = Model.Employee.Religion.Value.ToString();
-
-                                    var religionText = religionList?.FirstOrDefault(r => r.Value == religionValue)?.Text;
-                                    @religionText
-                                }
-
-                                else
-
-                                {
-                                    @:N/A
-                                }
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_DOB"]: </div>
-                            <div>@Model.Employee.DOB?.ToString("dd/MM/yyyy")</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_PlaceofBirth"]: </div>
-                            <div>@Model.Employee.PlaceOfBirth</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_Phone1"]: </div>
-                            <div>@Model.Employee.Phone1</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_Phone2"]: </div>
-                            <div>@Model.Employee.Phone2</div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_Mobile"]: </div>
-                            <div>@Model.Employee.Mobile</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_Whatsapp"]: </div>
-                            <div>@Model.Employee.Whatsapp</div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_Email"]: </div>
-                            <div>@Model.Employee.Email</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_Fax"]: </div>
-                            <div>@Model.Employee.Fax</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-md-12 col-lg-12">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_Address"]: </div>
-                            <div>@Model.Employee.Address</div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-12 col-md-3 col-lg-3">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_IDNumber"]: </div>
-                            <div>@Model.Employee.IDNumber</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-3 col-lg-3">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_IDPlaceofIssue"]: </div>
-                            <div>@Model.Employee.IDPlaceOfIssue</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-3 col-lg-3">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_IDIssueDate"]: </div>
-                            <div>@Model.Employee.IDIssueDate?.ToString("dd/MM/yyyy")</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-3 col-lg-3">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_IDExpiryDate"]: </div>
-                            <div>@Model.Employee.IDExpiryDate?.ToString("dd/MM/yyyy")</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-md-3 col-lg-3">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_PassportNumber"]: </div>
-                            <div>@Model.Employee.PassportNumber</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-3 col-lg-3">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_PassportPlaceOfIssue"]: </div>
-                            <div>@Model.Employee.PassportPlaceOfIssue</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-3 col-lg-3">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_PassportIssueDate"]: </div>
-                            <div>@Model.Employee.PassportIssueDate?.ToString("dd/MM/yyyy")</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-3 col-lg-3">
-                        <div class="info-row">
-                            <div class="info-label">@Localizer["lbl_PassportExpiryDate"]: </div>
-                            <div>@Model.Employee.PassportExpiryDate?.ToString("dd/MM/yyyy")</div>
-                        </div>
-                    </div>
-                </div>
-
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_HireDate"]: </div>
+                <div>@Model.Employee.HireDate?.ToString("dd/MM/yyyy")</div>
             </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_EmployeeID"]: </div>
+                <div>@Model.Employee.EmployeeID</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_EmployeeCode"]: </div>
+                <div>@Model.Employee.EmployeeCode</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_FirstName"]: </div>
+                <div>@Model.Employee.FirstName</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_FatherName"]: </div>
+                <div>@Model.Employee.FatherName</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_FamilyName"]: </div>
+                <div>@Model.Employee.FamilyName</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_Gender"]: </div>
+                <div>
+                    @if (Model.Employee.Sex.HasValue)
 
-            @* Displaying Education Information *@
-            @if (Model.Educations != null && Model.Educations.Any())
-            {
-                <div class="section">
-                    <h5>@Localizer["lbl_Education"]</h5>
-                    @foreach (var education in Model.Educations)
-                    {
-                        <div class="row">
-                            <div class="col-12 col-md-2 col-lg-2">
-                                <div class="info-row">
-                                    <div class="info-label">@Localizer["lbl_Qualification"]: </div>
-                                    <div>
-                                        @if (education.QualificationTypeID.HasValue)
-
-                                        {
-
-                                            var qualificationValue = education.QualificationTypeID.Value.ToString();
-
-                                            var qualificationText = qualificationTypes?.FirstOrDefault(q => q.Value == qualificationValue)?.Text;
-                                            @qualificationText
-                                        }
-
-                                        else
-
-                                        {
-                                            @:N/A
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-3 col-lg-3">
-                                <div class="info-row">
-                                    <div class="info-label">@Localizer["lbl_Institute"]: </div>
-                                    <div>@education.InstituteName</div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-1 col-lg-1">
-                                <div class="info-row">
-                                    <div class="info-label">@Localizer["lbl_City"]: </div>
-                                    <div>@education.City</div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-2 col-lg-2">
-                                <div class="info-row">
-                                    <div class="info-label">@Localizer["lbl_Country"]: </div>
-                                    <div>
-                                        @if (education.CountryTypeID.HasValue)
-
-                                        {
-
-                                            var countryValue = education.CountryTypeID.Value.ToString();
-
-                                            var countryText = countryTypes?.FirstOrDefault(c => c.Value == countryValue)?.Text;
-                                            @countryText
-                                        }
-
-                                        else
-
-                                        {
-                                            @:N/A
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-2 col-lg-2">
-                                <div class="info-row">
-                                    <div class="info-label">@Localizer["lbl_StartDate"]: </div>
-                                    <div>@education.StartMonth/@education.StartYear</div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-2 col-lg-2">
-                                <div class="info-row">
-                                    <div class="info-label">@Localizer["lbl_EndDate"]: </div>
-                                    <div>@education.EndMonth/@education.EndYear</div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-            }
-
-            @* Displaying Experience Information *@
-            @if (Model.Experiences != null && Model.Experiences.Any())
-            {
-                <div class="section">
-                    <h5>@Localizer["lbl_WorkExperience"]</h5>
-                    @foreach (var experience in Model.Experiences)
                     {
 
-                        <div class="row">
-                            <div class="col-12 col-md-2 col-lg-2">
-                                <div class="info-row">
-                                    <div class="info-label">@Localizer["lbl_Tittle"]: </div>
-                                    <div>@experience.ExperienceTittle</div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-3 col-lg-3">
-                                <div class="info-row">
-                                    <div class="info-label">@Localizer["lbl_CompanyName"]: </div>
-                                    <div>@experience.CompanyName</div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-1 col-lg-1">
-                                <div class="info-row">
-                                    <div class="info-label">@Localizer["lbl_City"]: </div>
-                                    <div>@experience.City</div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-2 col-lg-2">
-                                <div class="info-row">
-                                    <div class="info-label">@Localizer["lbl_Country"]: </div>
-                                    <div>
-                                        @if (experience.CountryTypeID.HasValue)
+                        var genderValue = Model.Employee.Sex.Value.ToString();
 
-                                        {
+                        var genderText = genderList?.FirstOrDefault(g => g.Value == genderValue)?.Text;
+                        @genderText
+                    }
 
-                                            var countryValue = experience.CountryTypeID.Value.ToString();
+                    else
 
-                                            var countryText = countryTypes?.FirstOrDefault(c => c.Value == countryValue)?.Text;
-                                            @countryText
-                                        }
-
-                                        else
-
-                                        {
-                                            @:N/A
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-2 col-lg-2">
-                                <div class="info-row">
-                                    <div class="info-label">@Localizer["lbl_StartDate"]: </div>
-                                    <div>@experience.StartMonth/@experience.StartYear</div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-2 col-lg-2">
-                                <div class="info-row">
-                                    <div class="info-label">@Localizer["lbl_EndDate"]: </div>
-                                    <div>@experience.EndMonth/@experience.EndYear</div>
-                                </div>
-                            </div>
-                        </div>
+                    {
+                        @:N/A
                     }
                 </div>
-            }
+            </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_MaritalStatus"]: </div>
+                <div>
+                    @if (Model.Employee.MaritalStatus.HasValue)
 
+                    {
+
+                        var maritalValue = Model.Employee.MaritalStatus.Value.ToString();
+
+                        var maritalText = maritalStatusList?.FirstOrDefault(m => m.Value == maritalValue)?.Text;
+                        @maritalText
+                    }
+
+                    else
+
+                    {
+                        @:N/A
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_NoofChildren"]: </div>
+                <div>@Model.Employee.NoOfChildren</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_Religion"]: </div>
+                <div>
+                    @if (Model.Employee.Religion.HasValue)
+
+                    {
+
+                        var religionValue = Model.Employee.Religion.Value.ToString();
+
+                        var religionText = religionList?.FirstOrDefault(r => r.Value == religionValue)?.Text;
+                        @religionText
+                    }
+
+                    else
+
+                    {
+                        @:N/A
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_DOB"]: </div>
+                <div>@Model.Employee.DOB?.ToString("dd/MM/yyyy")</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_PlaceofBirth"]: </div>
+                <div>@Model.Employee.PlaceOfBirth</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_Phone1"]: </div>
+                <div>@Model.Employee.Phone1</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_Phone2"]: </div>
+                <div>@Model.Employee.Phone2</div>
+            </div>
         </div>
 
-        <div class="footer">
-            <button class="print-button" onclick="window.print()">@Localizer["lbl_Print"]</button>
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_Mobile"]: </div>
+                <div>@Model.Employee.Mobile</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_Whatsapp"]: </div>
+                <div>@Model.Employee.Whatsapp</div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_Email"]: </div>
+                <div>@Model.Employee.Email</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_Fax"]: </div>
+                <div>@Model.Employee.Fax</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-12 col-lg-12">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_Address"]: </div>
+                <div>@Model.Employee.Address</div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-3 col-lg-3">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_IDNumber"]: </div>
+                <div>@Model.Employee.IDNumber</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-3 col-lg-3">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_IDPlaceofIssue"]: </div>
+                <div>@Model.Employee.IDPlaceOfIssue</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-3 col-lg-3">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_IDIssueDate"]: </div>
+                <div>@Model.Employee.IDIssueDate?.ToString("dd/MM/yyyy")</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-3 col-lg-3">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_IDExpiryDate"]: </div>
+                <div>@Model.Employee.IDExpiryDate?.ToString("dd/MM/yyyy")</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-3 col-lg-3">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_PassportNumber"]: </div>
+                <div>@Model.Employee.PassportNumber</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-3 col-lg-3">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_PassportPlaceOfIssue"]: </div>
+                <div>@Model.Employee.PassportPlaceOfIssue</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-3 col-lg-3">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_PassportIssueDate"]: </div>
+                <div>@Model.Employee.PassportIssueDate?.ToString("dd/MM/yyyy")</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-3 col-lg-3">
+            <div class="info-row">
+                <div class="info-label">@Localizer["lbl_PassportExpiryDate"]: </div>
+                <div>@Model.Employee.PassportExpiryDate?.ToString("dd/MM/yyyy")</div>
+            </div>
         </div>
     </div>
 
+
+    @* Displaying Education Information *@
+    @if (Model.Educations != null && Model.Educations.Any())
+    {
+        <h5>
+            @Localizer["lbl_Education"]
+        </h5>
+        @foreach (var education in Model.Educations)
+        {
+            <div class="row">
+                <div class="col-12 col-md-2 col-lg-2">
+                    <div class="info-row">
+                        <div class="info-label">@Localizer["lbl_Qualification"]: </div>
+                        <div>
+                            @if (education.QualificationTypeID.HasValue)
+
+                            {
+
+                                var qualificationValue = education.QualificationTypeID.Value.ToString();
+
+                                var qualificationText = qualificationTypes?.FirstOrDefault(q => q.Value == qualificationValue)?.Text;
+                                @qualificationText
+                            }
+
+                            else
+
+                            {
+                                @:N/A
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-3 col-lg-3">
+                    <div class="info-row">
+                        <div class="info-label">@Localizer["lbl_Institute"]: </div>
+                        <div>@education.InstituteName</div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-1 col-lg-1">
+                    <div class="info-row">
+                        <div class="info-label">@Localizer["lbl_City"]: </div>
+                        <div>@education.City</div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-2 col-lg-2">
+                    <div class="info-row">
+                        <div class="info-label">@Localizer["lbl_Country"]: </div>
+                        <div>
+                            @if (education.CountryTypeID.HasValue)
+
+                            {
+
+                                var countryValue = education.CountryTypeID.Value.ToString();
+
+                                var countryText = countryTypes?.FirstOrDefault(c => c.Value == countryValue)?.Text;
+                                @countryText
+                            }
+
+                            else
+
+                            {
+                                @:N/A
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-2 col-lg-2">
+                    <div class="info-row">
+                        <div class="info-label">@Localizer["lbl_StartDate"]: </div>
+                        <div>@education.StartMonth/@education.StartYear</div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-2 col-lg-2">
+                    <div class="info-row">
+                        <div class="info-label">@Localizer["lbl_EndDate"]: </div>
+                        <div>@education.EndMonth/@education.EndYear</div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    @* Displaying Experience Information *@
+    @if (Model.Experiences != null && Model.Experiences.Any())
+    {
+        <h5>
+            @Localizer["lbl_WorkExperience"]
+        </h5>
+        @foreach (var experience in Model.Experiences)
+        {
+
+            <div class="row">
+                <div class="col-12 col-md-2 col-lg-2">
+                    <div class="info-row">
+                        <div class="info-label">@Localizer["lbl_Tittle"]: </div>
+                        <div>@experience.ExperienceTittle</div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-3 col-lg-3">
+                    <div class="info-row">
+                        <div class="info-label">@Localizer["lbl_CompanyName"]: </div>
+                        <div>@experience.CompanyName</div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-1 col-lg-1">
+                    <div class="info-row">
+                        <div class="info-label">@Localizer["lbl_City"]: </div>
+                        <div>@experience.City</div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-2 col-lg-2">
+                    <div class="info-row">
+                        <div class="info-label">@Localizer["lbl_Country"]: </div>
+                        <div>
+                            @if (experience.CountryTypeID.HasValue)
+
+                            {
+
+                                var countryValue = experience.CountryTypeID.Value.ToString();
+
+                                var countryText = countryTypes?.FirstOrDefault(c => c.Value == countryValue)?.Text;
+                                @countryText
+                            }
+
+                            else
+
+                            {
+                                @:N/A
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-2 col-lg-2">
+                    <div class="info-row">
+                        <div class="info-label">@Localizer["lbl_StartDate"]: </div>
+                        <div>@experience.StartMonth/@experience.StartYear</div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-2 col-lg-2">
+                    <div class="info-row">
+                        <div class="info-label">@Localizer["lbl_EndDate"]: </div>
+                        <div>@experience.EndMonth/@experience.EndYear</div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/super-ui@latest/dist/super-ui.min.js"></script>
+    <script>
+        window.print();
+    </script>
 </body>
 </html>
