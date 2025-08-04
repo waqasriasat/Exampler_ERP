@@ -1,7 +1,10 @@
 namespace Exampler_ERP.Models.Temp
 {
-  public class Contract
+  public class ContractViewModel
   {
+    public HR_Contract Contract { get; set; }
+    //public HR_Employee Employee { get; set; }
+    //public List<HR_EmployeeExperience> Experiences { get; set; }
   }
   public class ContractRenewalViewModel
   {

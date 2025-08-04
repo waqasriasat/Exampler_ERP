@@ -90,7 +90,7 @@
 			});
 
 			// Print functionality
-			$('#printButton').click(function () {
+			$('#printListButton').click(function () {
 				window.print();
 			});
 			$.widget("custom.autocomplete", $.ui.autocomplete, {
@@ -129,11 +129,28 @@
 		});
 	</script>
 	<script>
-		function printContracts() {
-			var printWindow = window.open('@Url.Action("Print", "Contract")', '_blank');
+		function PrintContractLists() {
+			var printWindow = window.open('@Url.Action("PrintList", "Contract")', '_blank');
 			printWindow.focus();
 		}
 
+		$(document).on('click', '.printContractLink', function (e) {
+			e.preventDefault();
+
+			// Get the ContractID from the data-id attribute
+			var contractID = $(this).data('id');
+
+			// Call the function to open the print window and pass ContractID
+			PrintContract(contractID);
+		});
+		function PrintContract(contractID) {
+			// Construct the URL with the ContractID parameter
+			var url = '@Url.Action("Print", "Contract")' + '?id=' + contractID;
+
+			// Open the new window for printing
+			var printWindow = window.open(url, '_blank');
+			printWindow.focus();
+		}
 		function closeModal() {
 			$('.close').click(function () {
 				$('#addContractModal').modal('hide');
@@ -174,7 +191,7 @@
 						<button type="button" class="btn btn-primary addContractLink">@Localizer["lbl_AddNew"]</button>
 						<!-- Example: Add buttons for exporting to Excel and printing -->
 						<button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Contract")'">@Localizer["lbl_Excel"]</button>
-						<button type="button" class="btn btn-outline-secondary" onclick="printContracts()">@Localizer["lbl_Print"]</button>
+						<button type="button" class="btn btn-outline-secondary" onclick="PrintContractLists()">@Localizer["lbl_Print"]</button>
 					</div>
 				</div>
 			</div>

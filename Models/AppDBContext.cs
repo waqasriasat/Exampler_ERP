@@ -1253,7 +1253,8 @@ namespace Exampler_ERP.Models
       new CR_LanguageRecord() { LanguageRecordId = 1106, LabelName = "lbl_WorkingDayManagement", LabelValue = "Working Day Management", Culture = "en-US" },
       new CR_LanguageRecord() { LanguageRecordId = 1107, LabelName = "lbl_WorkingSlot", LabelValue = "Working Slot", Culture = "en-US" },
       new CR_LanguageRecord() { LanguageRecordId = 1108, LabelName = "lbl_Year", LabelValue = "Year", Culture = "en-US" },
-      new CR_LanguageRecord() { LanguageRecordId = 1109, LabelName = "lbl_Yes", LabelValue = "Yes", Culture = "en-US" }
+      new CR_LanguageRecord() { LanguageRecordId = 1109, LabelName = "lbl_Yes", LabelValue = "Yes", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1110, LabelName = "lbl_PersonalInformation", LabelValue = "Personal Information", Culture = "en-US" }
       );
 
       modelBuilder.Entity<Settings_LanguageSetup>().HasData(

@@ -3,8 +3,8 @@ namespace Exampler_ERP
   public class Working_List
   {
     // 0.All Page Search via Name or date Modified with tha without page Loading
-    // 1.Applicatn.cshtml main page Print form Design karna hy
-    // 2.Contract main Print Icon pe form Design karna hy
+    // Done-1.Applicatn.cshtml main page Print form Design karna hy 
+    // Done-2.Contract main Print Icon pe form Design karna hy
     // 3.Addional Allowance Print icon Convert To Delete Icon and Delete controlling
     // 4.Addional Allowance Make a Print Page
     // 5.Addional Allowance Make a Excel Sheet

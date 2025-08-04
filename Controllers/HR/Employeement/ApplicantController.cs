@@ -6,6 +6,7 @@ using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using Microsoft.Extensions.Localization;
+using Exampler_ERP.Models.Temp;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
@@ -204,6 +205,26 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
 
       return View("~/Views/HR/Employeement/Applicant/PrintApplicant.cshtml", Applicants);
+    }
+    public async Task<IActionResult> PrintApplicantBioData(int id)
+    {
+      ViewBag.GenderList = await _utils.GetGender();
+      ViewBag.MaritalStatusList = await _utils.GetMaritalStatus();
+      ViewBag.ReligionList = await _utils.GetReligion();
+      ViewBag.CountriesList = await _utils.GetCountries();
+      ViewBag.BranchsList = await _utils.GetBranchs();
+      ViewBag.DepartmentsList = await _utils.GetDepartments();
+      ViewBag.DesignationsList = await _utils.GetDesignations();
+      var Applicant = await _appDBContext.HR_Applicants.FindAsync(id);
+      if (Applicant == null)
+      {
+        return NotFound();
+      }
+      var applicantBioData = new ApplicantBioDataViewModel
+      {
+        Applicant = Applicant
+      };
+      return PartialView("~/Views/HR/Employeement/Applicant/PrintApplicantBioData.cshtml", applicantBioData);
     }
     public async Task<IActionResult> ExportToExcel()
     {

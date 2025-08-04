@@ -1,0 +1,333 @@
+@model Exampler_ERP.Models.Temp.ApplicantBioDataViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+	ViewData["Title"] = Localizer["lbl_ApplicantBiodata"];
+	var genderList = ViewBag.GenderList as List<SelectListItem>;
+	var maritalStatusList = ViewBag.MaritalStatusList as List<SelectListItem>;
+	var religionList = ViewBag.ReligionList as List<SelectListItem>;
+	var qualificationTypes = ViewBag.QualificationTypes as List<SelectListItem>;
+	var countryTypes = ViewBag.CountryTypes as List<SelectListItem>;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@Localizer["lbl_ApplicantBiodata"]</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/super-ui@latest/dist/super-ui.min.css">
+	<style>
+		body {
+			background-color: #f4f4f9;
+			font-family: 'Arial', sans-serif;
+			padding: 20px;
+		}
+
+		.card {
+			border-radius: 10px;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+			overflow: hidden;
+			margin-bottom: 20px;
+			background-color: #fff;
+		}
+
+		.card-header {
+			background-color: #4caf50;
+			color: white;
+			padding: 15px;
+			text-align: center;
+		}
+
+		.card-body {
+			padding: 20px;
+		}
+
+		.section {
+			margin-bottom: 20px;
+			padding: 15px;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			background-color: #f9f9f9;
+		}
+
+			.section h5 {
+				margin-bottom: 15px;
+				color: #333;
+				font-weight: bold;
+			}
+
+		.info-row {
+			/* display: flex;
+											justify-content: flex-start; */
+			padding: 10px 0;
+			border-bottom: 1px solid #eee;
+		}
+
+		.row {
+			border-bottom: 1px solid #eee;
+		}
+
+		.info-row:last-child {
+			border-bottom: none;
+		}
+
+		.info-label {
+			font-weight: bold;
+			color: #555;
+		}
+
+		.imgs {
+			border-radius: 50%;
+			width: 120px; /* Set a fixed width for the profile picture */
+			height: 120px; /* Set a fixed height for the profile picture */
+			object-fit: cover; /* Maintain aspect ratio and cover the area */
+			margin-right: 20px;
+		}
+
+		.footer {
+			text-align: right;
+			padding: 10px;
+			background-color: #f1f1f1;
+		}
+
+		.print-button {
+			background-color: #4caf50;
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 16px;
+		}
+
+			.print-button:hover {
+				background-color: #45a049;
+			}
+	</style>
+</head>
+<body style="background-color:white">
+	<h5 style="text-align: center; padding-top: 35px; font-size: x-large;">
+		@Localizer["lbl_ApplicantBiodata"]
+	</h5>
+
+	<h5>@Localizer["lbl_PersonalInformation"]</h5>
+	<div class="info-row">
+		<div class="info-label">@Localizer["lbl_Picture"]: </div>
+		<div>
+			@if (Model.Applicant.Picture != null)
+
+			{
+				<img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Applicant.Picture))" alt="Employee Picture" class="imgs" />
+			}
+
+			else
+
+			{
+				<img src="~/images/default-profile.png" alt="Default Profile Picture" class="imgs" />
+			}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_ApplyDate"]: </div>
+				<div>@Model.Applicant.ApplyDate?.ToString("dd/MM/yyyy")</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_FirstName"]: </div>
+				<div>@Model.Applicant.FirstName</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_FatherName"]: </div>
+				<div>@Model.Applicant.FatherName</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_FamilyName"]: </div>
+				<div>@Model.Applicant.FamilyName</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_Gender"]: </div>
+				<div>
+					@if (Model.Applicant.Sex.HasValue)
+
+					{
+
+						var genderValue = Model.Applicant.Sex.Value.ToString();
+
+						var genderText = genderList?.FirstOrDefault(g => g.Value == genderValue)?.Text;
+						@genderText
+					}
+
+					else
+
+					{
+						@:N/A
+					}
+				</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_MaritalStatus"]: </div>
+				<div>
+					@if (Model.Applicant.MaritalStatus.HasValue)
+
+					{
+
+						var maritalValue = Model.Applicant.MaritalStatus.Value.ToString();
+
+						var maritalText = maritalStatusList?.FirstOrDefault(m => m.Value == maritalValue)?.Text;
+						@maritalText
+					}
+
+					else
+
+					{
+						@:N/A
+					}
+				</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_NoofChildren"]: </div>
+				<div>@Model.Applicant.NoOfChildren</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_Religion"]: </div>
+				<div>
+					@if (Model.Applicant.Religion.HasValue)
+
+					{
+
+						var religionValue = Model.Applicant.Religion.Value.ToString();
+
+						var religionText = religionList?.FirstOrDefault(r => r.Value == religionValue)?.Text;
+						@religionText
+					}
+
+					else
+
+					{
+						@:N/A
+					}
+				</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_DOB"]: </div>
+				<div>@Model.Applicant.DOB?.ToString("dd/MM/yyyy")</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_PlaceofBirth"]: </div>
+				<div>@Model.Applicant.PlaceOfBirth</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_Phone1"]: </div>
+				<div>@Model.Applicant.Phone1</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_Phone2"]: </div>
+				<div>@Model.Applicant.Phone2</div>
+			</div>
+		</div>
+
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_Mobile"]: </div>
+				<div>@Model.Applicant.Mobile</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_Whatsapp"]: </div>
+				<div>@Model.Applicant.Whatsapp</div>
+			</div>
+		</div>
+
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_Email"]: </div>
+				<div>@Model.Applicant.Email</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-4 col-lg-4">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_Fax"]: </div>
+				<div>@Model.Applicant.Fax</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 col-md-12 col-lg-12">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_Address"]: </div>
+				<div>@Model.Applicant.Address</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="row">
+		<div class="col-12 col-md-3 col-lg-3">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_IDNumber"]: </div>
+				<div>@Model.Applicant.IDNumber</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-3 col-lg-3">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_IDPlaceofIssue"]: </div>
+				<div>@Model.Applicant.IDPlaceOfIssue</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 col-md-3 col-lg-3">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_PassportNumber"]: </div>
+				<div>@Model.Applicant.PassportNumber</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-3 col-lg-3">
+			<div class="info-row">
+				<div class="info-label">@Localizer["lbl_PassportPlaceOfIssue"]: </div>
+				<div>@Model.Applicant.PassportPlaceOfIssue</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/super-ui@latest/dist/super-ui.min.js"></script>
+	<script>
+		window.print();
+	</script>
+</body>
+</html>

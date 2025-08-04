@@ -1,0 +1,15 @@
+@model Exampler_ERP.Models.Temp.ApplicantBioDataViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+	Layout = "_PrintLayout";
+}
+@{
+	ViewData["Title"] = @Localizer["lbl_EmployeementBiodata"];
+	var genderList = ViewBag.GenderList as List<SelectListItem>;
+	var maritalStatusList = ViewBag.MaritalStatusList as List<SelectListItem>;
+	var religionList = ViewBag.ReligionList as List<SelectListItem>;
+	var qualificationTypes = ViewBag.QualificationTypes as List<SelectListItem>;
+	var countryTypes = ViewBag.CountryTypes as List<SelectListItem>;
+}
+@Html.Partial("~/Views/HR/Employeement/Applicant/_PrintApplicantBioData.cshtml", Model)

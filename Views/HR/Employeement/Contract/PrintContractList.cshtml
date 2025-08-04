@@ -1,0 +1,71 @@
+@model IEnumerable<Exampler_ERP.Models.HR_Contract>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    Layout = "_PrintLayout";
+}
+@{
+    
+    var ContractStatusList = (List<SelectListItem>)ViewBag.ContractStatusList;
+}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>@Localizer["lbl_PrintContract"]</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>@Localizer["lbl_ContractList"]</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>@Localizer["lbl_ContractID"]</th>
+                <th>@Localizer["lbl_Active"]</th>
+                <th>@Localizer["lbl_EmployeeName"]</th>
+                <th>@Localizer["lbl_ContractType"]</th>
+                <th>@Localizer["lbl_SalaryType"]</th>
+                <th>@Localizer["lbl_VacationDays"]</th>
+                <th>@Localizer["lbl_DutyHours"]</th>
+                <th>@Localizer["lbl_DutyMinutess"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contract in Model)
+            {
+                <tr>
+                    <td>@contract.ContractID</td>
+                    <td>@contract.ActiveYNID</td>
+                    <td>@($"{contract.Employee?.FirstName} {contract.Employee?.FatherName} {contract.Employee?.FamilyName}")</td>
+                    <td>@contract.Settings_ContractType?.ContractTypeName</td>
+                    <td>@contract.SalaryTypeID</td>
+                    <td>@contract.VacationDays</td>
+                    <td>@contract.DHours</td>
+                    <td>@contract.DMinutes</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

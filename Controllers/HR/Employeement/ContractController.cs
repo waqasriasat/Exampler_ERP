@@ -201,16 +201,33 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       return Json(new { success = true });
     }
 
-    public async Task<IActionResult> Print()
+    public async Task<IActionResult> PrintList()
     {
       var contracts = await _appDBContext.HR_Contracts
           .Where(c => c.DeleteYNID != 1)
           .Include(c => c.Employee)
           .ToListAsync();
 
-      return View("~/Views/HR/Employeement/Contract/PrintContract.cshtml", contracts);
+      return View("~/Views/HR/Employeement/Contract/PrintContractList.cshtml", contracts);
     }
-
+    public async Task<IActionResult> Print(int id)
+    {
+      ViewBag.EmployeesList = await _utils.GetEmployee();
+      ViewBag.SalaryTypesList = await _utils.GetSalaryOptions();
+      ViewBag.ContractTypesList = await _utils.GetContractTypes();
+      var contracts = await _appDBContext.HR_Contracts
+        .Include(c => c.Employee)
+        .FirstOrDefaultAsync(c => c.ContractID == id);
+      if (contracts == null)
+      {
+        return NotFound();
+      }
+      var contract = new ContractViewModel
+      {
+        Contract = contracts
+      };
+      return PartialView("~/Views/HR/Employeement/Contract/PrintContract.cshtml", contract);
+    }
     public async Task<IActionResult> ExportToExcel()
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;

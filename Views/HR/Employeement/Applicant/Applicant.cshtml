@@ -149,6 +149,23 @@
             var printWindow = window.open('@Url.Action("Print", "Applicant")', '_blank');
             printWindow.focus();
         }
+		$(document).on('click', '.PrintApplicantBioDataLink', function (e) {
+			e.preventDefault();
+
+			// Get the ApplicantID from the data-id attribute
+			var applicantID = $(this).data('id');
+
+			// Call the function to open the print window and pass ApplicantID
+			PrintApplicantBioData(applicantID);
+		});
+		function PrintApplicantBioData(applicantID) {
+			// Construct the URL with the ApplicantID parameter
+			var url = '@Url.Action("PrintApplicantBioData", "Applicant")' + '?id=' + applicantID;
+
+			// Open the new window for printing
+			var printWindow = window.open(url, '_blank');
+			printWindow.focus();
+		}
         //Close Modal
         function closeModal() {
             $('.close').click(function () {
