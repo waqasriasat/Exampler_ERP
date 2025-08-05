@@ -65,9 +65,11 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
 
         _appDBContext.Update(vacation);
         await _appDBContext.SaveChangesAsync();
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Vacation request has been successfully Updated.");
         return Json(new { success = true });
       }
-      return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Failed to generate vacation request. Contact your administrator.");
+      return Json(new { success = false });
     }
 
     [HttpGet]
@@ -133,11 +135,7 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
 
               _appDBContext.CR_ProcessTypeApprovalDetails.Add(newProcessTypeApprovalDetail);
               await _appDBContext.SaveChangesAsync();
-              await _hubContext.Clients.All.SendAsync("ReceiveProcessNotification");
-              return Json(new { success = true });
-            }
-            else
-            {
+              await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Vacation request has been successfully generated. Please continue to set up the approval process for vacation approval.");
               return Json(new { success = true });
             }
           }
@@ -146,16 +144,14 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
             vacation.FinalApprovalID = 1;
             vacation.ProcessTypeApprovalID = 0;
             _appDBContext.HR_Vacations.Update(vacation);
-            await _appDBContext.SaveChangesAsync();
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Vacation request has been successfully generated. No approval process was found, so the request has been automatically approved.");
             return Json(new { success = true });
           }
         }
-
-        return Json(new { success = true });
       }
 
-      // If the model state is invalid, return a failure response with validation errors
-      return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Failed to generate vacation request. Contact your administrator.");
+      return Json(new { success = false });
     }
 
 
@@ -168,10 +164,10 @@ namespace Exampler_ERP.Controllers.EmployeePortal.Apply
       }
 
       vacations.DeleteYNID = 1;
-
+      vacations.FinalApprovalID = 0;
       _appDBContext.HR_Vacations.Update(vacations);
       await _appDBContext.SaveChangesAsync();
-
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Vacation Deleted successfully.");
       return Json(new { success = true });
     }
 

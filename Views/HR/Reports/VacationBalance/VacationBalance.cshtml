@@ -79,7 +79,7 @@
 
                     </div>
                     <div class="col-md-4 text-end">
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Vacation")'">@Localizer["lbl_Excel"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "VacationBalance")'">@Localizer["lbl_Excel"]</button>
                         <button type="button" class="btn btn-outline-secondary" onclick="printVacations()">@Localizer["lbl_Print"]</button>
                     </div>
                 </div>
@@ -98,20 +98,11 @@
                         <div class="col-10 col-md-10 col-lg-12">
                             <div class="row">
                              
-                                <div class="col-4">
+                                <div class="col-8">
                                     <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                                 </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">@Localizer["lbl_ContractStartDate"]</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">@Localizer["lbl_ContractEndDate"]</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">@Localizer["lbl_TotalVacation"]</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">@Localizer["lbl_VacationBalance"] </p>
+                                <div class="col-4">
+                                    <p class="text-nowrap">@Localizer["lbl_TotalBalance"]</p>
                                 </div>
                             </div>
                         </div>
@@ -124,20 +115,11 @@
                         <div class="row">
                             <div class="col-10 col-md-10 col-lg-12">
                                 <div class="row">
-                                    <div class="col-4">
+                                    <div class="col-8">
                                         <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.EmployeeName</p>
                                     </div>
-                                    <div class="col-2">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_ContractStartDate"]: </span>@item.StartDate?.ToString("dd-MMM-yyyy")</p>
-                                    </div>
-                                    <div class="col-2">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_ContractEndDate"]: </span>@item.EndDate?.ToString("dd-MMM-yyyy")</p>
-                                    </div>
-                                    <div class="col-2">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_TotalVacation"]: </span>@item.TotalVacation</p>
-                                    </div>
-                                    <div class="col-2">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_VacationBalance"] : </span>@item.VacationBalance</p>
+                                    <div class="col-4">
+                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_TotalBalance"]: </span>@item.TotalBalance</p>
                                     </div>
                                 </div>
                             </div>

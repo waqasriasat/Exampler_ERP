@@ -112,9 +112,17 @@
             var printWindow = window.open('@Url.Action("Print", "Branch")', '_blank');
             printWindow.focus();
         }
-        $('#searchBranchButton').click(function () {
+        // $('#searchBranchButton').click(function () {
+        //     var searchValue = $('#searchBranchInput').val();
+        //     window.location.href = '@Url.Action("Index", "Branch")?searchBranchName=' + searchValue;
+        // });
+            $('#searchBranchButton').click(function () {
             var searchValue = $('#searchBranchInput').val();
-            window.location.href = '@Url.Action("Index", "Branch")?searchBranchName=' + searchValue;
+
+            $.get('@Url.Action("Index", "Branch")', { searchBranchName: searchValue }, function (partialHtml) {
+                var html = $(partialHtml).find('#branchListContainer').html();
+                $('#branchListContainer').html(html);
+            });
         });
     </script>
    

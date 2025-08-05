@@ -171,6 +171,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           }
           else
           {
+            contract.FinalApprovalID = 1;
             contract.ActiveYNID = 1;
             _appDBContext.HR_Contracts.Update(contract);
             await _appDBContext.SaveChangesAsync();

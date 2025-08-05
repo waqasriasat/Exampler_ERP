@@ -1,0 +1,61 @@
+@model IEnumerable<Exampler_ERP.Models.Temp.ContractEndDaysViewModel>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    Layout = "_PrintLayout";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@Localizer["lbl_PrintContractExpiry"]</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>@Localizer["lbl_ContractExpiryList"]</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>@Localizer["lbl_EmployeeName"]</th>
+                <th>@Localizer["lbl_Branch"]</th>
+                <th>@Localizer["lbl_Department"]</th>
+                <th>@Localizer["lbl_ContractType"]</th>
+                <th>@Localizer["lbl_RemainingEndDays"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var VacationBalance in Model)
+            {
+                <tr>
+                    <td>@VacationBalance.EmployeeName</td>
+                    <td>@VacationBalance.BranchName</td>
+                    <td>@VacationBalance.DepartmentName</td>
+                    <td>@VacationBalance.ContractTypeName</td>
+                    <td>@VacationBalance.EndDays</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

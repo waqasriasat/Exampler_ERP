@@ -14,14 +14,15 @@ namespace Exampler_ERP
     // 9.Contract Termination Proper Testing
     // 10.Face Attendance Farwording Proper Testing (with the Sql Server 2022)
     // 11.Monthly Salary Sheet Proper Testing (with the Sql Server 2022)
-    // Issue Not Find-12.Create or edit Employee ko set karna hy k jab without approvalprocess Generate ho tw finalApprovalID = 1 ho and processTypeID = 0 jaye
+    // Done-12.Create or edit Employee ko set karna hy k jab without approvalprocess Generate ho tw finalApprovalID = 1 ho and processTypeID = 0 jaye
     // 13.VacationReport Proper Testing
-    // 14.VacationBalance Make a Print Page
-    // 15.VacationBalance main TotalVacation and VacationBalance k Column ko point 2 Value pe set karna hy.
-    // 17.Create or edit Contract ko set karna hy k jab without approvalprocess Generate ho tw finalApprovalID = 1 ho and processTypeID = 0 jaye
-    // 18.ContractExpiry Make a Print Page
-    // 19.ContractExpiry Make a Excel Sheet
+    // Done-14.VacationBalance Make a Print Page
+    // Done-15.VacationBalance main TotalVacation and VacationBalance k Column ko point 2 Value pe set karna hy.
+    // Done-17.Create or edit Contract ko set karna hy k jab without approvalprocess Generate ho tw finalApprovalID = 1 ho and processTypeID = 0 jaye
+    // Done-18.ContractExpiry Make a Print Page
+    // Done-19.ContractExpiry Make a Excel Sheet
     // 20.MonthlyPayslip Make a Print Page
     // 21.MonthlyPayslip Make a Excel Sheet
+    // 22.Vacation main By Line Wala Print Banana hy
   }
 }

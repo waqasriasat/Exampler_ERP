@@ -96,9 +96,7 @@
         $('#EmployeeID').change(function () {
             var employeeID = $(this).val();
 
-            // Check if an employee is selected
             if (employeeID && employeeID !== "0") {
-                // Make an AJAX request to fetch vacation dates
                 $.ajax({
                     url: '@Url.Action("GetVacationDatesByEmployeeIDWithoutSettled", "VacationSettle")', // Adjust controller name if necessary
                     type: 'GET',
@@ -107,27 +105,21 @@
                         var $vacationDropdown = $('#VacationID');
                         $vacationDropdown.empty(); // Clear the current options
 
-                        // Check if data is not empty
                         if (data.length > 0) {
-                            // Populate the vacation dates dropdown
                             $.each(data, function (index, option) {
                                 $vacationDropdown.append($('<option></option>').val(option.value).text(option.text));
                             });
-                            // Enable the dropdown if records are found
                             $vacationDropdown.prop('disabled', false);
                         } else {
-                            // If no vacation records, keep it disabled
                             $vacationDropdown.prop('disabled', true);
                         }
                     },
                     error: function () {
                         alert('Error fetching vacation dates.');
-                        // Keep the dropdown disabled on error
                         $('#VacationID').prop('disabled', true);
                     }
                 });
             } else {
-                // If no employee is selected, reset the vacation dropdown and keep it disabled
                 $('#VacationID').empty().append('<option value="0">Please Select</option>').prop('disabled', true);
             }
         });
