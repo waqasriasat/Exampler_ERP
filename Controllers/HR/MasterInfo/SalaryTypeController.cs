@@ -17,8 +17,6 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
     private readonly IConfiguration _configuration;
     private readonly Utils _utils;
     private readonly IHubContext<NotificationHub> _hubContext;
-
-
     public SalaryTypeController(AppDBContext appDBContext, IConfiguration configuration, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<SalaryTypeController> localizer) 
     : base(appDBContext)
     {
@@ -64,7 +62,6 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       }
       return PartialView("~/Views/HR/MasterInfo/SalaryType/EditSalaryType.cshtml", SalaryType);
     }
-
     [HttpPost]
     public async Task<IActionResult> Edit(Settings_SalaryType SalaryType)
     {
@@ -87,7 +84,6 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
       ViewBag.ActiveYNIDList = await _utils.GetActiveYNIDList();
       return PartialView("~/Views/HR/MasterInfo/SalaryType/AddSalaryType.cshtml", new Settings_SalaryType());
     }
-
     [HttpPost]
     public async Task<IActionResult> Create(Settings_SalaryType SalaryType)
     {
@@ -117,7 +113,7 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
 
       _appDBContext.Settings_SalaryTypes.Update(SalaryType);
       await _appDBContext.SaveChangesAsync();
-      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Designation Deleted successfully.");
+      await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Salary Type Deleted successfully.");
       return Json(new { success = true });
     }
     public async Task<IActionResult> ExportToExcel()
@@ -161,6 +157,5 @@ namespace Exampler_ERP.Controllers.HR.MasterInfo
           .ToListAsync();
       return View("~/Views/HR/MasterInfo/SalaryType/PrintSalaryTypes.cshtml", SalaryTypees);
     }
-
   }
 }
