@@ -245,13 +245,24 @@ namespace Exampler_ERP.Controllers.HR.HR
     }
     public async Task<IActionResult> Delete(int id)
     {
-      var allowance = await _appDBContext.HR_AdditionalAllowances.FindAsync(id);
+      var allowance = await _appDBContext.HR_AdditionalAllowances
+          .Include(a => a.AdditionalAllowanceDetails)
+          .FirstOrDefaultAsync(a => a.AdditionalAllowanceID == id);
       if (allowance == null)
       {
         return NotFound();
       }
-
-      _appDBContext.HR_AdditionalAllowances.Remove(allowance);
+      if ((allowance.PostedID == 0 || allowance.PostedID == null) && (allowance.PayRollID == 0 || allowance.PayRollID == null))
+      {
+        allowance.FinalApprovalID = 2;
+      }
+      else
+      {
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse",
+        "The additional allowance could not be deleted because it has already been posted to the payroll. Please unpost it before proceeding.");
+        return Json(new { success = true });
+      }
+      _appDBContext.HR_AdditionalAllowances.Update(allowance);
       await _appDBContext.SaveChangesAsync();
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Additional Allowance Deleted successfully.");
       return Json(new { success = true });
@@ -260,7 +271,7 @@ namespace Exampler_ERP.Controllers.HR.HR
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var addAllowance = _appDBContext.HR_AdditionalAllowances
+      var addAllowance = await _appDBContext.HR_AdditionalAllowances
         .Include(d => d.Employee)
         .Include(d => d.MonthType)
         .ToListAsync();
@@ -268,16 +279,16 @@ namespace Exampler_ERP.Controllers.HR.HR
       using (var package = new ExcelPackage())
       {
         var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_AdditionalAllowance"]);
-        worksheet.Cells["A1"].Value = _localizer["lbl_SalaryTypeID"];
-        worksheet.Cells["B1"].Value = _localizer["lbl_SalaryTypeName"];
-        worksheet.Cells["C1"].Value = _localizer["lbl_Active"];
+        worksheet.Cells["A1"].Value = _localizer["lbl_EmployeeName"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_Month"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_Year"];
 
 
         for (int i = 0; i < addAllowance.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = addAllowance[i].SalaryTypeID;
-          worksheet.Cells[i + 2, 2].Value = addAllowance[i].SalaryTypeName;
-          worksheet.Cells[i + 2, 3].Value = addAllowance[i].ActiveYNID == 1 ? _localizer["lbl_Yes"] : _localizer["lbl_No"];
+          worksheet.Cells[i + 2, 1].Value = addAllowance[i].Employee?.FirstName + ' ' + addAllowance[i].Employee?.FatherName + ' ' + addAllowance[i].Employee?.FamilyName;
+          worksheet.Cells[i + 2, 2].Value = addAllowance[i].MonthType?.MonthTypeName;
+          worksheet.Cells[i + 2, 3].Value = addAllowance[i].Year;
         }
 
         worksheet.Cells["A1:C1"].Style.Font.Bold = true;
@@ -293,10 +304,11 @@ namespace Exampler_ERP.Controllers.HR.HR
     }
     public async Task<IActionResult> Print()
     {
-      var SalaryTypees = await _appDBContext.Settings_SalaryTypes
-          .Where(b => b.DeleteYNID != 1)
+      var addAllowance = await _appDBContext.HR_AdditionalAllowances
+          .Include(d => d.Employee)
+          .Include(d => d.MonthType)
           .ToListAsync();
-      return View("~/Views/HR/MasterInfo/SalaryType/PrintSalaryTypes.cshtml", SalaryTypees);
+      return View("~/Views/HR/HR/AdditionalAllowance/PrintAdditionalAllowance.cshtml", addAllowance);
     }
   }
 }

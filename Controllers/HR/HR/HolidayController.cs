@@ -212,56 +212,42 @@ namespace Exampler_ERP.Controllers.HR.HR
       return View("~/Views/HR/HR/Holiday/PrintHoliday.cshtml", Holidays);
     }
 
-    //public async Task<IActionResult> ExportToExcel()
-    //{
-    //  ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+    public async Task<IActionResult> ExportToExcel()
+    {
+      ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-    //  var Holidays = await _appDBContext.HR_Holidays
-    //      .Where(c => c.DeleteYNID != 1)
-    //      .Include(c => c.HolidayType)
-    //      .ToListAsync();
-    //  var SalaryTypesList = await _utils.GetSalaryOptions();
-    //  using (var package = new ExcelPackage())
-    //  {
-    //    var worksheet = package.Workbook.Worksheets.Add("Holidays");
+      var Holidays = await _appDBContext.HR_Holidays
+          .Where(c => c.DeleteYNID != 1)
+          .Include(c => c.HolidayType)
+          .ToListAsync();
+      var SalaryTypesList = await _utils.GetSalaryOptions();
+      using (var package = new ExcelPackage())
+      {
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Holiday"]);
 
-    //    worksheet.Cells["A1"].Value = "Holiday ID";
-    //    worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
-    //    worksheet.Cells["C1"].Value = _localizer["lbl_IssueDate"];
-    //    worksheet.Cells["D1"].Value = _localizer["lbl_SalaryType"];
-    //    worksheet.Cells["E1"].Value = "Holiday Type";
-    //    worksheet.Cells["F1"].Value = _localizer["lbl_VacationDays"];
-    //    worksheet.Cells["G1"].Value = _localizer["lbl_DutyHours"];
-    //    worksheet.Cells["H1"].Value = _localizer["lbl_DutyMinutess"];
-    //    worksheet.Cells["I1"].Value = _localizer["lbl_FinalApprovalID"];
-    //    worksheet.Cells["J1"].Value = _localizer["lbl_ApprovalProcessID"];
+        worksheet.Cells["A1"].Value = _localizer["lbl_HolidayID"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_HolidayDate"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_HolidayType"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_FinalApprovalID"];
+     
+        for (int i = 0; i < Holidays.Count; i++)
+        {
+          worksheet.Cells[i + 2, 1].Value = Holidays[i].HolidayID;
+          worksheet.Cells[i + 2, 2].Value = Holidays[i].HolidayDate.ToString("dd-MMM-yyyy");
+          worksheet.Cells[i + 2, 3].Value = Holidays[i].HolidayType?.HolidayTypeName;
+          worksheet.Cells[i + 2, 4].Value = Holidays[i].FinalApprovalID;
+        }
 
-    //    for (int i = 0; i < Holidays.Count; i++)
-    //    {
-    //      worksheet.Cells[i + 2, 1].Value = Holidays[i].HolidayID;
-    //      worksheet.Cells[i + 2, 2].Value = Holidays[i].Employee?.FirstName + ' ' + Holidays[i].Employee?.FatherName + ' ' + Holidays[i].Employee?.FamilyName;
-    //      worksheet.Cells[i + 2, 3].Value = Holidays[i].IssueDate.ToString("dd-MMM-yyyy");
-    //      worksheet.Cells[i + 2, 4].Value = Holidays[i].SalaryTypeID == 0 || Holidays[i]?.SalaryTypeID == null
-    //      ? ""
-    //      : SalaryTypesList.FirstOrDefault(g => g.Value == Holidays[i].SalaryTypeID.ToString())?.Text;
-    //      worksheet.Cells[i + 2, 5].Value = Holidays[i].HolidayTypeID;
-    //      worksheet.Cells[i + 2, 6].Value = Holidays[i].VacationDays;
-    //      worksheet.Cells[i + 2, 7].Value = Holidays[i].DHours;
-    //      worksheet.Cells[i + 2, 8].Value = Holidays[i].DMinutes;
-    //      worksheet.Cells[i + 2, 9].Value = Holidays[i].FinalApprovalID;
-    //      worksheet.Cells[i + 2, 10].Value = Holidays[i].ProcessTypeApprovalID;
-    //    }
+        worksheet.Cells["A1:J1"].Style.Font.Bold = true;
+        worksheet.Cells.AutoFitColumns();
 
-    //    worksheet.Cells["A1:J1"].Style.Font.Bold = true;
-    //    worksheet.Cells.AutoFitColumns();
+        var stream = new MemoryStream();
+        package.SaveAs(stream);
+        stream.Position = 0;
+        string excelName = _localizer["lbl_Holiday"] +$"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
-    //    var stream = new MemoryStream();
-    //    package.SaveAs(stream);
-    //    stream.Position = 0;
-    //    string excelName = $"Holidays-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
-
-    //    return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
-    //  }
-    //}
+        return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+      }
+    }
   }
 }

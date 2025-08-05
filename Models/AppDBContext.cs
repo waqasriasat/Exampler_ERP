@@ -1254,7 +1254,17 @@ namespace Exampler_ERP.Models
       new CR_LanguageRecord() { LanguageRecordId = 1107, LabelName = "lbl_WorkingSlot", LabelValue = "Working Slot", Culture = "en-US" },
       new CR_LanguageRecord() { LanguageRecordId = 1108, LabelName = "lbl_Year", LabelValue = "Year", Culture = "en-US" },
       new CR_LanguageRecord() { LanguageRecordId = 1109, LabelName = "lbl_Yes", LabelValue = "Yes", Culture = "en-US" },
-      new CR_LanguageRecord() { LanguageRecordId = 1110, LabelName = "lbl_PersonalInformation", LabelValue = "Personal Information", Culture = "en-US" }
+      new CR_LanguageRecord() { LanguageRecordId = 1110, LabelName = "lbl_PersonalInformation", LabelValue = "Personal Information", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1111, LabelName = "lbl_AdditionalAllowanceID", LabelValue = "Additional Allowance ID", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1112, LabelName = "lbl_Disapprove", LabelValue = "Disapprove", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1113, LabelName = "lbl_Pending", LabelValue = "Pending", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1115, LabelName = "lbl_PrintHoliday", LabelValue = "Print Holiday", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1116, LabelName = "lbl_HolidayID", LabelValue = "Holiday ID", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1117, LabelName = "lbl_HolidayID", LabelValue = "Holiday ID", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1118, LabelName = "lbl_HolidayID", LabelValue = "Holiday ID", Culture = "en-US" }
+
+
+
       );
 
       modelBuilder.Entity<Settings_LanguageSetup>().HasData(

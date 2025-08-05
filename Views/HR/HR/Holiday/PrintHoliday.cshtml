@@ -1,5 +1,59 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model IEnumerable<Exampler_ERP.Models.HR_Holiday>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
+	Layout = "_PrintLayout";
 }
+<!DOCTYPE html>
+<html>
+<head>
+	<title>@Localizer["lbl_PrintHoliday"]</title>
+	<style>
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			background-color: white;
+		}
+
+		table, th, td {
+			border: 1px solid black;
+		}
+
+		th, td {
+			padding: 8px;
+			text-align: left;
+		}
+
+		th {
+			background-color: white;
+		}
+	</style>
+</head>
+<body style="background-color:white">
+	<h2>@Localizer["lbl_HolidayList"]</h2>
+	<table>
+		<thead>
+			<tr>
+				<th>@Localizer["lbl_HolidayID"]</th>
+				<th>@Localizer["lbl_HolidayDate"]</th>
+				<th>@Localizer["lbl_HolidayTypeName"]</th>
+				<th>@Localizer["lbl_Active"]</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var Holiday in Model)
+			{
+				<tr>
+					<td>@Holiday.HolidayTypeID</td>
+					<td>@Holiday.HolidayDate</td>
+					<td>@Holiday.HolidayType.HolidayTypeName</td>
+					<td>@(Holiday.ActiveYNID == 1 ? "Yes" : "No")</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	<script>
+		window.print();
+	</script>
+</body>
+</html>

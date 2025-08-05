@@ -10,11 +10,28 @@
 					<div class="col-12 col-md-12 col-lg-6">
 						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
 					</div>
-					<div class="col-12 col-md-12 col-lg-3">
+					<div class="col-12 col-md-12 col-lg-2">
                         <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Month"] : </span>@item.MonthType?.MonthTypeName</p>
 					</div>
-					<div class="col-12 col-md-12 col-lg-3">
+					<div class="col-12 col-md-12 col-lg-2">
                         <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Year"] : </span>@Html.DisplayFor(modelItem => item.Year)</p>
+					</div>
+					<div class="col-12 col-md-12 col-lg-2">
+						<p class="text-nowrap">
+							<span class="smallAdd">@Localizer["lbl_Status"] : </span>
+							@if (item.FinalApprovalID == 0)
+							{
+								<span>@Localizer["lbl_Pending"]</span>
+							}
+							else if (item.FinalApprovalID == 1)
+							{
+								<span>@Localizer["lbl_Approve"]</span>
+							}
+							else if (item.FinalApprovalID == 2)
+							{
+								<span>@Localizer["lbl_Disapprove"]</span>
+							}
+						</p>
 					</div>
 				</div>
 			</div>
@@ -29,8 +46,8 @@
 					</div>
 					<div class="col-12 col-md-12 col-lg-6">
 						<div class="btn-group" role="group" aria-label="Actions">
-							<a href="javascript:void(0)" class="PrintAdditionalAllowanceLink" data-id="@item.AdditionalAllowanceID">
-								<i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
+							<a href="javascript:void(0)" class="deleteAdditionalAllowanceLink" data-id="@item.AdditionalAllowanceID">
+								<i class="fa-regular fa-trash-can" style="font-size: large; color:maroon; line-height: 2;"></i>
 							</a>
 						</div>
 					</div>

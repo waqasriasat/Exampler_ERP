@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Localizer["lbl_HumanResources"] + " - Additional Allowance";
+	ViewData["Title"] = Localizer["lbl_HumanResources"] + " - " + Localizer["lbl_AdditionalAllowance"];
 }
 
 @section PageScripts {
@@ -142,7 +142,7 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">@Localizer["lbl_HumanResources"] /</span> Additional Allowance
+	<span class="text-muted fw-light">@Localizer["lbl_HumanResources"] /</span> @Localizer["lbl_AdditionalAllowance"]
 </h4>
 <form method="get" action="@Url.Action("Index", "AdditionalAllowance")">
     <div class="row">
@@ -219,7 +219,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">Additional Allowance @Localizer["lbl_List"]</h5>
+			<h5 class="card-header">@Localizer["lbl_AdditionalAllowanceList"]</h5>
             <div class="">
                 <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
                     <div class="row">
@@ -228,12 +228,15 @@
                                 <div class="col-6">
                                     <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
                                     <p class="text-nowrap">@Localizer["lbl_Month"]</p>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
                                     <p class="text-nowrap">@Localizer["lbl_Year"]</p>
                                 </div>
+								<div class="col-2">
+									<p class="text-nowrap">@Localizer["lbl_Status"]</p>
+								</div>
                             </div>
                         </div>
                         <div class="col-2 col-md-1 col-lg-2">
@@ -242,7 +245,7 @@
                                     <p class="text-nowrap">@Localizer["lbl_Edit"]</p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="text-nowrap">@Localizer["lbl_Print"] </p>
+                                    <p class="text-nowrap">@Localizer["lbl_Delete"] </p>
                                 </div>
                             </div>
                         </div>
