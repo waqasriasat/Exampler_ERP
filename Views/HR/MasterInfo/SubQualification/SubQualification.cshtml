@@ -97,8 +97,11 @@
         }
         $('#searchSubQualificationButton').click(function () {
             var searchValue = $('#searchSubQualificationInput').val();
-            window.location.href = '@Url.Action("Index", "SubQualification")?searchSubQualificationName=' + searchValue;
-        });
+         	$.get('@Url.Action("Index", "SubQualification")', { searchSubQualificationName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#SubQualificationListContainer').html();
+				$('#SubQualificationListContainer').html(html);
+			});
+		});
     </script>
 }
 <h4 class="py-3 mb-4">

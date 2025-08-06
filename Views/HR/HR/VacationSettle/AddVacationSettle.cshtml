@@ -25,7 +25,7 @@
                         <div class="col-12">
                             <label asp-for="EmployeeID" class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
                             <select id="EmployeeID" asp-for="EmployeeID" asp-items="@(new SelectList(ViewBag.EmployeesList, "Value", "Text"))" class="form-control form-control-lg">
-                            </select>
+							</select>
                             <span asp-validation-for="EmployeeID" class="text-danger"></span>
                         </div>
 
@@ -90,81 +90,74 @@
     </div>
 </div>
 <script>
+	$(document).on('change', '#EmployeeID', function () {
+			var employeeID = $(this).val();
+			if (employeeID && employeeID !== "0") {
+				$.ajax({
+					url: '@Url.Action("GetVacationDatesByEmployeeIDWithoutSettled", "VacationSettle")', // Adjust controller name if necessary
+					type: 'GET',
+					data: { employeeID: employeeID },
+					success: function (data) {
+						var $vacationDropdown = $('#VacationID');
+						$vacationDropdown.empty(); // Clear the current options
+
+						if (data.length > 0) {
+							$.each(data, function (index, option) {
+								$vacationDropdown.append($('<option></option>').val(option.value).text(option.text));
+							});
+							$vacationDropdown.prop('disabled', false);
+						} else {
+							$vacationDropdown.prop('disabled', true);
+						}
+					},
+					error: function () {
+						alert('Error fetching vacation dates.');
+						$('#VacationID').prop('disabled', true);
+					}
+				});
+			} else {
+				$('#VacationID').empty().append('<option value="0">Please Select</option>').prop('disabled', true);
+			}
+	});
+	  $(document).on('change', '#VacationID', function () {
+		  var vacationID = $(this).val();
+		  console.log($('#EmployeeID').length);
+		  console.log($('#EmployeeID').val());
+			  var employeeID = $('#EmployeeID').val();
+			  debugger;
+			  if (vacationID && vacationID !== "0") {
+				  $.ajax({
+					  url: '@Url.Action("GetVacationRecord", "VacationSettle")',
+					  type: 'GET',
+					  data: { vacationID: vacationID },
+
+					  success: function (data) {
+						  var startDateParts = data.startDate.split('/'); // dd/MM/yyyy
+						  var endDateParts = data.endDate.split('/');     // dd/MM/yyyy
+
+						  var formattedStartDate = `${startDateParts[2]}-${startDateParts[1]}-${startDateParts[0]}`;
+						  var formattedEndDate = `${endDateParts[2]}-${endDateParts[1]}-${endDateParts[0]}`;
+
+						  $('#StartDate').val(formattedStartDate);
+						  $('#EndDate').val(formattedEndDate);
+
+						  $('.start-date-display').text(data.startDate); // Show in dd/MM/yyyy
+						  $('.end-date-display').text(data.endDate);     // Show in dd/MM/yyyy
+
+						  $('#TotalDays').val(data.totalDays);
+						  $('#SettleDays').val(Math.round(data.settleDays));
+						  $('#SettleAmount').val(Math.round(data.settleAmount));
+					  },
+					  error: function () {
+						  alert('Error fetching vacation details.');
+					  }
+				  });
+			  } else {
+				  $('#StartDate, #EndDate, #TotalDays').val('');
+				  $('.start-date-display, .end-date-display').text(''); // Clear displayed dates
+			  }
+	  });
     $(document).ready(function () {
-        $('#VacationID').prop('disabled', true);
-        // On Employee dropdown change
-        $('#EmployeeID').change(function () {
-            var employeeID = $(this).val();
-
-            if (employeeID && employeeID !== "0") {
-                $.ajax({
-                    url: '@Url.Action("GetVacationDatesByEmployeeIDWithoutSettled", "VacationSettle")', // Adjust controller name if necessary
-                    type: 'GET',
-                    data: { employeeID: employeeID },
-                    success: function (data) {
-                        var $vacationDropdown = $('#VacationID');
-                        $vacationDropdown.empty(); // Clear the current options
-
-                        if (data.length > 0) {
-                            $.each(data, function (index, option) {
-                                $vacationDropdown.append($('<option></option>').val(option.value).text(option.text));
-                            });
-                            $vacationDropdown.prop('disabled', false);
-                        } else {
-                            $vacationDropdown.prop('disabled', true);
-                        }
-                    },
-                    error: function () {
-                        alert('Error fetching vacation dates.');
-                        $('#VacationID').prop('disabled', true);
-                    }
-                });
-            } else {
-                $('#VacationID').empty().append('<option value="0">Please Select</option>').prop('disabled', true);
-            }
-        });
-        // On Vacation dropdown change
-        $('#VacationID').change(function () {
-            var vacationID = $(this).val();
-            var employeeID = $('#EmployeeID').val();
-            if (vacationID && vacationID !== "0") {
-                $.ajax({
-                    url: '@Url.Action("GetVacationRecord", "VacationSettle")',
-                    type: 'GET',
-                    data: { vacationID: vacationID, employeeID: employeeID },
-
-                    success: function (data) {
-                        // Parse the dates (assumes they are returned in dd/MM/yyyy format)
-                        var startDateParts = data.startDate.split('/'); // dd/MM/yyyy
-                        var endDateParts = data.endDate.split('/');     // dd/MM/yyyy
-
-                        // Convert to yyyy-MM-dd format for the date input
-                        var formattedStartDate = `${startDateParts[2]}-${startDateParts[1]}-${startDateParts[0]}`;
-                        var formattedEndDate = `${endDateParts[2]}-${endDateParts[1]}-${endDateParts[0]}`;
-
-                        // Set the values in the date input fields
-                        $('#StartDate').val(formattedStartDate);
-                        $('#EndDate').val(formattedEndDate);
-
-                        // Display the dates in dd/MM/yyyy format next to the inputs
-                        $('.start-date-display').text(data.startDate); // Show in dd/MM/yyyy
-                        $('.end-date-display').text(data.endDate);     // Show in dd/MM/yyyy
-
-                        $('#TotalDays').val(data.totalDays);
-                        $('#SettleDays').val(Math.round(data.settleDays));
-                        $('#SettleAmount').val(Math.round(data.settleAmount));
-                    },
-                    error: function () {
-                        alert('Error fetching vacation details.');
-                    }
-                });
-            } else {
-                // Reset the fields if no vacation is selected
-                $('#StartDate, #EndDate, #TotalDays').val('');
-                $('.start-date-display, .end-date-display').text(''); // Clear displayed dates
-            }
-        });
-
-
+		$('#VacationID').prop('disabled', true);
     });
 </script>

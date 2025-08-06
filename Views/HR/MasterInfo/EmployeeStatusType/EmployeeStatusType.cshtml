@@ -97,8 +97,11 @@
         }
         $('#searchEmployeeStatusTypeButton').click(function () {
             var searchValue = $('#searchEmployeeStatusTypeInput').val();
-            window.location.href = '@Url.Action("Index", "EmployeeStatusType")?searchEmployeeStatusTypeName=' + searchValue;
-        });
+			$.get('@Url.Action("Index", "EmployeeStatusType")', { searchEmployeeStatusTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#EmployeeStatusTypeListContainer').html();
+				$('#EmployeeStatusTypeListContainer').html(html);
+			});
+		});
     </script>
 }
 <h4 class="py-3 mb-4">

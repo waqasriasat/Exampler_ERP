@@ -97,7 +97,10 @@
         }
         $('#searchProcessTypeButton').click(function () {
             var searchValue = $('#searchProcessTypeInput').val();
-            window.location.href = '@Url.Action("Index", "ProcessType")?searchProcessTypeName=' + searchValue;
+        	$.get('@Url.Action("Index", "ProcessType")', { searchProcessTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#ProcessTypeListContainer').html();
+				$('#ProcessTypeListContainer').html(html);
+			});
         });
     </script>
 }

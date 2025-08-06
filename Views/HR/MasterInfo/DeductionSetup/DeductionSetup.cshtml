@@ -67,7 +67,10 @@
         }
         $('#searchDeductionTypeButton').click(function () {
             var searchValue = $('#searchDeductionTypeInput').val();
-            window.location.href = '@Url.Action("Index", "DeductionSetup")?searchDeductionTypeName=' + searchValue;
+        	$.get('@Url.Action("Index", "DeductionSetup")', { searchDeductionTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#DeductionSetupListContainer').html();
+				$('#DeductionSetupListContainer').html(html);
+			});
         });
     </script>
 }

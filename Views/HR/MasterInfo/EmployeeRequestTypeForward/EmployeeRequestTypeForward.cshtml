@@ -73,8 +73,11 @@
         }
         $('#searchEmployeeRequestTypeButton').click(function () {
             var searchValue = $('#searchEmployeeRequestTypeInput').val();
-            window.location.href = '@Url.Action("Index", "EmployeeRequestTypeForward")?searchEmployeeRequestTypeName=' + searchValue;
-        });
+			$.get('@Url.Action("Index", "EmployeeRequestTypeForward")', { searchEmployeeRequestTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#EmployeeRequestTypeForwardListContainer').html();
+				$('#EmployeeRequestTypeForwardListContainer').html(html);
+			});
+		});
     </script>
 }
 <h4 class="py-3 mb-4">

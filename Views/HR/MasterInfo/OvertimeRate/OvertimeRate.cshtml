@@ -95,7 +95,10 @@
         }
         $('#searchOverTimeRateButton').click(function () {
             var searchValue = $('#searchOverTimeRateInput').val();
-            window.location.href = '@Url.Action("Index", "OverTimeRate")?searchOverTimeRateName=' + searchValue;
+			$.get('@Url.Action("Index", "OverTimeRate")', { searchOverTimeRateName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#OverTimeRateListContainer').html();
+				$('#OverTimeRateListContainer').html(html);
+			});
         });
     </script>
 }

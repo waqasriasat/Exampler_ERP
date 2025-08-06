@@ -97,7 +97,10 @@
         }
         $('#searchHolidayTypeButton').click(function () {
             var searchValue = $('#searchHolidayTypeInput').val();
-            window.location.href = '@Url.Action("Index", "HolidayType")?searchHolidayTypeName=' + searchValue;
+       		$.get('@Url.Action("Index", "HolidayType")', { searchHolidayTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#HolidayTypeListContainer').html();
+				$('#HolidayTypeListContainer').html(html);
+			});
         });
     </script>
 }

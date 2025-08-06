@@ -70,8 +70,11 @@
         }
         $('#searchEmployeeRequestTypeButton').click(function () {
             var searchValue = $('#searchEmployeeRequestTypeInput').val();
-            window.location.href = '@Url.Action("Index", "EmployeeRequestTypeApprovalSetup")?searchEmployeeRequestTypeName=' + searchValue;
-        });
+			$.get('@Url.Action("Index", "EmployeeRequestTypeApprovalSetup")', { searchEmployeeRequestTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#EmployeeRequestTypeApprovalSetupListContainer').html();
+				$('#EmployeeRequestTypeApprovalSetupListContainer').html(html);
+			});
+		});
     </script>
 }
 <h4 class="py-3 mb-4">

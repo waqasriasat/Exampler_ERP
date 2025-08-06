@@ -97,7 +97,10 @@
 		}
 		$('#searchDeductionTypeButton').click(function () {
 			var searchValue = $('#searchDeductionTypeInput').val();
-			window.location.href = '@Url.Action("Index", "DeductionType")?searchDeductionTypeName=' + searchValue;
+			$.get('@Url.Action("Index", "DeductionType")', { searchDeductionTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#DeductionTypeListContainer').html();
+				$('#DeductionTypeListContainer').html(html);
+			});
 		});
 	</script>
 }

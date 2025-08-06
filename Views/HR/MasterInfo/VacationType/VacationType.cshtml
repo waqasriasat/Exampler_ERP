@@ -97,7 +97,10 @@
         }
         $('#searchVacationTypeButton').click(function () {
             var searchValue = $('#searchVacationTypeInput').val();
-            window.location.href = '@Url.Action("Index", "VacationType")?searchVacationTypeName=' + searchValue;
+         	$.get('@Url.Action("Index", "VacationType")', { searchVacationTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#VacationTypeListContainer').html();
+				$('#VacationTypeListContainer').html(html);
+			});
         });
     </script>
 }

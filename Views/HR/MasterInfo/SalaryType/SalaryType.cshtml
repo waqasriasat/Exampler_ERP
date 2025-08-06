@@ -97,7 +97,10 @@
         }
         $('#searchSalaryTypeButton').click(function () {
             var searchValue = $('#searchSalaryTypeInput').val();
-            window.location.href = '@Url.Action("Index", "SalaryType")?searchSalaryTypeName=' + searchValue;
+        	$.get('@Url.Action("Index", "SalaryType")', { searchSalaryTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#SalaryTypeListContainer').html();
+				$('#SalaryTypeListContainer').html(html);
+			});
         });
     </script>
 }

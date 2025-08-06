@@ -98,7 +98,10 @@
         }
         $('#searchSectionButton').click(function () {
             var searchValue = $('#searchSectionInput').val();
-            window.location.href = '@Url.Action("Index", "Section")?searchSectionName=' + searchValue;
+        	$.get('@Url.Action("Index", "Section")', { searchSectionName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#SectionListContainer').html();
+				$('#SectionListContainer').html(html);
+			});
         });
 
     </script>

@@ -98,7 +98,10 @@
 
         $('#searchRoleTypeButton').click(function () {
             var searchValue = $('#searchRoleTypeInput').val();
-            window.location.href = '@Url.Action("Index", "Role")?searchRoleTypeName=' + searchValue;
+        	$.get('@Url.Action("Index", "Role")', { searchRoleTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#RoleListContainer').html();
+				$('#RoleListContainer').html(html);
+			});
         });
     </script>
 }

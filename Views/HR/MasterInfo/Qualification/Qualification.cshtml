@@ -98,7 +98,10 @@
         }
         $('#searchQualificationButton').click(function () {
             var searchValue = $('#searchQualificationInput').val();
-            window.location.href = '@Url.Action("Index", "Qualification")?searchQualificationName=' + searchValue;
+         	$.get('@Url.Action("Index", "Qualification")', { searchQualificationName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#QualificationListContainer').html();
+				$('#QualificationListContainer').html(html);
+			});
         });
     </script>
 }

@@ -37,11 +37,11 @@ namespace Exampler_ERP.Controllers.HR.HR
     public async Task<IActionResult> Index(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? VacationTypeID)
     {
       var query = _appDBContext.HR_VacationSettles
-        .Where(b => b.FinalApprovalID != 1)
+        .Where(d => d.FinalApprovalID == 1)
         .Include(d => d.Vacation)
         .Include(d => d.Vacation.Settings_VacationType)
         .Include(d => d.Vacation.Employee)
-        .OrderBy(emp => emp.VacationSettleID)
+        .OrderBy(d => d.VacationSettleID)
         .AsQueryable();
 
       if (FromDate.HasValue)
@@ -257,10 +257,14 @@ namespace Exampler_ERP.Controllers.HR.HR
       return Json(vacationDates); // Return the data as JSON
     }
     [HttpGet]
-    public async Task<IActionResult> GetVacationRecord(int vacationID, int employeeID)
+    public async Task<IActionResult> GetVacationRecord(int vacationID)
     {
+      var vacFromEmpID = await _appDBContext.HR_Vacations
+        .Where(v => v.VacationID == vacationID)
+        .Select(v => v.EmployeeID)
+        .FirstOrDefaultAsync();
       var VacationBalanceresult = await _appDBContext.HR_Contracts
-          .Where(emp => emp.ActiveYNID == 1 && emp.EmployeeID == employeeID)
+          .Where(emp => emp.ActiveYNID == 1 && emp.EmployeeID == vacFromEmpID)
           .Select(emp => new
           {
             VacationBalance = (EF.Functions.DateDiffDay(emp.StartDate, emp.EndDate) / 365.0) * emp.VacationDays
@@ -294,7 +298,7 @@ namespace Exampler_ERP.Controllers.HR.HR
         return NotFound(); // Return 404 if the vacation record isn't found
       }
       var salarySum = await _appDBContext.HR_SalaryDetails
-          .Where(sd => sd.Salary.EmployeeID == employeeID
+          .Where(sd => sd.Salary.EmployeeID == vacFromEmpID
                        && sd.Salary.FinalApprovalID == 1
                        && (sd.SalaryTypeID == 1 || sd.SalaryTypeID == 2))
           .SumAsync(sd => sd.SalaryAmount ?? 0);

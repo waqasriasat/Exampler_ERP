@@ -96,6 +96,13 @@
             var printWindow = window.open('@Url.Action("Print", "Department")', '_blank');
             printWindow.focus();
         }
+			 $('#searchDepartmentButton').click(function () {
+			var searchValue = $('#searchDepartmentInput').val();
+			$.get('@Url.Action("Index", "Department")', { searchDepartmentName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#DepartmentListContainer').html();
+				$('#DepartmentListContainer').html(html);
+			});
+		});
     </script>
 }
 <h4 class="py-3 mb-4">
@@ -171,10 +178,3 @@
 <!-- Include the modal partial -->
 <div id="editDepartmentModalContainer"></div>
 <div id="addDepartmentModalContainer"></div>
-<script>
-    $('#searchDepartmentButton').click(function () {
-        var searchValue = $('#searchDepartmentInput').val();
-        window.location.href = '@Url.Action("Index", "Department")?searchDepartmentName=' + searchValue;
-    });
-
-</script>

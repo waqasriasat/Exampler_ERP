@@ -97,7 +97,10 @@
         }
         $('#searchDesignationButton').click(function () {
             var searchValue = $('#searchDesignationInput').val();
-            window.location.href = '@Url.Action("Index", "Designation")?searchDesignationName=' + searchValue;
+        	$.get('@Url.Action("Index", "Designation")', { searchDesignationName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#DesignationListContainer').html();
+				$('#DesignationListContainer').html(html);
+			});
         });
     </script>
 }

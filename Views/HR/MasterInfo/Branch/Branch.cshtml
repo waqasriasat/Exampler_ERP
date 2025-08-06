@@ -112,10 +112,6 @@
             var printWindow = window.open('@Url.Action("Print", "Branch")', '_blank');
             printWindow.focus();
         }
-        // $('#searchBranchButton').click(function () {
-        //     var searchValue = $('#searchBranchInput').val();
-        //     window.location.href = '@Url.Action("Index", "Branch")?searchBranchName=' + searchValue;
-        // });
             $('#searchBranchButton').click(function () {
             var searchValue = $('#searchBranchInput').val();
 
@@ -136,7 +132,6 @@
 </h4>
 <div class="row">
     <div class="col-md-12">
-       
         <div class="card">
             <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
             <div class="Searching-Box-padding">

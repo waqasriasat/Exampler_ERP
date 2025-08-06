@@ -98,7 +98,10 @@
         }
         $('#searchUserButton').click(function () {
             var searchValue = $('#searchUserInput').val();
-            window.location.href = '@Url.Action("Index", "User")?searchUserName=' + searchValue;
+        	$.get('@Url.Action("Index", "User")', { searchUserName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#userListContainer').html();
+				$('#userListContainer').html(html);
+			});
         });
     </script>
 }
