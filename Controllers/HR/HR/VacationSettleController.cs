@@ -321,6 +321,91 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       return Json(result); // Return the vacation data as JSON
     }
+    [HttpGet]
+    public async Task<IActionResult> GetVacationRecordbySettleDay(int vacationID, int settleDay)
+    {
+      try
+      {
+        var vacFromEmpID = await _appDBContext.HR_Vacations
+            .Where(v => v.VacationID == vacationID)
+            .Select(v => v.EmployeeID)
+            .FirstOrDefaultAsync();
+
+        var VacationBalanceresult = await _appDBContext.HR_Contracts
+            .Where(emp => emp.ActiveYNID == 1 && emp.EmployeeID == vacFromEmpID)
+            .Select(emp => new
+            {
+              VacationBalance = (EF.Functions.DateDiffDay(emp.StartDate, emp.EndDate) / 365.0) * emp.VacationDays
+                    - (_appDBContext.HR_Vacations
+                        .Where(vac => vac.EmployeeID == emp.Employee.EmployeeID
+                                      && vac.FinalApprovalID == 1
+                                      && _appDBContext.HR_VacationSettles.Any(vs => vs.VacationID == vac.VacationID))
+                        .Sum(vac => (int?)vac.TotalDays) ?? 0),
+            })
+            .FirstOrDefaultAsync();
+
+        if (VacationBalanceresult == null)
+        {
+          return BadRequest("Vacation balance could not be calculated.");
+        }
+
+        var vacation = await _appDBContext.HR_Vacations
+            .Where(v => v.VacationID == vacationID)
+            .Select(v => new
+            {
+              StartDate = v.StartDate.ToString("dd/MM/yyyy"),
+              EndDate = v.EndDate.ToString("dd/MM/yyyy"),
+              TotalDays = v.TotalDays,
+              SettleDays = (VacationBalanceresult.VacationBalance < v.TotalDays)
+                    ? VacationBalanceresult.VacationBalance
+                    : v.TotalDays
+            })
+            .FirstOrDefaultAsync();
+
+        if (vacation == null)
+        {
+          return NotFound("Vacation record not found.");
+        }
+
+        var salarySum = await _appDBContext.HR_SalaryDetails
+            .Where(sd => sd.Salary.EmployeeID == vacFromEmpID
+                         && sd.Salary.FinalApprovalID == 1
+                         && (sd.SalaryTypeID == 1 || sd.SalaryTypeID == 2))
+            .SumAsync(sd => sd.SalaryAmount ?? 0);
+
+        if (salarySum == 0)
+        {
+          return BadRequest("Salary data not found.");
+        }
+
+        DateTime endDate = DateTime.ParseExact(vacation.EndDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+        int daysInMonth = DateTime.DaysInMonth(endDate.Year, endDate.Month);
+
+        if (daysInMonth == 0)
+        {
+          return BadRequest("Invalid end date.");
+        }
+
+        double dailySalary = salarySum / daysInMonth;
+        double SettleAmount = dailySalary * settleDay;
+
+        var result = new
+        {
+          vacation.StartDate,
+          vacation.EndDate,
+          vacation.TotalDays,
+          settleDay,
+          SettleAmount = Math.Round(SettleAmount, 0)
+        };
+
+        return Json(result);
+      }
+      catch (Exception ex)
+      {
+        // Log this exception in production
+        return StatusCode(500, $"Internal server error: {ex.Message}");
+      }
+    }
 
     public async Task<IActionResult> Delete(int id)
     {

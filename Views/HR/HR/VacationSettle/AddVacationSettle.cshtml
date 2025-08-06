@@ -121,10 +121,7 @@
 	});
 	  $(document).on('change', '#VacationID', function () {
 		  var vacationID = $(this).val();
-		  console.log($('#EmployeeID').length);
-		  console.log($('#EmployeeID').val());
 			  var employeeID = $('#EmployeeID').val();
-			  debugger;
 			  if (vacationID && vacationID !== "0") {
 				  $.ajax({
 					  url: '@Url.Action("GetVacationRecord", "VacationSettle")',

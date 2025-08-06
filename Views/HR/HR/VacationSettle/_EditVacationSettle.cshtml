@@ -45,12 +45,12 @@
 <div class="row">
     <div class="col-6">
         <label asp-for="SettleDays" class="form-label fw-bold">@Localizer["lbl_SettleDays"]</label>
-        <input asp-for="SettleDays" class="form-control form-control-lg readonly-background" placeholder="Enter Settle Days here..." readonly>
+        <input asp-for="SettleDays" id="SettleDay" class="form-control form-control-lg " placeholder="Enter Settle Days here..." type="number">
         <span asp-validation-for="SettleDays" class="text-danger small"></span>
     </div>
     <div class="col-6">
         <label asp-for="SettleAmount" class="form-label fw-bold">@Localizer["lbl_SettleAmount"]</label>
-        <input asp-for="SettleAmount" class="form-control form-control-lg readonly-background" placeholder="Enter Settle Amount here..." readonly>
+        <input asp-for="SettleAmount" class="form-control form-control-lg " placeholder="Enter Settle Amount here...">
         <span asp-validation-for="SettleAmount" class="text-danger small"></span>
     </div>
 </div>
@@ -58,6 +58,43 @@
 <input type="hidden" asp-for="EmployeeID" id="HiddenEmployeeID" />
 <input type="hidden" asp-for="VacationID" id="HiddenVacationID" />
 <script>
+    $(document).on('change', '#SettleDay', function () {
+            var settleDay = $(this).val();
+                var vacationID = $('#HiddenVacationID').val();
+               
+                if (vacationID && vacationID !== "0") {
+                    $.ajax({
+                        url: '@Url.Action("GetVacationRecordbySettleDay", "VacationSettle")',
+                        type: 'GET',
+                        data: { vacationID: vacationID, settleDay: settleDay },
+                        
+                        success: function (data) {
+                           debugger;
+                            var startDateParts = data.startDate.split('/'); // dd/MM/yyyy
+                            var endDateParts = data.endDate.split('/');     // dd/MM/yyyy
+
+                            var formattedStartDate = `${startDateParts[2]}-${startDateParts[1]}-${startDateParts[0]}`;
+                            var formattedEndDate = `${endDateParts[2]}-${endDateParts[1]}-${endDateParts[0]}`;
+
+                            $('#StartDate').val(formattedStartDate);
+                            $('#EndDate').val(formattedEndDate);
+
+                            $('.start-date-display').text(data.startDate); // Show in dd/MM/yyyy
+                            $('.end-date-display').text(data.endDate);     // Show in dd/MM/yyyy
+
+                            $('#TotalDays').val(data.totalDays);
+                            $('#SettleDays').val(Math.round(data.settleDays));
+                            $('#SettleAmount').val(Math.round(data.settleAmount));
+                        },
+                        error: function () {
+                            alert('Error fetching vacation details.');
+                        }
+                    });
+                } else {
+                    $('#StartDate, #EndDate, #TotalDays').val('');
+                    $('.start-date-display, .end-date-display').text(''); // Clear displayed dates
+                }
+        });
     $(document).ready(function () {
         $('#VacationID').prop('disabled', true);
 
