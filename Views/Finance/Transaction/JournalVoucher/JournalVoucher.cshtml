@@ -105,7 +105,10 @@
         }
         $('#searchHeadofAccountButton').click(function () {
             var searchValue = $('#searchHeadofAccountInput').val();
-            window.location.href = '@Url.Action("Index", "JournalVoucher")?searchHeadofAccount_FiveName=' + searchValue;
+            $.get('@Url.Action("Index", "JournalVoucher")', { searchHeadofAccount_FiveName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#JournalVoucherListContainer').html();
+				$('#JournalVoucherListContainer').html(html);
+			});
         });
     </script>
 

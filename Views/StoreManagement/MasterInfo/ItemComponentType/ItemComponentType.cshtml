@@ -97,7 +97,10 @@
         }
         $('#searchItemComponentTypeButton').click(function () {
             var searchValue = $('#searchItemComponentTypeInput').val();
-            window.location.href = '@Url.Action("Index", "ItemComponentType")?searchItemComponentTypeName=' + searchValue;
+            $.get('@Url.Action("Index", "ItemComponentType")', { searchItemComponentTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#ItemComponentTypeListContainer').html();
+				$('#ItemComponentTypeListContainer').html(html);
+			});
         });
     </script>
 }

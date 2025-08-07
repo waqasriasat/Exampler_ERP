@@ -97,7 +97,10 @@
         }
         $('#searchItemButton').click(function () {
             var searchValue = $('#searchItemInput').val();
-            window.location.href = '@Url.Action("Index", "Item")?searchItemName=' + searchValue;
+            $.get('@Url.Action("Index", "Item")', { searchItemName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#ItemListContainer').html();
+				$('#ItemListContainer').html(html);
+			});
         });
     </script>
 }

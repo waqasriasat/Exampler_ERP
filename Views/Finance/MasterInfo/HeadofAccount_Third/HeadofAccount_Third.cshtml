@@ -98,7 +98,10 @@
         }
         $('#searchHeadofAccount_ThirdButton').click(function () {
             var searchValue = $('#searchHeadofAccount_ThirdInput').val();
-            window.location.href = '@Url.Action("Index", "HeadofAccount_Third")?searchThirdName=' + searchValue;
+            $.get('@Url.Action("Index", "HeadofAccount_Third")', { searchThirdName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#HeadofAccount_ThirdListContainer').html();
+				$('#HeadofAccount_ThirdListContainer').html(html);
+			});
         });
     </script>
 

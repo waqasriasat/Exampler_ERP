@@ -425,30 +425,32 @@ namespace Exampler_ERP.Controllers.HR.HR
 
     public async Task<IActionResult> Print()
     {
-      var employeeID = HttpContext.Session.GetInt32("EmployeeID");
+      var query = _appDBContext.HR_VacationSettles
+          .Where(d => d.FinalApprovalID == 1)
+          .Include(d => d.Vacation)
+          .Include(d => d.Vacation.Settings_VacationType)
+          .Include(d => d.Vacation.Employee)
+          .OrderBy(d => d.VacationSettleID)
+          .AsQueryable();
 
-      var vacations = await _appDBContext.HR_Vacations
-                                   .Where(v => employeeID != null && v.EmployeeID == employeeID && v.DeleteYNID != 1)
-                                   .OrderByDescending(v => v.VacationID)
-                                   .Include(c => c.Employee)
-                                    .Include(c => c.Settings_VacationType)
-                                   .ToListAsync();
+      var vacationSettle = await query.ToListAsync();
+      return View("~/Views/HR/HR/VacationSettle/PrintVacationSettle.cshtml", vacationSettle);
 
-      return View("~/Views/HR/HR/VacationSettle/PrintVacationSettle.cshtml", vacations);
     }
 
     public async Task<IActionResult> ExportToExcel()
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var employeeID = HttpContext.Session.GetInt32("EmployeeID");
+      var query = _appDBContext.HR_VacationSettles
+         .Where(d => d.FinalApprovalID == 1)
+         .Include(d => d.Vacation)
+         .Include(d => d.Vacation.Settings_VacationType)
+         .Include(d => d.Vacation.Employee)
+         .OrderBy(d => d.VacationSettleID)
+         .AsQueryable();
 
-      var vacations = await _appDBContext.HR_Vacations
-                                   .Where(v => employeeID != null && v.EmployeeID == employeeID && v.DeleteYNID != 1)
-                                   .OrderByDescending(v => v.VacationID)
-                                   .Include(c => c.Employee)
-                                    .Include(c => c.Settings_VacationType)
-                                   .ToListAsync();
+      var vacationSettle = await query.ToListAsync();
 
 
       var vacationTypesList = await _utils.GetVacationTypes();
@@ -459,22 +461,24 @@ namespace Exampler_ERP.Controllers.HR.HR
         worksheet.Cells["A1"].Value = _localizer["lbl_VacationSettleID"];
         worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
         worksheet.Cells["C1"].Value = _localizer["lbl_VacationTypeName"];
-        worksheet.Cells["D1"].Value = _localizer["lbl_ApplyDate"];
-        worksheet.Cells["E1"].Value = _localizer["lbl_StartDate"];
-        worksheet.Cells["F1"].Value = _localizer["lbl_EndDate"];
-        worksheet.Cells["G1"].Value = _localizer["lbl_TotalDays"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_StartDate"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_EndDate"];
+        worksheet.Cells["F1"].Value = _localizer["lbl_TotalDays"];
+        worksheet.Cells["G1"].Value = _localizer["lbl_SettleDays"];
+        worksheet.Cells["H1"].Value = _localizer["lbl_SettleAmount"];
 
-        for (int i = 0; i < vacations.Count; i++)
+        for (int i = 0; i < vacationSettle.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = vacations[i].VacationID;
-          worksheet.Cells[i + 2, 2].Value = vacations[i].Employee?.FirstName + ' ' + vacations[i].Employee?.FatherName + ' ' + vacations[i].Employee?.FamilyName;
-          worksheet.Cells[i + 2, 3].Value = vacations[i].VacationTypeID == 0 || vacations[i]?.VacationTypeID == null
+          worksheet.Cells[i + 2, 1].Value = vacationSettle[i].VacationSettleID;
+          worksheet.Cells[i + 2, 2].Value = vacationSettle[i].Vacation.Employee?.FirstName + ' ' + vacationSettle[i].Vacation.Employee?.FatherName + ' ' + vacationSettle[i].Vacation.Employee?.FamilyName;
+          worksheet.Cells[i + 2, 3].Value = vacationSettle[i].Vacation.VacationTypeID == 0 || vacationSettle[i]?.Vacation.VacationTypeID == null
           ? ""
-          : vacationTypesList.FirstOrDefault(g => g.Value == vacations[i].VacationTypeID.ToString())?.Text;
-          worksheet.Cells[i + 2, 4].Value = vacations[i].Date.ToString("dd-MMM-yyyy");
-          worksheet.Cells[i + 2, 5].Value = vacations[i].StartDate.ToString("dd-MMM-yyyy");
-          worksheet.Cells[i + 2, 6].Value = vacations[i].EndDate.ToString("dd-MMM-yyyy");
-          worksheet.Cells[i + 2, 7].Value = vacations[i].TotalDays;
+          : vacationTypesList.FirstOrDefault(g => g.Value == vacationSettle[i].Vacation.VacationTypeID.ToString())?.Text;
+          worksheet.Cells[i + 2, 4].Value = vacationSettle[i].Vacation.StartDate.ToString("dd-MMM-yyyy");
+          worksheet.Cells[i + 2, 5].Value = vacationSettle[i].Vacation.EndDate.ToString("dd-MMM-yyyy");
+          worksheet.Cells[i + 2, 6].Value = vacationSettle[i].Vacation.TotalDays;
+          worksheet.Cells[i + 2, 7].Value = vacationSettle[i].SettleDays;
+          worksheet.Cells[i + 2, 8].Value = vacationSettle[i].SettleAmount;
 
         }
 

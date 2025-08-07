@@ -176,7 +176,10 @@
 
         $('#searcApplicantButton').click(function () {
             var searchValue = $('#searchApplicantInput').val();
-            window.location.href = '@Url.Action("Index", "Applicant")?id=' + searchValue;
+      		$.get('@Url.Action("Index", "Applicant")', { searchValue: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#ApplicantListContainer').html();
+				$('#ApplicantListContainer').html(html);
+			});
         });
     </script>
 }

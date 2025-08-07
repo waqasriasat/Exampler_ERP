@@ -119,7 +119,10 @@
         }
         $('#searchItemNameButton').click(function () {
             var searchValue = $('#searchItemNameInput').val();
-            window.location.href = '@Url.Action("Index", "MaterialRequisition")?searchItemName=' + searchValue;
+            $.get('@Url.Action("Index", "MaterialRequisition")', { searchItemName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#MaterialRequisitionListContainer').html();
+				$('#MaterialRequisitionListContainer').html(html);
+			});
         });
     </script>
 

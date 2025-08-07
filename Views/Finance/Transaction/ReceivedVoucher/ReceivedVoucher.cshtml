@@ -104,7 +104,10 @@
         }
         $('#searchHeadofAccountButton').click(function () {
             var searchValue = $('#searchHeadofAccountInput').val();
-            window.location.href = '@Url.Action("Index", "ReceivedVoucher")?searchHeadofAccount_FiveName=' + searchValue;
+            $.get('@Url.Action("Index", "ReceivedVoucher")', { searchHeadofAccount_FiveName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#ReceivedVoucherListContainer').html();
+				$('#ReceivedVoucherListContainer').html(html);
+			});
         });
     </script>
 

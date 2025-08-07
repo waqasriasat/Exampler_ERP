@@ -68,7 +68,7 @@
             });
 
 
-            $("#searchEmployeeInput").autocomplete({
+            $("#EmployeeName").autocomplete({
                 source: function (request, response) {
                     $.ajax({
                         url: '@Url.Action("GetEmployeeSuggestions", "Employee")',
@@ -100,7 +100,10 @@
         }
         $('#searchEmployeeButton').click(function () {
             var searchValue = $('#searchEmployeeInput').val();
-            window.location.href = '@Url.Action("Index", "FixedDeduction")?id=' + searchValue;
+			$.get('@Url.Action("Index", "FixedDeduction")', { id: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#FixedDeductionListContainer').html();
+				$('#FixedDeductionListContainer').html(html);
+			});
         });
     </script>
 }

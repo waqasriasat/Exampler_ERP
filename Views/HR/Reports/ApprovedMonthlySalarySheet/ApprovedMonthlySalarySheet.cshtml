@@ -20,7 +20,7 @@
 <h4 class="py-3 mb-4">
     <span class="text-muted fw-light">@Localizer["lbl_Reports"]  /</span> @Localizer["lbl_ApprovedMonthlySalarySheet"]
 </h4>
-<form method="get" action="@Url.Action("Index", "ApprovedMonthlySalarySheet")">
+<form id="searchEmployeeForm" method="get" action="@Url.Action("Index", "ApprovedMonthlySalarySheet")">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -30,7 +30,7 @@
                         <!-- From Date Field -->
                         <div class="col-md-4 mb-4">
                             <label class="form-label fw-bold">@Localizer["lbl_Month"]</label>
-                            <select name="MonthsTypeID" class="form-control">
+                            <select name="MonthsTypeID" id="MonthsTypeID" class="form-control">
                                 @foreach (var item in ViewBag.MonthsTypeList)
                                 {
                                     if (item.Value == ViewBag.MonthsTypeID?.ToString())
@@ -47,7 +47,7 @@
                         <!-- To Date Field -->
                         <div class="col-md-4 mb-4">
                             <label for="YearsTypeID" class="form-label fw-bold">@Localizer["lbl_Year"]</label>
-                            <select name="YearsTypeID" class="form-control">
+                            <select name="YearsTypeID" id="YearsTypeID" class="form-control">
                                 @for (int year = DateTime.Now.Year; year >= 1900; year--)
                                 {
                                     if (year == (ViewBag.YearsTypeID ?? 0))

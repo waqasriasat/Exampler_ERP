@@ -97,7 +97,10 @@
         }
         $('#searchVendorButton').click(function () {
             var searchValue = $('#searchVendorInput').val();
-            window.location.href = '@Url.Action("Index", "Vendor")?searchVendorName=' + searchValue;
+         	$.get('@Url.Action("Index", "Vendor")', { searchVendorName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#VendorListContainer').html();
+				$('#VendorListContainer').html(html);
+			});
         });
     </script>
 

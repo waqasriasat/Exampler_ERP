@@ -97,7 +97,10 @@
         }
         $('#searchVoucherTypeButton').click(function () {
             var searchValue = $('#searchVoucherTypeInput').val();
-            window.location.href = '@Url.Action("Index", "VoucherType")?searchVoucherTypeName=' + searchValue;
+            $.get('@Url.Action("Index", "VoucherType")', { searchVoucherTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#VoucherTypeListContainer').html();
+				$('#VoucherTypeListContainer').html(html);
+			});
         });
     </script>
 

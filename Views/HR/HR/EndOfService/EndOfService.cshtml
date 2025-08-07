@@ -101,7 +101,7 @@
                 }
             });
 
-            $("#searchEmployeeInput").autocomplete({
+            $("#EmployeeName").autocomplete({
                 source: function (request, response) {
 
                     $.ajax({
@@ -126,9 +126,24 @@
                     
                     // Set the selected employee's ID and name
                     $("#EmployeeID").val(ui.item.id); // Set the hidden input for Employee ID
-                    $("#searchEmployeeInput").val(ui.item.name); // Set the input field for Employee Name
+                    $("#EmployeeName").val(ui.item.name); // Set the input field for Employee Name
                 }
             });
+			$('#searchEmployeeForm').submit(function (e) {
+				e.preventDefault(); // Prevent full page reload
+
+				var form = $(this);
+				var actionUrl = form.attr('action');
+
+				// Serialize form data
+				var formData = form.serialize();
+
+				$.get(actionUrl, formData, function (partialHtml) {
+					// Load only the relevant part of the response
+					var html = $(partialHtml).find('#EndOfServiceListContainer').html();
+					$('#EndOfServiceListContainer').html(html);
+				});
+			});
         });
     </script>
     <script>
@@ -149,7 +164,7 @@
 <h4 class="py-3 mb-4">
     <span class="text-muted fw-light">@Localizer["lbl_HumanResources"] /</span>  @Localizer["lbl_EndOfService"]
 </h4>
-<form method="get" action="@Url.Action("Index", "EndOfService")">
+<form id="searchEmployeeForm" method="get" action="@Url.Action("Index", "EndOfService")">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -159,26 +174,26 @@
                         <!-- From Date Field -->
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">@Localizer["lbl_FromDate"]</label>
-                            <input class="form-control" type="date" name="FromDate" value="@ViewBag.FromDate?.ToString("yyyy-MM-dd")" />
+							<input class="form-control" type="date" name="FromDate" id="FromDate" value="@ViewBag.FromDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
                         <!-- To Date Field -->
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">@Localizer["lbl_ToDate"]</label>
-                            <input class="form-control" type="date" name="ToDate" value="@ViewBag.ToDate?.ToString("yyyy-MM-dd")" />
+							<input class="form-control" type="date" name="ToDate" id="ToDate" value="@ViewBag.ToDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
                         <!-- Employee Name Search Field -->
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
-                            <input type="text" class="form-control" id="searchEmployeeInput" placeholder="@Localizer["lbl_SearchEmployee"]" name="EmployeeName" value="@ViewBag.EmployeeName" />
+                            <input type="text" class="form-control" id="EmployeeName" placeholder="@Localizer["lbl_SearchEmployee"]" name="EmployeeName" value="@ViewBag.EmployeeName" />
                             <input type="hidden" class="form-control" id="EmployeeID" placeholder="@Localizer["lbl_SearchEmployee"]" name="EmployeeID" value="@ViewBag.EmployeeID" />
                         </div>
 
                         <!-- EndOfServiceReason Type Dropdown -->
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">@Localizer["lbl_ReasonType"]</label>
-                            <select name="EndOfServiceReasonTypeID" class="form-control">
+							<select name="EndOfServiceReasonTypeID" id="EndOfServiceReasonTypeID" class="form-control">
                                 @foreach (var item in ViewBag.EndOfServiceReasonTypeList)
                                 {
                                     if (item.Value == ViewBag.EndOfServiceReasonTypeID?.ToString())

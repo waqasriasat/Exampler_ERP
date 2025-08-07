@@ -149,7 +149,10 @@
         }
         $('#searchItemNameButton').click(function () {
             var searchValue = $('#searchItemNameInput').val();
-            window.location.href = '@Url.Action("Index", "PurchaseRequest")?searchItemName=' + searchValue;
+            $.get('@Url.Action("Index", "PurchaseRequest")', { searchItemName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#PurchaseRequestListContainer').html();
+				$('#PurchaseRequestListContainer').html(html);
+			});
         });
     </script>
 

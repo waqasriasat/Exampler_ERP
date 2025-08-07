@@ -67,6 +67,10 @@
         $('#searchUserNameButton').click(function () {
             var searchValue = $('#searchUserNameInput').val();
             window.location.href = '@Url.Action("Index", "AccessRightsByUser")?searchUserName=' + searchValue;
+			$.get('@Url.Action("Index", "AccessRightsByUser")', { searchUserName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#accessRightsByUserListContainer').html();
+				$('#accessRightsByUserListContainer').html(html);
+			});
         });
     </script>
 }
@@ -129,7 +133,10 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model.AccessRightsWithUserCount)
+				<div id="accessRightsByUserListContainer">
+					@Html.Partial("~/Views/Setup/AccessRightsByRole/Stock/_AccessRightsByUserListPartial.cshtml", Model)
+				</div>
+                @* @foreach (var item in Model.AccessRightsWithUserCount)
                 {
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
                         <div class="row">
@@ -163,7 +170,7 @@
                             </div>
                         </div>
                     </div>
-                }
+                } *@
             </div>
         </div>
     </div>

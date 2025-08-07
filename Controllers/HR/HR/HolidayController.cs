@@ -44,11 +44,14 @@ namespace Exampler_ERP.Controllers.HR.HR
         HolidayQuery = HolidayQuery.Where(c => c.HolidayTypeID == HolidayTypeID.Value);
       }
 
-      if (MonthsTypeID.HasValue && YearsTypeID.HasValue)
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0)
       {
-        HolidayQuery = HolidayQuery.Where(c => c.HolidayDate.Month == MonthsTypeID.Value && c.HolidayDate.Year == YearsTypeID.Value);
+        HolidayQuery = HolidayQuery.Where(c => c.HolidayDate.Month == MonthsTypeID.Value);
       }
-
+      if (YearsTypeID.HasValue && YearsTypeID != 0)
+      {
+        HolidayQuery = HolidayQuery.Where(c => c.HolidayDate.Year == YearsTypeID.Value);
+      }
       var Holidays = await HolidayQuery
           .Include(c => c.HolidayType)
           .ToListAsync();

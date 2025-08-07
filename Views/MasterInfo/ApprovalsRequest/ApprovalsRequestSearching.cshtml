@@ -115,7 +115,7 @@
             });
 
           
-            $("#searchEmployeeInput").autocomplete({
+            $("#EmployeeName").autocomplete({
                 source: function (request, response) {
                  
                     $.ajax({
@@ -140,7 +140,7 @@
                     
                     // Set the selected employee's ID and name
                     $("#EmployeeID").val(ui.item.id); // Set the hidden input for Employee ID
-                    $("#searchEmployeeInput").val(ui.item.name); // Set the input field for Employee Name
+                    $("#EmployeeName").val(ui.item.name); // Set the input field for Employee Name
                 }
             });
           

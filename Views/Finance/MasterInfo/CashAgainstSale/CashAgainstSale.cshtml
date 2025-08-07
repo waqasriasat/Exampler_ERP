@@ -97,8 +97,11 @@
         }
         $('#searchCashAgainstSaleButton').click(function () {
             var searchValue = $('#searchCashAgainstSaleInput').val();
-            window.location.href = '@Url.Action("Index", "CashAgainstSale")?searchCashAgainstSaleName=' + searchValue;
-        });
+			$.get('@Url.Action("Index", "CashAgainstSale")', { searchCashAgainstSaleName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#CashAgainstSaleListContainer').html();
+				$('#CashAgainstSaleListContainer').html(html);
+			});
+		});
     </script>
 
 

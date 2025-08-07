@@ -66,7 +66,10 @@
         }
         $('#searchRoleButton').click(function () {
             var searchValue = $('#searchRoleInput').val();
-            window.location.href = '@Url.Action("Index", "AccessRightsByRole")?searchRoleName=' + searchValue;
+           $.get('@Url.Action("Index", "AccessRightsByRole")', { searchRoleName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#accessRightsByRoleListContainer').html();
+				$('#accessRightsByRoleListContainer').html(html);
+			});
         });
     </script>
 }
@@ -129,7 +132,10 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model.AccessRightsWithRoleCount)
+				<div id="accessRightsByRoleListContainer">
+					@Html.Partial("~/Views/Setup/AccessRightsByRole/Stock/_AccessRightsByRoleListPartial.cshtml", Model)
+				</div>
+                @* @foreach (var item in Model.AccessRightsWithRoleCount)
                 {
                     <div class="col-12 col-md-12 col-lg-12 GVDetail">
                         <div class="row">
@@ -163,7 +169,7 @@
                             </div>
                         </div>
                     </div>
-                }
+                } *@
             </div>
         </div>
     </div>

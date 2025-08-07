@@ -24,7 +24,7 @@
                 }
             });
 
-            $("#searchEmployeeInput").autocomplete({
+            $("#EmployeeName").autocomplete({
                 source: function (request, response) {
 
                     $.ajax({
@@ -49,7 +49,7 @@
                     
                     // Set the selected employee's ID and name
                     $("#EmployeeID").val(ui.item.id); // Set the hidden input for Employee ID
-                    $("#searchEmployeeInput").val(ui.item.name); // Set the input field for Employee Name
+                    $("#EmployeeName").val(ui.item.name); // Set the input field for Employee Name
                 }
             });
         });
@@ -64,7 +64,7 @@
 <h4 class="py-3 mb-4">
     <span class="text-muted fw-light">@Localizer["lbl_Reports"]  /</span> @Localizer["lbl_VacationReport"]
 </h4>
-<form method="get" action="@Url.Action("Index", "VacationReport")">
+<form id="searchEmployeeForm" method="get" action="@Url.Action("Index", "VacationReport")">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -86,7 +86,7 @@
                         <!-- Employee Name Search Field -->
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
-                            <input type="text" class="form-control" id="searchEmployeeInput" placeholder="@Localizer["lbl_SearchEmployee"]" name="EmployeeName" value="@ViewBag.EmployeeName" />
+                            <input type="text" class="form-control" id="EmployeeName" placeholder="@Localizer["lbl_SearchEmployee"]" name="EmployeeName" value="@ViewBag.EmployeeName" />
                             <input type="hidden" class="form-control" id="EmployeeID" placeholder="@Localizer["lbl_SearchEmployee"]" name="EmployeeID" value="@ViewBag.EmployeeID" />
                         </div>
 

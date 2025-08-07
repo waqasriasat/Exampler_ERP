@@ -97,7 +97,10 @@
         }
         $('#searchUnitTypeButton').click(function () {
             var searchValue = $('#searchUnitTypeInput').val();
-            window.location.href = '@Url.Action("Index", "UnitType")?searchUnitTypeName=' + searchValue;
+            $.get('@Url.Action("Index", "UnitType")', { searchUnitTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#UnitTypeListContainer').html();
+				$('#UnitTypeListContainer').html(html);
+			});
         });
     </script>
 }

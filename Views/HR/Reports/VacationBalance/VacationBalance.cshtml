@@ -22,7 +22,7 @@
                 }
             });
 
-            $("#searchEmployeeInput").autocomplete({
+            $("#EmployeeName").autocomplete({
                 source: function (request, response) {
                     $.ajax({
                         url: '@Url.Action("GetEmployeeSuggestions", "Employee")',

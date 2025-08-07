@@ -24,7 +24,7 @@
             });
 
 
-            $("#searchEmployeeInput").autocomplete({
+            $("#EmployeeName").autocomplete({
                 source: function (request, response) {
 
                     $.ajax({
@@ -49,7 +49,7 @@
                     
                     // Set the selected employee's ID and name
                     $("#EmployeeID").val(ui.item.id); // Set the hidden input for Employee ID
-                    $("#searchEmployeeInput").val(ui.item.name); // Set the input field for Employee Name
+                    $("#EmployeeName").val(ui.item.name); // Set the input field for Employee Name
                 }
             });
         });
@@ -69,7 +69,7 @@
 <h4 class="py-3 mb-4">
     <span class="text-muted fw-light">@Localizer["lbl_Reports"] /</span> @Localizer["lbl_FaceAttendanceReport"]
 </h4>
-<form method="get" action="@Url.Action("Index", "FaceAttendanceReport")">
+<form id="searchEmployeeForm" method="get" action="@Url.Action("Index", "FaceAttendanceReport")">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -79,7 +79,7 @@
                         <!-- From Date Field -->
                         <div class="col-md-4 mb-4">
                             <label class="form-label fw-bold">@Localizer["lbl_Month"]</label>
-                            <select name="MonthsTypeID" class="form-control">
+                            <select name="MonthsTypeID" id="MonthsTypeID" class="form-control">
                                 @foreach (var item in ViewBag.MonthsTypeList)
 
                                 {
@@ -104,7 +104,7 @@
                         <!-- To Date Field -->
                         <div class="col-md-4 mb-4">
                             <label for="YearsTypeID" class="form-label fw-bold">@Localizer["lbl_Year"]</label>
-                            <select name="YearsTypeID" class="form-control">
+                            <select name="YearsTypeID" id="YearsTypeID" class="form-control">
                                 @for (int year = DateTime.Now.Year; year >= 1900; year--)
 
                                 {
@@ -131,7 +131,7 @@
                         <!-- Employee Name Search Field -->
                         <div class="col-md-4 mb-4">
                             <label class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
-                            <input type="text" class="form-control" id="searchEmployeeInput" placeholder="@Localizer["lbl_SearchEmployee"]" name="EmployeeName" value="@ViewBag.EmployeeName" />
+                            <input type="text" class="form-control" id="EmployeeName" placeholder="@Localizer["lbl_SearchEmployee"]" name="EmployeeName" value="@ViewBag.EmployeeName" />
                             <input type="hidden" class="form-control" id="EmployeeID" placeholder="@Localizer["lbl_SearchEmployee"]" name="EmployeeID" value="@ViewBag.EmployeeID" />
                         </div>
 

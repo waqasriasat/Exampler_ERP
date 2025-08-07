@@ -97,7 +97,10 @@
         }
         $('#searchItemCategoryTypeButton').click(function () {
             var searchValue = $('#searchItemCategoryTypeInput').val();
-            window.location.href = '@Url.Action("Index", "ItemCategoryType")?searchItemCategoryTypeName=' + searchValue;
+            $.get('@Url.Action("Index", "ItemCategoryType")', { searchItemCategoryTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#ItemCategoryTypeListContainer').html();
+				$('#ItemCategoryTypeListContainer').html(html);
+			});
         });
     </script>
 }

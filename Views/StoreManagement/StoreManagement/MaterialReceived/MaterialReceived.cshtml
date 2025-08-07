@@ -31,8 +31,8 @@
 
                             // ✅ Ab poora list AJAX se reload karo
                             $.get('@Url.Action("Index", "Branch")', function (partialHtml) {
-                                var html = $(partialHtml).find('#BranchListContainer').html();
-                                $('#BranchListContainer').html(html);
+								var html = $(partialHtml).find('#materialReceivedListContainer').html();
+								$('#materialReceivedListContainer').html(html);
                             });
                         }
                 });
@@ -56,8 +56,8 @@
 
                             // ✅ Ab poora list AJAX se reload karo
                             $.get('@Url.Action("Index", "Branch")', function (partialHtml) {
-                                var html = $(partialHtml).find('#BranchListContainer').html();
-                                $('#BranchListContainer').html(html);
+								var html = $(partialHtml).find('#materialReceivedListContainer').html();
+								$('#materialReceivedListContainer').html(html);
                             });
                         }
                         });
@@ -86,8 +86,8 @@
 
                             // ✅ Ab poora list AJAX se reload karo
                             $.get('@Url.Action("Index", "Branch")', function (partialHtml) {
-                                var html = $(partialHtml).find('#BranchListContainer').html();
-                                $('#BranchListContainer').html(html);
+								var html = $(partialHtml).find('#materialReceivedListContainer').html();
+								$('#materialReceivedListContainer').html(html);
                             });
                         }
                         });
@@ -105,14 +105,14 @@
             });
 
             // Delete MaterialReceived
-           $('#BranchListContainer').on('click', '.deleteBranchLink', function (e) {
+		   $('#materialReceivedListContainer').on('click', '.deleteBranchLink', function (e) {
                 e.preventDefault();
                 var MaterialReceivedId = $(this).data('id');
                 $.post('@Url.Action("Delete", "MaterialReceived")', { id: MaterialReceivedId }, function (response) {
                      if (response.success) {
                     $.get('@Url.Action("Index", "Branch")', function (partialHtml) {
-                      var html = $(partialHtml).find('#BranchListContainer').html();
-                      $('#BranchListContainer').html(html);
+					  var html = $(partialHtml).find('#materialReceivedListContainer').html();
+					  $('#materialReceivedListContainer').html(html);
                     });
                   }
                 });
@@ -134,7 +134,10 @@
         }
         $('#searchItemNameButton').click(function () {
             var searchValue = $('#searchItemNameInput').val();
-            window.location.href = '@Url.Action("Index", "MaterialReceived")?searchItemName=' + searchValue;
+            $.get('@Url.Action("Index", "MaterialReceived")', { searchItemName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#materialReceivedListContainer').html();
+				$('#materialReceivedListContainer').html(html);
+			});
         });
     </script>
 

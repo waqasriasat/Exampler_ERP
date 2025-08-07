@@ -97,7 +97,10 @@
         }
         $('#searchHeadofAccount_FourButton').click(function () {
             var searchValue = $('#searchHeadofAccount_FourInput').val();
-            window.location.href = '@Url.Action("Index", "HeadofAccount_Four")?searchFourName=' + searchValue;
+            $.get('@Url.Action("Index", "HeadofAccount_Four")', { searchFourName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#HeadofAccount_FourListContainer').html();
+				$('#HeadofAccount_FourListContainer').html(html);
+			});
         });
     </script>
 

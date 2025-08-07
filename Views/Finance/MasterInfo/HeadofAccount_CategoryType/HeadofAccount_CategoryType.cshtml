@@ -97,7 +97,10 @@
         }
         $('#searchHeadofAccount_CategoryTypeButton').click(function () {
             var searchValue = $('#searchHeadofAccount_CategoryTypeInput').val();
-            window.location.href = '@Url.Action("Index", "HeadofAccount_CategoryType")?searchCategoryTypeName=' + searchValue;
+			$.get('@Url.Action("Index", "HeadofAccount_CategoryType")', { searchCategoryTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#HeadofAccount_CategoryTypeListContainer').html();
+				$('#HeadofAccount_CategoryTypeListContainer').html(html);
+			});
         });
     </script>
 

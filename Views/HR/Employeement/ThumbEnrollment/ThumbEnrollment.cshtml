@@ -94,7 +94,7 @@
                 }
             });
 
-            $("#searchEmployeeInput").autocomplete({
+            $("#EmployeeName").autocomplete({
                 source: function (request, response) {
                     $.ajax({
                         url: '@Url.Action("GetEmployeeSuggestions", "Employee")',
@@ -115,6 +115,7 @@
                     // Do something when an employee is selected
                     console.log(ui.item.value); // Employee ID
                     window.location.href = '@Url.Action("Index", "ThumbEnrollment")?id=' + ui.item.value;
+
                 }
             });
 
@@ -137,6 +138,10 @@
         $('#searchEmployeeButton').click(function () {
             var searchValue = $('#searchEmployeeInput').val();
             window.location.href = '@Url.Action("Index", "ThumbEnrollment")?id=' + searchValue;
+			// $.get('@Url.Action("Index", "ThumbEnrollment")', { id: searchValue }, function (partialHtml) {
+			// 	var html = $(partialHtml).find('#SalaryListContainer').html();
+			// 	$('#SalaryListContainer').html(html);
+			// });
         });
     </script>
 

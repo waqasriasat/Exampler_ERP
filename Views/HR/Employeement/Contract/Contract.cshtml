@@ -101,7 +101,7 @@
 				}
 			});
 
-			$("#searchEmployeeInput").autocomplete({
+			$("#EmployeeName").autocomplete({
 				source: function (request, response) {
 					$.ajax({
 						url: '@Url.Action("GetEmployeeSuggestions", "Employee")',
@@ -160,7 +160,10 @@
 
 		$('#searchEmployeeButton').click(function () {
 			var searchValue = $('#searchEmployeeInput').val();
-			window.location.href = '@Url.Action("Index", "Contract")?id=' + searchValue;
+			$.get('@Url.Action("Index", "Contract")', { id: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#ContractListContainer').html();
+				$('#ContractListContainer').html(html);
+			});
 		});
 	</script>
 

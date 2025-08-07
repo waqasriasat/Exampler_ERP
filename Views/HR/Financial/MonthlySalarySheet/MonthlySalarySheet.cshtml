@@ -59,7 +59,7 @@
                         <!-- From Date Field -->
                         <div class="col-md-4 mb-4">
                             <label class="form-label fw-bold">@Localizer["lbl_Month"]</label>
-                            <select name="MonthsTypeID" class="form-control">
+                            <select name="MonthsTypeID" id="MonthsTypeID" class="form-control">
                                 @foreach (var item in ViewBag.MonthsTypeList)
                                 {
                                     if (item.Value == ViewBag.MonthsTypeID?.ToString())
@@ -76,7 +76,7 @@
                         <!-- To Date Field -->
                         <div class="col-md-4 mb-4">
                             <label for="YearsTypeID" class="form-label fw-bold">@Localizer["lbl_Year"]</label>
-                            <select name="YearsTypeID" class="form-control">
+                            <select name="YearsTypeID" id="YearsTypeID" class="form-control">
                                 @for (int year = DateTime.Now.Year; year >= 1900; year--)
                                 {
                                     if (year == (ViewBag.YearsTypeID ?? 0))

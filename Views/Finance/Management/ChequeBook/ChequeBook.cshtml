@@ -97,7 +97,10 @@
         }
         $('#searchChequeBookButton').click(function () {
             var searchValue = $('#searchChequeBookInput').val();
-            window.location.href = '@Url.Action("Index", "ChequeBook")?searchChequeBookName=' + searchValue;
+        	$.get('@Url.Action("Index", "ChequeBook")', { searchChequeBookName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#ChequeBookListContainer').html();
+				$('#ChequeBookListContainer').html(html);
+			});
         });
     </script>
 

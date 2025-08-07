@@ -97,7 +97,10 @@
         }
         $('#searchManufacturerTypeButton').click(function () {
             var searchValue = $('#searchManufacturerTypeInput').val();
-            window.location.href = '@Url.Action("Index", "ManufacturerType")?searchManufacturerTypeName=' + searchValue;
+            $.get('@Url.Action("Index", "ManufacturerType")', { searchManufacturerTypeName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#ManufacturerTypeListContainer').html();
+				$('#ManufacturerTypeListContainer').html(html);
+			});
         });
     </script>
 }

@@ -97,7 +97,10 @@
         }
         $('#searchBankButton').click(function () {
             var searchValue = $('#searchBankInput').val();
-            window.location.href = '@Url.Action("Index", "Bank")?searchBankName=' + searchValue;
+         	$.get('@Url.Action("Index", "Bank")', { searchBankName: searchValue }, function (partialHtml) {
+				var html = $(partialHtml).find('#BankListContainer').html();
+				$('#BankListContainer').html(html);
+			});
         });
     </script>
 
