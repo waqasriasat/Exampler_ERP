@@ -1,0 +1,61 @@
+@model IEnumerable<Exampler_ERP.Models.Temp.VacationReportViewModel>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    Layout = "_PrintLayout";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@Localizer["lbl_PrintVacation"]</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>@Localizer["lbl_VacationList"]</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>@Localizer["lbl_EmployeeName"]</th>
+                <th>@Localizer["lbl_StartDate"]</th>
+                <th>@Localizer["lbl_EndDate"]</th>
+                <th>@Localizer["lbl_TotalDays"]</th>
+                <th>@Localizer["lbl_VacationType"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Vacation in Model)
+            {
+                <tr>
+                    <td>@Vacation.EmployeeName</td>
+                    <td>@Vacation.StartDate?.ToString("dd-MMM-yyyy")</td>
+                    <td>@Vacation.EndDate?.ToString("dd-MMM-yyyy")</td>
+                    <td>@Vacation.TotalDays</td>
+                    <td>@(Vacation.TypeOfVacation)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

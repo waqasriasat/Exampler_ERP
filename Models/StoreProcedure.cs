@@ -195,16 +195,8 @@ BEGIN
         AND hre.BranchTypeID = @BranchID
         AND fa.MarkDate <= GETDATE(); 
 END;
-
-
-
-USE [Exampler_ERP]
 GO
-/****** Object:  StoredProcedure [dbo].[GetMonthlySalarySheet]    Script Date: 10/30/2024 3:11:39 AM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
+
 Create PROCEDURE [dbo].[GetMonthlySalarySheet]
 	@BranchID NVARCHAR(10),
     @EmployeeID NVARCHAR(10), -- Parameter to specify the EmployeeID
@@ -229,8 +221,8 @@ BEGIN
 
     -- Step 1: Retrieve distinct column names with unique prefixes for all types
     SELECT @cols = @cols + ',' + STUFF((
-        SELECT DISTINCT ',' + QUOTENAME('AdditionalAllowance_' + AddionalAllowanceTypeName) 
-        FROM Settings_AddionalAllowanceTypes where DeleteYNID != 1
+        SELECT DISTINCT ',' + QUOTENAME('AdditionalAllowance_' + AdditionalAllowanceTypeName) 
+        FROM Settings_AdditionalAllowanceTypes where DeleteYNID != 1
         FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 1, '');
 
     -- Include OverTime Types
@@ -321,7 +313,7 @@ BEGIN
 
     -- Step 3: Execute the dynamic SQL
     EXEC sp_executesql @query;
-END
+EN
 
       ";
 
