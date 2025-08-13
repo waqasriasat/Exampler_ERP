@@ -35,11 +35,13 @@
         <thead>
             <tr>
                 <th>@Localizer["lbl_VacationSettleID"]</th>
-                <th>@Localizer["lbl_VacationType"]</th>
-                <th>@Localizer["lbl_ApplyDate"]</th>
+                <th>@Localizer["lbl_EmployeeName"]</th>
+                <th>@Localizer["lbl_VacationTypeName"]</th>
                 <th>@Localizer["lbl_StartDate"]</th>
                 <th>@Localizer["lbl_EndDate"]</th>
                 <th>@Localizer["lbl_TotalDays"]</th>
+                <th>@Localizer["lbl_SettleDays"]</th>
+                <th>@Localizer["lbl_SettleAmount"]</th>
             </tr>
         </thead>
         <tbody>
@@ -47,11 +49,13 @@
             {
                 <tr>
                     <td>@VacationSettle.VacationSettleID</td>
-                    @* <td>@(VacationSettle.Settings_VacationSettleType?.VacationSettleTypeName ?? "N/A")</td>
-                    <td>@VacationSettle.Date</td>
-                    <td>@VacationSettle.StartDate</td>
-                    <td>@VacationSettle.EndDate</td>
-                    <td>@(VacationSettle.TotalDays)</td> *@
+                    <td>@VacationSettle.VacationSettleID</td>
+                    <td>@(VacationSettle.Vacation?.Settings_VacationType?.VacationTypeName ?? "N/A")</td>
+                    <td>@VacationSettle.Vacation?.StartDate.ToString("dd-MMM-yyyy")</td>
+                    <td>@VacationSettle.Vacation?.EndDate.ToString("dd-MMM-yyyy")</td>
+                    <td>@(VacationSettle.Vacation?.TotalDays)</td>
+                    <td>@(VacationSettle.SettleDays)</td>
+                    <td>@(VacationSettle.SettleAmount)</td>
                 </tr>
             }
         </tbody>
