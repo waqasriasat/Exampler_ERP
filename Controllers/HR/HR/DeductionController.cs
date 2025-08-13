@@ -8,6 +8,7 @@ using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using Microsoft.Extensions.Localization;
+using Exampler_ERP.Models.Temp;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
@@ -33,34 +34,52 @@ namespace Exampler_ERP.Controllers.HR.HR
 
     }
 
-    public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID, int? DeducationTypeID)
+    public async Task<IActionResult> Index(int? DayID, int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID, int? DeducationTypeID)
     {
+      if (!DayID.HasValue && !EmployeeID.HasValue && !MonthsTypeID.HasValue && !YearsTypeID.HasValue)
+      {
+        var today = DateTime.Today;
+        DayID = today.Day;
+        MonthsTypeID = today.Month;
+        YearsTypeID = today.Year;
+      }
       var query = _appDBContext.HR_Deductions
           .Where(b => b.DeleteYNID != 1)
           .Include(d => d.Employee)
           .Include(d => d.DeductionType)
           .AsQueryable();
-
-      if (MonthsTypeID.HasValue && MonthsTypeID != 0)
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
+                YearsTypeID.HasValue && YearsTypeID != 0 &&
+                DayID.HasValue && DayID != 0)
       {
-        query = query.Where(d => d.Month == MonthsTypeID.Value);
-      }
+        var startDate = new DateTime(YearsTypeID.Value, MonthsTypeID.Value, 1);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
 
-      if (YearsTypeID.HasValue)
-      {
-        query = query.Where(d => d.Year == YearsTypeID.Value);
-      }
-
-      if (EmployeeID.HasValue)
-      {
-        query = query.Where(d => d.EmployeeID == EmployeeID.Value);
-      }
-
-      if (!string.IsNullOrEmpty(EmployeeName))
-      {
         query = query.Where(d =>
-            (d.Employee.FirstName + " " + d.Employee.FatherName + " " + d.Employee.FamilyName)
-            .Contains(EmployeeName));
+            d.FromDate >= startDate &&
+            d.FromDate <= endDate &&
+            d.FromDate.Day == DayID.Value
+        );
+      }
+      else if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
+               YearsTypeID.HasValue && YearsTypeID != 0 &&
+               EmployeeID.HasValue && EmployeeID != 0)
+      {
+        var startDate = new DateTime(YearsTypeID.Value, MonthsTypeID.Value, 1);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
+
+        query = query.Where(d =>
+            d.FromDate >= startDate &&
+            d.FromDate <= endDate &&
+            d.EmployeeID == EmployeeID.Value
+        );
+      }
+      else
+      {
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Please select either a Day or an Employee.");
+        ViewBag.deductions = new List<HR_Deduction>();
+        await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName, DayID, DeducationTypeID);
+        return View("~/Views/HR/HR/Deduction/Deduction.cshtml", new List<HR_Deduction>());
       }
 
       if (DeducationTypeID.HasValue && DeducationTypeID != 0)
@@ -70,16 +89,21 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       var deductions = await query.ToListAsync();
 
-      ViewBag.MonthsTypeID = MonthsTypeID;
-      ViewBag.YearsTypeID = YearsTypeID;
-      ViewBag.DeducationTypeID = DeducationTypeID;
-      ViewBag.EmployeeID = EmployeeID;
-      ViewBag.EmployeeName = EmployeeName;
+      await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName, DayID, DeducationTypeID);
+
+      return View("~/Views/HR/HR/Deduction/Deduction.cshtml", deductions);
+    }
+    private async Task PopulateDropdowns(int? month, int? year, int? employeeId, string? employeeName, int? day, int? deducationType)
+    {
+      ViewBag.MonthsTypeID = month;
+      ViewBag.YearsTypeID = year;
+      ViewBag.EmployeeID = employeeId;
+      ViewBag.EmployeeName = employeeName;
+      ViewBag.SelectedDay = day;
+      ViewBag.DeducationType = deducationType;
 
       ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
       ViewBag.DeducationTypeList = await _utils.GetDeductionTypes();
-
-      return View("~/Views/HR/HR/Deduction/Deduction.cshtml", deductions);
     }
 
     [HttpGet]

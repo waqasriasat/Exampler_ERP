@@ -47,7 +47,7 @@ namespace Exampler_ERP.Utilities
                     <span>{e.DepartmentType.DepartmentTypeName}, {e.BranchType.BranchTypeName}</span><br />
                     <span>{e.Phone1 ?? e.Phone2 ?? e.Mobile ?? e.Whatsapp}</span>
                 </div>",
-            Name = $"{e.FirstName} {e.FatherName} {e.FamilyName}" // Full name to be returned
+            name = $"{e.FirstName} {e.FatherName} {e.FamilyName}" // Full name to be returned
 
           })
           .ToListAsync();

@@ -107,7 +107,9 @@
                         success: function (data) {
 
                             response($.map(data, function (item) {
+                              debugger;
                                 return {
+                                  
                                     label: item.label,  // HTML content to be displayed in suggestions
                                     id: item.id,     // Employee ID for the hidden input
                                     name: item.name,      // Full name to be used in the input field
@@ -159,8 +161,26 @@
                 <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
                 <div class="Searching-Box-padding" style="padding-bottom: 15px;">
                     <div class="row mb-4">
+                        <!-- From Date - Day Dropdown -->
+                        <div class="col-md-2 mb-2">
+                            <label class="form-label fw-bold">@Localizer["lbl_Date"]</label>
+                            <select name="DayID" id="DayID" class="form-control">
+                                <option value="0">Select Date</option>
+                                @for (int day = 1; day <= 31; day++)
+                                {
+                                    if (day == ViewBag.SelectedDay)
+                                    {
+                                        <option value="@day" selected>@day</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@day">@day</option>
+                                    }
+                                }
+                            </select>
+                        </div>
                         <!-- From Date Field -->
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-2 mb-2">
 							<label class="form-label fw-bold">@Localizer["lbl_Month"]</label>
                             <select name="MonthsTypeID" id="MonthsTypeID" class="form-control">
                                 @foreach (var item in ViewBag.MonthsTypeList)
@@ -179,7 +199,7 @@
 
 
                         <!-- To Date Field -->
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-2 mb-2">
                             <label for="YearsTypeID" class="form-label fw-bold">@Localizer["lbl_Year"]</label>
                             <select name="YearsTypeID" id="YearsTypeID" class="form-control">
                                 @for (int year = DateTime.Now.Year; year >= 1900; year--)
