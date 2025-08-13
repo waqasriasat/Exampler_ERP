@@ -2,85 +2,96 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 <div class="row">
-        <h5 class="modal-title" style="padding-top:10px">@Localizer["lbl_CompanyInformation"]</h5>
-        <hr />
-        <input type="hidden" asp-for="ActiveYNID" class="form-control form-control-lg" />
-        <input type="hidden" asp-for="DeleteYNID" class="form-control form-control-lg" />
-        <input type="hidden" asp-for="FinalApprovalID" class="form-control form-control-lg" />
-        <input type="hidden" asp-for="ProcessTypeApprovalID" class="form-control form-control-lg" />
-        <input type="hidden" asp-for="ApplicantID" class="form-control form-control-lg" />
-    <div class="col-12 col-md-12 col-lg-9">
-        <div class="row">
-            <div class="col-4">
-                <label asp-for="HireDate" class="form-label fw-bold">@Localizer["lbl_HireDate"]</label>
-                <input asp-for="HireDate" class="form-control form-control-lg" type="date" />
-                <span asp-validation-for="HireDate" class="text-danger"></span>
-            </div>
-            <div class="col-4">
-                <label asp-for="EmployeeCode" class="form-label fw-bold">@Localizer["lbl_EmployeeCode"]</label>
-                <input asp-for="EmployeeCode" class="form-control form-control-lg" />
-                <span asp-validation-for="EmployeeCode" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4">
-                <label asp-for="UserName" class="form-label fw-bold">@Localizer["lbl_UserName"]</label>
-                <input asp-for="UserName" class="form-control form-control-lg" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="col-4">
-                <label asp-for="Password" class="form-label fw-bold">@Localizer["lbl_Password"]</label>
-                <input asp-for="Password" class="form-control form-control-lg" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4">
-                <label asp-for="FromDutyTime" class="form-label fw-bold">@Localizer["lbl_FromDutySlot"]</label>
-                <input asp-for="FromDutyTime" class="form-control form-control-lg"
-                       type="number" min="1" max="24" value="8" />
-                <span asp-validation-for="FromDutyTime" class="text-danger"></span>
-            </div>
-            <div class="col-4">
-                <label asp-for="ToDutyTime" class="form-label fw-bold">@Localizer["lbl_ToDutySlot"]</label>
-                <input asp-for="ToDutyTime" class="form-control form-control-lg"
-                       type="number" min="1" max="24" value="17" />
-                <span asp-validation-for="ToDutyTime" class="text-danger"></span>
-            </div>
-        </div>
+	<h5 class="modal-title" style="padding-top:10px">@Localizer["lbl_CompanyInformation"]</h5>
+	<hr />
+	<input type="hidden" asp-for="ActiveYNID" class="form-control form-control-lg" />
+	<input type="hidden" asp-for="DeleteYNID" class="form-control form-control-lg" />
+	<input type="hidden" asp-for="FinalApprovalID" class="form-control form-control-lg" />
+	<input type="hidden" asp-for="ProcessTypeApprovalID" class="form-control form-control-lg" />
+	<input type="hidden" asp-for="ApplicantID" class="form-control form-control-lg" />
+	<div class="col-12 col-md-12 col-lg-9">
+		<div class="row">
+			<div class="col-4">
+				<label asp-for="HireDate" class="form-label fw-bold">@Localizer["lbl_HireDate"]</label>
+				<input asp-for="HireDate" class="form-control form-control-lg" type="date" />
+				<span asp-validation-for="HireDate" class="text-danger"></span>
+			</div>
+			<div class="col-4">
+				<label asp-for="EmployeeCode" class="form-label fw-bold">@Localizer["lbl_EmployeeCode"]</label>
+				<input asp-for="EmployeeCode" class="form-control form-control-lg" />
+				<span asp-validation-for="EmployeeCode" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-4">
+				<label asp-for="UserName" class="form-label fw-bold">@Localizer["lbl_UserName"]</label>
+				<input asp-for="UserName" class="form-control form-control-lg" />
+				<span asp-validation-for="UserName" class="text-danger"></span>
+			</div>
+			<div class="col-4">
+				<label asp-for="Password" class="form-label fw-bold">@Localizer["lbl_Password"]</label>
+				<input asp-for="Password" class="form-control form-control-lg" />
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-4">
+				<label asp-for="FromDutyTime" class="form-label fw-bold">@Localizer["lbl_FromDutySlot"]</label>
+				<input asp-for="FromDutyTime" class="form-control form-control-lg"
+				type="number" min="1" max="24" value="8" />
+				<span asp-validation-for="FromDutyTime" class="text-danger"></span>
+			</div>
+			<div class="col-4">
+				<label asp-for="ToDutyTime" class="form-label fw-bold">@Localizer["lbl_ToDutySlot"]</label>
+				<input asp-for="ToDutyTime" class="form-control form-control-lg"
+				type="number" min="1" max="24" value="17" />
+				<span asp-validation-for="ToDutyTime" class="text-danger"></span>
+			</div>
+		</div>
 
-        <div class="row">
-            <div class="col-4">
+		<div class="row">
+			<div class="col-4">
 				<label asp-for="BranchTypeID" class="form-label fw-bold">@Localizer["lbl_SearchBranchName"]</label>
-                <select asp-for="BranchTypeID" asp-items="@(new SelectList(ViewBag.BranchsList, "Value", "Text", Model.BranchTypeID))" class="form-control form-control-lg">
-                </select>
-                <span asp-validation-for="BranchTypeID" class="text-danger"></span>
-            </div>
-            <div class="col-4">
+				<select asp-for="BranchTypeID" asp-items="@(new SelectList(ViewBag.BranchsList, "Value", "Text", Model.BranchTypeID))" class="form-control form-control-lg">
+				</select>
+				<span asp-validation-for="BranchTypeID" class="text-danger"></span>
+			</div>
+			<div class="col-4">
 				<label asp-for="DepartmentTypeID" class="form-label fw-bold"> @Localizer["lbl_SearchDepartmentName"]</label>
-                <select asp-for="DepartmentTypeID" asp-items="@(new SelectList(ViewBag.DepartmentsList, "Value", "Text"))" class="form-control form-control-lg">
-                </select>
-                <span asp-validation-for="DepartmentTypeID" class="text-danger"></span>
-            </div>
-            <div class="col-4">
+				<select asp-for="DepartmentTypeID" asp-items="@(new SelectList(ViewBag.DepartmentsList, "Value", "Text"))" class="form-control form-control-lg">
+				</select>
+				<span asp-validation-for="DepartmentTypeID" class="text-danger"></span>
+			</div>
+			<div class="col-4">
 				<label asp-for="DesignationTypeID" class="form-label fw-bold">@Localizer["lbl_SearchDesignationName"]</label>
-                <select asp-for="DesignationTypeID" asp-items="@(new SelectList(ViewBag.DesignationsList, "Value", "Text"))" class="form-control form-control-lg">
-                </select>
-                <span asp-validation-for="DesignationTypeID" class="text-danger"></span>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-12 col-lg-3">
-        <div class="row">
-            <div class="col-12" style="height:150px">
-                <div class="relative" style="text-align: -webkit-center;">
-                    <img src="@(Model.Picture != null ? "data:image/jpeg;base64," + Convert.ToBase64String(Model.Picture) : "~/img/icons/NoImage.jpg")"
-                         id="PreviewPhoto" alt="Profile Picture" width="125" height="125"
-                         style="border:1px; margin-top:0px;border-radius: 50%;" />
-                    <input asp-for="Picture" class="custom-file-input" id="profilePictureInput" type="file" name="profilePicture" value="@Convert.ToBase64String(Model.Picture)"
-                           class="form-control form-control-lg" style="display:none;" onchange="document.getElementById('PreviewPhoto').src=window.URL.createObjectURL(this.files[0])" />
-                    <a href="javascript:void(0)" onclick="document.getElementById('profilePictureInput').click()">
-                        <i class="fa fa-pencil" style="font-size: large; color:darkslategray; line-height: 2;position: relative;bottom: -55px;right: 16px;"></i>
+				<select asp-for="DesignationTypeID" asp-items="@(new SelectList(ViewBag.DesignationsList, "Value", "Text"))" class="form-control form-control-lg">
+				</select>
+				<span asp-validation-for="DesignationTypeID" class="text-danger"></span>
+			</div>
+		</div>
+	</div>
+	<div class="col-12 col-md-12 col-lg-3">
+		<div class="row">
+			<div class="col-12" style="height:150px">
+				<div class="relative" style="text-align: -webkit-center;">
+					@if (Model.Picture != null)
+					{
+						<img src="@(Model.Picture != null ? "data:image/jpeg;base64," + Convert.ToBase64String(Model.Picture) : "~/img/icons/NoImage.jpg")"
+						id="PreviewPhoto" alt="Profile Picture" width="125" height="125"
+						style="border:1px; margin-top:0px;border-radius: 50%;" />
+						<input asp-for="Picture" class="custom-file-input" id="profilePictureInput" type="file" name="profilePicture" value="@Convert.ToBase64String(Model.Picture)"
+						class="form-control form-control-lg" style="display:none;" onchange="document.getElementById('PreviewPhoto').src=window.URL.createObjectURL(this.files[0])" />
+					}
+					else
+					{
+						<img src="~/img/icons/noimage.jpg"
+							 id="PreviewPhoto" alt="Profile Picture" width="125" height="125"
+							 style="border:1px; margin-top:0px;border-radius: 50%;" />
+						<input asp-for="Picture" class="custom-file-input" id="profilePictureInput" type="file" name="profilePicture" 
+							   class="form-control form-control-lg" style="display:none;" onchange="document.getElementById('PreviewPhoto').src=window.URL.createObjectURL(this.files[0])" />
+					}
+					<a href="javascript:void(0)" onclick="document.getElementById('profilePictureInput').click()">
+						<i class="fa fa-pencil" style="font-size: large; color:darkslategray; line-height: 2;position: relative;bottom: -55px;right: 16px;"></i>
                     </a>
                     <span asp-validation-for="Picture" class="text-danger"></span>
                     @if (Model.Picture != null)

@@ -193,7 +193,7 @@ BEGIN
         MONTH(fa.MarkDate) = @MonthID 
         AND YEAR(fa.MarkDate) = @YearID
         AND hre.BranchTypeID = @BranchID
-        AND fa.MarkDate <= GETDATE(); 
+        --AND fa.MarkDate <= GETDATE(); 
 END;
 
 
@@ -229,8 +229,8 @@ BEGIN
 
     -- Step 1: Retrieve distinct column names with unique prefixes for all types
     SELECT @cols = @cols + ',' + STUFF((
-        SELECT DISTINCT ',' + QUOTENAME('AdditionalAllowance_' + AddionalAllowanceTypeName) 
-        FROM Settings_AddionalAllowanceTypes where DeleteYNID != 1
+        SELECT DISTINCT ',' + QUOTENAME('AdditionalAllowance_' + AdditionalAllowanceTypeName) 
+        FROM Settings_AdditionalAllowanceTypes where DeleteYNID != 1
         FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 1, '');
 
     -- Include OverTime Types
@@ -267,16 +267,16 @@ BEGIN
 
             UNION ALL
             
-            SELECT ''AdditionalAllowance_'' + AddionalAllowanceTypeName AS TypeName, 
-                ISNULL((SELECT haad.AddionalAllowanceAmount 
-                         FROM HR_AddionalAllowanceDetails haad
-                         INNER JOIN HR_AddionalAllowances haa ON haa.AddionalAllowanceID = haad.AddionalAllowanceID
-                         WHERE haad.AddionalAllowanceTypeID = saat.AddionalAllowanceTypeID AND FinalApprovalID=1
+            SELECT ''AdditionalAllowance_'' + AdditionalAllowanceTypeName AS TypeName, 
+                ISNULL((SELECT haad.AdditionalAllowanceAmount 
+                         FROM HR_AdditionalAllowanceDetails haad
+                         INNER JOIN HR_AdditionalAllowances haa ON haa.AdditionalAllowanceID = haad.AdditionalAllowanceID
+                         WHERE haad.AdditionalAllowanceTypeID = saat.AdditionalAllowanceTypeID AND FinalApprovalID=1
                            AND haa.EmployeeID = ''' + @EmployeeID + ''' 
                            AND MonthTypeID = ''' + @Month + ''' 
                            AND Year = ''' + @Year + '''), 
                    0) AS Value
-            FROM Settings_AddionalAllowanceTypes saat 
+            FROM Settings_AdditionalAllowanceTypes saat 
 
             UNION ALL
             

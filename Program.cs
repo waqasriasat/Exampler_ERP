@@ -6,6 +6,7 @@ using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Localization;
 using Exampler_ERP.Language;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,11 +23,10 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddSession(options =>
 {
-  options.Cookie.HttpOnly = true; // Ensure the session cookie is only accessed through HTTP
-  options.Cookie.IsEssential = true; // Make the session cookie essential
+  options.Cookie.HttpOnly = true; 
+  options.Cookie.IsEssential = true; 
 });
 
-// Add services to the container.
 builder.Services.AddControllersWithViews()
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
@@ -39,6 +39,26 @@ var localizationOptions = new RequestLocalizationOptions()
     .AddSupportedCultures(supportedCultures)
     .AddSupportedUICultures(supportedCultures);
 
+builder.Services.Configure<FormOptions>(options =>
+{
+  options.ValueCountLimit = int.MaxValue; // For many form fields
+  options.MultipartBodyLengthLimit = 100_000_000; // 100 MB
+});
+builder.WebHost.ConfigureKestrel(options =>
+{
+  options.Limits.MaxRequestBodySize = 100_000_000; // 100 MB
+});
+builder.Services.Configure<FormOptions>(options =>
+{
+  options.ValueCountLimit = int.MaxValue;         // from default 1024
+  options.ValueLengthLimit = int.MaxValue;
+  options.MultipartBodyLengthLimit = long.MaxValue;
+});
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+  options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+  options.JsonSerializerOptions.PropertyNamingPolicy = null;
+});
 
 builder.Services.AddSignalR();
 

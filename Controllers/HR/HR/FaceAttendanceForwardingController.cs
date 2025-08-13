@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using OfficeOpenXml;
 using System.Data;
 using Microsoft.Extensions.Localization;
+using System.Text.Json;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
@@ -114,251 +115,268 @@ namespace Exampler_ERP.Controllers.HR.HR
       return weekends;
     }
     [HttpPost]
-    public async Task<JsonResult> UpdatePosted(List<EmployeeData> Employees)
+    [RequestSizeLimit(100_000_000)]
+    public async Task<JsonResult> UpdatePosted([FromBody] List<EmployeeData> Employees)
     {
-      try
+      if (!ModelState.IsValid)
       {
-        var FatchExistingFaceAttendancePosted = await _appDBContext.CR_FaceAttendancePosteds
-        .Where(e => e.PostedID == 1 && e.MonthTypeID == HttpContext.Session.GetInt32("FaceAttendanceMonthID") && e.Year == HttpContext.Session.GetInt32("FaceAttendanceYearID") && e.BranchTypeID == HttpContext.Session.GetInt32("FaceAttendanceBranchID"))
-        .FirstOrDefaultAsync();
+        var errors = ModelState.Values
+            .SelectMany(v => v.Errors)
+            .Select(e => e.ErrorMessage)
+            .ToList();
 
-
-
-        if (FatchExistingFaceAttendancePosted != null)
+        return Json(new { success = false, message = "Binding failed", errors });
+      }
+        if (Employees == null)
         {
-          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Already posting found for the specified branch, month, and year.");
-          return Json(new { success = false });
+          return Json(new { success = false, message = "Employees is null — binding failed." });
         }
-
-        var groupedEmployees = Employees.GroupBy(emp => emp.EmployeeID);
-
-        foreach (var group in groupedEmployees)
+        else
         {
-          var employeeID = group.Key;
-          var employee = group.First();
-
-          int monthID = employee.MarkDate.Month;
-          int year = employee.MarkDate.Year;
-
-          int daysInMonth = DateTime.DaysInMonth(year, monthID);
-          int weekends = CalculateWeekends(daysInMonth, monthID, year, employee.EmployeeID);
-
-          int holidays = _appDBContext.HR_Holidays
-              .Where(h => h.HolidayDate.Month == monthID && h.HolidayDate.Year == year)
-              .Count();
-
-          int workingDaysInWeek = _appDBContext.HR_GlobalSettings
-          .Select(gs => (int?)gs.WorkingDayInWeek) // Cast to nullable int
-          .FirstOrDefault() ?? 5;
-
-          int totalWorkingDays = daysInMonth - weekends - holidays;
-
-          int presentDays = _appDBContext.CR_FaceAttendances
-              .Where(a => a.EmployeeID == employee.EmployeeID && a.MarkDate.Month == monthID && a.MarkDate.Year == year)
-              .Count();
-
-          int absentDays = totalWorkingDays - presentDays;
-
-          bool deductionExists = _appDBContext.HR_Deductions
-              .Any(d => d.EmployeeID == employeeID && d.Month == monthID && d.Year == year && d.DeductionTypeID == 3);
+          try
+          {
+            var FatchExistingFaceAttendancePosted = await _appDBContext.CR_FaceAttendancePosteds
+            .Where(e => e.PostedID == 1 && e.MonthTypeID == HttpContext.Session.GetInt32("FaceAttendanceMonthID") && e.Year == HttpContext.Session.GetInt32("FaceAttendanceYearID") && e.BranchTypeID == HttpContext.Session.GetInt32("FaceAttendanceBranchID"))
+            .FirstOrDefaultAsync();
 
 
 
-          var perDaySalary = _appDBContext.HR_Salarys
-              .Join(_appDBContext.HR_SalaryDetails,
-              hs => hs.SalaryID,
-              hrsd => hrsd.SalaryID,
-              (hs, hrsd) => new
-              {
-                hs.EmployeeID,
-                hrsd.SalaryAmount
-              })
-              .Where(s => s.EmployeeID == employeeID)
-              .Select(s => new
-              {
-                PerDaySalary = (s.SalaryAmount /
-                      (monthID == 2
-                          ? (DateTime.IsLeapYear(year) ? 29.0 : 28.0)
-                          : (new[] { 4, 6, 9, 11 }.Contains(monthID) ? 30.0 : 31.0)
+            if (FatchExistingFaceAttendancePosted != null)
+            {
+              await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Already posting found for the specified branch, month, and year.");
+              return Json(new { success = false });
+            }
+
+            var groupedEmployees = Employees.GroupBy(emp => emp.employeeID);
+
+            foreach (var group in groupedEmployees)
+            {
+              var employeeID = group.Key;
+              var employee = group.First();
+
+              int monthID = employee.markDate.Month;
+              int year = employee.markDate.Year;
+
+              int daysInMonth = DateTime.DaysInMonth(year, monthID);
+              int weekends = CalculateWeekends(daysInMonth, monthID, year, employee.employeeID);
+
+              int holidays = _appDBContext.HR_Holidays
+                  .Where(h => h.HolidayDate.Month == monthID && h.HolidayDate.Year == year)
+                  .Count();
+
+              int workingDaysInWeek = _appDBContext.HR_GlobalSettings
+              .Select(gs => (int?)gs.WorkingDayInWeek) // Cast to nullable int
+              .FirstOrDefault() ?? 5;
+
+              int totalWorkingDays = daysInMonth - weekends - holidays;
+
+              int presentDays = _appDBContext.CR_FaceAttendances
+                  .Where(a => a.EmployeeID == employee.employeeID && a.MarkDate.Month == monthID && a.MarkDate.Year == year)
+                  .Count();
+
+              int absentDays = totalWorkingDays - presentDays;
+
+              bool deductionExists = _appDBContext.HR_Deductions
+                  .Any(d => d.EmployeeID == employeeID && d.Month == monthID && d.Year == year && d.DeductionTypeID == 3);
+
+
+
+              var perDaySalary = _appDBContext.HR_Salarys
+                  .Join(_appDBContext.HR_SalaryDetails,
+                  hs => hs.SalaryID,
+                  hrsd => hrsd.SalaryID,
+                  (hs, hrsd) => new
+                  {
+                    hs.EmployeeID,
+                    hrsd.SalaryAmount
+                  })
+                  .Where(s => s.EmployeeID == employeeID)
+                  .Select(s => new
+                  {
+                    PerDaySalary = (s.SalaryAmount /
+                          (monthID == 2
+                              ? (DateTime.IsLeapYear(year) ? 29.0 : 28.0)
+                              : (new[] { 4, 6, 9, 11 }.Contains(monthID) ? 30.0 : 31.0)
+                          )
                       )
-                  )
-              })
-              .FirstOrDefault();
+                  })
+                  .FirstOrDefault();
 
-          float perDaySalarys = (float)(perDaySalary?.PerDaySalary.GetValueOrDefault(0) ?? 0);
-          float amount = absentDays * perDaySalarys;
-          amount = (float)Math.Round(amount, 2);
+              float perDaySalarys = (float)(perDaySalary?.PerDaySalary.GetValueOrDefault(0) ?? 0);
+              float amount = absentDays * perDaySalarys;
+              amount = (float)Math.Round(amount, 2);
 
-          if (absentDays > 0 && !deductionExists)
-          {
-            var deduction = new HR_Deduction
+              if (absentDays > 0 && !deductionExists)
+              {
+                var deduction = new HR_Deduction
+                {
+                  DeductionTypeID = 3, // Absence Deduction
+                  EmployeeID = employeeID,
+                  Month = monthID,
+                  Year = year,
+                  Days = absentDays,
+                  FromDate = new DateTime(year, monthID, 1),
+                  ToDate = new DateTime(year, monthID, daysInMonth),
+                  Amount = amount, // Calculated deduction amount
+                  DeleteYNID = 0,
+                  FinalApprovalID = 1
+                };
+
+                _appDBContext.HR_Deductions.Add(deduction);
+              }
+              if (absentDays < 0)
+              {
+                var AdditionalAllowance = _appDBContext.HR_AdditionalAllowances
+                    .Where(a => a.EmployeeID == employeeID && a.MonthTypeID == monthID && a.Year == year)
+                    .FirstOrDefault();
+
+                if (AdditionalAllowance != null)
+                {
+                  var allowanceAmount = Math.Abs(absentDays) * perDaySalarys;
+                  var allowanceDetail = new HR_AdditionalAllowanceDetail
+                  {
+                    AdditionalAllowanceID = AdditionalAllowance.AdditionalAllowanceID,
+                    AdditionalAllowanceTypeID = 1,
+                    AdditionalAllowanceAmount = allowanceAmount
+                  };
+
+                  _appDBContext.HR_AdditionalAllowanceDetails.Add(allowanceDetail);
+                }
+                else
+                {
+                  var newAllowance = new HR_AdditionalAllowance
+                  {
+                    EmployeeID = employeeID,
+                    MonthTypeID = monthID,
+                    Year = year,
+                    FinalApprovalID = 1,
+                    ProcessTypeApprovalID = 1,
+                    PostedID = 0,
+                    PayRollID = 0
+                  };
+
+                  _appDBContext.HR_AdditionalAllowances.Add(newAllowance);
+                  _appDBContext.SaveChanges();
+
+                  var allowanceAmount = Math.Abs(absentDays) * perDaySalarys;
+                  var allowanceDetail = new HR_AdditionalAllowanceDetail
+                  {
+                    AdditionalAllowanceID = newAllowance.AdditionalAllowanceID,
+                    AdditionalAllowanceTypeID = 3,
+                    AdditionalAllowanceAmount = allowanceAmount
+                  };
+
+                  _appDBContext.HR_AdditionalAllowanceDetails.Add(allowanceDetail);
+                }
+              }
+            }
+
+
+            foreach (var employee in Employees)
             {
-              DeductionTypeID = 3, // Absence Deduction
-              EmployeeID = employeeID,
-              Month = monthID,
-              Year = year,
-              Days = absentDays,
-              FromDate = new DateTime(year, monthID, 1),
-              ToDate = new DateTime(year, monthID, daysInMonth),
-              Amount = amount, // Calculated deduction amount
-              DeleteYNID = 0,
-              FinalApprovalID = 1
+              int monthID = employee.markDate.Month;
+              int year = employee.markDate.Year;
+              if (employee.lateComingDeduction > 0)
+              {
+                var deduction = new HR_Deduction
+                {
+                  DeductionTypeID = 1,
+                  EmployeeID = employee.employeeID,
+                  Month = monthID,
+                  Year = year,
+                  Days = 1,
+                  FromDate = employee.markDate,
+                  ToDate = employee.markDate,
+                  Amount = (float)employee.lateComingDeduction,
+                  DeleteYNID = 0,
+                  FinalApprovalID = 1
+                };
+                _appDBContext.HR_Deductions.Add(deduction);
+              }
+
+              if (employee.earlyGoingDeduction > 0)
+              {
+                var deduction = new HR_Deduction
+                {
+                  DeductionTypeID = 2,
+                  EmployeeID = employee.employeeID,
+                  Month = monthID,
+                  Year = year,
+                  Days = 1,
+                  FromDate = employee.markDate,
+                  ToDate = employee.markDate,
+                  Amount = (float)employee.earlyGoingDeduction,
+                  DeleteYNID = 0,
+                  FinalApprovalID = 1
+                };
+                _appDBContext.HR_Deductions.Add(deduction);
+              }
+
+              if (employee.earlyComingAmount > 0)
+              {
+                var overtime = new HR_OverTime
+                {
+                  EmployeeID = employee.employeeID,
+                  Amount = (float)employee.earlyComingAmount,
+                  OverTimeTypeID = 1,
+                  MonthTypeID = monthID,
+                  Year = year,
+                  Days = 1,
+                  Hours = employee.earlyComingGraceTime,
+                  DeleteYNID = 0,
+                  FinalApprovalID = 1
+                };
+                _appDBContext.HR_OverTimes.Add(overtime);
+              }
+
+              if (employee.lateGoingAmount > 0)
+              {
+                var overtime = new HR_OverTime
+                {
+                  EmployeeID = employee.employeeID,
+                  Amount = (float)employee.lateGoingAmount,
+                  OverTimeTypeID = 1,
+                  MonthTypeID = monthID,
+                  Year = year,
+                  Days = 1,
+                  Hours = employee.lateGoingGraceTime,
+                  DeleteYNID = 0,
+                  FinalApprovalID = 1
+                };
+                _appDBContext.HR_OverTimes.Add(overtime);
+              }
+            }
+            var faceAttendancePosted = new CR_FaceAttendancePosted
+            {
+              BranchTypeID = HttpContext.Session.GetInt32("FaceAttendanceBranchID") ?? 0,
+              MonthTypeID = HttpContext.Session.GetInt32("FaceAttendanceMonthID") ?? 0,
+              Year = HttpContext.Session.GetInt32("FaceAttendanceYearID") ?? 0,
+              PostedID = 1
             };
-
-            _appDBContext.HR_Deductions.Add(deduction);
+            _appDBContext.CR_FaceAttendancePosteds.Add(faceAttendancePosted);
+            await _appDBContext.SaveChangesAsync();
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Successfully Posted.");
+            return Json(new { success = true });
           }
-          if (absentDays < 0)
+          catch (Exception ex)
           {
-            var AdditionalAllowance = _appDBContext.HR_AdditionalAllowances
-                .Where(a => a.EmployeeID == employeeID && a.MonthTypeID == monthID && a.Year == year)
-                .FirstOrDefault();
-
-            if (AdditionalAllowance != null)
-            {
-              var allowanceAmount = Math.Abs(absentDays) * perDaySalarys;
-              var allowanceDetail = new HR_AdditionalAllowanceDetail
-              {
-                AdditionalAllowanceID = AdditionalAllowance.AdditionalAllowanceID,
-                AdditionalAllowanceTypeID = 1,
-                AdditionalAllowanceAmount = allowanceAmount
-              };
-
-              _appDBContext.HR_AdditionalAllowanceDetails.Add(allowanceDetail);
-            }
-            else
-            {
-              var newAllowance = new HR_AdditionalAllowance
-              {
-                EmployeeID = employeeID,
-                MonthTypeID = monthID,
-                Year = year,
-                FinalApprovalID = 1,
-                ProcessTypeApprovalID = 1,
-                PostedID = 0,
-                PayRollID = 0
-              };
-
-              _appDBContext.HR_AdditionalAllowances.Add(newAllowance);
-              _appDBContext.SaveChanges();
-
-              var allowanceAmount = Math.Abs(absentDays) * perDaySalarys;
-              var allowanceDetail = new HR_AdditionalAllowanceDetail
-              {
-                AdditionalAllowanceID = newAllowance.AdditionalAllowanceID,
-                AdditionalAllowanceTypeID = 3,
-                AdditionalAllowanceAmount = allowanceAmount
-              };
-
-              _appDBContext.HR_AdditionalAllowanceDetails.Add(allowanceDetail);
-            }
+            await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "InvalidCastException occurred: " + ex.Message);
+            return Json(new { success = false, message = ex.Message });
           }
         }
-
-
-        foreach (var employee in Employees)
-        {
-          int monthID = employee.MarkDate.Month;
-          int year = employee.MarkDate.Year;
-          if (employee.LateComingDeduction > 0)
-          {
-            var deduction = new HR_Deduction
-            {
-              DeductionTypeID = 1,
-              EmployeeID = employee.EmployeeID,
-              Month = monthID,
-              Year = year,
-              Days = 1,
-              FromDate = employee.MarkDate,
-              ToDate = employee.MarkDate,
-              Amount = employee.LateComingDeduction,
-              DeleteYNID = 0,
-              FinalApprovalID = 1
-            };
-            _appDBContext.HR_Deductions.Add(deduction);
-          }
-
-          if (employee.EarlyGoingDeduction > 0)
-          {
-            var deduction = new HR_Deduction
-            {
-              DeductionTypeID = 2,
-              EmployeeID = employee.EmployeeID,
-              Month = monthID,
-              Year = year,
-              Days = 1,
-              FromDate = employee.MarkDate,
-              ToDate = employee.MarkDate,
-              Amount = employee.EarlyGoingDeduction,
-              DeleteYNID = 0,
-              FinalApprovalID = 1
-            };
-            _appDBContext.HR_Deductions.Add(deduction);
-          }
-
-          if (employee.EarlyComingAmount > 0)
-          {
-            var overtime = new HR_OverTime
-            {
-              EmployeeID = employee.EmployeeID,
-              Amount = employee.EarlyComingAmount,
-              OverTimeTypeID = 1,
-              MonthTypeID = monthID,
-              Year = year,
-              Days = 1,
-              Hours = employee.EarlyComingGraceTime,
-              DeleteYNID = 0,
-              FinalApprovalID = 1
-            };
-            _appDBContext.HR_OverTimes.Add(overtime);
-          }
-
-          if (employee.LateGoingAmount > 0)
-          {
-            var overtime = new HR_OverTime
-            {
-              EmployeeID = employee.EmployeeID,
-              Amount = employee.LateGoingAmount,
-              OverTimeTypeID = 1,
-              MonthTypeID = monthID,
-              Year = year,
-              Days = 1,
-              Hours = employee.LateGoingGraceTime,
-              DeleteYNID = 0,
-              FinalApprovalID = 1
-            };
-            _appDBContext.HR_OverTimes.Add(overtime);
-          }
-        }
-        var faceAttendancePosted = new CR_FaceAttendancePosted
-        {
-          BranchTypeID = HttpContext.Session.GetInt32("FaceAttendanceBranchID") ?? 0,
-          MonthTypeID = HttpContext.Session.GetInt32("FaceAttendanceMonthID") ?? 0,
-          Year = HttpContext.Session.GetInt32("FaceAttendanceYearID") ?? 0,
-          PostedID = 1
-        };
-        _appDBContext.CR_FaceAttendancePosteds.Add(faceAttendancePosted);
-        await _appDBContext.SaveChangesAsync();
-        await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Successfully Posted.");
-        return Json(new { success = true });
-      }
-      catch (Exception ex)
-      {
-        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "InvalidCastException occurred: " + ex.Message);
-        return Json(new { success = false, message = ex.Message });
-      }
-    }
+   }
 
     // Model class for employee data
     public class EmployeeData
     {
-      public int EmployeeID { get; set; }
-      public DateTime MarkDate { get; set; }
-      public float LateComingDeduction { get; set; }
-      public float EarlyGoingDeduction { get; set; }
-      public int EarlyComingGraceTime { get; set; }
-      public float EarlyComingAmount { get; set; }
-      public int LateGoingGraceTime { get; set; }
-      public float LateGoingAmount { get; set; }
+      public int employeeID { get; set; }
+      public DateTime markDate { get; set; }
+      public decimal lateComingDeduction { get; set; }
+      public decimal earlyGoingDeduction { get; set; }
+      public int earlyComingGraceTime { get; set; }
+      public decimal earlyComingAmount { get; set; }
+      public int lateGoingGraceTime { get; set; }
+      public decimal lateGoingAmount { get; set; }
     }
 
 

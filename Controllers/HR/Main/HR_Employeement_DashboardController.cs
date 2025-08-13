@@ -37,9 +37,7 @@ namespace Exampler_ERP.Controllers.HR.Main
       ViewBag.JoiningCount = await _appDBContext.HR_Joinings.CountAsync();
       ViewBag.BankAccountCount = await _appDBContext.HR_BankAccounts.CountAsync();
       ViewBag.ContractRenewwalCount = await _appDBContext.HR_ContractRenewals.CountAsync();
-      //ViewBag.LeaveBalanceCount = await _appDBContext.leave.CountAsync();
-      //ViewBag.CardPrintCount = await _appDBContext.Card.CountAsync();
-
+ 
       return View("~/Views/HR/Main/Dashboard/HR_Employeement_Dashboard.cshtml");
     }
   }

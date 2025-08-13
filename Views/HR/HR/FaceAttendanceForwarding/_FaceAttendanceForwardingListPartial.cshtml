@@ -1,0 +1,82 @@
+@model IEnumerable<Exampler_ERP.Models.Temp.FaceAttendanceForwardingViewModel>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+	var lblEmployeeName = Localizer["lbl_EmployeeName"];
+	var lblMarkDate = Localizer["lbl_MarkDate"];
+	var lblPresentTiming = Localizer["lbl_PresentTiming"];
+	var lblAttendanceDuration = Localizer["lbl_AttendanceDuration"];
+	var lblWorkingSlot = Localizer["lbl_WorkingSlot"];
+	var lblLateComingDeduction = Localizer["lbl_LateComingDeduction(Hours)"];
+	var lblEarlyGoingDeduction = Localizer["lbl_EarlyGoingDeduction(Hours)"];
+	var lblPerDaySalary = Localizer["lbl_PerDaySalary"];
+	var lblEarlyComingAmount = Localizer["lbl_EarlyComingAmount(Hours)"];
+	var lblLateGoingAmount = Localizer["lbl_LateGoingAmount(Hours)"];
+
+	var lblLateComingHours = Localizer["lbl_LateComingHours"];
+	var lblEarlyGoingHours = Localizer["lbl_EarlyGoingHours"];
+	var lblEarlyComingHours = Localizer["lbl_EarlyComingHours"];
+	var lblLateGoingHours = Localizer["lbl_LateGoingHours"];
+}
+
+@foreach (var item in Model)
+
+{
+
+	<div class="col-12 col-md-12 col-lg-12 GVDetail">
+		<input type="hidden" class="employeeID" value="@item.EmployeeID" />
+		<input type="hidden" class="markDate" value="@item.MarkDate" />
+		<input type="hidden" class="lateComingDeduction" value="@item.LateComingDeduction" />
+		<input type="hidden" class="earlyGoingDeduction" value="@item.EarlyGoingDeduction" />
+		<input type="hidden" class="earlyComingGraceTime" value="@item.EarlyComingGraceTime" />
+		<input type="hidden" class="earlyComingAmount" value="@item.EarlyComingAmount" />
+		<input type="hidden" class="lateGoingGraceTime" value="@item.LateGoingGraceTime" />
+		<input type="hidden" class="lateGoingAmount" value="@item.LateGoingAmount" />
+		<div class="row" style="display: flex; flex-wrap: nowrap;">
+			<div class="col-12 col-md-2 col-lg-3">
+				<p class="text-nowrap"><span class="smallAdd">@lblEmployeeName : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+			</div>
+			<div class="col-12 col-md-1 col-lg-2">
+				<p class="text-nowrap"><span class="smallAdd">@lblMarkDate : </span>@item.MarkDate.ToString("dd/MMM/yyyy")</p>
+			</div>
+			<div class="col-12 col-md-1 col-lg-1">
+				<p class="text-nowrap"><span class="smallAdd">@lblPresentTiming : </span>@item.InTime - @item.OutTime</p>
+			</div>
+			<div class="col-12 col-md-1 col-lg-1">
+				<p class="text-nowrap"><span class="smallAdd">@lblAttendanceDuration : </span>@item.DHours:@item.DMinutes</p>
+			</div>
+			<div class="col-12 col-md-1 col-lg-1">
+				<p class="text-nowrap"><span class="smallAdd">@lblWorkingSlot : </span>@item.FromDutyTime - @item.ToDutyTime</p>
+			</div>
+			<div class="col-12 col-md-1 col-lg-1" style="display:none">
+				<p class="text-nowrap"><span class="smallAdd">@lblLateComingHours : </span>@item.LateComingGraceTime</p>
+			</div>
+			<div class="col-12 col-md-1 col-lg-1">
+				<p class="text-nowrap"><span class="smallAdd">@lblLateComingDeduction : </span>@item.LateComingDeduction (@item.LateComingGraceTime)</p>
+			</div>
+			<div class="col-12 col-md-1 col-lg-1" style="display:none">
+				<p class="text-nowrap"><span class="smallAdd">@lblEarlyGoingHours : </span>@item.EarlyGoingGraceTime</p>
+			</div>
+			<div class="col-12 col-md-1 col-lg-1">
+				<p class="text-nowrap"><span class="smallAdd">@lblEarlyGoingDeduction : </span>@item.EarlyGoingDeduction (@item.EarlyGoingGraceTime)</p>
+			</div>
+			<div class="col-12 col-md-1 col-lg-1" style="display:none">
+				<p class="text-nowrap"><span class="smallAdd">@lblPerDaySalary : </span>@item.PerDaySalary</p>
+			</div>
+
+
+			<div class="col-12 col-md-1 col-lg-1" style="display:none">
+				<p class="text-nowrap"><span class="smallAdd">@lblEarlyComingHours : </span>@item.EarlyComingGraceTime</p>
+			</div>
+			<div class="col-12 col-md-1 col-lg-1">
+				<p class="text-nowrap"><span class="smallAdd">@lblEarlyComingAmount : </span>@item.EarlyComingAmount (@item.EarlyComingGraceTime)</p>
+			</div>
+			<div class="col-12 col-md-1 col-lg-1" style="display:none">
+				<p class="text-nowrap"><span class="smallAdd">@lblLateGoingHours : </span>@item.LateGoingGraceTime</p>
+			</div>
+			<div class="col-12 col-md-1 col-lg-1">
+				<p class="text-nowrap"><span class="smallAdd">@lblLateGoingAmount : </span>@item.LateGoingAmount (@item.LateGoingGraceTime)</p>
+			</div>
+		</div>
+	</div>
+}

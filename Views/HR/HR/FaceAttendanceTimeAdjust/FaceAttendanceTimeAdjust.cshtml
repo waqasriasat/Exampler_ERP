@@ -99,7 +99,7 @@
 
             $("#EmployeeName").autocomplete({
                 source: function (request, response) {
-
+					$("#EmployeeID").val("");
                     $.ajax({
                         url: '@Url.Action("GetEmployeeSuggestions", "Employee")', // Ensure this matches the C# method
                         type: 'GET',
@@ -159,60 +159,65 @@
                 <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
                 <div class="Searching-Box-padding" style="padding-bottom: 15px;">
                     <div class="row mb-4">
+						<!-- From Date - Day Dropdown -->
+						<div class="col-md-3 mb-3">
+							<label class="form-label fw-bold">@Localizer["lbl_Date"]</label>
+							<select name="DayID" id="DayID" class="form-control">
+								<option value="0">Select Date</option>
+								@for (int day = 1; day <= 31; day++)
+								{
+									if (day == ViewBag.SelectedDay)
+									{
+										<option value="@day" selected>@day</option>
+									}
+									else
+									{
+										<option value="@day">@day</option>
+									}
+								}
+							</select>
+						</div>
+
                         <!-- From Date Field -->
-                        <div class="col-md-4 mb-4">
+                        <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">@Localizer["lbl_Month"]</label>
                             <select name="MonthsTypeID" id="MonthsTypeID" class="form-control">
                                 @foreach (var item in ViewBag.MonthsTypeList)
-
                                 {
-
                                     if (item.Value == ViewBag.MonthsTypeID?.ToString())
-
                                     {
                                         <option value="@item.Value" selected>@item.Text</option>
                                     }
-
                                     else
-
                                     {
                                         <option value="@item.Value">@item.Text</option>
                                     }
-
                                 }
                             </select>
                         </div>
 
 
                         <!-- To Date Field -->
-                        <div class="col-md-4 mb-4">
+                        <div class="col-md-3 mb-3">
                             <label for="YearsTypeID" class="form-label fw-bold">@Localizer["lbl_Year"]</label>
                             <select name="YearsTypeID" id="YearsTypeID" class="form-control">
                                 @for (int year = DateTime.Now.Year; year >= 1900; year--)
-
                                 {
-
-                                    // Corrected to compare with ViewBag.YearsTypeID
-
                                     if (year == (ViewBag.YearsTypeID ?? 0))
-
                                     {
                                         <option value="@year" selected>@year</option>
                                     }
-
                                     else
-
                                     {
                                         <option value="@year">@year</option>
                                     }
-
                                 }
                             </select>
                         </div>
 
 
                         <!-- Employee Name Search Field -->
-                        <div class="col-md-4 mb-4">
+                        <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
                             <input type="text" class="form-control" id="EmployeeName" placeholder="@Localizer["lbl_SearchEmployee"]" name="EmployeeName" value="@ViewBag.EmployeeName" />
                             <input type="hidden" class="form-control" id="EmployeeID" placeholder="@Localizer["lbl_SearchEmployee"]" name="EmployeeID" value="@ViewBag.EmployeeID" />

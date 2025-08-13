@@ -50,7 +50,7 @@
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
                                         <strong class="text-primary">@Localizer["lbl_Deduction"]</strong>
-                                        <h4 class="font-weight-bold text-dark">0</h4>
+										<h4 class="font-weight-bold text-dark">@ViewBag.DeductionCount</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
                                         <i class="fa fa-minus-circle Card1I" aria-hidden="true"></i>
@@ -72,7 +72,7 @@
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
                                         <strong class="text-primary">@Localizer["lbl_OverTime"]</strong>
-                                        <h4 class="font-weight-bold text-dark">0</h4>
+										<h4 class="font-weight-bold text-dark">@ViewBag.OverTimeCount</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
                                         <i class="fa fa-clock Card1I" aria-hidden="true"></i>
@@ -94,7 +94,7 @@
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
                                         <strong class="text-primary"> @Localizer["lbl_AdditionalAllowance"] </strong>
-                                        <h4 class="font-weight-bold text-dark">0</h4>
+										<h4 class="font-weight-bold text-dark">@ViewBag.AdditionalAllowanceCount</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
                                         <i class="fa fa-plus-circle Card1I" aria-hidden="true"></i>
@@ -116,7 +116,7 @@
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
                                         <strong class="text-primary"> @Localizer["lbl_Holiday"] </strong>
-                                        <h4 class="font-weight-bold text-dark">0</h4>
+										<h4 class="font-weight-bold text-dark">@ViewBag.HolidayCount</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
                                         <i class="fa fa-plus-circle Card1I" aria-hidden="true"></i>
@@ -138,7 +138,7 @@
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
                                         <strong class="text-primary"> @Localizer["lbl_VacationSettle"] </strong>
-                                        <h4 class="font-weight-bold text-dark">0</h4>
+										<h4 class="font-weight-bold text-dark">@ViewBag.VacationSettleCount</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
                                         <i class="fa fa-plane-departure Card1I" aria-hidden="true"></i>
@@ -160,7 +160,7 @@
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
                                         <strong class="text-primary"> @Localizer["lbl_EndOfService"] </strong>
-                                        <h4 class="font-weight-bold text-dark">0</h4>
+										<h4 class="font-weight-bold text-dark">@ViewBag.EndOfServiceCount</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
                                         <i class="fa fa-hand-holding-usd Card1I" aria-hidden="true"></i>
@@ -182,7 +182,7 @@
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
                                         <strong class="text-primary"> @Localizer["lbl_EvaluationAssign"] </strong>
-                                        <h4 class="font-weight-bold text-dark">0</h4>
+										<h4 class="font-weight-bold text-dark">@ViewBag.EvaluationAssignCount</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
                                         <i class="fa fa-tasks Card1I" aria-hidden="true"></i>
@@ -204,7 +204,7 @@
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
                                         <strong class="text-primary"> @Localizer["lbl_EvaluationApproval"] </strong>
-                                        <h4 class="font-weight-bold text-dark">0</h4>
+										<h4 class="font-weight-bold text-dark">@ViewBag.EvaluationApprovalCount</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
                                         <i class="fa fa-check-circle Card1I" aria-hidden="true"></i>
@@ -226,7 +226,7 @@
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
                                         <strong class="text-primary"> @Localizer["lbl_EvaluationList"] </strong>
-                                        <h4 class="font-weight-bold text-dark">0</h4>
+										<h4 class="font-weight-bold text-dark">@ViewBag.EvaluationListCount</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
                                         <i class="fa fa-list-alt Card1I" aria-hidden="true"></i>
@@ -248,7 +248,7 @@
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
                                         <strong class="text-primary"> @Localizer["lbl_FaceAttendanceTimeAdjust"] </strong>
-                                        <h4 class="font-weight-bold text-dark">0</h4>
+										<h4 class="font-weight-bold text-dark">@ViewBag.FaceAttendanceTimeAdjustCount</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
                                         <i class="fa fa-calendar-check Card1I" aria-hidden="true"></i>
@@ -270,7 +270,7 @@
                                 <div class="card-body small-box bg-light rounded-lg p-3 d-flex align-items-center justify-content-between">
                                     <div class="card-details">
                                         <strong class="text-primary">@Localizer["lbl_FaceAttendanceForwarding"]</strong>
-                                        <h4 class="font-weight-bold text-dark">0</h4>
+										<h4 class="font-weight-bold text-dark">@ViewBag.FaceAttendanceForwardingCount</h4>
                                     </div>
                                     <div class="icon bg-primary text-white">
                                         <i class="fa fa-calendar-check Card1I" aria-hidden="true"></i>

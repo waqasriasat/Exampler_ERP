@@ -28,45 +28,71 @@ namespace Exampler_ERP.Controllers.HR.HR
       _localizer = localizer;
 
     }
-    public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
-    {
+      public async Task<IActionResult> Index(int? DayID, int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
+      {
+      if (!DayID.HasValue && !EmployeeID.HasValue && !MonthsTypeID.HasValue && !YearsTypeID.HasValue)
+      {
+        var today = DateTime.Today;
+        DayID = today.Day;
+        MonthsTypeID = today.Month;
+        YearsTypeID = today.Year;
+      }
       var query = _appDBContext.CR_FaceAttendances
-           .Where(b => b.DeleteYNID != 1)
+          .Where(b => b.DeleteYNID != 1)
           .Include(d => d.Employee)
           .AsQueryable();
 
-      if (MonthsTypeID.HasValue && MonthsTypeID != 0 && YearsTypeID.HasValue && YearsTypeID != 0)
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
+                YearsTypeID.HasValue && YearsTypeID != 0 &&
+                DayID.HasValue && DayID != 0)
       {
         var startDate = new DateTime(YearsTypeID.Value, MonthsTypeID.Value, 1);
-        var endDate = startDate.AddMonths(1).AddDays(-1);  // Last day of the selected month
+        var endDate = startDate.AddMonths(1).AddDays(-1);
 
-        query = query.Where(d => d.MarkDate >= startDate && d.MarkDate <= endDate);
-      }
-
-      if (EmployeeID.HasValue)
-      {
-        query = query.Where(d => d.EmployeeID == EmployeeID.Value);
-      }
-
-      if (!string.IsNullOrEmpty(EmployeeName))
-      {
         query = query.Where(d =>
-            (d.Employee.FirstName + " " + d.Employee.FatherName + " " + d.Employee.FamilyName)
-            .Contains(EmployeeName));
+            d.MarkDate >= startDate &&
+            d.MarkDate <= endDate &&
+            d.MarkDate.Day == DayID.Value
+        );
       }
+      else if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
+               YearsTypeID.HasValue && YearsTypeID != 0 &&
+               EmployeeID.HasValue && EmployeeID != 0)
+      {
+        var startDate = new DateTime(YearsTypeID.Value, MonthsTypeID.Value, 1);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
 
-
+        query = query.Where(d =>
+            d.MarkDate >= startDate &&
+            d.MarkDate <= endDate &&
+            d.EmployeeID == EmployeeID.Value
+        );
+      }
+      else
+      {
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Please select either a Day or an Employee.");
+        ViewBag.FaceAttendance = new List<CR_FaceAttendance>();
+        await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName, DayID);
+        return View("~/Views/HR/HR/FaceAttendanceTimeAdjust/FaceAttendanceTimeAdjust.cshtml", new List<CR_FaceAttendance>());
+      }
       var faceAttendance = await query.ToListAsync();
 
-      ViewBag.MonthsTypeID = MonthsTypeID;
-      ViewBag.YearsTypeID = YearsTypeID;
-      ViewBag.EmployeeID = EmployeeID;
-      ViewBag.EmployeeName = EmployeeName;
-
-      ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
+      await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName, DayID);
 
       return View("~/Views/HR/HR/FaceAttendanceTimeAdjust/FaceAttendanceTimeAdjust.cshtml", faceAttendance);
     }
+    private async Task PopulateDropdowns(int? month, int? year, int? employeeId, string? employeeName, int? day)
+    {
+      ViewBag.MonthsTypeID = month;
+      ViewBag.YearsTypeID = year;
+      ViewBag.EmployeeID = employeeId;
+      ViewBag.EmployeeName = employeeName;
+      ViewBag.SelectedDay = day;
+
+      ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
+    }
+
+
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {

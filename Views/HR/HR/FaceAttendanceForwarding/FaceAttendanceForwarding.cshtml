@@ -9,21 +9,23 @@
     <script>
         $(document).ready(function () {
             $('#postedButton').click(function () {
-              
                 var employeeData = [];
-
+				function parseDecimal(val) {
+					return parseFloat(val?.replace(/,/g, '') || '0');
+				}
                 // Collect data for all employees (assuming you have a way to identify each entry)
                 $('.GVDetail').each(function () {
                    
                     var employeeID = $(this).find('.employeeID').val();
-                    var markDate = $(this).find('.markDate').val();
-                    var lateComingDeduction = $(this).find('.lateComingDeduction').val();
-                    var earlyGoingDeduction = $(this).find('.earlyGoingDeduction').val(); 
-                    var earlyComingGraceTime = $(this).find('.earlyComingGraceTime').val(); 
-                    var earlyComingAmount = $(this).find('.earlyComingAmount').val();
-                    var lateGoingGraceTime = $(this).find('.lateGoingGraceTime').val();
-                    var lateGoingAmount = $(this).find('.lateGoingAmount').val();
-
+					var rawDate = $(this).find('.markDate').val();
+					var markDate = new Date(rawDate).toISOString();
+					var lateComingDeduction = parseDecimal($(this).find('.lateComingDeduction').val());
+					var earlyGoingDeduction = parseDecimal($(this).find('.earlyGoingDeduction').val());
+					var earlyComingGraceTime = parseInt($(this).find('.earlyComingGraceTime').val()) || 0;
+					var earlyComingAmount = parseDecimal($(this).find('.earlyComingAmount').val());
+					var lateGoingGraceTime = parseInt($(this).find('.lateGoingGraceTime').val()) || 0;
+					var lateGoingAmount = parseDecimal($(this).find('.lateGoingAmount').val());
+					
                     employeeData.push({
                         
                         employeeID: employeeID,
@@ -36,27 +38,24 @@
                         lateGoingAmount: lateGoingAmount
                     });
                 });
+				debugger;
+				$.ajax({
+					  url: '/FaceAttendanceForwarding/UpdatePosted',
+					  type: 'POST',
+					  contentType: 'application/json',
+					  data: JSON.stringify(employeeData),
+					  success: function (response) {
+						  if (response.success) {
+							 debugger;
+						  } else {
+							  debugger;
+						  }
+					  },
+					  error: function (xhr, status, error) {
+						  alert("An error occurred while updating Posted ID.");
+					  }
+				  });
 
-                // Send the values to the controller using AJAX
-                $.ajax({
-                    url: '/FaceAttendanceForwarding/UpdatePosted',  // Replace with the correct URL
-                    type: 'POST',
-                    data: {
-                        Employees: employeeData // Pass the array of employee data
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                           
-                            
-                        } else {
-                           
-                            
-                        }
-                    },
-                    error: function () {
-                        alert("An error occurred while updating Posted ID.");
-                    }
-                });
             });
 			$('#searchEmployeeForm').submit(function (e) {
 				e.preventDefault(); // Prevent full page reload
@@ -208,68 +207,9 @@
                     </div>
                 </div>
 				 <div id="FaceAttendanceForwardingListContainer">
+					@Html.Partial("~/Views/HR/HR/FaceAttendanceForwarding/_FaceAttendanceForwardingListPartial.cshtml", Model)
 					 </div>
-                @foreach (var item in Model)
-
-                {
-                    
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <input type="hidden" class="employeeID" value="@item.EmployeeID" />
-                        <input type="hidden" class="markDate" value="@item.MarkDate" />
-                        <input type="hidden" class="lateComingDeduction" value="@item.LateComingDeduction" />
-                        <input type="hidden" class="earlyGoingDeduction" value="@item.EarlyGoingDeduction" />
-                        <input type="hidden" class="earlyComingGraceTime" value="@item.EarlyComingGraceTime" />
-                        <input type="hidden" class="earlyComingAmount" value="@item.EarlyComingAmount" />
-                        <input type="hidden" class="lateGoingGraceTime" value="@item.LateGoingGraceTime" />
-                        <input type="hidden" class="lateGoingAmount" value="@item.LateGoingAmount" />
-                        <div class="row" style="display: flex; flex-wrap: nowrap;">
-                            <div class="col-12 col-md-2 col-lg-3">
-                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
-                            </div>
-                            <div class="col-12 col-md-1 col-lg-2">
-                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_MarkDate"] : </span>@item.MarkDate.ToString("dd/MMM/yyyy")</p>
-                            </div>
-                            <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_PresentTiming"] : </span>@item.InTime - @item.OutTime</p>
-                            </div>
-                            <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_AttendanceDuration"] : </span>@item.DHours:@item.DMinutes</p>
-                            </div>
-                             <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_WorkingSlot"] : </span>@item.FromDutyTime - @item.ToDutyTime</p>
-                            </div>
-                            <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_LateComingHours"] : </span>@item.LateComingGraceTime</p>
-                            </div>
-                            <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_LateComingDeduction(Hours)"] : </span>@item.LateComingDeduction (@item.LateComingGraceTime)</p>
-                            </div>
-                            <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EarlyGoingHours"] : </span>@item.EarlyGoingGraceTime</p>
-                            </div>
-                            <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EarlyGoingDeduction(Hours)"] : </span>@item.EarlyGoingDeduction (@item.EarlyGoingGraceTime)</p>
-                            </div>
-                            <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_PerDaySalary"] : </span>@item.PerDaySalary</p>
-                            </div>
-
-
-                            <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EarlyComingHours"] : </span>@item.EarlyComingGraceTime</p>
-                            </div>
-                            <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EarlyComingAmount(Hours)"] : </span>@item.EarlyComingAmount (@item.EarlyComingGraceTime)</p>
-                            </div>
-                            <div class="col-12 col-md-1 col-lg-1" style="display:none">
-                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_LateGoingHours"] : </span>@item.LateGoingGraceTime</p>
-                            </div>
-                            <div class="col-12 col-md-1 col-lg-1">
-                                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_LateGoingAmount(Hours)"] : </span>@item.LateGoingAmount (@item.LateGoingGraceTime)</p>
-                            </div>
-                        </div>
-                    </div>
-                }
+               
             </div>
         </div>
     </div>
