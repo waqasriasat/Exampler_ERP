@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using Microsoft.Extensions.Localization;
 using Exampler_ERP.Models.Temp;
+using Microsoft.CodeAnalysis.Operations;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
@@ -28,25 +29,42 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       _localizer = localizer;
 
     }
-    public async Task<IActionResult> Index(int? id)
+    public async Task<IActionResult> Index(int? ApplicantID, string ApplicantName, int? BranchID)
     {
       var ApplicantsQuery = _appDBContext.HR_Applicants
           .Where(a => !_appDBContext.HR_Employees.Select(e => e.ApplicantID).Contains(a.ApplicantID));
 
-      if (id.HasValue)
+      if (ApplicantID.HasValue && ApplicantID != 0)
       {
-        ApplicantsQuery = ApplicantsQuery.Where(a => a.ApplicantID == id.Value);
+        ApplicantsQuery = ApplicantsQuery.Where(e => e.ApplicantID == ApplicantID.Value);
       }
-
+      if (BranchID.HasValue && BranchID != 0)
+      {
+        ApplicantsQuery = ApplicantsQuery.Where(e => e.BranchTypeID == BranchID.Value);
+      }
+   
       var Applicants = await ApplicantsQuery.ToListAsync();
 
+      await PopulateDropdowns(ApplicantID, ApplicantName, BranchID);
 
-      if (id.HasValue && id == 0)
+      if (Applicants.Count == 0)
       {
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Applicant Found.");
       }
 
       return View("~/Views/HR/Employeement/Applicant/Applicant.cshtml", Applicants);
+    }
+
+    private async Task PopulateDropdowns(int? employeeID, string employeeName, int? branchID)
+    {
+      ViewBag.EmployeeID = employeeID;
+      ViewBag.EmployeeName = employeeName;
+      ViewBag.BranchID = branchID;
+
+      ViewBag.BranchsList = await _utils.GetBranchs();
+      ViewBag.GenderList = await _utils.GetGender();
+      ViewBag.MaritalStatusList = await _utils.GetMaritalStatus();
+      ViewBag.ReligionList = await _utils.GetReligion();
     }
 
     public async Task<IActionResult> GetApplicantSuggestions(string term)
@@ -74,10 +92,13 @@ namespace Exampler_ERP.Controllers.HR.Employeement
           .Include(b => b.BranchType)
           .Select(e => new
           {
-            // Label showing employee's full name
-            label = e.FirstName + " " + e.FatherName + " " + e.FamilyName,
             id = e.ApplicantID,
-            // Additional details like department, branch, and designation for display (optional)
+            label = $@"
+                <div class='employee-suggestion'>
+                    <strong>{e.FirstName} {e.FatherName} {e.FamilyName}</strong><br />
+                    <span>{e.BranchType.BranchTypeName}, {e.Mobile}</span><br />
+                </div>",
+            name = $"{e.FirstName} {e.FatherName} {e.FamilyName}",
             branch = e.BranchType.BranchTypeName,
             phone = e.Phone1 ?? e.Phone2 ?? e.Mobile, // Prefer Phone1, else Phone2, else Mobile
             whatsapp = e.Whatsapp,
@@ -193,16 +214,23 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Applicant deleted successfully.");
       return Json(new { success = true });
     }
-    public async Task<IActionResult> Print()
+    public async Task<IActionResult> Print(int? ApplicantID, string ApplicantName, int? BranchID)
     {
-      var Applicants = await _appDBContext.HR_Applicants
-          .Include(b => b.BranchType)
-          .ToListAsync();
+      var ApplicantsQuery = _appDBContext.HR_Applicants
+           .Where(a => !_appDBContext.HR_Employees.Select(e => e.ApplicantID).Contains(a.ApplicantID));
 
-      ViewBag.GenderList = await _utils.GetGender();
-      ViewBag.MaritalStatusList = await _utils.GetMaritalStatus();
-      ViewBag.ReligionList = await _utils.GetReligion();
+      if (ApplicantID.HasValue && ApplicantID != 0)
+      {
+        ApplicantsQuery = ApplicantsQuery.Where(e => e.ApplicantID == ApplicantID.Value);
+      }
+      if (BranchID.HasValue && BranchID != 0)
+      {
+        ApplicantsQuery = ApplicantsQuery.Where(e => e.BranchTypeID == BranchID.Value);
+      }
 
+      var Applicants = await ApplicantsQuery.ToListAsync();
+
+      await PopulateDropdowns(ApplicantID, ApplicantName, BranchID);
 
       return View("~/Views/HR/Employeement/Applicant/PrintApplicant.cshtml", Applicants);
     }
@@ -226,13 +254,25 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       };
       return PartialView("~/Views/HR/Employeement/Applicant/PrintApplicantBioData.cshtml", applicantBioData);
     }
-    public async Task<IActionResult> ExportToExcel()
+    public async Task<IActionResult> ExportToExcel(int? ApplicantID, string ApplicantName, int? BranchID)
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var Applicants = await _appDBContext.HR_Applicants
-          .Include(b => b.BranchType)
-          .ToListAsync();
+      var ApplicantsQuery = _appDBContext.HR_Applicants
+           .Where(a => !_appDBContext.HR_Employees.Select(e => e.ApplicantID).Contains(a.ApplicantID));
+
+      if (ApplicantID.HasValue && ApplicantID != 0)
+      {
+        ApplicantsQuery = ApplicantsQuery.Where(e => e.ApplicantID == ApplicantID.Value);
+      }
+      if (BranchID.HasValue && BranchID != 0)
+      {
+        ApplicantsQuery = ApplicantsQuery.Where(e => e.BranchTypeID == BranchID.Value);
+      }
+
+      var Applicants = await ApplicantsQuery.ToListAsync();
+
+      await PopulateDropdowns(ApplicantID, ApplicantName, BranchID);
 
       var GenderList = await _utils.GetGender();
       var MaritalStatusList = await _utils.GetMaritalStatus();

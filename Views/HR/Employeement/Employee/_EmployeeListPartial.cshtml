@@ -1,6 +1,12 @@
 @model IEnumerable<Exampler_ERP.Models.HR_Employee>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@{
+    var lblEmployeeName = Localizer["lbl_EmployeeName"];
+    var lblActive = Localizer["lbl_Active"];
+    var lblYes = Localizer["lbl_Yes"];
+    var lblNo = Localizer["lbl_No"];
+}
 @foreach (var item in Model)
 {
 	<div class="col-12 col-md-12 col-lg-12 GVDetail">
@@ -20,19 +26,19 @@
 						</p>
 					</div>
 					<div class="col-12 col-md-12 col-lg-6">
-						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@Html.Raw($"{item.FirstName} {item.FatherName} {item.FamilyName}")</p>
+                        <p class="text-nowrap"><span class="smallAdd">@lblEmployeeName : </span>@Html.Raw($"{item.FirstName} {item.FatherName} {item.FamilyName}")</p>
 					</div>
 					<div class="col-12 col-md-12 col-lg-3">
 
 						<p class="text-nowrap">
-							<span class="smallAdd">@Localizer["lbl_Active"] : </span>
+                            <span class="smallAdd">@lblActive : </span>
 							@if (item.ActiveYNID == 1)
 							{
-								<span>@Localizer["lbl_Yes"]</span>
+                                <span>@lblYes</span>
 							}
 							else if (item.ActiveYNID == 2)
 							{
-								<span>@Localizer["lbl_No"]</span>
+                                <span>@lblNo</span>
 							}
 						</p>
 					</div>
@@ -87,3 +93,42 @@
 		</div>
 	</div>
 }
+<div class="row">
+    <div class="col-12 text-center mt-3">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+
+                @* Previous Button *@
+                @if (ViewBag.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, EmployeeID = ViewBag.EmployeeID, BranchID = ViewBag.BranchID, DepartmentID = ViewBag.DepartmentID, DesignationID = ViewBag.DesignationID })">Previous</a>
+                    </li>
+                }
+
+                @* Page Numbers *@
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    if (i == ViewBag.CurrentPage)
+                    {
+                        <li class="page-item active"><span class="page-link">@i</span></li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i, EmployeeID = ViewBag.EmployeeID, BranchID = ViewBag.BranchID, DepartmentID = ViewBag.DepartmentID, DesignationID = ViewBag.DesignationID })">@i</a>
+                        </li>
+                    }
+                }
+
+                @* Next Button *@
+                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, EmployeeID = ViewBag.EmployeeID, BranchID = ViewBag.BranchID, DepartmentID = ViewBag.DepartmentID, DesignationID = ViewBag.DesignationID })">Next</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+</div>

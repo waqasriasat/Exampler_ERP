@@ -29,13 +29,11 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       _localizer = localizer;
 
     }
-    public async Task<IActionResult> Index(int? id)
+    public async Task<IActionResult> Index(int? EmployeeID, string EmployeeName, int? BranchID, int? DepartmentID, int? DesignationID)
     {
       var employeeBankAccountsQuery = from emp in _appDBContext.HR_Employees
-                                      join con in _appDBContext.HR_Contracts
-                                      on emp.EmployeeID equals con.EmployeeID
-                                      join bank in _appDBContext.HR_BankAccounts
-                                      on emp.EmployeeID equals bank.EmployeeID into joinGroup
+                                      join con in _appDBContext.HR_Contracts on emp.EmployeeID equals con.EmployeeID
+                                      join bank in _appDBContext.HR_BankAccounts on emp.EmployeeID equals bank.EmployeeID into joinGroup
                                       from j in joinGroup.DefaultIfEmpty()
                                       where con.ActiveYNID == 1 && emp.ActiveYNID == 1
                                       select new
@@ -44,14 +42,32 @@ namespace Exampler_ERP.Controllers.HR.Employeement
                                         emp.FirstName,
                                         emp.FatherName,
                                         emp.FamilyName,
+                                        emp.BranchTypeID,
+                                        emp.DepartmentTypeID,
+                                        emp.DesignationTypeID,
                                         BankName = j != null ? j.BankName : "N/A"
                                       };
 
-      if (id.HasValue)
+      if (EmployeeID.HasValue)
       {
-        employeeBankAccountsQuery = employeeBankAccountsQuery.Where(e => e.EmployeeID == id.Value);
+        employeeBankAccountsQuery = employeeBankAccountsQuery.Where(e => e.EmployeeID == EmployeeID.Value);
       }
+      if (BranchID.HasValue)
+      {
+        employeeBankAccountsQuery = employeeBankAccountsQuery.Where(e => e.BranchTypeID == BranchID.Value);
+      }
+      if (DepartmentID.HasValue)
+      {
+        employeeBankAccountsQuery = employeeBankAccountsQuery.Where(e => e.DepartmentTypeID == DepartmentID.Value);
+      }
+      if (DesignationID.HasValue)
+      {
+        employeeBankAccountsQuery = employeeBankAccountsQuery.Where(e => e.DesignationTypeID == DesignationID.Value);
+      }
+
       var employeeBankAccounts = await employeeBankAccountsQuery.ToListAsync();
+
+      await PopulateDropdowns(EmployeeID, EmployeeName, BranchID, DepartmentID, DesignationID);
 
       var employeeCounts = employeeBankAccounts.Select(ej => new EmployeeBankAccountViewModel
       {
@@ -68,6 +84,19 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       return View("~/Views/HR/Employeement/BankAccount/BankAccount.cshtml", viewModel);
     }
 
+
+    private async Task PopulateDropdowns(int? employeeID, string employeeName, int? branchID, int? departmentID, int? designationID)
+    {
+      ViewBag.EmployeeID = employeeID;
+      ViewBag.EmployeeName = employeeName;
+      ViewBag.BranchID = branchID;
+      ViewBag.DepartmentID = departmentID;
+      ViewBag.DesignationID = designationID;
+
+      ViewBag.BranchsList = await _utils.GetBranchs();
+      ViewBag.DepartmentsList = await _utils.GetDepartments();
+      ViewBag.DesignationsList = await _utils.GetDesignations();
+    }
 
     public async Task<IActionResult> Edit(int id)
     {

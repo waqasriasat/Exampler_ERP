@@ -29,7 +29,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       _localizer = localizer;
 
     }
-    public async Task<IActionResult> Index(int? id) // EmployeeID
+    public async Task<IActionResult> Index(int? EmployeeID, string EmployeeName, int? BranchID, int? DepartmentID, int? DesignationID)
     {
       var employeeJoiningsQuery = from emp in _appDBContext.HR_Employees
                                   join con in _appDBContext.HR_Contracts
@@ -44,14 +44,32 @@ namespace Exampler_ERP.Controllers.HR.Employeement
                                     emp.FirstName,
                                     emp.FatherName,
                                     emp.FamilyName,
+                                    emp.BranchTypeID,
+                                    emp.DepartmentTypeID,
+                                    emp.DesignationTypeID,
                                     JoiningDate = j != null ? j.JoiningDate : (DateTime?)null
                                   };
 
-      if (id.HasValue)
+      if (EmployeeID.HasValue)
       {
-        employeeJoiningsQuery = employeeJoiningsQuery.Where(e => e.EmployeeID == id.Value);
+        employeeJoiningsQuery = employeeJoiningsQuery.Where(e => e.EmployeeID == EmployeeID.Value);
       }
+      if (BranchID.HasValue)
+      {
+        employeeJoiningsQuery = employeeJoiningsQuery.Where(e => e.BranchTypeID == BranchID.Value);
+      }
+      if (DepartmentID.HasValue)
+      {
+        employeeJoiningsQuery = employeeJoiningsQuery.Where(e => e.DepartmentTypeID == DepartmentID.Value);
+      }
+      if (DesignationID.HasValue)
+      {
+        employeeJoiningsQuery = employeeJoiningsQuery.Where(e => e.DesignationTypeID == DesignationID.Value);
+      }
+
       var employeeJoinings = await employeeJoiningsQuery.ToListAsync();
+
+      await PopulateDropdowns(EmployeeID, EmployeeName, BranchID, DepartmentID, DesignationID);
 
       var employeeCounts = employeeJoinings.Select(ej => new EmployeeJoiningViewModel
       {
@@ -68,6 +86,18 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       return View("~/Views/HR/Employeement/Joining/Joining.cshtml", viewModel);
     }
 
+    private async Task PopulateDropdowns(int? employeeID, string employeeName, int? branchID, int? departmentID, int? designationID)
+    {
+      ViewBag.EmployeeID = employeeID;
+      ViewBag.EmployeeName = employeeName;
+      ViewBag.BranchID = branchID;
+      ViewBag.DepartmentID = departmentID;
+      ViewBag.DesignationID = designationID;
+
+      ViewBag.BranchsList = await _utils.GetBranchs();
+      ViewBag.DepartmentsList = await _utils.GetDepartments();
+      ViewBag.DesignationsList = await _utils.GetDesignations();
+    }
 
     public async Task<IActionResult> Edit(int id)
     {

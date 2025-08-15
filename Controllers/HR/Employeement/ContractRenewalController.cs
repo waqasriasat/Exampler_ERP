@@ -34,7 +34,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
     }
 
-    public async Task<IActionResult> Index(int? id)
+    public async Task<IActionResult> Index(int? EmployeeID, string EmployeeName, int? BranchID, int? DepartmentID, int? DesignationID)
     {
       var today = DateTime.Today;
       var futureDate = today.AddDays(30);
@@ -45,16 +45,45 @@ namespace Exampler_ERP.Controllers.HR.Employeement
                       c.EndDate != null &&
                       (c.EndDate.Value <= futureDate || c.EndDate.Value < today));
 
-      if (id.HasValue)
+      if (EmployeeID.HasValue)
       {
-        employeecontractQuery = employeecontractQuery.Where(c => c.EmployeeID == id.Value);
+        employeecontractQuery = employeecontractQuery.Where(e => e.EmployeeID == EmployeeID.Value);
       }
+      if (BranchID.HasValue)
+      {
+        employeecontractQuery = employeecontractQuery.Where(e => e.Employee.BranchTypeID == BranchID.Value);
+      }
+      if (DepartmentID.HasValue)
+      {
+        employeecontractQuery = employeecontractQuery.Where(e => e.Employee.DepartmentTypeID == DepartmentID.Value);
+      }
+      if (DesignationID.HasValue)
+      {
+        employeecontractQuery = employeecontractQuery.Where(e => e.Employee.DesignationTypeID == DesignationID.Value);
+      }
+
       var contracts = await employeecontractQuery
           .Include(c => c.Employee)
           .ToListAsync();
 
+      await PopulateDropdowns(EmployeeID, EmployeeName, BranchID, DepartmentID, DesignationID);
+
       return View("~/Views/HR/Employeement/ContractRenewal/ContractRenewal.cshtml", contracts);
     }
+
+    private async Task PopulateDropdowns(int? employeeID, string employeeName, int? branchID, int? departmentID, int? designationID)
+    {
+      ViewBag.EmployeeID = employeeID;
+      ViewBag.EmployeeName = employeeName;
+      ViewBag.BranchID = branchID;
+      ViewBag.DepartmentID = departmentID;
+      ViewBag.DesignationID = designationID;
+
+      ViewBag.BranchsList = await _utils.GetBranchs();
+      ViewBag.DepartmentsList = await _utils.GetDepartments();
+      ViewBag.DesignationsList = await _utils.GetDesignations();
+    }
+
     public async Task<IActionResult> Edit(int id)
     {
       var contractRenewal = await _appDBContext.HR_ContractRenewals

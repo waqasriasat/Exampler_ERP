@@ -45,29 +45,7 @@
                 }
             });
 
-            $("#EmployeeName").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: '@Url.Action("GetEmployeeSuggestions", "Employee")',
-                        type: 'GET',
-                        data: { term: request.term },
-                        success: function (data) {
-                            response($.map(data, function (item) {
-                                return {
-                                    label: item.label,  // HTML content
-                                    value: item.id      // Employee ID
-                                };
-                            }));
-                        }
-                    });
-                },
-                minLength: 2,
-                select: function (event, ui) {
-                    // Do something when an employee is selected
-                    console.log(ui.item.value); // Employee ID
-                    window.location.href = '@Url.Action("Index", "ContractRenewal")?id=' + ui.item.value;
-                }
-            });
+           
         });
     </script>
     <script>
@@ -82,12 +60,50 @@
                 $('#editContractRenewalModal').modal('hide');
             });
         }
-        $('#searchEmployeeButton').click(function () {
-            var searchValue = $('#searchEmployeeInput').val();
-       		$.get('@Url.Action("Index", "ContractRenewal")', { id: searchValue }, function (partialHtml) {
-				var html = $(partialHtml).find('#ContractRenewalListContainer').html();
-				$('#ContractRenewalListContainer').html(html);
-			});
+        $(document).ready(function () {
+            $("#EmployeeName").autocomplete({
+                source: function (request, response) {
+                    $("#EmployeeID").val("");
+                    $.ajax({
+                        url: '@Url.Action("GetEmployeeSuggestions", "Employee")', // Ensure this matches the C# method
+                        type: 'GET',
+                        data: { term: request.term },
+                        success: function (data) {
+
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.label,  // HTML content to be displayed in suggestions
+                                    id: item.id,     // Employee ID for the hidden input
+                                    name: item.name,      // Full name to be used in the input field
+                                    value: item.name
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+
+                    // Set the selected employee's ID and name
+                    $("#EmployeeID").val(ui.item.id); // Set the hidden input for Employee ID
+                    $("#EmployeeName").val(ui.item.name); // Set the input field for Employee Name
+                }
+            });
+        $('#searchEmployeeForm').submit(function (e) {
+                e.preventDefault(); // Prevent full page reload
+
+                var form = $(this);
+                var actionUrl = form.attr('action');
+
+                // Serialize form data
+                var formData = form.serialize();
+
+                $.get(actionUrl, formData, function (partialHtml) {
+                    // Load only the relevant part of the response
+                    var html = $(partialHtml).find('#ContractRenewalListContainer').html();
+                    $('#ContractRenewalListContainer').html(html);
+                });
+            });
         });
     </script>
 }
@@ -95,27 +111,78 @@
 <h4 class="py-3 mb-4">
 	<span class="text-muted fw-light">@Localizer["lbl_Employeement"] /</span> @Localizer["lbl_ContractRenewal"]
 </h4>
-<div class="row">
-    <div class="col-md-12">
+<form id="searchEmployeeForm" method="get" action="@Url.Action("Index", "ContractRenewal")">
+    <div class="row">
+        <div class="col-md-12">
 
-        <div class="card">
-            <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
-            <div class="Searching-Box-padding">
-                <div class="row mb-4">
-                    <div class="col-md-8" style="padding-bottom: 15px;">
-                        <!-- Search Field and Button -->
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="@Localizer["lbl_SearchEmployee"]" id="searchEmployeeInput">
-                            <button class="btn btn-outline-secondary" type="button" id="searchEmployeeButton">
-                                <i class="fa fa-search"></i>
-                            </button>
+            <div class="card">
+                <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
+                <div class="Searching-Box-padding">
+                    <div class="row mb-4">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label fw-bold">@Localizer["lbl_EmployeeName"]</label>
+                            <input type="text" class="form-control" id="EmployeeName" placeholder="@Localizer["lbl_SearchEmployee"]" name="EmployeeName" value="@ViewBag.EmployeeName" />
+                            <input type="hidden" class="form-control" id="EmployeeID" placeholder="@Localizer["lbl_SearchEmployee"]" name="EmployeeID" value="@ViewBag.EmployeeID" />
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label fw-bold">@Localizer["lbl_BranchName"]</label>
+                            <select name="BranchID" id="BranchID" class="form-control">
+                                @foreach (var item in ViewBag.BranchsList)
+                                {
+                                    if (item.Value == ViewBag.BranchID?.ToString())
+                                    {
+                                        <option value="@item.Value" selected>@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label fw-bold">@Localizer["lbl_DepartmentName"]</label>
+                            <select name="DepartmentID" id="DepartmentID" class="form-control">
+                                @foreach (var item in ViewBag.DepartmentsList)
+                                {
+                                    if (item.Value == ViewBag.DepartmentID?.ToString())
+                                    {
+                                        <option value="@item.Value" selected>@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label fw-bold">@Localizer["lbl_DesignationName"]</label>
+                            <select name="DesignationID" id="DesignationID" class="form-control">
+                                @foreach (var item in ViewBag.DesignationsList)
+                                {
+                                    if (item.Value == ViewBag.DesignationID?.ToString())
+                                    {
+                                        <option value="@item.Value" selected>@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-12 text-end">
+                            <!-- Action Buttons -->
+                            <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</form>
 <br />
 <div class="row">
     <div class="col-md-12">

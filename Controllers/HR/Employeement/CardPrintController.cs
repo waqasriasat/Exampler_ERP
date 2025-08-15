@@ -30,7 +30,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
     }
 
-    public async Task<IActionResult> Index(int? id)
+    public async Task<IActionResult> Index(int? EmployeeID, string EmployeeName, int? BranchID, int? DepartmentID, int? DesignationID)
     {
       var employeeCards = from emp in _appDBContext.HR_Employees
                           join con in _appDBContext.HR_Contracts
@@ -41,14 +41,31 @@ namespace Exampler_ERP.Controllers.HR.Employeement
                             emp.EmployeeID,
                             emp.FirstName,
                             emp.FatherName,
-                            emp.FamilyName
+                            emp.FamilyName,
+                            emp.BranchTypeID,
+                            emp.DepartmentTypeID,
+                            emp.DesignationTypeID
                           };
 
-      if (id.HasValue)
+      if (EmployeeID.HasValue)
       {
-        employeeCards = employeeCards.Where(e => e.EmployeeID == id.Value);
+        employeeCards = employeeCards.Where(e => e.EmployeeID == EmployeeID.Value);
+      }
+      if (BranchID.HasValue)
+      {
+        employeeCards = employeeCards.Where(e => e.BranchTypeID == BranchID.Value);
+      }
+      if (DepartmentID.HasValue)
+      {
+        employeeCards = employeeCards.Where(e => e.DepartmentTypeID == DepartmentID.Value);
+      }
+      if (DesignationID.HasValue)
+      {
+        employeeCards = employeeCards.Where(e => e.DesignationTypeID == DesignationID.Value);
       }
       var employeeCardPrints = await employeeCards.ToListAsync();
+
+      await PopulateDropdowns(EmployeeID, EmployeeName, BranchID, DepartmentID, DesignationID);
 
       var employeeCounts = employeeCardPrints.Select(ej => new EmployeeCardPrintViewModel
       {
@@ -62,6 +79,18 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       };
 
       return View("~/Views/HR/Employeement/CardPrint/CardPrint.cshtml", viewModel);
+    }
+    private async Task PopulateDropdowns(int? employeeID, string employeeName, int? branchID, int? departmentID, int? designationID)
+    {
+      ViewBag.EmployeeID = employeeID;
+      ViewBag.EmployeeName = employeeName;
+      ViewBag.BranchID = branchID;
+      ViewBag.DepartmentID = departmentID;
+      ViewBag.DesignationID = designationID;
+
+      ViewBag.BranchsList = await _utils.GetBranchs();
+      ViewBag.DepartmentsList = await _utils.GetDepartments();
+      ViewBag.DesignationsList = await _utils.GetDesignations();
     }
     public async Task<IActionResult> PrintCard(int employeeId)
     {

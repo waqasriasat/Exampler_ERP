@@ -12,6 +12,7 @@ using OfficeOpenXml;
 using System.Diagnostics.Contracts;
 using Contract = Exampler_ERP.Models.HR_Contract;
 using Microsoft.Extensions.Localization;
+using Microsoft.CodeAnalysis.Operations;
 
 namespace Exampler_ERP.Controllers.HR.Employeement
 {
@@ -37,7 +38,7 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
 
     }
-    public async Task<IActionResult> Index(int? id) // EmployeeID
+    public async Task<IActionResult> Index(int? EmployeeID, string EmployeeName, int? BranchID, int? DepartmentID, int? DesignationID) 
     {
       var salarytypes = await _appDBContext.Settings_SalaryTypes.ToListAsync();
       var salarys = await _appDBContext.HR_Salarys.ToListAsync();
@@ -50,12 +51,26 @@ namespace Exampler_ERP.Controllers.HR.Employeement
                            where con.ActiveYNID == 1 && emp.ActiveYNID == 1
                            select emp;
 
-      if (id.HasValue)
+      if (EmployeeID.HasValue)
       {
-        employeesQuery = employeesQuery.Where(e => e.EmployeeID == id.Value);
+        employeesQuery = employeesQuery.Where(e => e.EmployeeID == EmployeeID.Value);
+      }
+      if (BranchID.HasValue)
+      {
+        employeesQuery = employeesQuery.Where(e => e.BranchTypeID == BranchID.Value);
+      }
+      if (DepartmentID.HasValue)
+      {
+        employeesQuery = employeesQuery.Where(e => e.DepartmentTypeID == DepartmentID.Value);  
+      }
+      if (DesignationID.HasValue)
+      {
+        employeesQuery = employeesQuery.Where(e => e.DesignationTypeID == DesignationID.Value);
       }
 
       var employees = await employeesQuery.ToListAsync();
+
+      await PopulateDropdowns(EmployeeID, EmployeeName, BranchID, DepartmentID, DesignationID);
 
       var employeeCounts = new List<EmployeeCountViewModel>();
 
@@ -82,7 +97,18 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       return View("~/Views/HR/Employeement/Salary/Salary.cshtml", viewModel);
     }
 
+    private async Task PopulateDropdowns(int? employeeID, string employeeName, int? branchID, int? departmentID, int? designationID)
+    {
+      ViewBag.EmployeeID = employeeID;
+      ViewBag.EmployeeName = employeeName;
+      ViewBag.BranchID = branchID;
+      ViewBag.DepartmentID = departmentID;
+      ViewBag.DesignationID = designationID;
 
+      ViewBag.BranchsList = await _utils.GetBranchs();
+      ViewBag.DepartmentsList = await _utils.GetDepartments();
+      ViewBag.DesignationsList = await _utils.GetDesignations();
+    }
     public async Task<IActionResult> Edit(int id)
     {
       var SalaryDetails = await _appDBContext.HR_SalaryDetails

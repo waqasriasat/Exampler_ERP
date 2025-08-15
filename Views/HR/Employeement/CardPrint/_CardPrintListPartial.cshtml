@@ -1,0 +1,20 @@
+@model Exampler_ERP.Models.Temp.EmployeeCardPrintListViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@foreach (var item in Model.EmployeeCardPrint)
+{
+    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+        <div class="row">
+            <div class="col-10 col-md-11 col-lg-11">
+                <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@Html.DisplayFor(modelItem => item.EmployeeName)</p>
+            </div>
+            <div class="col-2 col-md-1 col-lg-1">
+                <div class="btn-group" role="group" aria-label="Actions">
+                    <a href="@Url.Action("PrintCard", "CardPrint", new { employeeId = item.EmployeeID })" target="_blank">
+                        <i class="fa fa-print" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,6 +1,9 @@
 @model IEnumerable<Exampler_ERP.Models.HR_Applicant>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@{
+    var lblApplicantName = Localizer["lbl_ApplicantName"];
+}
 @foreach (var item in Model)
 {
 	<div class="col-12 col-md-12 col-lg-12 GVDetail">
@@ -20,7 +23,7 @@
 						</p>
 					</div>
 					<div class="col-12 col-md-12 col-lg-9">
-						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_ApplicantName"] : </span>@Html.Raw($"{item.FirstName} {item.FatherName} {item.FamilyName}")</p>
+                        <p class="text-nowrap"><span class="smallAdd">@lblApplicantName : </span>@Html.Raw($"{item.FirstName} {item.FatherName} {item.FamilyName}")</p>
 					</div>
 
 				</div>

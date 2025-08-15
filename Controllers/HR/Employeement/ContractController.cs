@@ -34,27 +34,53 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
     }
 
-    public async Task<IActionResult> Index(int? id)
+    public async Task<IActionResult> Index(int? EmployeeID, string EmployeeName, int? BranchID, int? DepartmentID, int? DesignationID)
     {
       var contractQuery = _appDBContext.HR_Contracts
           .Where(c => c.DeleteYNID != 1);
 
-      if (id.HasValue)
+      if (EmployeeID.HasValue)
       {
-        contractQuery = contractQuery.Where(c => c.EmployeeID == id.Value);
+        contractQuery = contractQuery.Where(e => e.EmployeeID == EmployeeID.Value);
+      }
+      if (BranchID.HasValue)
+      {
+        contractQuery = contractQuery.Where(e => e.Employee.BranchTypeID == BranchID.Value);
+      }
+      if (DepartmentID.HasValue)
+      {
+        contractQuery = contractQuery.Where(e => e.Employee.DepartmentTypeID == DepartmentID.Value);   // ✅ correct property
+      }
+      if (DesignationID.HasValue)
+      {
+        contractQuery = contractQuery.Where(e => e.Employee.DesignationTypeID == DesignationID.Value);
       }
 
       var contracts = await contractQuery
           .Include(c => c.Employee).
           ToListAsync();
 
+      await PopulateDropdowns(EmployeeID, EmployeeName, BranchID, DepartmentID, DesignationID);
 
-      if (id.HasValue && id == 0)
+      if (contracts.Count == 0)
       {
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Contract Found.");
       }
 
       return View("~/Views/HR/Employeement/Contract/Contract.cshtml", contracts);
+    }
+
+    private async Task PopulateDropdowns(int? employeeID, string employeeName, int? branchID, int? departmentID, int? designationID)
+    {
+      ViewBag.EmployeeID = employeeID;
+      ViewBag.EmployeeName = employeeName;
+      ViewBag.BranchID = branchID;
+      ViewBag.DepartmentID = departmentID;
+      ViewBag.DesignationID = designationID;
+
+      ViewBag.BranchsList = await _utils.GetBranchs();
+      ViewBag.DepartmentsList = await _utils.GetDepartments();
+      ViewBag.DesignationsList = await _utils.GetDesignations();
     }
 
     public async Task<IActionResult> Contract()
@@ -202,12 +228,33 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       return Json(new { success = true });
     }
 
-    public async Task<IActionResult> PrintList()
+    public async Task<IActionResult> PrintList(int? EmployeeID, string EmployeeName, int? BranchID, int? DepartmentID, int? DesignationID)
     {
-      var contracts = await _appDBContext.HR_Contracts
-          .Where(c => c.DeleteYNID != 1)
-          .Include(c => c.Employee)
-          .ToListAsync();
+      var contractQuery = _appDBContext.HR_Contracts
+          .Where(c => c.DeleteYNID != 1);
+
+      if (EmployeeID.HasValue)
+      {
+        contractQuery = contractQuery.Where(e => e.EmployeeID == EmployeeID.Value);
+      }
+      if (BranchID.HasValue)
+      {
+        contractQuery = contractQuery.Where(e => e.Employee.BranchTypeID == BranchID.Value);
+      }
+      if (DepartmentID.HasValue)
+      {
+        contractQuery = contractQuery.Where(e => e.Employee.DepartmentTypeID == DepartmentID.Value);   // ✅ correct property
+      }
+      if (DesignationID.HasValue)
+      {
+        contractQuery = contractQuery.Where(e => e.Employee.DesignationTypeID == DesignationID.Value);
+      }
+
+      var contracts = await contractQuery
+          .Include(c => c.Employee).
+          ToListAsync();
+
+      await PopulateDropdowns(EmployeeID, EmployeeName, BranchID, DepartmentID, DesignationID);
 
       return View("~/Views/HR/Employeement/Contract/PrintContractList.cshtml", contracts);
     }
@@ -229,15 +276,35 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       };
       return PartialView("~/Views/HR/Employeement/Contract/PrintContract.cshtml", contract);
     }
-    public async Task<IActionResult> ExportToExcel()
+    public async Task<IActionResult> ExportToExcel(int? EmployeeID, string EmployeeName, int? BranchID, int? DepartmentID, int? DesignationID)
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var contracts = await _appDBContext.HR_Contracts
-          .Where(c => c.DeleteYNID != 1)
-          .Include(c => c.Employee)
-          .Include(c => c.Settings_ContractType)
-          .ToListAsync();
+      var contractQuery = _appDBContext.HR_Contracts
+          .Where(c => c.DeleteYNID != 1);
+
+      if (EmployeeID.HasValue)
+      {
+        contractQuery = contractQuery.Where(e => e.EmployeeID == EmployeeID.Value);
+      }
+      if (BranchID.HasValue)
+      {
+        contractQuery = contractQuery.Where(e => e.Employee.BranchTypeID == BranchID.Value);
+      }
+      if (DepartmentID.HasValue)
+      {
+        contractQuery = contractQuery.Where(e => e.Employee.DepartmentTypeID == DepartmentID.Value);   // ✅ correct property
+      }
+      if (DesignationID.HasValue)
+      {
+        contractQuery = contractQuery.Where(e => e.Employee.DesignationTypeID == DesignationID.Value);
+      }
+
+      var contracts = await contractQuery
+          .Include(c => c.Employee).
+          ToListAsync();
+
+      await PopulateDropdowns(EmployeeID, EmployeeName, BranchID, DepartmentID, DesignationID);
       var SalaryTypesList = await _utils.GetSalaryOptions();
       using (var package = new ExcelPackage())
       {

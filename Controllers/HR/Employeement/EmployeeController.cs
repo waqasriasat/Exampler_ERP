@@ -35,24 +35,106 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
 
     }
-    public async Task<IActionResult> Index(int? id)
+    public async Task<IActionResult> Index(int? EmployeeID, string EmployeeName, int? BranchID, int? DepartmentID, int? DesignationID)
     {
+
       var employeesQuery = _appDBContext.HR_Employees
           .Where(e => e.DeleteYNID != 1);  // Ensure employees are not marked as deleted
 
-      if (id.HasValue)
+      if (EmployeeID.HasValue && EmployeeID != 0)
       {
-        employeesQuery = employeesQuery.Where(e => e.EmployeeID == id.Value);
+        employeesQuery = employeesQuery.Where(e => e.EmployeeID == EmployeeID.Value);
+      }
+      if (BranchID.HasValue && BranchID != 0)
+      {
+        employeesQuery = employeesQuery.Where(e => e.BranchTypeID == BranchID.Value);
+      }
+      if (DepartmentID.HasValue && DepartmentID != 0)
+      {
+        employeesQuery = employeesQuery.Where(e => e.DepartmentTypeID == DepartmentID.Value);
+      }
+      if (DesignationID.HasValue && DesignationID != 0)
+      {
+        employeesQuery = employeesQuery.Where(e => e.DesignationTypeID == DesignationID.Value);
       }
 
       var employees = await employeesQuery.ToListAsync();
 
-      if (id.HasValue && id == 0)
+      await PopulateDropdowns(EmployeeID, EmployeeName, BranchID, DepartmentID, DesignationID);
+
+      if (employees.Count == 0)
       {
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No User found. Please check the name and try again.");
       }
       return View("~/Views/HR/Employeement/Employee/Employee.cshtml", employees);
     }
+
+    //public async Task<IActionResult> Index(int? EmployeeID, string EmployeeName, int? BranchID, int? DepartmentID, int? DesignationID, int page = 1)
+    //{
+    //  int pageSize = 10;  // har page par 10 record
+
+    //  var employeesQuery = _appDBContext.HR_Employees
+    //      .Where(e => e.DeleteYNID != 1);
+
+    //  if (EmployeeID.HasValue)
+    //  {
+    //    employeesQuery = employeesQuery.Where(e => e.EmployeeID == EmployeeID.Value);
+    //  }
+    //  if (BranchID.HasValue)
+    //  {
+    //    employeesQuery = employeesQuery.Where(e => e.BranchTypeID == BranchID.Value);
+    //  }
+    //  if (DepartmentID.HasValue)
+    //  {
+    //    employeesQuery = employeesQuery.Where(e => e.DepartmentTypeID == DepartmentID.Value);
+    //  }
+    //  if (DesignationID.HasValue)
+    //  {
+    //    employeesQuery = employeesQuery.Where(e => e.DesignationTypeID == DesignationID.Value);
+    //  }
+
+    //  // Total records count
+    //  int totalRecords = await employeesQuery.CountAsync();
+
+    //  // Pagination: Skip and Take
+    //  var employees = await employeesQuery
+    //      .OrderBy(e => e.EmployeeID)
+    //      .Skip((page - 1) * pageSize)
+    //      .Take(pageSize)
+    //      .ToListAsync();
+
+    //  // Pager data pass to ViewBag
+    //  ViewBag.CurrentPage = page;
+    //  ViewBag.TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+    //  await PopulateDropdowns(EmployeeID, EmployeeName, BranchID, DepartmentID, DesignationID);
+
+    //  if (employees.Count == 0)
+    //  {
+    //    await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No User found.");
+    //  }
+
+    //  return View("~/Views/HR/Employeement/Employee/Employee.cshtml", employees);
+    //}
+
+    private async Task PopulateDropdowns(int? employeeID, string employeeName, int? branchID, int? departmentID, int? designationID)
+    {
+      ViewBag.EmployeeID = employeeID;
+      ViewBag.EmployeeName = employeeName;
+      ViewBag.BranchID = branchID;
+      ViewBag.DepartmentID = departmentID;
+      ViewBag.DesignationID = designationID;
+
+      ViewBag.BranchsList = await _utils.GetBranchs();
+      ViewBag.DepartmentsList = await _utils.GetDepartments();
+      ViewBag.DesignationsList = await _utils.GetDesignations();
+      ViewBag.GenderList = await _utils.GetGender();
+      ViewBag.MaritalStatusList = await _utils.GetMaritalStatus();
+      ViewBag.ReligionList = await _utils.GetReligion();
+
+     
+    }
+
     public async Task<IActionResult> GetEmployeeSuggestions(string term)
     {
       var result = await _utils.GetSearchingEmployee(term);
@@ -260,21 +342,36 @@ namespace Exampler_ERP.Controllers.HR.Employeement
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Employee Deleted successfully.");
       return Json(new { success = true });
     }
-    public async Task<IActionResult> Print()
+    public async Task<IActionResult> Print(int? EmployeeID, string EmployeeName, int? BranchID, int? DepartmentID, int? DesignationID)
     {
-      var employees = await _appDBContext.HR_Employees
-          .Where(e => e.DeleteYNID != 1)
-          .Include(e => e.BranchType)
+      var employeesQuery = _appDBContext.HR_Employees
+          .Where(e => e.DeleteYNID != 1);  // Ensure employees are not marked as deleted
+
+      if (EmployeeID.HasValue && EmployeeID != 0)
+      {
+        employeesQuery = employeesQuery.Where(e => e.EmployeeID == EmployeeID.Value);
+      }
+      if (BranchID.HasValue && BranchID != 0)
+      {
+        employeesQuery = employeesQuery.Where(e => e.BranchTypeID == BranchID.Value);
+      }
+      if (DepartmentID.HasValue && DepartmentID != 0)
+      {
+        employeesQuery = employeesQuery.Where(e => e.DepartmentTypeID == DepartmentID.Value);
+      }
+      if (DesignationID.HasValue && DesignationID != 0)
+      {
+        employeesQuery = employeesQuery.Where(e => e.DesignationTypeID == DesignationID.Value);
+      }
+
+      var employees = await employeesQuery
+        .Include(e => e.BranchType)
          .Include(e => e.DepartmentType)
          .Include(e => e.DesignationType)
-          .ToListAsync();
+         .ToListAsync();
 
-      ViewBag.GenderList = _utils.GetGender();
-      ViewBag.MaritalStatusList = _utils.GetMaritalStatus();
-      ViewBag.ReligionList = _utils.GetReligion();
-
-
-
+      await PopulateDropdowns(EmployeeID, EmployeeName, BranchID, DepartmentID, DesignationID);
+    
       return View("~/Views/HR/Employeement/Employee/PrintEmployee.cshtml", employees);
     }
     public async Task<IActionResult> PrintEmployeeBioData(int id)
@@ -311,20 +408,43 @@ namespace Exampler_ERP.Controllers.HR.Employeement
 
       return View("~/Views/HR/Employeement/Employee/PrintEmployeeBioData.cshtml", employeeBioData);
     }
-    public async Task<IActionResult> ExportToExcel()
+    public async Task<IActionResult> ExportToExcel(int? EmployeeID, string EmployeeName, int? BranchID, int? DepartmentID, int? DesignationID)
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var employees = await _appDBContext.HR_Employees
-          .Where(e => e.DeleteYNID != 1)
-          .Include(e => e.BranchType)
+      var employeesQuery = _appDBContext.HR_Employees
+          .Where(e => e.DeleteYNID != 1);  // Ensure employees are not marked as deleted
+
+      if (EmployeeID.HasValue && EmployeeID != 0)
+      {
+        employeesQuery = employeesQuery.Where(e => e.EmployeeID == EmployeeID.Value);
+      }
+      if (BranchID.HasValue && BranchID != 0)
+      {
+        employeesQuery = employeesQuery.Where(e => e.BranchTypeID == BranchID.Value);
+      }
+      if (DepartmentID.HasValue && DepartmentID != 0)
+      {
+        employeesQuery = employeesQuery.Where(e => e.DepartmentTypeID == DepartmentID.Value);
+      }
+      if (DesignationID.HasValue && DesignationID != 0)
+      {
+        employeesQuery = employeesQuery.Where(e => e.DesignationTypeID == DesignationID.Value);
+      }
+
+      var employees = await employeesQuery
+        .Include(e => e.BranchType)
          .Include(e => e.DepartmentType)
          .Include(e => e.DesignationType)
-          .ToListAsync();
+         .ToListAsync();
+
+      await PopulateDropdowns(EmployeeID, EmployeeName, BranchID, DepartmentID, DesignationID);
+
       var GenderList = await _utils.GetGender();
       var MaritalStatusList = await _utils.GetMaritalStatus();
       var ReligionList = await _utils.GetReligion();
       var CountriesList = await _utils.GetCountries();
+
       using (var package = new ExcelPackage())
       {
         var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Employee"]);

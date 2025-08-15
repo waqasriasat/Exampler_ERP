@@ -49,13 +49,11 @@ namespace Exampler_ERP.Controllers.HR.HR
           .AsQueryable();  // Move this up to allow further filtering
 
       if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
-                YearsTypeID.HasValue && YearsTypeID != 0 &&
-                EmployeeID.HasValue && EmployeeID != 0)
+                YearsTypeID.HasValue && YearsTypeID != 0)
       {
         query = query.Where(d =>
             d.MonthTypeID >= MonthsTypeID.Value &&
-            d.Year <= YearsTypeID.Value &&
-            d.EmployeeID == EmployeeID.Value
+            d.Year <= YearsTypeID.Value
         );
       }
       else
@@ -65,7 +63,10 @@ namespace Exampler_ERP.Controllers.HR.HR
         await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName, OvertimeTypeID);
         return View("~/Views/HR/HR/OverTime/OverTime.cshtml", new List<HR_OverTime>());
       }
-
+      if (EmployeeID.HasValue && EmployeeID != 0)
+      {
+        query = query.Where(d => d.EmployeeID == EmployeeID.Value);
+      }
       if (OvertimeTypeID.HasValue && OvertimeTypeID != 0)
       {
         query = query.Where(d => d.OverTimeTypeID == OvertimeTypeID.Value);

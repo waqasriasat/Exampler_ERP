@@ -123,32 +123,30 @@
             $('#printButton').click(function () {
                 window.print();
             });
-            $(function () {
-                $("#searchApplicantInput").autocomplete({
-                    source: function (request, response) {
-                        $.ajax({
-                            url: '@Url.Action("GetApplicantSuggestions", "Applicant")',
-                            type: 'GET',
-                            data: { term: request.term },
-                            success: function (data) {
-                                response(data);
-                            }
-                        });
-                    },
-                    select: function (event, ui) {
-                        console.log("Selected Applicant ID: " + ui.item.id);
-                        window.location.href = '@Url.Action("Index", "Applicant")?id=' + ui.item.id;
-                    },
-                    minLength: 2
-                });
-            });
+            
         });
     </script>
     <script>
         function printApplicants() {
-            var printWindow = window.open('@Url.Action("Print", "Applicant")', '_blank');
-            printWindow.focus();
-        }
+              var form = $('<form target="_blank" method="POST" action="@Url.Action("Print", "Applicant")"></form>');
+              form.append($('<input>').attr('name', 'ApplicantID').val($('#ApplicantID').val()));
+              form.append($('<input>').attr('name', 'ApplicantName').val($('#ApplicantName').val()));
+              form.append($('<input>').attr('name', 'BranchID').val($('#BranchID').val()));
+              $('body').append(form);
+              form.submit();
+              form.remove();
+          }
+
+          function excelApplicants() {
+              var form = $('<form target="_blank" method="POST" action="@Url.Action("ExportToExcel", "Applicant")"></form>');
+              form.append($('<input>').attr('name', 'ApplicantID').val($('#ApplicantID').val()));
+              form.append($('<input>').attr('name', 'ApplicantName').val($('#ApplicantName').val()));
+              form.append($('<input>').attr('name', 'BranchID').val($('#BranchID').val()));
+              $('body').append(form);
+              form.submit();
+              form.remove();
+          }
+       
 		$(document).on('click', '.PrintApplicantBioDataLink', function (e) {
 			e.preventDefault();
 
@@ -174,12 +172,51 @@
             });
         }
 
-        $('#searcApplicantButton').click(function () {
-            var searchValue = $('#searchApplicantInput').val();
-      		$.get('@Url.Action("Index", "Applicant")', { searchValue: searchValue }, function (partialHtml) {
-				var html = $(partialHtml).find('#ApplicantListContainer').html();
-				$('#ApplicantListContainer').html(html);
-			});
+      
+        $(document).ready(function () {
+            $("#ApplicantName").autocomplete({
+                source: function (request, response) {
+                    $("#ApplicantID").val("");
+                    $.ajax({
+                        url: '@Url.Action("GetApplicantSuggestions", "Applicant")', // Ensure this matches the C# method
+                        type: 'GET',
+                        data: { term: request.term },
+                        success: function (data) {
+
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.label,  // HTML content to be displayed in suggestions
+                                    id: item.id,     // Employee ID for the hidden input
+                                    name: item.name,      // Full name to be used in the input field
+                                    value: item.name
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+
+                    // Set the selected employee's ID and name
+                    $("#ApplicantID").val(ui.item.id); // Set the hidden input for Employee ID
+                    $("#ApplicantName").val(ui.item.name); // Set the input field for Employee Name
+                }
+            });
+        $('#searchApplicantForm').submit(function (e) {
+                e.preventDefault(); // Prevent full page reload
+
+                var form = $(this);
+                var actionUrl = form.attr('action');
+
+                // Serialize form data
+                var formData = form.serialize();
+
+                $.get(actionUrl, formData, function (partialHtml) {
+                    // Load only the relevant part of the response
+                    var html = $(partialHtml).find('#ApplicantListContainer').html();
+                    $('#ApplicantListContainer').html(html);
+                });
+            });
         });
     </script>
 }
@@ -187,6 +224,7 @@
 <h4 class="py-3 mb-4">
 	<span class="text-muted fw-light">@Localizer["lbl_Employeement"] /</span> @Localizer["lbl_Applicant"]
 </h4>
+<form id="searchApplicantForm" method="get" action="@Url.Action("Index", "Applicant")">
 <div class="row">
     <div class="col-md-12">
 
@@ -194,21 +232,34 @@
             <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
             <div class="Searching-Box-padding">
                 <div class="row mb-4">
-                    <div class="col-md-8" style="padding-bottom: 15px;">
-                        <!-- Search Field and Button -->
-                        <div class="input-group">
-							<input type="text" class="form-control" placeholder="@Localizer["lbl_Search"] @Localizer["lbl_Applicant"]" id="searchApplicantInput">
-                            <button class="btn btn-outline-secondary" type="button" id="searchApplicantButton">
-                                <i class="fa fa-search"></i>
-                            </button>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label fw-bold">@Localizer["lbl_ApplicantName"]</label>
+                            <input type="text" class="form-control" id="ApplicantName" placeholder="@Localizer["lbl_ApplicantName"]" name="ApplicantName" value="@ViewBag.ApplicantName" />
+                            <input type="hidden" class="form-control" id="ApplicantID" placeholder="@Localizer["lbl_ApplicantName"]" name="ApplicantID" value="@ViewBag.ApplicantID" />
                         </div>
-
-                    </div>
-                    <div class="col-md-4 text-end">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label fw-bold">@Localizer["lbl_BranchName"]</label>
+                            <select name="BranchID" id="BranchID" class="form-control">
+                                @foreach (var item in ViewBag.BranchsList)
+                                {
+                                    if (item.Value == ViewBag.BranchID?.ToString())
+                                    {
+                                        <option value="@item.Value" selected>@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    
+                    <div class="col-md-12 text-end">
                         <!-- Action Buttons -->
+                            <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
                         <button type="button" class="btn btn-primary addApplicantLink">@Localizer["lbl_AddNew"]</button>
                         <!-- Example: Add buttons for exporting to Excel and printing -->
-                        <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "Applicant")'">@Localizer["lbl_Excel"]</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="excelApplicants()">@Localizer["lbl_Excel"]</button>
                         <button type="button" class="btn btn-outline-secondary" onclick="printApplicants()">@Localizer["lbl_Print"]</button>
                     </div>
                 </div>
@@ -216,6 +267,7 @@
         </div>
     </div>
 </div>
+</form>
 <br />
 <div class="row">
     <div class="col-md-12">
