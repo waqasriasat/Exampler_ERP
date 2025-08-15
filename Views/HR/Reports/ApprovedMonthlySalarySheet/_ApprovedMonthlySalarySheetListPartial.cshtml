@@ -1,0 +1,74 @@
+@model IEnumerable<Exampler_ERP.Models.HR_MonthlyPayroll>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+	var lblBranchName = Localizer["lbl_BranchName"];
+	var lblMonth = Localizer["lbl_Month"];
+	var lblYear = Localizer["lbl_Year"];
+	var lblPrint = Localizer["lbl_Print"];
+
+}
+<div class="row">
+	<div class="col-md-12">
+		<div class="card">
+			<h5 class="card-header">@Localizer["lbl_ApprovedMonthlySalarySheetList"]</h5>
+			<div class="">
+				<div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+					<div class="row">
+						<div class="col-11 col-md-10 col-lg-11">
+							<div class="row">
+								<div class="col-4">
+									<p class="text-nowrap">@lblBranchName</p>
+								</div>
+								<div class="col-4">
+									<p class="text-nowrap">@lblMonth</p>
+								</div>
+								<div class="col-4">
+									<p class="text-nowrap">@lblYear</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-1 col-md-2 col-lg-1">
+							<div class="row">
+								<div class="col-12">
+									<p class="text-nowrap">@lblPrint </p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				@foreach (var item in Model)
+				{
+					<div class="col-12 col-md-12 col-lg-12 GVDetail">
+						<div class="row">
+							<div class="col-11 col-md-10 col-lg-11">
+								<div class="row">
+									<div class="col-12 col-md-12 col-lg-4">
+										<p class="text-nowrap"><span class="smallAdd">@lblBranchName  : </span>@(item.BranchType?.BranchTypeName ?? "N/A")  </p>
+									</div>
+									<div class="col-12 col-md-12 col-lg-4">
+										<p class="text-nowrap"><span class="smallAdd">@lblMonth : </span>@(item.MonthType?.MonthTypeName ?? "N/A") </p>
+									</div>
+									<div class="col-12 col-md-12 col-lg-4">
+										<p class="text-nowrap"><span class="smallAdd">@lblYear : </span>@Html.DisplayFor(modelItem => item.Year)</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-1 col-md-2 col-lg-1">
+								<div class="row">
+									<div class="col-12 col-md-12 col-lg-6">
+										<div class="btn-group" role="group" aria-label="Actions">
+											<a href="javascript:void(0)" class="PrintApprovedMonthlySalarySheetDetailLink" data-id="@item.PayrollID">
+												<i class="fa fa-pencil" style="font-size: large; color:steelblue; line-height: 2;"></i>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</div>

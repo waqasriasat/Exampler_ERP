@@ -382,37 +382,89 @@ namespace Exampler_ERP.Controllers.HR.HR
 
 
 
-    public async Task<IActionResult> ExportToExcel()
+    public async Task<IActionResult> ExportToExcel(int? Branch, int? MonthsTypeID, int? YearsTypeID)
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var FaceAttendance = await _appDBContext.CR_FaceAttendances
-        .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Employee)
-        .ToListAsync();
+      HttpContext.Session.SetInt32("FaceAttendanceBranchID", Branch ?? 0);
+      HttpContext.Session.SetInt32("FaceAttendanceMonthID", MonthsTypeID ?? 0);
+      HttpContext.Session.SetInt32("FaceAttendanceYearID", YearsTypeID ?? 0);
+
+      var attendanceRecords = new List<FaceAttendanceForwardingViewModel>();
+      var connectionString = _configuration.GetConnectionString("AppDb");
+      using (SqlConnection connection = new SqlConnection(connectionString))
+      {
+        using (SqlCommand command = new SqlCommand("GetFaceAttendanceForwarding", connection))
+        {
+          command.CommandType = CommandType.StoredProcedure;
+          command.Parameters.AddWithValue("@MonthID", MonthsTypeID ?? 0); // Default to October if null
+          command.Parameters.AddWithValue("@YearID", YearsTypeID ?? 0); // Default to 2024 if null
+          command.Parameters.AddWithValue("@BranchID", Branch ?? 0); // Set your branch ID accordingly
+
+          connection.Open();
+          using (SqlDataReader reader = await command.ExecuteReaderAsync())
+          {
+            while (await reader.ReadAsync())
+            {
+              var record = new FaceAttendanceForwardingViewModel();
+              try
+              {
+                // Wrap each field assignment in try-catch to isolate errors
+                try { record.EmployeeID = reader.GetInt32(0); } catch (Exception ex) { Console.WriteLine("EmployeeID Error: " + ex.Message); }
+                record.Employee = await _appDBContext.HR_Employees.FindAsync(record.EmployeeID);
+                try { record.MarkDate = reader.GetDateTime(1); } catch (Exception ex) { Console.WriteLine("MarkDate Error: " + ex.Message); }
+                try { record.InTime = reader.GetString(2); } catch (Exception ex) { Console.WriteLine("InTime Error: " + ex.Message); }
+                try { record.OutTime = reader.GetString(3); } catch (Exception ex) { Console.WriteLine("OutTime Error: " + ex.Message); }
+                try { record.DHours = reader.GetInt32(4); } catch (Exception ex) { Console.WriteLine("DHours Error: " + ex.Message); }
+                try { record.DMinutes = reader.GetInt32(5); } catch (Exception ex) { Console.WriteLine("DMinutes Error: " + ex.Message); }
+                try { record.FromDutyTime = reader.GetString(6); } catch (Exception ex) { Console.WriteLine("FromDutyTime Error: " + ex.Message); }
+                try { record.ToDutyTime = reader.GetString(7); } catch (Exception ex) { Console.WriteLine("ToDutyTime Error: " + ex.Message); }
+                try { record.LateComingGraceTime = reader.GetDecimal(8); } catch (Exception ex) { Console.WriteLine("LateComingGraceTime Error: " + ex.Message); }
+                try { record.EarlyGoingGraceTime = reader.GetDecimal(9); } catch (Exception ex) { Console.WriteLine("EarlyGoingGraceTime Error: " + ex.Message); }
+                try { record.PerDaySalary = reader.GetString(10); } catch (Exception ex) { Console.WriteLine("PerDaySalary Error: " + ex.Message); }
+                try { record.LateComingDeduction = reader.GetString(11); } catch (Exception ex) { Console.WriteLine("LateComingDeduction Error: " + ex.Message); }
+                try { record.EarlyGoingDeduction = reader.GetString(12); } catch (Exception ex) { Console.WriteLine("EarlyGoingDeduction Error: " + ex.Message); }
+                try { record.EarlyComingGraceTime = reader.GetDecimal(13); } catch (Exception ex) { Console.WriteLine("EarlyComingGraceTime Error: " + ex.Message); }
+                try { record.LateGoingGraceTime = reader.GetDecimal(14); } catch (Exception ex) { Console.WriteLine("LateGoingGraceTime Error: " + ex.Message); }
+                try { record.EarlyComingAmount = reader.GetString(15); } catch (Exception ex) { Console.WriteLine("PerDaySalary Error: " + ex.Message); }
+                try { record.LateGoingAmount = reader.GetString(16); } catch (Exception ex) { Console.WriteLine("PerDaySalary Error: " + ex.Message); }
+
+                attendanceRecords.Add(record);
+              }
+              catch (InvalidCastException ex)
+              {
+                await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "InvalidCastException occurred: " + ex.Message);
+              }
+            }
+          }
+        }
+      }
 
 
       using (var package = new ExcelPackage())
       {
         var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_FaceAttendance"]);
-        worksheet.Cells["A1"].Value = _localizer["lbl_FaceAttendanceID"];
-        worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeName"];
-        worksheet.Cells["C1"].Value = _localizer["lbl_Date"];
-        worksheet.Cells["D1"].Value = _localizer["lbl_InTime"];
-        worksheet.Cells["E1"].Value = _localizer["lbl_OutTime"];
-        worksheet.Cells["F1"].Value = _localizer["lbl_DutyHours"];
-        worksheet.Cells["G1"].Value = _localizer["lbl_DutyMinutes"];
+        worksheet.Cells["A1"].Value = _localizer["lbl_EmployeeName"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_Date"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_PresentTiming"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_AttendanceDuration"];
+        worksheet.Cells["E1"].Value = _localizer["lbl_WorkingSlot"];
+        worksheet.Cells["F1"].Value = _localizer["lbl_LateComingDeduction(Hours)"];
+        worksheet.Cells["G1"].Value = _localizer["lbl_EarlyGoingDeduction(Hours)"];
+        worksheet.Cells["H1"].Value = _localizer["lbl_EarlyComingAmount(Hours)"];
+        worksheet.Cells["I1"].Value = _localizer["lbl_LateGoingAmount(Hours)"];
 
-
-        for (int i = 0; i < FaceAttendance.Count; i++)
+        for (int i = 0; i < attendanceRecords.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = FaceAttendance[i].FaceAttendanceID;
-          worksheet.Cells[i + 2, 2].Value = FaceAttendance[i].Employee?.FirstName + ' ' + FaceAttendance[i].Employee?.FatherName + ' ' + FaceAttendance[i].Employee?.FamilyName;
-          worksheet.Cells[i + 2, 3].Value = FaceAttendance[i].MarkDate.ToString("dd/MMM/yyyy");
-          worksheet.Cells[i + 2, 4].Value = FaceAttendance[i].InTime.ToString("hh:mm:ss");
-          worksheet.Cells[i + 2, 5].Value = FaceAttendance[i].OutTime.ToString("hh:mm:ss");
-          worksheet.Cells[i + 2, 6].Value = FaceAttendance[i].DHours;
-          worksheet.Cells[i + 2, 7].Value = FaceAttendance[i].DMinutes;
+          worksheet.Cells[i + 2, 1].Value = attendanceRecords[i].Employee?.FirstName + ' ' + attendanceRecords[i].Employee?.FatherName + ' ' + attendanceRecords[i].Employee?.FamilyName;
+          worksheet.Cells[i + 2, 2].Value = attendanceRecords[i].MarkDate.ToString("dd/MMM/yyyy");
+          worksheet.Cells[i + 2, 3].Value = attendanceRecords[i].InTime + " - " + attendanceRecords[i].OutTime;
+          worksheet.Cells[i + 2, 4].Value = attendanceRecords[i].DHours + " - " + attendanceRecords[i].DMinutes;
+          worksheet.Cells[i + 2, 5].Value = attendanceRecords[i].FromDutyTime + " - " + attendanceRecords[i].ToDutyTime;
+          worksheet.Cells[i + 2, 6].Value = attendanceRecords[i].LateComingDeduction + " (" + attendanceRecords[i].LateComingGraceTime + ")";
+          worksheet.Cells[i + 2, 7].Value = attendanceRecords[i].EarlyGoingDeduction + " (" + attendanceRecords[i].EarlyGoingGraceTime + ")";
+          worksheet.Cells[i + 2, 8].Value = attendanceRecords[i].EarlyComingAmount + " (" + attendanceRecords[i].EarlyComingGraceTime + ")";
+          worksheet.Cells[i + 2, 9].Value = attendanceRecords[i].LateGoingAmount + " (" + attendanceRecords[i].LateGoingGraceTime + ")";
         }
 
         worksheet.Cells["A1:l1"].Style.Font.Bold = true;
@@ -426,13 +478,62 @@ namespace Exampler_ERP.Controllers.HR.HR
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }
     }
-    public async Task<IActionResult> Print()
+    public async Task<IActionResult> Print(int? Branch, int? MonthsTypeID, int? YearsTypeID)
     {
-      var FaceAttendances = await _appDBContext.CR_FaceAttendances
-        .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Employee)
-        .ToListAsync();
-      return View("~/Views/HR/HR/FaceAttendanceForwarding/PrintFaceAttendanceForwarding.cshtml", FaceAttendances);
+      HttpContext.Session.SetInt32("FaceAttendanceBranchID", Branch ?? 0);
+      HttpContext.Session.SetInt32("FaceAttendanceMonthID", MonthsTypeID ?? 0);
+      HttpContext.Session.SetInt32("FaceAttendanceYearID", YearsTypeID ?? 0);
+
+      var attendanceRecords = new List<FaceAttendanceForwardingViewModel>();
+      var connectionString = _configuration.GetConnectionString("AppDb");
+      using (SqlConnection connection = new SqlConnection(connectionString))
+      {
+        using (SqlCommand command = new SqlCommand("GetFaceAttendanceForwarding", connection))
+        {
+          command.CommandType = CommandType.StoredProcedure;
+          command.Parameters.AddWithValue("@MonthID", MonthsTypeID ?? 0); // Default to October if null
+          command.Parameters.AddWithValue("@YearID", YearsTypeID ?? 0); // Default to 2024 if null
+          command.Parameters.AddWithValue("@BranchID", Branch ?? 0); // Set your branch ID accordingly
+
+          connection.Open();
+          using (SqlDataReader reader = await command.ExecuteReaderAsync())
+          {
+            while (await reader.ReadAsync())
+            {
+              var record = new FaceAttendanceForwardingViewModel();
+              try
+              {
+                // Wrap each field assignment in try-catch to isolate errors
+                try { record.EmployeeID = reader.GetInt32(0); } catch (Exception ex) { Console.WriteLine("EmployeeID Error: " + ex.Message); }
+                record.Employee = await _appDBContext.HR_Employees.FindAsync(record.EmployeeID);
+                try { record.MarkDate = reader.GetDateTime(1); } catch (Exception ex) { Console.WriteLine("MarkDate Error: " + ex.Message); }
+                try { record.InTime = reader.GetString(2); } catch (Exception ex) { Console.WriteLine("InTime Error: " + ex.Message); }
+                try { record.OutTime = reader.GetString(3); } catch (Exception ex) { Console.WriteLine("OutTime Error: " + ex.Message); }
+                try { record.DHours = reader.GetInt32(4); } catch (Exception ex) { Console.WriteLine("DHours Error: " + ex.Message); }
+                try { record.DMinutes = reader.GetInt32(5); } catch (Exception ex) { Console.WriteLine("DMinutes Error: " + ex.Message); }
+                try { record.FromDutyTime = reader.GetString(6); } catch (Exception ex) { Console.WriteLine("FromDutyTime Error: " + ex.Message); }
+                try { record.ToDutyTime = reader.GetString(7); } catch (Exception ex) { Console.WriteLine("ToDutyTime Error: " + ex.Message); }
+                try { record.LateComingGraceTime = reader.GetDecimal(8); } catch (Exception ex) { Console.WriteLine("LateComingGraceTime Error: " + ex.Message); }
+                try { record.EarlyGoingGraceTime = reader.GetDecimal(9); } catch (Exception ex) { Console.WriteLine("EarlyGoingGraceTime Error: " + ex.Message); }
+                try { record.PerDaySalary = reader.GetString(10); } catch (Exception ex) { Console.WriteLine("PerDaySalary Error: " + ex.Message); }
+                try { record.LateComingDeduction = reader.GetString(11); } catch (Exception ex) { Console.WriteLine("LateComingDeduction Error: " + ex.Message); }
+                try { record.EarlyGoingDeduction = reader.GetString(12); } catch (Exception ex) { Console.WriteLine("EarlyGoingDeduction Error: " + ex.Message); }
+                try { record.EarlyComingGraceTime = reader.GetDecimal(13); } catch (Exception ex) { Console.WriteLine("EarlyComingGraceTime Error: " + ex.Message); }
+                try { record.LateGoingGraceTime = reader.GetDecimal(14); } catch (Exception ex) { Console.WriteLine("LateGoingGraceTime Error: " + ex.Message); }
+                try { record.EarlyComingAmount = reader.GetString(15); } catch (Exception ex) { Console.WriteLine("PerDaySalary Error: " + ex.Message); }
+                try { record.LateGoingAmount = reader.GetString(16); } catch (Exception ex) { Console.WriteLine("PerDaySalary Error: " + ex.Message); }
+
+                attendanceRecords.Add(record);
+              }
+              catch (InvalidCastException ex)
+              {
+                await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "InvalidCastException occurred: " + ex.Message);
+              }
+            }
+          }
+        }
+      }
+      return View("~/Views/HR/HR/FaceAttendanceForwarding/PrintFaceAttendanceForwarding.cshtml", attendanceRecords);
     }
   }
 }

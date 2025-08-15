@@ -33,6 +33,21 @@
         $('#printButton').click(function () {
                         window.print();
                     });
+		$('#searchMonthlySalarySheetForm').submit(function (e) {
+				e.preventDefault(); // Prevent full page reload
+
+				var form = $(this);
+				var actionUrl = form.attr('action');
+
+				// Serialize form data
+				var formData = form.serialize();
+
+				$.get(actionUrl, formData, function (partialHtml) {
+					// Load only the relevant part of the response
+					var html = $(partialHtml).find('#MonthlySalarySheetListContainer').html();
+					$('#MonthlySalarySheetListContainer').html(html);
+				});
+			});
         });
         function printMonthlySalarySheets() {
             var url = '@Url.Action("Print", "MonthlySalarySheet")' + 
@@ -43,13 +58,22 @@
             var printWindow = window.open(url, '_blank');
             printWindow.focus();
         }
+		function excelMonthlySalarySheets() {
+			var url = '@Url.Action("ExportToExcel", "MonthlySalarySheet")' +
+					  '?branch=' + $('#BranchID').val() +
+					  '&monthsTypeID=' + $('#MonthID').val() +
+					  '&yearsTypeID=' + $('#Year').val();
 
+			var printWindow = window.open(url, '_blank');
+			printWindow.focus();
+		}
+		
 </script>
 
 <h4 class="py-3 mb-4">
     <span class="text-muted fw-light">@Localizer["lbl_Finance"] /</span> @Localizer["lbl_MonthlySalarySheet"]
 </h4>
-<form method="get" action="@Url.Action("GeneratePayroll", "MonthlySalarySheet")">
+<form id="searchMonthlySalarySheetForm" method="get" action="@Url.Action("Index", "MonthlySalarySheet")">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -93,7 +117,7 @@
                         <!-- Branch Dropdown -->
                         <div class="col-md-4 mb-4">
                             <label class="form-label fw-bold">@Localizer["lbl_Branch"]</label>
-                            <select name="Branch" class="form-control">
+							<select name="Branch" id="Branch" class="form-control">
                                 @foreach (var item in ViewBag.BranchList)
                                 {
                                     if (item.Value == ViewBag.BranchID?.ToString())
@@ -116,7 +140,7 @@
                             <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
 
                             <button type="button" class="btn btn-primary" id="postedButton">@Localizer["lbl_Post"]</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "OverTime")'">@Localizer["lbl_Excel"]</button>
+							<button type="button" class="btn btn-outline-secondary" onclick="excelMonthlySalarySheets()">@Localizer["lbl_Excel"]</button>
                             <button type="button" class="btn btn-outline-secondary" onclick="printMonthlySalarySheets()">@Localizer["lbl_Print"]</button>
 
                         </div>
@@ -128,4 +152,6 @@
     </div>
 </form>
 <br />
+<div id="MonthlySalarySheetListContainer">
 @Html.Partial("~/Views/HR/Financial/MonthlySalarySheet/_ViewMonthlySalarySheet.cshtml", Model)
+</div>

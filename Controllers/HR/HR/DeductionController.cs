@@ -43,11 +43,13 @@ namespace Exampler_ERP.Controllers.HR.HR
         MonthsTypeID = today.Month;
         YearsTypeID = today.Year;
       }
+
       var query = _appDBContext.HR_Deductions
           .Where(b => b.DeleteYNID != 1)
           .Include(d => d.Employee)
           .Include(d => d.DeductionType)
           .AsQueryable();
+
       if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
                 YearsTypeID.HasValue && YearsTypeID != 0 &&
                 DayID.HasValue && DayID != 0)

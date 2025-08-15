@@ -143,10 +143,26 @@
         });
     </script>
     <script>
-        function printFaceAttendanceTimeAdjusts() {
-            var printWindow = window.open('@Url.Action("Print", "FaceAttendanceTimeAdjust")', '_blank');
-            printWindow.focus();
-        }
+      	function printFaceAttendanceTimeAdjusts() {
+			var url = '@Url.Action("Print", "FaceAttendanceTimeAdjust")' +
+					  '?DayID=' + $('#DayID').val() +
+					  '&MonthsTypeID=' + $('#MonthsTypeID').val() +
+					  '&YearsTypeID=' + $('#YearsTypeID').val() +
+					  '&EmployeeID=' + $('#EmployeeID').val();
+
+			var printWindow = window.open(url, '_blank');
+			printWindow.focus();
+		}
+		function excelFaceAttendanceTimeAdjusts() {
+			var url = '@Url.Action("ExportToExcel", "FaceAttendanceTimeAdjust")' +
+					  '?DayID=' + $('#DayID').val() +
+					  '&MonthsTypeID=' + $('#MonthsTypeID').val() +
+					  '&YearsTypeID=' + $('#YearsTypeID').val() +
+					  '&EmployeeID=' + $('#EmployeeID').val();
+
+			var printWindow = window.open(url, '_blank');
+			printWindow.focus();
+		}
     </script>
 }
 <h4 class="py-3 mb-4">
@@ -232,7 +248,7 @@
                         <div class="col-md-12 text-end">
                             <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
                             <button type="button" class="btn btn-primary addFaceAttendanceTimeAdjustLink">@Localizer["lbl_AddNew"]</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "FaceAttendanceTimeAdjust")'">@Localizer["lbl_Excel"]</button>
+							<button type="button" class="btn btn-outline-secondary" onclick="excelFaceAttendanceTimeAdjusts()">@Localizer["lbl_Excel"]</button>
                             <button type="button" class="btn btn-outline-secondary" onclick="printFaceAttendanceTimeAdjusts()">@Localizer["lbl_Print"]</button>
                         </div>
                     </div>

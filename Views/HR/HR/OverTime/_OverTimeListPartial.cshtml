@@ -1,6 +1,14 @@
 @model IEnumerable<Exampler_ERP.Models.HR_OverTime>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@{
+	var lblEmployeeName = Localizer["lbl_EmployeeName"];
+	var lblMonth = Localizer["lbl_Month"];
+	var lblYear = Localizer["lbl_Year"];
+	var lblTotalOverTimeDays = Localizer["lbl_TotalOverTimeDays"];
+	var lblPerDayHours = Localizer["lbl_PerDayHours"];
+	var lblAmount = Localizer["lbl_Amount"];
+}
 @foreach (var item in Model)
 {
 	<div class="col-12 col-md-12 col-lg-12 GVDetail">
@@ -8,22 +16,22 @@
 			<div class="col-10 col-md-11 col-lg-10">
 				<div class="row">
 					<div class="col-12 col-md-12 col-lg-4">
-						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+						<p class="text-nowrap"><span class="smallAdd">@lblEmployeeName : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
 					</div>
 					<div class="col-12 col-md-12 col-lg-1">
-						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Month"] : </span>@item.MonthType?.MonthTypeName</p>
+						<p class="text-nowrap"><span class="smallAdd">@lblMonth : </span>@item.MonthType?.MonthTypeName</p>
 					</div>
 					<div class="col-12 col-md-12 col-lg-1">
-						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Year"] : </span>@Html.DisplayFor(modelItem => item.Year)</p>
+						<p class="text-nowrap"><span class="smallAdd">@lblYear : </span>@Html.DisplayFor(modelItem => item.Year)</p>
 					</div>
 					<div class="col-12 col-md-12 col-lg-2">
-						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_TotalOverTimeDays"] : </span>@Html.DisplayFor(modelItem => item.Days)</p>
+						<p class="text-nowrap"><span class="smallAdd">@lblTotalOverTimeDays : </span>@Html.DisplayFor(modelItem => item.Days)</p>
 					</div>
 					<div class="col-12 col-md-12 col-lg-2">
-						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_PerDayHours"] : </span>@Html.DisplayFor(modelItem => item.Hours)</p>
+						<p class="text-nowrap"><span class="smallAdd">@lblPerDayHours : </span>@Html.DisplayFor(modelItem => item.Hours)</p>
 					</div>
 					<div class="col-12 col-md-12 col-lg-1">
-						<p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Amount"] : </span>@Html.DisplayFor(modelItem => item.Amount)</p>
+						<p class="text-nowrap"><span class="smallAdd">@lblAmount : </span>@Html.DisplayFor(modelItem => item.Amount)</p>
 					</div>
 				</div>
 			</div>

@@ -23,7 +23,7 @@
 
 {
 
-	<div class="col-12 col-md-12 col-lg-12 GVDetail">
+	<div class="col-12 col-md-12 col-lg-12" style="border-bottom-style: inset;">
 		<input type="hidden" class="employeeID" value="@item.EmployeeID" />
 		<input type="hidden" class="markDate" value="@item.MarkDate" />
 		<input type="hidden" class="lateComingDeduction" value="@item.LateComingDeduction" />
@@ -34,48 +34,48 @@
 		<input type="hidden" class="lateGoingAmount" value="@item.LateGoingAmount" />
 		<div class="row" style="display: flex; flex-wrap: nowrap;">
 			<div class="col-12 col-md-2 col-lg-3">
-				<p class="text-nowrap"><span class="smallAdd">@lblEmployeeName : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+				<p class="text-nowrap">@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
 			</div>
 			<div class="col-12 col-md-1 col-lg-2">
-				<p class="text-nowrap"><span class="smallAdd">@lblMarkDate : </span>@item.MarkDate.ToString("dd/MMM/yyyy")</p>
+				<p class="text-nowrap">@item.MarkDate.ToString("dd/MMM/yyyy")</p>
 			</div>
 			<div class="col-12 col-md-1 col-lg-1">
-				<p class="text-nowrap"><span class="smallAdd">@lblPresentTiming : </span>@item.InTime - @item.OutTime</p>
+				<p class="text-nowrap">@item.InTime - @item.OutTime</p>
 			</div>
 			<div class="col-12 col-md-1 col-lg-1">
-				<p class="text-nowrap"><span class="smallAdd">@lblAttendanceDuration : </span>@item.DHours:@item.DMinutes</p>
+				<p class="text-nowrap">@item.DHours:@item.DMinutes</p>
 			</div>
 			<div class="col-12 col-md-1 col-lg-1">
-				<p class="text-nowrap"><span class="smallAdd">@lblWorkingSlot : </span>@item.FromDutyTime - @item.ToDutyTime</p>
+				<p class="text-nowrap">@item.FromDutyTime - @item.ToDutyTime</p>
 			</div>
 			<div class="col-12 col-md-1 col-lg-1" style="display:none">
-				<p class="text-nowrap"><span class="smallAdd">@lblLateComingHours : </span>@item.LateComingGraceTime</p>
+				<p class="text-nowrap">@item.LateComingGraceTime</p>
 			</div>
 			<div class="col-12 col-md-1 col-lg-1">
-				<p class="text-nowrap"><span class="smallAdd">@lblLateComingDeduction : </span>@item.LateComingDeduction (@item.LateComingGraceTime)</p>
+				<p class="text-nowrap">@item.LateComingDeduction (@item.LateComingGraceTime)</p>
 			</div>
 			<div class="col-12 col-md-1 col-lg-1" style="display:none">
-				<p class="text-nowrap"><span class="smallAdd">@lblEarlyGoingHours : </span>@item.EarlyGoingGraceTime</p>
+				<p class="text-nowrap">@item.EarlyGoingGraceTime</p>
 			</div>
 			<div class="col-12 col-md-1 col-lg-1">
-				<p class="text-nowrap"><span class="smallAdd">@lblEarlyGoingDeduction : </span>@item.EarlyGoingDeduction (@item.EarlyGoingGraceTime)</p>
+				<p class="text-nowrap">@item.EarlyGoingDeduction (@item.EarlyGoingGraceTime)</p>
 			</div>
 			<div class="col-12 col-md-1 col-lg-1" style="display:none">
-				<p class="text-nowrap"><span class="smallAdd">@lblPerDaySalary : </span>@item.PerDaySalary</p>
+				<p class="text-nowrap">@item.PerDaySalary</p>
 			</div>
 
 
 			<div class="col-12 col-md-1 col-lg-1" style="display:none">
-				<p class="text-nowrap"><span class="smallAdd">@lblEarlyComingHours : </span>@item.EarlyComingGraceTime</p>
+				<p class="text-nowrap">@item.EarlyComingGraceTime</p>
 			</div>
 			<div class="col-12 col-md-1 col-lg-1">
-				<p class="text-nowrap"><span class="smallAdd">@lblEarlyComingAmount : </span>@item.EarlyComingAmount (@item.EarlyComingGraceTime)</p>
+				<p class="text-nowrap">@item.EarlyComingAmount (@item.EarlyComingGraceTime)</p>
 			</div>
 			<div class="col-12 col-md-1 col-lg-1" style="display:none">
-				<p class="text-nowrap"><span class="smallAdd">@lblLateGoingHours : </span>@item.LateGoingGraceTime</p>
+				<p class="text-nowrap">@item.LateGoingGraceTime</p>
 			</div>
 			<div class="col-12 col-md-1 col-lg-1">
-				<p class="text-nowrap"><span class="smallAdd">@lblLateGoingAmount : </span>@item.LateGoingAmount (@item.LateGoingGraceTime)</p>
+				<p class="text-nowrap">@item.LateGoingAmount (@item.LateGoingGraceTime)</p>
 			</div>
 		</div>
 	</div>

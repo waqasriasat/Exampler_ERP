@@ -37,26 +37,42 @@ namespace Exampler_ERP.Controllers.HR.Reports
 
     public async Task<IActionResult> Index(int? Branch, int? MonthsTypeID, int? YearsTypeID)
     {
+      if (!Branch.HasValue || !MonthsTypeID.HasValue || !YearsTypeID.HasValue)
+      {
+        var today = DateTime.Today;
+        //Branch ??= 1;
+        MonthsTypeID ??= today.Month;
+        YearsTypeID ??= today.Year;
+      }
+      int branchValue = Branch ?? 0;
       var existingPayroll = await _appDBContext.HR_MonthlyPayrolls
           .Where(e => e.BranchTypeID == Branch && e.MonthTypeID == MonthsTypeID && e.Year == YearsTypeID)
           .FirstOrDefaultAsync();
 
       if (existingPayroll != null)
       {
+        Branch = existingPayroll.BranchTypeID;
+        MonthsTypeID = existingPayroll.MonthTypeID;
+        YearsTypeID = existingPayroll.Year;
+        await PopulateDropdowns(MonthsTypeID, YearsTypeID, Branch);
         return await PrintPayroll(existingPayroll.PayrollID);
       }
       if (existingPayroll == null)
       {
-        ViewBag.MonthsTypeID = MonthsTypeID;
-        ViewBag.YearsTypeID = YearsTypeID;
-        ViewBag.Branch = Branch;
-
-        ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
-        ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
+        await PopulateDropdowns(MonthsTypeID, YearsTypeID, Branch);
         return await PrintPayroll(0);
       }
 
       return View("~/Views/HR/Reports/MonthlyPayslip/MonthlyPayslip.cshtml", existingPayroll);
+    }
+    private async Task PopulateDropdowns(int? month, int? year, int? Branch)
+    {
+      ViewBag.MonthsTypeID = month;
+      ViewBag.YearsTypeID = year;
+      ViewBag.Branch = Branch;
+
+      ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
+      ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
     }
     public async Task<IActionResult> PrintPayroll(int payrollID)
     {
@@ -186,18 +202,31 @@ namespace Exampler_ERP.Controllers.HR.Reports
       return View("~/Views/HR/Reports/MonthlyPayslip/MonthlyPayslip.cshtml", payrollViewModel);
     }
 
-    public async Task<IActionResult> Print(int? branch, int? monthsTypeID, int? yearsTypeID)
+    public async Task<IActionResult> Print(int? Branch, int? MonthsTypeID, int? YearsTypeID)
     {
+      if (!Branch.HasValue || !MonthsTypeID.HasValue || !YearsTypeID.HasValue)
+      {
+        var today = DateTime.Today;
+        //Branch ??= 1;
+        MonthsTypeID ??= today.Month;
+        YearsTypeID ??= today.Year;
+      }
+      int branchValue = Branch ?? 0;
       var existingPayroll = await _appDBContext.HR_MonthlyPayrolls
-          .Where(e => e.BranchTypeID == branch && e.MonthTypeID == monthsTypeID && e.Year == yearsTypeID)
+          .Where(e => e.BranchTypeID == Branch && e.MonthTypeID == MonthsTypeID && e.Year == YearsTypeID)
           .FirstOrDefaultAsync();
 
       if (existingPayroll != null)
       {
+        Branch = existingPayroll.BranchTypeID;
+        MonthsTypeID = existingPayroll.MonthTypeID;
+        YearsTypeID = existingPayroll.Year;
+        await PopulateDropdowns(MonthsTypeID, YearsTypeID, Branch);
         return await ForPrintPayroll(existingPayroll.PayrollID);
       }
       if (existingPayroll == null)
       {
+        await PopulateDropdowns(MonthsTypeID, YearsTypeID, Branch);
         return await ForPrintPayroll(0);
       }
 

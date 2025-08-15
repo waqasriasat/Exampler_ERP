@@ -99,7 +99,7 @@
 
             $("#EmployeeName").autocomplete({
                 source: function (request, response) {
-
+					$("#EmployeeID").val("");
                     $.ajax({
                         url: '@Url.Action("GetEmployeeSuggestions", "Employee")', // Ensure this matches the C# method
                         type: 'GET',

@@ -106,7 +106,7 @@
 
             $("#EmployeeName").autocomplete({
                 source: function (request, response) {
-
+					$("#EmployeeID").val("");
                     $.ajax({
                         url: '@Url.Action("GetEmployeeSuggestions", "Employee")', // Ensure this matches the C# method
                         type: 'GET',
@@ -159,7 +159,7 @@
 <h4 class="py-3 mb-4">
 	<span class="text-muted fw-light">@Localizer["lbl_HumanResources"] /</span> @Localizer["lbl_AdditionalAllowance"]
 </h4>
-<form id="searchEmployeeForm" id="searchEmployeeForm" method="get" action="@Url.Action("Index", "AdditionalAllowance")">
+<form id="searchEmployeeForm" method="get" action="@Url.Action("Index", "AdditionalAllowance")">
     <div class="row">
         <div class="col-md-12">
             <div class="card">

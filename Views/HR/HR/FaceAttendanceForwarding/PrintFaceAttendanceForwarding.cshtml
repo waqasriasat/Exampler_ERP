@@ -1,0 +1,100 @@
+@model IEnumerable<Exampler_ERP.Models.Temp.FaceAttendanceForwardingViewModel>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+	Layout = "_PrintLayout";
+}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		@Localizer["lbl_PrintFaceAttendanceForwarding"]
+	</title>
+	<style>
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			background-color: white;
+		}
+
+		table, th, td {
+			border: 1px solid black;
+		}
+
+		th, td {
+			padding: 8px;
+			text-align: left;
+		}
+
+		th {
+			background-color: white;
+		}
+	</style>
+</head>
+<body style="background-color:white">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<h5 class="card-header">@Localizer["lbl_FaceAttendanceForwardingList"]</h5>
+				<div class="row" style="overflow-y: Overlay; padding: 15px;">
+					<div class="col-lg-12 col-md-12 col-sm-12 mb-12" style="border-bottom-style: inset;">
+						<div class="row" style="display: flex; flex-wrap: nowrap;">
+							<div class="col-12 col-md-2 col-lg-3">
+								<p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
+							</div>
+							<div class="col-12 col-md-1 col-lg-2">
+								<p class="text-nowrap">@Localizer["lbl_MarkDate"]</p>
+							</div>
+							<div class="col-12 col-md-1 col-lg-1">
+								<p class="text-nowrap">@Localizer["lbl_PresentTiming"]</p>
+							</div>
+							<div class="col-12 col-md-1 col-lg-1">
+								<p class="text-nowrap">@Localizer["lbl_AttendanceDuration"]</p>
+							</div>
+							<div class="col-12 col-md-1 col-lg-1">
+								<p class="text-nowrap">@Localizer["lbl_WorkingSlot"]</p>
+							</div>
+							<div class="col-12 col-md-1 col-lg-1" style="display:none">
+								<p class="text-nowrap">@Localizer["lbl_LateComingHours"]</p>
+							</div>
+							<div class="col-12 col-md-1 col-lg-1">
+								<p class="text-nowrap">@Localizer["lbl_LateComingDeduction(Hours)"]</p>
+							</div>
+							<div class="col-12 col-md-1 col-lg-1" style="display:none">
+								<p class="text-nowrap">@Localizer["lbl_EarlyGoingHours"]</p>
+							</div>
+							<div class="col-12 col-md-1 col-lg-1">
+								<p class="text-nowrap">@Localizer["lbl_EarlyGoingDeduction(Hours)"]</p>
+							</div>
+							<div class="col-12 col-md-1 col-lg-1" style="display:none">
+								<p class="text-nowrap">@Localizer["lbl_PerDaySalary"]</p>
+							</div>
+							<div class="col-12 col-md-1 col-lg-1" style="display:none">
+								<p class="text-nowrap">@Localizer["lbl_EarlyComingHours"]</p>
+							</div>
+							<div class="col-12 col-md-1 col-lg-1">
+								<p class="text-nowrap">@Localizer["lbl_EarlyComingAmount(Hours)"]</p>
+							</div>
+							<div class="col-12 col-md-1 col-lg-1" style="display:none">
+								<p class="text-nowrap">@Localizer["lbl_LateGoingHours"]</p>
+							</div>
+							<div class="col-12 col-md-1 col-lg-1">
+								<p class="text-nowrap">@Localizer["lbl_LateGoingAmount(Hours)"] </p>
+							</div>
+						</div>
+					</div>
+					<div id="FaceAttendanceForwardingListContainer">
+						@Html.Partial("~/Views/HR/HR/FaceAttendanceForwarding/_FaceAttendanceForwardingListPartial.cshtml", Model)
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		window.print();
+	</script>
+</body>
+</html>
+

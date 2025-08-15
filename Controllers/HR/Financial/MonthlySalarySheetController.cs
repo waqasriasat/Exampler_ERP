@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.SignalR;
 using Exampler_ERP.Controllers.HR.HR;
 using Exampler_ERP.Hubs;
 using Microsoft.Extensions.Localization;
+using OfficeOpenXml;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Exampler_ERP.Controllers.HR.Financial
 {
@@ -26,7 +29,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
 
 
-    public MonthlySalarySheetController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AdditionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<MonthlySalarySheetController> localizer) 
+    public MonthlySalarySheetController(AppDBContext appDBContext, IConfiguration configuration, ILogger<AdditionalAllowanceController> logger, Utils utils, IHubContext<NotificationHub> hubContext, IStringLocalizer<MonthlySalarySheetController> localizer)
     : base(appDBContext)
     {
       _appDBContext = appDBContext;
@@ -38,68 +41,42 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
 
     }
-    public async Task<IActionResult> Index(int Branch, int MonthsTypeID = 10, int YearsTypeID = 1998)
+    public async Task<IActionResult> Index(int? Branch, int? MonthsTypeID, int? YearsTypeID)
     {
+      if (!Branch.HasValue || !MonthsTypeID.HasValue || !YearsTypeID.HasValue)
+      {
+        var today = DateTime.Today;
+        //Branch ??= 1;
+        MonthsTypeID ??= today.Month;
+        YearsTypeID ??= today.Year;
+        
+      }
+      int branchValue = Branch ?? 0;
       var employeeList = await _appDBContext.HR_Employees
-          .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID == 0)
-          .ToListAsync();
-
+            .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID == branchValue)
+            .ToListAsync();
       var salarySheets = new List<MonthlySalarySheetViewModel>();
       var tasks = employeeList.Select(async employee =>
       {
-        var salaryData = await GetMonthlySalarySheetAsync(Branch, employee.EmployeeID, MonthsTypeID, YearsTypeID);
+        var salaryData = await GetMonthlySalarySheetAsync(branchValue, employee.EmployeeID, MonthsTypeID.Value, YearsTypeID.Value);
         return salaryData;
       });
 
       var salaryDataResults = await Task.WhenAll(tasks);
       salarySheets.AddRange(salaryDataResults);
-
-
-      ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
-      ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
-
+      await PopulateDropdowns(MonthsTypeID, YearsTypeID, Branch);
       return View("~/Views/HR/Financial/MonthlySalarySheet/MonthlySalarySheet.cshtml", salarySheets);
     }
-    public async Task<IActionResult> GeneratePayroll(int Branch, int MonthsTypeID, int YearsTypeID)
+    private async Task PopulateDropdowns(int? month, int? year, int? Branch)
     {
-      //var FatchExistingPosting = await _appDBContext.HR_MonthlyPayrollPosteds
-      //  .Where(e => e.BranchTypeID == Branch && e.MonthTypeID == MonthsTypeID && e.Year == YearsTypeID)
-      //  .FirstOrDefaultAsync();
-
-      //if (FatchExistingPosting != null)
-      //{
-      //  ViewBag.MonthsTypeID = MonthsTypeID;
-      //  ViewBag.YearsTypeID = YearsTypeID;
-      //  ViewBag.Branch = Branch;
-
-      //  ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
-      //  ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
-      //  await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Already posting found for the specified branch, month, and year.");
-      //  return View("~/Views/HR/Financial/MonthlySalarySheet/MonthlySalarySheet.cshtml", new List<MonthlySalarySheetViewModel>());
-      //}
-
-      var employeeList = await _appDBContext.HR_Employees
-          .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID == Branch)
-          .ToListAsync();
-
-      var salarySheets = new List<MonthlySalarySheetViewModel>();
-      var tasks = employeeList.Select(async employee =>
-      {
-        var salaryData = await GetMonthlySalarySheetAsync(Branch, employee.EmployeeID, MonthsTypeID, YearsTypeID);
-        return salaryData;
-      });
-      var salaryDataResults = await Task.WhenAll(tasks);
-      salarySheets.AddRange(salaryDataResults);
-
-      ViewBag.MonthsTypeID = MonthsTypeID;
-      ViewBag.YearsTypeID = YearsTypeID;
+      ViewBag.MonthsTypeID = month;
+      ViewBag.YearsTypeID = year;
       ViewBag.Branch = Branch;
 
       ViewBag.MonthsTypeList = await _utils.GetMonthsTypesWithoutZeroLine();
       ViewBag.BranchList = await _utils.GetBranchsWithoutZeroLine();
-
-      return View("~/Views/HR/Financial/MonthlySalarySheet/MonthlySalarySheet.cshtml", salarySheets);
     }
+    
     private async Task<MonthlySalarySheetViewModel> GetMonthlySalarySheetAsync(int Branch, int employeeId, int month, int year)
     {
 
@@ -211,7 +188,8 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
         if (FatchExistingPosting != null)
         {
-          return Json(new { success = false, message = "Already posting found for the specified branch, month, and year." });
+          await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Already posting found for the specified branch, month, and year.");
+          return Json(new { success = false});
         }
         var monthlyPayrollPosted = new HR_MonthlyPayrollPosted
         {
@@ -420,22 +398,184 @@ namespace Exampler_ERP.Controllers.HR.Financial
         return Json(new { success = false, message = ex.Message });
       }
     }
-    public async Task<IActionResult> Print(int Branch, int MonthsTypeID, int YearsTypeID)
+    public async Task<IActionResult> Print(int? branch, int? monthsTypeID, int? yearsTypeID)
     {
 
-      var employeeList = await _appDBContext.HR_Employees
-        .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID == Branch)
-        .ToListAsync();
+      if (!branch.HasValue || !monthsTypeID.HasValue || !yearsTypeID.HasValue)
+      {
+        var today = DateTime.Today;
+        //Branch ??= 1;
+        monthsTypeID ??= today.Month;
+        yearsTypeID ??= today.Year;
 
+      }
+      int branchValue = branch ?? 0;
+      var employeeList = await _appDBContext.HR_Employees
+            .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID == branchValue)
+            .ToListAsync();
       var salarySheets = new List<MonthlySalarySheetViewModel>();
       var tasks = employeeList.Select(async employee =>
       {
-        var salaryData = await GetMonthlySalarySheetAsync(Branch, employee.EmployeeID, MonthsTypeID, YearsTypeID);
+        var salaryData = await GetMonthlySalarySheetAsync(branchValue, employee.EmployeeID, monthsTypeID.Value, yearsTypeID.Value);
         return salaryData;
       });
+
       var salaryDataResults = await Task.WhenAll(tasks);
       salarySheets.AddRange(salaryDataResults);
       return View("~/Views/HR/Financial/MonthlySalarySheet/PrintMonthlySalarySheet.cshtml", salarySheets);
     }
+    public async Task<IActionResult> ExportToExcel(int? branch, int? monthsTypeID, int? yearsTypeID)
+    {
+      ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+      if (!branch.HasValue || !monthsTypeID.HasValue || !yearsTypeID.HasValue)
+      {
+        var today = DateTime.Today;
+        //Branch ??= 1;
+        monthsTypeID ??= today.Month;
+        yearsTypeID ??= today.Year;
+
+      }
+      int branchValue = branch ?? 0;
+      var employeeList = await _appDBContext.HR_Employees
+            .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID == branchValue)
+            .ToListAsync();
+      var salarySheets = new List<MonthlySalarySheetViewModel>();
+      var tasks = employeeList.Select(async employee =>
+      {
+        var salaryData = await GetMonthlySalarySheetAsync(branchValue, employee.EmployeeID, monthsTypeID.Value, yearsTypeID.Value);
+        return salaryData;
+      });
+
+      var salaryDataResults = await Task.WhenAll(tasks);
+      salarySheets.AddRange(salaryDataResults);
+
+      // Convert to Excel
+      byte[] excelData = ExportSalarySheetToExcel(salarySheets.ToList());
+
+      string excelName = _localizer["lbl_MonlySalarySheet"] + $"-{DateTime.Now:yyyyMMddHHmmssfff}.xlsx";
+      return File(excelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+    }
+    public byte[] ExportSalarySheetToExcel(List<MonthlySalarySheetViewModel> salarySheets)
+    {
+      using (var package = new ExcelPackage())
+      {
+        var worksheet = package.Workbook.Worksheets.Add("SalarySheet");
+
+        // Step 1: Collect all distinct keys for dynamic columns
+        var salaryDetailsColumns = new HashSet<string>();
+        var allowancesColumns = new HashSet<string>();
+        var overtimeColumns = new HashSet<string>();
+        var deductionsColumns = new HashSet<string>();
+        var fixedDeductionsColumns = new HashSet<string>();
+
+        foreach (var sheet in salarySheets)
+        {
+          foreach (var key in sheet.SalaryDetails.Keys) salaryDetailsColumns.Add(key);
+          foreach (var key in sheet.AdditionalAllowances.Keys) allowancesColumns.Add(key);
+          foreach (var key in sheet.OvertimeDetails.Keys) overtimeColumns.Add(key);
+          foreach (var key in sheet.Deductions.Keys) deductionsColumns.Add(key);
+          foreach (var key in sheet.FixedDeductions.Keys) fixedDeductionsColumns.Add(key);
+        }
+
+        // Step 2: Define static headers
+        int col = 1;
+        worksheet.Cells[1, col++].Value = "Employee ID";
+        worksheet.Cells[1, col++].Value = "Employee Name";
+        worksheet.Cells[1, col++].Value = "Month";
+        worksheet.Cells[1, col++].Value = "Year";
+
+        // Step 3: Add dynamic columns
+        var columnMappings = new Dictionary<string, int>();
+
+        void AddDynamicColumns(HashSet<string> keys)
+        {
+          foreach (var key in keys)
+          {
+            if (!columnMappings.ContainsKey(key))
+            {
+              worksheet.Cells[1, col].Value = key;
+              columnMappings[key] = col;
+              col++;
+            }
+          }
+        }
+
+        AddDynamicColumns(salaryDetailsColumns);
+        AddDynamicColumns(allowancesColumns);
+        AddDynamicColumns(overtimeColumns);
+        AddDynamicColumns(deductionsColumns);
+        AddDynamicColumns(fixedDeductionsColumns);
+
+        // Final column
+        int deservedAmountCol = col;
+        worksheet.Cells[1, col++].Value = "Deserved Salary";
+
+        // Step 4: Fill rows
+        for (int i = 0; i < salarySheets.Count; i++)
+        {
+          var sheet = salarySheets[i];
+          int row = i + 2;
+
+          worksheet.Cells[row, 1].Value = sheet.EmployeeID;
+          worksheet.Cells[row, 2].Value = sheet.EmployeeName;
+          worksheet.Cells[row, 3].Value = sheet.MonthID;
+          worksheet.Cells[row, 4].Value = sheet.Year;
+
+          void FillDynamicValues(Dictionary<string, decimal?> data)
+          {
+            foreach (var kvp in data)
+            {
+              if (columnMappings.ContainsKey(kvp.Key))
+              {
+                double value = Convert.ToDouble(kvp.Value ?? 0);
+                worksheet.Cells[row, columnMappings[kvp.Key]].Value = Math.Round(value, 2);
+              }
+            }
+          }
+
+          FillDynamicValues(sheet.SalaryDetails);
+          FillDynamicValues(sheet.AdditionalAllowances);
+          FillDynamicValues(sheet.OvertimeDetails);
+          FillDynamicValues(sheet.Deductions);
+          FillDynamicValues(sheet.FixedDeductions);
+
+          worksheet.Cells[row, deservedAmountCol].Value = sheet.DeservedAmount;
+        }
+
+        // Format
+        worksheet.Row(1).Style.Font.Bold = true;
+        worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
+        return package.GetAsByteArray();
+      }
+    }
+
+    public async Task<IActionResult> PrintDetail(int payrollID)
+    {
+      var monthlyPayroll = await _appDBContext.HR_MonthlyPayrolls
+            .Where(e => e.PayrollID == payrollID )
+            .FirstOrDefaultAsync();
+
+      var Branch = monthlyPayroll.BranchTypeID;
+      var monthsTypeID = monthlyPayroll.MonthTypeID;
+      var yearsTypeID = monthlyPayroll.Year;
+
+      var employeeList = await _appDBContext.HR_Employees
+            .Where(e => e.ActiveYNID == 1 && e.FinalApprovalID == 1 && e.BranchTypeID == Branch)
+            .ToListAsync();
+
+      var salarySheets = new List<MonthlySalarySheetViewModel>();
+      var tasks = employeeList.Select(async employee =>
+      {
+        var salaryData = await GetMonthlySalarySheetAsync(Branch.Value, employee.EmployeeID, monthsTypeID.Value, yearsTypeID.Value);
+        return salaryData;
+      });
+
+      var salaryDataResults = await Task.WhenAll(tasks);
+      salarySheets.AddRange(salaryDataResults);
+      return View("~/Views/HR/Financial/MonthlySalarySheet/PrintMonthlySalarySheet.cshtml", salarySheets);
+    }
+
   }
 }

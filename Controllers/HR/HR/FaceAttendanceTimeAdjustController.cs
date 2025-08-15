@@ -6,6 +6,7 @@ using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using Microsoft.Extensions.Localization;
+using Exampler_ERP.Models.Temp;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
@@ -184,14 +185,51 @@ namespace Exampler_ERP.Controllers.HR.HR
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Attendance Deleted successfully.");
       return Json(new { success = true });
     }
-    public async Task<IActionResult> ExportToExcel()
+    public async Task<IActionResult> ExportToExcel(int? DayID, int? MonthsTypeID, int? YearsTypeID, int? EmployeeID)
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var FaceAttendance = await _appDBContext.CR_FaceAttendances
-        .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Employee)
-        .ToListAsync();
+      if (!DayID.HasValue && !EmployeeID.HasValue && !MonthsTypeID.HasValue && !YearsTypeID.HasValue)
+      {
+        var today = DateTime.Today;
+        DayID = today.Day;
+        MonthsTypeID = today.Month;
+        YearsTypeID = today.Year;
+      }
+      var query = _appDBContext.CR_FaceAttendances
+          .Where(b => b.DeleteYNID != 1)
+          .Include(d => d.Employee)
+          .AsQueryable();
+
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
+                YearsTypeID.HasValue && YearsTypeID != 0 &&
+                DayID.HasValue && DayID != 0)
+      {
+        var startDate = new DateTime(YearsTypeID.Value, MonthsTypeID.Value, 1);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
+
+        query = query.Where(d =>
+            d.MarkDate >= startDate &&
+            d.MarkDate <= endDate &&
+            d.MarkDate.Day == DayID.Value
+        );
+      }
+      else if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
+               YearsTypeID.HasValue && YearsTypeID != 0 &&
+               EmployeeID.HasValue && EmployeeID != 0)
+      {
+        var startDate = new DateTime(YearsTypeID.Value, MonthsTypeID.Value, 1);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
+
+        query = query.Where(d =>
+            d.MarkDate >= startDate &&
+        d.MarkDate <= endDate &&
+            d.EmployeeID == EmployeeID.Value
+        );
+      }
+     
+      var faceAttendance = await query.ToListAsync();
+
 
 
       using (var package = new ExcelPackage())
@@ -206,15 +244,15 @@ namespace Exampler_ERP.Controllers.HR.HR
         worksheet.Cells["G1"].Value = _localizer["lbl_DutyMinutess"];
 
 
-        for (int i = 0; i < FaceAttendance.Count; i++)
+        for (int i = 0; i < faceAttendance.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = FaceAttendance[i].FaceAttendanceID;
-          worksheet.Cells[i + 2, 2].Value = FaceAttendance[i].Employee?.FirstName + ' ' + FaceAttendance[i].Employee?.FatherName + ' ' + FaceAttendance[i].Employee?.FamilyName;
-          worksheet.Cells[i + 2, 3].Value = FaceAttendance[i].MarkDate.ToString("dd/MMM/yyyy");
-          worksheet.Cells[i + 2, 4].Value = FaceAttendance[i].InTime.ToString("hh:mm:ss");
-          worksheet.Cells[i + 2, 5].Value = FaceAttendance[i].OutTime.ToString("hh:mm:ss");
-          worksheet.Cells[i + 2, 6].Value = FaceAttendance[i].DHours;
-          worksheet.Cells[i + 2, 7].Value = FaceAttendance[i].DMinutes;
+          worksheet.Cells[i + 2, 1].Value = faceAttendance[i].FaceAttendanceID;
+          worksheet.Cells[i + 2, 2].Value = faceAttendance[i].Employee?.FirstName + ' ' + faceAttendance[i].Employee?.FatherName + ' ' + faceAttendance[i].Employee?.FamilyName;
+          worksheet.Cells[i + 2, 3].Value = faceAttendance[i].MarkDate.ToString("dd/MMM/yyyy");
+          worksheet.Cells[i + 2, 4].Value = faceAttendance[i].InTime.ToString("hh:mm:ss");
+          worksheet.Cells[i + 2, 5].Value = faceAttendance[i].OutTime.ToString("hh:mm:ss");
+          worksheet.Cells[i + 2, 6].Value = faceAttendance[i].DHours;
+          worksheet.Cells[i + 2, 7].Value = faceAttendance[i].DMinutes;
         }
 
         worksheet.Cells["A1:l1"].Style.Font.Bold = true;
@@ -228,13 +266,49 @@ namespace Exampler_ERP.Controllers.HR.HR
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }
     }
-    public async Task<IActionResult> Print()
+    public async Task<IActionResult> Print(int? DayID, int? MonthsTypeID, int? YearsTypeID, int? EmployeeID)
     {
-      var FaceAttendances = await _appDBContext.CR_FaceAttendances
-        .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Employee)
-        .ToListAsync();
-      return View("~/Views/HR/HR/FaceAttendanceTimeAdjust/PrintFaceAttendanceTimeAdjust.cshtml", FaceAttendances);
+      if (!DayID.HasValue && !EmployeeID.HasValue && !MonthsTypeID.HasValue && !YearsTypeID.HasValue)
+      {
+        var today = DateTime.Today;
+        DayID = today.Day;
+        MonthsTypeID = today.Month;
+        YearsTypeID = today.Year;
+      }
+      var query = _appDBContext.CR_FaceAttendances
+          .Where(b => b.DeleteYNID != 1)
+          .Include(d => d.Employee)
+          .AsQueryable();
+
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
+                YearsTypeID.HasValue && YearsTypeID != 0 &&
+                DayID.HasValue && DayID != 0)
+      {
+        var startDate = new DateTime(YearsTypeID.Value, MonthsTypeID.Value, 1);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
+
+        query = query.Where(d =>
+            d.MarkDate >= startDate &&
+            d.MarkDate <= endDate &&
+            d.MarkDate.Day == DayID.Value
+        );
+      }
+      else if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
+               YearsTypeID.HasValue && YearsTypeID != 0 &&
+               EmployeeID.HasValue && EmployeeID != 0)
+      {
+        var startDate = new DateTime(YearsTypeID.Value, MonthsTypeID.Value, 1);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
+
+        query = query.Where(d =>
+            d.MarkDate >= startDate &&
+        d.MarkDate <= endDate &&
+            d.EmployeeID == EmployeeID.Value
+        );
+      }
+
+      var faceAttendance = await query.ToListAsync();
+      return View("~/Views/HR/HR/FaceAttendanceTimeAdjust/PrintFaceAttendanceTimeAdjust.cshtml", faceAttendance);
     }
   }
 }

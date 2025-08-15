@@ -34,6 +34,13 @@ namespace Exampler_ERP.Controllers.HR.HR
     }
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID, int? OvertimeTypeID)
     {
+      if (!EmployeeID.HasValue && !MonthsTypeID.HasValue && !YearsTypeID.HasValue)
+      {
+        var today = DateTime.Today;
+        MonthsTypeID = today.Month;
+        YearsTypeID = today.Year;
+      }
+
       var query = _appDBContext.HR_OverTimes
           .Where(b => b.DeleteYNID != 1)
           .Include(d => d.Employee)
@@ -41,26 +48,22 @@ namespace Exampler_ERP.Controllers.HR.HR
           .Include(d => d.MonthType)
           .AsQueryable();  // Move this up to allow further filtering
 
-      if (MonthsTypeID.HasValue && MonthsTypeID != 0)
-      {
-        query = query.Where(d => d.MonthTypeID == MonthsTypeID.Value);
-      }
-
-      if (YearsTypeID.HasValue)
-      {
-        query = query.Where(d => d.Year == YearsTypeID.Value);
-      }
-
-      if (EmployeeID.HasValue)
-      {
-        query = query.Where(d => d.EmployeeID == EmployeeID.Value);
-      }
-
-      if (!string.IsNullOrEmpty(EmployeeName))
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
+                YearsTypeID.HasValue && YearsTypeID != 0 &&
+                EmployeeID.HasValue && EmployeeID != 0)
       {
         query = query.Where(d =>
-            (d.Employee.FirstName + " " + d.Employee.FatherName + " " + d.Employee.FamilyName)
-            .Contains(EmployeeName));
+            d.MonthTypeID >= MonthsTypeID.Value &&
+            d.Year <= YearsTypeID.Value &&
+            d.EmployeeID == EmployeeID.Value
+        );
+      }
+      else
+      {
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Please select either a an Employee.");
+        ViewBag.overTime = new List<HR_OverTime>();
+        await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName, OvertimeTypeID);
+        return View("~/Views/HR/HR/OverTime/OverTime.cshtml", new List<HR_OverTime>());
       }
 
       if (OvertimeTypeID.HasValue && OvertimeTypeID != 0)
@@ -70,16 +73,21 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       var overTimes = await query.ToListAsync();
 
-      ViewBag.MonthsTypeID = MonthsTypeID;
-      ViewBag.YearsTypeID = YearsTypeID;
-      ViewBag.OvertimeTypeID = OvertimeTypeID;
-      ViewBag.EmployeeID = EmployeeID;
-      ViewBag.EmployeeName = EmployeeName;
-
-      ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
-      ViewBag.OvertimeTypeList = await _utils.GetOverTimeTypes();  // Assuming a similar utility exists for overtime types
+      await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName, OvertimeTypeID);
 
       return View("~/Views/HR/HR/OverTime/OverTime.cshtml", overTimes);
+    }
+
+    private async Task PopulateDropdowns(int? month, int? year, int? employeeId, string? employeeName, int? overtimeType)
+    {
+      ViewBag.MonthsTypeID = month;
+      ViewBag.YearsTypeID = year;
+      ViewBag.EmployeeID = employeeId;
+      ViewBag.EmployeeName = employeeName;
+      ViewBag.OvertimeType = overtimeType;
+
+      ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
+      ViewBag.OvertimeTypeList = await _utils.GetOverTimeTypes();
     }
 
     [HttpGet]

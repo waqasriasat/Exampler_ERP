@@ -34,19 +34,31 @@ namespace Exampler_ERP.Controllers.HR.HR
     }
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
     {
+      if (!EmployeeID.HasValue && !MonthsTypeID.HasValue && !YearsTypeID.HasValue)
+      {
+        var today = DateTime.Today;
+        MonthsTypeID = today.Month;
+        YearsTypeID = today.Year;
+      }
+
       var query = _appDBContext.HR_AdditionalAllowances
         .Include(d => d.Employee)
         .Include(d => d.MonthType)
         .AsQueryable();
 
-      if (MonthsTypeID.HasValue && MonthsTypeID != 0)
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0 && YearsTypeID.HasValue && YearsTypeID != 0)
       {
-        query = query.Where(d => d.MonthTypeID == MonthsTypeID.Value);
+        query = query.Where(d =>
+            d.MonthTypeID >= MonthsTypeID.Value &&
+            d.Year <= YearsTypeID.Value
+        );
       }
-
-      if (YearsTypeID.HasValue)
+      else
       {
-        query = query.Where(d => d.Year == YearsTypeID.Value);
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Please select either a an Month.");
+        ViewBag.additionalAllowance = new List<HR_AdditionalAllowance>();
+        await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName);
+        return View("~/Views/HR/HR/AdditionalAllowance/AdditionalAllowance.cshtml", new List<HR_AdditionalAllowance>());
       }
 
       if (EmployeeID.HasValue)
@@ -54,22 +66,20 @@ namespace Exampler_ERP.Controllers.HR.HR
         query = query.Where(d => d.EmployeeID == EmployeeID.Value);
       }
 
-      if (!string.IsNullOrEmpty(EmployeeName))
-      {
-        query = query.Where(d =>
-            (d.Employee.FirstName + " " + d.Employee.FatherName + " " + d.Employee.FamilyName)
-            .Contains(EmployeeName));
-      }
       var AdditionalAllowances = await query.ToListAsync();
 
-      ViewBag.MonthsTypeID = MonthsTypeID;
-      ViewBag.YearsTypeID = YearsTypeID;
-      ViewBag.EmployeeID = EmployeeID;
-      ViewBag.EmployeeName = EmployeeName;
-
-      ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
-
+      await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName);
+      
       return View("~/Views/HR/HR/AdditionalAllowance/AdditionalAllowance.cshtml", AdditionalAllowances);
+    }
+    private async Task PopulateDropdowns(int? month, int? year, int? employeeId, string? employeeName)
+    {
+      ViewBag.MonthsTypeID = month;
+      ViewBag.YearsTypeID = year;
+      ViewBag.EmployeeID = employeeId;
+      ViewBag.EmployeeName = employeeName;
+ 
+      ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
     }
     [HttpGet]
     public async Task<IActionResult> Edit(int id)

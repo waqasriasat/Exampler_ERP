@@ -1,26 +1,34 @@
 @model IEnumerable<Exampler_ERP.Models.Temp.MonthlySalarySheetViewModel>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-
+@{
+	var lblSalarySheetDetail = Localizer["lbl_SalarySheetDetail"];
+	var lblEmployeeID = Localizer["lbl_EmployeeID"];
+	var lblEmployeeName = Localizer["lbl_EmployeeName"];
+	var lblMonth = Localizer["lbl_Month"];
+	var lblYear = Localizer["lbl_Year"];
+	var lblDeservedAmount = Localizer["lbl_DeservedAmount"];
+	var lblBranchName = Localizer["lbl_BranchName"];
+}
 
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header">@Localizer["lbl_SalarySheetDetail"]</h5>
-            <div class="row" style="overflow-y: Overlay; padding: 15px;">
-                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
-                    <div class="row" style="display: flex; flex-wrap: nowrap;">
+			<h5 class="card-header">@lblSalarySheetDetail</h5>
+			<div class="row" style="overflow-y: Overlay; padding: 15px;">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12">
+					<div class="row" style="display: flex; flex-wrap: nowrap; border-bottom-style: inset;">
                         <div class="col-12 col-md-1 col-lg-1">
-                            <p class="text-nowrap">@Localizer["lbl_EmployeeID"]</p>
+                            <p class="text-nowrap">@lblEmployeeID</p>
                         </div>
                         <div class="col-12 col-md-2 col-lg-2">
-                            <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
+							<p class="text-nowrap">@lblEmployeeName</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1">
-                            <p class="text-nowrap">@Localizer["lbl_Month"]</p>
+                            <p class="text-nowrap">@lblMonth"</p>
                         </div>
                         <div class="col-12 col-md-1 col-lg-1">
-                            <p class="text-nowrap">@Localizer["lbl_Year"]</p>
+                            <p class="text-nowrap">@lblYear</p>
                         </div>
                         @foreach (var model in Model)
                         {
@@ -57,7 +65,7 @@
                             break;
                         }
                         <div class="col-12 col-md-1 col-lg-1">
-                            <p class="text-nowrap">@Localizer["lbl_DeservedAmount"]</p>
+                            <p class="text-nowrap">@lblDeservedAmount</p>
                         </div>
 
                     </div>
@@ -65,45 +73,39 @@
 
                 @foreach (var model in Model)
                 {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row" style="display: ruby-text;">
+                    <div class="col-12 col-md-12 col-lg-12">
+						<div class="row" style="display: flex; flex-wrap: nowrap; border-bottom-style: inset;">
                             <div class="col-12 col-md-1 col-lg-1">
                                 <p class="text-nowrap">
-                                    <span class="smallAdd">Employee ID : </span>
-                                    @(model.EmployeeID)
+								    @(model.EmployeeID)
                                 </p>
                             </div>
                             <div class="col-12 col-md-2 col-lg-2">
                                 <p class="text-nowrap">
-                                    <span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>
                                     @(model.EmployeeName)
                                 </p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1" style="display:none">
                                 @*  *@
                                 <p class="text-nowrap">
-                                    <span class="smallAdd">@Localizer["lbl_BranchName"] : </span>
-                                    <input type="hidden" id="BranchID" value="@(model.BranchID)" />
+                                     <input type="hidden" id="BranchID" value="@(model.BranchID)" />
                                     @(model.BranchID)
                                 </p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1" style="display:none">
                                 @*  *@
                                 <p class="text-nowrap">
-                                    <span class="smallAdd">@Localizer["lbl_Month"] : </span>
                                     <input type="hidden" id="MonthID" value="@(model.MonthID)" />
                                     @(model.MonthID)
                                 </p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1">
                                 <p class="text-nowrap">
-                                    <span class="smallAdd">@Localizer["lbl_Month"] : </span>
                                     @(model.MonthName)
                                 </p>
                             </div>
                             <div class="col-12 col-md-1 col-lg-1">
                                 <p class="text-nowrap">
-                                    <span class="smallAdd">@Localizer["lbl_Year"] : </span>
                                     <input type="hidden" id="Year" value="@(model.Year)" />
                                     @(model.Year)
                                 </p>
@@ -113,7 +115,6 @@
                             {
                                 <div class="col-12 col-md-1 col-lg-1">
                                     <p class="text-nowrap">
-                                        <span class="smallAdd">@column : </span>
                                         @(
                                             model.SalaryDetails.ContainsKey(column)
                                             ? Math.Round(Convert.ToDouble(model.SalaryDetails[column] ?? 0), 2).ToString("F2")
@@ -130,7 +131,6 @@
                             {
                                 <div class="col-12 col-md-1 col-lg-1">
                                     <p class="text-nowrap">
-                                        <span class="smallAdd">@column : </span>
                                         @(
                                             model.AdditionalAllowances.ContainsKey(column)
                                             ? Math.Round(Convert.ToDouble(model.AdditionalAllowances[column] ?? 0), 2).ToString("F2")
@@ -146,8 +146,7 @@
                             {
                                 <div class="col-12 col-md-1 col-lg-1">
                                     <p class="text-nowrap">
-                                        <span class="smallAdd">@column : </span>@(
-                                model.OvertimeDetails.ContainsKey(column)
+										@(model.OvertimeDetails.ContainsKey(column)
                                 ? Math.Round(Convert.ToDouble(model.OvertimeDetails[column] ?? 0), 2).ToString("F2")
                                 : "N/A"
                                 )
@@ -161,8 +160,7 @@
                             {
                                 <div class="col-12 col-md-1 col-lg-1">
                                     <p class="text-nowrap">
-                                        <span class="smallAdd">@column : </span>@(
-                                model.Deductions.ContainsKey(column)
+										@(model.Deductions.ContainsKey(column)
                                 ? Math.Round(Convert.ToDouble(model.Deductions[column] ?? 0), 2).ToString("F2")
                                 : "N/A"
                                 )
@@ -176,7 +174,6 @@
                             {
                                 <div class="col-12 col-md-1 col-lg-1">
                                     <p class="text-nowrap">
-                                        <span class="smallAdd">@column : </span>
                                         @(
                                             model.FixedDeductions.ContainsKey(column)
                                             ? Math.Round(Convert.ToDouble(model.FixedDeductions[column] ?? 0), 2).ToString("F2")
@@ -188,8 +185,7 @@
                             }
                             <div class="col-12 col-md-1 col-lg-1">
                                 <p class="text-nowrap">
-                                    <span class="smallAdd">@Localizer["lbl_DeservedAmount"] : </span>
-                                    @(model.DeservedAmount)
+                                     @(model.DeservedAmount)
                                 </p>
                             </div>
                         </div>
