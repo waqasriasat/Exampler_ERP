@@ -9,6 +9,7 @@ using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using Microsoft.Extensions.Localization;
+using Microsoft.CodeAnalysis.Operations;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
@@ -36,6 +37,14 @@ namespace Exampler_ERP.Controllers.HR.HR
 
     public async Task<IActionResult> Index(int? MonthsTypeID, int? YearsTypeID, string? HolidayTypeName, int? HolidayTypeID)
     {
+      if (!MonthsTypeID.HasValue && !YearsTypeID.HasValue)
+      {
+        var today = DateTime.Today;
+        MonthsTypeID = today.Month;
+        YearsTypeID = today.Year;
+      }
+
+
       var HolidayQuery = _appDBContext.HR_Holidays
           .Where(c => c.DeleteYNID != 1);
 
@@ -54,23 +63,27 @@ namespace Exampler_ERP.Controllers.HR.HR
       }
       var Holidays = await HolidayQuery
           .Include(c => c.HolidayType)
-          .ToListAsync();
+      .ToListAsync();
 
-      if (!Holidays.Any())
+      await PopulateDropdowns(MonthsTypeID, YearsTypeID, HolidayTypeID);
+
+      if (Holidays.Count == 0)
       {
         await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "No Holidays Found for the selected filters.");
       }
 
-      ViewBag.MonthsTypeID = MonthsTypeID;
-      ViewBag.YearsTypeID = YearsTypeID;
-      ViewBag.HolidayTypeID = HolidayTypeID;
-
-      ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
-      ViewBag.HolidayTypeList = await _utils.GetHolidayTypes();
-
       return View("~/Views/HR/HR/Holiday/Holiday.cshtml", Holidays);
     }
 
+    private async Task PopulateDropdowns(int? monthsTypeID, int? yearsTypeID, int? holidayTypeID)
+    {
+      ViewBag.MonthsTypeID = monthsTypeID;
+      ViewBag.YearsTypeID = yearsTypeID;;
+      ViewBag.HolidayTypeID = holidayTypeID;
+
+      ViewBag.MonthsTypeList = await _utils.GetMonthsTypes();
+      ViewBag.HolidayTypeList = await _utils.GetHolidayTypes();
+    }
 
     public async Task<IActionResult> Holiday()
     {
@@ -205,25 +218,61 @@ namespace Exampler_ERP.Controllers.HR.HR
       return Json(new { success = true });
     }
 
-    public async Task<IActionResult> Print()
+    public async Task<IActionResult> Print(int? MonthsTypeID, int? YearsTypeID, string? HolidayTypeName, int? HolidayTypeID)
     {
-      var Holidays = await _appDBContext.HR_Holidays
-          .Where(c => c.DeleteYNID != 1)
+      var HolidayQuery = _appDBContext.HR_Holidays
+          .Where(c => c.DeleteYNID != 1);
+
+      if (HolidayTypeID.HasValue && HolidayTypeID > 0)
+      {
+        HolidayQuery = HolidayQuery.Where(c => c.HolidayTypeID == HolidayTypeID.Value);
+      }
+
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0)
+      {
+        HolidayQuery = HolidayQuery.Where(c => c.HolidayDate.Month == MonthsTypeID.Value);
+      }
+      if (YearsTypeID.HasValue && YearsTypeID != 0)
+      {
+        HolidayQuery = HolidayQuery.Where(c => c.HolidayDate.Year == YearsTypeID.Value);
+      }
+      var Holidays = await HolidayQuery
           .Include(c => c.HolidayType)
-          .ToListAsync();
+      .ToListAsync();
+
+      await PopulateDropdowns(MonthsTypeID, YearsTypeID, HolidayTypeID);
 
       return View("~/Views/HR/HR/Holiday/PrintHoliday.cshtml", Holidays);
     }
 
-    public async Task<IActionResult> ExportToExcel()
+    public async Task<IActionResult> ExportToExcel(int? MonthsTypeID, int? YearsTypeID, string? HolidayTypeName, int? HolidayTypeID)
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var Holidays = await _appDBContext.HR_Holidays
-          .Where(c => c.DeleteYNID != 1)
+      var HolidayQuery = _appDBContext.HR_Holidays
+          .Where(c => c.DeleteYNID != 1);
+
+      if (HolidayTypeID.HasValue && HolidayTypeID > 0)
+      {
+        HolidayQuery = HolidayQuery.Where(c => c.HolidayTypeID == HolidayTypeID.Value);
+      }
+
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0)
+      {
+        HolidayQuery = HolidayQuery.Where(c => c.HolidayDate.Month == MonthsTypeID.Value);
+      }
+      if (YearsTypeID.HasValue && YearsTypeID != 0)
+      {
+        HolidayQuery = HolidayQuery.Where(c => c.HolidayDate.Year == YearsTypeID.Value);
+      }
+      var Holidays = await HolidayQuery
           .Include(c => c.HolidayType)
-          .ToListAsync();
+      .ToListAsync();
+
+      await PopulateDropdowns(MonthsTypeID, YearsTypeID, HolidayTypeID);
+
       var SalaryTypesList = await _utils.GetSalaryOptions();
+
       using (var package = new ExcelPackage())
       {
         var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_Holiday"]);
