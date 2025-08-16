@@ -28,16 +28,15 @@
 
 	</script>
 	<script>
-			function printMonthlyPayslips() {
-
-			var url = '@Url.Action("Print", "MonthlyPayslip")' +
-						  '?Branch=' + $('#Branch').val() +
-						  '&MonthsTypeID=' + $('#MonthsTypeID').val() +
-						  '&YearsTypeID=' + $('#YearsTypeID').val();
-
-			var printWindow = window.open(url, '_blank');
-				printWindow.focus();
-		}
+		function printMonthlyPayslips() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("Print", "MonthlyPayslip")"></form>');
+			  form.append($('<input>').attr('name', 'Branch').val($('#Branch').val()));
+			  form.append($('<input>').attr('name', 'MonthsTypeID').val($('#MonthsTypeID').val()));
+			  form.append($('<input>').attr('name', 'YearsTypeID').val($('#YearsTypeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
 	</script>
 }
 <h4 class="py-3 mb-4">

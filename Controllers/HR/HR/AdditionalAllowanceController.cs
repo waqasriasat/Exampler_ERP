@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.SignalR;
-using Exampler_ERP.Hubs;
 using Microsoft.Extensions.Localization;
 using OfficeOpenXml;
 
@@ -277,14 +275,38 @@ namespace Exampler_ERP.Controllers.HR.HR
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Additional Allowance Deleted successfully.");
       return Json(new { success = true });
     }
-    public async Task<IActionResult> ExportToExcel()
+    public async Task<IActionResult> ExportToExcel(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var addAllowance = await _appDBContext.HR_AdditionalAllowances
+      var query = _appDBContext.HR_AdditionalAllowances
         .Include(d => d.Employee)
         .Include(d => d.MonthType)
-        .ToListAsync();
+        .AsQueryable();
+
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0 && YearsTypeID.HasValue && YearsTypeID != 0)
+      {
+        query = query.Where(d =>
+            d.MonthTypeID >= MonthsTypeID.Value &&
+            d.Year <= YearsTypeID.Value
+        );
+      }
+      else
+      {
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Please select either a an Month.");
+        ViewBag.additionalAllowance = new List<HR_AdditionalAllowance>();
+        await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName);
+        return View("~/Views/HR/HR/AdditionalAllowance/AdditionalAllowance.cshtml", new List<HR_AdditionalAllowance>());
+      }
+
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(d => d.EmployeeID == EmployeeID.Value);
+      }
+
+      var AdditionalAllowances = await query.ToListAsync();
+
+      await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName);
 
       using (var package = new ExcelPackage())
       {
@@ -294,11 +316,11 @@ namespace Exampler_ERP.Controllers.HR.HR
         worksheet.Cells["C1"].Value = _localizer["lbl_Year"];
 
 
-        for (int i = 0; i < addAllowance.Count; i++)
+        for (int i = 0; i < AdditionalAllowances.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = addAllowance[i].Employee?.FirstName + ' ' + addAllowance[i].Employee?.FatherName + ' ' + addAllowance[i].Employee?.FamilyName;
-          worksheet.Cells[i + 2, 2].Value = addAllowance[i].MonthType?.MonthTypeName;
-          worksheet.Cells[i + 2, 3].Value = addAllowance[i].Year;
+          worksheet.Cells[i + 2, 1].Value = AdditionalAllowances[i].Employee?.FirstName + ' ' + AdditionalAllowances[i].Employee?.FatherName + ' ' + AdditionalAllowances[i].Employee?.FamilyName;
+          worksheet.Cells[i + 2, 2].Value = AdditionalAllowances[i].MonthType?.MonthTypeName;
+          worksheet.Cells[i + 2, 3].Value = AdditionalAllowances[i].Year;
         }
 
         worksheet.Cells["A1:C1"].Style.Font.Bold = true;
@@ -312,13 +334,38 @@ namespace Exampler_ERP.Controllers.HR.HR
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }
     }
-    public async Task<IActionResult> Print()
+    public async Task<IActionResult> Print(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID)
     {
-      var addAllowance = await _appDBContext.HR_AdditionalAllowances
-          .Include(d => d.Employee)
-          .Include(d => d.MonthType)
-          .ToListAsync();
-      return View("~/Views/HR/HR/AdditionalAllowance/PrintAdditionalAllowance.cshtml", addAllowance);
+      var query = _appDBContext.HR_AdditionalAllowances
+        .Include(d => d.Employee)
+        .Include(d => d.MonthType)
+        .AsQueryable();
+
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0 && YearsTypeID.HasValue && YearsTypeID != 0)
+      {
+        query = query.Where(d =>
+            d.MonthTypeID >= MonthsTypeID.Value &&
+            d.Year <= YearsTypeID.Value
+        );
+      }
+      else
+      {
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Please select either a an Month.");
+        ViewBag.additionalAllowance = new List<HR_AdditionalAllowance>();
+        await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName);
+        return View("~/Views/HR/HR/AdditionalAllowance/AdditionalAllowance.cshtml", new List<HR_AdditionalAllowance>());
+      }
+
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(d => d.EmployeeID == EmployeeID.Value);
+      }
+
+      var AdditionalAllowances = await query.ToListAsync();
+
+      await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName);
+
+      return View("~/Views/HR/HR/AdditionalAllowance/PrintAdditionalAllowance.cshtml", AdditionalAllowances);
     }
   }
 }

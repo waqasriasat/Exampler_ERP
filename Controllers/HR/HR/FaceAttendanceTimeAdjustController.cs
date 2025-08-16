@@ -241,7 +241,7 @@ namespace Exampler_ERP.Controllers.HR.HR
         worksheet.Cells["D1"].Value = _localizer["lbl_InTime"];
         worksheet.Cells["E1"].Value = _localizer["lbl_OutTime"];
         worksheet.Cells["F1"].Value = _localizer["lbl_DutyHours"];
-        worksheet.Cells["G1"].Value = _localizer["lbl_DutyMinutess"];
+        worksheet.Cells["G1"].Value = _localizer["lbl_DutyMinutes"];
 
 
         for (int i = 0; i < faceAttendance.Count; i++)

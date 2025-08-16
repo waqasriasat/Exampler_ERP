@@ -147,11 +147,29 @@
         });
     </script>
     <script>
-        function printEndOfServices() {
-            var printWindow = window.open('@Url.Action("Print", "EndOfService")', '_blank');
-            printWindow.focus();
-        }
+      	function printEndOfService() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("Print", "EndOfService")"></form>');
+			  form.append($('<input>').attr('name', 'FromDate').val($('#FromDate').val()));
+			  form.append($('<input>').attr('name', 'ToDate').val($('#ToDate').val()));
+			  form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+			  form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+			  form.append($('<input>').attr('name', 'EndOfServiceReasonTypeID').val($('#EndOfServiceReasonTypeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
 
+		  function excelEndOfService() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("ExportToExcel", "EndOfService")"></form>');
+			  form.append($('<input>').attr('name', 'FromDate').val($('#FromDate').val()));
+			  form.append($('<input>').attr('name', 'ToDate').val($('#ToDate').val()));
+			  form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+			  form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+			  form.append($('<input>').attr('name', 'EndOfServiceReasonTypeID').val($('#EndOfServiceReasonTypeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
         function closeModal() {
             $('.close').click(function () {
                 $('#addEndOfServiceModal').modal('hide');
@@ -216,8 +234,8 @@
                             <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
                             <button type="button" class="btn btn-primary addEndOfServiceLink">@Localizer["lbl_AddNew"]</button>
                             <!-- Example: Add buttons for exporting to Excel and printing -->
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "EndOfService")'">@Localizer["lbl_Excel"]</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="printEndOfServices()">@Localizer["lbl_Print"]</button>
+							<button type="button" class="btn btn-outline-secondary" onclick="excelEndOfService()">@Localizer["lbl_Excel"]</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="printEndOfService()">@Localizer["lbl_Print"]</button>
                         </div>
                     </div>
                 </div>

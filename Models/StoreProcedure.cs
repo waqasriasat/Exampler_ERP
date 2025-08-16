@@ -578,7 +578,7 @@ INSERT INTO CR_LanguageRecords (LanguageRecordId, LabelName, LabelValue, Culture
 ('257', 'lbl_DocumentUploadList', 'دستاویز اپ لوڈ کی فہرست', 'ur-PK'),
 ('258', 'lbl_Download', 'ڈاؤن لوڈ', 'ur-PK'),
 ('259', 'lbl_DutyHours', 'ڈیوٹی کے اوقات', 'ur-PK'),
-('260', 'lbl_DutyMinutess', 'ڈیوٹی کے منٹ', 'ur-PK'),
+('260', 'lbl_DutyMinutes', 'ڈیوٹی کے منٹ', 'ur-PK'),
 ('261', 'lbl_Earbuds', 'ایئربڈز', 'ur-PK'),
 ('262', 'lbl_EarlyArrivalOvertimeManagement', 'جلدی آمد پر اوور ٹائم کا نظم', 'ur-PK'),
 ('263', 'lbl_EarlyComingAmount(Hours)', 'جلد آنے کی رقم (گھنٹے)', 'ur-PK'),

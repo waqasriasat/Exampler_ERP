@@ -150,10 +150,27 @@
         });
     </script>
     <script>
-        function printAdditionalAllowances() {
-            var printWindow = window.open('@Url.Action("Print", "AdditionalAllowance")', '_blank');
-            printWindow.focus();
-        }
+       function printAdditionalAllowance() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("Print", "AdditionalAllowance")"></form>');
+			  form.append($('<input>').attr('name', 'MonthsTypeID').val($('#MonthsTypeID').val()));
+			  form.append($('<input>').attr('name', 'YearsTypeID').val($('#YearsTypeID').val()));
+			  form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+			  form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
+
+		  function excelAdditionalAllowance() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("ExportToExcel", "AdditionalAllowance")"></form>');
+			  form.append($('<input>').attr('name', 'MonthsTypeID').val($('#MonthsTypeID').val()));
+			  form.append($('<input>').attr('name', 'YearsTypeID').val($('#YearsTypeID').val()));
+			  form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+			  form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
     </script>
 }
 <h4 class="py-3 mb-4">
@@ -220,8 +237,8 @@
                             <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
                             <button type="button" class="btn btn-primary addAdditionalAllowanceLink">@Localizer["lbl_AddNew"]</button>
                             <!-- Example: Add buttons for exporting to Excel and printing -->
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "AdditionalAllowance")'">@Localizer["lbl_Excel"]</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="printAdditionalAllowances()">@Localizer["lbl_Print"]</button>
+							<button type="button" class="btn btn-outline-secondary" onclick="excelAdditionalAllowance()">@Localizer["lbl_Excel"]</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="printAdditionalAllowance()">@Localizer["lbl_Print"]</button>
                         </div>
                     </div>
                 </div>

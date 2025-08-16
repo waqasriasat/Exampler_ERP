@@ -4,8 +4,6 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Exampler_ERP.Hubs;
-using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using Microsoft.Extensions.Localization;
 
@@ -245,17 +243,44 @@ namespace Exampler_ERP.Controllers.HR.HR
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "OverTime deleted successfully.");
       return Json(new { success = true });
     }
-    public async Task<IActionResult> ExportToExcel()
+    public async Task<IActionResult> ExportToExcel(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID, int? OvertimeTypeID)
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var OverTime = await _appDBContext.HR_OverTimes
-        .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Employee)
-        .Include(d => d.OverTimeType)
-        .Include(d => d.MonthType)
-        .Include(d => d.OverTimeRate)
-        .ToListAsync();
+      var query = _appDBContext.HR_OverTimes
+           .Where(b => b.DeleteYNID != 1)
+           .Include(d => d.Employee)
+           .Include(d => d.OverTimeType)
+           .Include(d => d.MonthType)
+           .AsQueryable();  // Move this up to allow further filtering
+
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
+                YearsTypeID.HasValue && YearsTypeID != 0)
+      {
+        query = query.Where(d =>
+            d.MonthTypeID >= MonthsTypeID.Value &&
+            d.Year <= YearsTypeID.Value
+        );
+      }
+      else
+      {
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Please select either a an Employee.");
+        ViewBag.overTime = new List<HR_OverTime>();
+        await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName, OvertimeTypeID);
+        return View("~/Views/HR/HR/OverTime/OverTime.cshtml", new List<HR_OverTime>());
+      }
+      if (EmployeeID.HasValue && EmployeeID != 0)
+      {
+        query = query.Where(d => d.EmployeeID == EmployeeID.Value);
+      }
+      if (OvertimeTypeID.HasValue && OvertimeTypeID != 0)
+      {
+        query = query.Where(d => d.OverTimeTypeID == OvertimeTypeID.Value);
+      }
+
+      var overTimes = await query.ToListAsync();
+
+      await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName, OvertimeTypeID);
 
 
       using (var package = new ExcelPackage())
@@ -272,17 +297,17 @@ namespace Exampler_ERP.Controllers.HR.HR
         worksheet.Cells["I1"].Value = _localizer["lbl_Amount"];
 
 
-        for (int i = 0; i < OverTime.Count; i++)
+        for (int i = 0; i < overTimes.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = OverTime[i].OverTimeID;
-          worksheet.Cells[i + 2, 2].Value = OverTime[i].Employee?.FirstName + ' ' + OverTime[i].Employee?.FatherName + ' ' + OverTime[i].Employee?.FamilyName;
-          worksheet.Cells[i + 2, 3].Value = OverTime[i].OverTimeType?.OverTimeTypeName;
-          worksheet.Cells[i + 2, 4].Value = OverTime[i].MonthType?.MonthTypeName;
-          worksheet.Cells[i + 2, 5].Value = OverTime[i].Year;
-          worksheet.Cells[i + 2, 6].Value = OverTime[i].Days;
-          worksheet.Cells[i + 2, 7].Value = OverTime[i].Hours;
-          worksheet.Cells[i + 2, 8].Value = OverTime[i].OverTimeRate?.OverTimeRateValue;
-          worksheet.Cells[i + 2, 9].Value = OverTime[i].Amount;
+          worksheet.Cells[i + 2, 1].Value = overTimes[i].OverTimeID;
+          worksheet.Cells[i + 2, 2].Value = overTimes[i].Employee?.FirstName + ' ' + overTimes[i].Employee?.FatherName + ' ' + overTimes[i].Employee?.FamilyName;
+          worksheet.Cells[i + 2, 3].Value = overTimes[i].OverTimeType?.OverTimeTypeName;
+          worksheet.Cells[i + 2, 4].Value = overTimes[i].MonthType?.MonthTypeName;
+          worksheet.Cells[i + 2, 5].Value = overTimes[i].Year;
+          worksheet.Cells[i + 2, 6].Value = overTimes[i].Days;
+          worksheet.Cells[i + 2, 7].Value = overTimes[i].Hours;
+          worksheet.Cells[i + 2, 8].Value = overTimes[i].OverTimeRate?.OverTimeRateValue;
+          worksheet.Cells[i + 2, 9].Value = overTimes[i].Amount;
         }
 
         worksheet.Cells["A1:l1"].Style.Font.Bold = true;
@@ -296,16 +321,43 @@ namespace Exampler_ERP.Controllers.HR.HR
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }
     }
-    public async Task<IActionResult> Print()
+    public async Task<IActionResult> Print(int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID, int? OvertimeTypeID)
     {
-      var OverTimes = await _appDBContext.HR_OverTimes
-        .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Employee)
-        .Include(d => d.OverTimeType)
-        .Include(d => d.MonthType)
-        .Include(d => d.OverTimeRate)
-        .ToListAsync();
-      return View("~/Views/HR/HR/OverTime/PrintOverTime.cshtml", OverTimes);
+      var query = _appDBContext.HR_OverTimes
+          .Where(b => b.DeleteYNID != 1)
+          .Include(d => d.Employee)
+          .Include(d => d.OverTimeType)
+          .Include(d => d.MonthType)
+          .AsQueryable();  // Move this up to allow further filtering
+
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
+                YearsTypeID.HasValue && YearsTypeID != 0)
+      {
+        query = query.Where(d =>
+            d.MonthTypeID >= MonthsTypeID.Value &&
+            d.Year <= YearsTypeID.Value
+        );
+      }
+      else
+      {
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Please select either a an Employee.");
+        ViewBag.overTime = new List<HR_OverTime>();
+        await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName, OvertimeTypeID);
+        return View("~/Views/HR/HR/OverTime/OverTime.cshtml", new List<HR_OverTime>());
+      }
+      if (EmployeeID.HasValue && EmployeeID != 0)
+      {
+        query = query.Where(d => d.EmployeeID == EmployeeID.Value);
+      }
+      if (OvertimeTypeID.HasValue && OvertimeTypeID != 0)
+      {
+        query = query.Where(d => d.OverTimeTypeID == OvertimeTypeID.Value);
+      }
+
+      var overTimes = await query.ToListAsync();
+
+      await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName, OvertimeTypeID);
+      return View("~/Views/HR/HR/OverTime/PrintOverTime.cshtml", overTimes);
     }
   }
 

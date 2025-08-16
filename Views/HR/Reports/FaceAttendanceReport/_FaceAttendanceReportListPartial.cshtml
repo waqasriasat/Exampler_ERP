@@ -1,0 +1,37 @@
+@model IEnumerable<Exampler_ERP.Models.CR_FaceAttendance>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+
+	var lblEmployeeName = @Localizer["lbl_EmployeeName"];
+	var lblDate = @Localizer["lbl_Date"];
+	var lblInTime = @Localizer["lbl_InTime"];
+	var lblOutTime = @Localizer["lbl_OutTime"];
+	var lblDutyHours = @Localizer["lbl_DutyHours"];
+	var lblDutyMinutes = @Localizer["lbl_DutyMinutes"];
+}
+@foreach (var item in Model)
+{
+	<div class="col-12 col-md-12 col-lg-12 GVDetail">
+		<div class="row">
+			<div class="col-12 col-md-12 col-lg-2">
+				<p class="text-nowrap"><span class="smallAdd">@lblEmployeeName : </span>@item.Employee?.FirstName @item.Employee?.FatherName @item.Employee?.FamilyName</p>
+			</div>
+			<div class="col-12 col-md-12 col-lg-2">
+				<p class="text-nowrap"><span class="smallAdd">@lblDate : </span>@item.MarkDate.ToString("dd/MMM/yyyy")</p>
+			</div>
+			<div class="col-12 col-md-12 col-lg-2">
+				<p class="text-nowrap"><span class="smallAdd">@lblInTime : </span>@item.InTime.ToString("hh:mm:ss")</p>
+			</div>
+			<div class="col-12 col-md-12 col-lg-2">
+				<p class="text-nowrap"><span class="smallAdd">@lblOutTime : </span>@item.OutTime.ToString("hh:mm:ss")</p>
+			</div>
+			<div class="col-12 col-md-12 col-lg-2">
+				<p class="text-nowrap"><span class="smallAdd">@lblDutyHours : </span>@item.DHours</p>
+			</div>
+			<div class="col-12 col-md-12 col-lg-2">
+				<p class="text-nowrap"><span class="smallAdd">@lblDutyMinutes : </span>@item.DMinutes</p>
+			</div>
+		</div>
+	</div>
+}

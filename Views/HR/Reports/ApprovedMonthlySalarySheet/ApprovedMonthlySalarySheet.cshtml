@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Localizer["lbl_Reports"] + " - " + @Localizer["lbl_ApprovedMonthlySalarySheet"];
+	ViewData["Title"] = Localizer["lbl_Reports"] + " - " + @Localizer["lbl_ApprovedMonthlySalarySheet"];
 }
 <script>
 	$(document).ready(function () {
@@ -22,24 +22,41 @@
 				});
 			});
 		});
+
 		function printMonthlySalarySheetLists() {
-			var url = '@Url.Action("Print", "ApprovedMonthlySalarySheet")' +
-					  '?Branch=' + $('#Branch').val() +
-					  '&MonthsTypeID=' + $('#MonthsTypeID').val() +
-					  '&YearsTypeID=' + $('#YearsTypeID').val();
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("Print", "ApprovedMonthlySalarySheet")"></form>');
+			  form.append($('<input>').attr('name', 'Branch').val($('#Branch').val()));
+			  form.append($('<input>').attr('name', 'MonthsTypeID').val($('#MonthsTypeID').val()));
+			  form.append($('<input>').attr('name', 'YearsTypeID').val($('#YearsTypeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
 
-			var printWindow = window.open(url, '_blank');
-			printWindow.focus();
-		}
-		function excelMonthlySalarySheetList() {
-			var url = '@Url.Action("ExportToExcel", "ApprovedMonthlySalarySheet")' +
-					  '?Branch=' + $('#Branch').val() +
-					  '&MonthsTypeID=' + $('#MonthsTypeID').val() +
-					  '&YearsTypeID=' + $('#YearsTypeID').val();
+		  function excelMonthlySalarySheetList() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("ExportToExcel", "ApprovedMonthlySalarySheet")"></form>');
+			  form.append($('<input>').attr('name', 'Branch').val($('#Branch').val()));
+			  form.append($('<input>').attr('name', 'MonthsTypeID').val($('#MonthsTypeID').val()));
+			  form.append($('<input>').attr('name', 'YearsTypeID').val($('#YearsTypeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
+		  $('#searchApprovedMonthlySalarySheetForm').submit(function (e) {
+					e.preventDefault(); // Prevent full page reload
 
-			var printWindow = window.open(url, '_blank');
-			printWindow.focus();
-		}
+					var form = $(this);
+					var actionUrl = form.attr('action');
+
+					// Serialize form data
+					var formData = form.serialize();
+
+					$.get(actionUrl, formData, function (partialHtml) {
+						// Load only the relevant part of the response
+						var html = $(partialHtml).find('#ApprovedMonthlySalarySheetListContainer').html();
+						$('#ApprovedMonthlySalarySheetListContainer').html(html);
+					});
+				});
 		function PrintApprovedMonthlySalarySheet(payrollID) {
 		var url = '@Url.Action("PrintDetail", "MonthlySalarySheet")' + '?payrollID=' + payrollID;
 		var printWindow = window.open(url, '_blank');
@@ -51,81 +68,82 @@
 		PrintApprovedMonthlySalarySheet(payrollID);
 	});
 	
+
 </script>
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">@Localizer["lbl_Reports"]  /</span> @Localizer["lbl_ApprovedMonthlySalarySheet"]
+	<span class="text-muted fw-light">@Localizer["lbl_Reports"]  /</span> @Localizer["lbl_ApprovedMonthlySalarySheet"]
 </h4>
 <form id="searchApprovedMonthlySalarySheetForm" method="get" action="@Url.Action("Index", "ApprovedMonthlySalarySheet")">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
-                <div class="Searching-Box-padding" style="padding-bottom: 15px;">
-                    <div class="row mb-4">
-                        <!-- From Date Field -->
-                        <div class="col-md-4 mb-4">
-                            <label class="form-label fw-bold">@Localizer["lbl_Month"]</label>
-                            <select name="MonthsTypeID" id="MonthsTypeID" class="form-control">
-                                @foreach (var item in ViewBag.MonthsTypeList)
-                                {
-                                    if (item.Value == ViewBag.MonthsTypeID?.ToString())
-                                    {
-                                        <option value="@item.Value" selected>@item.Text</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@item.Value">@item.Text</option>
-                                    }
-                                }
-                            </select>
-                        </div>
-                        <!-- To Date Field -->
-                        <div class="col-md-4 mb-4">
-                            <label for="YearsTypeID" class="form-label fw-bold">@Localizer["lbl_Year"]</label>
-                            <select name="YearsTypeID" id="YearsTypeID" class="form-control">
-                                @for (int year = DateTime.Now.Year; year >= 1900; year--)
-                                {
-                                    if (year == (ViewBag.YearsTypeID ?? 0))
-                                    {
-                                        <option value="@year" selected>@year</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@year">@year</option>
-                                    }
-                                }
-                            </select>
-                        </div>
-                        <!-- Branch Dropdown -->
-                        <div class="col-md-4 mb-4">
-                            <label class="form-label fw-bold">@Localizer["lbl_Branch"]</label>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<h5 class="card-header">@Localizer["lbl_SearchingBox"]</h5>
+				<div class="Searching-Box-padding" style="padding-bottom: 15px;">
+					<div class="row mb-4">
+						<!-- From Date Field -->
+						<div class="col-md-4 mb-4">
+							<label class="form-label fw-bold">@Localizer["lbl_Month"]</label>
+							<select name="MonthsTypeID" id="MonthsTypeID" class="form-control">
+								@foreach (var item in ViewBag.MonthsTypeList)
+								{
+									if (item.Value == ViewBag.MonthsTypeID?.ToString())
+									{
+										<option value="@item.Value" selected>@item.Text</option>
+									}
+									else
+									{
+										<option value="@item.Value">@item.Text</option>
+									}
+								}
+							</select>
+						</div>
+						<!-- To Date Field -->
+						<div class="col-md-4 mb-4">
+							<label for="YearsTypeID" class="form-label fw-bold">@Localizer["lbl_Year"]</label>
+							<select name="YearsTypeID" id="YearsTypeID" class="form-control">
+								@for (int year = DateTime.Now.Year; year >= 1900; year--)
+								{
+									if (year == (ViewBag.YearsTypeID ?? 0))
+									{
+										<option value="@year" selected>@year</option>
+									}
+									else
+									{
+										<option value="@year">@year</option>
+									}
+								}
+							</select>
+						</div>
+						<!-- Branch Dropdown -->
+						<div class="col-md-4 mb-4">
+							<label class="form-label fw-bold">@Localizer["lbl_Branch"]</label>
 							<select name="Branch" id="Branch" class="form-control">
-                                @foreach (var item in ViewBag.BranchList)
-                                {
-                                    if (item.Value == ViewBag.BranchID?.ToString())
-                                    {
-                                        <option value="@item.Value" selected>@item.Text</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@item.Value">@item.Text</option>
-                                    }
-                                }
-                            </select>
-                        </div>
-                    </div>
-                    <!-- Action Buttons -->
-                    <div class="row">
-                        <div class="col-md-12 text-end">
-                            <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
+								@foreach (var item in ViewBag.BranchList)
+								{
+									if (item.Value == ViewBag.BranchID?.ToString())
+									{
+										<option value="@item.Value" selected>@item.Text</option>
+									}
+									else
+									{
+										<option value="@item.Value">@item.Text</option>
+									}
+								}
+							</select>
+						</div>
+					</div>
+					<!-- Action Buttons -->
+					<div class="row">
+						<div class="col-md-12 text-end">
+							<button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
 							<button type="button" class="btn btn-outline-secondary" onclick="excelMonthlySalarySheetList()">@Localizer["lbl_Excel"]</button>
 							<button type="button" class="btn btn-outline-secondary" onclick="printMonthlySalarySheetLists()">@Localizer["lbl_Print"]</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </form>
 <br />
 <div id="ApprovedMonthlySalarySheetListContainer">

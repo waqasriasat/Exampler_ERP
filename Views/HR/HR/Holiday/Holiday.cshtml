@@ -114,11 +114,7 @@
         });
     </script>
     <script>
-        function printHolidays() {
-            var printWindow = window.open('@Url.Action("Print", "Holiday")', '_blank');
-            printWindow.focus();
-        }
-        function printHoliday() {
+       function printHoliday() {
               var form = $('<form target="_blank" method="POST" action="@Url.Action("Print", "Holiday")"></form>');
               form.append($('<input>').attr('name', 'MonthsTypeID').val($('#MonthsTypeID').val()));
               form.append($('<input>').attr('name', 'YearsTypeID').val($('#YearsTypeID').val()));

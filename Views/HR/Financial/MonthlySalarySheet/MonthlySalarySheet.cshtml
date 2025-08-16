@@ -49,25 +49,26 @@
 				});
 			});
         });
-        function printMonthlySalarySheets() {
-            var url = '@Url.Action("Print", "MonthlySalarySheet")' + 
-                      '?branch=' + $('#BranchID').val() + 
-                      '&monthsTypeID=' + $('#MonthID').val() + 
-                      '&yearsTypeID=' + $('#Year').val();
-    
-            var printWindow = window.open(url, '_blank');
-            printWindow.focus();
-        }
-		function excelMonthlySalarySheets() {
-			var url = '@Url.Action("ExportToExcel", "MonthlySalarySheet")' +
-					  '?branch=' + $('#BranchID').val() +
-					  '&monthsTypeID=' + $('#MonthID').val() +
-					  '&yearsTypeID=' + $('#Year').val();
+       
+		function printMonthlySalarySheets() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("Print", "MonthlySalarySheet")"></form>');
+			  form.append($('<input>').attr('name', 'branch').val($('#BranchID').val()));
+			  form.append($('<input>').attr('name', 'monthsTypeID').val($('#MonthID').val()));
+			  form.append($('<input>').attr('name', 'yearsTypeID').val($('#Year').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
 
-			var printWindow = window.open(url, '_blank');
-			printWindow.focus();
-		}
-		
+		  function excelMonthlySalarySheets() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("ExportToExcel", "MonthlySalarySheet")"></form>');
+			  form.append($('<input>').attr('name', 'branch').val($('#BranchID').val()));
+			  form.append($('<input>').attr('name', 'monthsTypeID').val($('#MonthID').val()));
+			  form.append($('<input>').attr('name', 'yearsTypeID').val($('#Year').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
 </script>
 
 <h4 class="py-3 mb-4">

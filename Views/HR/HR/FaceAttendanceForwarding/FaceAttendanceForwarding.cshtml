@@ -76,24 +76,26 @@
         });
     </script>
 	<script>
+	
 		function printFaceAttendanceForwardings() {
-			var url = '@Url.Action("Print", "FaceAttendanceForwarding")' +
-					  '?Branch=' + $('#Branch').val() +
-					  '&MonthsTypeID=' + $('#MonthsTypeID').val() +
-					  '&YearsTypeID=' + $('#YearsTypeID').val();
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("Print", "FaceAttendanceForwarding")"></form>');
+			  form.append($('<input>').attr('name', 'Branch').val($('#Branch').val()));
+			  form.append($('<input>').attr('name', 'MonthsTypeID').val($('#MonthsTypeID').val()));
+			  form.append($('<input>').attr('name', 'YearsTypeID').val($('#YearsTypeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
 
-			var printWindow = window.open(url, '_blank');
-			printWindow.focus();
-		}
-		function excelFaceAttendanceForwardings() {
-			var url = '@Url.Action("ExportToExcel", "FaceAttendanceForwarding")' +
-					  '?Branch=' + $('#Branch').val() +
-					  '&MonthsTypeID=' + $('#MonthsTypeID').val() +
-					  '&YearsTypeID=' + $('#YearsTypeID').val();
-
-			var printWindow = window.open(url, '_blank');
-			printWindow.focus();
-		}
+		  function excelFaceAttendanceForwardings() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("ExportToExcel", "FaceAttendanceForwarding")"></form>');
+			  form.append($('<input>').attr('name', 'Branch').val($('#Branch').val()));
+			  form.append($('<input>').attr('name', 'MonthsTypeID').val($('#MonthsTypeID').val()));
+			  form.append($('<input>').attr('name', 'YearsTypeID').val($('#YearsTypeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
 	</script>
 }
 

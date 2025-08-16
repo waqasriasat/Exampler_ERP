@@ -143,10 +143,29 @@
         });
     </script>
     <script>
-        function printOverTimes() {
-            var printWindow = window.open('@Url.Action("Print", "OverTime")', '_blank');
-            printWindow.focus();
-        }
+  	function printOverTime() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("Print", "OverTime")"></form>');
+			  form.append($('<input>').attr('name', 'MonthsTypeID').val($('#MonthsTypeID').val()));
+			  form.append($('<input>').attr('name', 'YearsTypeID').val($('#YearsTypeID').val()));
+			  form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+			  form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+					  form.append($('<input>').attr('name', 'OvertimeTypeID').val($('#OvertimeTypeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
+
+		  function excelOverTime() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("ExportToExcel", "OverTime")"></form>');
+			  form.append($('<input>').attr('name', 'MonthsTypeID').val($('#MonthsTypeID').val()));
+			  form.append($('<input>').attr('name', 'YearsTypeID').val($('#YearsTypeID').val()));
+			  form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+			  form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+					  form.append($('<input>').attr('name', 'OvertimeTypeID').val($('#OvertimeTypeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
     </script>
 }
 <h4 class="py-3 mb-4">
@@ -231,8 +250,8 @@
                             <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
 
                             <button type="button" class="btn btn-primary addOverTimeLink">@Localizer["lbl_AddNew"]</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "OverTime")'">@Localizer["lbl_Excel"]</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="printOverTimes()">@Localizer["lbl_Print"]</button>
+							<button type="button" class="btn btn-outline-secondary" onclick="excelOverTime()">@Localizer["lbl_Excel"]</button>
+							<button type="button" class="btn btn-outline-secondary" onclick="printOverTime()">@Localizer["lbl_Print"]</button>
 
                         </div>
                     </div>

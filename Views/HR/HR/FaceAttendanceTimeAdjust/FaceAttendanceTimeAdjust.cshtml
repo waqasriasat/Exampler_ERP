@@ -143,26 +143,28 @@
         });
     </script>
     <script>
-      	function printFaceAttendanceTimeAdjusts() {
-			var url = '@Url.Action("Print", "FaceAttendanceTimeAdjust")' +
-					  '?DayID=' + $('#DayID').val() +
-					  '&MonthsTypeID=' + $('#MonthsTypeID').val() +
-					  '&YearsTypeID=' + $('#YearsTypeID').val() +
-					  '&EmployeeID=' + $('#EmployeeID').val();
+      
+		function printFaceAttendanceTimeAdjusts() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("Print", "FaceAttendanceTimeAdjust")"></form>');
+			  form.append($('<input>').attr('name', 'DayID').val($('#DayID').val()));
+			  form.append($('<input>').attr('name', 'MonthsTypeID').val($('#MonthsTypeID').val()));
+			  form.append($('<input>').attr('name', 'YearsTypeID').val($('#YearsTypeID').val()));
+			  form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
 
-			var printWindow = window.open(url, '_blank');
-			printWindow.focus();
-		}
-		function excelFaceAttendanceTimeAdjusts() {
-			var url = '@Url.Action("ExportToExcel", "FaceAttendanceTimeAdjust")' +
-					  '?DayID=' + $('#DayID').val() +
-					  '&MonthsTypeID=' + $('#MonthsTypeID').val() +
-					  '&YearsTypeID=' + $('#YearsTypeID').val() +
-					  '&EmployeeID=' + $('#EmployeeID').val();
-
-			var printWindow = window.open(url, '_blank');
-			printWindow.focus();
-		}
+		  function excelFaceAttendanceTimeAdjusts() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("ExportToExcel", "FaceAttendanceTimeAdjust")"></form>');
+			  form.append($('<input>').attr('name', 'DayID').val($('#DayID').val()));
+			  form.append($('<input>').attr('name', 'MonthsTypeID').val($('#MonthsTypeID').val()));
+			  form.append($('<input>').attr('name', 'YearsTypeID').val($('#YearsTypeID').val()));
+			  form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
     </script>
 }
 <h4 class="py-3 mb-4">
@@ -284,7 +286,7 @@
                                     <p class="text-nowrap">@Localizer["lbl_DutyHours"]</p>
                                 </div>
                                 <div class="col-2">
-                                    <p class="text-nowrap">@Localizer["lbl_DutyMinutess"]</p>
+                                    <p class="text-nowrap">@Localizer["lbl_DutyMinutes"]</p>
                                 </div>
                             </div>
                         </div>

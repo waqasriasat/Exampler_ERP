@@ -4,10 +4,9 @@ using Exampler_ERP.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Exampler_ERP.Hubs;
-using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using Microsoft.Extensions.Localization;
+using Exampler_ERP.Models.Temp;
 
 namespace Exampler_ERP.Controllers.HR.HR
 {
@@ -68,18 +67,23 @@ namespace Exampler_ERP.Controllers.HR.HR
         query = query.Where(d => d.EndOfSerivceReasonTypeId == EndOfServiceReasonTypeID.Value);
       }
 
+      await PopulateDropdowns(FromDate, ToDate, EmployeeName, EmployeeID, EndOfServiceReasonTypeID);
+
       var EndOfService = await query.ToListAsync();
-
-      ViewBag.FromDate = FromDate;
-      ViewBag.ToDate = ToDate;
-      ViewBag.EndOfServiceReasonTypeID = EndOfServiceReasonTypeID;
-      ViewBag.EmployeeID = EmployeeID;
-      ViewBag.EmployeeName = EmployeeName;
-
-      ViewBag.EndOfServiceReasonTypeList = await _utils.GetEndOfServiceReasonTypes();
 
       return View("~/Views/HR/HR/EndOfService/EndOfService.cshtml", EndOfService);
     }
+    private async Task PopulateDropdowns(DateTime? fromDate, DateTime? toDate, string? employeeName, int? employeeID, int? endOfServiceReasonTypeID)
+    {
+      ViewBag.FromDate = fromDate;
+      ViewBag.ToDate = toDate;
+      ViewBag.EndOfServiceReasonTypeID = endOfServiceReasonTypeID;
+      ViewBag.EmployeeID = employeeID;
+      ViewBag.EmployeeName = employeeName;
+
+      ViewBag.EndOfServiceReasonTypeList = await _utils.GetEndOfServiceReasonTypes();
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetEmployeeDetails(int employeeID)
     {
@@ -272,25 +276,90 @@ namespace Exampler_ERP.Controllers.HR.HR
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Employee Deleted successfully.");
       return Json(new { success = true });
     }
-    public async Task<IActionResult> Print()
+    public async Task<IActionResult> Print(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? EndOfServiceReasonTypeID)
     {
-      var EndOfService = await _appDBContext.HR_EndOfServices
+      var query = _appDBContext.HR_EndOfServices
         .Where(b => b.DeleteYNID != 1)
         .Include(d => d.Employee)
-        .Include(c => c.Settings_EndOfSerivceReasonType)
-        .ToListAsync();
+        .AsQueryable();
+
+      if (FromDate.HasValue)
+      {
+        var fromDateTime = FromDate.Value.Date.AddSeconds(1);
+        query = query.Where(d => d.DateOfCompletionOfWork >= fromDateTime);
+      }
+
+      if (ToDate.HasValue)
+      {
+        var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+        query = query.Where(d => d.DateOfCompletionOfWork <= toDateTime);
+      }
+
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(d => d.EmployeeID == EmployeeID.Value);
+      }
+
+      if (!string.IsNullOrEmpty(EmployeeName))
+      {
+        query = query.Where(d =>
+            (d.Employee.FirstName + " " + d.Employee.FatherName + " " + d.Employee.FamilyName)
+            .Contains(EmployeeName));
+      }
+
+      if (EndOfServiceReasonTypeID.HasValue && EndOfServiceReasonTypeID != 0)
+      {
+        query = query.Where(d => d.EndOfSerivceReasonTypeId == EndOfServiceReasonTypeID.Value);
+      }
+
+      await PopulateDropdowns(FromDate, ToDate, EmployeeName, EmployeeID, EndOfServiceReasonTypeID);
+
+      var EndOfService = await query.ToListAsync();
+
       return View("~/Views/HR/HR/EndOfService/PrintEndOfService.cshtml", EndOfService);
     }
 
-    public async Task<IActionResult> ExportToExcel()
+    public async Task<IActionResult> ExportToExcel(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? EndOfServiceReasonTypeID)
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var EndOfService = await _appDBContext.HR_EndOfServices
-          .Where(c => c.DeleteYNID != 1)
-          .Include(c => c.Employee)
-          .Include(c => c.Settings_EndOfSerivceReasonType)
-          .ToListAsync();
+      var query = _appDBContext.HR_EndOfServices
+        .Where(b => b.DeleteYNID != 1)
+        .Include(d => d.Employee)
+        .AsQueryable();
+
+      if (FromDate.HasValue)
+      {
+        var fromDateTime = FromDate.Value.Date.AddSeconds(1);
+        query = query.Where(d => d.DateOfCompletionOfWork >= fromDateTime);
+      }
+
+      if (ToDate.HasValue)
+      {
+        var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+        query = query.Where(d => d.DateOfCompletionOfWork <= toDateTime);
+      }
+
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(d => d.EmployeeID == EmployeeID.Value);
+      }
+
+      if (!string.IsNullOrEmpty(EmployeeName))
+      {
+        query = query.Where(d =>
+            (d.Employee.FirstName + " " + d.Employee.FatherName + " " + d.Employee.FamilyName)
+            .Contains(EmployeeName));
+      }
+
+      if (EndOfServiceReasonTypeID.HasValue && EndOfServiceReasonTypeID != 0)
+      {
+        query = query.Where(d => d.EndOfSerivceReasonTypeId == EndOfServiceReasonTypeID.Value);
+      }
+
+      await PopulateDropdowns(FromDate, ToDate, EmployeeName, EmployeeID, EndOfServiceReasonTypeID);
+
+      var EndOfService = await query.ToListAsync();
 
       using (var package = new ExcelPackage())
       {

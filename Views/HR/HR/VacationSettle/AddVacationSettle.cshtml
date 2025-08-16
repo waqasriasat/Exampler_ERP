@@ -102,10 +102,18 @@
 						$vacationDropdown.empty(); // Clear the current options
 
 						if (data.length > 0) {
+							
 							$.each(data, function (index, option) {
-								$vacationDropdown.append($('<option></option>').val(option.value).text(option.text));
+								$vacationDropdown.append(
+									$('<option></option>')
+										.val(option.Value)
+										.text(option.Text)
+										.prop('disabled', option.Disabled)
+										.prop('selected', option.Selected)
+								);
 							});
 							$vacationDropdown.prop('disabled', false);
+							
 						} else {
 							$vacationDropdown.prop('disabled', true);
 						}
@@ -129,8 +137,9 @@
 					  data: { vacationID: vacationID },
 
 					  success: function (data) {
-						  var startDateParts = data.startDate.split('/'); // dd/MM/yyyy
-						  var endDateParts = data.endDate.split('/');     // dd/MM/yyyy
+						  
+						  var startDateParts = data.StartDate.split('/'); // dd/MM/yyyy
+						  var endDateParts = data.EndDate.split('/');     // dd/MM/yyyy
 
 						  var formattedStartDate = `${startDateParts[2]}-${startDateParts[1]}-${startDateParts[0]}`;
 						  var formattedEndDate = `${endDateParts[2]}-${endDateParts[1]}-${endDateParts[0]}`;
@@ -138,14 +147,15 @@
 						  $('#StartDate').val(formattedStartDate);
 						  $('#EndDate').val(formattedEndDate);
 
-						  $('.start-date-display').text(data.startDate); // Show in dd/MM/yyyy
-						  $('.end-date-display').text(data.endDate);     // Show in dd/MM/yyyy
+						  $('.start-date-display').text(data.StartDate); // Show in dd/MM/yyyy
+						  $('.end-date-display').text(data.EndDate);     // Show in dd/MM/yyyy
 
-						  $('#TotalDays').val(data.totalDays);
-						  $('#SettleDays').val(Math.round(data.settleDays));
-						  $('#SettleAmount').val(Math.round(data.settleAmount));
+						  $('#TotalDays').val(data.TotalDays);
+						  $('#SettleDays').val(Math.round(data.SettleDays));
+						  $('#SettleAmount').val(Math.round(data.SettleAmount));
 					  },
 					  error: function () {
+						  
 						  alert('Error fetching vacation details.');
 					  }
 				  });

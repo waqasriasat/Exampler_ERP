@@ -37,7 +37,12 @@ namespace Exampler_ERP.Controllers.HR.HR
     }
     public async Task<IActionResult> Index(int? Branch, int? MonthsTypeID, int? YearsTypeID)
     {
-
+      if (!MonthsTypeID.HasValue && !YearsTypeID.HasValue)
+      {
+        var today = DateTime.Today;
+        MonthsTypeID = today.Month;
+        YearsTypeID = today.Year;
+      }
 
       HttpContext.Session.SetInt32("FaceAttendanceBranchID", Branch ?? 0);
       HttpContext.Session.SetInt32("FaceAttendanceMonthID", MonthsTypeID ?? 0);

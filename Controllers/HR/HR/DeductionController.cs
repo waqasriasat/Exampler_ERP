@@ -258,16 +258,58 @@ namespace Exampler_ERP.Controllers.HR.HR
       await _hubContext.Clients.All.SendAsync("ReceiveSuccessTrue", "Deduction deleted successfully.");
       return Json(new { success = true });
     }
-    public async Task<IActionResult> ExportToExcel()
+    public async Task<IActionResult> ExportToExcel(int? DayID, int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID, int? DeducationTypeID)
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-      var Deduction = await _appDBContext.HR_Deductions
-        .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Employee)
-        .Include(d => d.DeductionType)
-        .ToListAsync();
+      var query = _appDBContext.HR_Deductions
+          .Where(b => b.DeleteYNID != 1)
+          .Include(d => d.Employee)
+          .Include(d => d.DeductionType)
+          .AsQueryable();
 
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
+                YearsTypeID.HasValue && YearsTypeID != 0 &&
+                DayID.HasValue && DayID != 0)
+      {
+        var startDate = new DateTime(YearsTypeID.Value, MonthsTypeID.Value, 1);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
+
+        query = query.Where(d =>
+            d.FromDate >= startDate &&
+            d.FromDate <= endDate &&
+            d.FromDate.Day == DayID.Value
+        );
+      }
+      else if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
+               YearsTypeID.HasValue && YearsTypeID != 0 &&
+               EmployeeID.HasValue && EmployeeID != 0)
+      {
+        var startDate = new DateTime(YearsTypeID.Value, MonthsTypeID.Value, 1);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
+
+        query = query.Where(d =>
+            d.FromDate >= startDate &&
+            d.FromDate <= endDate &&
+            d.EmployeeID == EmployeeID.Value
+        );
+      }
+      else
+      {
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Please select either a Day or an Employee.");
+        ViewBag.deductions = new List<HR_Deduction>();
+        await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName, DayID, DeducationTypeID);
+        return View("~/Views/HR/HR/Deduction/Deduction.cshtml", new List<HR_Deduction>());
+      }
+
+      if (DeducationTypeID.HasValue && DeducationTypeID != 0)
+      {
+        query = query.Where(d => d.DeductionTypeID == DeducationTypeID.Value);
+      }
+
+      var deductions = await query.ToListAsync();
+
+      await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName, DayID, DeducationTypeID);
 
       using (var package = new ExcelPackage())
       {
@@ -280,14 +322,14 @@ namespace Exampler_ERP.Controllers.HR.HR
         worksheet.Cells["F1"].Value = _localizer["lbl_DeducationDay"];
 
 
-        for (int i = 0; i < Deduction.Count; i++)
+        for (int i = 0; i < deductions.Count; i++)
         {
-          worksheet.Cells[i + 2, 1].Value = Deduction[i].DeductionID;
-          worksheet.Cells[i + 2, 2].Value = Deduction[i].Employee?.FirstName + ' ' + Deduction[i].Employee?.FatherName + ' ' + Deduction[i].Employee?.FamilyName;
-          worksheet.Cells[i + 2, 3].Value = Deduction[i].DeductionType?.DeductionTypeName;
-          worksheet.Cells[i + 2, 4].Value = Deduction[i].Month;
-          worksheet.Cells[i + 2, 5].Value = Deduction[i].Year;
-          worksheet.Cells[i + 2, 6].Value = Deduction[i].Days;
+          worksheet.Cells[i + 2, 1].Value = deductions[i].DeductionID;
+          worksheet.Cells[i + 2, 2].Value = deductions[i].Employee?.FirstName + ' ' + deductions[i].Employee?.FatherName + ' ' + deductions[i].Employee?.FamilyName;
+          worksheet.Cells[i + 2, 3].Value = deductions[i].DeductionType?.DeductionTypeName;
+          worksheet.Cells[i + 2, 4].Value = deductions[i].Month;
+          worksheet.Cells[i + 2, 5].Value = deductions[i].Year;
+          worksheet.Cells[i + 2, 6].Value = deductions[i].Days;
         }
 
         worksheet.Cells["A1:l1"].Style.Font.Bold = true;
@@ -301,14 +343,58 @@ namespace Exampler_ERP.Controllers.HR.HR
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
       }
     }
-    public async Task<IActionResult> Print()
+    public async Task<IActionResult> Print(int? DayID, int? MonthsTypeID, int? YearsTypeID, string? EmployeeName, int? EmployeeID, int? DeducationTypeID)
     {
-      var Deduction = await _appDBContext.HR_Deductions
-        .Where(b => b.DeleteYNID != 1)
-        .Include(d => d.Employee)
-        .Include(d => d.DeductionType)
-        .ToListAsync();
-      return View("~/Views/HR/HR/Deduction/PrintDeduction.cshtml", Deduction);
+      var query = _appDBContext.HR_Deductions
+          .Where(b => b.DeleteYNID != 1)
+          .Include(d => d.Employee)
+          .Include(d => d.DeductionType)
+          .AsQueryable();
+
+      if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
+                YearsTypeID.HasValue && YearsTypeID != 0 &&
+                DayID.HasValue && DayID != 0)
+      {
+        var startDate = new DateTime(YearsTypeID.Value, MonthsTypeID.Value, 1);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
+
+        query = query.Where(d =>
+            d.FromDate >= startDate &&
+            d.FromDate <= endDate &&
+            d.FromDate.Day == DayID.Value
+        );
+      }
+      else if (MonthsTypeID.HasValue && MonthsTypeID != 0 &&
+               YearsTypeID.HasValue && YearsTypeID != 0 &&
+               EmployeeID.HasValue && EmployeeID != 0)
+      {
+        var startDate = new DateTime(YearsTypeID.Value, MonthsTypeID.Value, 1);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
+
+        query = query.Where(d =>
+            d.FromDate >= startDate &&
+            d.FromDate <= endDate &&
+            d.EmployeeID == EmployeeID.Value
+        );
+      }
+      else
+      {
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Please select either a Day or an Employee.");
+        ViewBag.deductions = new List<HR_Deduction>();
+        await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName, DayID, DeducationTypeID);
+        return View("~/Views/HR/HR/Deduction/Deduction.cshtml", new List<HR_Deduction>());
+      }
+
+      if (DeducationTypeID.HasValue && DeducationTypeID != 0)
+      {
+        query = query.Where(d => d.DeductionTypeID == DeducationTypeID.Value);
+      }
+
+      var deductions = await query.ToListAsync();
+
+      await PopulateDropdowns(MonthsTypeID, YearsTypeID, EmployeeID, EmployeeName, DayID, DeducationTypeID);
+
+      return View("~/Views/HR/HR/Deduction/PrintDeduction.cshtml", deductions);
     }
   }
 }

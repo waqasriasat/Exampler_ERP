@@ -401,7 +401,7 @@ namespace Exampler_ERP.Models
       new CR_LanguageRecord() { LanguageRecordId = 254, LabelName = "lbl_DocumentUploadList", LabelValue = "Document Upload List", Culture = "en-US" },
       new CR_LanguageRecord() { LanguageRecordId = 255, LabelName = "lbl_Download", LabelValue = "Download", Culture = "en-US" },
       new CR_LanguageRecord() { LanguageRecordId = 256, LabelName = "lbl_DutyHours", LabelValue = "Duty Hours", Culture = "en-US" },
-      new CR_LanguageRecord() { LanguageRecordId = 257, LabelName = "lbl_DutyMinutess", LabelValue = "Duty Minutes", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 257, LabelName = "lbl_DutyMinutes", LabelValue = "Duty Minutes", Culture = "en-US" },
       new CR_LanguageRecord() { LanguageRecordId = 258, LabelName = "lbl_Earbuds", LabelValue = "Earbuds", Culture = "en-US" },
       new CR_LanguageRecord() { LanguageRecordId = 259, LabelName = "lbl_EarlyArrivalOvertimeManagement", LabelValue = "Early Arrival Overtime Management", Culture = "en-US" },
       new CR_LanguageRecord() { LanguageRecordId = 260, LabelName = "lbl_EarlyComingAmount(Hours)", LabelValue = "Early Coming Amount (Hours)", Culture = "en-US" },
