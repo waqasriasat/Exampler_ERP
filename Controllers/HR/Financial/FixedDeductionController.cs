@@ -35,7 +35,7 @@ namespace Exampler_ERP.Controllers.HR.Financial
 
 
     }
-    public async Task<IActionResult> Index(int? id)
+    public async Task<IActionResult> Index(int? EmployeeID, string EmployeeName, int? BranchID, int? DepartmentID, int? DesignationID)
     {
       var FixedDeductiontypes = await _appDBContext.Settings_FixedDeductionTypes.ToListAsync();
       var FixedDeductions = await _appDBContext.HR_FixedDeductions.ToListAsync();
@@ -47,28 +47,42 @@ namespace Exampler_ERP.Controllers.HR.Financial
                            where con.ActiveYNID == 1 && emp.ActiveYNID == 1
                            select emp;
 
-      if (id.HasValue)
+      if (EmployeeID.HasValue)
       {
-        employeesQuery = employeesQuery.Where(e => e.EmployeeID == id);
+        employeesQuery = employeesQuery.Where(e => e.EmployeeID == EmployeeID.Value);
+      }
+      if (BranchID.HasValue)
+      {
+        employeesQuery = employeesQuery.Where(e => e.BranchTypeID == BranchID.Value);
+      }
+      if (DepartmentID.HasValue)
+      {
+        employeesQuery = employeesQuery.Where(e => e.DepartmentTypeID == DepartmentID.Value);
+      }
+      if (DesignationID.HasValue)
+      {
+        employeesQuery = employeesQuery.Where(e => e.DesignationTypeID == DesignationID.Value);
       }
 
       var employees = await employeesQuery.ToListAsync();
 
-      var employeeIds = employees.Select(e => e.EmployeeID).ToList();
-      //var deductionCounts = await _appDBContext.HR_FixedDeductionDetails
-      //    .Where(sd => employeeIds.Contains(sd.FixedDeduction.EmployeeID))
-      //    .GroupBy(sd => sd.FixedDeduction.EmployeeID)
-      //    .Select(g => new { EmployeeID = g.Key, Count = g.Count() })
-      //    .ToListAsync();
-      var deductionCounts = await _appDBContext.HR_FixedDeductionDetails
-    .CountAsync(sd => employeeIds.Contains(sd.FixedDeduction.EmployeeID));
+      await PopulateDropdowns(EmployeeID, EmployeeName, BranchID, DepartmentID, DesignationID);
 
-      var employeeCounts = employees.Select(emp => new EmployeeCountViewModel
+      // Create list of employee view model counts
+      var employeeCounts = new List<EmployeeCountViewModel>();
+
+      foreach (var emp in employees)
       {
-        EmployeeID = emp.EmployeeID,
-        EmployeeName = emp.FirstName + " " + emp.FatherName + " " + emp.FamilyName,
-        TypeCount = deductionCounts
-      }).ToList();
+        int count = await _appDBContext.HR_FixedDeductionDetails.CountAsync(sd =>
+            sd.FixedDeduction.EmployeeID == emp.EmployeeID);
+
+        employeeCounts.Add(new EmployeeCountViewModel
+        {
+          EmployeeID = emp.EmployeeID,
+          EmployeeName = emp.FirstName + " " + emp.FatherName + " " + emp.FamilyName,
+          TypeCount = count
+        });
+      }
 
       var viewModel = new EmployeeListViewModel
       {
@@ -78,6 +92,18 @@ namespace Exampler_ERP.Controllers.HR.Financial
       return View("~/Views/HR/Financial/FixedDeduction/FixedDeduction.cshtml", viewModel);
     }
 
+    private async Task PopulateDropdowns(int? employeeID, string employeeName, int? branchID, int? departmentID, int? designationID)
+    {
+      ViewBag.EmployeeID = employeeID;
+      ViewBag.EmployeeName = employeeName;
+      ViewBag.BranchID = branchID;
+      ViewBag.DepartmentID = departmentID;
+      ViewBag.DesignationID = designationID;
+
+      ViewBag.BranchsList = await _utils.GetBranchs();
+      ViewBag.DepartmentsList = await _utils.GetDepartments();
+      ViewBag.DesignationsList = await _utils.GetDesignations();
+    }
 
     public async Task<IActionResult> Edit(int id)
     {
