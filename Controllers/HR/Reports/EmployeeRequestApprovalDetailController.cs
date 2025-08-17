@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Localization;
+using Exampler_ERP.Models.Temp;
 
 namespace Exampler_ERP.Controllers.HR.Reports
 {
@@ -41,13 +42,8 @@ namespace Exampler_ERP.Controllers.HR.Reports
       if (FromDate.HasValue)
       {
         var fromDateTime = FromDate.Value.Date.AddSeconds(1);
-        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.Date >= fromDateTime);
-      }
-
-      if (ToDate.HasValue)
-      {
         var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
-        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.Date <= toDateTime);
+        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.Date >= fromDateTime && pta.HR_EmployeeRequestTypeApproval.Date <= toDateTime);
       }
 
       // Filter by EmployeeID
@@ -79,16 +75,26 @@ namespace Exampler_ERP.Controllers.HR.Reports
             : false);
       }
 
-      ViewBag.FromDate = FromDate;
-      ViewBag.ToDate = ToDate;
-      ViewBag.EmployeeRequestTypeID = EmployeeRequestTypeID;
-      ViewBag.EmployeeID = EmployeeID;
-      ViewBag.EmployeeName = EmployeeName;
-      ViewBag.Status = Status;  // Store the selected Status value in ViewBag
+      
 
       var result = await query
           .OrderByDescending(pta => pta.EmployeeRequestTypeApprovalDetailID)
           .ToListAsync();
+
+      
+      await PopulateDropdowns(FromDate, ToDate, EmployeeRequestTypeID, EmployeeID, EmployeeName, Status);
+
+      return View("~/Views/HR/Reports/EmployeeRequestApprovalDetail/EmployeeRequestApprovalDetail.cshtml", result);
+    }
+
+    private async Task PopulateDropdowns(DateTime? fromDate, DateTime? toDate, int? employeeRequestTypeID, int? employeeID, string? employeeName, int? status)
+    {
+      ViewBag.FromDate = fromDate;
+      ViewBag.ToDate = toDate;
+      ViewBag.EmployeeRequestTypeID = employeeRequestTypeID;
+      ViewBag.EmployeeID = employeeID;
+      ViewBag.EmployeeName = employeeName;
+      ViewBag.Status = status;  // Store the selected Status value in ViewBag
 
       ViewBag.EmployeeRequestTypeList = await _utils.GetEmployeeRequestTypes();
       ViewBag.StatusList = new List<SelectListItem>
@@ -98,10 +104,6 @@ namespace Exampler_ERP.Controllers.HR.Reports
                 new SelectListItem { Text = "In Process", Value = "2" },
                 new SelectListItem { Text = "Pending", Value = "3" }
             };
-
-
-      return View("~/Views/HR/Reports/EmployeeRequestApprovalDetail/EmployeeRequestApprovalDetail.cshtml", result);
     }
-
   }
 }

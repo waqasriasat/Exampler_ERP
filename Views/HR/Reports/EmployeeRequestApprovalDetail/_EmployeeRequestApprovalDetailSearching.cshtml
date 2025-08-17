@@ -12,13 +12,13 @@
                         <!-- From Date Field -->
                         <div class="col-md-2 mb-2">
                             <label class="form-label fw-bold">@Localizer["lbl_FromDate"]</label>
-                            <input class="form-control" type="date" name="FromDate" value="@ViewBag.FromDate?.ToString("yyyy-MM-dd")" />
+							<input class="form-control" type="date" name="FromDate" id="FromDate" value="@ViewBag.FromDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
                         <!-- To Date Field -->
                         <div class="col-md-2 mb-2">
                             <label class="form-label fw-bold">@Localizer["lbl_ToDate"]</label>
-                            <input class="form-control" type="date" name="ToDate" value="@ViewBag.ToDate?.ToString("yyyy-MM-dd")" />
+							<input class="form-control" type="date" name="ToDate" id="ToDate" value="@ViewBag.ToDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
                         <!-- Employee Name Search Field -->
@@ -31,7 +31,7 @@
                         <!-- EmployeeRequest Type Dropdown -->
                         <div class="col-md-2 mb-2">
                             <label class="form-label fw-bold">@Localizer["lbl_EmployeeRequestType"]</label>
-                            <select name="EmployeeRequestTypeID" class="form-control">
+							<select name="EmployeeRequestTypeID" id="EmployeeRequestTypeID" class="form-control">
                                 @foreach (var item in ViewBag.EmployeeRequestTypeList)
                                 {
                                     if (item.Value == ViewBag.EmployeeRequestTypeID?.ToString())
@@ -47,7 +47,7 @@
                         </div>
                         <div class="col-md-2 mb-2">
                             <label class="form-label fw-bold">@Localizer["lbl_Status"]</label>
-                            <select name="Status" class="form-control">
+							<select name="Status" id="Status" class="form-control">
                                 @foreach (var item in ViewBag.StatusList)
                                 {
                                     if (item.Value == ViewBag.Status?.ToString())
@@ -62,50 +62,15 @@
                             </select>
                         </div>
 
-                        @*  <div class="col-md-2 mb-2">
-                        <label class="form-label fw-bold">@Localizer["lbl_Status"]</label>
-                        <select name="Status" class="form-control">
-                        <option value="">Select Status</option>
-                        @foreach (var item in ViewBag.StatusList)
-                        {
-                        if (item.Value == "1")
-                        {
-                        <option value="1" selected>Complete</option>
-                        }
-                        else
-                        {
-                        <option value="1">Complete</option>
-                        }
-
-                        if (item.Value == "2")
-                        {
-                        <option value="2" selected>In EmployeeRequest</option>
-                        }
-                        else
-                        {
-                        <option value="2">In EmployeeRequest</option>
-                        }
-
-                        if (item.Value == "3")
-                        {
-                        <option value="3" selected>Pending</option>
-                        }
-                        else
-                        {
-                        <option value="3">Pending</option>
-                        }
-                        }
-                        </select>
-                        </div> *@
-
+                       
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="row">
                         <div class="col-md-12 text-end">
                             <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "EmployeeRequestTypeApproval")'">@Localizer["lbl_Excel"]</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="printEmployeeRequestTypeApprovals()">@Localizer["lbl_Print"]</button>
+							<button type="button" class="btn btn-outline-secondary" onclick="excelEmployeeRequestTypeApproval()">@Localizer["lbl_Excel"]</button>
+							<button type="button" class="btn btn-outline-secondary" onclick="printEmployeeRequestTypeApproval()">@Localizer["lbl_Print"]</button>
                         </div>
                     </div>
                 </div>

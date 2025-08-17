@@ -47,13 +47,8 @@ namespace Exampler_ERP.Controllers.HR.HR
       if (FromDate.HasValue)
       {
         var fromDateTime = FromDate.Value.Date.AddSeconds(1);
-        query = query.Where(d => d.Vacation.Date >= fromDateTime);
-      }
-
-      if (ToDate.HasValue)
-      {
         var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
-        query = query.Where(d => d.Vacation.Date <= toDateTime);
+        query = query.Where(d => d.Vacation.Date >= fromDateTime && d.Vacation.Date <= toDateTime);
       }
 
       if (EmployeeID.HasValue)
@@ -61,13 +56,7 @@ namespace Exampler_ERP.Controllers.HR.HR
         query = query.Where(d => d.Vacation.EmployeeID == EmployeeID.Value);
       }
 
-      if (!string.IsNullOrEmpty(EmployeeName))
-      {
-        query = query.Where(d =>
-            (d.Vacation.Employee.FirstName + " " + d.Vacation.Employee.FatherName + " " + d.Vacation.Employee.FamilyName)
-            .Contains(EmployeeName));
-      }
-
+      
       if (VacationTypeID.HasValue && VacationTypeID != 0)
       {
         query = query.Where(d => d.Vacation.VacationTypeID == VacationTypeID.Value);
@@ -75,16 +64,23 @@ namespace Exampler_ERP.Controllers.HR.HR
 
       var vacationSettle = await query.ToListAsync();
 
-      ViewBag.FromDate = FromDate;
-      ViewBag.ToDate = ToDate;
-      ViewBag.VacationTypeID = VacationTypeID;
-      ViewBag.EmployeeID = EmployeeID;
-      ViewBag.EmployeeName = EmployeeName;
-
-      ViewBag.VacationTypeList = await _utils.GetVacationTypes();
+      await PopulateDropdowns(FromDate, ToDate, VacationTypeID, EmployeeID, EmployeeName);
+      
 
       return View("~/Views/HR/HR/VacationSettle/VacationSettle.cshtml", vacationSettle);
     }
+
+    private async Task PopulateDropdowns(DateTime? fromDate, DateTime? toDate, int? vacationTypeID, int? employeeID, string? employeeName)
+    {
+      ViewBag.FromDate = fromDate;
+      ViewBag.ToDate = toDate;
+      ViewBag.VacationTypeID = vacationTypeID;
+      ViewBag.EmployeeID = employeeID;
+      ViewBag.EmployeeName = employeeName;
+
+      ViewBag.VacationTypeList = await _utils.GetVacationTypes();
+    }
+
     // [HttpGet] Edit action method
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
@@ -423,35 +419,75 @@ namespace Exampler_ERP.Controllers.HR.HR
       return Json(new { success = true });
     }
 
-    public async Task<IActionResult> Print()
+    public async Task<IActionResult> Print(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? VacationTypeID)
     {
       var query = _appDBContext.HR_VacationSettles
-          .Where(d => d.FinalApprovalID == 1)
-          .Include(d => d.Vacation)
-          .Include(d => d.Vacation.Settings_VacationType)
-          .Include(d => d.Vacation.Employee)
-          .OrderBy(d => d.VacationSettleID)
-          .AsQueryable();
+       .Where(d => d.FinalApprovalID == 1)
+       .Include(d => d.Vacation)
+       .Include(d => d.Vacation.Settings_VacationType)
+       .Include(d => d.Vacation.Employee)
+       .OrderBy(d => d.VacationSettleID)
+       .AsQueryable();
+
+      if (FromDate.HasValue)
+      {
+        var fromDateTime = FromDate.Value.Date.AddSeconds(1);
+        var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+        query = query.Where(d => d.Vacation.Date >= fromDateTime && d.Vacation.Date <= toDateTime);
+      }
+
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(d => d.Vacation.EmployeeID == EmployeeID.Value);
+      }
+
+
+      if (VacationTypeID.HasValue && VacationTypeID != 0)
+      {
+        query = query.Where(d => d.Vacation.VacationTypeID == VacationTypeID.Value);
+      }
 
       var vacationSettle = await query.ToListAsync();
+
+      await PopulateDropdowns(FromDate, ToDate, VacationTypeID, EmployeeID, EmployeeName);
+
       return View("~/Views/HR/HR/VacationSettle/PrintVacationSettle.cshtml", vacationSettle);
 
     }
 
-    public async Task<IActionResult> ExportToExcel()
+    public async Task<IActionResult> ExportToExcel(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? VacationTypeID)
     {
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
       var query = _appDBContext.HR_VacationSettles
-         .Where(d => d.FinalApprovalID == 1)
-         .Include(d => d.Vacation)
-         .Include(d => d.Vacation.Settings_VacationType)
-         .Include(d => d.Vacation.Employee)
-         .OrderBy(d => d.VacationSettleID)
-         .AsQueryable();
+        .Where(d => d.FinalApprovalID == 1)
+        .Include(d => d.Vacation)
+        .Include(d => d.Vacation.Settings_VacationType)
+        .Include(d => d.Vacation.Employee)
+        .OrderBy(d => d.VacationSettleID)
+        .AsQueryable();
+
+      if (FromDate.HasValue)
+      {
+        var fromDateTime = FromDate.Value.Date.AddSeconds(1);
+        var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+        query = query.Where(d => d.Vacation.Date >= fromDateTime && d.Vacation.Date <= toDateTime);
+      }
+
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(d => d.Vacation.EmployeeID == EmployeeID.Value);
+      }
+
+
+      if (VacationTypeID.HasValue && VacationTypeID != 0)
+      {
+        query = query.Where(d => d.Vacation.VacationTypeID == VacationTypeID.Value);
+      }
 
       var vacationSettle = await query.ToListAsync();
 
+      await PopulateDropdowns(FromDate, ToDate, VacationTypeID, EmployeeID, EmployeeName);
 
       var vacationTypesList = await _utils.GetVacationTypes();
       using (var package = new ExcelPackage())

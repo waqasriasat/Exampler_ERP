@@ -117,7 +117,7 @@
 
             $("#EmployeeName").autocomplete({
                 source: function (request, response) {
-
+					$("#EmployeeID").val('');
                     $.ajax({
                         url: '@Url.Action("GetEmployeeSuggestions", "Employee")', // Ensure this matches the C# method
                         type: 'GET',
@@ -143,14 +143,50 @@
                     $("#EmployeeName").val(ui.item.name); // Set the input field for Employee Name
                 }
             });
+			$('#searchEmployeeForm').submit(function (e) {
+				e.preventDefault(); // Prevent full page reload
 
+				var form = $(this);
+				var actionUrl = form.attr('action');
+
+				// Serialize form data
+				var formData = form.serialize();
+
+				$.get(actionUrl, formData, function (partialHtml) {
+					// Load only the relevant part of the response
+					var html = $(partialHtml).find('#EmployeeRequestApprovalDetailListContainer').html();
+					$('#EmployeeRequestApprovalDetailListContainer').html(html);
+				});
+			});
         });
     </script>
     <script>
-        function printEmployeeRequestTypeApprovals() {
-            var printWindow = window.open('@Url.Action("Print", "EmployeeRequestApprovalDetail")', '_blank');
-            printWindow.focus();
-        }
+  
+		function printEmployeeRequestTypeApproval() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("Print", "EmployeeRequestApprovalDetail")"></form>');
+			  form.append($('<input>').attr('name', 'FromDate').val($('#FromDate').val()));
+			  form.append($('<input>').attr('name', 'ToDate').val($('#ToDate').val()));
+			  form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+			  form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+			  form.append($('<input>').attr('name', 'EmployeeRequestTypeID').val($('#EmployeeRequestTypeID').val()));
+			  form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
+
+		  function excelEmployeeRequestTypeApproval() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("ExportToExcel", "EmployeeRequestApprovalDetail")"></form>');
+			  form.append($('<input>').attr('name', 'FromDate').val($('#FromDate').val()));
+			  form.append($('<input>').attr('name', 'ToDate').val($('#ToDate').val()));
+			  form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+			  form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+			  form.append($('<input>').attr('name', 'EmployeeRequestTypeID').val($('#EmployeeRequestTypeID').val()));
+			  form.append($('<input>').attr('name', 'Status').val($('#Status').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
         function searchRecord() {
             var printWindow = window.open('@Url.Action("Index", "EmployeeRequestApprovalDetail")', '_blank');
             printWindow.focus();
@@ -162,7 +198,9 @@
 </h4>
 @Html.Partial("~/Views/HR/Reports/EmployeeRequestApprovalDetail/_EmployeeRequestApprovalDetailSearching.cshtml", Model)
 <br />
+<div id="EmployeeRequestApprovalDetailListContainer">
 @Html.Partial("~/Views/HR/Reports/EmployeeRequestApprovalDetail/_EmployeeRequestApprovalDetail.cshtml", Model)
+</div>
 <!-- Include the modal partial -->
 <div id="approvalsEmployeeRequestTypeApprovalModalContainer"></div>
 <div id="detailsEmployeeRequestTypeApprovalModalContainer"></div>

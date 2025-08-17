@@ -104,7 +104,7 @@
 
             $("#EmployeeName").autocomplete({
                 source: function (request, response) {
-
+					$("#EmployeeID").val('');
                     $.ajax({
                         url: '@Url.Action("GetEmployeeSuggestions", "Employee")', // Ensure this matches the C# method
                         type: 'GET',
@@ -152,7 +152,29 @@
             var printWindow = window.open('@Url.Action("Print", "VacationSettle")', '_blank');
             printWindow.focus();
         }
+		function printVacationSettle() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("Print", "VacationSettle")"></form>');
+			  form.append($('<input>').attr('name', 'FromDate').val($('#FromDate').val()));
+			  form.append($('<input>').attr('name', 'ToDate').val($('#ToDate').val()));
+			  form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+			  form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+			  form.append($('<input>').attr('name', 'VacationTypeID').val($('#VacationTypeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
 
+		  function excelVacationSettle() {
+			  var form = $('<form target="_blank" method="POST" action="@Url.Action("ExportToExcel", "VacationSettle")"></form>');
+			  form.append($('<input>').attr('name', 'FromDate').val($('#FromDate').val()));
+			  form.append($('<input>').attr('name', 'ToDate').val($('#ToDate').val()));
+			  form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+			  form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+			  form.append($('<input>').attr('name', 'VacationTypeID').val($('#VacationTypeID').val()));
+			  $('body').append(form);
+			  form.submit();
+			  form.remove();
+		  }
         function closeModal() {
             $('.close').click(function () {
                 $('#addVacationSettleModal').modal('hide');
@@ -218,8 +240,8 @@
                             <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
                             <button type="button" class="btn btn-primary addVacationSettleLink">@Localizer["lbl_AddNew"]</button>
                             <!-- Example: Add buttons for exporting to Excel and printing -->
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "VacationSettle")'">@Localizer["lbl_Excel"]</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="printVacationSettles()">@Localizer["lbl_Print"]</button>
+							<button type="button" class="btn btn-outline-secondary" onclick="excelVacationSettle()">@Localizer["lbl_Excel"]</button>
+							<button type="button" class="btn btn-outline-secondary" onclick="printVacationSettle()">@Localizer["lbl_Print"]</button>
                         </div>
                     </div>
                 </div>
