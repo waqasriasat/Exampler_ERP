@@ -3,6 +3,14 @@
 @inject IViewLocalizer Localizer
 @{
 	ViewData["Title"] = Localizer["lbl_MasterInformation"] + " - " + Localizer["lbl_EmployeeRequestApprovals"];
+    var lblEmployeeRequestTypeApprovalList = Localizer["lbl_EmployeeRequestTypeApprovalList"];
+    var lblEmployeeName = Localizer["lbl_EmployeeName"];
+    var lblEmployeeRequestType = Localizer["lbl_EmployeeRequestType"];
+    var lblRank = Localizer["lbl_Rank"];
+    var lblPendingDate = Localizer["lbl_PendingDate"];
+    var lblApproval = Localizer["lbl_Approval"];
+    var lblDetails = Localizer["lbl_Details"];
+    var lblAction = Localizer["lbl_Action"];
 }
 
 @section PageScripts {
@@ -117,7 +125,7 @@
 
             $("#EmployeeName").autocomplete({
                 source: function (request, response) {
-
+                    $("#EmployeeID").val('');
                     $.ajax({
                         url: '@Url.Action("GetEmployeeSuggestions", "Employee")', // Ensure this matches the C# method
                         type: 'GET',
@@ -137,20 +145,54 @@
                 },
                 minLength: 2,
                 select: function (event, ui) {
-                    
+
                     // Set the selected employee's ID and name
                     $("#EmployeeID").val(ui.item.id); // Set the hidden input for Employee ID
                     $("#EmployeeName").val(ui.item.name); // Set the input field for Employee Name
                 }
             });
+            $('#searchEmployeeForm').submit(function (e) {
+                e.preventDefault(); // Prevent full page reload
+
+                var form = $(this);
+                var actionUrl = form.attr('action');
+
+                // Serialize form data
+                var formData = form.serialize();
+
+                $.get(actionUrl, formData, function (partialHtml) {
+                    // Load only the relevant part of the response
+                    var html = $(partialHtml).find('#EmployeeRequestTypeApprovalListContainer').html();
+                    $('#EmployeeRequestTypeApprovalListContainer').html(html);
+                });
+            });
 
         });
     </script>
     <script>
-        function printEmployeeRequestTypeApprovals() {
-            var printWindow = window.open('@Url.Action("Print", "ApprovalsEmployeeRequest")', '_blank');
-            printWindow.focus();
-        }
+        function printEmployeeRequestTypeApproval() {
+              var form = $('<form target="_blank" method="POST" action="@Url.Action("Print", "ApprovalsEmployeeRequest")"></form>');
+              form.append($('<input>').attr('name', 'FromDate').val($('#FromDate').val()));
+              form.append($('<input>').attr('name', 'ToDate').val($('#ToDate').val()));
+              form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+              form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+              form.append($('<input>').attr('name', 'EmployeeRequestTypeID').val($('#EmployeeRequestTypeID').val()));
+              $('body').append(form);
+              form.submit();
+              form.remove();
+          }
+
+          function excelEmployeeRequestTypeApproval() {
+              var form = $('<form target="_blank" method="POST" action="@Url.Action("ExportToExcel", "ApprovalsEmployeeRequest")"></form>');
+              form.append($('<input>').attr('name', 'FromDate').val($('#FromDate').val()));
+              form.append($('<input>').attr('name', 'ToDate').val($('#ToDate').val()));
+              form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+              form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+              form.append($('<input>').attr('name', 'EmployeeRequestTypeID').val($('#EmployeeRequestTypeID').val()));
+              $('body').append(form);
+              form.submit();
+              form.remove();
+          }
         function searchRecord() {
             var printWindow = window.open('@Url.Action("Index", "ApprovalsEmployeeRequest")', '_blank');
             printWindow.focus();
@@ -162,7 +204,51 @@
 </h4>
 @Html.Partial("~/Views/MasterInfo/ApprovalsEmployeeRequest/_ApprovalsEmployeeRequestSearching.cshtml", Model)
 <br />
-@Html.Partial("~/Views/MasterInfo/ApprovalsEmployeeRequest/_ApprovalsEmployeeRequest.cshtml", Model)
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">@lblEmployeeRequestTypeApprovalList</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-11 col-md-11 col-lg-8">
+                            <div class="row">
+                                <div class="col-3">
+                                    <p class="text-nowrap">@lblEmployeeName</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap">@lblEmployeeRequestType</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">@lblRank</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">@lblPendingDate</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1 col-md-1 col-lg-4">
+                            <div class="row">
+                                <div class="col-4">
+                                    <p class="text-nowrap">@lblApproval</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">@lblDetails</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">@lblAction</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="EmployeeRequestTypeApprovalListContainer">
+                    @Html.Partial("~/Views/MasterInfo/ApprovalsEmployeeRequest/_ApprovalsEmployeeRequest.cshtml", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Include the modal partial -->
 <div id="approvalsEmployeeRequestTypeApprovalModalContainer"></div>
 <div id="detailsEmployeeRequestTypeApprovalModalContainer"></div>

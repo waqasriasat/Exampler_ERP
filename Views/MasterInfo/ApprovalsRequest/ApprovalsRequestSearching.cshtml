@@ -2,7 +2,15 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-	ViewData["Title"] = @Localizer["lbl_MasterInformation"] + "-" + @Localizer["lbl_ProcessApprovals"];	
+    ViewData["Title"] = @Localizer["lbl_MasterInformation"] + "-" + @Localizer["lbl_ProcessApprovals"];
+    var lblProcessTypeApprovalList = Localizer["lbl_ProcessApprovalsList"];
+    var lblEmployeeName = Localizer["lbl_EmployeeName"];
+    var lblProcessType = Localizer["lbl_ProcessType"];
+    var lblRank = Localizer["lbl_Rank"];
+    var lblPendingDate = Localizer["lbl_PendingDate"];
+    var lblApproval = Localizer["lbl_Approval"];
+    var lblDetails = Localizer["lbl_Details"];
+    var lblAction = Localizer["lbl_Action"];
 }
 
 @section PageScripts {
@@ -60,7 +68,7 @@
                     success: function (response) {
                         if (response.success) {
                             // Reload the page or update the part of the page with the updated data
-                            
+
                         } else {
                             showError
                             // You can display errors here
@@ -77,7 +85,7 @@
                 $.post('@Url.Action("Reject", "ApprovalsRequest")', formData, function (response) {
                     if (response.success) {
                         // Reload the page or update the part of the page with the updated data
-                        
+
                     } else {
                         showError
                     }
@@ -95,7 +103,7 @@
                 var ProcessTypeApprovalId = $(this).data('id');
                 $.post('@Url.Action("Delete", "ProcessTypeApproval")', { id: ProcessTypeApprovalId }, function (response) {
                     if (response.success) {
-                        
+
                     } else {
                         showError
                     }
@@ -114,16 +122,16 @@
                 }
             });
 
-          
-            $("#EmployeeName").autocomplete({
+
+             $("#EmployeeName").autocomplete({
                 source: function (request, response) {
-                 
+                    $("#EmployeeID").val('');
                     $.ajax({
                         url: '@Url.Action("GetEmployeeSuggestions", "Employee")', // Ensure this matches the C# method
                         type: 'GET',
                         data: { term: request.term },
                         success: function (data) {
-                         
+
                             response($.map(data, function (item) {
                                 return {
                                     label: item.label,  // HTML content to be displayed in suggestions
@@ -137,20 +145,54 @@
                 },
                 minLength: 2,
                 select: function (event, ui) {
-                    
+
                     // Set the selected employee's ID and name
                     $("#EmployeeID").val(ui.item.id); // Set the hidden input for Employee ID
                     $("#EmployeeName").val(ui.item.name); // Set the input field for Employee Name
                 }
             });
-          
+            $('#searchEmployeeForm').submit(function (e) {
+                e.preventDefault(); // Prevent full page reload
+
+                var form = $(this);
+                var actionUrl = form.attr('action');
+
+                // Serialize form data
+                var formData = form.serialize();
+
+                $.get(actionUrl, formData, function (partialHtml) {
+                    // Load only the relevant part of the response
+                    var html = $(partialHtml).find('#ProcessTypeApprovalListContainer').html();
+                    $('#ProcessTypeApprovalListContainer').html(html);
+                });
+            });
+
         });
     </script>
     <script>
-        function printProcessTypeApprovals() {
-            var printWindow = window.open('@Url.Action("Print", "ApprovalsRequest")', '_blank');
-            printWindow.focus();
-        }
+         function printProcessTypeApproval() {
+              var form = $('<form target="_blank" method="POST" action="@Url.Action("Print", "ApprovalsRequest")"></form>');
+              form.append($('<input>').attr('name', 'FromDate').val($('#FromDate').val()));
+              form.append($('<input>').attr('name', 'ToDate').val($('#ToDate').val()));
+              form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+              form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+              form.append($('<input>').attr('name', 'ProcessTypeID').val($('#ProcessTypeID').val()));
+              $('body').append(form);
+              form.submit();
+              form.remove();
+          }
+
+          function excelProcessTypeApproval() {
+              var form = $('<form target="_blank" method="POST" action="@Url.Action("ExportToExcel", "ApprovalsRequest")"></form>');
+              form.append($('<input>').attr('name', 'FromDate').val($('#FromDate').val()));
+              form.append($('<input>').attr('name', 'ToDate').val($('#ToDate').val()));
+              form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+              form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+              form.append($('<input>').attr('name', 'ProcessTypeID').val($('#ProcessTypeID').val()));
+              $('body').append(form);
+              form.submit();
+              form.remove();
+          }
         function searchRecord() {
             var printWindow = window.open('@Url.Action("Index", "ApprovalsRequest")', '_blank');
             printWindow.focus();
@@ -158,11 +200,56 @@
     </script>
 }
 <h4 class="py-3 mb-4">
-	<span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> @Localizer["lbl_ProcessApprovals"]
+    <span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> @Localizer["lbl_ProcessApprovals"]
 </h4>
 @Html.Partial("~/Views/MasterInfo/ApprovalsRequest/_ApprovalsRequestSearching.cshtml", Model)
 <br />
-@Html.Partial("~/Views/MasterInfo/ApprovalsRequest/_ApprovalsRequest.cshtml", Model)
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">@lblProcessTypeApprovalList</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-11 col-md-11 col-lg-8">
+                            <div class="row">
+                                <div class="col-3">
+                                    <p class="text-nowrap">@lblEmployeeName</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap">@lblProcessType</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">@lblRank</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">@lblPendingDate</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1 col-md-1 col-lg-4">
+                            <div class="row">
+                                <div class="col-4">
+                                    <p class="text-nowrap">@lblApproval</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">@lblDetails</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">@lblAction</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ProcessTypeApprovalListContainer">
+                    @Html.Partial("~/Views/MasterInfo/ApprovalsRequest/_ApprovalsRequest.cshtml", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Include the modal partial -->
 <div id="approvalsProcessTypeApprovalModalContainer"></div>
 <div id="detailsProcessTypeApprovalModalContainer"></div>

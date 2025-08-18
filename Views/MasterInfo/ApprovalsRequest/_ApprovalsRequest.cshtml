@@ -1,49 +1,62 @@
 @model IEnumerable<Exampler_ERP.Models.CR_ProcessTypeApprovalDetail>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@{
+    var lblProcessTypeApprovalList = Localizer["lbl_ProcessApprovalsList"];
+    var lblEmployeeName = Localizer["lbl_EmployeeName"];
+    var lblProcessType = Localizer["lbl_ProcessType"];
+    var lblRank = Localizer["lbl_Rank"];
+    var lblPendingDate = Localizer["lbl_PendingDate"];
+    var lblApproval = Localizer["lbl_Approval"];
+    var lblDetails = Localizer["lbl_Details"];
+    var lblAction = Localizer["lbl_Action"];
+}
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-			<h5 class="card-header">@Localizer["lbl_ProcessApprovalsList"]</h5>
-            <div class="">
-                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
-                    <div class="row">
-                        <div class="col-11 col-md-11 col-lg-8">
-                            <div class="row">
-                                <div class="col-3">
-                                    <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
-                                </div>
-                                <div class="col-3">
-									<p class="text-nowrap">@Localizer["lbl_ProcessTypeName"]</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">@Localizer["lbl_Rank"]</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">@Localizer["lbl_PendingDate"]</p>
-                                </div>
-                            </div>
+@foreach (var item in Model)
+{
+    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+        <div class="row">
+            <div class="col-11 col-md-11 col-lg-8">
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-3">
+                        <p class="text-nowrap"><span class="smallAdd">@lblEmployeeName : </span>@item.CR_ProcessTypeApproval?.Employee?.FirstName @item.CR_ProcessTypeApproval?.Employee?.FatherName @item.CR_ProcessTypeApproval?.Employee?.FamilyName</p>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-3">
+                        <p class="text-nowrap"><span class="smallAdd">@lblProcessType : </span>@(item.CR_ProcessTypeApproval?.ProcessType?.ProcessTypeName ?? "N/A")  </p>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-2">
+                        <p class="text-nowrap"><span class="smallAdd">@lblRank : </span>@Html.DisplayFor(modelItem => item.Rank)</p>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-2">
+                        <p class="text-nowrap"><span class="smallAdd">@lblPendingDate : </span>@item.Date.ToString("dd-MM-yyyy HH:mm:ss")</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1 col-md-1 col-lg-4">
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-4">
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a href="javascript:void(0)" class="approvalsProcessTypeApprovalLink" data-id="@item.ProcessTypeApprovalID">
+                                <i class="bx bx-book-open" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                            </a>
                         </div>
-                        <div class="col-1 col-md-1 col-lg-4">
-                            <div class="row">
-                                <div class="col-4">
-                                    <p class="text-nowrap">@Localizer["lbl_Approval"]</p>
-                                </div>
-                                <div class="col-4">
-                                    <p class="text-nowrap">@Localizer["lbl_Details"]</p>
-                                </div>
-                                <div class="col-4">
-                                    <p class="text-nowrap">@Localizer["lbl_Action"]</p>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-4">
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a href="javascript:void(0)" class="detailsProcessTypeApprovalLink" data-id="@item.ProcessTypeApprovalID">
+                                <i class="bx bx-detail" style="font-size: large; color:maroon; line-height: 2;"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-4">
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a href="javascript:void(0)" class="actionsProcessTypeApprovalLink" data-id="@item.ProcessTypeApprovalDetailID">
+                                <i class="bx bx-bookmarks" style="font-size: large; color:maroon; line-height: 2;"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
-				<div id="approvalsProcessTypeApprovalListContainer">
-					@Html.Partial("~/Views/MasterInfo/ApprovalsRequest/_ApprovalsRequestListPartial.cshtml", Model)
-				</div>
             </div>
         </div>
     </div>
-</div>
+}

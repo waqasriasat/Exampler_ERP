@@ -2,175 +2,266 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-	ViewData["Title"] = @Localizer["lbl_MasterInformation"] + "-" + @Localizer["lbl_ProcessApprovals"];
+    ViewData["Title"] = @Localizer["lbl_MasterInformation"] + "-" + @Localizer["lbl_ProcessApprovals"];
+    var lblProcessTypeApprovalList = Localizer["lbl_ProcessApprovalsList"];
+    var lblEmployeeName = Localizer["lbl_EmployeeName"];
+    var lblProcessType = Localizer["lbl_ProcessType"];
+    var lblRank = Localizer["lbl_Rank"];
+    var lblPendingDate = Localizer["lbl_PendingDate"];
+    var lblApproval = Localizer["lbl_Approval"];
+    var lblDetails = Localizer["lbl_Details"];
+    var lblAction = Localizer["lbl_Action"];
 }
 
 @section PageScripts {
 
-	<script>
-		$(document).ready(function () {
-			// approvals ProcessTypeApproval modal popup
-			$('.approvalsProcessTypeApprovalLink').click(function (e) {
-				e.preventDefault();
-				var ProcessTypeApprovalId = $(this).data('id');
-				$.get('@Url.Action("approvals", "ApprovalsRequest")', { id: ProcessTypeApprovalId }, function (data) {
-					$('#approvalsProcessTypeApprovalModalContainer').html(data);
-					$('#approvalsProcessTypeApprovalModal').modal('show');
-				});
-			});
-			// Close Modal approvals Contrainer
-			$('#approvalsProcessTypeApprovalModalContainer').on('click', '#Close', function () {
-				$('#approvalsProcessTypeApprovalModal').modal('hide'); // Close the modal directly
-				// detailsitional logic if needed
-			});
+    <script>
+        $(document).ready(function () {
+            // approvals ProcessTypeApproval modal popup
+            $('.approvalsProcessTypeApprovalLink').click(function (e) {
+                e.preventDefault();
+                var ProcessTypeApprovalId = $(this).data('id');
+                $.get('@Url.Action("approvals", "ApprovalsRequest")', { id: ProcessTypeApprovalId }, function (data) {
+                    $('#approvalsProcessTypeApprovalModalContainer').html(data);
+                    $('#approvalsProcessTypeApprovalModal').modal('show');
+                });
+            });
+            // Close Modal approvals Contrainer
+            $('#approvalsProcessTypeApprovalModalContainer').on('click', '#Close', function () {
+                $('#approvalsProcessTypeApprovalModal').modal('hide'); // Close the modal directly
+                // detailsitional logic if needed
+            });
 
-			// details ProcessTypeApproval modal popup
-			$('.detailsProcessTypeApprovalLink').click(function (e) {
-				e.preventDefault();
-				var ProcessTypeApprovalId = $(this).data('id');
-				$.get('@Url.Action("details", "ApprovalsRequest")', { id: ProcessTypeApprovalId }, function (data) {
-					$('#detailsProcessTypeApprovalModalContainer').html(data);
-					$('#detailsProcessTypeApprovalModal').modal('show');
-				});
-			});
-			// Close Modal details Contrainer
-			$('#detailsProcessTypeApprovalModalContainer').on('click', '#Close', function () {
-				$('#detailsProcessTypeApprovalModal').modal('hide'); // Close the modal directly
-				// detailsitional logic if needed
-			});
+            // details ProcessTypeApproval modal popup
+            $('.detailsProcessTypeApprovalLink').click(function (e) {
+                e.preventDefault();
+                var ProcessTypeApprovalId = $(this).data('id');
+                $.get('@Url.Action("details", "ApprovalsRequest")', { id: ProcessTypeApprovalId }, function (data) {
+                    $('#detailsProcessTypeApprovalModalContainer').html(data);
+                    $('#detailsProcessTypeApprovalModal').modal('show');
+                });
+            });
+            // Close Modal details Contrainer
+            $('#detailsProcessTypeApprovalModalContainer').on('click', '#Close', function () {
+                $('#detailsProcessTypeApprovalModal').modal('hide'); // Close the modal directly
+                // detailsitional logic if needed
+            });
 
-			// actions ProcessTypeApproval modal popup
-			$('#approvalsProcessTypeApprovalListContainer').on('click', '.actionsProcessTypeApprovalLink', function (e) {
-			  e.preventDefault();
-			  var ProcessTypeApprovalId = $(this).data('id');
-			  $.get('@Url.Action("actions", "ApprovalsRequest")', { id: ProcessTypeApprovalId }, function (data) {
-				$('#actionsProcessTypeApprovalModalContainer').html(data);
-				$('#actionsProcessTypeApprovalModal').modal('show');
-			  });
-			});
+            // actions ProcessTypeApproval modal popup
+            $('#approvalsProcessTypeApprovalListContainer').on('click', '.actionsProcessTypeApprovalLink', function (e) {
+              e.preventDefault();
+              var ProcessTypeApprovalId = $(this).data('id');
+              $.get('@Url.Action("actions", "ApprovalsRequest")', { id: ProcessTypeApprovalId }, function (data) {
+                $('#actionsProcessTypeApprovalModalContainer').html(data);
+                $('#actionsProcessTypeApprovalModal').modal('show');
+              });
+            });
 
 
 
-			$('#actionsProcessTypeApprovalModalContainer').on('click', '#Approved', function () {
-			var form = $('#actionsProcessTypeApprovalForm')[0]; // get raw DOM element
-			var formData = new FormData(form); // includes file input too
+            $('#actionsProcessTypeApprovalModalContainer').on('click', '#Approved', function () {
+            var form = $('#actionsProcessTypeApprovalForm')[0]; // get raw DOM element
+            var formData = new FormData(form); // includes file input too
 
-				$.ajax({
-					url: '@Url.Action("Approved", "ApprovalsRequest")',
-					type: 'POST',
-					data: formData,
-					contentType: false, // must be false for file upload
-					processData: false, // must be false for file upload
-					success: function (response) {
-						if (response.success) {
-							$('#actionsProcessTypeApprovalModal').modal('hide');
+                $.ajax({
+                    url: '@Url.Action("Approved", "ApprovalsRequest")',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false, // must be false for file upload
+                    processData: false, // must be false for file upload
+                    success: function (response) {
+                        if (response.success) {
+                            $('#actionsProcessTypeApprovalModal').modal('hide');
 
-							$.get('@Url.Action("Index", "ApprovalsRequest")', function (partialHtml) {
-								var html = $(partialHtml).find('#approvalsProcessTypeApprovalListContainer').html();
-								$('#approvalsProcessTypeApprovalListContainer').html(html);
-							});
-						}
-					}
-				});
-			});
+                            $.get('@Url.Action("Index", "ApprovalsRequest")', function (partialHtml) {
+                                var html = $(partialHtml).find('#approvalsProcessTypeApprovalListContainer').html();
+                                $('#approvalsProcessTypeApprovalListContainer').html(html);
+                            });
+                        }
+                    }
+                });
+            });
 
-			$('#actionsProcessTypeApprovalModalContainer').on('click', '#Reject', function () {
-			var form = $('#actionsProcessTypeApprovalForm')[0]; // get raw DOM element
-			var formData = new FormData(form); // includes file input too
+            $('#actionsProcessTypeApprovalModalContainer').on('click', '#Reject', function () {
+            var form = $('#actionsProcessTypeApprovalForm')[0]; // get raw DOM element
+            var formData = new FormData(form); // includes file input too
 
-				$.ajax({
-					url: '@Url.Action("Approved", "ApprovalsRequest")',
-					type: 'POST',
-					data: formData,
-					contentType: false, // must be false for file upload
-					processData: false, // must be false for file upload
-					success: function (response) {
-						if (response.success) {
-							$('#actionsProcessTypeApprovalModal').modal('hide');
+                $.ajax({
+                    url: '@Url.Action("Approved", "ApprovalsRequest")',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false, // must be false for file upload
+                    processData: false, // must be false for file upload
+                    success: function (response) {
+                        if (response.success) {
+                            $('#actionsProcessTypeApprovalModal').modal('hide');
 
-							$.get('@Url.Action("Index", "ApprovalsRequest")', function (partialHtml) {
-								var html = $(partialHtml).find('#approvalsProcessTypeApprovalListContainer').html();
-								$('#approvalsProcessTypeApprovalListContainer').html(html);
-							});
-						}
-					}
-				});
-			});
+                            $.get('@Url.Action("Index", "ApprovalsRequest")', function (partialHtml) {
+                                var html = $(partialHtml).find('#approvalsProcessTypeApprovalListContainer').html();
+                                $('#approvalsProcessTypeApprovalListContainer').html(html);
+                            });
+                        }
+                    }
+                });
+            });
 
-			
-			// Close Modal actions Contrainer
-			$('#actionsProcessTypeApprovalModalContainer').on('click', '#Close', function () {
-				$('#actionsProcessTypeApprovalModal').modal('hide'); // Close the modal directly
-				// actionsitional logic if needed
-			});
 
-			// Delete ProcessTypeApproval
-			$('.deleteProcessTypeApprovalLink').click(function (e) {
-				e.preventDefault();
-				var ProcessTypeApprovalId = $(this).data('id');
-				$.post('@Url.Action("Delete", "ProcessTypeApproval")', { id: ProcessTypeApprovalId }, function (response) {
-					if (response.success) {
+            // Close Modal actions Contrainer
+            $('#actionsProcessTypeApprovalModalContainer').on('click', '#Close', function () {
+                $('#actionsProcessTypeApprovalModal').modal('hide'); // Close the modal directly
+                // actionsitional logic if needed
+            });
 
-					} else {
-						showError
-					}
-				});
-			});
+            // Delete ProcessTypeApproval
+            $('.deleteProcessTypeApprovalLink').click(function (e) {
+                e.preventDefault();
+                var ProcessTypeApprovalId = $(this).data('id');
+                $.post('@Url.Action("Delete", "ProcessTypeApproval")', { id: ProcessTypeApprovalId }, function (response) {
+                    if (response.success) {
 
-			// Print functionality
-			$('#printButton').click(function () {
-				window.print();
-			});
-			$.widget("custom.autocomplete", $.ui.autocomplete, {
-				_renderItem: function (ul, item) {
-					return $("<li>")
-						.append(item.label)  // Render the HTML content in `label`
-						.appendTo(ul);
-				}
-			});
+                    } else {
+                        showError
+                    }
+                });
+            });
 
-			$("#EmployeeName").autocomplete({
-				source: function (request, response) {
-					$.ajax({
-						url: '@Url.Action("GetEmployeeSuggestions", "Employee")',
-						type: 'GET',
-						data: { term: request.term },
-						success: function (data) {
-							response($.map(data, function (item) {
-								return {
-									label: item.label,  // HTML content
-									value: item.id      // Employee ID
-								};
-							}));
-						}
-					});
-				},
-				minLength: 2,
-				select: function (event, ui) {
-					// Do something when an employee is selected
-					console.log(ui.item.value); // Employee ID
-				}
-			});
-		});
-	</script>
-	<script>
-		function printProcessTypeApprovals() {
-			var printWindow = window.open('@Url.Action("Print", "ApprovalsRequest")', '_blank');
-			printWindow.focus();
-		}
-		function searchRecord() {
-			var printWindow = window.open('@Url.Action("Index", "ApprovalsRequest")', '_blank');
-			printWindow.focus();
-		}
+            // Print functionality
+            $('#printButton').click(function () {
+                window.print();
+            });
+            $.widget("custom.autocomplete", $.ui.autocomplete, {
+                _renderItem: function (ul, item) {
+                    return $("<li>")
+                        .append(item.label)  // Render the HTML content in `label`
+                        .appendTo(ul);
+                }
+            });
+        $("#EmployeeName").autocomplete({
+                        source: function (request, response) {
+                            $("#EmployeeID").val('');
+                            $.ajax({
+                                url: '@Url.Action("GetEmployeeSuggestions", "Employee")', // Ensure this matches the C# method
+                                type: 'GET',
+                                data: { term: request.term },
+                                success: function (data) {
 
-	</script>
+                                    response($.map(data, function (item) {
+                                        return {
+                                            label: item.label,  // HTML content to be displayed in suggestions
+                                            id: item.id,     // Employee ID for the hidden input
+                                            name: item.name,      // Full name to be used in the input field
+                                            value: item.name
+                                        };
+                                    }));
+                                }
+                            });
+                        },
+                        minLength: 2,
+                        select: function (event, ui) {
+
+                            // Set the selected employee's ID and name
+                            $("#EmployeeID").val(ui.item.id); // Set the hidden input for Employee ID
+                            $("#EmployeeName").val(ui.item.name); // Set the input field for Employee Name
+                        }
+                    });
+                    $('#searchEmployeeForm').submit(function (e) {
+                        e.preventDefault(); // Prevent full page reload
+
+                        var form = $(this);
+                        var actionUrl = form.attr('action');
+
+                        // Serialize form data
+                        var formData = form.serialize();
+
+                        $.get(actionUrl, formData, function (partialHtml) {
+                            // Load only the relevant part of the response
+                            var html = $(partialHtml).find('#ProcessTypeApprovalListContainer').html();
+                            $('#ProcessTypeApprovalListContainer').html(html);
+                        });
+                    });
+        });
+    </script>
+    <script>
+        function printProcessTypeApproval() {
+              var form = $('<form target="_blank" method="POST" action="@Url.Action("Print", "ApprovalsRequest")"></form>');
+              form.append($('<input>').attr('name', 'FromDate').val($('#FromDate').val()));
+              form.append($('<input>').attr('name', 'ToDate').val($('#ToDate').val()));
+              form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+              form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+              form.append($('<input>').attr('name', 'ProcessTypeID').val($('#ProcessTypeID').val()));
+              form.append($('<input>').attr('name', 'Status').val($('#Status').val()));
+              $('body').append(form);
+              form.submit();
+              form.remove();
+          }
+
+          function excelProcessTypeApproval() {
+              var form = $('<form target="_blank" method="POST" action="@Url.Action("ExportToExcel", "ApprovalsRequest")"></form>');
+              form.append($('<input>').attr('name', 'FromDate').val($('#FromDate').val()));
+              form.append($('<input>').attr('name', 'ToDate').val($('#ToDate').val()));
+              form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
+              form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+              form.append($('<input>').attr('name', 'ProcessTypeID').val($('#ProcessTypeID').val()));
+              form.append($('<input>').attr('name', 'Status').val($('#Status').val()));
+              $('body').append(form);
+              form.submit();
+              form.remove();
+          }
+        function searchRecord() {
+            var printWindow = window.open('@Url.Action("Index", "ApprovalsRequest")', '_blank');
+            printWindow.focus();
+        }
+
+    </script>
 }
 <h4 class="py-3 mb-4">
-	<span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> @Localizer["lbl_ProcessApprovals"]
+    <span class="text-muted fw-light">@Localizer["lbl_MasterInformation"] /</span> @Localizer["lbl_ProcessApprovals"]
 </h4>
-
-	@Html.Partial("~/Views/MasterInfo/ApprovalsRequest/_ApprovalsRequest.cshtml", Model)
-
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">@lblProcessTypeApprovalList</h5>
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-11 col-md-11 col-lg-8">
+                            <div class="row">
+                                <div class="col-3">
+                                    <p class="text-nowrap">@lblEmployeeName</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap">@lblProcessType</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">@lblRank</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">@lblPendingDate</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1 col-md-1 col-lg-4">
+                            <div class="row">
+                                <div class="col-4">
+                                    <p class="text-nowrap">@lblApproval</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">@lblDetails</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-nowrap">@lblAction</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ProcessTypeApprovalListContainer">
+                    @Html.Partial("~/Views/MasterInfo/ApprovalsRequest/_ApprovalsRequest.cshtml", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Include the modal partial -->
 <div id="approvalsProcessTypeApprovalModalContainer"></div>
 <div id="detailsProcessTypeApprovalModalContainer"></div>

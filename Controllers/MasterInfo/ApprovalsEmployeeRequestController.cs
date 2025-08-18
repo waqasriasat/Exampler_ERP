@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Localization;
+using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.MasterInfo
 {
@@ -38,16 +39,11 @@ namespace Exampler_ERP.Controllers.MasterInfo
           .Include(pta => pta.EmployeeRequestTypeApprovalDetailDoc)
           .Where(pta => pta.AppID == 0);
 
-      if (FromDate.HasValue)
+      if (FromDate.HasValue && ToDate.HasValue)
       {
         var fromDateTime = FromDate.Value.Date.AddSeconds(1);
-        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.Date >= fromDateTime);
-      }
-
-      if (ToDate.HasValue)
-      {
         var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
-        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.Date <= toDateTime);
+        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.Date >= fromDateTime && pta.HR_EmployeeRequestTypeApproval.Date <= toDateTime);
       }
 
       // Filter by EmployeeName
@@ -62,18 +58,24 @@ namespace Exampler_ERP.Controllers.MasterInfo
         query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.EmployeeRequestTypeID == EmployeeRequestTypeID.Value);
       }
 
-      ViewBag.FromDate = FromDate;
-      ViewBag.ToDate = ToDate;
-      ViewBag.EmployeeRequestTypeID = EmployeeRequestTypeID;
-      ViewBag.EmployeeID = EmployeeID;
-      ViewBag.EmployeeName = EmployeeName;
-
       var result = await query
           .OrderByDescending(pta => pta.EmployeeRequestTypeApprovalDetailID)
           .ToListAsync();
 
-      ViewBag.EmployeeRequestTypeList = await _utils.GetEmployeeRequestTypes();
+      await PopulateDropdowns(FromDate, ToDate, EmployeeName, EmployeeID, EmployeeRequestTypeID);
+
+
       return View("~/Views/MasterInfo/ApprovalsEmployeeRequest/ApprovalsEmployeeRequestSearching.cshtml", result);
+    }
+    private async Task PopulateDropdowns(DateTime? fromDate, DateTime? toDate, string? employeeName, int? employeeID, int? employeeRequestTypeID)
+    {
+      ViewBag.FromDate = fromDate;
+      ViewBag.ToDate = toDate;
+      ViewBag.EmployeeName = employeeName;
+      ViewBag.EmployeeID = employeeID;
+      ViewBag.EmployeeRequestTypeID = employeeRequestTypeID;
+
+      ViewBag.EmployeeRequestTypeList = await _utils.GetEmployeeRequestTypes();
     }
     public async Task<IActionResult> SelectedIndex(int? id = null)
     {
@@ -338,6 +340,109 @@ namespace Exampler_ERP.Controllers.MasterInfo
         return PartialView("~/Views/MasterInfo/ApprovalsEmployeeRequest/DetailsEmployeeRequestTypeApproval.cshtml", EmployeeRequests);
       }
       return View("~/Views/MasterInfo/ApprovalsEmployeeRequest/ApprovalsEmployeeRequest.cshtml", result);
+    }
+
+    public async Task<IActionResult> ExportToExcel(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? EmployeeRequestTypeID)
+    {
+      ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+      var query = _appDBContext.HR_EmployeeRequestTypeApprovalDetails
+          .Include(pta => pta.HR_EmployeeRequestTypeApproval)
+              .ThenInclude(pta => pta.Employee)
+          .Include(pta => pta.HR_EmployeeRequestTypeApproval)
+              .ThenInclude(pta => pta.EmployeeRequestType)
+          .Include(pta => pta.EmployeeRequestTypeApprovalDetailDoc)
+          .Where(pta => pta.AppID == 0);
+
+      if (FromDate.HasValue && ToDate.HasValue)
+      {
+        var fromDateTime = FromDate.Value.Date.AddSeconds(1);
+        var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.Date >= fromDateTime && pta.HR_EmployeeRequestTypeApproval.Date <= toDateTime);
+      }
+
+      // Filter by EmployeeName
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.EmployeeID <= EmployeeID.Value);
+      }
+
+      // Filter by EmployeeRequestTypeID
+      if (EmployeeRequestTypeID.HasValue && EmployeeRequestTypeID != 0)
+      {
+        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.EmployeeRequestTypeID == EmployeeRequestTypeID.Value);
+      }
+
+      var result = await query
+          .OrderByDescending(pta => pta.EmployeeRequestTypeApprovalDetailID)
+          .ToListAsync();
+
+      await PopulateDropdowns(FromDate, ToDate, EmployeeName, EmployeeID, EmployeeRequestTypeID);
+
+      using (var package = new ExcelPackage())
+      {
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_EmployeeRequestApprovals"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_EmployeeName"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeRequestType"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_Rank"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_PendingDate"];
+
+
+        for (int i = 0; i < result.Count; i++)
+        {
+          worksheet.Cells[i + 2, 1].Value = result[i].HR_EmployeeRequestTypeApproval?.Employee?.FirstName + ' ' + result[i].HR_EmployeeRequestTypeApproval?.Employee?.FatherName + ' ' + result[i].HR_EmployeeRequestTypeApproval?.Employee?.FamilyName;
+          worksheet.Cells[i + 2, 2].Value = result[i].HR_EmployeeRequestTypeApproval?.EmployeeRequestType?.EmployeeRequestTypeName;
+          worksheet.Cells[i + 2, 3].Value = result[i].Rank;
+          worksheet.Cells[i + 2, 4].Value = result[i].Date.ToString("dd/MMM/yyyy");
+        }
+
+        worksheet.Cells["A1:C1"].Style.Font.Bold = true;
+        worksheet.Cells.AutoFitColumns();
+
+        var stream = new MemoryStream();
+        package.SaveAs(stream);
+        stream.Position = 0;
+        string excelName = _localizer["lbl_EmployeeRequestApprovals"] + $"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+
+        return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+      }
+    }
+    public async Task<IActionResult> Print(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? EmployeeRequestTypeID)
+    {
+      var query = _appDBContext.HR_EmployeeRequestTypeApprovalDetails
+          .Include(pta => pta.HR_EmployeeRequestTypeApproval)
+              .ThenInclude(pta => pta.Employee)
+          .Include(pta => pta.HR_EmployeeRequestTypeApproval)
+              .ThenInclude(pta => pta.EmployeeRequestType)
+          .Include(pta => pta.EmployeeRequestTypeApprovalDetailDoc)
+          .Where(pta => pta.AppID == 0);
+
+      if (FromDate.HasValue && ToDate.HasValue)
+      {
+        var fromDateTime = FromDate.Value.Date.AddSeconds(1);
+        var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.Date >= fromDateTime && pta.HR_EmployeeRequestTypeApproval.Date <= toDateTime);
+      }
+
+      // Filter by EmployeeName
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.EmployeeID <= EmployeeID.Value);
+      }
+
+      // Filter by EmployeeRequestTypeID
+      if (EmployeeRequestTypeID.HasValue && EmployeeRequestTypeID != 0)
+      {
+        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.EmployeeRequestTypeID == EmployeeRequestTypeID.Value);
+      }
+
+      var result = await query
+          .OrderByDescending(pta => pta.EmployeeRequestTypeApprovalDetailID)
+          .ToListAsync();
+
+      await PopulateDropdowns(FromDate, ToDate, EmployeeName, EmployeeID, EmployeeRequestTypeID);
+
+      return View("~/Views/HR/Reports/EmployeeRequestApprovalDetail/PrintEmployeeRequestApprovalDetail.cshtml", result);
     }
   }
 }
