@@ -12,13 +12,13 @@
                         <!-- From Date Field -->
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">@Localizer["lbl_FromDate"]</label>
-                            <input class="form-control" type="date" name="FromDate" value="@ViewBag.FromDate?.ToString("yyyy-MM-dd")" />
+                            <input class="form-control" type="date" name="FromDate" id="FromDate" value="@ViewBag.FromDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
                         <!-- To Date Field -->
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">@Localizer["lbl_ToDate"]</label>
-                            <input class="form-control" type="date" name="ToDate" value="@ViewBag.ToDate?.ToString("yyyy-MM-dd")" />
+                            <input class="form-control" type="date" name="ToDate" id="ToDate" value="@ViewBag.ToDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
                         <!-- Employee Name Search Field -->
@@ -31,7 +31,7 @@
                         <!-- Process Type Dropdown -->
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">@Localizer["lbl_ProcessType"]</label>
-                            <select name="ProcessTypeID" class="form-control">
+                            <select name="ProcessTypeID" id="ProcessTypeID" class="form-control">
                                 @foreach (var item in ViewBag.ProcessTypeList)
                                 {
                                     if (item.Value == ViewBag.ProcessTypeID?.ToString())
@@ -52,8 +52,8 @@
                     <div class="row">
                         <div class="col-md-12 text-end">
                             <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "ProcessTypeApproval")'">@Localizer["lbl_Excel"]</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="printProcessTypeApprovals()">@Localizer["lbl_Print"]</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="excelProcessTypeApproval()">@Localizer["lbl_Excel"]</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="printProcessTypeApproval()">@Localizer["lbl_Print"]</button>
                         </div>
                     </div>
                 </div>

@@ -7,6 +7,7 @@ using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Localization;
 using Exampler_ERP.Models.Temp;
+using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.HR.Reports
 {
@@ -39,7 +40,7 @@ namespace Exampler_ERP.Controllers.HR.Reports
           .Include(pta => pta.EmployeeRequestTypeApprovalDetailDoc)
           .Where(pta => pta.AppID == 0);
 
-      if (FromDate.HasValue)
+      if (FromDate.HasValue && ToDate.HasValue)
       {
         var fromDateTime = FromDate.Value.Date.AddSeconds(1);
         var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
@@ -104,6 +105,149 @@ namespace Exampler_ERP.Controllers.HR.Reports
                 new SelectListItem { Text = "In Process", Value = "2" },
                 new SelectListItem { Text = "Pending", Value = "3" }
             };
+    }
+
+    public async Task<IActionResult> ExportToExcel(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? EmployeeRequestTypeID, int? Status)
+    {
+      ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+      var query = _appDBContext.HR_EmployeeRequestTypeApprovalDetails
+         .Include(pta => pta.HR_EmployeeRequestTypeApproval)
+             .ThenInclude(pta => pta.Employee)
+         .Include(pta => pta.HR_EmployeeRequestTypeApproval)
+             .ThenInclude(pta => pta.EmployeeRequestType)
+         .Include(pta => pta.EmployeeRequestTypeApprovalDetailDoc)
+         .Where(pta => pta.AppID == 0);
+
+      if (FromDate.HasValue && ToDate.HasValue)
+      {
+        var fromDateTime = FromDate.Value.Date.AddSeconds(1);
+        var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.Date >= fromDateTime && pta.HR_EmployeeRequestTypeApproval.Date <= toDateTime);
+      }
+
+      // Filter by EmployeeID
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.EmployeeID == EmployeeID.Value);
+      }
+
+      // Filter by EmployeeRequestTypeID
+      if (EmployeeRequestTypeID.HasValue && EmployeeRequestTypeID != 0)
+      {
+        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.EmployeeRequestTypeID == EmployeeRequestTypeID.Value);
+      }
+
+      // Add status filtering
+      if (Status.HasValue)
+      {
+        query = query.Where(pta =>
+            Status.Value == 1 // Complete
+            ? _appDBContext.HR_EmployeeRequestTypeApprovalSetups
+                .Where(setup => setup.EmployeeRequestTypeID == pta.HR_EmployeeRequestTypeApproval.EmployeeRequestTypeID && setup.Rank == pta.Rank)
+                .Any()
+            : Status.Value == 2 // InProcessRequest
+            ? _appDBContext.HR_EmployeeRequestTypeApprovalSetups
+                .Where(setup => setup.EmployeeRequestTypeID == pta.HR_EmployeeRequestTypeApproval.EmployeeRequestTypeID && setup.Rank > pta.Rank)
+                .Any()
+            : Status.Value == 3 // Pending
+            ? pta.Rank == 1
+            : false);
+      }
+
+
+
+      var result = await query
+          .OrderByDescending(pta => pta.EmployeeRequestTypeApprovalDetailID)
+          .ToListAsync();
+
+
+      await PopulateDropdowns(FromDate, ToDate, EmployeeRequestTypeID, EmployeeID, EmployeeName, Status);
+
+      using (var package = new ExcelPackage())
+      {
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_EmployeeRequestApprovals"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_EmployeeName"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_EmployeeRequestType"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_Rank"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_PendingDate"];
+
+
+        for (int i = 0; i < result.Count; i++)
+        {
+          worksheet.Cells[i + 2, 1].Value = result[i].HR_EmployeeRequestTypeApproval?.Employee?.FirstName + ' ' + result[i].HR_EmployeeRequestTypeApproval?.Employee?.FatherName + ' ' + result[i].HR_EmployeeRequestTypeApproval?.Employee?.FamilyName;
+          worksheet.Cells[i + 2, 2].Value = result[i].HR_EmployeeRequestTypeApproval?.EmployeeRequestType?.EmployeeRequestTypeName;
+          worksheet.Cells[i + 2, 3].Value = result[i].Rank;
+          worksheet.Cells[i + 2, 4].Value = result[i].Date.ToString("dd/MMM/yyyy");
+        }
+
+        worksheet.Cells["A1:C1"].Style.Font.Bold = true;
+        worksheet.Cells.AutoFitColumns();
+
+        var stream = new MemoryStream();
+        package.SaveAs(stream);
+        stream.Position = 0;
+        string excelName = _localizer["lbl_EmployeeRequestApprovals"] + $"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+
+        return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+      }
+    }
+    public async Task<IActionResult> Print(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? EmployeeRequestTypeID, int? Status)
+    {
+      var query = _appDBContext.HR_EmployeeRequestTypeApprovalDetails
+         .Include(pta => pta.HR_EmployeeRequestTypeApproval)
+             .ThenInclude(pta => pta.Employee)
+         .Include(pta => pta.HR_EmployeeRequestTypeApproval)
+             .ThenInclude(pta => pta.EmployeeRequestType)
+         .Include(pta => pta.EmployeeRequestTypeApprovalDetailDoc)
+         .Where(pta => pta.AppID == 0);
+
+      if (FromDate.HasValue && ToDate.HasValue)
+      {
+        var fromDateTime = FromDate.Value.Date.AddSeconds(1);
+        var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.Date >= fromDateTime && pta.HR_EmployeeRequestTypeApproval.Date <= toDateTime);
+      }
+
+      // Filter by EmployeeID
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.EmployeeID == EmployeeID.Value);
+      }
+
+      // Filter by EmployeeRequestTypeID
+      if (EmployeeRequestTypeID.HasValue && EmployeeRequestTypeID != 0)
+      {
+        query = query.Where(pta => pta.HR_EmployeeRequestTypeApproval.EmployeeRequestTypeID == EmployeeRequestTypeID.Value);
+      }
+
+      // Add status filtering
+      if (Status.HasValue)
+      {
+        query = query.Where(pta =>
+            Status.Value == 1 // Complete
+            ? _appDBContext.HR_EmployeeRequestTypeApprovalSetups
+                .Where(setup => setup.EmployeeRequestTypeID == pta.HR_EmployeeRequestTypeApproval.EmployeeRequestTypeID && setup.Rank == pta.Rank)
+                .Any()
+            : Status.Value == 2 // InProcessRequest
+            ? _appDBContext.HR_EmployeeRequestTypeApprovalSetups
+                .Where(setup => setup.EmployeeRequestTypeID == pta.HR_EmployeeRequestTypeApproval.EmployeeRequestTypeID && setup.Rank > pta.Rank)
+                .Any()
+            : Status.Value == 3 // Pending
+            ? pta.Rank == 1
+            : false);
+      }
+
+
+
+      var result = await query
+          .OrderByDescending(pta => pta.EmployeeRequestTypeApprovalDetailID)
+          .ToListAsync();
+
+
+      await PopulateDropdowns(FromDate, ToDate, EmployeeRequestTypeID, EmployeeID, EmployeeName, Status);
+
+      return View("~/Views/HR/Reports/EmployeeRequestApprovalDetail/PrintEmployeeRequestApprovalDetail.cshtml", result);
     }
   }
 }

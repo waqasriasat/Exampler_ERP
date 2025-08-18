@@ -11,13 +11,13 @@
                         <!-- From Date Field -->
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">@Localizer["lbl_FromDate"]</label>
-                            <input class="form-control" type="date" name="FromDate" value="@ViewBag.FromDate?.ToString("yyyy-MM-dd")" />
+                            <input class="form-control" type="date" name="FromDate" id="FromDate" value="@ViewBag.FromDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
                         <!-- To Date Field -->
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">@Localizer["lbl_ToDate"]</label>
-                            <input class="form-control" type="date" name="ToDate" value="@ViewBag.ToDate?.ToString("yyyy-MM-dd")" />
+                            <input class="form-control" type="date" name="ToDate" id="ToDate" value="@ViewBag.ToDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
                         <!-- Employee Name Search Field -->
@@ -30,7 +30,7 @@
                         <!-- EmployeeRequest Type Dropdown -->
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">@Localizer["lbl_EmployeeRequestType"]</label>
-                            <select name="EmployeeRequestTypeID" class="form-control">
+                            <select name="EmployeeRequestTypeID" id="EmployeeRequestTypeID" class="form-control">
                                 @foreach (var item in ViewBag.EmployeeRequestTypeList)
                                 {
                                     if (item.Value == ViewBag.EmployeeRequestTypeID?.ToString())
@@ -51,8 +51,8 @@
                     <div class="row">
                         <div class="col-md-12 text-end">
                             <button type="submit" class="btn btn-primary">@Localizer["lbl_Search"]</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("ExportToExcel", "EmployeeRequestTypeApproval")'">@Localizer["lbl_Excel"]</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="printEmployeeRequestTypeApprovals()">@Localizer["lbl_Print"]</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="excelEmployeeRequestTypeApproval()">@Localizer["lbl_Excel"]</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="printEmployeeRequestTypeApproval()">@Localizer["lbl_Print"]</button>
                         </div>
                     </div>
                 </div>

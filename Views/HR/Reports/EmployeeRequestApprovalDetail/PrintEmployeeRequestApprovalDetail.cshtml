@@ -1,0 +1,59 @@
+@model IEnumerable<Exampler_ERP.Models.HR_EmployeeRequestTypeApprovalDetail>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    Layout = "_PrintLayout";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@Localizer["lbl_PrintEmployeeRequestApprovals"]</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color:white">
+    <h2>@Localizer["lbl_EmployeeRequestTypeApprovalList"]</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>@Localizer["lbl_EmployeeName"]</th>
+                <th>@Localizer["lbl_EmployeeRequestType"]</th>
+                <th>@Localizer["lbl_Rank"]</th>
+                <th>@Localizer["lbl_PendingDate"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var empReq in Model)
+            {
+                <tr>
+                    <td>@empReq.HR_EmployeeRequestTypeApproval?.Employee?.FirstName @empReq.HR_EmployeeRequestTypeApproval?.Employee?.FatherName @empReq.HR_EmployeeRequestTypeApproval?.Employee?.FamilyName</td>
+                    <td>@empReq.HR_EmployeeRequestTypeApproval?.EmployeeRequestType?.EmployeeRequestTypeName</td>
+                    <td>@empReq.Rank</td>
+                    <td>@empReq.Date</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

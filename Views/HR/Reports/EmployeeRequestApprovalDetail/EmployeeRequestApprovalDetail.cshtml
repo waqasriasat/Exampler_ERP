@@ -3,7 +3,13 @@
 @inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = Localizer["lbl_Reports"] + " - " + Localizer["lbl_EmployeeRequestApprovals"];
-        }
+    var lblEmployeeName = Localizer["lbl_EmployeeName"];
+    var lblEmployeeRequestType = Localizer["lbl_EmployeeRequestType"];
+    var lblRank = Localizer["lbl_Rank"];
+    var lblPendingDate = Localizer["lbl_PendingDate"];
+    var lblApproval = Localizer["lbl_Approval"];
+    var lblDetails = Localizer["lbl_Details"];
+}
 
 @section PageScripts {
 
@@ -169,7 +175,7 @@
 			  form.append($('<input>').attr('name', 'EmployeeName').val($('#EmployeeName').val()));
 			  form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
 			  form.append($('<input>').attr('name', 'EmployeeRequestTypeID').val($('#EmployeeRequestTypeID').val()));
-			  form.append($('<input>').attr('name', 'EmployeeID').val($('#EmployeeID').val()));
+              form.append($('<input>').attr('name', 'Status').val($('#Status').val()));
 			  $('body').append(form);
 			  form.submit();
 			  form.remove();
@@ -198,9 +204,73 @@
 </h4>
 @Html.Partial("~/Views/HR/Reports/EmployeeRequestApprovalDetail/_EmployeeRequestApprovalDetailSearching.cshtml", Model)
 <br />
-<div id="EmployeeRequestApprovalDetailListContainer">
-@Html.Partial("~/Views/HR/Reports/EmployeeRequestApprovalDetail/_EmployeeRequestApprovalDetail.cshtml", Model)
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">
+                @Localizer["lbl_EmployeeRequestTypeApprovalList"]
+
+                @{
+                    var status = ViewBag.Status != null ? ViewBag.Status.ToString() : "";
+                }
+
+                @if (string.IsNullOrEmpty(status))
+                {
+                    <span>(All Records)</span>
+                }
+                else if (status == "1")
+                {
+                    <span>(Complete Records)</span>
+                }
+                else if (status == "2")
+                {
+                    <span>(In EmployeeRequest Records)</span>
+                }
+                else if (status == "3")
+                {
+                    <span>(Pending Records)</span>
+                }
+            </h5>
+
+            <div class="">
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
+                    <div class="row">
+                        <div class="col-11 col-md-11 col-lg-10">
+                            <div class="row">
+                                <div class="col-4">
+                                    <p class="text-nowrap">@lblEmployeeName</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="text-nowrap">@lblEmployeeRequestType</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">@lblRank</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="text-nowrap">@lblPendingDate</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1 col-md-1 col-lg-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-nowrap">@lblApproval</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-nowrap">@lblDetails</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                  <div id="EmployeeRequestApprovalDetailListContainer">
+                  @Html.Partial("~/Views/HR/Reports/EmployeeRequestApprovalDetail/_EmployeeRequestApprovalDetail.cshtml", Model)
+                  </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 <!-- Include the modal partial -->
 <div id="approvalsEmployeeRequestTypeApprovalModalContainer"></div>
 <div id="detailsEmployeeRequestTypeApprovalModalContainer"></div>

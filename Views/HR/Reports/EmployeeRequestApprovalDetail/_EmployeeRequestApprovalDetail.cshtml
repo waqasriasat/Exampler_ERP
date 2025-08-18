@@ -1,108 +1,54 @@
 @model IEnumerable<Exampler_ERP.Models.HR_EmployeeRequestTypeApprovalDetail>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@{
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <h5 class="card-header">
-				@Localizer["lbl_EmployeeRequestTypeApprovalList"]
+    var lblEmployeeName = Localizer["lbl_EmployeeName"];
+    var lblEmployeeRequestType = Localizer["lbl_EmployeeRequestType"];
+    var lblRank = Localizer["lbl_Rank"];
+    var lblPendingDate = Localizer["lbl_PendingDate"];
+    var lblApproval = Localizer["lbl_Approval"];
+    var lblDetails = Localizer["lbl_Details"];
+}
 
-                @{
-                    var status = ViewBag.Status != null ? ViewBag.Status.ToString() : "";
-                }
-
-                @if (string.IsNullOrEmpty(status))
-                {
-                    <span>(All Records)</span>
-                }
-                else if (status == "1")
-                {
-                    <span>(Complete Records)</span>
-                }
-                else if (status == "2")
-                {
-                    <span>(In EmployeeRequest Records)</span>
-                }
-                else if (status == "3")
-                {
-                    <span>(Pending Records)</span>
-                }
-            </h5>
-
-            <div class="">
-                <div class="col-lg-12 col-md-12 col-sm-12 mb-12 SmallHide GVHeader">
-                    <div class="row">
-                        <div class="col-11 col-md-11 col-lg-10">
-                            <div class="row">
-                                <div class="col-4">
-                                    <p class="text-nowrap">@Localizer["lbl_EmployeeName"]</p>
-                                </div>
-                                <div class="col-3">
-                                    <p class="text-nowrap">@Localizer["lbl_EmployeeRequestType"]</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">@Localizer["lbl_Rank"]</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="text-nowrap">@Localizer["lbl_PendingDate"]</p>
-                                </div>
-                            </div>
+@foreach (var item in Model)
+{
+    <div class="col-12 col-md-12 col-lg-12 GVDetail">
+        <div class="row">
+            <div class="col-11 col-md-11 col-lg-10">
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-4">
+                        <p class="text-nowrap"><span class="smallAdd">@lblEmployeeName : </span>@item.HR_EmployeeRequestTypeApproval?.Employee?.FirstName @item.HR_EmployeeRequestTypeApproval?.Employee?.FatherName @item.HR_EmployeeRequestTypeApproval?.Employee?.FamilyName</p>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-3">
+                        <p class="text-nowrap"><span class="smallAdd">@lblEmployeeRequestType : </span>@(item.HR_EmployeeRequestTypeApproval?.EmployeeRequestType?.EmployeeRequestTypeName ?? "N/A")  </p>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-2">
+                        <p class="text-nowrap"><span class="smallAdd">@lblRank : </span>@Html.DisplayFor(modelItem => item.Rank)</p>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-2">
+                        <p class="text-nowrap"><span class="smallAdd">@lblPendingDate : </span>@item.Date.ToString("dd-MM-yyyy HH:mm:ss")</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1 col-md-1 col-lg-2">
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-6">
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a href="javascript:void(0)" class="approvalsEmployeeRequestTypeApprovalLink" data-id="@item.EmployeeRequestTypeApprovalID">
+                                <i class="bx bx-book-open" style="font-size: large; color:steelblue; line-height: 2;"></i>
+                            </a>
                         </div>
-                        <div class="col-1 col-md-1 col-lg-2">
-                            <div class="row">
-                                <div class="col-6">
-                                    <p class="text-nowrap">@Localizer["lbl_Approval"]</p>
-                                </div>
-                                <div class="col-6">
-                                    <p class="text-nowrap">@Localizer["lbl_Details"]</p>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-6">
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a href="javascript:void(0)" class="detailsEmployeeRequestTypeApprovalLink" data-id="@item.EmployeeRequestTypeApprovalID">
+                                <i class="bx bx-detail" style="font-size: large; color:maroon; line-height: 2;"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
-                @foreach (var item in Model)
-                {
-                    <div class="col-12 col-md-12 col-lg-12 GVDetail">
-                        <div class="row">
-                            <div class="col-11 col-md-11 col-lg-10">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-4">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeName"] : </span>@item.HR_EmployeeRequestTypeApproval?.Employee?.FirstName @item.HR_EmployeeRequestTypeApproval?.Employee?.FatherName @item.HR_EmployeeRequestTypeApproval?.Employee?.FamilyName</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-3">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_EmployeeRequestType"] : </span>@(item.HR_EmployeeRequestTypeApproval?.EmployeeRequestType?.EmployeeRequestTypeName ?? "N/A")  </p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_Rank"] : </span>@Html.DisplayFor(modelItem => item.Rank)</p>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-2">
-                                        <p class="text-nowrap"><span class="smallAdd">@Localizer["lbl_PendingDate"] : </span>@item.Date.ToString("dd-MM-yyyy HH:mm:ss")</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-1 col-md-1 col-lg-2">
-                                <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="approvalsEmployeeRequestTypeApprovalLink" data-id="@item.EmployeeRequestTypeApprovalID">
-                                                <i class="bx bx-book-open" style="font-size: large; color:steelblue; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-6">
-                                        <div class="btn-group" role="group" aria-label="Actions">
-                                            <a href="javascript:void(0)" class="detailsEmployeeRequestTypeApprovalLink" data-id="@item.EmployeeRequestTypeApprovalID">
-                                                <i class="bx bx-detail" style="font-size: large; color:maroon; line-height: 2;"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
             </div>
         </div>
     </div>
-</div>
+}

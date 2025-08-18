@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Localization;
+using OfficeOpenXml;
 
 namespace Exampler_ERP.Controllers.MasterInfo
 {
@@ -40,16 +41,11 @@ namespace Exampler_ERP.Controllers.MasterInfo
           .Include(pta => pta.ProcessTypeApprovalDetailDoc)
           .Where(pta => pta.AppID == 0);
 
-      if (FromDate.HasValue)
+      if (FromDate.HasValue && ToDate.HasValue)
       {
         var fromDateTime = FromDate.Value.Date.AddSeconds(1);
-        query = query.Where(pta => pta.CR_ProcessTypeApproval.Date >= fromDateTime);
-      }
-
-      if (ToDate.HasValue)
-      {
         var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
-        query = query.Where(pta => pta.CR_ProcessTypeApproval.Date <= toDateTime);
+        query = query.Where(pta => pta.CR_ProcessTypeApproval.Date >= fromDateTime && pta.CR_ProcessTypeApproval.Date <= toDateTime);
       }
 
       // Filter by EmployeeName
@@ -64,18 +60,23 @@ namespace Exampler_ERP.Controllers.MasterInfo
         query = query.Where(pta => pta.CR_ProcessTypeApproval.ProcessTypeID == ProcessTypeID.Value);
       }
 
-      ViewBag.FromDate = FromDate;
-      ViewBag.ToDate = ToDate;
-      ViewBag.ProcessTypeID = ProcessTypeID;
-      ViewBag.EmployeeID = EmployeeID;
-      ViewBag.EmployeeName = EmployeeName;
-
       var result = await query
           .OrderByDescending(pta => pta.ProcessTypeApprovalDetailID)
           .ToListAsync();
 
-      ViewBag.ProcessTypeList = await _utils.GetProcessTypes();
+      await PopulateDropdowns(FromDate, ToDate, EmployeeName, EmployeeID, ProcessTypeID);
+
       return View("~/Views/MasterInfo/ApprovalsRequest/ApprovalsRequestSearching.cshtml", result);
+    }
+    private async Task PopulateDropdowns(DateTime? fromDate, DateTime? toDate, string? employeeName, int? employeeID, int? processTypeID)
+    {
+      ViewBag.FromDate = fromDate;
+      ViewBag.ToDate = toDate;
+      ViewBag.EmployeeName = employeeName;
+      ViewBag.EmployeeID = employeeID;
+      ViewBag.ProcessTypeID = processTypeID;
+      
+      ViewBag.ProcessTypeList = await _utils.GetProcessTypes();
     }
     public async Task<IActionResult> SelectedIndex(int? id = null)
     {
@@ -1740,6 +1741,109 @@ namespace Exampler_ERP.Controllers.MasterInfo
       salarySheet.DeservedAmount = (sumSalary + sumAdditionalAllowance + sumOverTime) - (sumDeduction + sumFixedDeduction);
 
       return salarySheet;
+    }
+    public async Task<IActionResult> ExportToExcel(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? ProcessTypeID)
+    {
+      ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+      var query = _appDBContext.CR_ProcessTypeApprovalDetails
+          .Include(pta => pta.CR_ProcessTypeApproval)
+              .ThenInclude(pta => pta.Employee)
+          .Include(pta => pta.CR_ProcessTypeApproval)
+              .ThenInclude(pta => pta.ProcessType)
+          .Include(pta => pta.ProcessTypeApprovalDetailDoc)
+          .Where(pta => pta.AppID == 0);
+
+      if (FromDate.HasValue && ToDate.HasValue)
+      {
+        var fromDateTime = FromDate.Value.Date.AddSeconds(1);
+        var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+        query = query.Where(pta => pta.CR_ProcessTypeApproval.Date >= fromDateTime && pta.CR_ProcessTypeApproval.Date <= toDateTime);
+      }
+
+      // Filter by EmployeeName
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(pta => pta.CR_ProcessTypeApproval.EmployeeID <= EmployeeID.Value);
+      }
+
+      // Filter by ProcessTypeID
+      if (ProcessTypeID.HasValue && ProcessTypeID != 0)
+      {
+        query = query.Where(pta => pta.CR_ProcessTypeApproval.ProcessTypeID == ProcessTypeID.Value);
+      }
+
+      var result = await query
+          .OrderByDescending(pta => pta.ProcessTypeApprovalDetailID)
+          .ToListAsync();
+
+      await PopulateDropdowns(FromDate, ToDate, EmployeeName, EmployeeID, ProcessTypeID);
+
+
+      using (var package = new ExcelPackage())
+      {
+        var worksheet = package.Workbook.Worksheets.Add(_localizer["lbl_ProcessApprovals"]);
+        worksheet.Cells["A1"].Value = _localizer["lbl_EmployeeName"];
+        worksheet.Cells["B1"].Value = _localizer["lbl_ProcessType"];
+        worksheet.Cells["C1"].Value = _localizer["lbl_Rank"];
+        worksheet.Cells["D1"].Value = _localizer["lbl_PendingDate"];
+
+
+        for (int i = 0; i < result.Count; i++)
+        {
+          worksheet.Cells[i + 2, 1].Value = result[i].CR_ProcessTypeApproval?.Employee?.FirstName + ' ' + result[i].CR_ProcessTypeApproval?.Employee?.FatherName + ' ' + result[i].CR_ProcessTypeApproval?.Employee?.FamilyName;
+          worksheet.Cells[i + 2, 2].Value = result[i].CR_ProcessTypeApproval?.ProcessType?.ProcessTypeName;
+          worksheet.Cells[i + 2, 3].Value = result[i].Rank;
+          worksheet.Cells[i + 2, 4].Value = result[i].Date.ToString("dd/MMM/yyyy");
+        }
+
+        worksheet.Cells["A1:C1"].Style.Font.Bold = true;
+        worksheet.Cells.AutoFitColumns();
+
+        var stream = new MemoryStream();
+        package.SaveAs(stream);
+        stream.Position = 0;
+        string excelName = _localizer["lbl_ProcessApprovals"] + $"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+
+        return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+      }
+    }
+    public async Task<IActionResult> Print(DateTime? FromDate, DateTime? ToDate, string? EmployeeName, int? EmployeeID, int? ProcessTypeID)
+    {
+      var query = _appDBContext.CR_ProcessTypeApprovalDetails
+          .Include(pta => pta.CR_ProcessTypeApproval)
+              .ThenInclude(pta => pta.Employee)
+          .Include(pta => pta.CR_ProcessTypeApproval)
+              .ThenInclude(pta => pta.ProcessType)
+          .Include(pta => pta.ProcessTypeApprovalDetailDoc)
+          .Where(pta => pta.AppID == 0);
+
+      if (FromDate.HasValue && ToDate.HasValue)
+      {
+        var fromDateTime = FromDate.Value.Date.AddSeconds(1);
+        var toDateTime = ToDate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+        query = query.Where(pta => pta.CR_ProcessTypeApproval.Date >= fromDateTime && pta.CR_ProcessTypeApproval.Date <= toDateTime);
+      }
+
+      // Filter by EmployeeName
+      if (EmployeeID.HasValue)
+      {
+        query = query.Where(pta => pta.CR_ProcessTypeApproval.EmployeeID <= EmployeeID.Value);
+      }
+
+      // Filter by ProcessTypeID
+      if (ProcessTypeID.HasValue && ProcessTypeID != 0)
+      {
+        query = query.Where(pta => pta.CR_ProcessTypeApproval.ProcessTypeID == ProcessTypeID.Value);
+      }
+
+      var result = await query
+          .OrderByDescending(pta => pta.ProcessTypeApprovalDetailID)
+          .ToListAsync();
+
+      await PopulateDropdowns(FromDate, ToDate, EmployeeName, EmployeeID, ProcessTypeID);
+
+      return View("~/Views/HR/Reports/ProcessApprovalDetail/PrintProcessApprovalDetail.cshtml", result);
     }
   }
 }
