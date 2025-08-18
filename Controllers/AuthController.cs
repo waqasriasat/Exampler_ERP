@@ -68,12 +68,22 @@ namespace Exampler_ERP.Controllers
         return View();
       }
 
+      // Get Role Name
+      var Role = await _appDBContext.Settings_RoleTypes
+          .Where(u => u.RoleTypeID == user.RoleTypeID)
+          .FirstOrDefaultAsync();
 
-      // Logic for setting up user session or authentication cookie goes here
+      if (Role == null)
+      {
+        await _hubContext.Clients.All.SendAsync("ReceiveSuccessFalse", "Wrong rolename or password");
+        return View();
+      }
+
+      // Set Sessions
       HttpContext.Session.SetInt32("UserID", user.UserID);
       HttpContext.Session.SetString("UserName", Username);
       HttpContext.Session.SetInt32("UserRoleID", user.RoleTypeID);
-      HttpContext.Session.SetString("UserRoleName", Username);
+      HttpContext.Session.SetString("UserRoleName", Role.RoleTypeName);
 
 
       var accessRightbyUser = await _appDBContext.CR_AccessRightsByUsers

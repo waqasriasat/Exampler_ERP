@@ -1,7 +1,13 @@
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Dashboards - Analytics";
+    var lblEmployeename = HttpContextAccessor?.HttpContext?.Session.GetString("EmployeeName") ?? "Unknown User";
+    var lblRolename = HttpContextAccessor?.HttpContext?.Session.GetString("UserRoleName") ?? "Unknown User";
+    var lblUnderEmployee = HttpContextAccessor?.HttpContext?.Session.GetString("YourUnderEmployee") ?? "Unknown";
+    var lblActiveEmployee = HttpContextAccessor?.HttpContext?.Session.GetInt32("totalActiveEmployee") ?? 0;
+    var lblTotalEmployee = HttpContextAccessor?.HttpContext?.Session.GetInt32("totalEmployee") ?? 0;
 }
 @section VendorStyles {
     <link rel="stylesheet" href="~/vendor/libs/apex-charts/apex-charts.css" />
@@ -20,8 +26,8 @@
             <div class="d-flex align-items-end row">
                 <div class="col-sm-7">
                     <div class="card-body">
-                        <h5 class="card-title text-primary">@Localizer["lbl_WellcomeTo"] John! 🎉</h5>
-                        <p class="mb-4">You have done <span class="fw-medium">72%</span> more sales today. Check your new badge in your profile.</p>
+                        <h5 class="card-title text-primary">@Localizer["lbl_WellcomeTo"] @lblEmployeename! (@lblRolename) 🎉</h5>
+                        <p class="mb-4">Congratulations! Under your leadership, <span class="fw-medium">@lblUnderEmployee</span> of employees have shown excellent performance.</p>
 
                         <a href="javascript:;" class="btn btn-sm btn-outline-primary">@Localizer["lbl_ViewBadges"]</a>
                     </div>
@@ -53,9 +59,9 @@
                                 </div>
                             </div>
                         </div>
-                        <span class="fw-medium d-block mb-1">@Localizer["lbl_Profit"]</span>
-                        <h3 class="card-title mb-2">$12,628</h3>
-                        <small class="text-success fw-medium"><i class='bx bx-up-arrow-alt'></i> +72.80%</small>
+                        <span class="fw-medium d-block mb-1">@Localizer["lbl_TotalEmployeement"]</span>
+                        <h3 class="card-title mb-2">@lblTotalEmployee</h3>
+                        <small class="text-success fw-medium"><i class='bx bx-up-arrow-alt'></i> @Localizer["lbl_ActiveEmployees"] (@lblActiveEmployee)</small>
                     </div>
                 </div>
             </div>

@@ -8,6 +8,8 @@ using Exampler_ERP.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Localization;
 using Exampler_ERP.Controllers;
+using Exampler_ERP.Models.Temp;
+using Microsoft.AspNetCore.Http;
 
 namespace AspnetCoreMvcFull.Controllers;
 
@@ -32,11 +34,17 @@ public class DashboardsController : PositionController
   }
   public async Task<IActionResult> Index()
   {
-    if (HttpContext.Session.GetInt32("UserID") != null)
+    int? userId = HttpContext.Session.GetInt32("UserID");
+    if (userId != null)
     {
+      
       await ApprovalProcessCount(); // Ensure it's called before returning the view
       ViewBag.MySession = HttpContext.Session.GetInt32("UserID").ToString();
-
+      var fullName = await GetEmployeeName(userId.Value);
+      double? YourUnderEmployee = await GetYourUnderEmployee(userId.Value);
+      string percentageStr = YourUnderEmployee?.ToString() ?? "0";
+      HttpContext.Session.SetString("EmployeeName", fullName);
+      HttpContext.Session.SetString("YourUnderEmployee", percentageStr+'%');
       return View();
     }
     else
@@ -44,6 +52,55 @@ public class DashboardsController : PositionController
       return RedirectToAction("Login", "Auth");
     }
   }
+
+  private async Task<double?> GetYourUnderEmployee(int managerId)
+  {
+    var totalEmployee = await _appDBContext.HR_Employees
+        .Where(e => e.ActiveYNID == 1)
+        .CountAsync();
+    HttpContext.Session.SetInt32("totalEmployee", totalEmployee);
+
+    var totalActive = await _appDBContext.HR_Employees
+        .Where(e => e.ActiveYNID == 1)
+        .CountAsync();
+    HttpContext.Session.SetInt32("totalActiveEmployee", totalActive);
+
+    var underYou = await _appDBContext.HR_Employees
+        .Where(e => e.ActiveYNID == 1 && e.ReportToID == managerId)
+        .CountAsync();
+
+    if (totalActive > 0)
+    {
+      double percentage = ((double)underYou * 100) / totalActive;
+      return percentage;
+    }
+
+    return null;
+  }
+
+
+  private async Task<string> GetEmployeeName(int userid)
+  {
+    var employee = await _appDBContext.CR_Users
+        .Where(u => u.UserID == userid)
+        .Join(_appDBContext.HR_Employees,
+            cu => cu.EmployeeID,
+            he => he.EmployeeID,
+            (cu, he) => new { he.FirstName, he.FatherName, he.FamilyName })
+        .FirstOrDefaultAsync();
+
+    if (employee != null)
+    {
+      return employee.FirstName + " " + employee.FatherName + " " + employee.FamilyName;
+    }
+    if (employee == null)
+    {
+      var UserName = HttpContext.Session.GetString("UserName");
+      return UserName;
+    }
+    return null;
+  }
+
   private async Task ApprovalProcessCount()
   {
     int count = await _appDBContext.CR_ProcessTypeApprovalDetails
