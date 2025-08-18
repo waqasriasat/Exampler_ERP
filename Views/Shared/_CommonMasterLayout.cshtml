@@ -31,14 +31,14 @@
 						processNotificationsTotal = 0;
 
 						$.each(data.notifications, function (index, notification) {
-							const { processTypeID, processCount } = notification;
+							const { ProcessTypeID, ProcessCount } = notification;
 
-							if (processCount > 0) {
-								$('#count' + getNotificationName(processTypeID)).text(processCount);
-								$('#li' + getNotificationName(processTypeID)).show();
+							if (ProcessCount > 0) {
+								$('#count' + getNotificationName(ProcessTypeID)).text(ProcessCount);
+								$('#li' + getNotificationName(ProcessTypeID)).show();
 							}
 
-							processNotificationsTotal += processCount;
+							processNotificationsTotal += ProcessCount;
 						});
 
 						updateGrandTotal();
@@ -59,16 +59,15 @@
 						employeeRequestNotificationsTotal = 0;
 
 						$.each(data.notifications, function (index, notification) {
-							const { employeeRequestTypeID, employeeRequestCount } = notification;
+							const { EmployeeRequestTypeID, EmployeeRequestCount } = notification;
 
-							if (employeeRequestCount > 0) {
-								$('#count' + getemployeeRequestName(employeeRequestTypeID)).text(employeeRequestCount);
-								$('#li' + getemployeeRequestName(employeeRequestTypeID)).show();
+							if (EmployeeRequestCount > 0) {
+								$('#count' + getemployeeRequestName(EmployeeRequestTypeID)).text(EmployeeRequestCount);
+								$('#li' + getemployeeRequestName(EmployeeRequestTypeID)).show();
 							}
 
-							employeeRequestNotificationsTotal += employeeRequestCount;
+							employeeRequestNotificationsTotal += EmployeeRequestCount;
 						});
-
 						updateGrandTotal();
 					}
 				},
@@ -115,7 +114,7 @@
 			return console.error(err.toString());
 		});
 
-		function getNotificationName(processTypeID) {
+		function getNotificationName(ProcessTypeID) {
 			const names = [
 				'',          // 0 (not used)
 				'User',      // 1
@@ -142,10 +141,10 @@
 				'EditedPurchaseRequest', // 22
 				'ApprovalForPurchaseOrder' // 23
 			];
-			return names[processTypeID] || '';
+			return names[ProcessTypeID] || '';
 		}
 
-		function getemployeeRequestName(employeeRequestTypeID) {
+		function getemployeeRequestName(EmployeeRequestTypeID) {
 			const names = [
 				'',          // 0 (not used)
 				'OvertimeRequest', // 1
@@ -199,7 +198,7 @@
 				'PensPencilsRequest', // 49
 				'NotebooksStickyNotesRequest' // 50
 			];
-			return names[employeeRequestTypeID] || '';
+			return names[EmployeeRequestTypeID] || '';
 		}
 
 		// Fetch notifications on page load

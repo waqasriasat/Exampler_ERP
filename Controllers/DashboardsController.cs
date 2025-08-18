@@ -36,6 +36,7 @@ public class DashboardsController : PositionController
     {
       await ApprovalProcessCount(); // Ensure it's called before returning the view
       ViewBag.MySession = HttpContext.Session.GetInt32("UserID").ToString();
+
       return View();
     }
     else
