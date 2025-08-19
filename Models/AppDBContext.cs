@@ -1264,10 +1264,10 @@ namespace Exampler_ERP.Models
       new CR_LanguageRecord() { LanguageRecordId = 1118, LabelName = "lbl_VacationBalanceList", LabelValue = "Vacation Balance List", Culture = "en-US" },
       new CR_LanguageRecord() { LanguageRecordId = 1119, LabelName = "lbl_PrintContractExpiry", LabelValue = "Print Contract Expiry", Culture = "en-US" },
       new CR_LanguageRecord() { LanguageRecordId = 1120, LabelName = "lbl_ContractExpiryList", LabelValue = "Contract Expiry List", Culture = "en-US" },
-      new CR_LanguageRecord() { LanguageRecordId = 1121, LabelName = "lbl_HolidayID", LabelValue = "Holiday ID", Culture = "en-US" },
-      new CR_LanguageRecord() { LanguageRecordId = 1122, LabelName = "lbl_HolidayID", LabelValue = "Holiday ID", Culture = "en-US" },
-      new CR_LanguageRecord() { LanguageRecordId = 1123, LabelName = "lbl_HolidayID", LabelValue = "Holiday ID", Culture = "en-US" },
-      new CR_LanguageRecord() { LanguageRecordId = 1124, LabelName = "lbl_HolidayID", LabelValue = "Holiday ID", Culture = "en-US" }
+      new CR_LanguageRecord() { LanguageRecordId = 1121, LabelName = "lbl_TotalEmployeement", LabelValue = "Total Employeement", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1122, LabelName = "lbl_ActiveEmployees", LabelValue = "Active Employees", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1123, LabelName = "lbl_PresentEmployee", LabelValue = "Present Employee", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1124, LabelName = "lbl_AbsentEmployee", LabelValue = "Absent Employee", Culture = "en-US" }
 
 
 

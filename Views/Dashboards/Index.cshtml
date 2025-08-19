@@ -8,6 +8,8 @@
     var lblUnderEmployee = HttpContextAccessor?.HttpContext?.Session.GetString("YourUnderEmployee") ?? "Unknown";
     var lblActiveEmployee = HttpContextAccessor?.HttpContext?.Session.GetInt32("totalActiveEmployee") ?? 0;
     var lblTotalEmployee = HttpContextAccessor?.HttpContext?.Session.GetInt32("totalEmployee") ?? 0;
+	var lblPresentEmployee = HttpContextAccessor?.HttpContext?.Session.GetInt32("PresentEmployee") ?? 0;
+	var lblAbsentEmployee = lblTotalEmployee - lblPresentEmployee;
 }
 @section VendorStyles {
     <link rel="stylesheet" href="~/vendor/libs/apex-charts/apex-charts.css" />
@@ -47,7 +49,7 @@
                     <div class="card-body">
                         <div class="card-title d-flex align-items-start justify-content-between">
                             <div class="avatar flex-shrink-0">
-                                <img src="~/img/icons/unicons/chart-success.png" alt="chart success" class="rounded">
+								<img src="~/img/icons/unicons/wallet-info.png" alt="Credit Card" class="rounded">
                             </div>
                             <div class="dropdown">
                                 <button class="btn p-0" type="button" id="cardOpt3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -59,7 +61,7 @@
                                 </div>
                             </div>
                         </div>
-                        <span class="fw-medium d-block mb-1">@Localizer["lbl_TotalEmployeement"]</span>
+                        <span>@Localizer["lbl_TotalEmployeement"]</span>
                         <h3 class="card-title mb-2">@lblTotalEmployee</h3>
                         <small class="text-success fw-medium"><i class='bx bx-up-arrow-alt'></i> @Localizer["lbl_ActiveEmployees"] (@lblActiveEmployee)</small>
                     </div>
@@ -70,7 +72,8 @@
                     <div class="card-body">
                         <div class="card-title d-flex align-items-start justify-content-between">
                             <div class="avatar flex-shrink-0">
-                                <img src="~/img/icons/unicons/wallet-info.png" alt="Credit Card" class="rounded">
+								<img src="~/img/icons/unicons/chart-success.png" alt="chart success" class="rounded">
+                                
                             </div>
                             <div class="dropdown">
                                 <button class="btn p-0" type="button" id="cardOpt6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -82,9 +85,9 @@
                                 </div>
                             </div>
                         </div>
-                        <span>@Localizer["lbl_Sales"]</span>
-                        <h3 class="card-title text-nowrap mb-1">$4,679</h3>
-                        <small class="text-success fw-medium"><i class='bx bx-up-arrow-alt'></i> +28.42%</small>
+                        <span>@Localizer["lbl_PresentEmployee"]</span>
+						<h3 class="card-title text-nowrap mb-1">@lblPresentEmployee</h3>
+						<small class="text-danger fw-medium"><i class='bx bx-down-arrow-alt'></i> @Localizer["lbl_AbsentEmployee"] (@lblAbsentEmployee)</small>
                     </div>
                 </div>
             </div>

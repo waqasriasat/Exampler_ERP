@@ -40,11 +40,9 @@ public class DashboardsController : PositionController
       
       await ApprovalProcessCount(); // Ensure it's called before returning the view
       ViewBag.MySession = HttpContext.Session.GetInt32("UserID").ToString();
-      var fullName = await GetEmployeeName(userId.Value);
-      double? YourUnderEmployee = await GetYourUnderEmployee(userId.Value);
-      string percentageStr = YourUnderEmployee?.ToString() ?? "0";
-      HttpContext.Session.SetString("EmployeeName", fullName);
-      HttpContext.Session.SetString("YourUnderEmployee", percentageStr+'%');
+      await GetEmployeeName(userId.Value);
+      await GetYourUnderEmployee(userId.Value);
+      await GetEmployeesMarkedToday();
       return View();
     }
     else
@@ -52,6 +50,21 @@ public class DashboardsController : PositionController
       return RedirectToAction("Login", "Auth");
     }
   }
+
+  private async Task<int> GetEmployeesMarkedToday()
+  {
+    DateTime today = DateTime.Today;
+    int totalEmployeesMarkedToday = await _appDBContext.CR_FaceAttendances
+        .Where(a => a.MarkDate.Date == today)
+        .Select(a => a.EmployeeID)
+        .Distinct()
+        .CountAsync();
+
+    HttpContext.Session.SetInt32("PresentEmployee", totalEmployeesMarkedToday);
+
+    return totalEmployeesMarkedToday; // ✅ Return added
+  }
+
 
   private async Task<double?> GetYourUnderEmployee(int managerId)
   {
@@ -72,6 +85,8 @@ public class DashboardsController : PositionController
     if (totalActive > 0)
     {
       double percentage = ((double)underYou * 100) / totalActive;
+      string percentageStr = percentage.ToString() ?? "0";
+      HttpContext.Session.SetString("YourUnderEmployee", percentageStr + '%');
       return percentage;
     }
 
@@ -91,11 +106,15 @@ public class DashboardsController : PositionController
 
     if (employee != null)
     {
-      return employee.FirstName + " " + employee.FatherName + " " + employee.FamilyName;
+      var fullName = employee.FirstName + " " + employee.FatherName + " " + employee.FamilyName;
+      HttpContext.Session.SetString("EmployeeName", fullName);
+      return fullName;
+
     }
     if (employee == null)
     {
       var UserName = HttpContext.Session.GetString("UserName");
+      HttpContext.Session.SetString("EmployeeName", UserName);
       return UserName;
     }
     return null;
