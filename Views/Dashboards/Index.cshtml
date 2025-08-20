@@ -2,14 +2,22 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
+
     ViewData["Title"] = "Dashboards - Analytics";
     var lblEmployeename = HttpContextAccessor?.HttpContext?.Session.GetString("EmployeeName") ?? "Unknown User";
     var lblRolename = HttpContextAccessor?.HttpContext?.Session.GetString("UserRoleName") ?? "Unknown User";
     var lblUnderEmployee = HttpContextAccessor?.HttpContext?.Session.GetString("YourUnderEmployee") ?? "Unknown";
     var lblActiveEmployee = HttpContextAccessor?.HttpContext?.Session.GetInt32("totalActiveEmployee") ?? 0;
     var lblTotalEmployee = HttpContextAccessor?.HttpContext?.Session.GetInt32("totalEmployee") ?? 0;
-	var lblPresentEmployee = HttpContextAccessor?.HttpContext?.Session.GetInt32("PresentEmployee") ?? 0;
-	var lblAbsentEmployee = lblTotalEmployee - lblPresentEmployee;
+    var lblPresentEmployee = HttpContextAccessor?.HttpContext?.Session.GetInt32("PresentEmployee") ?? 0;
+    var lblAbsentEmployee = lblActiveEmployee - lblPresentEmployee;
+    var lblAbsentWithInform = HttpContextAccessor?.HttpContext?.Session.GetInt32("AbsentWithInform") ?? 0;
+    var lblNotResponding = lblActiveEmployee - lblPresentEmployee - lblAbsentWithInform;
+    var lbllateEmployees = HttpContextAccessor?.HttpContext?.Session.GetInt32("lateEmployees") ?? 0;
+
+    var lblOnTimeComing = lblPresentEmployee - lbllateEmployees;
+    int currentYear = DateTime.Now.Year;
+    
 }
 @section VendorStyles {
     <link rel="stylesheet" href="~/vendor/libs/apex-charts/apex-charts.css" />
@@ -49,7 +57,7 @@
                     <div class="card-body">
                         <div class="card-title d-flex align-items-start justify-content-between">
                             <div class="avatar flex-shrink-0">
-								<img src="~/img/icons/unicons/wallet-info.png" alt="Credit Card" class="rounded">
+                                <img src="~/img/icons/unicons/wallet-info.png" alt="Credit Card" class="rounded">
                             </div>
                             <div class="dropdown">
                                 <button class="btn p-0" type="button" id="cardOpt3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -72,8 +80,8 @@
                     <div class="card-body">
                         <div class="card-title d-flex align-items-start justify-content-between">
                             <div class="avatar flex-shrink-0">
-								<img src="~/img/icons/unicons/chart-success.png" alt="chart success" class="rounded">
-                                
+                                <img src="~/img/icons/unicons/chart-success.png" alt="chart success" class="rounded">
+
                             </div>
                             <div class="dropdown">
                                 <button class="btn p-0" type="button" id="cardOpt6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -86,8 +94,8 @@
                             </div>
                         </div>
                         <span>@Localizer["lbl_PresentEmployee"]</span>
-						<h3 class="card-title text-nowrap mb-1">@lblPresentEmployee</h3>
-						<small class="text-danger fw-medium"><i class='bx bx-down-arrow-alt'></i> @Localizer["lbl_AbsentEmployee"] (@lblAbsentEmployee)</small>
+                        <h3 class="card-title text-nowrap mb-1">@lblPresentEmployee</h3>
+                        <small class="text-danger fw-medium"><i class='bx bx-down-arrow-alt'></i> @Localizer["lbl_AbsentEmployee"] (@lblAbsentEmployee)</small>
                     </div>
                 </div>
             </div>
@@ -98,26 +106,29 @@
         <div class="card">
             <div class="row row-bordered g-0">
                 <div class="col-md-8" style="padding-bottom: 15px;">
-                    <h5 class="card-header m-0 me-2 pb-3">@Localizer["lbl_TotalRevenues"]</h5>
-                    <div id="totalRevenueChart" class="px-2"></div>
+                    <h5 class="card-header m-0 pb-3">@Localizer["lbl_TotalAttendanceRatio"]</h5>
+                    <div id="totalAttendanceRatio" class="px-2"></div>
                 </div>
                 <div class="col-md-4">
                     <div class="card-body">
                         <div class="text-center">
                             <div class="dropdown">
                                 <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="growthReportId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    2022
+                                    @currentYear
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="growthReportId">
-                                    <a class="dropdown-item" href="javascript:void(0);">2021</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">2020</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">2019</a>
+                                    @for (int y = currentYear; y >= currentYear - 2; y--)
+                                    {
+                                        <a class="dropdown-item year-item" href="javascript:void(0);" data-year="@y">@y</a>
+                                    }
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="growthChart"></div>
-                    <div class="text-center fw-medium pt-3 mb-2">62% @Localizer["lbl_CompanyGrowth"]</div>
+                    <div id="Chartgraphreload">
+                  
+                    <div id="growthAttendanceChartViaYear"></div>
+                        <div class="text-center fw-medium pt-3 mb-2" id="lblitemPresentCount">0% @Localizer["lbl_PositiveAttendance"]</div>
 
                     <div class="d-flex px-xxl-4 px-lg-2 p-4 gap-xxl-3 gap-lg-1 gap-3 justify-content-between">
                         <div class="d-flex">
@@ -125,8 +136,8 @@
                                 <span class="badge bg-label-primary p-2"><i class="bx bx-dollar text-primary"></i></span>
                             </div>
                             <div class="d-flex flex-column">
-                                <small>2022</small>
-                                <h6 class="mb-0">$32.5k</h6>
+                                <small>@Localizer["lbl_Absent"]</small>
+                                    <h6 class="mb-0" id="lblitemAbsentCount">0%</h6>
                             </div>
                         </div>
                         <div class="d-flex">
@@ -134,10 +145,11 @@
                                 <span class="badge bg-label-info p-2"><i class="bx bx-wallet text-info"></i></span>
                             </div>
                             <div class="d-flex flex-column">
-                                <small>2021</small>
-                                <h6 class="mb-0">$41.2k</h6>
+                                <small>@Localizer["lbl_Vacation"]</small>
+                                    <h6 class="mb-0" id="lblitemVacationCount">0%</h6>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -163,9 +175,9 @@
                                 </div>
                             </div>
                         </div>
-                        <span class="d-block mb-1">@Localizer["lbl_Payments"]</span>
-                        <h3 class="card-title text-nowrap mb-2">$2,456</h3>
-                        <small class="text-danger fw-medium"><i class='bx bx-down-arrow-alt'></i> -14.82%</small>
+                        <span>@Localizer["lbl_AbsentWithInform"]</span>
+                        <h3 class="card-title text-nowrap mb-2">@lblAbsentWithInform</h3>
+                        <small class="text-danger fw-medium"><i class='bx bx-down-arrow-alt'></i> @Localizer["lbl_NotResponding"] (@lblNotResponding)</small>
                     </div>
                 </div>
             </div>
@@ -186,9 +198,9 @@
                                 </div>
                             </div>
                         </div>
-                        <span class="fw-medium d-block mb-1">@Localizer["lbl_Transaction"]</span>
-                        <h3 class="card-title mb-2">$14,857</h3>
-                        <small class="text-success fw-medium"><i class='bx bx-up-arrow-alt'></i> +28.14%</small>
+                        <span class="fw-medium d-block mb-1">@Localizer["lbl_LateComing"]</span>
+                        <h3 class="card-title mb-2">@lbllateEmployees</h3>
+                        <small class="text-success fw-medium"><i class='bx bx-up-arrow-alt'></i>@Localizer["lbl_OnTime"] (@lblOnTimeComing)</small>
                     </div>
                 </div>
             </div>

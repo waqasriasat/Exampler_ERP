@@ -1267,7 +1267,18 @@ namespace Exampler_ERP.Models
       new CR_LanguageRecord() { LanguageRecordId = 1121, LabelName = "lbl_TotalEmployeement", LabelValue = "Total Employeement", Culture = "en-US" },
       new CR_LanguageRecord() { LanguageRecordId = 1122, LabelName = "lbl_ActiveEmployees", LabelValue = "Active Employees", Culture = "en-US" },
       new CR_LanguageRecord() { LanguageRecordId = 1123, LabelName = "lbl_PresentEmployee", LabelValue = "Present Employee", Culture = "en-US" },
-      new CR_LanguageRecord() { LanguageRecordId = 1124, LabelName = "lbl_AbsentEmployee", LabelValue = "Absent Employee", Culture = "en-US" }
+      new CR_LanguageRecord() { LanguageRecordId = 1124, LabelName = "lbl_AbsentEmployee", LabelValue = "Absent", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1125, LabelName = "lbl_AbsentWithInform", LabelValue = "Absent With Inform", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1126, LabelName = "lbl_NotResponding", LabelValue = "Not Responding", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1127, LabelName = "lbl_TotalAttendanceRatio", LabelValue = "Total Attendance Ratio", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1128, LabelName = "lbl_AbsentEmployee", LabelValue = "Absent", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1129, LabelName = "lbl_AbsentEmployee", LabelValue = "Absent", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1130, LabelName = "lbl_AbsentEmployee", LabelValue = "Absent", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1131, LabelName = "lbl_AbsentEmployee", LabelValue = "Absent", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1132, LabelName = "lbl_AbsentEmployee", LabelValue = "Absent", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1133, LabelName = "lbl_AbsentEmployee", LabelValue = "Absent", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1134, LabelName = "lbl_AbsentEmployee", LabelValue = "Abse", Culture = "en-US" },
+      new CR_LanguageRecord() { LanguageRecordId = 1135, LabelName = "lbl_AbsentEmployee", LabelValue = "Absent", Culture = "en-US" }
 
 
 
