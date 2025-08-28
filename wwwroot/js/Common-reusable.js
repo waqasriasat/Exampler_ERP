@@ -489,3 +489,87 @@ $(document).ready(function () {
     loadGrowthAttendanceChartViaYears(yr);
   });
 });
+
+$(document).ready(function () {
+  loadYearlyHiringRatio();
+});
+
+function loadYearlyHiringRatio() {
+  $.ajax({
+    url: '/Dashboards/GetYearlyHiringRatio',
+    type: 'GET',
+    success: function (result) {
+      if (!result || result.length === 0) return;
+
+      // Extract years and ratios for chart
+      const years = result.map(item => item.HireYear); // X-axis
+      const ratios = result.map(item => item.HiringRatio); // Y-axis
+      debugger;
+      const profileReportChartEl = document.querySelector('#yearlyHiringRatio');
+
+      const profileReportChartConfig = {
+        chart: {
+          height: 80,
+          type: 'line',
+          toolbar: {
+            show: false
+          },
+          dropShadow: {
+            enabled: true,
+            top: 10,
+            left: 5,
+            blur: 3,
+            color: config.colors.warning,
+            opacity: 0.15
+          },
+          sparkline: {
+            enabled: true
+          }
+        },
+        grid: {
+          show: false,
+          padding: {
+            right: 8
+          }
+        },
+        colors: [config.colors.warning],
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          width: 5,
+          curve: 'smooth'
+        },
+        series: [
+          {
+            name: 'Hiring Ratio (%)',
+            data: ratios
+          }
+        ],
+        xaxis: {
+          categories: years,
+          labels: {
+            show: false
+          },
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false
+          }
+        },
+        yaxis: {
+          show: false
+        }
+      };
+
+      if (typeof profileReportChartEl !== 'undefined' && profileReportChartEl !== null) {
+        const profileReportChart = new ApexCharts(profileReportChartEl, profileReportChartConfig);
+        profileReportChart.render();
+      }
+    },
+    error: function (xhr, status, error) {
+      console.error('Error loading hiring ratio:', error);
+    }
+  });
+}

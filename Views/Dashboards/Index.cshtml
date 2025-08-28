@@ -14,8 +14,11 @@
     var lblAbsentWithInform = HttpContextAccessor?.HttpContext?.Session.GetInt32("AbsentWithInform") ?? 0;
     var lblNotResponding = lblActiveEmployee - lblPresentEmployee - lblAbsentWithInform;
     var lbllateEmployees = HttpContextAccessor?.HttpContext?.Session.GetInt32("lateEmployees") ?? 0;
+	var lblCurrentYear = HttpContextAccessor?.HttpContext?.Session.GetInt32("CurrentYear") ?? 0;
+	var lblTopOFradioValue = HttpContextAccessor?.HttpContext?.Session.GetString("TopOFradioValue") ?? "Unknown";
+	var lblTopOFradioYear = HttpContextAccessor?.HttpContext?.Session.GetInt32("TopOFradioYear") ?? 0;
 
-    var lblOnTimeComing = lblPresentEmployee - lbllateEmployees;
+	var lblOnTimeComing = lblPresentEmployee - lbllateEmployees;
     int currentYear = DateTime.Now.Year;
     
 }
@@ -212,15 +215,15 @@
                         <div class="d-flex justify-content-between flex-sm-row flex-column gap-3">
                             <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
                                 <div class="card-title">
-                                    <h5 class="text-nowrap mb-2">@Localizer["lbl_ProfileReport"]</h5>
-                                    <span class="badge bg-label-warning rounded-pill">Year 2021</span>
+                                    <h5 class="text-nowrap mb-2">@Localizer["lbl_YearlyHiringRatio"]</h5>
+									<span class="badge bg-label-warning rounded-pill">Current Year (@lblCurrentYear)</span>
                                 </div>
                                 <div class="mt-sm-auto">
-                                    <small class="text-success text-nowrap fw-medium"><i class='bx bx-chevron-up'></i> 68.2%</small>
-                                    <h3 class="mb-0">$84,686k</h3>
+									<small class="text-success text-nowrap fw-medium"><i class='bx bx-chevron-up'></i> @lblTopOFradioValue</small>
+									<h3 class="mb-0">@lblTopOFradioYear</h3>
                                 </div>
                             </div>
-                            <div id="profileReportChart"></div>
+							<div id="yearlyHiringRatio"></div>
                         </div>
                     </div>
                 </div>

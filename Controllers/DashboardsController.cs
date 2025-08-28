@@ -45,6 +45,7 @@ public class DashboardsController : PositionController
       await GetEmployeesMarkedToday();
       await GetTodayAbsentwithInform();
       await GetTodayLateComing();
+      //await GetYearlyHiringRatio();
       return View();
     }
     else
@@ -52,6 +53,8 @@ public class DashboardsController : PositionController
       return RedirectToAction("Login", "Auth");
     }
   }
+
+ 
 
   private async Task<int> GetTodayLateComing()
   {
@@ -353,5 +356,60 @@ public class DashboardsController : PositionController
     var vacation = item?.VacationCount ?? 0;
 
     return Json(new { present, absent, vacation });
+  }
+  public async Task<IActionResult> GetYearlyHiringRatio()
+  {
+    var data = await GetYearlyHiringRatioList();
+    return Json(data);
+  }
+  private async Task<List<YearlyHiringStats>> GetYearlyHiringRatioList()
+  {
+    var currentYear = DateTime.Now.Year;
+    var lastSixYears = Enumerable.Range(currentYear - 6, 7).ToList();
+
+    var hires = await _appDBContext.HR_Employees
+        .Where(e => e.HireDate.HasValue && e.HireDate.Value.Year >= currentYear - 6)
+        .GroupBy(e => e.HireDate.Value.Year)
+        .Select(g => new
+        {
+          HireYear = g.Key,
+          YearHires = g.Count()
+        })
+        .ToListAsync();
+
+    var totalEmployees = await _appDBContext.HR_Employees.CountAsync();
+
+    var result = lastSixYears
+        .Select(year =>
+        {
+          var hire = hires.FirstOrDefault(h => h.HireYear == year);
+          var yearHires = hire?.YearHires ?? 0;
+          return new YearlyHiringStats
+          {
+            HireYear = year,
+            YearHires = yearHires,
+            HiringRatio = totalEmployees > 0
+                  ? Math.Round(yearHires * 100.0 / totalEmployees, 2)
+                  : 0
+          };
+        })
+        .OrderByDescending(r => r.HireYear)
+        .ToList();
+    var topRadio = result.OrderByDescending(r => r.HiringRatio).FirstOrDefault();
+    var topRadioValue = topRadio?.HiringRatio ?? 0;
+    var topRadioYear = topRadio?.HireYear ?? 0;
+
+    // 🔸 Set session values
+    HttpContext.Session.SetInt32("CurrentYear", currentYear);
+    HttpContext.Session.SetString("TopOFradioValue", topRadioValue.ToString());
+    HttpContext.Session.SetInt32("TopOFradioYear", topRadioYear);
+    return result;
+  }
+
+  public class YearlyHiringStats
+  {
+    public int HireYear { get; set; }
+    public int YearHires { get; set; }
+    public double HiringRatio { get; set; }
   }
 }
