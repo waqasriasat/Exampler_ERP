@@ -20,5 +20,9 @@ namespace Exampler_ERP.Models
     public int? DHours { get; set; }
     public int? DMinutes { get; set; }
     public int? DeleteYNID { get; set;}
+    public string? InDevice_SerialNo { get; set; }
+    public int InPunchType { get; set; } //1=thumb, 15=face, 4=card
+    public string? OutDevice_SerialNo { get; set; }
+    public int OutPunchType { get; set; } //1=thumb, 15=face, 4=card
   }
 }

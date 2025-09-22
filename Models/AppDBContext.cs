@@ -74,6 +74,9 @@ namespace Exampler_ERP.Models
     public DbSet<CR_User> CR_Users { get; set; }
     public DbSet<CR_LanguageRecord> CR_LanguageRecords { get; set; }
     public DbSet<CR_GlobalSetting> CR_GlobalSettings { get; set; }
+    public DbSet<CR_AttDeviceDeviceOptionLog> CR_AttDeviceDeviceOptionLogs { get; set; }
+    public DbSet<CR_AttDeviceTempDevicePost> CR_AttDeviceTempDevicePosts { get; set; }
+    public DbSet<CR_AttDeviceRegistration> CR_AttDeviceRegistrations { get; set; }
 
     public DbSet<HR_ThumbEnrollment> HR_ThumbEnrollments { get; set; }
     public DbSet<HR_DeductionSetup> HR_DeductionSetups { get; set; }
